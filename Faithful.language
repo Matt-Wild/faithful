@@ -1,0 +1,11 @@
+{
+  "strings": {
+	"FAITHFUL_DEV_BUFF": "GOD MODE",
+  
+    "FAITHFUL_COPPER_GEAR_NAME": "Copper Gear",
+	"FAITHFUL_COPPER_GEAR_PICKUP": "Increase attack speed while within the Teleporter zone.",
+	"FAITHFUL_COPPER_GEAR_DESC": "Increase <style=cIsDamage>attack speed</style> by <style=cIsDamage>25%</style> <style=cStack>(+25% per stack)</style> while inside the Teleporter zone.",
+	"FAITHFUL_COPPER_GEAR_LORE": "<style=cMono>\r\n//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u201CHey, you know those clockmakers we met when we went on that trip to Earth?\u201C\n\n\u201CYeah, I remember. Why are you bringing them up now?\u201C\n\n\u201CA couple o' them told me that they were always in the zone when wearing one of these gears 'round their wrist. Said it helped 'em work way faster.\u201C\n\n\u201CI see but… what does that have to do with the mountain of lemurian corpses behind you?\u201C\n\n\u201CWell, uh… I can tell you that it works.\u201C",
+	"FAITHFUL_COPPER_GEAR_BUFF": "Copper Gear"
+  }
+}

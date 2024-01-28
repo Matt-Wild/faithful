@@ -1,0 +1,10 @@
+{
+    "name": "Faithful",
+    "version_number": "1.0.0",
+    "website_url": "",
+    "description": "Faithful additions to RoR2.",
+    "dependencies": [
+		"bbepis-BepInExPack-5.4.1903",
+		"tristanmcpherson-R2API-4.3.5"
+    ]
+}
