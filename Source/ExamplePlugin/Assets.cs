@@ -4,10 +4,10 @@ using BepInEx;
 
 namespace Faithful
 {
-    public class Assets
+    internal class Assets
     {
-        // Store plugin info
-        public PluginInfo PInfo;
+        // Toolbox
+        protected Toolbox toolbox;
 
         // Asset bundle name
         public const string bundleName = "faithfulbundle";
@@ -15,30 +15,45 @@ namespace Faithful
         // Asset bundle
         public AssetBundle assetBundle;
 
+        public Assets(Toolbox _toolbox)
+        {
+            toolbox = _toolbox;
+
+            // Loads the assetBundle from the path
+            assetBundle = AssetBundle.LoadFromFile(AssetBundlePath);
+
+            // DEBUG display loading assets
+            string[] loaded = assetBundle.GetAllAssetNames();
+            foreach (string current in loaded)
+            {
+                Log.Debug($"Loaded asset '{current}'");
+            }
+        }
+
         // Get the path to the asset bundle
         public string AssetBundlePath
         {
             get
             {
                 // Returns the path to the asset bundle
-                return Path.Combine(Path.GetDirectoryName(PInfo.Location), bundleName);
+                return Path.Combine(Path.GetDirectoryName(toolbox.utils.pluginInfo.Location), bundleName);
             }
         }
 
-        public void Init(PluginInfo _pluginInfo)
+        public string FindAsset(string _file)
         {
-            // Get plugin info
-            PInfo = _pluginInfo;
-
-            // Loads the assetBundle from the path
-            assetBundle = AssetBundle.LoadFromFile(AssetBundlePath);
-
-            // DEBUG loading assets
-            string[] loaded = assetBundle.GetAllAssetNames();
-            foreach (string current in loaded)
+            // Cycle through asset bundle
+            foreach (string name in assetBundle.GetAllAssetNames())
             {
-                Log.Debug($"Loaded asset '{current}'");
+                // Is correct asset?
+                if (name.Contains(_file))
+                {
+                    return name;
+                }
             }
+
+            // Return null if not found
+            return null;
         }
 
         public bool HasAsset(string _name)
@@ -49,26 +64,40 @@ namespace Faithful
 
         public Sprite GetIcon(string _name)
         {
+            // Add file extension
+            string fullName = _name + ".png";
+
+            // Attempt to find asset
+            string asset = FindAsset(fullName);
+
             // Check for asset
-            if(!HasAsset(_name))
+            if(asset == null)
             {
-                Log.Error($"Requested asset '{_name}' could not be found.");
+                Log.Error($"Requested asset '{fullName}' could not be found.");
+                return null;
             }
 
             // Return asset
-            return assetBundle.LoadAsset<Sprite>(_name);
+            return assetBundle.LoadAsset<Sprite>(asset);
         }
 
         public GameObject GetModel(string _name)
         {
+            // Add file extension
+            string fullName = _name + ".prefab";
+
+            // Attempt to find asset
+            string asset = FindAsset(fullName);
+
             // Check for asset
-            if (!HasAsset(_name))
+            if (asset == null)
             {
-                Log.Error($"Requested asset '{_name}' could not be found.");
+                Log.Error($"Requested asset '{fullName}' could not be found.");
+                return null;
             }
 
             // Return asset
-            return assetBundle.LoadAsset<GameObject>(_name);
+            return assetBundle.LoadAsset<GameObject>(asset);
         }
     }
 }

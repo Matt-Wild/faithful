@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 355624263
+CRC: 962488141
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e9e3a07b42d207e5c215a0f51f8c79e5
+    Hash: 8eb33f4d21848496495b7ed138a7734b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -29,10 +29,22 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Testing/texBuffTeleporterGear.png
-- Assets/Testing/texCopperGearIcon.png
-- Assets/Testing/texBuffDevMode.png
-- Assets/Testing/texCopperGear.png
-- Assets/Testing/texCopperGearNormal.png
-- Assets/Testing/CopperGearMesh.prefab
+- Assets/Items/CopperGear/texBuffTeleporterGear.png
+- Assets/Items/BrassScrews/texBrassScrewsIcon.png
+- Assets/Items/MeltingWarbler/MeltingWarblerMesh.prefab
+- Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
+- Assets/Items/CopperGear/texCopperGearIcon.png
+- Assets/Items/BrassScrews/BrassScrewsDisplayMesh.prefab
+- Assets/Status/texBuffDevMode.png
+- Assets/Items/BrassScrews/BrassScrewsMesh.prefab
+- Assets/Items/BrassScrews/texBrassScrews.png
+- Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
+- Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.prefab
+- Assets/Items/CopperGear/texCopperGear.png
+- Assets/Items/MeltingWarbler/texMeltingWarblerIcon.png
+- Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
+- Assets/Items/MeltingWarbler/texMeltingWarbler.png
+- Assets/Items/BrassScrews/texBuffTeleporterScrew.png
+- Assets/Items/CopperGear/texCopperGearNormal.png
+- Assets/Items/CopperGear/CopperGearMesh.prefab
 Dependencies: []

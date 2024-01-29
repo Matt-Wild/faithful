@@ -1,6 +1,6 @@
 {
     "name": "Faithful",
-    "version_number": "1.0.0",
+    "version_number": "1.1.0",
     "website_url": "",
     "description": "Faithful additions to RoR2.",
     "dependencies": [
