@@ -21,7 +21,7 @@ namespace Faithful
         public string token;
 
         // Constructor
-        public Item(Toolbox _toolbox, string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null)
+        public Item(Toolbox _toolbox, string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null)
         {
             toolbox = _toolbox;
 
@@ -68,14 +68,17 @@ namespace Faithful
             itemDef.pickupIconSprite = toolbox.assets.GetIcon(_iconName);
             itemDef.pickupModelPrefab = toolbox.assets.GetModel(_modelName);
 
-            // Add item to R2API
-            // You can add your own display rules here,
-            // where the first argument passed are the default display rules:
-            // the ones used when no specific display rules for a character are found.
-            // For this example, we are omitting them,
-            // as they are quite a pain to set up without tools like https://thunderstore.io/package/KingEnderBrine/ItemDisplayPlacementHelper/
-            ItemDisplayRuleDict displayRules = new ItemDisplayRuleDict(null);
-            ItemAPI.Add(new CustomItem(itemDef, displayRules));
+            // Check for item display settings
+            if (_displaySettings != null)
+            {
+                // Add item and pass in item display settings
+                ItemAPI.Add(new CustomItem(itemDef, _displaySettings.GetRules()));
+            }
+            else
+            {
+                // Add item and pass in null Item Display Rules
+                ItemAPI.Add(new CustomItem(itemDef, new ItemDisplayRuleDict(null)));
+            }
 
             Log.Debug($"Created item '{_token}'");
         }

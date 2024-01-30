@@ -4,30 +4,35 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class MeltingWarbler
+    internal class BrassScrews
     {
         // Toolbox
         protected Toolbox toolbox;
 
-        // Store item
-        Item meltingWarblerItem;
+        // Store item and buff
+        Item brassScrewsItem;
+        Buff brassScrewsBuff;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
 
         // Constructor
-        public MeltingWarbler(Toolbox _toolbox)
+        public BrassScrews(Toolbox _toolbox)
         {
             toolbox = _toolbox;
 
             // Create display settings
             CreateDisplaySettings();
 
-            // Create Melting Warbler item
-            meltingWarblerItem = toolbox.items.AddItem("MELTING_WARBLER", [ItemTag.Utility], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _displaySettings: displaySettings);
+            // Create Brass Screws item and buff
+            brassScrewsItem = toolbox.items.AddItem("BRASS_SCREWS", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_COPPER_GEAR_NAME", _displaySettings: displaySettings);
+            brassScrewsBuff = toolbox.buffs.AddBuff("BRASS_SCREWS", "texbuffteleporterscrew", Color.white);
 
             // Add stats modification
-            toolbox.behaviour.AddStatsMod(meltingWarblerItem, MeltingWarblerStatsMod);
+            toolbox.behaviour.AddStatsMod(brassScrewsBuff, BrassScrewsStatsMod);
+
+            // Link Holdout Zone behaviour
+            toolbox.behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
         }
 
         private void CreateDisplaySettings()
@@ -53,10 +58,38 @@ namespace Faithful
             //displaySettings.AddCharacterDisplay("Scavenger", "Weapon", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
         }
 
-        void MeltingWarblerStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        void BrassScrewsStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
-            // Modify jump power
-            _stats.baseJumpPowerAdd += 1.8f * _count;
+            // Modify damage
+            _stats.damageMultAdd += 0.20f * _count;
+        }
+
+        void InHoldoutZone(CharacterBody _body, HoldoutZoneController _zone)
+        {
+            // Check for inventory
+            Inventory inventory = _body.inventory;
+            if (inventory)
+            {
+                // Get Brass Screws amount
+                int copperGearCount = inventory.GetItemCount(brassScrewsItem.itemDef.itemIndex);
+
+                // Has Brass Screws?
+                if (copperGearCount > 0)
+                {
+                    // Refresh Brass Screws buffs
+                    toolbox.utils.RefreshTimedBuffs(_body, brassScrewsBuff.buffDef, 1);
+
+                    // Get needed amount of buffs
+                    int needed = copperGearCount - _body.GetBuffCount(brassScrewsBuff.buffDef);
+
+                    // Catch up buff count
+                    for (int i = 0; i < needed; i++)
+                    {
+                        // Add Brass Screws buff
+                        _body.AddTimedBuff(brassScrewsBuff.buffDef, 1);
+                    }
+                }
+            }
         }
     }
 }

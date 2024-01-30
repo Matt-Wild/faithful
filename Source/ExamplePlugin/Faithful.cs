@@ -53,6 +53,7 @@ namespace Faithful
 
         // Items
         private static CopperGear copperGear;
+        private static BrassScrews brassScrews;
         private static MeltingWarbler meltingWarbler;
 
         // The Awake() method is run at the very start when the game is initialized.
@@ -72,6 +73,7 @@ namespace Faithful
 
             // Create items
             copperGear = new CopperGear(toolbox);
+            brassScrews = new BrassScrews(toolbox);
             meltingWarbler = new MeltingWarbler(toolbox);
 
             // But now we have defined an item, but it doesn't do anything yet. So we'll need to define that ourselves.

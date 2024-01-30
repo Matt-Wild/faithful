@@ -13,20 +13,49 @@ namespace Faithful
         Item copperGearItem;
         Buff copperGearBuff;
 
+        // Store display settings
+        ItemDisplaySettings displaySettings;
+
         // Constructor
         public CopperGear(Toolbox _toolbox)
         {
             toolbox = _toolbox;
 
+            // Create display settings
+            CreateDisplaySettings();
+
             // Create Copper Gear item and buff
-            copperGearItem = toolbox.items.AddItem("COPPER_GEAR", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true);
-            copperGearBuff = toolbox.buffs.AddBuff("COPPER_GEAR", "texbuffteleportergear", Color.yellow);
+            copperGearItem = toolbox.items.AddItem("COPPER_GEAR", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _displaySettings: displaySettings);
+            copperGearBuff = toolbox.buffs.AddBuff("COPPER_GEAR", "texbuffteleportergear", Color.white);
 
             // Add stats modification
             toolbox.behaviour.AddStatsMod(copperGearBuff, CopperGearStatsMod);
 
             // Link Holdout Zone behaviour
             toolbox.behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
+        }
+
+        private void CreateDisplaySettings()
+        {
+            // Create display settings
+            displaySettings = toolbox.utils.CreateItemDisplaySettings("coppergeardisplaymesh");
+
+            // Add character display settings
+            displaySettings.AddCharacterDisplay("Commando", "LowerArmL", new Vector3(0.01898f, 0.26776f, 0.00182f), new Vector3(7.69423f, 1.2381f, 2.28152f), new Vector3(0.11f, 0.11f, 0.11f));
+            //displaySettings.AddCharacterDisplay("Huntress", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Bandit", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Engineer", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Turret", "Head", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Mercenary", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("REX", "CalfBackL", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Loader", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Acrid", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Captain", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Void Fiend", "CalfR", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            //displaySettings.AddCharacterDisplay("Scavenger", "Weapon", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
         }
 
         void CopperGearStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
