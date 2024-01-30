@@ -23,8 +23,6 @@ namespace Faithful
             items = new Items(this);
             buffs = new Buffs(this);
 
-            On.RoR2.Items.ContagiousItemManager.Init += AddItemCorruptions;
-
             Log.Debug("Toolbox built");
         }
 
@@ -38,16 +36,6 @@ namespace Faithful
         {
             // Update tools
             behaviour.FixedUpdate();
-        }
-
-        private void AddItemCorruptions(On.RoR2.Items.ContagiousItemManager.orig_Init orig)
-        {
-            // Add item corruptions
-            items.AddItemCorruptions();
-
-            Log.Debug("Added item corruptions");
-
-            orig(); // Run normal processes
         }
     }
 }

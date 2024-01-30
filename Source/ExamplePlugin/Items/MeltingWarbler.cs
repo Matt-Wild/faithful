@@ -27,7 +27,7 @@ namespace Faithful
         void MeltingWarblerStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify jump power
-            _stats.baseJumpPowerAdd += 1.0f * _count;
+            _stats.baseJumpPowerAdd += 1.8f * _count;
         }
     }
 }

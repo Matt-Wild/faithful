@@ -22,16 +22,6 @@ namespace Faithful
             items = new List<Item>();
         }
 
-        public void AddItemCorruptions()
-        {
-            // Cycle through items
-            foreach (Item item in items)
-            {
-                // Add item corruptions
-                item.AddCorruption();
-            }
-        }
-
         public Item AddItem(string _token, ItemTag[] _tags, string _iconDir, string _modelDir, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null)
         {
             // Create item

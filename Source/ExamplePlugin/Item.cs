@@ -20,9 +20,6 @@ namespace Faithful
         // Item token
         public string token;
 
-        // Corrupted item token
-        private string corruptToken = null;
-
         // Constructor
         public Item(Toolbox _toolbox, string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null)
         {
@@ -30,9 +27,6 @@ namespace Faithful
 
             // Assign token
             token = _token;
-
-            // Store corrupted item token
-            corruptToken = _corruptToken;
 
             // Create item def
             itemDef = ScriptableObject.CreateInstance<ItemDef>();
@@ -63,6 +57,13 @@ namespace Faithful
             // Is item hidden
             itemDef.hidden = _hidden;
 
+            // Corrupts item?
+            if (_corruptToken != null)
+            {
+                // Add corruption pair
+                toolbox.utils.AddCorruptionPair(itemDef, _corruptToken);
+            }
+
             // Set icon and model
             itemDef.pickupIconSprite = toolbox.assets.GetIcon(_iconName);
             itemDef.pickupModelPrefab = toolbox.assets.GetModel(_modelName);
@@ -77,37 +78,6 @@ namespace Faithful
             ItemAPI.Add(new CustomItem(itemDef, displayRules));
 
             Log.Debug($"Created item '{_token}'");
-        }
-
-        public void AddCorruption()
-        {
-            // Corrupts item?
-            if (corruptToken != null)
-            {
-                // Get item to corrupt
-                ItemDef itemToCorrupt = ItemCatalog.itemDefs.Where(x => x.nameToken == corruptToken).FirstOrDefault();
-
-                // Found item?
-                if (!itemToCorrupt)
-                {
-                    Log.Error($"Failed to add '{corruptToken}' as corrupted by '{token}', unable to find '{corruptToken}'");
-                }
-                else
-                {
-                    // Create temp pair array
-                    var pair = new ItemDef.Pair[]
-                    {
-                        new ItemDef.Pair
-                        {
-                            itemDef1 = itemToCorrupt,
-                            itemDef2 = itemDef,
-                        }
-                    };
-
-                    // Append pair array to contagious items pair array
-                    ItemCatalog.itemRelationships[DLC1Content.ItemRelationshipTypes.ContagiousItem] = ItemCatalog.itemRelationships[DLC1Content.ItemRelationshipTypes.ContagiousItem].AddRangeToArray(pair);
-                }
-            }
         }
     }
 }

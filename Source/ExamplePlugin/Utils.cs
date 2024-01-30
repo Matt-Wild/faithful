@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using HarmonyLib;
 using RoR2;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,10 @@ namespace Faithful
         private const bool _debugMode = true;
 
         // Simulacrum banned items
-        List<ItemDef> simulacrumBanned = [];
+        List<ItemDef> simulacrumBanned = new List<ItemDef>();
+
+        // Corruption item pairs
+        List<CorruptPair> corruptionPairs = new List<CorruptPair>();
 
         // Constructor
         public Utils(Toolbox _toolbox, PluginInfo _pluginInfo)
@@ -30,6 +34,9 @@ namespace Faithful
 
             // Config Simulacrum
             On.RoR2.InfiniteTowerRun.OverrideRuleChoices += InjectSimulacrumBannedItems;
+
+            // Config item corruptions
+            On.RoR2.Items.ContagiousItemManager.Init += SetupItemCorruptions;
 
             Log.Debug("Utils initialised");
         }
@@ -58,6 +65,12 @@ namespace Faithful
         {
             // Add item def to banned list for Simulacrum
             simulacrumBanned.Add(_item);
+        }
+
+        public void AddCorruptionPair(ItemDef _corrupter, string _corruptedToken)
+        {
+            // Add item pair to corruption pairs
+            corruptionPairs.Add(new CorruptPair(_corrupter, _corruptedToken));
         }
 
         void InjectSimulacrumBannedItems(On.RoR2.InfiniteTowerRun.orig_OverrideRuleChoices orig, InfiniteTowerRun self, RuleChoiceMask mustInclude, RuleChoiceMask mustExclude, ulong runSeed)
@@ -94,6 +107,26 @@ namespace Faithful
             orig(self, mustInclude, mustExclude, runSeed);  // Run normal processes
         }
 
+        private void SetupItemCorruptions(On.RoR2.Items.ContagiousItemManager.orig_Init orig)
+        {
+            // Create item pair list
+            List<ItemDef.Pair> itemPairs = new List<ItemDef.Pair>();
+
+            // Cycle through corruption pairs
+            foreach (CorruptPair pair in corruptionPairs)
+            {
+                // Add to item pairs
+                itemPairs.Add(pair.GetPair());
+            }
+
+            // Append corruption pairs to contagious items pair array
+            ItemCatalog.itemRelationships[DLC1Content.ItemRelationshipTypes.ContagiousItem] = ItemCatalog.itemRelationships[DLC1Content.ItemRelationshipTypes.ContagiousItem].AddRangeToArray(itemPairs.ToArray());
+
+            Log.Debug("Added item corruptions");
+
+            orig(); // Run normal processes
+        }
+
         // Return Hurt Boxes from RoR2 Sphere Search
         public HurtBox[] GetHurtBoxesInSphere(Vector3 position, float radius)
         {
@@ -116,6 +149,41 @@ namespace Faithful
         public bool debugMode
         {
             get { return _debugMode; }
+        }
+    }
+
+    internal struct CorruptPair
+    {
+        // Store corrupter and corrupted
+        private ItemDef corrupter;
+        private string corruptedToken;
+
+        public CorruptPair(ItemDef _corrupter, string _corruptedToken)
+        {
+            // Assign corrupter and corrupted
+            corrupter = _corrupter;
+            corruptedToken = _corruptedToken;
+        }
+
+        public ItemDef.Pair GetPair()
+        {
+            // Copy corrupted token to local
+            string localCorruptedToken = corruptedToken;
+
+            // Get item to corrupt
+            ItemDef corrupted = ItemCatalog.itemDefs.Where(x => x.nameToken == localCorruptedToken).FirstOrDefault();
+
+            // Found item?
+            if (!corrupted)
+            {
+                Log.Error($"Failed to add '{localCorruptedToken}' as corrupted by '{corrupter.nameToken}', unable to find '{localCorruptedToken}'");
+
+                // Return empty item pair
+                return new ItemDef.Pair();
+            }
+
+            // Return setup item pair
+            return new ItemDef.Pair { itemDef1 = corrupted, itemDef2 = corrupter };
         }
     }
 }
