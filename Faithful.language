@@ -17,7 +17,7 @@
 	
 	"FAITHFUL_VENGEFUL_TOASTER_NAME": "Vengeful Toaster",
 	"FAITHFUL_VENGEFUL_TOASTER_PICKUP": "Taking damage increases your own.",
-	"FAITHFUL_VENGEFUL_TOASTER_DESC": "Getting hit gains <style=cIsDamage>Vengeance</style> for <style=cIsUtility>4</style> <style=cStack>(+1 per stack)</style> seconds. Each stack of <style=cIsDamage>Vengeance</style> increases damage by <style=cIsDamage>75%</style>. All stacks of <style=cIsDamage>Vengeance</style> are consumed upon dealing damage.",
+	"FAITHFUL_VENGEFUL_TOASTER_DESC": "Getting hit gains <style=cIsDamage>Vengeance</style> for <style=cIsUtility>4</style> <style=cStack>(+1 per stack)</style> seconds. Each stack of <style=cIsDamage>Vengeance</style> increases damage by <style=cIsDamage>+75%</style>. All stacks of <style=cIsDamage>Vengeance</style> are consumed upon dealing damage.",
 	"FAITHFUL_VENGEFUL_TOASTER_LORE": "Haha toaster go\n\n<style=cMono>BRRRRRRRRRRRRRRRRRRRRRRRRRRRRR</style>",
 	
 	"FAITHFUL_MELTING_WARBLER_NAME": "Melting Warbler",
