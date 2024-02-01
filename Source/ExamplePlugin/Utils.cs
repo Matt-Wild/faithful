@@ -148,7 +148,7 @@ namespace Faithful
             orig(); // Run normal processes
         }
 
-        public ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _ignoreOverlays = false)
+        public ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _ignoreOverlays = false, bool _dithering = true)
         {
             // Get model asset
             GameObject model = toolbox.assets.GetModel(_modelFile);
@@ -189,6 +189,19 @@ namespace Faithful
                     defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                     ignoreOverlays = _ignoreOverlays    // Should this model ignore effect overlays
                 };
+
+                // Check for material
+                Material material = renderers[i] is SkinnedMeshRenderer ? renderers[i].sharedMaterial : renderers[i].material;
+                if (material)
+                {
+                    // Check for dither keyword
+                    string[] keywords = material.GetShaderKeywords();
+                    if (keywords.Contains("DITHER"))
+                    {
+                        // Enable dithering
+                        material.EnableKeyword("DITHER");
+                    }
+                }
             }
 
             // Set item display renderer info
