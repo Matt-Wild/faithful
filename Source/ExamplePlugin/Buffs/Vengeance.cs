@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using RoR2;
 using R2API;
-using System.Collections.Generic;
 
 namespace Faithful
 {
@@ -46,7 +45,7 @@ namespace Faithful
         void VengeanceStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify damage multiplier
-            _stats.damageMultAdd += _count > 1 ? 1.0f + (0.75f * _count - 1) : 1.0f;
+            _stats.damageMultAdd += 0.75f * _count;
         }
     }
 }
