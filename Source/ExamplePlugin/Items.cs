@@ -48,6 +48,7 @@ namespace Faithful
             }
 
             // Return null if not found
+            Log.Error($"Attempted to fetch item '{_token}' but couldn't find it");
             return null;
         }
     }

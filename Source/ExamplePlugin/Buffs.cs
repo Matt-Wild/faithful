@@ -49,6 +49,7 @@ namespace Faithful
             }
 
             // Return null if not found
+            Log.Error($"Attempted to fetch buff '{_token}' but couldn't find it");
             return null;
         }
     }

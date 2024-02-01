@@ -1,4 +1,5 @@
 using BepInEx;
+using ProBuilder.Core;
 using R2API;
 using RoR2;
 using System.Linq;
@@ -48,13 +49,15 @@ namespace Faithful
         // Toolbox
         Toolbox toolbox;
 
-        // God Mode buff
+        // Buffs
         private static GodMode godMode;
+        private static Vengeance vengeance;
 
         // Items
         private static CopperGear copperGear;
         private static BrassScrews brassScrews;
         private static MeltingWarbler meltingWarbler;
+        private static VengefulToaster vengefulToaster;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -70,11 +73,13 @@ namespace Faithful
 
             // Create buffs
             godMode = new GodMode(toolbox);
+            vengeance = new Vengeance(toolbox);
 
             // Create items
             copperGear = new CopperGear(toolbox);
             brassScrews = new BrassScrews(toolbox);
             meltingWarbler = new MeltingWarbler(toolbox);
+            vengefulToaster = new VengefulToaster(toolbox);
 
             // But now we have defined an item, but it doesn't do anything yet. So we'll need to define that ourselves.
             //GlobalEventManager.onCharacterDeathGlobal += GlobalEventManager_onCharacterDeathGlobal;

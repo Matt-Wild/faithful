@@ -1,6 +1,7 @@
 {
   "strings": {
 	"FAITHFUL_DEV_BUFF": "GOD MODE",
+	"FAITHFUL_VENGEANCE_BUFF": "Vengeance",
   
     "FAITHFUL_COPPER_GEAR_NAME": "Copper Gear",
 	"FAITHFUL_COPPER_GEAR_PICKUP": "Increase attack speed while within the Teleporter zone.",
@@ -14,9 +15,14 @@
 	"FAITHFUL_BRASS_SCREWS_LORE": "<style=cMono>\r\n//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u201CYo, how’re you holding up- woah!\u201C\n\n\u201COh, u-uh... Hey, there. I’ve been... a little busy as you can see.\u201C\n\n\u201CI never thought I'd see so many dead beetles and... a queen? Did you kill an entire nest? By yourself?! How’d you-?! Gah!\u201C\n\n\u201CHeheh... yeah. It was real bloody.\u201C\n\n\u201CH-how’d you even manage all this? Are... are those screws?\u201C\n\n\u201CThese? Yeah, your whole 'gear' talk gave me an idea.\u201C",
 	"FAITHFUL_BRASS_SCREWS_BUFF": "Brass Screws",
 	
+	"FAITHFUL_VENGEFUL_TOASTER_NAME": "Vengeful Toaster",
+	"FAITHFUL_VENGEFUL_TOASTER_PICKUP": "Taking damage increases your own.",
+	"FAITHFUL_VENGEFUL_TOASTER_DESC": "Getting hit gains <style=cIsDamage>Vengeance</style> for <style=cIsUtility>4</style> <style=cStack>(+1 per stack)</style> seconds. Each stack of <style=cIsDamage>Vengeance</style> increases damage by <style=cIsDamage>100%</style> <style=cStack>(+75% per stack)</style>. All stacks of <style=cIsDamage>Vengeance</style> are consumed upon dealing damage.",
+	"FAITHFUL_VENGEFUL_TOASTER_LORE": "Haha toaster go\n\n<style=cMono>BRRRRRRRRRRRRRRRRRRRRRRRRRRRRR</style>",
+	
 	"FAITHFUL_MELTING_WARBLER_NAME": "Melting Warbler",
 	"FAITHFUL_MELTING_WARBLER_PICKUP": "Increase jump height. <style=cIsVoid>Corrupts all Wax Quails</style>.",
 	"FAITHFUL_MELTING_WARBLER_DESC": "Increase <style=cIsUtility>jump height</style> by <style=cIsUtility>1m</style> <style=cStack>(+1m per stack)</style>. <style=cIsVoid>Corrupts all Wax Quails</style>.",
-	"FAITHFUL_MELTING_WARBLER_LORE": "Melts ur warbler uwu"
+	"FAITHFUL_MELTING_WARBLER_LORE": "Order: Wax Warbler\nTracking Number: 27*******\nEstimated Delivery: 02/15/2057\nShipping Method: Priority\nShipping Address: Research Center, Polarity Zone, Neptune\nShipping Details:\n\nHello Buu,\nThis is Mama again, how is everything where you are?\n\nWe’ve had the heat on a bit higher for the colder months which led to some of Papa's wax models melting so we’ve had to move them out of the house for now. I am sending one to you that we thought you might like. There were a few more that he wanted you to have but Papa is moving onto using wood now so look forward to next time.\n\nHope we can meet Buu again soon! :-)\nMama"
   }
 }
