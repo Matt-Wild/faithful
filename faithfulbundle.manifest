@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1791901056
+CRC: 2792565636
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: bcf015149439e57d6af02ddc8c585127
+    Hash: 706105c481bddcf730e1e453ed061fe6
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -37,6 +37,7 @@ Assets:
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
 - Assets/Items/CopperGear/texCopperGearIcon.png
+- Assets/Shader/hgstandard.shader
 - Assets/Items/BrassScrews/BrassScrewsDisplayMesh.prefab
 - Assets/Status/texBuffDevMode.png
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
