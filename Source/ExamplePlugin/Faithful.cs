@@ -53,6 +53,7 @@ namespace Faithful
         private static BrassScrews brassScrews;
         private static MeltingWarbler meltingWarbler;
         private static VengefulToaster vengefulToaster;
+        private static SpaciousUmbrella spaciousUmbrella;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -75,6 +76,7 @@ namespace Faithful
             brassScrews = new BrassScrews(toolbox);
             meltingWarbler = new MeltingWarbler(toolbox);
             vengefulToaster = new VengefulToaster(toolbox);
+            spaciousUmbrella = new SpaciousUmbrella(toolbox);
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing!");

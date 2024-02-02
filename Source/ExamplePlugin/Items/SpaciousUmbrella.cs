@@ -1,39 +1,34 @@
 ﻿using R2API;
 using RoR2;
 using UnityEngine;
-using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
-    internal class VengefulToaster
+    internal class SpaciousUmbrella
     {
         // Toolbox
         protected Toolbox toolbox;
 
-        // Store item and buff
-        Buff vengeanceBuff;
-        Item vengefulToasterItem;
+        // Store item
+        Item spaciousUmbrellaItem;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
 
         // Constructor
-        public VengefulToaster(Toolbox _toolbox)
+        public SpaciousUmbrella(Toolbox _toolbox)
         {
             toolbox = _toolbox;
-
-            // Get Vengeance buff
-            vengeanceBuff = toolbox.buffs.GetBuff("VENGEANCE");
 
             // Create display settings
             //CreateDisplaySettings();
 
-            // Create Vengeful Toaster item
-            vengefulToasterItem = toolbox.items.AddItem("VENGEFUL_TOASTER", [ItemTag.Damage, ItemTag.AIBlacklist], "textemporalcubeicon", "temporalcubemesh", ItemTier.Tier2);
+            // Create Copper Gear item and buff
+            spaciousUmbrellaItem = toolbox.items.AddItem("SPACIOUS_UMBRELLA", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.HoldoutZoneRelated], "textemporalcubeicon", "temporalcubemesh", ItemTier.Tier2, _simulacrumBanned: true);
             //_displaySettings: displaySettings
 
-            // Link On Damage Dealt behaviour
-            toolbox.behaviour.AddOnDamageDealtCallback(OnDamageDealt);
+            // Link Holdout Zone behaviour
+            toolbox.behaviour.AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadius);
         }
 
         private void CreateDisplaySettings()
@@ -52,31 +47,43 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Mercenary", "LowerArmL", new Vector3(0.0085F, 0.152F, -0.0075F), new Vector3(0F, 18.25F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
             displaySettings.AddCharacterDisplay("REX", "FootFrontL", new Vector3(0F, -0.034F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Loader", "MechLowerArmL", new Vector3(-0.0025F, 0.64F, -0.0055F), new Vector3(356F, 90F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Acrid", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
-            displaySettings.AddCharacterDisplay("Captain", "Chest", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
-            displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
-            displaySettings.AddCharacterDisplay("Void Fiend", "CalfR", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
-            displaySettings.AddCharacterDisplay("Scavenger", "Weapon", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
+            displaySettings.AddCharacterDisplay("Acrid", "LowerArmL", new Vector3(0F, 3.725F, 0F), new Vector3(355F, 180F, 0F), new Vector3(1.5F, 1.5F, 1.5F));
+            displaySettings.AddCharacterDisplay("Captain", "MuzzleGun", new Vector3(-0.00353F, -0.00525F, -0.06F), new Vector3(0F, 90F, 90F), new Vector3(0.07F, 0.07F, 0.07F));
+            displaySettings.AddCharacterDisplay("Railgunner", "GunScope", new Vector3(-0.075F, -0.1475F, 0.2855F), new Vector3(0F, 90F, 270F), new Vector3(0.05F, 0.05F, 0.05F));
+            displaySettings.AddCharacterDisplay("Void Fiend", "CalfL", new Vector3(-0.0025F, 0.385F, 0.0025F), new Vector3(4.5F, 0F, 350F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Scavenger", "Head", new Vector3(5.13896F, 3.45994F, 0.08489F), new Vector3(338.495F, 358.5428F, 334.8337F), new Vector3(1.5F, 1.5F, 1.5F));
         }
 
-        void OnDamageDealt(DamageReport report)
+        void OnHoldoutZoneCalcRadius(ref float _radius, HoldoutZoneController _zone)
         {
-            // Check for inventory of victum
-            Inventory inventory = report.victimBody.inventory;
-            if (inventory)
+            // Number of Spacious Umbrella items
+            int count = 0;
+
+            // Cycle through players
+            foreach (PlayerCharacterMasterController player in PlayerCharacterMasterController.instances)
             {
-                // Get Vengeful Toaster amount
-                int vengefulToasterCount = inventory.GetItemCount(vengefulToasterItem.itemDef.itemIndex);
+                // Get character body
+                CharacterBody body = player.body;
 
-                // Has Vengeful Toasters?
-                if (vengefulToasterCount > 0)
+                // Check for character body
+                if (!body)
                 {
-                    // Calculate buff duration
-                    float buffDuration = vengefulToasterCount > 1 ? 4.0f + (1.0f * vengefulToasterCount - 1) : 4.0f;
-
-                    // Add Vengeance buff
-                    report.victimBody.AddTimedBuff(vengeanceBuff.buffDef, buffDuration);
+                    continue;
                 }
+
+                // Check for inventory
+                if (body.inventory)
+                {
+                    // Add to item total
+                    count += body.inventory.GetItemCount(spaciousUmbrellaItem.itemDef);
+                }
+            }
+
+            // Check if players have item
+            if (count > 0)
+            {
+                // Add onto radius
+                _radius += Mathf.Log(count + 1.0f, 16.0f) * _zone.baseRadius;
             }
         }
     }

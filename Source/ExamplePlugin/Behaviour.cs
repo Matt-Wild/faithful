@@ -7,6 +7,8 @@ namespace Faithful
     internal delegate void Callback();
 
     internal delegate void InHoldoutZoneCallback(CharacterBody _contained, HoldoutZoneController _zone);
+    internal delegate void OnHoldoutZoneStartCallback(HoldoutZoneController _zone);
+    internal delegate void OnHoldoutZoneCalcRadiusCallback(ref float _radius, HoldoutZoneController _zone);
 
     internal delegate void StatsModCallback(int _count, RecalculateStatsAPI.StatHookEventArgs _stats);
 
@@ -23,8 +25,10 @@ namespace Faithful
         protected List<Callback> fixedUpdateCallbacks = new List<Callback>();
         protected List<Callback> debugFixedUpdateCallbacks = new List<Callback>();
 
-        // In Holdout Zone callback functions
+        // Holdout Zone callback functions
         protected List<InHoldoutZoneCallback> inHoldoutZoneCallbacks = new List<InHoldoutZoneCallback>();
+        protected List<OnHoldoutZoneStartCallback> onHoldoutZoneStartCallbacks = new List<OnHoldoutZoneStartCallback>();
+        protected List<OnHoldoutZoneCalcRadiusCallback> onHoldoutZoneCalcRadiusCallbacks = new List<OnHoldoutZoneCalcRadiusCallback>();
 
         // Stat modification item and buff callbacks
         List<ItemStatsMod> itemStatsMods = new List<ItemStatsMod>();
@@ -40,6 +44,7 @@ namespace Faithful
 
             // Inject hooks
             On.RoR2.HoldoutZoneController.FixedUpdate += HookHoldoutZoneControllerFixedUpdate;
+            On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
 
@@ -138,15 +143,31 @@ namespace Faithful
             Log.Debug($"Added stat mods for '{_buff.token}' buff");
         }
 
-        // Add In Holdout Zone callback
+        // Add in Holdout Zone callback
         public void AddInHoldoutZoneCallback(InHoldoutZoneCallback _callback)
         {
             inHoldoutZoneCallbacks.Add(_callback);
 
-            Log.Debug("Added Holdout Zone behaviour");
+            Log.Debug("Added in Holdout Zone behaviour");
         }
 
-        // Add On Damage Dealt callback
+        // Add on Holdout Zone start callback
+        public void AddOnHoldoutZoneStartCallback(OnHoldoutZoneStartCallback _callback)
+        {
+            onHoldoutZoneStartCallbacks.Add(_callback);
+
+            Log.Debug("Added on Holdout Zone start behaviour");
+        }
+
+        // Add on Holdout Zone calc radius callback
+        public void AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadiusCallback _callback)
+        {
+            onHoldoutZoneCalcRadiusCallbacks.Add(_callback);
+
+            Log.Debug("Added on Holdout Zone calc radius behaviour");
+        }
+
+        // Add on Damage Dealt callback
         public void AddOnDamageDealtCallback(OnDamageDealtCallback _callback)
         {
             onDamageDealtCallbacks.Add(_callback);
@@ -185,6 +206,22 @@ namespace Faithful
                 {
                     callback(hurtBox.healthComponent.body, self);
                 }
+            }
+
+            orig(self); // Run normal processes
+        }
+
+        protected void HookHoldoutZoneControllerStart(On.RoR2.HoldoutZoneController.orig_Start orig, HoldoutZoneController self)
+        {
+            // Add Faithful Holdout Zone mono behaviours
+            FaithfulHoldoutZoneBehaviour behaviour = self.gameObject.AddComponent<FaithfulHoldoutZoneBehaviour>();
+            behaviour.Init(onHoldoutZoneCalcRadiusCallbacks);
+
+            // Cycle through OnHoldoutZoneStart callbacks
+            foreach (OnHoldoutZoneStartCallback callback in onHoldoutZoneStartCallbacks)
+            {
+                // Call
+                callback(self);
             }
 
             orig(self); // Run normal processes
