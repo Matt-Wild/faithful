@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2745446722
+CRC: 925447453
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 24eab980a6a14141f7ec792fe03f9cf9
+    Hash: cbd4aca72af92ca4bd6cb7495ad00d7b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -29,6 +29,7 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/Items/CopperGear/texCopperGearEmission.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Placeholder/Item/texBuffTemporalCube.png
