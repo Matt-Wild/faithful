@@ -45,6 +45,9 @@ namespace Faithful
             { "scavenger", "mdlScav" }
         };
 
+        // HG shader
+        private Shader HGShader;
+
         // Constructor
         public Utils(Toolbox _toolbox, PluginInfo _pluginInfo)
         {
@@ -52,6 +55,9 @@ namespace Faithful
 
             // Set plugin info
             pluginInfo = _pluginInfo;
+
+            // Get HG shader
+            HGShader = LegacyResourcesAPI.Load<Shader>("Shaders/Deferred/HGStandard");
 
             // Config Simulacrum
             On.RoR2.InfiniteTowerRun.OverrideRuleChoices += InjectSimulacrumBannedItems;
@@ -194,12 +200,19 @@ namespace Faithful
                 Material material = renderers[i] is SkinnedMeshRenderer ? renderers[i].sharedMaterial : renderers[i].material;
                 if (material)
                 {
-                    // Check for dither keyword
-                    string[] keywords = material.GetShaderKeywords();
-                    if (keywords.Contains("DITHER"))
+                    // Set shader
+                    material.shader = HGShader;
+
+                    // Should dither?
+                    if (_dithering)
                     {
-                        // Enable dithering
-                        material.EnableKeyword("DITHER");
+                        // Check for dither keyword
+                        string[] keywords = material.GetShaderKeywords();
+                        if (keywords.Contains("DITHER"))
+                        {
+                            // Enable dithering
+                            material.EnableKeyword("DITHER");
+                        }
                     }
                 }
             }

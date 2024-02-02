@@ -99,5 +99,24 @@ namespace Faithful
             // Return asset
             return assetBundle.LoadAsset<GameObject>(asset);
         }
+
+        public Shader GetShader(string _name)
+        {
+            // Add file extension
+            string fullName = _name + ".shader";
+
+            // Attempt to find asset
+            string asset = FindAsset(fullName);
+
+            // Check for asset
+            if (asset == null)
+            {
+                Log.Error($"Requested asset '{fullName}' could not be found.");
+                return null;
+            }
+
+            // Return asset
+            return assetBundle.LoadAsset<Shader>(asset);
+        }
     }
 }
