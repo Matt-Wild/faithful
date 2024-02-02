@@ -156,6 +156,8 @@ namespace Faithful
 
         public ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _ignoreOverlays = false, bool _dithering = true)
         {
+            Log.Debug($"Creating item display for '{_modelFile}'");
+
             // Get model asset
             GameObject model = toolbox.assets.GetModel(_modelFile);
 
@@ -197,13 +199,11 @@ namespace Faithful
                     // Should dither?
                     if (_dithering)
                     {
-                        // Check for dither keyword
-                        string[] keywords = material.GetShaderKeywords();
-                        if (keywords.Contains("DITHER"))
-                        {
-                            // Enable dithering
-                            material.EnableKeyword("DITHER");
-                        }
+                        material.EnableKeyword("DITHER");
+                    }
+                    else
+                    {
+                        material.DisableKeyword("DITHER");
                     }
                 }
 
