@@ -187,15 +187,6 @@ namespace Faithful
             // Cycle through renderers
             for (int i = 0; i < renderers.Count; i++)
             {
-                // Set render info
-                renderInfos[i] = new CharacterModel.RendererInfo
-                {
-                    defaultMaterial = renderers[i] is SkinnedMeshRenderer ? renderers[i].sharedMaterial : renderers[i].material,
-                    renderer = renderers[i],
-                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                    ignoreOverlays = _ignoreOverlays    // Should this model ignore effect overlays
-                };
-
                 // Check for material
                 Material material = renderers[i] is SkinnedMeshRenderer ? renderers[i].sharedMaterial : renderers[i].material;
                 if (material)
@@ -215,6 +206,15 @@ namespace Faithful
                         }
                     }
                 }
+
+                // Set render info
+                renderInfos[i] = new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = material,
+                    renderer = renderers[i],
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = _ignoreOverlays    // Should this model ignore effect overlays
+                };
             }
 
             // Set item display renderer info

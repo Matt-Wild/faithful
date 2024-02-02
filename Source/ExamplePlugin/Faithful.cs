@@ -81,9 +81,6 @@ namespace Faithful
             meltingWarbler = new MeltingWarbler(toolbox);
             vengefulToaster = new VengefulToaster(toolbox);
 
-            // But now we have defined an item, but it doesn't do anything yet. So we'll need to define that ourselves.
-            //GlobalEventManager.onCharacterDeathGlobal += GlobalEventManager_onCharacterDeathGlobal;
-
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing!");
         }
