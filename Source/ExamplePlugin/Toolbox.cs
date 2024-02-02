@@ -8,6 +8,7 @@ namespace Faithful
     {
         // Tool references
         public Utils utils;
+        public DebugMode debugMode;
         public Behaviour behaviour;
         public Assets assets;
         public Items items;
@@ -18,6 +19,7 @@ namespace Faithful
         {
             // Create tools
             utils = new Utils(this, _pluginInfo);
+            debugMode = new DebugMode(this);
             behaviour = new Behaviour(this);
             assets = new Assets(this);
             items = new Items(this);
@@ -29,6 +31,7 @@ namespace Faithful
         public void Update()
         {
             // Update tools
+            debugMode.Update();
             behaviour.Update();
         }
 
