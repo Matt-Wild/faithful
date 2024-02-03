@@ -29,7 +29,7 @@ namespace Faithful
             //CreateDisplaySettings();
 
             // Create Vengeful Toaster item
-            vengefulToasterItem = toolbox.items.AddItem("VENGEFUL_TOASTER", [ItemTag.Damage, ItemTag.AIBlacklist], "textemporalcubeicon", "temporalcubemesh", ItemTier.Tier2);
+            vengefulToasterItem = toolbox.items.AddItem("VENGEFUL_TOASTER", [ItemTag.Damage, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2);
             //_displaySettings: displaySettings
 
             // Link On Damage Dealt behaviour
@@ -39,7 +39,7 @@ namespace Faithful
         private void CreateDisplaySettings()
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings("coppergeardisplaymesh");
+            displaySettings = toolbox.utils.CreateItemDisplaySettings("vengefultoasterdisplaymesh");
 
             // Add character display settings
             displaySettings.AddCharacterDisplay("Commando", "LowerArmL", new Vector3(0.01898F, 0.26776F, 0.00182F), new Vector3(7.69423F, 1.2381F, 2.28152F), new Vector3(0.11F, 0.11F, 0.11F));

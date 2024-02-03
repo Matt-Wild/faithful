@@ -22,10 +22,6 @@ namespace Faithful
 
             // Should hide this buff due to temporary assets?
             bool forceHide = !toolbox.utils.debugMode && _iconName == "texbufftemporalcube";
-            if (forceHide)
-            {
-                Log.Debug($"Hiding buff '{_token}' due to use of temporary assets outside of debug mode");
-            }
 
             // Assign token
             token = _token;
@@ -53,6 +49,11 @@ namespace Faithful
             ContentAddition.AddBuffDef(buffDef);
 
             Log.Debug($"Created buff '{_token}'");
+
+            if (forceHide)
+            {
+                Log.Debug($"Hiding buff '{_token}' due to use of temporary assets outside of debug mode");
+            }
         }
     }
 }

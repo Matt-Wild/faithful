@@ -18,7 +18,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create Vengeance buff
-            vengeanceBuff = toolbox.buffs.AddBuff("VENGEANCE", "texbufftemporalcube", Color.red);
+            vengeanceBuff = toolbox.buffs.AddBuff("VENGEANCE", "texbuffvengefulboost", Color.red);
 
             // Link On Damage Dealt behaviour
             toolbox.behaviour.AddOnDamageDealtCallback(OnDamageDealt);

@@ -27,10 +27,6 @@ namespace Faithful
 
             // Should hide this item due to temporary assets?
             bool forceHide = !toolbox.utils.debugMode && (_iconName == "textemporalcubeicon" || _modelName == "temporalcubemesh");
-            if (forceHide)
-            {
-                Log.Debug($"Hiding item '{_token}' due to use of temporary assets outside of debug mode");
-            }
 
             // Assign token
             token = _token;
@@ -88,6 +84,11 @@ namespace Faithful
             }
 
             Log.Debug($"Created item '{_token}'");
+
+            if (forceHide)
+            {
+                Log.Debug($"Hiding item '{_token}' due to use of temporary assets outside of debug mode");
+            }
         }
     }
 }
