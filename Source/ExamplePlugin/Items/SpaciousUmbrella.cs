@@ -57,27 +57,7 @@ namespace Faithful
         void OnHoldoutZoneCalcRadius(ref float _radius, HoldoutZoneController _zone)
         {
             // Number of Spacious Umbrella items
-            int count = 0;
-
-            // Cycle through players
-            foreach (PlayerCharacterMasterController player in PlayerCharacterMasterController.instances)
-            {
-                // Get character body
-                CharacterBody body = player.body;
-
-                // Check for character body
-                if (!body)
-                {
-                    continue;
-                }
-
-                // Check for inventory
-                if (body.inventory)
-                {
-                    // Add to item total
-                    count += body.inventory.GetItemCount(spaciousUmbrellaItem.itemDef);
-                }
-            }
+            int count = toolbox.utils.GetItemCountForTeam(TeamIndex.Player, spaciousUmbrellaItem.itemDef);
 
             // Check if players have item
             if (count > 0)

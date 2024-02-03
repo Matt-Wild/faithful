@@ -25,6 +25,13 @@ namespace Faithful
         {
             toolbox = _toolbox;
 
+            // Should hide this item due to temporary assets?
+            bool forceHide = !toolbox.utils.debugMode && (_iconName == "textemporalcubeicon" || _modelName == "temporalcubemesh");
+            if (forceHide)
+            {
+                Log.Debug($"Hiding item '{_token}' due to use of temporary assets outside of debug mode");
+            }
+
             // Assign token
             token = _token;
 
@@ -41,8 +48,8 @@ namespace Faithful
             // Set item tags
             itemDef.tags = _tags;
 
-            // Set item tier
-            itemDef.deprecatedTier = _tier;
+            // Set item tier (force untiered if forced to be hidden)
+            itemDef.deprecatedTier = forceHide ? ItemTier.NoTier : _tier;
 
             // Banned from Simulacrum?
             if (_simulacrumBanned)
@@ -54,8 +61,8 @@ namespace Faithful
             // Set can remove (Can a shrine of chance or printer etc. take this item)
             itemDef.canRemove = _canRemove;
 
-            // Is item hidden
-            itemDef.hidden = _hidden;
+            // Is item hidden (Also hide if using temporary assets when not in debug mode)
+            itemDef.hidden = _hidden || forceHide;
 
             // Corrupts item?
             if (_corruptToken != null)

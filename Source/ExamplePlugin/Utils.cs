@@ -2,7 +2,9 @@
 using HarmonyLib;
 using R2API;
 using RoR2;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
@@ -242,6 +244,32 @@ namespace Faithful
             }.RefreshCandidates().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes();
 
             return hurtBoxes;   // Return found hurt boxes
+        }
+
+        public int GetItemCountForTeam(TeamIndex _teamIndex, ItemDef _itemDef, bool _requiresAlive = true, bool _requiresConnected = true)
+        {
+            // Found item count
+            int count = 0;
+
+            // Cycle through characters
+            foreach (CharacterMaster character in CharacterMaster.readOnlyInstancesList)
+            {
+                // Check if valid
+                if (character.teamIndex == _teamIndex && (!_requiresAlive || character.hasBody) && (!_requiresConnected || !character.playerCharacterMasterController || character.playerCharacterMasterController.isConnected))
+                {
+                    // Check for inventory
+                    if (!character.inventory)
+                    {
+                        continue;
+                    }
+
+                    // Increment count
+                    count += character.inventory.GetItemCount(_itemDef);
+                }
+            }
+
+            // Return total items
+            return count;
         }
 
         public string GetCharacterModelName(string _character)

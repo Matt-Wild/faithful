@@ -20,14 +20,22 @@ namespace Faithful
 
         private void OnEnable()
         {
-            // Add Holdout Zone hooks
-            zone.calcRadius += OnCalcRadius;
+            // Ensure it isn't the escape ship (Just called "HoldoutZone" for some reason lol)
+            if (zone.name != "HoldoutZone")
+            {
+                // Add Holdout Zone hooks
+                zone.calcRadius += OnCalcRadius;
+            }
         }
 
         private void OnDisable()
         {
-            // Remove Holdout Zone hooks
-            zone.calcRadius -= OnCalcRadius;
+            // Ensure it isn't the escape ship (Just called "HoldoutZone" for some reason lol)
+            if (zone.name != "HoldoutZone")
+            {
+                // Remove Holdout Zone hooks
+                zone.calcRadius -= OnCalcRadius;
+            }
         }
 
         public void Init(List<OnHoldoutZoneCalcRadiusCallback> _onHoldoutZoneCalcRadiusCallbacks)

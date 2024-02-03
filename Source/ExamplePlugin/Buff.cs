@@ -20,6 +20,13 @@ namespace Faithful
         {
             toolbox = _toolbox;
 
+            // Should hide this buff due to temporary assets?
+            bool forceHide = !toolbox.utils.debugMode && _iconName == "texbufftemporalcube";
+            if (forceHide)
+            {
+                Log.Debug($"Hiding buff '{_token}' due to use of temporary assets outside of debug mode");
+            }
+
             // Assign token
             token = _token;
 
@@ -35,7 +42,9 @@ namespace Faithful
             // Set buff configs
             buffDef.canStack = _canStack;
             buffDef.isDebuff = _isDebuff;
-            buffDef.isHidden = _isHidden;
+
+            // Set if buff is hidden (Also hide if using temporary assets when not in debug mode)
+            buffDef.isHidden = _isHidden || forceHide;
 
             // Set icon
             buffDef.iconSprite = toolbox.assets.GetIcon(_iconName);
