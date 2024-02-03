@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 925447453
+CRC: 1593717065
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cbd4aca72af92ca4bd6cb7495ad00d7b
+    Hash: ebde343424911f428f0d7683a0025ffa
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -30,23 +30,29 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Items/CopperGear/texCopperGearEmission.png
+- Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.prefab
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Placeholder/Item/texBuffTemporalCube.png
 - Assets/Placeholder/Item/texTemporalCubeConsumedIcon.png
 - Assets/Items/MeltingWarbler/MeltingWarblerMesh.prefab
+- Assets/Items/VengefulToaster/texVengefulToaster.png
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
+- Assets/Items/VengefulToaster/texVengefulToasterEmission.png
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
 - Assets/Items/CopperGear/texCopperGearIcon.png
 - Assets/Shader/hgstandard.shader
 - Assets/Items/BrassScrews/BrassScrewsDisplayMesh.prefab
+- Assets/Items/VengefulToaster/texBuffVengefulBoost.png
 - Assets/Status/texBuffDevMode.png
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
 - Assets/Items/BrassScrews/texBrassScrews.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
+- Assets/Items/VengefulToaster/VengefulToasterMesh.prefab
 - Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCube.png
 - Assets/Items/CopperGear/texCopperGear.png
+- Assets/Items/VengefulToaster/texVengefulToasterIcon.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerIcon.png
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeNormal.png
