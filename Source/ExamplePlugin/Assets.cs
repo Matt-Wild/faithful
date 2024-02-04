@@ -23,10 +23,13 @@ namespace Faithful
             assetBundle = AssetBundle.LoadFromFile(AssetBundlePath);
 
             // DEBUG display loading assets
-            string[] loaded = assetBundle.GetAllAssetNames();
-            foreach (string current in loaded)
+            if (toolbox.utils.debugMode)
             {
-                Log.Debug($"Loaded asset '{current}'");
+                string[] loaded = assetBundle.GetAllAssetNames();
+                foreach (string current in loaded)
+                {
+                    Log.Debug($"Loaded asset '{current}'");
+                }
             }
         }
 

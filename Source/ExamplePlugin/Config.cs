@@ -110,7 +110,7 @@ namespace Faithful
             get
             {
                 // Returns the path to the asset bundle
-                return Path.Combine(Path.GetDirectoryName(pluginInfo.Location), "config");
+                return Path.Combine(Path.GetDirectoryName(pluginInfo.Location), "config.cfg");
             }
         }
     }
