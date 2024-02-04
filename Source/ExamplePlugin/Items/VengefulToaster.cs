@@ -26,11 +26,10 @@ namespace Faithful
             vengeanceBuff = toolbox.buffs.GetBuff("VENGEANCE");
 
             // Create display settings
-            //CreateDisplaySettings();
+            CreateDisplaySettings();
 
             // Create Vengeful Toaster item
-            vengefulToasterItem = toolbox.items.AddItem("VENGEFUL_TOASTER", [ItemTag.Damage, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2);
-            //_displaySettings: displaySettings
+            vengefulToasterItem = toolbox.items.AddItem("VENGEFUL_TOASTER", [ItemTag.Damage, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2, _displaySettings: displaySettings);
 
             // Link On Damage Dealt behaviour
             toolbox.behaviour.AddOnDamageDealtCallback(OnDamageDealt);
