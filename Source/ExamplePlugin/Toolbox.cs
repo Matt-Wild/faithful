@@ -7,6 +7,7 @@ namespace Faithful
     internal class Toolbox
     {
         // Tool references
+        public Config config;
         public Utils utils;
         public DebugMode debugMode;
         public Behaviour behaviour;
@@ -18,6 +19,7 @@ namespace Faithful
         public Toolbox(PluginInfo _pluginInfo)
         {
             // Create tools
+            config = new Config(this, _pluginInfo);
             utils = new Utils(this, _pluginInfo);
             debugMode = new DebugMode(this);
             behaviour = new Behaviour(this);

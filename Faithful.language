@@ -1,6 +1,7 @@
 {
   "strings": {
-	"FAITHFUL_DEV_BUFF": "GOD MODE",
+	"FAITHFUL_DEBUG_MODE_BUFF": "GOD MODE",
+	
 	"FAITHFUL_VENGEANCE_BUFF": "Vengeance",
   
     "FAITHFUL_COPPER_GEAR_NAME": "Copper Gear",

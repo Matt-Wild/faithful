@@ -19,7 +19,7 @@ namespace Faithful
         public PluginInfo pluginInfo;
 
         // Store debug mode
-        private const bool _debugMode = true;
+        private bool _debugMode = false;
 
         // Simulacrum banned items
         List<ItemDef> simulacrumBanned = new List<ItemDef>();
@@ -66,6 +66,9 @@ namespace Faithful
 
             // Config item corruptions
             On.RoR2.Items.ContagiousItemManager.Init += SetupItemCorruptions;
+
+            // Update debug mode from config
+            _debugMode = toolbox.config.CheckTag("DEBUG_MODE");
 
             Log.Debug("Utils initialised");
         }

@@ -23,6 +23,12 @@ namespace Faithful
             // Should hide this buff due to temporary assets?
             bool forceHide = !toolbox.utils.debugMode && _iconName == "texbufftemporalcube";
 
+            // Should hide anyway due to config?
+            if (!forceHide)
+            {
+                forceHide = !toolbox.config.CheckTag(_token);
+            }
+
             // Assign token
             token = _token;
 
@@ -52,7 +58,14 @@ namespace Faithful
 
             if (forceHide)
             {
-                Log.Debug($"Hiding buff '{_token}' due to use of temporary assets outside of debug mode");
+                if (!toolbox.config.CheckTag(_token))
+                {
+                    Log.Debug($"Hiding buff '{_token}' due to user preference");
+                }
+                else
+                {
+                    Log.Debug($"Hiding buff '{_token}' due to use of temporary assets outside of debug mode");
+                }
             }
         }
     }
