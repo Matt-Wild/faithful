@@ -249,6 +249,38 @@ namespace Faithful
             return hurtBoxes;   // Return found hurt boxes
         }
 
+        public List<PlayerCharacterMasterController> GetPlayers()
+        {
+            // Return list of all characters
+            return new List<PlayerCharacterMasterController>(PlayerCharacterMasterController.instances);
+        }
+
+        public List<CharacterMaster> GetCharacters()
+        {
+            // Return list of all characters
+            return new List<CharacterMaster>(CharacterMaster.readOnlyInstancesList);
+        }
+
+        public List<CharacterMaster> GetCharactersForTeam(TeamIndex _teamIndex, bool _requiresBody = true)
+        {
+            // Initialise list
+            List<CharacterMaster> characters = new List<CharacterMaster>();
+
+            // Cycle through characters
+            foreach (CharacterMaster character in CharacterMaster.readOnlyInstancesList)
+            {
+                // Check if valid
+                if (character.teamIndex == _teamIndex && (!_requiresBody || character.hasBody))
+                {
+                    // Add to list
+                    characters.Add(character);
+                }
+            }
+
+            // Return list
+            return characters;
+        }
+
         public int GetItemCountForTeam(TeamIndex _teamIndex, ItemDef _itemDef, bool _requiresAlive = true, bool _requiresConnected = true)
         {
             // Found item count

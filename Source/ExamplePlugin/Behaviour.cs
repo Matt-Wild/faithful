@@ -14,6 +14,8 @@ namespace Faithful
 
     internal delegate void OnDamageDealtCallback(DamageReport _report);
 
+    internal delegate void PlayerToPlayerCallback(PlayerCharacterMasterController _player1, PlayerCharacterMasterController _player2);
+
     internal class Behaviour
     {
         // Toolbox
@@ -25,7 +27,7 @@ namespace Faithful
         protected List<Callback> fixedUpdateCallbacks = new List<Callback>();
         protected List<Callback> debugFixedUpdateCallbacks = new List<Callback>();
 
-        // Holdout Zone callback functions
+        // Holdout Zone callbacks
         protected List<InHoldoutZoneCallback> inHoldoutZoneCallbacks = new List<InHoldoutZoneCallback>();
         protected List<OnHoldoutZoneStartCallback> onHoldoutZoneStartCallbacks = new List<OnHoldoutZoneStartCallback>();
         protected List<OnHoldoutZoneCalcRadiusCallback> onHoldoutZoneCalcRadiusCallbacks = new List<OnHoldoutZoneCalcRadiusCallback>();
@@ -34,8 +36,11 @@ namespace Faithful
         List<ItemStatsMod> itemStatsMods = new List<ItemStatsMod>();
         List<BuffStatsMod> buffStatsMods = new List<BuffStatsMod>();
 
-        // On Damage Dealt callback functions
+        // On Damage Dealt callbacks
         protected List<OnDamageDealtCallback> onDamageDealtCallbacks = new List<OnDamageDealtCallback>();
+
+        // Player to player callbacks
+        protected List<PlayerToPlayerCallback> playerToPlayerCallbacks = new List<PlayerToPlayerCallback>();
 
         // Constructor
         public Behaviour(Toolbox _toolbox)
@@ -167,12 +172,48 @@ namespace Faithful
             Log.Debug("Added on Holdout Zone calc radius behaviour");
         }
 
+        // Add player to player callback
+        public void AddOnDamageDealtCallback(PlayerToPlayerCallback _callback)
+        {
+            playerToPlayerCallbacks.Add(_callback);
+
+            Log.Debug("Added Player to Player behaviour");
+        }
+
         // Add on Damage Dealt callback
         public void AddOnDamageDealtCallback(OnDamageDealtCallback _callback)
         {
             onDamageDealtCallbacks.Add(_callback);
 
             Log.Debug("Added On Damage Dealt behaviour");
+        }
+
+        // Fixed update for checking player to player interactions
+        private void PlayerOnPlayerFixedUpdate()
+        {
+            // Get list of players
+            List<PlayerCharacterMasterController> players = toolbox.utils.GetPlayers();
+
+            // Cycle through players
+            foreach (PlayerCharacterMasterController player in players)
+            {
+                // Cycle through players again
+                foreach (PlayerCharacterMasterController subPlayer in players)
+                {
+                    // Skip self interactions
+                    if (player == subPlayer)
+                    {
+                        continue;
+                    }
+
+                    // Cycle through player to player callbacks
+                    foreach (PlayerToPlayerCallback callback in playerToPlayerCallbacks)
+                    {
+                        // Call
+                        callback(player, subPlayer);
+                    }
+                }
+            }
         }
 
         // Do stat modifications
