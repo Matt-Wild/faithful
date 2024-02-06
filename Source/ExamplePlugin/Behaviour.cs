@@ -15,6 +15,7 @@ namespace Faithful
     internal delegate void OnDamageDealtCallback(DamageReport _report);
 
     internal delegate void PlayerToPlayerCallback(PlayerCharacterMasterController _player1, PlayerCharacterMasterController _player2);
+    internal delegate void PlayerHolderToPlayerCallback(int _count, PlayerCharacterMasterController _holder, PlayerCharacterMasterController _other);
 
     internal class Behaviour
     {
@@ -41,6 +42,8 @@ namespace Faithful
 
         // Player to player callbacks
         protected List<PlayerToPlayerCallback> playerToPlayerCallbacks = new List<PlayerToPlayerCallback>();
+        protected List<PlayerItemToPlayer> playerItemToPlayerCallbacks = new List<PlayerItemToPlayer>();
+        protected List<PlayerBuffToPlayer> playerBuffToPlayerCallbacks = new List<PlayerBuffToPlayer>();
 
         // Constructor
         public Behaviour(Toolbox _toolbox)
@@ -96,6 +99,9 @@ namespace Faithful
                     callback();
                 }
             }
+
+            // Player on player behaviour
+            PlayerOnPlayerFixedUpdate();
         }
 
         // Add update callback
@@ -173,9 +179,25 @@ namespace Faithful
         }
 
         // Add player to player callback
-        public void AddOnDamageDealtCallback(PlayerToPlayerCallback _callback)
+        public void AddPlayerToPlayerCallback(PlayerToPlayerCallback _callback)
         {
             playerToPlayerCallbacks.Add(_callback);
+
+            Log.Debug("Added Player to Player behaviour");
+        }
+
+        // Add player with item to player callback
+        public void AddPlayerToPlayerCallback(Item _requiredItem, PlayerHolderToPlayerCallback _callback)
+        {
+            playerItemToPlayerCallbacks.Add(new PlayerItemToPlayer(_requiredItem, _callback));
+
+            Log.Debug("Added Player to Player behaviour");
+        }
+
+        // Add player with buff to player callback
+        public void AddPlayerToPlayerCallback(Buff _requiredBuff, PlayerHolderToPlayerCallback _callback)
+        {
+            playerBuffToPlayerCallbacks.Add(new PlayerBuffToPlayer(_requiredBuff, _callback));
 
             Log.Debug("Added Player to Player behaviour");
         }
@@ -197,6 +219,16 @@ namespace Faithful
             // Cycle through players
             foreach (PlayerCharacterMasterController player in players)
             {
+                // Process player holder on player behaviour
+                foreach (PlayerItemToPlayer callback in playerItemToPlayerCallbacks)
+                {
+                    callback.Process(player, players);
+                }
+                foreach (PlayerBuffToPlayer callback in playerBuffToPlayerCallbacks)
+                {
+                    callback.Process(player, players);
+                }
+
                 // Cycle through players again
                 foreach (PlayerCharacterMasterController subPlayer in players)
                 {
@@ -285,6 +317,7 @@ namespace Faithful
         public Item item;
         public StatsModCallback callback;
 
+        // Constructor
         public ItemStatsMod(Item _item, StatsModCallback _callback)
         {
             // Assign item and callback
@@ -323,6 +356,7 @@ namespace Faithful
         public Buff buff;
         public StatsModCallback callback;
 
+        // Constructor
         public BuffStatsMod(Buff _buff, StatsModCallback _callback)
         {
             // Assign buff and callback
@@ -343,6 +377,107 @@ namespace Faithful
 
             // Call
             callback(buffCount, _stats);
+        }
+    }
+
+    internal struct PlayerItemToPlayer
+    {
+        // Store item and callback
+        public Item item;
+        public PlayerHolderToPlayerCallback callback;
+        
+        // Constructor
+        public PlayerItemToPlayer(Item _item, PlayerHolderToPlayerCallback _callback)
+        {
+            // Assign item and callback
+            item = _item;
+            callback = _callback;
+        }
+
+        public void Process(PlayerCharacterMasterController _player, List<PlayerCharacterMasterController> _others)
+        {
+            // Check for body
+            if (!_player.body)
+            {
+                return;
+            }
+
+            // Get character inventory
+            Inventory inventory = _player.body.inventory;
+
+            if (!inventory)
+            {
+                // Doesn't have an inventory
+                return;
+            }
+
+            // Get item amount
+            int itemCount = inventory.GetItemCount(item.itemDef);
+
+            if (itemCount == 0)
+            {
+                // Doesn't have the item
+                return;
+            }
+
+            // Cycle through other players
+            foreach (PlayerCharacterMasterController other in _others)
+            {
+                // Skip self interaction
+                if (other == _player)
+                {
+                    continue;
+                }
+
+                // Call
+                callback(itemCount, _player, other);
+            }
+        }
+    }
+
+    internal struct PlayerBuffToPlayer
+    {
+        // Store buff and callback
+        public Buff buff;
+        public PlayerHolderToPlayerCallback callback;
+
+        // Constructor
+        public PlayerBuffToPlayer(Buff _buff, PlayerHolderToPlayerCallback _callback)
+        {
+            // Assign buff and callback
+            buff = _buff;
+            callback = _callback;
+        }
+
+        public void Process(PlayerCharacterMasterController _player, List<PlayerCharacterMasterController> _others)
+        {
+            // Check for body
+            if (!_player.body)
+            {
+                return;
+            }
+
+            // Get buff amount
+            int buffCount = _player.body.GetBuffCount(buff.buffDef);
+
+            if (buffCount == 0)
+            {
+                // Doesn't have the buff
+                return;
+            }
+
+            // Cycle through other players
+            foreach (PlayerCharacterMasterController other in _others)
+            {
+                // Skip self interaction
+                if (other == _player)
+                {
+                    continue;
+                }
+
+                // Call
+                callback(buffCount, _player, other);
+            }
         }
     }
 }
