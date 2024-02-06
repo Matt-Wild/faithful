@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1593717065
+CRC: 3732292967
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ebde343424911f428f0d7683a0025ffa
+    Hash: 1ebbb1a37a05ed7a84e5eaf926f8a3e2
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -39,6 +39,7 @@ Assets:
 - Assets/Items/VengefulToaster/texVengefulToaster.png
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
+- Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
 - Assets/Items/CopperGear/texCopperGearIcon.png
 - Assets/Shader/hgstandard.shader
@@ -51,8 +52,11 @@ Assets:
 - Assets/Items/VengefulToaster/VengefulToasterMesh.prefab
 - Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCube.png
+- Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaNormal.png
+- Assets/Items/SpaciousUmbrella/texSpaciousUmbrella.png
 - Assets/Items/CopperGear/texCopperGear.png
 - Assets/Items/VengefulToaster/texVengefulToasterIcon.png
+- Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaIcon.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerIcon.png
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeNormal.png
