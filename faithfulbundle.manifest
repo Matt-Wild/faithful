@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3732292967
+CRC: 2118732840
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1ebbb1a37a05ed7a84e5eaf926f8a3e2
+    Hash: 8d71b0ad6aa6b15674dfaca1d7f9d9ab
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -58,6 +58,7 @@ Assets:
 - Assets/Items/VengefulToaster/texVengefulToasterIcon.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaIcon.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerIcon.png
+- Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.prefab
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeNormal.png
 - Assets/Placeholder/Item/TemporalCubeMesh.prefab
