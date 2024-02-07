@@ -1,6 +1,7 @@
 ﻿using R2API;
 using RoR2;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
@@ -74,7 +75,7 @@ namespace Faithful
             float radius = 15.0f + (_count - 1) * 5.0f;
 
             // Other ally in radius
-            if ((_holder.transform.position - _other.transform.position).magnitude <= radius)
+            if ((_holder.GetBodyObject().transform.position - _other.GetBodyObject().transform.position).magnitude <= radius)
             {
                 // Get body of other
                 CharacterBody body = _other.GetBody();
