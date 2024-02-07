@@ -17,6 +17,8 @@ namespace Faithful
     internal delegate void PlayerToPlayerCallback(PlayerCharacterMasterController _player1, PlayerCharacterMasterController _player2);
     internal delegate void PlayerHolderToPlayerCallback(int _count, PlayerCharacterMasterController _holder, PlayerCharacterMasterController _other);
 
+    internal delegate void AllyHolderToAllyCallback(int _count, CharacterMaster _holder, CharacterMaster _other);
+
     internal class Behaviour
     {
         // Toolbox
@@ -44,6 +46,10 @@ namespace Faithful
         protected List<PlayerToPlayerCallback> playerToPlayerCallbacks = new List<PlayerToPlayerCallback>();
         protected List<PlayerItemToPlayer> playerItemToPlayerCallbacks = new List<PlayerItemToPlayer>();
         protected List<PlayerBuffToPlayer> playerBuffToPlayerCallbacks = new List<PlayerBuffToPlayer>();
+
+        // Ally to ally callbacks
+        protected List<AllyItemToAlly> allyItemToAllyCallbacks = new List<AllyItemToAlly>();
+        protected List<AllyBuffToAlly> allyBuffToAllyCallbacks = new List<AllyBuffToAlly>();
 
         // Constructor
         public Behaviour(Toolbox _toolbox)
@@ -102,6 +108,9 @@ namespace Faithful
 
             // Player on player behaviour
             PlayerOnPlayerFixedUpdate();
+
+            // Ally on ally behaviour
+            AllyOnAllyFixedUpdate();
         }
 
         // Add update callback
@@ -202,6 +211,22 @@ namespace Faithful
             Log.Debug("Added Player to Player behaviour");
         }
 
+        // Add ally with item to ally callback
+        public void AddAllyToAllyCallback(Item _requiredItem, AllyHolderToAllyCallback _callback)
+        {
+            allyItemToAllyCallbacks.Add(new AllyItemToAlly(_requiredItem, _callback));
+
+            Log.Debug("Added Ally to Ally behaviour");
+        }
+
+        // Add ally with buff to ally callback
+        public void AddAllyToAllyCallback(Buff _requiredBuff, AllyHolderToAllyCallback _callback)
+        {
+            allyBuffToAllyCallbacks.Add(new AllyBuffToAlly(_requiredBuff, _callback));
+
+            Log.Debug("Added Ally to Ally behaviour");
+        }
+
         // Add on Damage Dealt callback
         public void AddOnDamageDealtCallback(OnDamageDealtCallback _callback)
         {
@@ -244,6 +269,27 @@ namespace Faithful
                         // Call
                         callback(player, subPlayer);
                     }
+                }
+            }
+        }
+
+        // Fixed update for checking ally to ally interactions
+        private void AllyOnAllyFixedUpdate()
+        {
+            // Get list of allies
+            List<CharacterMaster> allies = toolbox.utils.GetCharactersForTeam(TeamIndex.Player);
+
+            // Cycle through allies
+            foreach (CharacterMaster ally in allies)
+            {
+                // Process ally holder on ally behaviour
+                foreach (AllyItemToAlly callback in allyItemToAllyCallbacks)
+                {
+                    callback.Process(ally, allies);
+                }
+                foreach (AllyBuffToAlly callback in allyBuffToAllyCallbacks)
+                {
+                    callback.Process(ally, allies);
                 }
             }
         }
@@ -477,6 +523,107 @@ namespace Faithful
 
                 // Call
                 callback(buffCount, _player, other);
+            }
+        }
+    }
+
+    internal struct AllyItemToAlly
+    {
+        // Store item and callback
+        public Item item;
+        public AllyHolderToAllyCallback callback;
+
+        // Constructor
+        public AllyItemToAlly(Item _item, AllyHolderToAllyCallback _callback)
+        {
+            // Assign item and callback
+            item = _item;
+            callback = _callback;
+        }
+
+        public void Process(CharacterMaster _ally, List<CharacterMaster> _others)
+        {
+            // Check for body
+            if (!_ally.hasBody)
+            {
+                return;
+            }
+
+            // Get character inventory
+            Inventory inventory = _ally.GetBody().inventory;
+
+            if (!inventory)
+            {
+                // Doesn't have an inventory
+                return;
+            }
+
+            // Get item amount
+            int itemCount = inventory.GetItemCount(item.itemDef);
+
+            if (itemCount == 0)
+            {
+                // Doesn't have the item
+                return;
+            }
+
+            // Cycle through other allies
+            foreach (CharacterMaster other in _others)
+            {
+                // Skip self interaction
+                if (other == _ally)
+                {
+                    continue;
+                }
+
+                // Call
+                callback(itemCount, _ally, other);
+            }
+        }
+    }
+
+    internal struct AllyBuffToAlly
+    {
+        // Store buff and callback
+        public Buff buff;
+        public AllyHolderToAllyCallback callback;
+
+        // Constructor
+        public AllyBuffToAlly(Buff _buff, AllyHolderToAllyCallback _callback)
+        {
+            // Assign buff and callback
+            buff = _buff;
+            callback = _callback;
+        }
+
+        public void Process(CharacterMaster _ally, List<CharacterMaster> _others)
+        {
+            // Check for body
+            if (!_ally.hasBody)
+            {
+                return;
+            }
+
+            // Get buff amount
+            int buffCount = _ally.GetBody().GetBuffCount(buff.buffDef);
+
+            if (buffCount == 0)
+            {
+                // Doesn't have the buff
+                return;
+            }
+
+            // Cycle through other allies
+            foreach (CharacterMaster other in _others)
+            {
+                // Skip self interaction
+                if (other == _ally)
+                {
+                    continue;
+                }
+
+                // Call
+                callback(buffCount, _ally, other);
             }
         }
     }

@@ -25,12 +25,12 @@ namespace Faithful
             //CreateDisplaySettings();
 
             // Create Leader's Pennon item and buff
-            leadersPennonBuff = toolbox.buffs.AddBuff("LEADERS_PENNON", "texbufftemporalcube", Color.white);
+            leadersPennonBuff = toolbox.buffs.AddBuff("LEADERS_PENNON", "texbufftemporalcube", Color.white, false);
             leadersPennonItem = toolbox.items.AddItem("LEADERS_PENNON", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy], "textemporalcubeicon", "temporalcubemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME");
             //_displaySettings: displaySettings
 
-            // Add player to player behaviour
-            toolbox.behaviour.AddPlayerToPlayerCallback(leadersPennonItem, PlayerWithItemToPlayer);
+            // Add ally to ally behaviour
+            toolbox.behaviour.AddAllyToAllyCallback(leadersPennonItem, AllyWithItemToAlly);
 
             // Add stats modification
             toolbox.behaviour.AddStatsMod(leadersPennonBuff, LeadersPennonStatsMod);
@@ -68,22 +68,27 @@ namespace Faithful
             _stats.regenMultAdd += 0.3f;
         }
 
-        void PlayerWithItemToPlayer(int _count, PlayerCharacterMasterController _holder, PlayerCharacterMasterController _other)
+        void AllyWithItemToAlly(int _count, CharacterMaster _holder, CharacterMaster _other)
         {
             // Calculate effect radius
             float radius = 15.0f + (_count - 1) * 5.0f;
 
-            // Other player in radius
+            // Other ally in radius
             if ((_holder.transform.position - _other.transform.position).magnitude <= radius)
             {
-                // Refresh Leader's Pennon buffs on other player
-                toolbox.utils.RefreshTimedBuffs(_other.body, leadersPennonBuff.buffDef, 1);
+                // Get body of other
+                CharacterBody body = _other.GetBody();
 
-                // If other player doesn't have buff already
-                if (_other.body.GetBuffCount(leadersPennonBuff.buffDef) == 0)
+                // If other ally doesn't have buff already
+                if (body.GetBuffCount(leadersPennonBuff.buffDef) == 0)
                 {
                     // Grant buff
-                    _other.body.AddTimedBuff(leadersPennonBuff.buffDef, 1);
+                    body.AddTimedBuff(leadersPennonBuff.buffDef, 1);
+                }
+                else
+                {
+                    // Refresh Leader's Pennon buffs on other ally
+                    toolbox.utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, 1);
                 }
             }
         }
