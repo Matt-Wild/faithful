@@ -230,6 +230,42 @@ namespace Faithful
             return new ItemDisplaySettings(this, model, new ItemDisplayRuleDict());
         }
 
+        // Get all Holdout Zones this character is in
+        public List<HoldoutZoneController> GetHoldoutZonesContainingCharacter(CharacterMaster _character)
+        {
+            // Check for character body
+            if (!_character.hasBody)
+            {
+                return [];
+            }
+
+            // Get character position
+            Vector3 charPos = _character.GetBody().transform.position;
+
+            // Initialise list of zones containing character
+            List<HoldoutZoneController> containing = new List<HoldoutZoneController>();
+
+            // Get all Holdout Zones
+            HoldoutZoneController[] zones = Component.FindObjectsOfType<HoldoutZoneController>();
+
+            // Cycle through zones
+            foreach (HoldoutZoneController zone in zones)
+            {
+                // Calculate distance
+                float distance = (_character.transform.position - charPos).magnitude;
+
+                // Check if character is within zone
+                if (distance <= zone.currentRadius)
+                {
+                    // Add to containing list
+                    containing.Add(zone);
+                }
+            }
+
+            // Return list of zones containing character
+            return containing;
+        }
+
         // Return Hurt Boxes from RoR2 Sphere Search
         public HurtBox[] GetHurtBoxesInSphere(Vector3 position, float radius)
         {
