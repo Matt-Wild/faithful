@@ -43,7 +43,7 @@ namespace Faithful
                 if (_body.GetBuffCount(godModeBuff.buffDef) > 0)
                 {
                     // Instantly charge Holdout Zone
-                    _zone.baseChargeDuration = 0.0f;
+                    toolbox.utils.ChargeHoldoutZone(_zone);
                 }
             }
         }

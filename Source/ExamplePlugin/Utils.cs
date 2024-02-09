@@ -159,6 +159,33 @@ namespace Faithful
             orig(); // Run normal processes
         }
 
+        public HoldoutZoneController ChargeHoldoutZone(HoldoutZoneController _zone)
+        {
+            // Instantly charge Holdout Zone
+            _zone.baseChargeDuration = 0.0f;
+
+            // return Holdout Zone
+            return _zone;
+        }
+
+        public HoldoutZoneController ChargeHoldoutZone(HoldoutZoneController _zone, float _amount, bool _percentage = true)
+        {
+            // Check if percentage based
+            if (!_percentage)
+            {
+                _amount /= _zone.baseChargeDuration;
+            }
+
+            // Add charge to Holdout Zone
+            _zone.charge += _amount;
+
+            // Clamp zone charge
+            _zone.charge = Mathf.Clamp01(_zone.charge);
+
+            // return Holdout Zone
+            return _zone;
+        }
+
         public ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _ignoreOverlays = false, bool _dithering = true)
         {
             Log.Debug($"Creating item display for '{_modelFile}'");
@@ -246,13 +273,13 @@ namespace Faithful
             List<HoldoutZoneController> containing = new List<HoldoutZoneController>();
 
             // Get all Holdout Zones
-            HoldoutZoneController[] zones = Component.FindObjectsOfType<HoldoutZoneController>();
+            HoldoutZoneController[] zones = UnityEngine.Object.FindObjectsOfType<HoldoutZoneController>();
 
             // Cycle through zones
             foreach (HoldoutZoneController zone in zones)
             {
                 // Calculate distance
-                float distance = (_character.transform.position - charPos).magnitude;
+                float distance = (zone.gameObject.transform.position - charPos).magnitude;
 
                 // Check if character is within zone
                 if (distance <= zone.currentRadius)

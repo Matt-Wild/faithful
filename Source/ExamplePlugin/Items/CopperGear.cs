@@ -71,7 +71,7 @@ namespace Faithful
             if (inventory)
             {
                 // Get Copper Gear amount
-                int copperGearCount = inventory.GetItemCount(copperGearItem.itemDef.itemIndex);
+                int copperGearCount = inventory.GetItemCount(copperGearItem.itemDef);
 
                 // Has Copper Gears?
                 if (copperGearCount > 0)

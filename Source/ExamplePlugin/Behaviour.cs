@@ -39,8 +39,9 @@ namespace Faithful
         List<ItemStatsMod> itemStatsMods = new List<ItemStatsMod>();
         List<BuffStatsMod> buffStatsMods = new List<BuffStatsMod>();
 
-        // On Damage Dealt callbacks
+        // On Damage Dealt and On Character Death callbacks
         protected List<OnDamageDealtCallback> onDamageDealtCallbacks = new List<OnDamageDealtCallback>();
+        protected List<OnDamageDealtCallback> onCharacterDeathCallbacks = new List<OnDamageDealtCallback>();
 
         // Player to player callbacks
         protected List<PlayerToPlayerCallback> playerToPlayerCallbacks = new List<PlayerToPlayerCallback>();
@@ -61,6 +62,7 @@ namespace Faithful
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
+            GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
 
             Log.Debug("Behaviour initialised");
         }
@@ -235,6 +237,14 @@ namespace Faithful
             Log.Debug("Added On Damage Dealt behaviour");
         }
 
+        // Add on Character Death callback
+        public void AddOnCharacterDeathCallback(OnDamageDealtCallback _callback)
+        {
+            onCharacterDeathCallbacks.Add(_callback);
+
+            Log.Debug("Added On Character Death behaviour");
+        }
+
         // Fixed update for checking player to player interactions
         private void PlayerOnPlayerFixedUpdate()
         {
@@ -350,6 +360,16 @@ namespace Faithful
         {
             // Cycle through On Damage Dealt callbacks
             foreach (OnDamageDealtCallback callback in onDamageDealtCallbacks)
+            {
+                // Call
+                callback(_report);
+            }
+        }
+
+        protected void HookOnCharacterDeath(DamageReport _report)
+        {
+            // Cycle through On Character Death callbacks
+            foreach (OnDamageDealtCallback callback in onCharacterDeathCallbacks)
             {
                 // Call
                 callback(_report);
