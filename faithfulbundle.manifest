@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2118732840
+CRC: 2774409505
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8d71b0ad6aa6b15674dfaca1d7f9d9ab
+    Hash: 79a8cb9eb9856eba7f41d8fd716ff151
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -31,6 +31,7 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Items/CopperGear/texCopperGearEmission.png
 - Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.prefab
+- Assets/Items/DrownedVisage/texDrownedVisageIcon.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Placeholder/Item/texBuffTemporalCube.png
@@ -39,14 +40,17 @@ Assets:
 - Assets/Items/VengefulToaster/texVengefulToaster.png
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
+- Assets/Items/DrownedVisage/texDrownedVisageNormal.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
 - Assets/Items/CopperGear/texCopperGearIcon.png
 - Assets/Shader/hgstandard.shader
 - Assets/Items/BrassScrews/BrassScrewsDisplayMesh.prefab
+- Assets/Items/DrownedVisage/texDrownedVisage.png
 - Assets/Items/VengefulToaster/texBuffVengefulBoost.png
 - Assets/Status/texBuffDevMode.png
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
+- Assets/Items/DrownedVisage/DrownedVisageDisplayMesh.prefab
 - Assets/Items/BrassScrews/texBrassScrews.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
 - Assets/Items/VengefulToaster/VengefulToasterMesh.prefab
@@ -64,6 +68,7 @@ Assets:
 - Assets/Placeholder/Item/TemporalCubeMesh.prefab
 - Assets/Items/MeltingWarbler/texMeltingWarbler.png
 - Assets/Items/BrassScrews/texBuffTeleporterScrew.png
+- Assets/Items/DrownedVisage/DrownedVisageMesh.prefab
 - Assets/Items/CopperGear/texCopperGearNormal.png
 - Assets/Items/CopperGear/CopperGearMesh.prefab
 Dependencies: []
