@@ -6,6 +6,9 @@ namespace Faithful
 {
     internal class Toolbox
     {
+        // Store reference to plugin
+        public Faithful plugin;
+
         // Tool references
         public Config config;
         public Utils utils;
@@ -16,8 +19,11 @@ namespace Faithful
         public Buffs buffs;
 
         // Constructor
-        public Toolbox(PluginInfo _pluginInfo)
+        public Toolbox(Faithful _plugin, PluginInfo _pluginInfo)
         {
+            // Assign reference to plugin
+            plugin = _plugin;
+
             // Create tools
             config = new Config(this, _pluginInfo);
             utils = new Utils(this, _pluginInfo);

@@ -21,11 +21,10 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create display settings
-            //CreateDisplaySettings();
+            CreateDisplaySettings();
 
             // Create Drowned Visage item
-            drownedVisageItem = toolbox.items.AddItem("DROWNED_VISAGE", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated], "textemporalcubeicon", "temporalcubemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_SPACIOUS_UMBRELLA_NAME");
-            //_displaySettings: displaySettings
+            drownedVisageItem = toolbox.items.AddItem("DROWNED_VISAGE", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_SPACIOUS_UMBRELLA_NAME", _displaySettings: displaySettings);
 
             // Link On Character Death behaviour
             toolbox.behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
@@ -34,7 +33,7 @@ namespace Faithful
         private void CreateDisplaySettings()
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings("vengefultoasterdisplaymesh");
+            displaySettings = toolbox.utils.CreateItemDisplaySettings("drownedvisagedisplaymesh");
 
             // Add character display settings
             displaySettings.AddCharacterDisplay("Commando", "ThighR", new Vector3(-0.1738F, 0.0778F, 0.0148F), new Vector3(0F, 6F, 90F), new Vector3(0.125F, 0.125F, 0.125F));
@@ -42,7 +41,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Bandit", "ThighR", new Vector3(-0.09275F, 0.4F, 0.0715F), new Vector3(0F, 35F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(-1.75F, 2.875F, -1.31F), new Vector3(0F, 0F, 0F), new Vector3(0.75F, 0.75F, 0.75F));
             displaySettings.AddCharacterDisplay("Engineer", "CannonHeadR", new Vector3(0.055F, 0.24F, 0.2575F), new Vector3(270F, 180F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-            //displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, -0.3F, 0F), new Vector3(0F, 270F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
+            displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, -0.3F, 0F), new Vector3(0F, 270F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
             displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(-0.239F, 0.05525F, -0.2225F), new Vector3(9.5F, 0F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Mercenary", "ThighL", new Vector3(0.11575F, 0.13425F, -0.115F), new Vector3(2F, 45F, 260F), new Vector3(0.125F, 0.125F, 0.125F));
             displaySettings.AddCharacterDisplay("REX", "Chest", new Vector3(0.48F, 0.425F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.25F, 0.25F, 0.25F));

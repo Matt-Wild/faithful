@@ -68,7 +68,7 @@ namespace Faithful
             Log.Init(Logger);
 
             // Initialise toolbox
-            toolbox = new Toolbox(PInfo);
+            toolbox = new Toolbox(this, PInfo);
 
             // Create buffs
             godMode = new GodMode(toolbox);

@@ -60,6 +60,7 @@ namespace Faithful
             // Inject hooks
             On.RoR2.HoldoutZoneController.FixedUpdate += HookHoldoutZoneControllerFixedUpdate;
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
+            On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
@@ -354,6 +355,14 @@ namespace Faithful
             }
 
             orig(self); // Run normal processes
+        }
+
+        
+        protected void HookHealthComponentAwake(On.RoR2.HealthComponent.orig_Awake orig, HealthComponent self)
+        {
+            orig(self); // Run normal processes
+
+            Log.Error("AAAAAAAAAAAAAA");
         }
 
         protected void HookOnDamageDealt(DamageReport _report)
