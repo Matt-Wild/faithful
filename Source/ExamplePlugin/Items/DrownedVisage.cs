@@ -36,20 +36,20 @@ namespace Faithful
             displaySettings = toolbox.utils.CreateItemDisplaySettings("drownedvisagedisplaymesh");
 
             // Add character display settings
-            displaySettings.AddCharacterDisplay("Commando", "ThighR", new Vector3(-0.1738F, 0.0778F, 0.0148F), new Vector3(0F, 6F, 90F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("Huntress", "ThighR", new Vector3(-0.105F, -0.065F, 0.02785F), new Vector3(347.5F, 334F, 117.5F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Bandit", "ThighR", new Vector3(-0.09275F, 0.4F, 0.0715F), new Vector3(0F, 35F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(-1.75F, 2.875F, -1.31F), new Vector3(0F, 0F, 0F), new Vector3(0.75F, 0.75F, 0.75F));
-            displaySettings.AddCharacterDisplay("Engineer", "CannonHeadR", new Vector3(0.055F, 0.24F, 0.2575F), new Vector3(270F, 180F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, -0.3F, 0F), new Vector3(0F, 270F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
-            displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(-0.239F, 0.05525F, -0.2225F), new Vector3(9.5F, 0F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Mercenary", "ThighL", new Vector3(0.11575F, 0.13425F, -0.115F), new Vector3(2F, 45F, 260F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("REX", "Chest", new Vector3(0.48F, 0.425F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.25F, 0.25F, 0.25F));
-            displaySettings.AddCharacterDisplay("Loader", "MechLowerArmL", new Vector3(0.0535F, 0.1525F, -0.1415F), new Vector3(352F, 90F, 270F), new Vector3(0.115F, 0.115F, 0.115F));
-            displaySettings.AddCharacterDisplay("Acrid", "Chest", new Vector3(-1.83F, 3.05F, 3.025F), new Vector3(317.2F, 186.25F, 321F), new Vector3(1F, 1F, 1F));
-            displaySettings.AddCharacterDisplay("Captain", "UpperArmL", new Vector3(0.0575F, 0.1375F, -0.1255F), new Vector3(0F, 61F, 265.25F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(0.1315F, 0.461F, -0.02325F), new Vector3(0F, 180F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Void Fiend", "ForeArmR", new Vector3(0.082F, 0.27F, -0.191F), new Vector3(8F, 280F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Commando", "Stomach", new Vector3(-0.15F, -0.015F, -0.13F), new Vector3(353F, 212F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("Huntress", "Chest", new Vector3(0.143F, 0.1825F, -0.1175F), new Vector3(0F, 117.5F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Bandit", "Stomach", new Vector3(0.038F, -0.04785F, -0.188F), new Vector3(340F, 174.25F, 2F), new Vector3(0.11F, 0.11F, 0.11F));
+            displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(1.97F, 1.3F, -1.9F), new Vector3(0F, 180F, 0F), new Vector3(0.75F, 0.75F, 0.75F));
+            displaySettings.AddCharacterDisplay("Engineer", "Chest", new Vector3(0.2415F, 0.18F, -0.2875F), new Vector3(0F, 180F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, 0.3935F, 0.265F), new Vector3(355F, 0F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
+            displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(-0.1125F, 0.072F, -0.345F), new Vector3(340F, 180F, 1.5F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Mercenary", "Chest", new Vector3(0.08F, -0.07125F, -0.2285F), new Vector3(5F, 180F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("REX", "ClavicleL", new Vector3(0.2625F, 0.662F, -0.026F), new Vector3(288.5F, 270F, 270.5F), new Vector3(0.25F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Loader", "MechBase", new Vector3(-0.1355F, 0.25F, -0.13F), new Vector3(0F, 180F, 0F), new Vector3(0.115F, 0.115F, 0.115F));
+            displaySettings.AddCharacterDisplay("Acrid", "SpineChest1", new Vector3(-1.25F, 0.0635F, 3.5F), new Vector3(348.25F, 272.5F, 51.25F), new Vector3(1.1F, 1.1F, 1.1F));
+            displaySettings.AddCharacterDisplay("Captain", "ThighR", new Vector3(-0.135F, 0.35F, 0.0564F), new Vector3(2.5F, 293.7499F, 187.5F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(-0.091F, -0.1825F, -0.165F), new Vector3(355F, 180F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
+            displaySettings.AddCharacterDisplay("Void Fiend", "ForeArmL", new Vector3(0.11F, 0.1325F, 0.0155F), new Vector3(320F, 90F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
         }
 
         void OnCharacterDeath(DamageReport _report)
