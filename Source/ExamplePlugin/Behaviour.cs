@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using R2API;
 using RoR2;
 
@@ -12,7 +13,8 @@ namespace Faithful
 
     internal delegate void StatsModCallback(int _count, RecalculateStatsAPI.StatHookEventArgs _stats);
 
-    internal delegate void OnDamageDealtCallback(DamageReport _report);
+    internal delegate void OnIncomingDamageCallback(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim);
+    internal delegate void DamageReportCallback(DamageReport _report);
 
     internal delegate void PlayerToPlayerCallback(PlayerCharacterMasterController _player1, PlayerCharacterMasterController _player2);
     internal delegate void PlayerHolderToPlayerCallback(int _count, PlayerCharacterMasterController _holder, PlayerCharacterMasterController _other);
@@ -39,9 +41,10 @@ namespace Faithful
         List<ItemStatsMod> itemStatsMods = new List<ItemStatsMod>();
         List<BuffStatsMod> buffStatsMods = new List<BuffStatsMod>();
 
-        // On Damage Dealt and On Character Death callbacks
-        protected List<OnDamageDealtCallback> onDamageDealtCallbacks = new List<OnDamageDealtCallback>();
-        protected List<OnDamageDealtCallback> onCharacterDeathCallbacks = new List<OnDamageDealtCallback>();
+        // Damage Report callbacks
+        protected List<OnIncomingDamageCallback> onIncomingDamageCallbacks = new List<OnIncomingDamageCallback>();
+        protected List<DamageReportCallback> onDamageDealtCallbacks = new List<DamageReportCallback>();
+        protected List<DamageReportCallback> onCharacterDeathCallbacks = new List<DamageReportCallback>();
 
         // Player to player callbacks
         protected List<PlayerToPlayerCallback> playerToPlayerCallbacks = new List<PlayerToPlayerCallback>();
@@ -230,16 +233,24 @@ namespace Faithful
             Log.Debug("Added Ally to Ally behaviour");
         }
 
-        // Add on Damage Dealt callback
-        public void AddOnDamageDealtCallback(OnDamageDealtCallback _callback)
+        // Add On Incoming Damage callback
+        public void AddOnIncomingDamageCallback(OnIncomingDamageCallback _callback)
+        {
+            onIncomingDamageCallbacks.Add(_callback);
+
+            Log.Debug("Added On Incoming Damage behaviour");
+        }
+
+        // Add On Damage Dealt callback
+        public void AddOnDamageDealtCallback(DamageReportCallback _callback)
         {
             onDamageDealtCallbacks.Add(_callback);
 
             Log.Debug("Added On Damage Dealt behaviour");
         }
 
-        // Add on Character Death callback
-        public void AddOnCharacterDeathCallback(OnDamageDealtCallback _callback)
+        // Add On Character Death callback
+        public void AddOnCharacterDeathCallback(DamageReportCallback _callback)
         {
             onCharacterDeathCallbacks.Add(_callback);
 
@@ -362,13 +373,20 @@ namespace Faithful
         {
             orig(self); // Run normal processes
 
-            Log.Error("AAAAAAAAAAAAAA");
+            // Add custom health component behaviour
+            FaithfulHealthComponentBehaviour component = self.gameObject.AddComponent<FaithfulHealthComponentBehaviour>();
+
+            // Pass Behaviour reference to custom component
+            component.behaviour = this;
+
+            // Add custom behaviour to On Incoming Damage Receivers
+            self.onIncomingDamageReceivers = self.onIncomingDamageReceivers.Concat([component]).ToArray();
         }
 
         protected void HookOnDamageDealt(DamageReport _report)
         {
             // Cycle through On Damage Dealt callbacks
-            foreach (OnDamageDealtCallback callback in onDamageDealtCallbacks)
+            foreach (DamageReportCallback callback in onDamageDealtCallbacks)
             {
                 // Call
                 callback(_report);
@@ -378,10 +396,20 @@ namespace Faithful
         protected void HookOnCharacterDeath(DamageReport _report)
         {
             // Cycle through On Character Death callbacks
-            foreach (OnDamageDealtCallback callback in onCharacterDeathCallbacks)
+            foreach (DamageReportCallback callback in onCharacterDeathCallbacks)
             {
                 // Call
                 callback(_report);
+            }
+        }
+
+        public void OnIncomingDamageServer(DamageInfo _damageInfo, CharacterMaster _attacker, CharacterMaster _victim)
+        {
+            // Cycle through On Incoming Damage callbacks
+            foreach (OnIncomingDamageCallback callback in onIncomingDamageCallbacks)
+            {
+                // Call
+                callback(_damageInfo, _attacker, _victim);
             }
         }
     }

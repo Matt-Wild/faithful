@@ -24,8 +24,8 @@ namespace Faithful
             // Link Holdout Zone behaviour
             toolbox.behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
 
-            // Link On Damage Dealt behaviour
-            toolbox.behaviour.AddOnDamageDealtCallback(OnDamageDealt);
+            // Link On Incoming Damage behaviour
+            toolbox.behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
 
             // Add stats modification
             toolbox.behaviour.AddStatsMod(godModeBuff, GodModeStatsMod);
@@ -48,13 +48,21 @@ namespace Faithful
             }
         }
 
-        void OnDamageDealt(DamageReport report)
+        void OnIncomingDamage(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim)
         {
-            // Does victim have God Mode
-            if (report.victimBody.GetBuffCount(godModeBuff.buffDef) > 0)
+            // Check for body
+            CharacterBody victimBody = _victim.GetBody();
+            if (victimBody != null)
             {
-                // Set health to max
-                report.victim.health = report.victim.fullHealth;
+                // Does victim have God Mode
+                if (victimBody.GetBuffCount(godModeBuff.buffDef) > 0)
+                {
+                    // Modify report to avoid damage and knockback
+                    _report.rejected = true;
+                    _report.canRejectForce = true;
+                    _report.damage = 0.0f;
+                    _report.force = new Vector3();
+                }
             }
         }
 
@@ -113,27 +121,6 @@ namespace Faithful
                     //body.name = "[GODMODE] " + body.name;   // Set God Mode name
 
                     Log.Debug("God Mode enabled!");
-                }
-            }
-
-            // Has God Mode?
-            if (body.GetBuffCount(godModeBuff.buffDef) > 0)
-            {
-                // Clear timed debuffs
-                List<BuffIndex> buffClearList = [];
-                foreach (CharacterBody.TimedBuff timed in body.timedBuffs)
-                {
-                    // Is debuff?
-                    if (BuffCatalog.GetBuffDef(timed.buffIndex).isDebuff)
-                    {
-                        // Add to clear list
-                        buffClearList.Add(timed.buffIndex);
-                    }
-                }
-                foreach (BuffIndex buffIndex in buffClearList)
-                {
-                    // Clear debuffs
-                    body.ClearTimedBuffs(buffIndex);
                 }
             }
         }
