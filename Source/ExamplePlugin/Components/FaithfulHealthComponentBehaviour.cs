@@ -13,6 +13,12 @@ namespace Faithful
 
         public void OnIncomingDamageServer(DamageInfo _damageInfo)
         {
+            // Check for damage info
+            if (_damageInfo == null)
+            {
+                return;
+            }
+
             // Get victim
             CharacterBody victimBody = GetComponent<CharacterBody>();
             CharacterMaster victim = victimBody ? victimBody.master : null;

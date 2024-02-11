@@ -16,6 +16,9 @@ namespace Faithful
     internal delegate void OnIncomingDamageCallback(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim);
     internal delegate void DamageReportCallback(DamageReport _report);
 
+    internal delegate void OnPurchaseInteractionBeginCallback(PurchaseInteraction _shop, CharacterMaster _activator);
+    internal delegate bool OnPurchaseCanBeAffordedCallback(PurchaseInteraction _shop, CharacterMaster _activator);
+
     internal delegate void PlayerToPlayerCallback(PlayerCharacterMasterController _player1, PlayerCharacterMasterController _player2);
     internal delegate void PlayerHolderToPlayerCallback(int _count, PlayerCharacterMasterController _holder, PlayerCharacterMasterController _other);
 
@@ -46,6 +49,10 @@ namespace Faithful
         protected List<DamageReportCallback> onDamageDealtCallbacks = new List<DamageReportCallback>();
         protected List<DamageReportCallback> onCharacterDeathCallbacks = new List<DamageReportCallback>();
 
+        // Interactable callbacks
+        protected List<OnPurchaseInteractionBeginCallback> onPurchaseInteractionBeginCallbacks = new List<OnPurchaseInteractionBeginCallback>();
+        protected List<OnPurchaseCanBeAffordedCallback> onPurchaseCanBeAffordedCallbacks = new List<OnPurchaseCanBeAffordedCallback>();
+
         // Player to player callbacks
         protected List<PlayerToPlayerCallback> playerToPlayerCallbacks = new List<PlayerToPlayerCallback>();
         protected List<PlayerItemToPlayer> playerItemToPlayerCallbacks = new List<PlayerItemToPlayer>();
@@ -64,6 +71,8 @@ namespace Faithful
             On.RoR2.HoldoutZoneController.FixedUpdate += HookHoldoutZoneControllerFixedUpdate;
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
             On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
+            On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin;
+            On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
@@ -257,6 +266,22 @@ namespace Faithful
             Log.Debug("Added On Character Death behaviour");
         }
 
+        // Add On Purchase Interaction Begin callback
+        public void AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBeginCallback _callback)
+        {
+            onPurchaseInteractionBeginCallbacks.Add(_callback);
+
+            Log.Debug("Added On Purchase Interaction Begin behaviour");
+        }
+
+        // Add On Purchase Can Be Afforded callback
+        public void AddOnPurchaseCanBeAffordedCallback(OnPurchaseCanBeAffordedCallback _callback)
+        {
+            onPurchaseCanBeAffordedCallbacks.Add(_callback);
+
+            Log.Debug("Added On Purchase Can Be Afforded behaviour");
+        }
+
         // Fixed update for checking player to player interactions
         private void PlayerOnPlayerFixedUpdate()
         {
@@ -371,16 +396,51 @@ namespace Faithful
         
         protected void HookHealthComponentAwake(On.RoR2.HealthComponent.orig_Awake orig, HealthComponent self)
         {
-            orig(self); // Run normal processes
-
             // Add custom health component behaviour
             FaithfulHealthComponentBehaviour component = self.gameObject.AddComponent<FaithfulHealthComponentBehaviour>();
 
             // Pass Behaviour reference to custom component
             component.behaviour = this;
 
-            // Add custom behaviour to On Incoming Damage Receivers
-            self.onIncomingDamageReceivers = self.onIncomingDamageReceivers.Concat([component]).ToArray();
+            orig(self); // Run normal processes
+        }
+
+        protected void HookPurchaseInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)
+        {
+            // Cycle through OnPurchaseInteractionBegin callbacks
+            foreach (OnPurchaseInteractionBeginCallback callback in onPurchaseInteractionBeginCallbacks)
+            {
+                // Check for activator
+                CharacterBody body = activator.gameObject.GetComponent<CharacterBody>();
+                if (body != null)
+                {
+                    // Call
+                    callback(self, body.master);
+                }
+            }
+
+            orig(self, activator); // Run normal processes
+        }
+
+        protected bool HookPurchaseCanBeAfforded(On.RoR2.PurchaseInteraction.orig_CanBeAffordedByInteractor orig, PurchaseInteraction self, Interactor activator)
+        {
+            // Cycle through OnPurchaseCanBeAfforded callbacks
+            foreach (OnPurchaseCanBeAffordedCallback callback in onPurchaseCanBeAffordedCallbacks)
+            {
+                // Check for activator
+                CharacterBody body = activator.gameObject.GetComponent<CharacterBody>();
+                if (body != null)
+                {
+                    // Call
+                    if (callback(self, body.master))
+                    {
+                        // Force can be afforded if result is true
+                        return true;
+                    }
+                }
+            }
+
+            return orig(self, activator); // Run normal processes
         }
 
         protected void HookOnDamageDealt(DamageReport _report)

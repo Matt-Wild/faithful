@@ -27,6 +27,10 @@ namespace Faithful
             // Link On Incoming Damage behaviour
             toolbox.behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
 
+            // Link On Purchase Interaction behaviour
+            toolbox.behaviour.AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBegin);
+            toolbox.behaviour.AddOnPurchaseCanBeAffordedCallback(OnPurchaseCanBeAfforded);
+
             // Add stats modification
             toolbox.behaviour.AddStatsMod(godModeBuff, GodModeStatsMod);
 
@@ -50,10 +54,18 @@ namespace Faithful
 
         void OnIncomingDamage(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim)
         {
-            // Check for body
-            CharacterBody victimBody = _victim.GetBody();
-            if (victimBody != null)
+            // Check for victim
+            if (_victim == null)
             {
+                return;
+            }
+
+            // Check for victim body
+            if (_victim.hasBody)
+            {
+                // Get victim body
+                CharacterBody victimBody = _victim.GetBody();
+
                 // Does victim have God Mode
                 if (victimBody.GetBuffCount(godModeBuff.buffDef) > 0)
                 {
@@ -64,6 +76,41 @@ namespace Faithful
                     _report.force = new Vector3();
                 }
             }
+        }
+
+        void OnPurchaseInteractionBegin(PurchaseInteraction _shop, CharacterMaster _activator)
+        {
+            // Check for body
+            if (!_activator.hasBody)
+            {
+                return;
+            }
+
+            // Check for God Mode
+            if (_activator.GetBody().GetBuffCount(godModeBuff.buffDef) > 0)
+            {
+                // Set cost of shop to 0
+                _shop.cost = 0;
+            }
+        }
+
+        bool OnPurchaseCanBeAfforded(PurchaseInteraction _shop, CharacterMaster _activator)
+        {
+            // Check for body
+            if (!_activator.hasBody)
+            {
+                return false;
+            }
+
+            // Check for God Mode
+            if (_activator.GetBody().GetBuffCount(godModeBuff.buffDef) > 0)
+            {
+                // Force afforded
+                return true;
+            }
+
+            // Otherwise return false
+            return false;
         }
 
         void GodModeStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
