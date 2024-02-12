@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2774409505
+CRC: 329787054
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 79a8cb9eb9856eba7f41d8fd716ff151
+    Hash: 33c55c04712ccaa74bd15d1505482dca
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -30,15 +30,22 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Items/CopperGear/texCopperGearEmission.png
+- Assets/Items/LeadersPennon/texLeadersPennonEmission.png
 - Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.prefab
+- Assets/Items/LeadersPennon/texLeadersPennonNormal.png
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
+- Assets/Skills/Railgunner/texRailgunnerCoin.png
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
+- Assets/Items/LeadersPennon/LeadersPennonMesh.prefab
 - Assets/Placeholder/Item/texBuffTemporalCube.png
 - Assets/Placeholder/Item/texTemporalCubeConsumedIcon.png
+- Assets/Items/LeadersPennon/LeadersPennonDisplayMesh.prefab
 - Assets/Items/MeltingWarbler/MeltingWarblerMesh.prefab
 - Assets/Items/VengefulToaster/texVengefulToaster.png
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
+- Assets/Items/LeadersPennon/texBuffLeaderArea.png
+- Assets/Items/LeadersPennon/texLeadersPennonIcon.png
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
 - Assets/Items/DrownedVisage/texDrownedVisageNormal.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
@@ -50,10 +57,12 @@ Assets:
 - Assets/Items/VengefulToaster/texBuffVengefulBoost.png
 - Assets/Status/texBuffDevMode.png
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
+- Assets/Items/LeadersPennon/texLeadersPennon.png
 - Assets/Items/DrownedVisage/DrownedVisageDisplayMesh.prefab
 - Assets/Items/BrassScrews/texBrassScrews.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
 - Assets/Items/VengefulToaster/VengefulToasterMesh.prefab
+- Assets/Skills/Railgunner/texRailgunnerCoinNormal.png
 - Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCube.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaNormal.png
@@ -71,4 +80,5 @@ Assets:
 - Assets/Items/DrownedVisage/DrownedVisageMesh.prefab
 - Assets/Items/CopperGear/texCopperGearNormal.png
 - Assets/Items/CopperGear/CopperGearMesh.prefab
+- Assets/Skills/Railgunner/RailgunnerCoinMesh.prefab
 Dependencies: []
