@@ -57,6 +57,7 @@ namespace Faithful
         private static SpaciousUmbrella spaciousUmbrella;
         private static LeadersPennon leadersPennon;
         private static DrownedVisage drownedVisage;
+        private static LongshotGeode longshotGeode;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -82,6 +83,7 @@ namespace Faithful
             spaciousUmbrella = new SpaciousUmbrella(toolbox);
             leadersPennon = new LeadersPennon(toolbox);
             drownedVisage = new DrownedVisage(toolbox);
+            longshotGeode = new LongshotGeode(toolbox);
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing!");

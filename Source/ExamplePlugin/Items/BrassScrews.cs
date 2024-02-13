@@ -22,7 +22,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create display settings
-            CreateDisplaySettings();
+            CreateDisplaySettings("brassscrewsdisplaymesh");
 
             // Create Brass Screws item and buff
             brassScrewsItem = toolbox.items.AddItem("BRASS_SCREWS", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_COPPER_GEAR_NAME", _displaySettings: displaySettings);
@@ -35,10 +35,16 @@ namespace Faithful
             toolbox.behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
         }
 
-        private void CreateDisplaySettings()
+        private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings("brassscrewsdisplaymesh");
+            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+
+            // Check for required asset
+            if (!toolbox.assets.HasAsset(_displayMeshName))
+            {
+                return;
+            }
 
             // Add character display settings
             displaySettings.AddCharacterDisplay("Commando", "LowerArmL", new Vector3(0.02264F, 0.16791F, -0.03632F), new Vector3(335.4802F, 67.51034F, 272.0254F), new Vector3(0.1F, 0.1F, 0.1F));

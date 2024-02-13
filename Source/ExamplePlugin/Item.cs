@@ -26,7 +26,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Should hide this item due to temporary assets?
-            bool forceHide = !toolbox.utils.debugMode && (_iconName == "textemporalcubeicon" || _modelName == "temporalcubemesh");
+            bool forceHide = !toolbox.utils.debugMode && (_iconName == "textemporalcubeicon" || !toolbox.assets.HasAsset(_iconName) || _modelName == "temporalcubemesh" || !toolbox.assets.HasAsset(_modelName));
 
             // Should hide anyway due to config?
             if (!forceHide)

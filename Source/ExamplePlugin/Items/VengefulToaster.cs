@@ -24,7 +24,7 @@ namespace Faithful
             vengeanceBuff = toolbox.buffs.GetBuff("VENGEANCE");
 
             // Create display settings
-            CreateDisplaySettings();
+            CreateDisplaySettings("vengefultoasterdisplaymesh");
 
             // Create Vengeful Toaster item
             vengefulToasterItem = toolbox.items.AddItem("VENGEFUL_TOASTER", [ItemTag.Damage, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2, _displaySettings: displaySettings);
@@ -33,10 +33,16 @@ namespace Faithful
             toolbox.behaviour.AddOnDamageDealtCallback(OnDamageDealt);
         }
 
-        private void CreateDisplaySettings()
+        private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings("vengefultoasterdisplaymesh");
+            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+
+            // Check for required asset
+            if (!toolbox.assets.HasAsset(_displayMeshName))
+            {
+                return;
+            }
 
             // Add character display settings
             displaySettings.AddCharacterDisplay("Commando", "ThighR", new Vector3(-0.1738F, 0.0778F, 0.0148F), new Vector3(0F, 6F, 90F), new Vector3(0.125F, 0.125F, 0.125F));

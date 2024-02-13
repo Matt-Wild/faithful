@@ -21,7 +21,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create display settings
-            CreateDisplaySettings();
+            CreateDisplaySettings("spaciousumbrelladisplaymesh");
 
             // Create Copper Gear item and buff
             spaciousUmbrellaItem = toolbox.items.AddItem("SPACIOUS_UMBRELLA", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.HoldoutZoneRelated], "texspaciousumbrellaicon", "spaciousumbrellamesh", ItemTier.Tier2, _simulacrumBanned: true, _displaySettings: displaySettings);
@@ -30,10 +30,16 @@ namespace Faithful
             toolbox.behaviour.AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadius);
         }
 
-        private void CreateDisplaySettings()
+        private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings("spaciousumbrelladisplaymesh");
+            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+
+            // Check for required asset
+            if (!toolbox.assets.HasAsset(_displayMeshName))
+            {
+                return;
+            }
 
             // Add character display settings
             displaySettings.AddCharacterDisplay("Commando", "ThighL", new Vector3(0.1225F, 0.14F, 0.0375F), new Vector3(6.735F, 231.25F, 212F), new Vector3(0.35F, 0.35F, 0.35F));

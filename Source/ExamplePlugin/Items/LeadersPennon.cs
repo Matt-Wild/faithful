@@ -23,7 +23,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create display settings
-            CreateDisplaySettings();
+            CreateDisplaySettings("leaderspennondisplaymesh");
 
             // Create Leader's Pennon item and buff
             leadersPennonBuff = toolbox.buffs.AddBuff("LEADERS_PENNON", "texbuffleaderarea", Color.white, false);
@@ -36,10 +36,16 @@ namespace Faithful
             toolbox.behaviour.AddStatsMod(leadersPennonBuff, LeadersPennonStatsMod);
         }
 
-        private void CreateDisplaySettings()
+        private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings("leaderspennondisplaymesh");
+            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+
+            // Check for required asset
+            if (!toolbox.assets.HasAsset(_displayMeshName))
+            {
+                return;
+            }
 
             // Add character display settings
             displaySettings.AddCharacterDisplay("Commando", "Chest", new Vector3(0F, 0.3775F, -0.21275F), new Vector3(1F, 180F, 0F), new Vector3(0.15F, 0.15F, 0.15F));

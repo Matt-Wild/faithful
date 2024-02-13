@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.IO;
 using BepInEx;
+using IL.RoR2.ConVar;
 
 namespace Faithful
 {
@@ -14,6 +15,12 @@ namespace Faithful
 
         // Asset bundle
         public AssetBundle assetBundle;
+
+        // Default assets
+        private const string defaultModel = "temporalcubemesh";
+        private const string defaultIcon = "textemporalcubeicon";
+        private const string defaultConsumedIcon = "textemporalcubeconsumedicon";
+        private const string defaultBuffIcon = "texbufftemporalcube";
 
         public Assets(Toolbox _toolbox)
         {
@@ -61,8 +68,11 @@ namespace Faithful
 
         public bool HasAsset(string _name)
         {
-            // Returns if asset bundle has asset
-            return assetBundle.Contains(_name);
+            // Attempt to find asset
+            string found = FindAsset(_name);
+
+            // Return if found
+            return found != null;
         }
 
         public Sprite GetIcon(string _name)
@@ -74,10 +84,18 @@ namespace Faithful
             string asset = FindAsset(fullName);
 
             // Check for asset
-            if(asset == null)
+            if (asset == null)
             {
-                Log.Error($"Requested asset '{fullName}' could not be found.");
-                return null;
+                if (toolbox.utils.debugMode)
+                {
+                    Log.Error($"Requested asset '{fullName}' could not be found.");
+                }
+
+                // Force name to lower case
+                _name = _name.ToLower();
+
+                // Return default asset
+                return assetBundle.LoadAsset<Sprite>(_name.Contains("buff") ? FindAsset(defaultBuffIcon) : _name.Contains("consumed") ? FindAsset(defaultConsumedIcon) : FindAsset(defaultIcon));
             }
 
             // Return asset
@@ -95,8 +113,13 @@ namespace Faithful
             // Check for asset
             if (asset == null)
             {
-                Log.Error($"Requested asset '{fullName}' could not be found.");
-                return null;
+                if (toolbox.utils.debugMode)
+                {
+                    Log.Error($"Requested asset '{fullName}' could not be found.");
+                }
+
+                // Return default asset
+                return assetBundle.LoadAsset<GameObject>(defaultModel);
             }
 
             // Return asset

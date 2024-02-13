@@ -21,7 +21,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create display settings
-            CreateDisplaySettings();
+            CreateDisplaySettings("drownedvisagedisplaymesh");
 
             // Create Drowned Visage item
             drownedVisageItem = toolbox.items.AddItem("DROWNED_VISAGE", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_SPACIOUS_UMBRELLA_NAME", _displaySettings: displaySettings);
@@ -30,10 +30,16 @@ namespace Faithful
             toolbox.behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
         }
 
-        private void CreateDisplaySettings()
+        private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings("drownedvisagedisplaymesh");
+            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+
+            // Check for required asset
+            if (!toolbox.assets.HasAsset(_displayMeshName))
+            {
+                return;
+            }
 
             // Add character display settings
             displaySettings.AddCharacterDisplay("Commando", "Stomach", new Vector3(-0.15F, -0.015F, -0.13F), new Vector3(353F, 212F, 0F), new Vector3(0.125F, 0.125F, 0.125F));

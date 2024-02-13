@@ -22,7 +22,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create display settings
-            CreateDisplaySettings();
+            CreateDisplaySettings("coppergeardisplaymesh");
 
             // Create Copper Gear item and buff
             copperGearItem = toolbox.items.AddItem("COPPER_GEAR", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _displaySettings: displaySettings);
@@ -35,10 +35,16 @@ namespace Faithful
             toolbox.behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
         }
 
-        private void CreateDisplaySettings()
+        private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings("coppergeardisplaymesh");
+            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+
+            // Check for required asset
+            if (!toolbox.assets.HasAsset(_displayMeshName))
+            {
+                return;
+            }
 
             // Add character display settings
             displaySettings.AddCharacterDisplay("Commando", "LowerArmL", new Vector3(0.01898F, 0.26776F, 0.00182F), new Vector3(7.69423F, 1.2381F, 2.28152F), new Vector3(0.11F, 0.11F, 0.11F));
