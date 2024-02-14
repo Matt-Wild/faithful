@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using UnityEngine.Networking;
 using UnityEngine;
+using System.Linq;
 
 namespace Faithful
 {
@@ -17,7 +18,7 @@ namespace Faithful
 
         public void Update()
         {
-            if (!toolbox.utils.debugMode)
+            if (!toolbox.utils.debugMode || !toolbox.utils.hosting)
             {
                 return; // Update contains only debug functionality
             }
@@ -72,6 +73,16 @@ namespace Faithful
                 {
                     spawn = true;
                     index = PickupCatalog.FindPickupIndex(ItemTier.VoidBoss);
+                }
+                else if (Input.GetKeyDown(KeyCode.Alpha0))
+                {
+                    spawn = true;
+                    index = PickupCatalog.FindPickupIndex(EquipmentCatalog.equipmentDefs.Where(x => x.nameToken == "EQUIPMENT_COMMANDMISSILE_NAME").FirstOrDefault().equipmentIndex);
+                }
+                else if (Input.GetKeyDown(KeyCode.Minus))
+                {
+                    spawn = true;
+                    index = PickupCatalog.FindPickupIndex(EquipmentCatalog.equipmentDefs.Where(x => x.nameToken == "EQUIPMENT_METEOR_NAME").FirstOrDefault().equipmentIndex);
                 }
 
                 if (spawn)  // Spawn command essense of selected tier

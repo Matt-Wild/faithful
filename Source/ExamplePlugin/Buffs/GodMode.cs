@@ -154,6 +154,12 @@ namespace Faithful
 
         void Update()
         {
+            // Host only
+            if (!toolbox.utils.hosting)
+            {
+                return;
+            }
+
             if (PlayerCharacterMasterController.instances.Count <= 0)
             {
                 // No player character

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
@@ -188,7 +189,11 @@ namespace Faithful
 
         public ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _ignoreOverlays = false, bool _dithering = true)
         {
-            Log.Debug($"Creating item display for '{_modelFile}'");
+            // In debug mode?
+            if (toolbox.utils.debugMode)
+            {
+                Log.Debug($"Creating item display for '{_modelFile}'");
+            }
 
             // Get model asset
             GameObject model = toolbox.assets.GetModel(_modelFile);
@@ -386,6 +391,11 @@ namespace Faithful
         public bool debugMode
         {
             get { return _debugMode; }
+        }
+
+        public bool hosting
+        {
+            get { return NetworkServer.active; }
         }
     }
 

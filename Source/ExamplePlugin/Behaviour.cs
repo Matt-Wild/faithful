@@ -89,7 +89,7 @@ namespace Faithful
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
 
-            Log.Debug("Behaviour initialised");
+            DebugLog("Behaviour initialised");
         }
 
         public void Update()
@@ -178,7 +178,7 @@ namespace Faithful
             // Add item stats mod
             itemStatsMods.Add(new ItemStatsMod(_item, _callback));
 
-            Log.Debug($"Added stat mods for '{_item.token}' item");
+            DebugLog($"Added stat mods for '{_item.token}' item");
         }
 
         // Add buff stats mod
@@ -187,7 +187,7 @@ namespace Faithful
             // Add buff stats mod
             buffStatsMods.Add(new BuffStatsMod(_buff, _callback));
 
-            Log.Debug($"Added stat mods for '{_buff.token}' buff");
+            DebugLog($"Added stat mods for '{_buff.token}' buff");
         }
 
         // Add in Holdout Zone callback
@@ -195,7 +195,7 @@ namespace Faithful
         {
             inHoldoutZoneCallbacks.Add(_callback);
 
-            Log.Debug("Added in Holdout Zone behaviour");
+            DebugLog("Added in Holdout Zone behaviour");
         }
 
         // Add on Holdout Zone start callback
@@ -203,7 +203,7 @@ namespace Faithful
         {
             onHoldoutZoneStartCallbacks.Add(_callback);
 
-            Log.Debug("Added on Holdout Zone start behaviour");
+            DebugLog("Added on Holdout Zone start behaviour");
         }
 
         // Add on Holdout Zone calc radius callback
@@ -211,7 +211,7 @@ namespace Faithful
         {
             onHoldoutZoneCalcRadiusCallbacks.Add(_callback);
 
-            Log.Debug("Added on Holdout Zone calc radius behaviour");
+            DebugLog("Added on Holdout Zone calc radius behaviour");
         }
 
         // Add player to player callback
@@ -219,7 +219,7 @@ namespace Faithful
         {
             playerToPlayerCallbacks.Add(_callback);
 
-            Log.Debug("Added Player to Player behaviour");
+            DebugLog("Added Player to Player behaviour");
         }
 
         // Add player with item to player callback
@@ -227,7 +227,7 @@ namespace Faithful
         {
             playerItemToPlayerCallbacks.Add(new PlayerItemToPlayer(_requiredItem, _callback));
 
-            Log.Debug("Added Player to Player behaviour");
+            DebugLog("Added Player to Player behaviour");
         }
 
         // Add player with buff to player callback
@@ -235,7 +235,7 @@ namespace Faithful
         {
             playerBuffToPlayerCallbacks.Add(new PlayerBuffToPlayer(_requiredBuff, _callback));
 
-            Log.Debug("Added Player to Player behaviour");
+            DebugLog("Added Player to Player behaviour");
         }
 
         // Add ally with item to ally callback
@@ -243,7 +243,7 @@ namespace Faithful
         {
             allyItemToAllyCallbacks.Add(new AllyItemToAlly(_requiredItem, _callback));
 
-            Log.Debug("Added Ally to Ally behaviour");
+            DebugLog("Added Ally to Ally behaviour");
         }
 
         // Add ally with buff to ally callback
@@ -251,7 +251,7 @@ namespace Faithful
         {
             allyBuffToAllyCallbacks.Add(new AllyBuffToAlly(_requiredBuff, _callback));
 
-            Log.Debug("Added Ally to Ally behaviour");
+            DebugLog("Added Ally to Ally behaviour");
         }
 
         // Add On Incoming Damage callback
@@ -259,7 +259,7 @@ namespace Faithful
         {
             onIncomingDamageCallbacks.Add(_callback);
 
-            Log.Debug("Added On Incoming Damage behaviour");
+            DebugLog("Added On Incoming Damage behaviour");
         }
 
         // Add On Damage Dealt callback
@@ -267,7 +267,7 @@ namespace Faithful
         {
             onDamageDealtCallbacks.Add(_callback);
 
-            Log.Debug("Added On Damage Dealt behaviour");
+            DebugLog("Added On Damage Dealt behaviour");
         }
 
         // Add On Character Death callback
@@ -275,7 +275,7 @@ namespace Faithful
         {
             onCharacterDeathCallbacks.Add(_callback);
 
-            Log.Debug("Added On Character Death behaviour");
+            DebugLog("Added On Character Death behaviour");
         }
 
         // Add On Heal callback
@@ -283,7 +283,7 @@ namespace Faithful
         {
             onHealCallbacks.Add(_callback);
 
-            Log.Debug("Added On Heal behaviour");
+            DebugLog("Added On Heal behaviour");
         }
 
         // Add On Recalculate Stats callback
@@ -291,7 +291,7 @@ namespace Faithful
         {
             onRecalculateStatsCallbacks.Add(_callback);
 
-            Log.Debug("Added On Recalculate Stats behaviour");
+            DebugLog("Added On Recalculate Stats behaviour");
         }
 
         // Add On Purchase Interaction Begin callback
@@ -299,7 +299,7 @@ namespace Faithful
         {
             onPurchaseInteractionBeginCallbacks.Add(_callback);
 
-            Log.Debug("Added On Purchase Interaction Begin behaviour");
+            DebugLog("Added On Purchase Interaction Begin behaviour");
         }
 
         // Add On Purchase Can Be Afforded callback
@@ -307,7 +307,7 @@ namespace Faithful
         {
             onPurchaseCanBeAffordedCallbacks.Add(_callback);
 
-            Log.Debug("Added On Purchase Can Be Afforded behaviour");
+            DebugLog("Added On Purchase Can Be Afforded behaviour");
         }
 
         // Fixed update for checking player to player interactions
@@ -525,6 +525,16 @@ namespace Faithful
             {
                 // Call
                 callback(_damageInfo, _attacker, _victim);
+            }
+        }
+
+        public void DebugLog(string _message)
+        {
+            // Only log behaviour on debug
+            if (toolbox.utils.debugMode)
+            {
+                // Log message
+                Log.Debug($"[BEHAVIOUR] - {_message}");
             }
         }
     }
