@@ -34,6 +34,9 @@ namespace Faithful
             // Add stats modification
             toolbox.behaviour.AddStatsMod(godModeBuff, GodModeStatsMod);
 
+            // Add On Heal behaviour
+            toolbox.behaviour.AddOnHealCallback(OnHeal);
+
             // Link update function
             toolbox.behaviour.AddUpdateCallback(Update, true);
         }
@@ -132,6 +135,21 @@ namespace Faithful
 
             // God Mode cooldowns
             _stats.cooldownReductionAdd += float.PositiveInfinity;
+        }
+
+        void OnHeal(HealthComponent _healthComponent, ref float _amount, ref ProcChainMask _procChainMask, ref bool _nonRegen)
+        {
+            // Attempt to get Character Body
+            CharacterBody body = _healthComponent.gameObject.GetComponent<CharacterBody>();
+            if (body != null)
+            {
+                // Check for buff
+                if (body.GetBuffCount(godModeBuff.buffDef) > 0)
+                {
+                    // Apply God Mode healing
+                    _amount = float.PositiveInfinity;
+                }
+            }
         }
 
         void Update()

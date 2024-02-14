@@ -70,6 +70,12 @@ namespace Faithful
 
         void OnHeal(HealthComponent _healthComponent, ref float _amount, ref ProcChainMask _procChainMask, ref bool _nonRegen)
         {
+            // This is not regen behaviour
+            if (!_nonRegen)
+            {
+                return;
+            }
+
             // Attempt to get Character Body
             CharacterBody body = _healthComponent.gameObject.GetComponent<CharacterBody>();
             if (body != null)
