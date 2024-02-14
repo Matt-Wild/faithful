@@ -16,6 +16,10 @@ namespace Faithful
     internal delegate void OnIncomingDamageCallback(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim);
     internal delegate void DamageReportCallback(DamageReport _report);
 
+    internal delegate void OnHealCallback(HealthComponent _healthComponent, ref float _amount, ref ProcChainMask _procChainMask, ref bool _nonRegen);
+
+    internal delegate void CharacterBodyCallback(CharacterBody _body);
+
     internal delegate void OnPurchaseInteractionBeginCallback(PurchaseInteraction _shop, CharacterMaster _activator);
     internal delegate bool OnPurchaseCanBeAffordedCallback(PurchaseInteraction _shop, CharacterMaster _activator);
 
@@ -49,6 +53,12 @@ namespace Faithful
         protected List<DamageReportCallback> onDamageDealtCallbacks = new List<DamageReportCallback>();
         protected List<DamageReportCallback> onCharacterDeathCallbacks = new List<DamageReportCallback>();
 
+        // Heal callbacks
+        protected List<OnHealCallback> onHealCallbacks = new List<OnHealCallback>();
+
+        // Character Body callbacks
+        protected List<CharacterBodyCallback> onRecalculateStatsCallbacks = new List<CharacterBodyCallback>();
+
         // Interactable callbacks
         protected List<OnPurchaseInteractionBeginCallback> onPurchaseInteractionBeginCallbacks = new List<OnPurchaseInteractionBeginCallback>();
         protected List<OnPurchaseCanBeAffordedCallback> onPurchaseCanBeAffordedCallbacks = new List<OnPurchaseCanBeAffordedCallback>();
@@ -71,6 +81,8 @@ namespace Faithful
             On.RoR2.HoldoutZoneController.FixedUpdate += HookHoldoutZoneControllerFixedUpdate;
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
             On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
+            On.RoR2.HealthComponent.Heal += HookHeal;
+            On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats;
             On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin;
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
@@ -266,6 +278,22 @@ namespace Faithful
             Log.Debug("Added On Character Death behaviour");
         }
 
+        // Add On Heal callback
+        public void AddOnHealCallback(OnHealCallback _callback)
+        {
+            onHealCallbacks.Add(_callback);
+
+            Log.Debug("Added On Heal behaviour");
+        }
+
+        // Add On Recalculate Stats callback
+        public void AddOnRecalculateStatsCallback(CharacterBodyCallback _callback)
+        {
+            onRecalculateStatsCallbacks.Add(_callback);
+
+            Log.Debug("Added On Recalculate Stats behaviour");
+        }
+
         // Add On Purchase Interaction Begin callback
         public void AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBeginCallback _callback)
         {
@@ -403,6 +431,33 @@ namespace Faithful
             component.behaviour = this;
 
             orig(self); // Run normal processes
+        }
+
+        protected float HookHeal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen)
+        {
+            // Cycle through On Heal callbacks
+            foreach (OnHealCallback callback in onHealCallbacks)
+            {
+                // Call
+                callback(self, ref amount, ref procChainMask, ref nonRegen);
+            }
+
+            return orig(self, amount, procChainMask, nonRegen); // Run normal processes
+        }
+
+        protected void HookRecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
+        {
+            orig(self); // Run normal processes
+
+            // Cycle through On Recalculate Stats callbacks
+            foreach (CharacterBodyCallback callback in onRecalculateStatsCallbacks)
+            {
+                // Call
+                callback(self);
+            }
+
+            // Update all temporary visual effects (again)
+            self.UpdateAllTemporaryVisualEffects();
         }
 
         protected void HookPurchaseInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)

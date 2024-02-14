@@ -58,6 +58,8 @@ namespace Faithful
         private static LeadersPennon leadersPennon;
         private static DrownedVisage drownedVisage;
         private static LongshotGeode longshotGeode;
+        private static HasteningGreave hasteningGreave;
+        private static CauterizingGreave cauterizingGreave;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -84,6 +86,8 @@ namespace Faithful
             leadersPennon = new LeadersPennon(toolbox);
             drownedVisage = new DrownedVisage(toolbox);
             longshotGeode = new LongshotGeode(toolbox);
+            hasteningGreave = new HasteningGreave(toolbox);
+            cauterizingGreave = new CauterizingGreave(toolbox);
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing!");

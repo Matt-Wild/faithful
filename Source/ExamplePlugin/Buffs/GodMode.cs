@@ -118,6 +118,9 @@ namespace Faithful
             // God Mode damage
             _stats.baseDamageAdd += float.PositiveInfinity;
 
+            // God Mode attack speed
+            _stats.attackSpeedMultAdd += 3.0f;
+
             // God Mode regen
             _stats.baseRegenAdd += 9999999.9f;
 
