@@ -60,6 +60,7 @@ namespace Faithful
         private static LongshotGeode longshotGeode;
         private static HasteningGreave hasteningGreave;
         private static CauterizingGreave cauterizingGreave;
+        private static NoxiousSlime noxiousSlime;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -88,6 +89,7 @@ namespace Faithful
             longshotGeode = new LongshotGeode(toolbox);
             hasteningGreave = new HasteningGreave(toolbox);
             cauterizingGreave = new CauterizingGreave(toolbox);
+            noxiousSlime = new NoxiousSlime(toolbox);
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing!");

@@ -8,11 +8,26 @@ namespace Faithful
 {
     internal class FaithfulHealthComponentBehaviour : MonoBehaviour, IOnIncomingDamageServerReceiver
     {
-        // Store reference to Behaviour
-        public Behaviour behaviour;
+        // Store reference to Toolbox
+        public Toolbox toolbox;
+
+        // Store reference to Character Body
+        public CharacterBody character;
+
+        // Store last attacker
+        public CharacterMaster lastAttacker;
+
+        private void Start()
+        {
+            // Get Character Body
+            character = gameObject.GetComponent<CharacterBody>();
+        }
 
         public void OnIncomingDamageServer(DamageInfo _damageInfo)
         {
+            // Reset last attacker
+            lastAttacker = null;
+
             // Check for damage info
             if (_damageInfo == null)
             {
@@ -20,8 +35,7 @@ namespace Faithful
             }
 
             // Get victim
-            CharacterBody victimBody = GetComponent<CharacterBody>();
-            CharacterMaster victim = victimBody ? victimBody.master : null;
+            CharacterMaster victim = character ? character.master : null;
 
             // Get attacker
             CharacterMaster attacker = null;
@@ -33,11 +47,14 @@ namespace Faithful
                 {
                     // Get attacker character master
                     attacker = attackerBody.master;
+
+                    // Update last attacker
+                    lastAttacker = attacker;
                 }
             }
 
             // Send request for behaviour to handle
-            behaviour.OnIncomingDamageServer(_damageInfo, attacker, victim);
+            toolbox.behaviour.OnIncomingDamageServer(_damageInfo, attacker, victim);
         }
     }
 }

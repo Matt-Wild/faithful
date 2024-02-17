@@ -187,6 +187,50 @@ namespace Faithful
             return _zone;
         }
 
+        public void AddPulverizeBuildup(CharacterBody _target, CharacterBody _applier, float _duration)
+        {
+            // Check for target and applier
+            if (_target == null || _applier == null)
+            {
+                return;
+            }
+
+            // Check for applier inventory
+            Inventory applierInventory = _applier.inventory;
+            if (applierInventory == null)
+            {
+                return;
+            }
+
+            // Get Shattering Justice item count
+            int count = applierInventory.GetItemCount(RoR2Content.Items.ArmorReductionOnHit);
+
+            // Test for item count and Pulverized buff
+            if (count > 0 && !_target.HasBuff(RoR2Content.Buffs.Pulverized))
+            {
+                // Add Pulzerize Buildup
+                _target.AddTimedBuff(RoR2Content.Buffs.PulverizeBuildup, _duration);
+
+                // Check if enough Pulverize Buildup
+                if (_target.GetBuffCount(RoR2Content.Buffs.PulverizeBuildup) >= 5)
+                {
+                    // Clear Pulverize Buildup
+                    _target.ClearTimedBuffs(RoR2Content.Buffs.PulverizeBuildup);
+                    _target.RemoveBuff(RoR2Content.Buffs.PulverizeBuildup);
+
+                    // Add Pulverized
+                    _target.AddTimedBuff(RoR2Content.Buffs.Pulverized, 8.0f * count);
+
+                    // Spawn Pulzerized effect
+                    EffectManager.SpawnEffect(HealthComponent.AssetReferences.pulverizedEffectPrefab, new EffectData
+                    {
+                        origin = _target.corePosition,
+                        scale = _target.radius
+                    }, true);
+                }
+            }
+        }
+
         public ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _ignoreOverlays = false, bool _dithering = true)
         {
             // In debug mode?
@@ -373,6 +417,26 @@ namespace Faithful
 
             // Return total items
             return count;
+        }
+
+        public CharacterMaster GetLastAttacker(CharacterBody _victim)
+        {
+            // Check for victim
+            if (_victim == null)
+            {
+                return null;
+            }
+
+            // Try to find Faithful Behaviour
+            FaithfulHealthComponentBehaviour helper = _victim.gameObject.GetComponent<FaithfulHealthComponentBehaviour>();
+            if (helper != null)
+            {
+                // Return last attacker
+                return helper.lastAttacker;
+            }
+
+            // Otherwise return null
+            return null;
         }
 
         public string GetCharacterModelName(string _character)

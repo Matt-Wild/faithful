@@ -2,6 +2,8 @@
 using System.Linq;
 using R2API;
 using RoR2;
+using UnityEngine;
+using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
@@ -15,6 +17,10 @@ namespace Faithful
 
     internal delegate void OnIncomingDamageCallback(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim);
     internal delegate void DamageReportCallback(DamageReport _report);
+
+    internal delegate void OnAddBuffCallback(BuffIndex _buff, CharacterBody _character);
+    internal delegate void OnAddTimedBuffCallback(BuffDef _buff, float _duration, CharacterBody _character);
+    internal delegate void OnInflictDamageOverTime(GameObject _victimObject, GameObject _attackerObject, DotController.DotIndex _dotIndex, float _duration, float _damageMultiplier, uint? _maxStacksFromAttacker);
 
     internal delegate void OnHealCallback(HealthComponent _healthComponent, ref float _amount, ref ProcChainMask _procChainMask, ref bool _nonRegen);
 
@@ -53,6 +59,11 @@ namespace Faithful
         protected List<DamageReportCallback> onDamageDealtCallbacks = new List<DamageReportCallback>();
         protected List<DamageReportCallback> onCharacterDeathCallbacks = new List<DamageReportCallback>();
 
+        // Buff, debuff and DoT callbacks
+        protected List<OnAddBuffCallback> onAddBuffCallbacks = new List<OnAddBuffCallback>();
+        protected List<OnAddTimedBuffCallback> onAddTimedBuffCallbacks = new List<OnAddTimedBuffCallback>();
+        protected List<OnInflictDamageOverTime> onInflictDamageOverTimeCallbacks = new List<OnInflictDamageOverTime>();
+
         // Heal callbacks
         protected List<OnHealCallback> onHealCallbacks = new List<OnHealCallback>();
 
@@ -80,6 +91,10 @@ namespace Faithful
             // Inject hooks
             On.RoR2.HoldoutZoneController.FixedUpdate += HookHoldoutZoneControllerFixedUpdate;
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
+            On.RoR2.CharacterBody.Awake += HookCharacterBodyAwake;
+            On.RoR2.CharacterBody.AddBuff_BuffIndex += HookAddBuffIndex;
+            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += HookAddTimedBuffDef;
+            On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 += HookInflictDamageOverTime;
             On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
             On.RoR2.HealthComponent.Heal += HookHeal;
             On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats;
@@ -278,6 +293,30 @@ namespace Faithful
             DebugLog("Added On Character Death behaviour");
         }
 
+        // Add On Add Buff callback
+        public void AddOnAddBuffCallback(OnAddBuffCallback _callback)
+        {
+            onAddBuffCallbacks.Add(_callback);
+
+            DebugLog("Added On Add Buff behaviour");
+        }
+
+        // Add On Add Timed Buff callback
+        public void AddOnAddTimedBuffCallback(OnAddTimedBuffCallback _callback)
+        {
+            onAddTimedBuffCallbacks.Add(_callback);
+
+            DebugLog("Added On Add Timed Buff behaviour");
+        }
+
+        // Add On Inflict Damage Over Time callback
+        public void AddOnInflictDamageOverTimeCallback(OnInflictDamageOverTime _callback)
+        {
+            onInflictDamageOverTimeCallbacks.Add(_callback);
+
+            DebugLog("Added On Inflict Damage Over Time behaviour");
+        }
+
         // Add On Heal callback
         public void AddOnHealCallback(OnHealCallback _callback)
         {
@@ -421,14 +460,60 @@ namespace Faithful
             orig(self); // Run normal processes
         }
 
-        
+        protected void HookCharacterBodyAwake(On.RoR2.CharacterBody.orig_Awake orig, CharacterBody self)
+        {
+            // Add custom character body behaviour
+            FaithfulCharacterBodyBehaviour component = self.gameObject.AddComponent<FaithfulCharacterBodyBehaviour>();
+
+            // Pass Toolbox reference to custom component
+            component.toolbox = toolbox;
+
+            orig(self); // Run normal processes
+        }
+
+        protected void HookAddBuffIndex(On.RoR2.CharacterBody.orig_AddBuff_BuffIndex orig, CharacterBody self, BuffIndex buffType)
+        {
+            // Cycle through On Add Buff callbacks
+            foreach (OnAddBuffCallback callback in onAddBuffCallbacks)
+            {
+                // Call
+                callback(buffType, self);
+            }
+
+            orig(self, buffType); // Run normal processes
+        }
+
+        protected void HookAddTimedBuffDef(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffDef_float orig, CharacterBody self, BuffDef buffDef, float duration)
+        {
+            // Cycle through On Add Timed Buff callbacks
+            foreach (OnAddTimedBuffCallback callback in onAddTimedBuffCallbacks)
+            {
+                // Call
+                callback(buffDef, duration, self);
+            }
+
+            orig(self, buffDef, duration); // Run normal processes
+        }
+
+        protected void HookInflictDamageOverTime(On.RoR2.DotController.orig_InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 orig, GameObject victimObject, GameObject attackerObject, DotController.DotIndex dotIndex, float duration, float damageMultiplier, uint? maxStacksFromAttacker)
+        {
+            orig(victimObject, attackerObject, dotIndex, duration, damageMultiplier, maxStacksFromAttacker); // Run normal processes
+
+            // Cycle through On Add Timed Buff callbacks
+            foreach (OnInflictDamageOverTime callback in onInflictDamageOverTimeCallbacks)
+            {
+                // Call
+                callback(victimObject, attackerObject, dotIndex, duration, damageMultiplier, maxStacksFromAttacker);
+            }
+        }
+
         protected void HookHealthComponentAwake(On.RoR2.HealthComponent.orig_Awake orig, HealthComponent self)
         {
             // Add custom health component behaviour
             FaithfulHealthComponentBehaviour component = self.gameObject.AddComponent<FaithfulHealthComponentBehaviour>();
 
-            // Pass Behaviour reference to custom component
-            component.behaviour = this;
+            // Pass Toolbox reference to custom component
+            component.toolbox = toolbox;
 
             orig(self); // Run normal processes
         }
