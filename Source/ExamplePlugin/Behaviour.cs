@@ -4,6 +4,7 @@ using R2API;
 using RoR2;
 using UnityEngine;
 using static Facepunch.Steamworks.Inventory.Item;
+using static RoR2.DotController;
 
 namespace Faithful
 {
@@ -21,6 +22,7 @@ namespace Faithful
     internal delegate void OnAddBuffCallback(BuffIndex _buff, CharacterBody _character);
     internal delegate void OnAddTimedBuffCallback(BuffDef _buff, float _duration, CharacterBody _character);
     internal delegate void OnInflictDamageOverTime(GameObject _victimObject, GameObject _attackerObject, DotController.DotIndex _dotIndex, float _duration, float _damageMultiplier, uint? _maxStacksFromAttacker);
+    internal delegate void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo);
 
     internal delegate void OnHealCallback(HealthComponent _healthComponent, ref float _amount, ref ProcChainMask _procChainMask, ref bool _nonRegen);
 
@@ -63,6 +65,7 @@ namespace Faithful
         protected List<OnAddBuffCallback> onAddBuffCallbacks = new List<OnAddBuffCallback>();
         protected List<OnAddTimedBuffCallback> onAddTimedBuffCallbacks = new List<OnAddTimedBuffCallback>();
         protected List<OnInflictDamageOverTime> onInflictDamageOverTimeCallbacks = new List<OnInflictDamageOverTime>();
+        protected List<OnInflictDamageOverTimeRef> onInflictDamageOverTimeRefCallbacks = new List<OnInflictDamageOverTimeRef>();
 
         // Heal callbacks
         protected List<OnHealCallback> onHealCallbacks = new List<OnHealCallback>();
@@ -95,6 +98,7 @@ namespace Faithful
             On.RoR2.CharacterBody.AddBuff_BuffIndex += HookAddBuffIndex;
             On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += HookAddTimedBuffDef;
             On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 += HookInflictDamageOverTime;
+            On.RoR2.DotController.InflictDot_refInflictDotInfo += HookInflictDamageOverTimeRef;
             On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
             On.RoR2.HealthComponent.Heal += HookHeal;
             On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats;
@@ -317,6 +321,14 @@ namespace Faithful
             DebugLog("Added On Inflict Damage Over Time behaviour");
         }
 
+        // Add On Inflict Damage Over Time Ref callback
+        public void AddOnInflictDamageOverTimeRefCallback(OnInflictDamageOverTimeRef _callback)
+        {
+            onInflictDamageOverTimeRefCallbacks.Add(_callback);
+
+            DebugLog("Added On Inflict Damage Over Time Ref behaviour");
+        }
+
         // Add On Heal callback
         public void AddOnHealCallback(OnHealCallback _callback)
         {
@@ -499,12 +511,24 @@ namespace Faithful
         {
             orig(victimObject, attackerObject, dotIndex, duration, damageMultiplier, maxStacksFromAttacker); // Run normal processes
 
-            // Cycle through On Add Timed Buff callbacks
+            // Cycle through On Inflict Damage Over Time callbacks
             foreach (OnInflictDamageOverTime callback in onInflictDamageOverTimeCallbacks)
             {
                 // Call
                 callback(victimObject, attackerObject, dotIndex, duration, damageMultiplier, maxStacksFromAttacker);
             }
+        }
+
+        protected void HookInflictDamageOverTimeRef(On.RoR2.DotController.orig_InflictDot_refInflictDotInfo orig, ref InflictDotInfo inflictDotInfo)
+        {
+            // Cycle through On Inflict Damage Over Time Ref callbacks
+            foreach (OnInflictDamageOverTimeRef callback in onInflictDamageOverTimeRefCallbacks)
+            {
+                // Call
+                callback(ref inflictDotInfo);
+            }
+
+            orig(ref inflictDotInfo); // Run normal processes
         }
 
         protected void HookHealthComponentAwake(On.RoR2.HealthComponent.orig_Awake orig, HealthComponent self)

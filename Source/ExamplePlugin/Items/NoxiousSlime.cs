@@ -1,7 +1,7 @@
 ﻿using R2API;
 using RoR2;
 using UnityEngine;
-using static RoR2.DotController;
+using UnityEngine.TextCore;
 using static RoR2.UI.HGHeaderNavigationController;
 
 namespace Faithful
@@ -31,7 +31,7 @@ namespace Faithful
             // Inject buff, timed buff and DoT behaviour
             toolbox.behaviour.AddOnAddBuffCallback(OnAddBuff);
             toolbox.behaviour.AddOnAddTimedBuffCallback(OnAddTimedBuff);
-            toolbox.behaviour.AddOnInflictDamageOverTimeCallback(OnInflictDamageOverTime);
+            toolbox.behaviour.AddOnInflictDamageOverTimeRefCallback(OnInflictDamageOverTimeRef);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -170,7 +170,7 @@ namespace Faithful
             }
         }
 
-        void OnInflictDamageOverTime(GameObject _victimObject, GameObject _attackerObject, DotController.DotIndex _dotIndex, float _duration, float _damageMultiplier, uint? _maxStacksFromAttacker)
+        void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo)
         {
             // Check if hosting
             if (!toolbox.utils.hosting)
@@ -178,12 +178,34 @@ namespace Faithful
                 return;
             }
 
+            // Check for victim and attacker
+            if (_inflictDotInfo.victimObject == null || _inflictDotInfo.attackerObject == null)
+            {
+                return;
+            }
+
+            // Try to get Faithful behaviour
+            FaithfulCharacterBodyBehaviour helper = _inflictDotInfo.victimObject.GetComponent<FaithfulCharacterBodyBehaviour>();
+            if (helper == null)
+            {
+                return;
+            }
+
+            // Check for flag
+            if (helper.flags.Get($"NS_{_inflictDotInfo.dotIndex}_IEDOT"))
+            {
+                return;
+            }
+
             // Attempt to get attacker body
-            CharacterBody attackerBody = _attackerObject.GetComponent<CharacterBody>();
+            CharacterBody attackerBody = _inflictDotInfo.attackerObject.GetComponent<CharacterBody>();
             if (attackerBody == null)
             {
                 return;
             }
+
+            // Set flag to avoid infinite recursion
+            helper.flags.Set($"NS_{_inflictDotInfo.dotIndex}_IEDOT", true);
 
             // Get item count
             int count = attackerBody.inventory.GetItemCount(noxiousSlimeItem.itemDef);
@@ -191,15 +213,15 @@ namespace Faithful
             // Inflict extra DoT
             while (count > 0)
             {
-                // Inflict DoT
+                // Inflict copied DoT
                 InflictDotInfo inflictDotInfo = new InflictDotInfo
                 {
-                    victimObject = _victimObject,
-                    attackerObject = _attackerObject,
-                    dotIndex = _dotIndex,
-                    duration = _duration,
-                    damageMultiplier = _damageMultiplier,
-                    maxStacksFromAttacker = _maxStacksFromAttacker
+                    victimObject = _inflictDotInfo.victimObject,
+                    attackerObject = _inflictDotInfo.attackerObject,
+                    dotIndex = _inflictDotInfo.dotIndex,
+                    duration = _inflictDotInfo.duration,
+                    damageMultiplier = _inflictDotInfo.damageMultiplier,
+                    maxStacksFromAttacker = _inflictDotInfo.maxStacksFromAttacker
                 };
                 DotController.InflictDot(ref inflictDotInfo);
 
