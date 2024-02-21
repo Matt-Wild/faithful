@@ -45,21 +45,21 @@ namespace Faithful
             }
 
             // Add character display settings
-            displaySettings.AddCharacterDisplay("Commando", "Head", new Vector3(0F, 0.46155F, 0.00827F), new Vector3(15F, 0F, 0F), new Vector3(0.13F, 0.13F, 0.13F));
-            displaySettings.AddCharacterDisplay("Huntress", "Head", new Vector3(0F, 0.3575F, -0.025F), new Vector3(10F, 0F, 0F), new Vector3(0.11F, 0.11F, 0.11F));
-            displaySettings.AddCharacterDisplay("Bandit", "Head", new Vector3(0F, 0.275F, 0.02F), new Vector3(0F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("MUL-T", "Head", new Vector3(0F, 3F, 2.15F), new Vector3(305F, 180F, 0F), new Vector3(0.6F, 0.6F, 0.6F));
-            displaySettings.AddCharacterDisplay("Engineer", "Chest", new Vector3(0F, 0.7715F, 0.0975F), new Vector3(15F, 0F, 0F), new Vector3(0.11F, 0.11F, 0.11F));
-            displaySettings.AddCharacterDisplay("Turret", "Head", new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f));
-            displaySettings.AddCharacterDisplay("Artificer", "Head", new Vector3(0F, 0.25F, -0.0375F), new Vector3(25F, 0F, 0F), new Vector3(0.11F, 0.11F, 0.11F));
-            displaySettings.AddCharacterDisplay("Mercenary", "Head", new Vector3(0F, 0.325F, 0.07F), new Vector3(12.5F, 0F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("REX", "HandL", new Vector3(0F, 0.3F, 0.125F), new Vector3(280F, 180F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Loader", "Head", new Vector3(0F, 0.3F, 0.0375F), new Vector3(5F, 0F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("Acrid", "Head", new Vector3(0F, 1.4325F, 2.15F), new Vector3(280F, 180F, 0F), new Vector3(1.35F, 1.35F, 1.35F));
-            displaySettings.AddCharacterDisplay("Captain", "Chest", new Vector3(0.3415F, 0.5145F, -0.045F), new Vector3(5F, 0F, 0F), new Vector3(0.11F, 0.11F, 0.11F));
-            displaySettings.AddCharacterDisplay("Railgunner", "GunStock", new Vector3(-0.001F, -0.015F, 0.09F), new Vector3(85.00005F, 180F, 180F), new Vector3(0.06F, 0.06F, 0.06F));
-            displaySettings.AddCharacterDisplay("Void Fiend", "Head", new Vector3(0F, 0.25F, -0.065F), new Vector3(345F, 0F, 0F), new Vector3(0.11F, 0.11F, 0.11F));
-            displaySettings.AddCharacterDisplay("Scavenger", "Chest", new Vector3(0F, 7.25F, 1.4F), new Vector3(350F, 180F, 0F), new Vector3(2.4F, 2.4F, 2.4F));
+            displaySettings.AddCharacterDisplay("Commando", "CalfR", new Vector3(-0.0025F, 0.225F, 0.0235F), new Vector3(2F, 175F, 177.5F), new Vector3(0.19F, 0.19F, 0.19F));
+            displaySettings.AddCharacterDisplay("Huntress", "CalfR", new Vector3(0.02F, 0.26F, 0.0215F), new Vector3(1.5F, 170F, 179F), new Vector3(0.175F, 0.175F, 0.175F));
+            displaySettings.AddCharacterDisplay("Bandit", "CalfR", new Vector3(0F, 0.225F, 0.01215F), new Vector3(0F, 175.5F, 180F), new Vector3(0.16F, 0.16F, 0.16F));
+            displaySettings.AddCharacterDisplay("MUL-T", "CalfR", new Vector3(0F, 2.25F, 0F), new Vector3(0F, 0F, 180F), new Vector3(1.75F, 1.75F, 1.75F));
+            displaySettings.AddCharacterDisplay("Engineer", "CalfR", new Vector3(0.003F, 0.1875F, 0.02F), new Vector3(2.5F, 180F, 177.5F), new Vector3(0.225F, 0.2F, 0.24F));
+            displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, 0.295F, 0F), new Vector3(0F, 180F, 0F), new Vector3(0.5F, 0.25F, 0.5F));
+            displaySettings.AddCharacterDisplay("Artificer", "CalfR", new Vector3(0.0055F, 0.4045F, 0.01F), new Vector3(5F, 175F, 176.5F), new Vector3(0.09F, 0.09F, 0.09F));
+            displaySettings.AddCharacterDisplay("Mercenary", "CalfR", new Vector3(-0.0032F, 0.245F, 0.022F), new Vector3(5F, 175F, 179F), new Vector3(0.14F, 0.14F, 0.1475F));
+            displaySettings.AddCharacterDisplay("REX", "FootFrontR", new Vector3(0F, 0.85F, 0F), new Vector3(0F, 180F, 180F), new Vector3(0.25F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Loader", "CalfR", new Vector3(0.009F, 0.25F, 0.015F), new Vector3(2.5F, 185F, 180F), new Vector3(0.225F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Acrid", "CalfR", new Vector3(0.065F, 3.8F, -0.0075F), new Vector3(2F, 0F, 180F), new Vector3(0.85F, 0.8F, 0.85F));
+            displaySettings.AddCharacterDisplay("Captain", "CalfR", new Vector3(0F, 0.3F, 0.0125F), new Vector3(5F, 165F, 180F), new Vector3(0.155F, 0.125F, 0.15F));
+            displaySettings.AddCharacterDisplay("Railgunner", "CalfR", new Vector3(0F, 0.325F, 0.00825F), new Vector3(0F, 280F, 180F), new Vector3(0.195F, 0.15F, 0.195F));
+            displaySettings.AddCharacterDisplay("Void Fiend", "CalfR", new Vector3(0.00335F, 0.378F, 0F), new Vector3(5F, 260F, 176.5F), new Vector3(0.13F, 0.125F, 0.14F));
+            displaySettings.AddCharacterDisplay("Scavenger", "CalfR", new Vector3(0.025F, 1.55F, -0.16F), new Vector3(8.5F, 180F, 180F), new Vector3(1.7F, 0.75F, 1.7F));
         }
 
         void StatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
