@@ -58,8 +58,8 @@
 	"FAITHFUL_CAUTERIZING_GREAVE_LORE": "<style=cMono>WILL CAUTERIZE YOUR GREAVES</style>\n\nAlso no refunds.",
 	
 	"FAITHFUL_NOXIOUS_SLIME_NAME": "Noxious Slimes",
-	"FAITHFUL_NOXIOUS_SLIME_PICKUP": "Debuffs are inflicted twice.",
-	"FAITHFUL_NOXIOUS_SLIME_DESC": "Inflicting a debuff onto an enemy will inflict that same debuff an additional <style=cIsDamage>1</style> <style=cStack>(+1 per stack)</style> times.",
+	"FAITHFUL_NOXIOUS_SLIME_PICKUP": "Debuffs deal double damage.",
+	"FAITHFUL_NOXIOUS_SLIME_DESC": "All damaging debuffs deal <style=cIsDamage>+100%</style> <style=cStack>(+100% per stack)</style> damage.",
 	"FAITHFUL_NOXIOUS_SLIME_LORE": "Order: Venomous Unicellular Organisms\nTracking Number: 58******\nEstimated Delivery: 07/01/2056\nShipping Method: High Priority/Biological\nShipping Address: Rare/Extinct Study Satellite, Beachfront, Saturn\nShipping Details:\n\nListen, I know you guys probably already know a decent amount about these \u201Cslimes\u201C but KEEP THESE THINGS IN A SEALED CHAMBER!\n\nThey may look friendly but that's just a coincidence. I've seen these things escape a containment tank just to eat the security guard in seconds over the cameras. It's not exactly a display of nature's beauty, I'll say that much.\n\nYou don't need to worry about their diet or any special needs. Place any form of organic matter in front of them and they'll consume and integrate it into their own physiology in the span of an hour. Make sure they get some sunlight, too. At least 3 hours a day. If they generate any unusual substances, send a sample over to us. We'll let you know if we find anything with our own research.\n\nI know you guys are interested in the possible medicinal benefits these could provide but do be extra careful with them. I wouldn't be thrilled to hear you guys go the way of their meals as well."
   }
 }

@@ -28,9 +28,7 @@ namespace Faithful
             // Create Noxious Slime item
             noxiousSlimeItem = toolbox.items.AddItem("NOXIOUS_SLIME", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _displaySettings: displaySettings);
 
-            // Inject buff, timed buff and DoT behaviour
-            toolbox.behaviour.AddOnAddBuffCallback(OnAddBuff);
-            toolbox.behaviour.AddOnAddTimedBuffCallback(OnAddTimedBuff);
+            // Inject DoT behaviour
             toolbox.behaviour.AddOnInflictDamageOverTimeRefCallback(OnInflictDamageOverTimeRef);
         }
 
@@ -63,113 +61,6 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Scavenger", "Weapon", new Vector3(0F, 18.25F, 0F), new Vector3(280F, 330F, 90F), new Vector3(2.5F, 2.5F, 2.5F));
         }
 
-        void OnAddBuff(BuffIndex _buff, CharacterBody _character)
-        {
-            // Check for host, Character Body and Buff Type
-            if (!toolbox.utils.hosting || _character == null || _buff == BuffIndex.None)
-            {
-                return;
-            }
-
-            // Try to get last attacker
-            CharacterMaster attacker = toolbox.utils.GetLastAttacker(_character);
-            if (attacker == null || !attacker.hasBody)
-            {
-                return;
-            }
-
-            // Get attacker body
-            CharacterBody attackerBody = attacker.GetBody();
-
-            // Check for attacker inventory
-            if (!attackerBody.inventory)
-            {
-                return;
-            }
-
-            // Get item count
-            int count = attackerBody.inventory.GetItemCount(noxiousSlimeItem.itemDef);
-
-            // Has item?
-            if (count > 0)
-            {
-                // Try to get Faithful behaviour
-                FaithfulCharacterBodyBehaviour helper = _character.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
-                if (helper == null)
-                {
-                    return;
-                }
-
-                // Try get Buff Def and ensure not timed debuff using flag system
-                BuffDef buffDef = BuffCatalog.GetBuffDef(_buff);
-                if (buffDef != null && !helper.flags.Get($"NS_{buffDef.name}_TDA"))
-                {
-                    // Check if Debuff
-                    if (!buffDef.isDebuff)
-                    {
-                        return;
-                    }
-
-                    // Apply more debuffs
-                    _character.SetBuffCount(_buff, _character.buffs[(int)_buff] + count);
-                }
-            }
-        }
-
-        void OnAddTimedBuff(BuffDef _buff, float _duration, CharacterBody _character)
-        {
-            // Check for host, Character Body, Buff and if Debuff
-            if (!toolbox.utils.hosting || _character == null || _buff == null || !_buff.isDebuff)
-            {
-                return;
-            }
-
-            // Try to get Faithful behaviour
-            FaithfulCharacterBodyBehaviour helper = _character.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
-            if (helper == null)
-            {
-                return;
-            }
-
-            // Check for flag
-            if (helper.flags.Get($"NS_{_buff.name}_TDA"))
-            {
-                return;
-            }
-
-            // Try to get last attacker
-            CharacterMaster attacker = toolbox.utils.GetLastAttacker(_character);
-            if (attacker == null || !attacker.hasBody)
-            {
-                return;
-            }
-
-            // Get attacker body
-            CharacterBody attackerBody = attacker.GetBody();
-
-            // Check for attacker inventory
-            if (!attackerBody.inventory)
-            {
-                return;
-            }
-
-            // Set flag to avoid infinite recursion
-            helper.flags.Set($"NS_{_buff.name}_TDA", true);
-
-            // Get item count
-            int count = attackerBody.inventory.GetItemCount(noxiousSlimeItem.itemDef);
-
-            // Add extra debuffs
-            while (count > 0)
-            {
-                // Apply extra debuff
-                toolbox.utils.AddPulverizeBuildup(_character, attackerBody, _duration);
-
-                // Decrease count
-                count--;
-            }
-        }
-
         void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo)
         {
             // Check if hosting
@@ -184,19 +75,6 @@ namespace Faithful
                 return;
             }
 
-            // Try to get Faithful behaviour
-            FaithfulCharacterBodyBehaviour helper = _inflictDotInfo.victimObject.GetComponent<FaithfulCharacterBodyBehaviour>();
-            if (helper == null)
-            {
-                return;
-            }
-
-            // Check for flag
-            if (helper.flags.Get($"NS_{_inflictDotInfo.dotIndex}_IEDOT"))
-            {
-                return;
-            }
-
             // Attempt to get attacker body
             CharacterBody attackerBody = _inflictDotInfo.attackerObject.GetComponent<CharacterBody>();
             if (attackerBody == null)
@@ -204,29 +82,14 @@ namespace Faithful
                 return;
             }
 
-            // Set flag to avoid infinite recursion
-            helper.flags.Set($"NS_{_inflictDotInfo.dotIndex}_IEDOT", true);
-
             // Get item count
             int count = attackerBody.inventory.GetItemCount(noxiousSlimeItem.itemDef);
 
-            // Inflict extra DoT
-            while (count > 0)
+            // Has item?
+            if (count > 0)
             {
-                // Inflict copied DoT
-                InflictDotInfo inflictDotInfo = new InflictDotInfo
-                {
-                    victimObject = _inflictDotInfo.victimObject,
-                    attackerObject = _inflictDotInfo.attackerObject,
-                    dotIndex = _inflictDotInfo.dotIndex,
-                    duration = _inflictDotInfo.duration,
-                    damageMultiplier = _inflictDotInfo.damageMultiplier,
-                    maxStacksFromAttacker = _inflictDotInfo.maxStacksFromAttacker
-                };
-                DotController.InflictDot(ref inflictDotInfo);
-
-                // Decrease count
-                count--;
+                // Modify DoT
+                _inflictDotInfo.damageMultiplier *= 1.0f + (1.0f * count);
             }
         }
     }
