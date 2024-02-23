@@ -29,7 +29,7 @@ namespace Faithful
             _stats.critAdd += 1.0f * _count;
 
             // Modify crit damage
-            _stats.critDamageMultAdd += 0.10f * _count;
+            _stats.critDamageMultAdd += 0.20f * _count;
         }
     }
 }
