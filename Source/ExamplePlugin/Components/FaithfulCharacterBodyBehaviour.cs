@@ -14,7 +14,8 @@ namespace Faithful
         public Toolbox toolbox;
 
         // Store flags
-        public Flags flags = new Flags();
+        public Flags frameFlags = new Flags();
+        public Flags stageFlags = new Flags();
 
         // Store reference to Character Body
         private CharacterBody character;
@@ -28,7 +29,7 @@ namespace Faithful
         private void LateUpdate()
         {
             // Reset flags
-            flags.Reset();
+            frameFlags.Reset();
         }
     }
 }

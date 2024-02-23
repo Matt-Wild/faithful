@@ -1,8 +1,6 @@
 ﻿using R2API;
 using RoR2;
 using UnityEngine;
-using UnityEngine.TextCore;
-using static RoR2.UI.HGHeaderNavigationController;
 
 namespace Faithful
 {

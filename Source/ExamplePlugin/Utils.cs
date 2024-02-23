@@ -439,6 +439,25 @@ namespace Faithful
             return null;
         }
 
+        public CharacterBody GetInventoryBody(Inventory _inventory)
+        {
+            // Attempt to get Character Master
+            CharacterMaster master = _inventory.gameObject.GetComponent<CharacterMaster>();
+            if (master == null)
+            {
+                return null;
+            }
+
+            // Check for Character Body
+            if (!master.hasBody)
+            {
+                return null;
+            }
+
+            // Return Character Body
+            return master.GetBody();
+        }
+
         public string GetCharacterModelName(string _character)
         {
             // Check for name

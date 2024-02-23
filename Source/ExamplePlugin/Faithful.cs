@@ -48,6 +48,7 @@ namespace Faithful
         // Buffs
         private static GodMode godMode;
         private static Vengeance vengeance;
+        private static Inspiration inspiration;
 
         // Items
         private static CopperGear copperGear;
@@ -61,6 +62,7 @@ namespace Faithful
         private static HasteningGreave hasteningGreave;
         private static CauterizingGreave cauterizingGreave;
         private static NoxiousSlime noxiousSlime;
+        private static CollectorsVision collectorsVision;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -77,6 +79,7 @@ namespace Faithful
             // Create buffs
             godMode = new GodMode(toolbox);
             vengeance = new Vengeance(toolbox);
+            inspiration = new Inspiration(toolbox);
 
             // Create items
             copperGear = new CopperGear(toolbox);
@@ -90,6 +93,7 @@ namespace Faithful
             hasteningGreave = new HasteningGreave(toolbox);
             cauterizingGreave = new CauterizingGreave(toolbox);
             noxiousSlime = new NoxiousSlime(toolbox);
+            collectorsVision = new CollectorsVision(toolbox);
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing!");

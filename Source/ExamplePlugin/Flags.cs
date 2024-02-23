@@ -36,7 +36,7 @@ namespace Faithful
         }
 
         // Set a flag
-        public void Set(string _token, bool _state)
+        public void Set(string _token, bool _state = true)
         {
             // Cycle through flags
             foreach (Flag flag in flags)
