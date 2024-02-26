@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿using EntityStates;
+using RoR2;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -20,10 +21,16 @@ namespace Faithful
         // Store reference to Character Body
         private CharacterBody character;
 
+        // Store reference to behaviours
+        public FaithfulTJetpackBehaviour tJetpack;
+
         private void Start()
         {
             // Get Character Body
             character = gameObject.GetComponent<CharacterBody>();
+
+            // Create TJetpack behaviour
+            tJetpack = new FaithfulTJetpackBehaviour(character);
         }
 
         private void LateUpdate()

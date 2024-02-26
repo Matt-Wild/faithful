@@ -39,6 +39,9 @@ namespace Faithful
 
             // Link update function
             toolbox.behaviour.AddUpdateCallback(Update, true);
+
+            // Override On Map Zone Teleport Body
+            On.RoR2.MapZone.TeleportBody += OnMapTeleportBody;
         }
 
         void InHoldoutZone(CharacterBody _body, HoldoutZoneController _zone)
@@ -200,6 +203,19 @@ namespace Faithful
                     Log.Debug("God Mode enabled!");
                 }
             }
+        }
+
+        void OnMapTeleportBody(On.RoR2.MapZone.orig_TeleportBody orig, MapZone self, CharacterBody characterBody)
+        {
+            // Check for buff
+            if (characterBody.GetBuffCount(godModeBuff.buffDef) > 0)
+            {
+                // Ignore behaviour
+                return;
+            }
+
+            // Otherwise run normal processes
+            orig(self, characterBody);
         }
     }
 }

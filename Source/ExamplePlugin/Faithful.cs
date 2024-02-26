@@ -63,6 +63,7 @@ namespace Faithful
         private static CauterizingGreave cauterizingGreave;
         private static NoxiousSlime noxiousSlime;
         private static CollectorsVision collectorsVision;
+        private static TJetpack tJetpack;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -76,8 +77,13 @@ namespace Faithful
             // Initialise toolbox
             toolbox = new Toolbox(this, PInfo);
 
+            // Create God Mode if in debug
+            if (toolbox.utils.debugMode)
+            {
+                godMode = new GodMode(toolbox);
+            }
+
             // Create buffs
-            godMode = new GodMode(toolbox);
             vengeance = new Vengeance(toolbox);
             inspiration = new Inspiration(toolbox);
 
@@ -94,6 +100,7 @@ namespace Faithful
             cauterizingGreave = new CauterizingGreave(toolbox);
             noxiousSlime = new NoxiousSlime(toolbox);
             collectorsVision = new CollectorsVision(toolbox);
+            tJetpack = new TJetpack(toolbox);
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing!");

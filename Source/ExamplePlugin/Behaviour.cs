@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using R2API;
 using RoR2;
 using UnityEngine;
@@ -30,6 +29,8 @@ namespace Faithful
 
     internal delegate void OnPurchaseInteractionBeginCallback(PurchaseInteraction _shop, CharacterMaster _activator);
     internal delegate bool OnPurchaseCanBeAffordedCallback(PurchaseInteraction _shop, CharacterMaster _activator);
+
+    internal delegate void OnProcessJumpCallback(EntityStates.GenericCharacterMain _character);
 
     internal delegate void PlayerToPlayerCallback(PlayerCharacterMasterController _player1, PlayerCharacterMasterController _player2);
     internal delegate void PlayerHolderToPlayerCallback(int _count, PlayerCharacterMasterController _holder, PlayerCharacterMasterController _other);
@@ -80,6 +81,9 @@ namespace Faithful
         protected List<OnPurchaseInteractionBeginCallback> onPurchaseInteractionBeginCallbacks = new List<OnPurchaseInteractionBeginCallback>();
         protected List<OnPurchaseCanBeAffordedCallback> onPurchaseCanBeAffordedCallbacks = new List<OnPurchaseCanBeAffordedCallback>();
 
+        // Character movement callbacks
+        protected List<OnProcessJumpCallback> onProcessJumpCallbacks = new List<OnProcessJumpCallback>();
+
         // Player to player callbacks
         protected List<PlayerToPlayerCallback> playerToPlayerCallbacks = new List<PlayerToPlayerCallback>();
         protected List<PlayerItemToPlayer> playerItemToPlayerCallbacks = new List<PlayerItemToPlayer>();
@@ -108,6 +112,7 @@ namespace Faithful
             On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats;
             On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin;
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
+            On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump;
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
@@ -373,6 +378,14 @@ namespace Faithful
             DebugLog("Added On Purchase Can Be Afforded behaviour");
         }
 
+        // Add On Process Jump callback
+        public void AddOnProcessJumpCallback(OnProcessJumpCallback _callback)
+        {
+            onProcessJumpCallbacks.Add(_callback);
+
+            DebugLog("Added On Process Jump behaviour");
+        }
+
         // Fixed update for checking player to player interactions
         private void PlayerOnPlayerFixedUpdate()
         {
@@ -629,6 +642,18 @@ namespace Faithful
             }
 
             return orig(self, activator); // Run normal processes
+        }
+
+        protected void HookProcessJump(On.EntityStates.GenericCharacterMain.orig_ProcessJump orig, EntityStates.GenericCharacterMain self)
+        {
+            orig(self); // Run normal processes first
+
+            // Cycle through On Process Jump callbacks
+            foreach (OnProcessJumpCallback callback in onProcessJumpCallbacks)
+            {
+                // Call
+                callback(self);
+            }
         }
 
         protected void HookOnDamageDealt(DamageReport _report)
