@@ -28,8 +28,9 @@ namespace Faithful
             // Create item
             item = toolbox.items.AddItem("4T0N_JETPACK", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
 
-            // Inject on jump behaviour
-            toolbox.behaviour.AddOnProcessJumpCallback(OnProcessJump);
+            // Inject on transfer item behaviours
+            toolbox.behaviour.AddOnGiveItemCallback(OnGiveItem);
+            toolbox.behaviour.AddOnRemoveItemCallback(OnRemoveItem);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -61,39 +62,80 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Scavenger", "Weapon", new Vector3(0F, 18.25F, 0F), new Vector3(280F, 330F, 90F), new Vector3(2.5F, 2.5F, 2.5F));
         }
 
-        private void OnProcessJump(EntityStates.GenericCharacterMain _character)
+        void OnGiveItem(Inventory _inventory, ItemIndex _index, int _count)
         {
-            // Check for valid jump
-            if (_character.hasCharacterMotor && _character.hasInputBank && _character.isAuthority)
+            // Check for valid call
+            if (_inventory == null || _index == ItemIndex.None || _count <= 0)
             {
-                // Check if character is attempting to jump, is not grounded and is falling
-                if (_character.inputBank.jump.down && _character.characterMotor.velocity.y < 0.0f && !_character.characterMotor.isGrounded)
-                {
-                    // Attempt to get Character Body and check for inventory
-                    CharacterBody body = _character.characterBody;
-                    if (body == null || body.inventory == null)
-                    {
-                        return;
-                    }
-
-                    // Get item count
-                    int count = body.inventory.GetItemCount(item.itemDef);
-
-                    // Has item?
-                    if (count > 0)
-                    {
-                        // Attempt to get Faithful 4-T0N Jetpack behaviour
-                        FaithfulCharacterBodyBehaviour helper = _character.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
-                        if (helper == null || helper.tJetpack == null)
-                        {
-                            return;
-                        }
-
-                        // Activate 4-T0N Jetpack
-                        helper.tJetpack.Activate(count);
-                    }
-                }
+                return;
             }
+
+            // Get TJetpack index
+            ItemIndex jetpackIndex = ItemCatalog.FindItemIndex("FAITHFUL_4T0N_JETPACK_NAME");
+
+            // Ensure correct index
+            if (jetpackIndex != _index)
+            {
+                return;
+            }
+
+            // Attempt to get Character Body
+            CharacterBody body = toolbox.utils.GetInventoryBody(_inventory);
+            if (body == null)
+            {
+                return;
+            }
+
+            // Attempt to get Faithful behaviour
+            FaithfulCharacterBodyBehaviour helper = body.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
+            if (helper == null)
+            {
+                return;
+            }
+
+            // Get new item count
+            int count = _inventory.GetItemCount(item.itemDef);
+
+            // Update TJetpack item count
+            helper.tJetpack.UpdateItemCount(count + _count);
+        }
+
+        void OnRemoveItem(Inventory _inventory, ItemIndex _index, int _count)
+        {
+            // Check for valid call
+            if (_inventory == null || _index == ItemIndex.None || _count <= 0)
+            {
+                return;
+            }
+
+            // Get TJetpack index
+            ItemIndex jetpackIndex = ItemCatalog.FindItemIndex("FAITHFUL_4T0N_JETPACK_NAME");
+
+            // Ensure correct index
+            if (jetpackIndex != _index)
+            {
+                return;
+            }
+
+            // Attempt to get Character Body
+            CharacterBody body = toolbox.utils.GetInventoryBody(_inventory);
+            if (body == null)
+            {
+                return;
+            }
+
+            // Attempt to get Faithful behaviour
+            FaithfulCharacterBodyBehaviour helper = body.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
+            if (helper == null)
+            {
+                return;
+            }
+
+            // Get new item count
+            int count = _inventory.GetItemCount(item.itemDef);
+
+            // Update TJetpack item count
+            helper.tJetpack.UpdateItemCount(count - _count);
         }
     }
 }

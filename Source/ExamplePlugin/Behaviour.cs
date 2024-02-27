@@ -21,7 +21,7 @@ namespace Faithful
     internal delegate void OnInflictDamageOverTimeCallback(GameObject _victimObject, GameObject _attackerObject, DotController.DotIndex _dotIndex, float _duration, float _damageMultiplier, uint? _maxStacksFromAttacker);
     internal delegate void OnInflictDamageOverTimeRefCallback(ref InflictDotInfo _inflictDotInfo);
 
-    internal delegate void OnGiveItemCallback(Inventory _inventory, ItemIndex _index, int _count);
+    internal delegate void OnTransferItemCallback(Inventory _inventory, ItemIndex _index, int _count);
 
     internal delegate void OnHealCallback(HealthComponent _healthComponent, ref float _amount, ref ProcChainMask _procChainMask, ref bool _nonRegen);
 
@@ -69,7 +69,8 @@ namespace Faithful
         protected List<OnInflictDamageOverTimeRefCallback> onInflictDamageOverTimeRefCallbacks = new List<OnInflictDamageOverTimeRefCallback>();
 
         // Item interaction callbacks
-        protected List<OnGiveItemCallback> onGiveItemCallbacks = new List<OnGiveItemCallback>();
+        protected List<OnTransferItemCallback> onGiveItemCallbacks = new List<OnTransferItemCallback>();
+        protected List<OnTransferItemCallback> onRemoveItemCallbacks = new List<OnTransferItemCallback>();
 
         // Heal callbacks
         protected List<OnHealCallback> onHealCallbacks = new List<OnHealCallback>();
@@ -105,6 +106,7 @@ namespace Faithful
             On.RoR2.CharacterBody.AddBuff_BuffIndex += HookAddBuffIndex;
             On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += HookAddTimedBuffDef;
             On.RoR2.Inventory.GiveItem_ItemIndex_int += HookGiveItem;
+            On.RoR2.Inventory.RemoveItem_ItemIndex_int += HookRemoveItem;
             On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 += HookInflictDamageOverTime;
             On.RoR2.DotController.InflictDot_refInflictDotInfo += HookInflictDamageOverTimeRef;
             On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
@@ -339,11 +341,19 @@ namespace Faithful
         }
 
         // Add On Give Item callback
-        public void AddOnGiveItemCallback(OnGiveItemCallback _callback)
+        public void AddOnGiveItemCallback(OnTransferItemCallback _callback)
         {
             onGiveItemCallbacks.Add(_callback);
 
             DebugLog("Added On Give Item behaviour");
+        }
+
+        // Add On Remove Item callback
+        public void AddOnRemoveItemCallback(OnTransferItemCallback _callback)
+        {
+            onRemoveItemCallbacks.Add(_callback);
+
+            DebugLog("Added On Remove Item behaviour");
         }
 
         // Add On Heal callback
@@ -559,7 +569,19 @@ namespace Faithful
         protected void HookGiveItem(On.RoR2.Inventory.orig_GiveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
         {
             // Cycle through On Give Item callbacks
-            foreach (OnGiveItemCallback callback in onGiveItemCallbacks)
+            foreach (OnTransferItemCallback callback in onGiveItemCallbacks)
+            {
+                // Call
+                callback(self, itemIndex, count);
+            }
+
+            orig(self, itemIndex, count); // Run normal processes
+        }
+
+        protected void HookRemoveItem(On.RoR2.Inventory.orig_RemoveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
+        {
+            // Cycle through On Remove Item callbacks
+            foreach (OnTransferItemCallback callback in onRemoveItemCallbacks)
             {
                 // Call
                 callback(self, itemIndex, count);
