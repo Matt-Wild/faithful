@@ -30,12 +30,12 @@ namespace Faithful
         //protected float deactivatedTime;
 
         // Jetpack stats
-        protected float maxVelocity = 32.0f;
-        protected float risingAcceleration = 40.0f;
+        protected float maxVelocity = 30.0f;
+        protected float risingAcceleration = 36.0f;
         protected float fallingAcceleration = 100.0f;
         protected float baseFuel = 2.0f;
         protected float fuelPerStack = 1.0f;
-        protected float baseRefuelDuration = 10.0f;
+        protected float baseRefuelDuration = 12.0f;
         protected float refuelWaitRatio = 0.4f;
         protected float minimumFuelToActivate = 0.5f;
 
@@ -127,6 +127,16 @@ namespace Faithful
             // Check if valid and correct character
             if (self == null || self.characterBody != character || !self.hasCharacterMotor || !self.hasInputBank || !self.isAuthority)
             {
+                return;
+            }
+
+            // Check if game is paused
+            if (Time.timeScale == 0.0f)
+            {
+                // Increase last jet time
+                lastJetTime += Time.fixedDeltaTime;
+
+                // Skip behaviour
                 return;
             }
 
@@ -263,8 +273,8 @@ namespace Faithful
                 return;
             }
 
-            // Skip if no fuel used
-            if (fuelUsed == 0.0f)
+            // Skip if no fuel used or artificer hover is active
+            if (fuelUsed == 0.0f || artificerJetpackDefaultState)
             {
                 return;
             }
