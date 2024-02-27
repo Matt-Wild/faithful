@@ -70,7 +70,7 @@
 	
 	"FAITHFUL_4T0N_JETPACK_NAME": "4-T0N Jetpack",
 	"FAITHFUL_4T0N_JETPACK_PICKUP": "Hold 'Jump' to boost upwards. Recharges over time.",
-	"FAITHFUL_4T0N_JETPACK_DESC": "Holding the jump key <style=cIsUtility>boosts you upwards</style> for up to <style=cIsUtility>2</style> <style=cStack>(+1 per stack)</style> seconds. Fully recharges in <style=cIsUtility>10</style> <style=cStack>(-20% per stack)</style> seconds.",
-	"FAITHFUL_4T0N_JETPACK_LORE": "Order: High-Power Photon Jetpack\nTracking Number: 76*************\nEstimated Delivery: 04/07/2057\nShipping Method: High Priority/Fragile\nShipping Address: Floor 77, Corp INC, Jupiter\nShipping Details:\n\nHere's the new jetpack you ordered, sir. This one should last you a good while longer.\n\nAlthough, I do advise that you don't try to use it to fly to the other office again. The higher-ups wanted me to let you know that they wouldn't be paying off your medical costs next time, sir."
+	"FAITHFUL_4T0N_JETPACK_DESC": "Holding the jump key <style=cIsUtility>boosts you upwards</style> for up to <style=cIsUtility>2</style> <style=cStack>(+1 per stack)</style> seconds. Fully recharges in <style=cIsUtility>12</style> <style=cStack>(-20% per stack)</style> seconds.",
+	"FAITHFUL_4T0N_JETPACK_LORE": "Order: High-Power Photon Jetpack\nTracking Number: 76*************\nEstimated Delivery: 04/07/2057\nShipping Method: High Priority/Fragile\nShipping Address: Floor 77, Corp INC, Jupiter\nShipping Details:\n\nHere's the new jetpack you ordered, sir. This one should last you a good while longer.\n\nAlthough, I do advise that you don't try to use it to fly to the other office again. The higher-ups wanted me to let you know that they wouldn't be paying off your medical bills next time, sir."
   }
 }

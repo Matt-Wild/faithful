@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3280900574
+CRC: 3992158184
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 93d5723366a6911b5a41dd747b4261dc
+    Hash: c9467ca90b7474ba7c08dc0a3443ef93
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -34,6 +34,7 @@ Assets:
 - Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.prefab
 - Assets/Items/LeadersPennon/texLeadersPennonNormal.png
 - Assets/Items/Chakram/ChakramMesh.prefab
+- Assets/Items/4-T0NJetpack/4T0NJetpackMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
 - Assets/Items/HasteningGreave/texHasteningGreaveEmission.png
@@ -70,6 +71,7 @@ Assets:
 - Assets/Items/VengefulToaster/texBuffVengefulBoost.png
 - Assets/Status/texBuffDevMode.png
 - Assets/Items/HasteningGreave/HasteningGreaveDisplayMesh.prefab
+- Assets/Items/4-T0NJetpack/4T0NJetpackDisplayMesh.prefab
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
 - Assets/Items/LeadersPennon/texLeadersPennon.png
 - Assets/Items/DrownedVisage/DrownedVisageDisplayMesh.prefab
@@ -88,10 +90,13 @@ Assets:
 - Assets/Items/Chakram/texBuffPrimarySkillChakram.png
 - Assets/Items/Chakram/ChakramProjectileMesh.prefab
 - Assets/Items/HasteningGreave/texHasteningGreaveNormal.png
+- Assets/Items/4-T0NJetpack/tex4T0NJetpackEmissionLight.png
 - Assets/Items/CopperGear/texCopperGear.png
+- Assets/Items/CollectorsVision/texBuffInspiredBoost.png
 - Assets/Items/VengefulToaster/texVengefulToasterIcon.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaIcon.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerIcon.png
+- Assets/Items/4-T0NJetpack/tex4T0NJetpack.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveIcon.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.prefab
 - Assets/Items/Chakram/texChakramNormal.png
