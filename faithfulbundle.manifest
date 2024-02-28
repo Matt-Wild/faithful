@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3992158184
+CRC: 490503312
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c9467ca90b7474ba7c08dc0a3443ef93
+    Hash: b97e304811cf7848dc3a5b9286d8efa3
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1fe3abd029edb3522ae5dbbc711d0a74
+    Hash: 5c5d9d8194aa64fce158ffc973ed80f2
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,6 +25,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
@@ -37,6 +39,7 @@ Assets:
 - Assets/Items/4-T0NJetpack/4T0NJetpackMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
+- Assets/Items/4-T0NJetpack/tex4T0NJetpackIcon.png
 - Assets/Items/HasteningGreave/texHasteningGreaveEmission.png
 - Assets/Skills/Railgunner/texRailgunnerCoin.png
 - Assets/Items/LongshotGeode/LongshotGeodeMesh.prefab
@@ -74,6 +77,7 @@ Assets:
 - Assets/Items/4-T0NJetpack/4T0NJetpackDisplayMesh.prefab
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
 - Assets/Items/LeadersPennon/texLeadersPennon.png
+- Assets/Items/4-T0NJetpack/4T0NJetpackMageDisplayMesh.prefab
 - Assets/Items/DrownedVisage/DrownedVisageDisplayMesh.prefab
 - Assets/Items/CauterizingGreave/texCauterizingGreaveEmission.png
 - Assets/Items/BrassScrews/texBrassScrews.png
