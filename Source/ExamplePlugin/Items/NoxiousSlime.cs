@@ -73,9 +73,9 @@ namespace Faithful
                 return;
             }
 
-            // Attempt to get attacker body
+            // Attempt to get attacker body and inventory
             CharacterBody attackerBody = _inflictDotInfo.attackerObject.GetComponent<CharacterBody>();
-            if (attackerBody == null)
+            if (attackerBody == null || attackerBody.inventory == null)
             {
                 return;
             }
