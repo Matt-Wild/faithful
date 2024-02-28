@@ -24,7 +24,7 @@ namespace Faithful
         // Store reference to behaviours
         public FaithfulTJetpackBehaviour tJetpack;
 
-        private void Start()
+        private void Awake()
         {
             // Get Character Body
             character = gameObject.GetComponent<CharacterBody>();

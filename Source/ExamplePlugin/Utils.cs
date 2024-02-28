@@ -2,9 +2,7 @@
 using HarmonyLib;
 using R2API;
 using RoR2;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -526,6 +524,9 @@ namespace Faithful
         private GameObject model;
         private ItemDisplayRuleDict displayRules;
 
+        // List of models with display rules already assigned
+        List<string> assignedModels = new List<string>();
+
         public ItemDisplaySettings(Utils _utils, GameObject _model, ItemDisplayRuleDict _displayRules)
         {
             // Assign utils
@@ -548,6 +549,30 @@ namespace Faithful
                 return;
             }
 
+            // Test if character already has display rules assigned
+            if (assignedModels.Contains(modelName))
+            {
+                // Get current list of display rules
+                List<ItemDisplayRule> current = new List<ItemDisplayRule>(displayRules[modelName])
+                {
+                    // Add to list
+                    new ItemDisplayRule
+                    {
+                        ruleType = ItemDisplayRuleType.ParentedPrefab,
+                        followerPrefab = model,
+                        childName = _childName,
+                        localPos = _position,
+                        localAngles = _angle,
+                        localScale = _scale
+                    }
+                };
+
+                // Update display rules
+                displayRules[modelName] = current.ToArray();
+
+                return;
+            }
+
             // Add item display rule
             displayRules.Add(modelName,
             [
@@ -561,6 +586,9 @@ namespace Faithful
                     localScale = _scale
                 }
             ]);
+
+            // Add to assigned models
+            assignedModels.Add(modelName);
         }
 
         public ItemDisplayRuleDict GetRules()

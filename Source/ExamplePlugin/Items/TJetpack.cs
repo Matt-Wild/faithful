@@ -1,5 +1,6 @@
 ﻿using RoR2;
 using UnityEngine;
+using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
@@ -31,6 +32,9 @@ namespace Faithful
             // Inject on transfer item behaviours
             toolbox.behaviour.AddOnGiveItemCallback(OnGiveItem);
             toolbox.behaviour.AddOnRemoveItemCallback(OnRemoveItem);
+
+            // Inject character body behaviours
+            toolbox.behaviour.AddOnCharacterBodyStartCallback(OnCharacterBodyStart);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -134,6 +138,32 @@ namespace Faithful
 
             // Update TJetpack item count
             helper.tJetpack.UpdateItemCount(count - _count);
+        }
+
+        void OnCharacterBodyStart(CharacterBody _character)
+        {
+            // Check if valid
+            if (_character == null || _character.inventory == null)
+            {
+                return;
+            }
+
+            // Get item count
+            int count = _character.inventory.GetItemCount(item.itemDef);
+
+            // Has item?
+            if (count > 0)
+            {
+                // Attempt to get Faithful behaviour
+                FaithfulCharacterBodyBehaviour helper = _character.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
+                if (helper == null)
+                {
+                    return;
+                }
+
+                // Update TJetpack item count
+                helper.tJetpack.UpdateItemCount(count);
+            }
         }
     }
 }

@@ -76,6 +76,8 @@ namespace Faithful
         protected List<OnHealCallback> onHealCallbacks = new List<OnHealCallback>();
 
         // Character Body callbacks
+        protected List<CharacterBodyCallback> onCharacterBodyAwakeCallbacks = new List<CharacterBodyCallback>();
+        protected List<CharacterBodyCallback> onCharacterBodyStartCallbacks = new List<CharacterBodyCallback>();
         protected List<CharacterBodyCallback> onRecalculateStatsCallbacks = new List<CharacterBodyCallback>();
 
         // Interactable callbacks
@@ -103,6 +105,7 @@ namespace Faithful
             On.RoR2.HoldoutZoneController.FixedUpdate += HookHoldoutZoneControllerFixedUpdate;
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
             On.RoR2.CharacterBody.Awake += HookCharacterBodyAwake;
+            On.RoR2.CharacterBody.Start += HookCharacterBodyStart;
             On.RoR2.CharacterBody.AddBuff_BuffIndex += HookAddBuffIndex;
             On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += HookAddTimedBuffDef;
             On.RoR2.Inventory.GiveItem_ItemIndex_int += HookGiveItem;
@@ -364,6 +367,22 @@ namespace Faithful
             DebugLog("Added On Heal behaviour");
         }
 
+        // Add On Character Body Awake callback
+        public void AddOnCharacterBodyAwakeCallback(CharacterBodyCallback _callback)
+        {
+            onCharacterBodyAwakeCallbacks.Add(_callback);
+
+            DebugLog("Added On Character Body Awake behaviour");
+        }
+
+        // Add On Character Body Start callback
+        public void AddOnCharacterBodyStartCallback(CharacterBodyCallback _callback)
+        {
+            onCharacterBodyStartCallbacks.Add(_callback);
+
+            DebugLog("Added On Character Body Start behaviour");
+        }
+
         // Add On Recalculate Stats callback
         public void AddOnRecalculateStatsCallback(CharacterBodyCallback _callback)
         {
@@ -516,6 +535,25 @@ namespace Faithful
             component.toolbox = toolbox;
 
             orig(self); // Run normal processes
+
+            // Cycle through On Character Body Awake callbacks
+            foreach (CharacterBodyCallback callback in onCharacterBodyAwakeCallbacks)
+            {
+                // Call
+                callback(self);
+            }
+        }
+
+        protected void HookCharacterBodyStart(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
+        {
+            orig(self); // Run normal processes
+
+            // Cycle through On Character Body Start callbacks
+            foreach (CharacterBodyCallback callback in onCharacterBodyStartCallbacks)
+            {
+                // Call
+                callback(self);
+            }
         }
 
         protected void HookAddBuffIndex(On.RoR2.CharacterBody.orig_AddBuff_BuffIndex orig, CharacterBody self, BuffIndex buffType)

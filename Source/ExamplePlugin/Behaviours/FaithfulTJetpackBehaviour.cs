@@ -7,7 +7,7 @@ namespace Faithful
     internal class FaithfulTJetpackBehaviour
     {
         // Store reference to Character Body and Character Inventory
-        protected CharacterBody character;
+        public CharacterBody character;
 
         // Store reference to Artificer jetpack (OFTEN NULL)
         protected GameObject artificerJetpack;
@@ -51,12 +51,6 @@ namespace Faithful
         {
             // Assign character
             character = _character;
-        }
-
-        ~FaithfulTJetpackBehaviour()
-        {
-            // Deactivate
-            Deactivate();
         }
 
         public void UpdateItemCount(int _itemCount)
