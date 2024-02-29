@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using BepInEx;
+using JetBrains.Annotations;
 
 namespace Faithful
 {
@@ -14,6 +15,9 @@ namespace Faithful
 
         // Config tag list
         List<ConfigTag> tags = new List<ConfigTag>();
+
+        // Store default item flags
+        ConfigTag defaultItemFlags;
 
         // Constructor
         public Config(Toolbox _toolbox, PluginInfo _pluginInfo)
@@ -78,8 +82,20 @@ namespace Faithful
                                 flags = args[2].ToUpper().Split('|');
                             }
 
-                            // Append config tag
-                            tags.Add(new ConfigTag(tag, enabled, flags));
+                            // Create new config tag
+                            ConfigTag configTag = new ConfigTag(tag, enabled, flags);
+
+                            // Check if default item flags
+                            if (tag == "DEFAULT_ITEM_FLAGS")
+                            {
+                                // Set default item flags
+                                defaultItemFlags = configTag;
+                            }
+                            else
+                            {
+                                // Otherwise append config tag
+                                tags.Add(configTag);
+                            }
                         }
                     }
                 }
@@ -114,10 +130,13 @@ namespace Faithful
         }
 
         // Get if tag has a flag
-        public bool CheckTagFlag(string _tag, string _flag)
+        public bool CheckTagFlag(string _tag, string _flag, bool _isItem = false)
         {
             // Force tag uppercase
             _tag = _tag.ToUpper();
+
+            // Assume flag is false
+            bool flag = false;
 
             // Cycle through tags
             foreach (ConfigTag tag in tags)
@@ -125,13 +144,26 @@ namespace Faithful
                 // Check if correct tag
                 if (tag.tag == _tag)
                 {
-                    // Return flag from tag
-                    return tag.GetFlag(_flag);
+                    // Update flag and escape loop
+                    flag = tag.GetFlag(_flag);
+
+                    break;
                 }
             }
 
-            // If tag isn't found return false
-            return false;
+            // Override false item flags with default item flags
+            if (_isItem && !flag)
+            {
+                // Check for default item flags
+                if (defaultItemFlags != null)
+                {
+                    // Override flag
+                    flag = defaultItemFlags.GetFlag(_flag);
+                }
+            }
+
+            // Return flag
+            return flag;
         }
 
         // Get the path to the asset bundle
@@ -145,7 +177,7 @@ namespace Faithful
         }
     }
 
-    internal struct ConfigTag
+    internal class ConfigTag
     {
         // Store tag and if tag is enabled as well as any flags
         public string tag;

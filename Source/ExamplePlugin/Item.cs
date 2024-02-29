@@ -43,7 +43,7 @@ namespace Faithful
             // Set item texts
             itemDef.name = $"FAITHFUL_{_token}_NAME";
             itemDef.nameToken = $"FAITHFUL_{_token}_NAME";
-            itemDef.pickupToken = toolbox.config.CheckTagFlag(_token, "EXTENDED_PICKUP_DESC") ? $"FAITHFUL_{_token}_DESC" : $"FAITHFUL_{_token}_PICKUP";
+            itemDef.pickupToken = toolbox.config.CheckTagFlag(_token, "EXTENDED_PICKUP_DESC", true) ? $"FAITHFUL_{_token}_DESC" : $"FAITHFUL_{_token}_PICKUP";
             itemDef.descriptionToken = $"FAITHFUL_{_token}_DESC";
             itemDef.loreToken = $"FAITHFUL_{_token}_LORE";
 
@@ -78,7 +78,7 @@ namespace Faithful
             itemDef.pickupModelPrefab = toolbox.assets.GetModel(_modelName);
 
             // Check for item display settings and against flag
-            if (_displaySettings != null && !toolbox.config.CheckTagFlag(_token, "DISABLE_ITEM_DISPLAYS"))
+            if (_displaySettings != null && !toolbox.config.CheckTagFlag(_token, "DISABLE_ITEM_DISPLAYS", true))
             {
                 // Add item and pass in item display settings
                 ItemAPI.Add(new CustomItem(itemDef, _displaySettings.GetRules()));
