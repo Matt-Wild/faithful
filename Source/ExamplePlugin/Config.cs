@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using BepInEx;
-using System.Globalization;
 
 namespace Faithful
 {
@@ -69,8 +68,18 @@ namespace Faithful
                             // Get state
                             bool enabled = args[1].ToLower().Contains("true");
 
+                            // Store flags
+                            string[] flags = [];
+
+                            // Test for flags
+                            if (args.Length >= 3)
+                            {
+                                // Get flags
+                                flags = args[2].ToUpper().Split('|');
+                            }
+
                             // Append config tag
-                            tags.Add(new ConfigTag(tag, enabled));
+                            tags.Add(new ConfigTag(tag, enabled, flags));
                         }
                     }
                 }
@@ -104,6 +113,27 @@ namespace Faithful
             return true;
         }
 
+        // Get if tag has a flag
+        public bool CheckTagFlag(string _tag, string _flag)
+        {
+            // Force tag uppercase
+            _tag = _tag.ToUpper();
+
+            // Cycle through tags
+            foreach (ConfigTag tag in tags)
+            {
+                // Check if correct tag
+                if (tag.tag == _tag)
+                {
+                    // Return flag from tag
+                    return tag.GetFlag(_flag);
+                }
+            }
+
+            // If tag isn't found return false
+            return false;
+        }
+
         // Get the path to the asset bundle
         public string ConfigFilePath
         {
@@ -117,16 +147,35 @@ namespace Faithful
 
     internal struct ConfigTag
     {
-        // Store tag and if tag is enabled
+        // Store tag and if tag is enabled as well as any flags
         public string tag;
         public bool enabled;
+        public string[] flags;
 
         // Constructor
-        public ConfigTag(string _tag, bool _enabled)
+        public ConfigTag(string _tag, bool _enabled, string[] _flags)
         {
-            // Set tag and state
+            // Set tag, state and flags
             tag = _tag;
             enabled = _enabled;
+            flags = _flags;
+        }
+
+        // Get if config tag has a flag
+        public bool GetFlag(string _flag)
+        {
+            // Cycle through flags
+            foreach (string flag in flags)
+            {
+                // Flag found
+                if (_flag == flag)
+                {
+                    return true;
+                }
+            }
+
+            // Flag not found
+            return false;
         }
     }
 }

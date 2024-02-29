@@ -95,7 +95,8 @@ namespace Faithful
                 // Check if distance is greater or equal to 50 metres
                 if (distance >= 50.0f)
                 {
-                    // Apply damage bonus
+                    // Apply damage bonus and colour index
+                    _report.damageColorIndex = DamageColorIndex.Nearby;
                     _report.damage *= 1.0f + count * 0.15f;
                 }
             }
