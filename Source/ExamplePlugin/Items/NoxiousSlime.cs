@@ -42,21 +42,20 @@ namespace Faithful
             }
 
             // Add character display settings
-            displaySettings.AddCharacterDisplay("Commando", "HandL", new Vector3(0.00635F, 0.0875F, 0.0875F), new Vector3(355F, 15F, 180F), new Vector3(0.08F, 0.08F, 0.08F));
-            displaySettings.AddCharacterDisplay("Huntress", "HandL", new Vector3(-0.005F, 0.079F, 0.065F), new Vector3(5F, 355F, 0F), new Vector3(0.08F, 0.08F, 0.08F));
-            displaySettings.AddCharacterDisplay("Bandit", "MainWeapon", new Vector3(-0.05F, 0.25F, -0.0425F), new Vector3(0F, 180F, 180F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("MUL-T", "LowerArmL", new Vector3(0.135F, 3.2F, 1.5F), new Vector3(0F, 0F, 55F), new Vector3(0.8F, 0.8F, 0.8F));
-            displaySettings.AddCharacterDisplay("Engineer", "HandL", new Vector3(0.005F, 0.11F, 0.09F), new Vector3(0F, 345F, 0F), new Vector3(0.09F, 0.09F, 0.09F));
-            displaySettings.AddCharacterDisplay("Artificer", "LowerArmL", new Vector3(0F, 0.1775F, -0.1325F), new Vector3(25F, 180F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Mercenary", "HandL", new Vector3(-0.005F, 0.124F, 0.097F), new Vector3(12.5F, 345F, 10F), new Vector3(0.075F, 0.075F, 0.075F));
-            displaySettings.AddCharacterDisplay("REX", "PlatformBase", new Vector3(0F, -0.087F, 0.559F), new Vector3(10F, 0F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
-            displaySettings.AddCharacterDisplay("Loader", "MechHandL", new Vector3(-0.075F, 0.15F, 0.18F), new Vector3(5F, 325F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("Acrid", "HandL", new Vector3(0F, 0F, 0F), new Vector3(0F, 0F, 120F), new Vector3(0.8F, 0.8F, 0.8F));
-            displaySettings.AddCharacterDisplay("Acrid", "HandR", new Vector3(0F, 0F, 0F), new Vector3(45F, 0F, 0F), new Vector3(0.8F, 0.8F, 0.8F));
-            displaySettings.AddCharacterDisplay("Captain", "HandL", new Vector3(0F, 0.125F, -0.064F), new Vector3(0F, 95F, 0F), new Vector3(0.08F, 0.08F, 0.08F));
-            displaySettings.AddCharacterDisplay("Railgunner", "TopRail", new Vector3(0F, 0.6525F, 0.0585F), new Vector3(0F, 0F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Void Fiend", "ElbowR", new Vector3(0.01F, -0.0125F, 0.005F), new Vector3(345F, 90F, 60F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("Scavenger", "Weapon", new Vector3(0F, 18.25F, 0F), new Vector3(280F, 330F, 90F), new Vector3(2.5F, 2.5F, 2.5F));
+            displaySettings.AddCharacterDisplay("Commando", "Pelvis", new Vector3(0.232F, -0.03F, -0.071F), new Vector3(12.5F, 110F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Huntress", "Pelvis", new Vector3(0.22F, 0.02F, -0.017F), new Vector3(20.5F, 82.5F, 163.75F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Bandit", "Pelvis", new Vector3(-0.1815F, -0.061F, 0.085F), new Vector3(348F, 130F, 180.5F), new Vector3(0.06F, 0.06F, 0.06F));
+            displaySettings.AddCharacterDisplay("MUL-T", "Hip", new Vector3(0.01F, -0.45F, 1.725F), new Vector3(0F, 0F, 180F), new Vector3(0.65F, 0.65F, 0.65F));
+            displaySettings.AddCharacterDisplay("Engineer", "Pelvis", new Vector3(0.278F, -0.006F, 0.009F), new Vector3(350F, 281.25F, 173.5F), new Vector3(0.09F, 0.09F, 0.09F));
+            displaySettings.AddCharacterDisplay("Artificer", "Pelvis", new Vector3(0.2F, 0.04F, 0.098F), new Vector3(12F, 66F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Mercenary", "Pelvis", new Vector3(0.255F, 0.128F, 0.022F), new Vector3(350F, 264.25F, 176.5F), new Vector3(0.095F, 0.095F, 0.095F));
+            displaySettings.AddCharacterDisplay("REX", "PlatformBase", new Vector3(-0.505F, 0.3995F, 0F), new Vector3(0F, 0F, 0F), new Vector3(0.175F, 0.175F, 0.175F));
+            displaySettings.AddCharacterDisplay("Loader", "Pelvis", new Vector3(0.27F, 0.14F, -0.032F), new Vector3(7.5F, 100F, 190F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Acrid", "Chest", new Vector3(-2.525F, 2.05F, 3.08F), new Vector3(350F, 304F, 9.25F), new Vector3(0.8F, 0.8F, 0.8F));
+            displaySettings.AddCharacterDisplay("Captain", "Pelvis", new Vector3(0.2875F, 0.163F, -0.085F), new Vector3(357.5F, 324.5F, 168F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Railgunner", "Pelvis", new Vector3(0.165F, 0.066F, 0.005F), new Vector3(20.5F, 80F, 197.25F), new Vector3(0.07F, 0.07F, 0.07F));
+            displaySettings.AddCharacterDisplay("Void Fiend", "Pelvis", new Vector3(0.05275F, 0.045F, 0.1725F), new Vector3(353.5F, 19.8F, 186.25F), new Vector3(0.09F, 0.09F, 0.09F));
+            displaySettings.AddCharacterDisplay("Scavenger", "Backpack", new Vector3(-4.0285F, 13.375F, 0.00053F), new Vector3(359.2F, 359.85F, 10.175F), new Vector3(1F, 1F, 1F));
         }
 
         void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo)

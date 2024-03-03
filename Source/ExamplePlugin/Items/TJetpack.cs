@@ -54,13 +54,13 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Bandit", "Chest", new Vector3(0.0025F, 0.1295F, -0.225F), new Vector3(355F, 180F, 0F), new Vector3(0.32F, 0.32F, 0.32F));
             displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(0F, 1.1F, -2.1F), new Vector3(0F, 180F, 0F), new Vector3(1.85F, 1.85F, 1.85F));
             displaySettings.AddCharacterDisplay("Engineer", "Chest", new Vector3(0F, 0.18F, -0.33F), new Vector3(345F, 180F, 0F), new Vector3(0.35F, 0.35F, 0.35F));
-            displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(0.0025F, 0.065F, -0.2525F), new Vector3(350F, 180F, 0F), new Vector3(0.35F, 0.35F, 0.35F));
+            displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(0.003F, 0.0645F, -0.25F), new Vector3(350F, 180F, 0F), new Vector3(0.4F, 0.4F, 0.4F));
             displaySettings.AddCharacterDisplay("Mercenary", "Chest", new Vector3(0F, 0.1875F, -0.265F), new Vector3(345F, 180F, 0F), new Vector3(0.32F, 0.32F, 0.32F));
             displaySettings.AddCharacterDisplay("REX", "PlatformBase", new Vector3(0F, 0.15F, -0.95F), new Vector3(0F, 180F, 0F), new Vector3(0.75F, 0.75F, 0.75F));
             displaySettings.AddCharacterDisplay("Loader", "MechBase", new Vector3(0F, 0.125F, -0.205F), new Vector3(350F, 179.6F, 0F), new Vector3(0.35F, 0.35F, 0.35F));
             displaySettings.AddCharacterDisplay("Acrid", "SpineStomach1", new Vector3(0F, 1.25F, 1F), new Vector3(270F, 0F, 0F), new Vector3(3F, 3F, 3F));
             displaySettings.AddCharacterDisplay("Captain", "Chest", new Vector3(0F, 0.125F, -0.3075F), new Vector3(0F, 180F, 0F), new Vector3(0.45F, 0.45F, 0.45F));
-            displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(0F, -0.275F, 0.0025F), new Vector3(0F, 178.5F, 0F), new Vector3(0.375F, 0.375F, 0.375F));
+            displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(-0.00325F, -0.275F, 0.0025F), new Vector3(0F, 178.75F, 0F), new Vector3(0.3725F, 0.3725F, 0.3725F));
             displaySettings.AddCharacterDisplay("Void Fiend", "Stomach", new Vector3(-0.001F, 0F, -0.2F), new Vector3(5F, 179F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
         }
 

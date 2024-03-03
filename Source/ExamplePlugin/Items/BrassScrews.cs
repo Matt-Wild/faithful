@@ -58,6 +58,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("REX", "FootFrontL", new Vector3(0.04454F, 0.20025F, -0.03737F), new Vector3(340F, 40F, 270F), new Vector3(0.15F, 0.15F, 0.15F));
             displaySettings.AddCharacterDisplay("Loader", "MechLowerArmL", new Vector3(0.0042F, 0.53245F, -0.11887F), new Vector3(48.68909F, 51.01041F, 227.7835F), new Vector3(0.095F, 0.095F, 0.095F));
             displaySettings.AddCharacterDisplay("Acrid", "LowerArmL", new Vector3(-0.793F, 3.70431F, 0.14379F), new Vector3(51.71926F, 146.3149F, 227.2395F), new Vector3(0.95F, 0.95F, 0.95F));
+            displaySettings.AddCharacterDisplay("Acrid", "LowerArmR", new Vector3(0.7955F, 3.535F, 0.26625F), new Vector3(63.0825F, 231.25F, 159.35F), new Vector3(0.95F, 0.95F, 0.95F));
             displaySettings.AddCharacterDisplay("Captain", "MuzzleGun", new Vector3(-0.01064F, 0.01558F, -0.08823F), new Vector3(18.29989F, 139.6017F, 345.7164F), new Vector3(0.075F, 0.075F, 0.075F));
             displaySettings.AddCharacterDisplay("Railgunner", "GunScope", new Vector3(-0.096F, -0.17875F, 0.1775F), new Vector3(316F, 305F, 160F), new Vector3(0.05F, 0.05F, 0.05F));
             displaySettings.AddCharacterDisplay("Void Fiend", "CalfL", new Vector3(0.0146F, 0.3535F, -0.03525F), new Vector3(10F, 275F, 95F), new Vector3(0.05F, 0.05F, 0.05F));

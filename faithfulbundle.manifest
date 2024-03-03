@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2453824534
+CRC: 258398106
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dc456a762afd9b380cb2b681506c50a7
+    Hash: 693eb7c432a47006278064f9c135fb40
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5c5d9d8194aa64fce158ffc973ed80f2
@@ -37,7 +37,9 @@ Assets:
 - Assets/Items/LeadersPennon/texLeadersPennonNormal.png
 - Assets/Items/Chakram/ChakramMesh.prefab
 - Assets/Items/4-T0NJetpack/4T0NJetpackMesh.prefab
+- Assets/Items/NoxiousSlimes/NoxiousSlimeMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
+- Assets/Items/NoxiousSlimes/texNoxiousSlime.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackIcon.png
 - Assets/Items/HasteningGreave/texHasteningGreaveEmission.png
@@ -61,12 +63,15 @@ Assets:
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
 - Assets/Items/LeadersPennon/texBuffLeaderArea.png
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystalNormal.png
+- Assets/Items/NoxiousSlimes/texNoxiousSlimeNormal.png
 - Assets/Items/LeadersPennon/texLeadersPennonIcon.png
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
 - Assets/Items/DrownedVisage/texDrownedVisageNormal.png
+- Assets/Items/NoxiousSlimes/texNoxiousSlimeIcon.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
 - Assets/Items/HasteningGreave/texHasteningGreave.png
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
+- Assets/Items/NoxiousSlimes/NoxiousSlimeDisplayMesh.prefab
 - Assets/Items/CopperGear/texCopperGearIcon.png
 - Assets/Shader/hgstandard.shader
 - Assets/Items/BrassScrews/BrassScrewsDisplayMesh.prefab
@@ -106,6 +111,7 @@ Assets:
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.prefab
 - Assets/Items/Chakram/texChakramNormal.png
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
+- Assets/Items/NoxiousSlimes/texNoxiousSlimeEmission.png
 - Assets/Items/Chakram/ChakramDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeNormal.png
 - Assets/Placeholder/Item/TemporalCubeMesh.prefab
