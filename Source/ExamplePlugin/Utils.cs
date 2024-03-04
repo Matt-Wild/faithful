@@ -229,7 +229,7 @@ namespace Faithful
             }
         }
 
-        public ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _ignoreOverlays = false, bool _dithering = true)
+        public ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _useHopooShader = true, bool _ignoreOverlays = false, bool _dithering = true)
         {
             // In debug mode?
             if (toolbox.utils.debugMode)
@@ -268,9 +268,11 @@ namespace Faithful
             // Cycle through renderers
             for (int i = 0; i < renderers.Count; i++)
             {
-                // Check for material
+                // Get material
                 Material material = renderers[i] is SkinnedMeshRenderer ? renderers[i].sharedMaterial : renderers[i].material;
-                if (material)
+
+                // Apply shader
+                if (_useHopooShader && material)
                 {
                     // Set shader
                     material.shader = HGShader;

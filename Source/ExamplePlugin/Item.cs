@@ -21,12 +21,12 @@ namespace Faithful
         public string token;
 
         // Constructor
-        public Item(Toolbox _toolbox, string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null)
+        public Item(Toolbox _toolbox, string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, bool _debugOnly = false)
         {
             toolbox = _toolbox;
 
-            // Should hide this item due to temporary assets?
-            bool forceHide = !toolbox.utils.debugMode && (_iconName == "textemporalcubeicon" || !toolbox.assets.HasAsset(_iconName) || _modelName == "temporalcubemesh" || !toolbox.assets.HasAsset(_modelName));
+            // Should hide this item due to temporary assets or debug only?
+            bool forceHide = !toolbox.utils.debugMode && (_debugOnly || _iconName == "textemporalcubeicon" || !toolbox.assets.HasAsset(_iconName) || _modelName == "temporalcubemesh" || !toolbox.assets.HasAsset(_modelName));
 
             // Should hide anyway due to config?
             if (!forceHide)
@@ -96,6 +96,10 @@ namespace Faithful
                 if (!toolbox.config.CheckTag(_token))
                 {
                     Log.Debug($"Hiding item '{_token}' due to user preference");
+                }
+                else if (_debugOnly)
+                {
+                    Log.Debug($"Hiding WIP item '{_token}'");
                 }
                 else
                 {

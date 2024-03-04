@@ -1,6 +1,5 @@
 ﻿using RoR2;
 using UnityEngine;
-using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
@@ -27,7 +26,7 @@ namespace Faithful
             CreateDisplaySettings("4t0njetpackdisplaymesh");
 
             // Create item
-            item = toolbox.items.AddItem("4T0N_JETPACK", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
+            item = toolbox.items.AddItem("4T0N_JETPACK", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings, _debugOnly: true);
 
             // Inject on transfer item behaviours
             toolbox.behaviour.AddOnGiveItemCallback(OnGiveItem);

@@ -33,7 +33,7 @@ namespace Faithful
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
 
             // Check for required asset
             if (!toolbox.assets.HasAsset(_displayMeshName))
