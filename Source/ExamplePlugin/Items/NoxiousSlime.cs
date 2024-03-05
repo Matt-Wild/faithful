@@ -85,8 +85,9 @@ namespace Faithful
             // Has item?
             if (count > 0)
             {
-                // Modify DoT
+                // Modify DoT damage
                 _inflictDotInfo.damageMultiplier *= 1.0f + (1.0f * count);
+                _inflictDotInfo.totalDamage *= 1.0f + (1.0f * count);
             }
         }
     }
