@@ -30,7 +30,7 @@ namespace Faithful
             collectorsVisionItem = toolbox.items.AddItem("COLLECTORS_VISION", [ItemTag.Damage], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings);
 
             // Link On Give Item behaviour
-            toolbox.behaviour.AddOnGiveItemCallback(OnGiveItem);
+            toolbox.behaviour.AddServerOnGiveItemCallback(OnGiveItem);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)

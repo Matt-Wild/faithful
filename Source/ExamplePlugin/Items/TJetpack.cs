@@ -1,5 +1,7 @@
 ﻿using RoR2;
+using System.Reflection;
 using UnityEngine;
+using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
@@ -17,9 +19,6 @@ namespace Faithful
         // Constructor
         public TJetpack(Toolbox _toolbox)
         {
-            // Velocity = -1? or 32?
-            // Acceleration = 60?
-
             toolbox = _toolbox;
 
             // Create display settings
@@ -29,8 +28,7 @@ namespace Faithful
             item = toolbox.items.AddItem("4T0N_JETPACK", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings, _debugOnly: true);
 
             // Inject on transfer item behaviours
-            toolbox.behaviour.AddOnGiveItemCallback(OnGiveItem);
-            toolbox.behaviour.AddOnRemoveItemCallback(OnRemoveItem);
+            toolbox.behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
 
             // Inject character body behaviours
             toolbox.behaviour.AddOnCharacterBodyStartCallback(OnCharacterBodyStart);
@@ -63,23 +61,8 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Void Fiend", "Stomach", new Vector3(-0.001F, 0F, -0.2F), new Vector3(5F, 179F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
         }
 
-        void OnGiveItem(Inventory _inventory, ItemIndex _index, int _count)
+        void OnInventoryChanged(Inventory _inventory)
         {
-            // Check for valid call
-            if (_inventory == null || _index == ItemIndex.None || _count <= 0)
-            {
-                return;
-            }
-
-            // Get TJetpack index
-            ItemIndex jetpackIndex = ItemCatalog.FindItemIndex("FAITHFUL_4T0N_JETPACK_NAME");
-
-            // Ensure correct index
-            if (jetpackIndex != _index)
-            {
-                return;
-            }
-
             // Attempt to get Character Body
             CharacterBody body = toolbox.utils.GetInventoryBody(_inventory);
             if (body == null)
@@ -98,45 +81,7 @@ namespace Faithful
             int count = _inventory.GetItemCount(item.itemDef);
 
             // Update TJetpack item count
-            helper.tJetpack.UpdateItemCount(count + _count);
-        }
-
-        void OnRemoveItem(Inventory _inventory, ItemIndex _index, int _count)
-        {
-            // Check for valid call
-            if (_inventory == null || _index == ItemIndex.None || _count <= 0)
-            {
-                return;
-            }
-
-            // Get TJetpack index
-            ItemIndex jetpackIndex = ItemCatalog.FindItemIndex("FAITHFUL_4T0N_JETPACK_NAME");
-
-            // Ensure correct index
-            if (jetpackIndex != _index)
-            {
-                return;
-            }
-
-            // Attempt to get Character Body
-            CharacterBody body = toolbox.utils.GetInventoryBody(_inventory);
-            if (body == null)
-            {
-                return;
-            }
-
-            // Attempt to get Faithful behaviour
-            FaithfulCharacterBodyBehaviour helper = body.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
-            if (helper == null)
-            {
-                return;
-            }
-
-            // Get new item count
-            int count = _inventory.GetItemCount(item.itemDef);
-
-            // Update TJetpack item count
-            helper.tJetpack.UpdateItemCount(count - _count);
+            helper.tJetpack.UpdateItemCount(count);
         }
 
         void OnCharacterBodyStart(CharacterBody _character)
