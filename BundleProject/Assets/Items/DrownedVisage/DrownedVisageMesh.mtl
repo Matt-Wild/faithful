@@ -1,0 +1,14 @@
+# Blender MTL File: 'Rough_Idea_att13_-_Finished.blend'
+# Material Count: 1
+
+newmtl DrownedVisage
+Ns 56.250000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Bump Drowned_Visage_Normal_(512x512).png
+map_Kd Drowned_Visage_(512x512).png

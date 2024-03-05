@@ -1,0 +1,15 @@
+# Blender MTL File: 'Rough_Idea_att8_-_Item_Icon.blend'
+# Material Count: 1
+
+newmtl LeadersPennon
+Ns 56.250000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.250000 0.250000 0.250000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump Leader's_Pennon_Normal_(512x512).png
+map_Kd Leader's_Pennon_(512x512).png
+map_Ke Leader's_Pennon_Emission_(512x512).png

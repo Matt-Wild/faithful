@@ -1,0 +1,14 @@
+# Blender MTL File: 'Rough_Idea_att14_-_Item_Display.blend'
+# Material Count: 1
+
+newmtl Brass_Screws
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.250000 Brass_Screws_Normal_(512x512).jpg
+map_Kd Brass_Screws_(512x512).png
