@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1237765011
+CRC: 226634029
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 64469895a46d7e06c5023f3f080a249e
+    Hash: 0624c52c3021f7b83ed0c201743b3a09
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 5c5d9d8194aa64fce158ffc973ed80f2
+    Hash: b92b67f9fad27d9b356076df1449d638
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,9 +25,23 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
 - Class: 137
   Script: {instanceID: 0}
 - Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
@@ -42,6 +56,7 @@ Assets:
 - Assets/Items/NoxiousSlimes/texNoxiousSlime.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackIcon.png
+- Assets/Debug/UI/DebugCanvas.prefab
 - Assets/Items/HasteningGreave/texHasteningGreaveEmission.png
 - Assets/Skills/Railgunner/texRailgunnerCoin.png
 - Assets/Items/LongshotGeode/LongshotGeodeMesh.prefab

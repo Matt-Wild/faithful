@@ -102,7 +102,7 @@ namespace Faithful
             return assetBundle.LoadAsset<Sprite>(asset);
         }
 
-        public GameObject GetModel(string _name)
+        public GameObject GetObject(string _name, string _default = null)
         {
             // Add file extension
             string fullName = _name + ".prefab";
@@ -118,12 +118,25 @@ namespace Faithful
                     Log.Error($"Requested asset '{fullName}' could not be found.");
                 }
 
-                // Return default asset
-                return assetBundle.LoadAsset<GameObject>(defaultModel);
+                // Check for default asset
+                if (_default != null)
+                {
+                    // Return default asset
+                    return assetBundle.LoadAsset<GameObject>(_default);
+                }
+
+                // Otherwise send error and return null
+                return null;
             }
 
             // Return asset
             return assetBundle.LoadAsset<GameObject>(asset);
+        }
+
+        public GameObject GetModel(string _name)
+        {
+            // Load object and return with default model as fallback
+            return GetObject(_name, defaultModel);
         }
 
         public Shader GetShader(string _name)

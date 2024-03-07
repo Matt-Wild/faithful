@@ -40,6 +40,9 @@ namespace Faithful
             // Link update function
             toolbox.behaviour.AddUpdateCallback(Update, true);
 
+            // Add On Get User Name behaviour
+            On.RoR2.CharacterBody.GetUserName += OnGetUsername;
+
             // Override On Map Zone Teleport Body
             On.RoR2.MapZone.TeleportBody += OnMapTeleportBody;
         }
@@ -203,6 +206,19 @@ namespace Faithful
                     Log.Debug("God Mode enabled!");
                 }
             }
+        }
+
+        string OnGetUsername(On.RoR2.CharacterBody.orig_GetUserName orig, CharacterBody self)
+        {
+            // Check for buff
+            if (self.GetBuffCount(godModeBuff.buffDef) > 0)
+            {
+                // Ignore behaviour
+                return orig(self);
+            }
+
+            // Add GODMODE to username
+            return "[GODMODE] " + orig(self);
         }
 
         void OnMapTeleportBody(On.RoR2.MapZone.orig_TeleportBody orig, MapZone self, CharacterBody characterBody)
