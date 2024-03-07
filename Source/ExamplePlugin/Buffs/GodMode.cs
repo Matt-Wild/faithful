@@ -213,12 +213,12 @@ namespace Faithful
             // Check for buff
             if (self.GetBuffCount(godModeBuff.buffDef) > 0)
             {
-                // Ignore behaviour
-                return orig(self);
+                // Add "Godly" to username
+                return "Godly " + orig(self);
             }
 
-            // Add GODMODE to username
-            return "[GODMODE] " + orig(self);
+            // Otherwise ignore behaviour
+            return orig(self);
         }
 
         void OnMapTeleportBody(On.RoR2.MapZone.orig_TeleportBody orig, MapZone self, CharacterBody characterBody)
