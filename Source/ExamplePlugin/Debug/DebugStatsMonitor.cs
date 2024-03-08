@@ -25,13 +25,22 @@ namespace Faithful
         protected Text currentRegen;
         protected Text currentArmour;
         protected Text currentShield;
+        protected Text currentBarrier;
+        protected Text currentBarrierDecay;
+        protected Text currentOneShotProtection;
         protected Text currentDamage;
         protected Text currentAttackSpeed;
         protected Text currentCrit;
+        protected Text currentCritMultiplier;
+        protected Text currentOutOfCombat;
+        protected Text currentOutOfDanger;
         protected Text currentSpeed;
         protected Text currentAcceleration;
         protected Text currentJumpCount;
         protected Text currentJumpPower;
+        protected Text currentJumpHeight;
+        protected Text currentSprinting;
+        protected Text currentFlying;
 
         void Awake()
         {
@@ -54,13 +63,22 @@ namespace Faithful
             currentRegen = transform.Find("CurrentRegenText").GetComponent<Text>();
             currentArmour = transform.Find("CurrentArmourText").GetComponent<Text>();
             currentShield = transform.Find("CurrentShieldText").GetComponent<Text>();
+            currentBarrier = transform.Find("CurrentBarrierText").GetComponent<Text>();
+            currentBarrierDecay = transform.Find("CurrentBarrierDecayText").GetComponent<Text>();
+            currentOneShotProtection = transform.Find("CurrentOneShotProtectionText").GetComponent<Text>();
             currentDamage = transform.Find("CurrentDamageText").GetComponent<Text>();
             currentAttackSpeed = transform.Find("CurrentAttackSpeedText").GetComponent<Text>();
             currentCrit = transform.Find("CurrentCritText").GetComponent<Text>();
+            currentCritMultiplier = transform.Find("CurrentCritMultiplierText").GetComponent<Text>();
+            currentOutOfCombat = transform.Find("CurrentOutOfCombatText").GetComponent<Text>();
+            currentOutOfDanger = transform.Find("CurrentOutOfDangerText").GetComponent<Text>();
             currentSpeed = transform.Find("CurrentSpeedText").GetComponent<Text>();
             currentAcceleration = transform.Find("CurrentAccelerationText").GetComponent<Text>();
             currentJumpCount = transform.Find("CurrentJumpCountText").GetComponent<Text>();
             currentJumpPower = transform.Find("CurrentJumpPowerText").GetComponent<Text>();
+            currentJumpHeight = transform.Find("CurrentJumpHeightText").GetComponent<Text>();
+            currentSprinting = transform.Find("CurrentSprintingText").GetComponent<Text>();
+            currentFlying = transform.Find("CurrentFlyingText").GetComponent<Text>();
         }
 
         void FixedUpdate()
@@ -72,7 +90,7 @@ namespace Faithful
             baseShield.text = $"b.shd: {host.baseMaxShield}";
             baseDamage.text = $"b.dmg: {host.baseDamage}";
             baseAttackSpeed.text = $"b.asp: {host.baseAttackSpeed}";
-            baseCrit.text = $"b.crt: {host.baseCrit}";
+            baseCrit.text = $"b.crt: {host.baseCrit}%";
             baseSpeed.text = $"b.spd: {host.baseMoveSpeed}";
             baseAcceleration.text = $"b.acc: {host.baseAcceleration}";
             baseJumpCount.text = $"b.jcn: {host.baseJumpCount}";
@@ -81,13 +99,22 @@ namespace Faithful
             currentRegen.text = $"c.rgn: {host.regen}";
             currentArmour.text = $"c.arm: {host.armor}";
             currentShield.text = $"c.shd: {host.maxShield}";
+            currentBarrier.text = $"c.brr: {host.maxBarrier}";
+            currentBarrierDecay.text = $"c.bdc: {host.barrierDecayRate}";
+            currentOneShotProtection.text = $"c.osp: {host.oneShotProtectionFraction * 100.0f}%";
             currentDamage.text = $"c.dmg: {host.damage}";
             currentAttackSpeed.text = $"c.asp: {host.attackSpeed}";
-            currentCrit.text = $"c.crt: {host.crit}";
+            currentCrit.text = $"c.crt: {host.crit}%";
+            currentCritMultiplier.text = $"c.cmt: {host.critMultiplier * 100.0f}%";
+            currentOutOfCombat.text = $"c.ooc: {host.outOfCombat}";
+            currentOutOfDanger.text = $"c.ood: {host.outOfDanger}";
             currentSpeed.text = $"c.spd: {host.moveSpeed}";
             currentAcceleration.text = $"c.acc: {host.acceleration}";
             currentJumpCount.text = $"c.jcn: {host.maxJumpCount}";
             currentJumpPower.text = $"c.jpw: {host.jumpPower}";
+            currentJumpHeight.text = $"c.jhg: {host.maxJumpHeight}";
+            currentSprinting.text = $"c.spr: {host.isSprinting}";
+            currentFlying.text = $"c.fly: {host.isFlying}";
         }
     }
 }

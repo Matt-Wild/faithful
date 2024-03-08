@@ -7,7 +7,7 @@ namespace Faithful
         void Awake()
         {
             // Add stats monitor to stats panel
-            transform.Find("StatsPanel").gameObject.AddComponent<DebugStatsMonitor>();
+            transform.Find("DebugStatsPanel").gameObject.AddComponent<DebugStatsMonitor>();
         }
     }
 }
