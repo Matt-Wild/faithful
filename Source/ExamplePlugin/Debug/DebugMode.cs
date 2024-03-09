@@ -143,7 +143,7 @@ namespace Faithful
             ui = Object.Instantiate(toolbox.assets.GetObject("debugcanvas"));
 
             // Add Debug Main component
-            ui.AddComponent<DebugMain>();
+            ui.AddComponent<DebugController>();
 
             // Disable UI on creation
             ui.SetActive(false);

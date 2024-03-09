@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Faithful
 {
-    internal class DebugStatsMonitor : MonoBehaviour
+    internal class DebugStatsMonitor : DebugPanel
     {
         // Store reference to host character body
         protected CharacterBody host;
@@ -45,8 +45,11 @@ namespace Faithful
         protected Text positionY;
         protected Text positionZ;
 
-        void Awake()
+        public override void Awake()
         {
+            // Call base class Awake
+            base.Awake();
+
             // Get host
             host = PlayerCharacterMasterController.instances[0].master.GetBody();
 

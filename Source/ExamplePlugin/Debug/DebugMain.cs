@@ -1,13 +1,11 @@
-﻿using UnityEngine;
-
-namespace Faithful
+﻿namespace Faithful
 {
-    internal class DebugMain : MonoBehaviour
+    internal class DebugMain : DebugPanel
     {
-        void Awake()
+        public override void Awake()
         {
-            // Add stats monitor to stats panel
-            transform.Find("DebugStatsPanel").gameObject.AddComponent<DebugStatsMonitor>();
+            // Call base class Awake
+            base.Awake();
         }
     }
 }
