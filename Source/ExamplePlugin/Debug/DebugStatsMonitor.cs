@@ -41,6 +41,9 @@ namespace Faithful
         protected Text currentJumpHeight;
         protected Text currentSprinting;
         protected Text currentFlying;
+        protected Text positionX;
+        protected Text positionY;
+        protected Text positionZ;
 
         void Awake()
         {
@@ -79,6 +82,9 @@ namespace Faithful
             currentJumpHeight = transform.Find("CurrentJumpHeightText").GetComponent<Text>();
             currentSprinting = transform.Find("CurrentSprintingText").GetComponent<Text>();
             currentFlying = transform.Find("CurrentFlyingText").GetComponent<Text>();
+            positionX = transform.Find("PositionXText").GetComponent<Text>();
+            positionY = transform.Find("PositionYText").GetComponent<Text>();
+            positionZ = transform.Find("PositionZText").GetComponent<Text>();
         }
 
         void FixedUpdate()
@@ -115,6 +121,9 @@ namespace Faithful
             currentJumpHeight.text = $"c.jhg: {host.maxJumpHeight}";
             currentSprinting.text = $"c.spr: {host.isSprinting}";
             currentFlying.text = $"c.fly: {host.isFlying}";
+            positionX.text = $"x: {Mathf.RoundToInt(host.corePosition.x)}";
+            positionY.text = $"y: {Mathf.RoundToInt(host.corePosition.y)}";
+            positionZ.text = $"z: {Mathf.RoundToInt(host.corePosition.z)}";
         }
     }
 }
