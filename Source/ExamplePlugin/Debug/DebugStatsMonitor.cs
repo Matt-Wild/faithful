@@ -1,5 +1,6 @@
 ﻿using RoR2;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Faithful
@@ -51,7 +52,28 @@ namespace Faithful
             base.Awake();
 
             // Get host
-            host = PlayerCharacterMasterController.instances[0].master.GetBody();
+            if (NetworkServer.active)
+            {
+                // Get first player
+                host = PlayerCharacterMasterController.instances[0].master.GetBody();
+            }
+            else
+            {
+                // Get client ID
+                int clientID = FindObjectOfType<NetworkManager>().client.connection.connectionId;
+                
+                // Cycle through players
+                foreach (PlayerCharacterMasterController playerCharacterMasterController in PlayerCharacterMasterController.instances)
+                {
+                    // Compare connection IDs
+                    if (playerCharacterMasterController.connectionToClient.connectionId == clientID)
+                    {
+                        // Get Character Body
+                        host = playerCharacterMasterController.master.GetBody();
+                        break;
+                    }
+                }
+            }
 
             // Get stat texts
             baseHealth = transform.Find("BaseHealthText").GetComponent<Text>();
@@ -92,6 +114,12 @@ namespace Faithful
 
         void FixedUpdate()
         {
+            // Check for character body
+            if (host == null)
+            {
+                return;
+            }
+
             // Update stat texts
             baseHealth.text = $"b.hp: {host.baseMaxHealth}";
             baseRegen.text = $"b.rgn: {host.baseRegen}";

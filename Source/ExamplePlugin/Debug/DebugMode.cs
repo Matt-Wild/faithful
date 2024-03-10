@@ -24,9 +24,10 @@ namespace Faithful
 
         public void Update()
         {
-            if (!toolbox.utils.debugMode || !toolbox.utils.hosting)
+            // Ensure in debug mode
+            if (!toolbox.utils.debugMode)
             {
-                return; // Update contains only debug functionality
+                return;
             }
 
             // Check if F3 pressed
@@ -34,6 +35,12 @@ namespace Faithful
             {
                 // Toggle UI
                 ToggleUI();
+            }
+
+            // Do not allow other debug functionality if not hosting
+            if (!toolbox.utils.hosting)
+            {
+                return;
             }
 
             // Is F1 key down - Item spawning
@@ -134,10 +141,10 @@ namespace Faithful
         void CreateUI()
         {
             // Ensure hosting
-            if (!toolbox.utils.hosting)
+            /*if (!toolbox.utils.hosting)
             {
                 return;
-            }
+            }*/
 
             // Create UI
             ui = Object.Instantiate(toolbox.assets.GetObject("debugcanvas"));

@@ -7,10 +7,12 @@ namespace Faithful
         void Awake()
         {
             // Add main behaviour to main panel
-            transform.Find("DebugMainPanel").gameObject.AddComponent<DebugMain>();
+            DebugMain debugMain = transform.Find("DebugMainPanel").gameObject.AddComponent<DebugMain>();
+            debugMain.Init(this);
 
             // Add stats monitor to stats panel
-            transform.Find("DebugStatsPanel").gameObject.AddComponent<DebugStatsMonitor>();
+            DebugStatsMonitor debugStatsMonitor = transform.Find("DebugStatsPanel").gameObject.AddComponent<DebugStatsMonitor>();
+            debugStatsMonitor.Init(this);
         }
     }
 }
