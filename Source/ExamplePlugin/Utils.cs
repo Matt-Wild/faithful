@@ -20,6 +20,10 @@ namespace Faithful
         // Store debug mode
         private bool _debugMode = false;
 
+        // Store local player master and body
+        private CharacterMaster _localPlayer;
+        private CharacterBody _localPlayerBody;
+
         // Simulacrum banned items
         List<ItemDef> simulacrumBanned = new List<ItemDef>();
 
@@ -306,6 +310,18 @@ namespace Faithful
             return new ItemDisplaySettings(this, model, new ItemDisplayRuleDict());
         }
 
+        // Attempt to fetch local player master
+        private void FetchLocalPlayer()
+        {
+            // Check for local user
+            LocalUser local = LocalUserManager.GetFirstLocalUser();
+            if (local != null && local.cachedMaster != null)
+            {
+                // Assign local player master
+                _localPlayer = local.cachedMaster;
+            }
+        }
+
         // Get all Holdout Zones this character is in
         public List<HoldoutZoneController> GetHoldoutZonesContainingCharacter(CharacterMaster _character)
         {
@@ -479,6 +495,48 @@ namespace Faithful
         public bool hosting
         {
             get { return NetworkServer.active; }
+        }
+
+        public CharacterMaster localPlayer
+        {
+            get
+            {
+                // Check for local player master
+                if (_localPlayer == null)
+                {
+                    // Attempt to fetch local player master
+                    FetchLocalPlayer();
+                }
+
+                // Return local player master
+                return _localPlayer;
+            }
+        }
+
+        public CharacterBody localPlayerBody
+        {
+            get
+            {
+                // Check for local player body
+                if (_localPlayerBody == null)
+                {
+                    // Check for local player master
+                    CharacterMaster localMaster = localPlayer;
+                    if (localMaster == null)
+                    {
+                        // Cannot find local player master
+                        return null;
+                    }
+                    else
+                    {
+                        // Update local player body
+                        _localPlayerBody = localMaster.GetBody();
+                    }
+                }
+
+                // Return local player body
+                return _localPlayerBody;
+            }
         }
     }
 

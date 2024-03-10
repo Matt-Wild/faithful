@@ -7,9 +7,6 @@ namespace Faithful
 {
     internal class DebugStatsMonitor : DebugPanel
     {
-        // Store reference to host character body
-        protected CharacterBody host;
-
         // Store reference to stat texts
         protected Text baseHealth;
         protected Text baseRegen;
@@ -51,30 +48,6 @@ namespace Faithful
             // Call base class Awake
             base.Awake();
 
-            // Get host
-            if (NetworkServer.active)
-            {
-                // Get first player
-                host = PlayerCharacterMasterController.instances[0].master.GetBody();
-            }
-            else
-            {
-                // Get client ID
-                int clientID = FindObjectOfType<NetworkManager>().client.connection.connectionId;
-                
-                // Cycle through players
-                foreach (PlayerCharacterMasterController playerCharacterMasterController in PlayerCharacterMasterController.instances)
-                {
-                    // Compare connection IDs
-                    if (playerCharacterMasterController.connectionToClient.connectionId == clientID)
-                    {
-                        // Get Character Body
-                        host = playerCharacterMasterController.master.GetBody();
-                        break;
-                    }
-                }
-            }
-
             // Get stat texts
             baseHealth = transform.Find("BaseHealthText").GetComponent<Text>();
             baseRegen = transform.Find("BaseRegenText").GetComponent<Text>();
@@ -115,46 +88,46 @@ namespace Faithful
         void FixedUpdate()
         {
             // Check for character body
-            if (host == null)
+            if (debugController.localBody == null)
             {
                 return;
             }
 
             // Update stat texts
-            baseHealth.text = $"b.hp: {host.baseMaxHealth}";
-            baseRegen.text = $"b.rgn: {host.baseRegen}";
-            baseArmour.text = $"b.arm: {host.baseArmor}";
-            baseShield.text = $"b.shd: {host.baseMaxShield}";
-            baseDamage.text = $"b.dmg: {host.baseDamage}";
-            baseAttackSpeed.text = $"b.asp: {host.baseAttackSpeed}";
-            baseCrit.text = $"b.crt: {host.baseCrit}%";
-            baseSpeed.text = $"b.spd: {host.baseMoveSpeed}";
-            baseAcceleration.text = $"b.acc: {host.baseAcceleration}";
-            baseJumpCount.text = $"b.jcn: {host.baseJumpCount}";
-            baseJumpPower.text = $"b.jpw: {host.baseJumpPower}";
-            currentHealth.text = $"c.hp: {host.maxHealth}";
-            currentRegen.text = $"c.rgn: {host.regen}";
-            currentArmour.text = $"c.arm: {host.armor}";
-            currentShield.text = $"c.shd: {host.maxShield}";
-            currentBarrier.text = $"c.brr: {host.maxBarrier}";
-            currentBarrierDecay.text = $"c.bdc: {host.barrierDecayRate}";
-            currentOneShotProtection.text = $"c.osp: {host.oneShotProtectionFraction * 100.0f}%";
-            currentDamage.text = $"c.dmg: {host.damage}";
-            currentAttackSpeed.text = $"c.asp: {host.attackSpeed}";
-            currentCrit.text = $"c.crt: {host.crit}%";
-            currentCritMultiplier.text = $"c.cmt: {host.critMultiplier * 100.0f}%";
-            currentOutOfCombat.text = $"c.ooc: {host.outOfCombat}";
-            currentOutOfDanger.text = $"c.ood: {host.outOfDanger}";
-            currentSpeed.text = $"c.spd: {host.moveSpeed}";
-            currentAcceleration.text = $"c.acc: {host.acceleration}";
-            currentJumpCount.text = $"c.jcn: {host.maxJumpCount}";
-            currentJumpPower.text = $"c.jpw: {host.jumpPower}";
-            currentJumpHeight.text = $"c.jhg: {host.maxJumpHeight}";
-            currentSprinting.text = $"c.spr: {host.isSprinting}";
-            currentFlying.text = $"c.fly: {host.isFlying}";
-            positionX.text = $"x: {Mathf.RoundToInt(host.corePosition.x)}";
-            positionY.text = $"y: {Mathf.RoundToInt(host.corePosition.y)}";
-            positionZ.text = $"z: {Mathf.RoundToInt(host.corePosition.z)}";
+            baseHealth.text = $"b.hp: {debugController.localBody.baseMaxHealth}";
+            baseRegen.text = $"b.rgn: {debugController.localBody.baseRegen}";
+            baseArmour.text = $"b.arm: {debugController.localBody.baseArmor}";
+            baseShield.text = $"b.shd: {debugController.localBody.baseMaxShield}";
+            baseDamage.text = $"b.dmg: {debugController.localBody.baseDamage}";
+            baseAttackSpeed.text = $"b.asp: {debugController.localBody.baseAttackSpeed}";
+            baseCrit.text = $"b.crt: {debugController.localBody.baseCrit}%";
+            baseSpeed.text = $"b.spd: {debugController.localBody.baseMoveSpeed}";
+            baseAcceleration.text = $"b.acc: {debugController.localBody.baseAcceleration}";
+            baseJumpCount.text = $"b.jcn: {debugController.localBody.baseJumpCount}";
+            baseJumpPower.text = $"b.jpw: {debugController.localBody.baseJumpPower}";
+            currentHealth.text = $"c.hp: {debugController.localBody.maxHealth}";
+            currentRegen.text = $"c.rgn: {debugController.localBody.regen}";
+            currentArmour.text = $"c.arm: {debugController.localBody.armor}";
+            currentShield.text = $"c.shd: {debugController.localBody.maxShield}";
+            currentBarrier.text = $"c.brr: {debugController.localBody.maxBarrier}";
+            currentBarrierDecay.text = $"c.bdc: {debugController.localBody.barrierDecayRate}";
+            currentOneShotProtection.text = $"c.osp: {debugController.localBody.oneShotProtectionFraction * 100.0f}%";
+            currentDamage.text = $"c.dmg: {debugController.localBody.damage}";
+            currentAttackSpeed.text = $"c.asp: {debugController.localBody.attackSpeed}";
+            currentCrit.text = $"c.crt: {debugController.localBody.crit}%";
+            currentCritMultiplier.text = $"c.cmt: {debugController.localBody.critMultiplier * 100.0f}%";
+            currentOutOfCombat.text = $"c.ooc: {debugController.localBody.outOfCombat}";
+            currentOutOfDanger.text = $"c.ood: {debugController.localBody.outOfDanger}";
+            currentSpeed.text = $"c.spd: {debugController.localBody.moveSpeed}";
+            currentAcceleration.text = $"c.acc: {debugController.localBody.acceleration}";
+            currentJumpCount.text = $"c.jcn: {debugController.localBody.maxJumpCount}";
+            currentJumpPower.text = $"c.jpw: {debugController.localBody.jumpPower}";
+            currentJumpHeight.text = $"c.jhg: {debugController.localBody.maxJumpHeight}";
+            currentSprinting.text = $"c.spr: {debugController.localBody.isSprinting}";
+            currentFlying.text = $"c.fly: {debugController.localBody.isFlying}";
+            positionX.text = $"x: {Mathf.RoundToInt(debugController.localBody.corePosition.x)}";
+            positionY.text = $"y: {Mathf.RoundToInt(debugController.localBody.corePosition.y)}";
+            positionZ.text = $"z: {Mathf.RoundToInt(debugController.localBody.corePosition.z)}";
         }
     }
 }

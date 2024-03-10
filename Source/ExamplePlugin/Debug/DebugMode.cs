@@ -140,17 +140,12 @@ namespace Faithful
 
         void CreateUI()
         {
-            // Ensure hosting
-            /*if (!toolbox.utils.hosting)
-            {
-                return;
-            }*/
-
             // Create UI
             ui = Object.Instantiate(toolbox.assets.GetObject("debugcanvas"));
 
-            // Add Debug Main component
-            ui.AddComponent<DebugController>();
+            // Add Debug Controller component
+            DebugController debugController = ui.AddComponent<DebugController>();
+            debugController.Init(toolbox);
 
             // Disable UI on creation
             ui.SetActive(false);

@@ -1,12 +1,22 @@
-﻿using UnityEngine;
+﻿using RoR2;
+using UnityEngine;
 
 namespace Faithful
 {
     internal class DebugController : MonoBehaviour
     {
+        // Toolbox
+        protected Toolbox toolbox;
+
         // Store references to debug panels
         public DebugMain debugMain;
         public DebugStatsMonitor debugStatsMonitor;
+
+        public void Init(Toolbox _toolbox)
+        {
+            // Assign toolbox
+            toolbox = _toolbox;
+        }
 
         void Awake()
         {
@@ -20,6 +30,15 @@ namespace Faithful
 
             // Create panel toggles
             debugMain.CreateToggles();
+        }
+
+        public CharacterBody localBody
+        {
+            get
+            {
+                // Return local player body from utils
+                return toolbox.utils.localPlayerBody;
+            }
         }
     }
 }
