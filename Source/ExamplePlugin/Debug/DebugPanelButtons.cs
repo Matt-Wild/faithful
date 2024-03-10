@@ -9,8 +9,14 @@ namespace Faithful
         // Store reference to menu panel tranform
         protected RectTransform panel;
 
+        // Store reference to panel toggle
+        protected DebugPanelToggle toggle;
+
         // Store reference to panel button game objects
         protected GameObject tabButton;
+        protected GameObject tabButtonOpen;
+        protected GameObject tabButtonClose;
+        protected GameObject closeButton;
 
         // Store reference to child objects
         protected List<GameObject> children = new List<GameObject>();
@@ -24,8 +30,11 @@ namespace Faithful
             // Get menu panel transform from parent
             panel = GetComponent<RectTransform>();
 
-            // Get panel buttons
+            // Get tab panel buttons
             tabButton = transform.Find("TabPanelButton").gameObject;
+            tabButtonOpen = tabButton.transform.Find("Open").gameObject;
+            tabButtonClose = tabButton.transform.Find("Close").gameObject;
+            closeButton = transform.Find("ClosePanelButton") != null ? transform.Find("ClosePanelButton").gameObject : null;
 
             // Get menu panel opened height
             openedHeight = panel.sizeDelta.y;
@@ -41,6 +50,16 @@ namespace Faithful
 
             // Add tab button behaviour
             tabButtonComponent.onClick.AddListener(OnTabButtonClicked);
+
+            // Check for close button
+            if (closeButton != null)
+            {
+                // Get close button
+                Button closeButtonComponent = closeButton.GetComponent<Button>();
+
+                // Add close button behaviour
+                closeButtonComponent.onClick.AddListener(OnCloseButtonClicked);
+            }
 
             // Cycle through all children in menu panel
             foreach (Transform child in transform)
@@ -64,12 +83,32 @@ namespace Faithful
             {
                 // Hide buttons
                 tabButton.SetActive(false);
+
+                // Check for close button
+                if (closeButton != null)
+                {
+                    // Hide close button
+                    closeButton.SetActive(false);
+                }
             }
             else
             {
                 // Show buttons
                 tabButton.SetActive(true);
+
+                // Check for close button
+                if (closeButton != null)
+                {
+                    // Show close button
+                    closeButton.SetActive(true);
+                }
             }
+        }
+
+        public void AssignPanelToggle(DebugPanelToggle _toggle)
+        {
+            // Assign panel toggle
+            toggle = _toggle;
         }
 
         public void OnTabButtonClicked()
@@ -82,6 +121,10 @@ namespace Faithful
 
                 // Enable children
                 SetChildrenActive(true);
+
+                // Set tab button sprite
+                tabButtonOpen.SetActive(false);
+                tabButtonClose.SetActive(true);
             }
             else
             {
@@ -90,6 +133,20 @@ namespace Faithful
 
                 // Disable children
                 SetChildrenActive(false);
+
+                // Set tab button sprite
+                tabButtonOpen.SetActive(true);
+                tabButtonClose.SetActive(false);
+            }
+        }
+
+        public void OnCloseButtonClicked()
+        {
+            // Check for panel toggle
+            if (toggle != null)
+            {
+                // Close panel
+                toggle.SetState(false);
             }
         }
 

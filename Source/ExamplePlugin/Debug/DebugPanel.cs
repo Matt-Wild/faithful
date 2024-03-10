@@ -12,10 +12,13 @@ namespace Faithful
         protected Canvas canvas;
         protected RectTransform rectTransform;
 
-        public void Init(DebugController _debugController)
+        public void Init(DebugController _debugController, bool _startOpen = false)
         {
             // Assign debug controller
             debugController = _debugController;
+
+            // Set active
+            gameObject.SetActive(_startOpen);
         }
 
         public virtual void Awake()
@@ -34,6 +37,18 @@ namespace Faithful
         {
             // Move panel
             rectTransform.anchoredPosition += _eventData.delta / canvas.scaleFactor;
+        }
+
+        public void Open()
+        {
+            // Set active
+            gameObject.SetActive(true);
+        }
+
+        public void Close()
+        {
+            // Set inactive
+            gameObject.SetActive(false);
         }
     }
 }
