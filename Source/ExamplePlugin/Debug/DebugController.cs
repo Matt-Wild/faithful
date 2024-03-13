@@ -11,22 +11,24 @@ namespace Faithful
         // Store references to debug panels
         public DebugMain debugMain;
         public DebugStatsMonitor debugStatsMonitor;
+        public DebugSpawnMenu debugSpawnMenu;
 
         public void Init(Toolbox _toolbox)
         {
             // Assign toolbox
             toolbox = _toolbox;
-        }
 
-        void Awake()
-        {
             // Add main behaviour to main panel
             debugMain = transform.Find("DebugMainPanel").gameObject.AddComponent<DebugMain>();
-            debugMain.Init(this, true);
+            debugMain.Init(toolbox, this, true);
 
             // Add stats monitor to stats panel
             debugStatsMonitor = transform.Find("DebugStatsPanel").gameObject.AddComponent<DebugStatsMonitor>();
-            debugStatsMonitor.Init(this);
+            debugStatsMonitor.Init(toolbox, this);
+
+            // Add spawn menu behaviour
+            debugSpawnMenu = transform.Find("DebugSpawnPanel").gameObject.AddComponent<DebugSpawnMenu>();
+            debugSpawnMenu.Init(toolbox, this);
 
             // Create panel toggles
             debugMain.CreateToggles();
