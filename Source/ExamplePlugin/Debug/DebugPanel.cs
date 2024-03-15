@@ -15,7 +15,7 @@ namespace Faithful
         protected Canvas canvas;
         protected RectTransform rectTransform;
 
-        public void Init(Toolbox _toolbox, DebugController _debugController, bool _startOpen = false)
+        public virtual void Init(Toolbox _toolbox, DebugController _debugController, bool _startOpen = false)
         {
             // Assign toolbox
             toolbox = _toolbox;

@@ -40,8 +40,20 @@ namespace Faithful
             // Add on spawn behaviour
             spawnButton.onClick.AddListener(OnSpawn);
 
+            // Add on chagne category behaviour
+            categoryDropdown.onValueChanged.AddListener(OnChangeCategory);
+        }
+
+        public override void Init(Toolbox _toolbox, DebugController _debugController, bool _startOpen = false)
+        {
+            // Call base init method
+            base.Init(_toolbox, _debugController, _startOpen);
+
             // Create selection dropdowns
             CreateSelectionDropdowns();
+
+            // Enable correct selection dropdown
+            EnableCorrectSelection();
         }
 
         void Update()
@@ -59,6 +71,10 @@ namespace Faithful
             // Create essence selection dropdown
             Dropdown essenceSelectionDropdown = transform.Find("EssenceSelectionDropdown").gameObject.GetComponent<Dropdown>();
             selectionDropdowns.Add(new SelectionDropdown(essenceSelectionDropdown, "Essence", ["Common", "Uncommon", "Legendary", "Boss/Planet", "Lunar", "Void Common", "Void Uncommon", "Void Legendary", "Void Boss/Planet", "Equipment", "Lunar Equipment"]));
+
+            // Create character selection dropdown
+            Dropdown characterSelectionDropdown = transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<Dropdown>();
+            selectionDropdowns.Add(new SelectionDropdown(characterSelectionDropdown, "Character", toolbox.utils.characterCardNames));
         }
 
         protected void OnSpawn()
@@ -69,6 +85,10 @@ namespace Faithful
                 case "Essence":
                     // Spawn essence
                     SpawnEssence();
+                    break;
+                case "Character":
+                    // Spawn character
+                    SpawnCharacter();
                     break;
                 default:
                     break;
@@ -137,6 +157,48 @@ namespace Faithful
             }
         }
 
+        protected void SpawnCharacter()
+        {
+            // Get local player body
+            CharacterBody localBody = toolbox.utils.localPlayerBody;
+
+            // Skip if no local player body
+            if (localBody == null)
+            {
+                return;
+            }
+
+            Log.Debug($"Spawning {spawnAmount} character(s) at target {localBody.transform.position}");
+
+            // Request spawn from utils
+            toolbox.utils.SpawnCharacterCard(localBody.transform, selection, spawnAmount);
+        }
+
+        protected void EnableCorrectSelection()
+        {
+            // Cycle through selection dropdowns
+            foreach (SelectionDropdown selectionDropdown in selectionDropdowns)
+            {
+                // Correct selection dropdown?
+                if (selectionDropdown.tag == category)
+                {
+                    // Enable dropdown
+                    selectionDropdown.Enable();
+                }
+                else
+                {
+                    // Otherwise disable
+                    selectionDropdown.Disable();
+                }
+            }
+        }
+
+        protected void OnChangeCategory(int _index)
+        {
+            // Enable correct selection dropdown
+            EnableCorrectSelection();
+        }
+
         protected int spawnAmount
         {
             get
@@ -194,6 +256,18 @@ namespace Faithful
 
             // Add options to dropdown
             dropdown.AddOptions(_options);
+        }
+
+        public void Enable()
+        {
+            // Enable dropdown
+            dropdown.gameObject.SetActive(true);
+        }
+
+        public void Disable()
+        {
+            // Disable dropdown
+            dropdown.gameObject.SetActive(false);
         }
 
         public string value

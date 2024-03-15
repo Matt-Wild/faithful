@@ -2,10 +2,12 @@
 using HarmonyLib;
 using R2API;
 using RoR2;
+using RoR2.Navigation;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using static RoR2.DirectorPlacementRule;
 
 namespace Faithful
 {
@@ -23,6 +25,9 @@ namespace Faithful
         // Store local player master and body
         private CharacterMaster _localPlayer;
         private CharacterBody _localPlayerBody;
+
+        // Store character spawn cards
+        private List<CharacterSpawnCard> characterSpawnCards = new List<CharacterSpawnCard>();
 
         // Simulacrum banned items
         List<ItemDef> simulacrumBanned = new List<ItemDef>();
@@ -70,6 +75,9 @@ namespace Faithful
             // Config item corruptions
             On.RoR2.Items.ContagiousItemManager.Init += SetupItemCorruptions;
 
+            // Inject character spawn card awake behaviour
+            On.RoR2.CharacterSpawnCard.Awake += OnCharacterSpawnCardAwake;
+
             // Update debug mode from config
             _debugMode = toolbox.config.CheckTag("DEBUG_MODE");
 
@@ -106,6 +114,58 @@ namespace Faithful
         {
             // Add item pair to corruption pairs
             corruptionPairs.Add(new CorruptPair(_corrupter, _corruptedToken));
+        }
+
+        public void SpawnCharacterCard(Transform _target, string _name, int _amount = 1)
+        {
+            // Attempt to get character spawn card
+            CharacterSpawnCard spawnCard = GetCharacterSpawnCard(_name);
+            if (spawnCard == null)
+            {
+                // Send error
+                Log.Error($"[UTILS] - Spawn character card failed! Could not find character card '{_name}'");
+                return;
+            }
+
+            // Create director placement rule
+            DirectorPlacementRule directorPlacementRule = new DirectorPlacementRule
+            {
+                placementMode = DirectorPlacementRule.PlacementMode.Approximate,
+                spawnOnTarget = _target,
+                preventOverhead = false
+            };
+
+            // Create director spawn request
+            DirectorSpawnRequest directorSpawnRequest = new DirectorSpawnRequest(spawnCard, directorPlacementRule, new Xoroshiro128Plus((ulong)Run.instance.stageRng.nextUint));
+            directorSpawnRequest.ignoreTeamMemberLimit = true;
+            directorSpawnRequest.teamIndexOverride = TeamIndex.Monster;
+
+            // COPIED SCRIPT //
+            // ORIGINAL -> RoR2.CombatDirector.GenerateAmbush
+            // COPIED SCRIPT //
+
+            NodeGraph groundNodes = SceneInfo.instance.groundNodes;
+            NodeGraph.NodeIndex nodeIndex = groundNodes.FindClosestNode(_target.position, HullClassification.Human, float.PositiveInfinity);
+            NodeGraphSpider nodeGraphSpider = new NodeGraphSpider(groundNodes, HullMask.Human);
+            nodeGraphSpider.AddNodeForNextStep(nodeIndex);
+            List<NodeGraphSpider.StepInfo> list = new List<NodeGraphSpider.StepInfo>();
+            int num = 0;
+            List<NodeGraphSpider.StepInfo> collectedSteps = nodeGraphSpider.collectedSteps;
+            while (nodeGraphSpider.PerformStep() && num < _amount && list.Count < _amount)  // ADJUSTED TO ENSURE CORRECT AMOUNT OF ENEMIES SPAWN
+            {
+                num++;
+                for (int i = 0; i < collectedSteps.Count && list.Count < _amount; i++)
+                {
+                    list.Add(collectedSteps[i]);    // SKIP TEST FOR ACCEPTABLE AMBUSH
+                }
+                collectedSteps.Clear();
+            }
+            for (int j = 0; j < list.Count; j++)
+            {
+                Vector3 position;
+                groundNodes.GetNodePosition(list[j].node, out position);
+                spawnCard.DoSpawn(position, Quaternion.identity, directorSpawnRequest); // REPLACED LOAD RESOURCES WITH CACHED SPAWN CARD AND INJECT DIRECTOR SPAWN REQUEST
+            }
         }
 
         void InjectSimulacrumBannedItems(On.RoR2.InfiniteTowerRun.orig_OverrideRuleChoices orig, InfiniteTowerRun self, RuleChoiceMask mustInclude, RuleChoiceMask mustExclude, ulong runSeed)
@@ -160,6 +220,26 @@ namespace Faithful
             Log.Debug("Added item corruptions");
 
             orig(); // Run normal processes
+        }
+
+        private void OnCharacterSpawnCardAwake(On.RoR2.CharacterSpawnCard.orig_Awake orig, CharacterSpawnCard self)
+        {
+            orig(self); // Run normal processes
+
+            // Check for card
+            if (HasCharacterSpawnCard(self.prefab.name))
+            {
+                return;
+            }
+
+            // Add to character spawn cards
+            characterSpawnCards.Add(self);
+
+            // Debug only message
+            if (debugMode)
+            {
+                Log.Debug($"[UTILS] - New character spawn card found for '{self.prefab.name}'");
+            }
         }
 
         public HoldoutZoneController ChargeHoldoutZone(HoldoutZoneController _zone)
@@ -320,6 +400,29 @@ namespace Faithful
                 // Assign local player master
                 _localPlayer = local.cachedMaster;
             }
+        }
+
+        public bool HasCharacterSpawnCard(string _name)
+        {
+            // Check for character spawn card
+            return GetCharacterSpawnCard(_name) != null;
+        }
+
+        public CharacterSpawnCard GetCharacterSpawnCard(string _name)
+        {
+            // Cycle through character spawn cards
+            foreach (CharacterSpawnCard current in characterSpawnCards)
+            {
+                // Check name
+                if (current.prefab.name == _name)
+                {
+                    // Found
+                    return current;
+                }
+            }
+
+            // Not found
+            return null;
         }
 
         // Get all Holdout Zones this character is in
@@ -536,6 +639,28 @@ namespace Faithful
 
                 // Return local player body
                 return _localPlayerBody;
+            }
+        }
+
+        public List<string> characterCardNames
+        {
+            get
+            {
+                // Create string list
+                List<string> names = new List<string>();
+
+                // Cycle through character spawn cards
+                foreach (CharacterSpawnCard current in characterSpawnCards)
+                {
+                    // Add name to list
+                    names.Add(current.prefab.name);
+                }
+
+                // Sort list
+                names.Sort();
+
+                // Return list
+                return names;
             }
         }
     }

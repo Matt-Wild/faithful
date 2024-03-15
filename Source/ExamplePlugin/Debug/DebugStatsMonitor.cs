@@ -99,7 +99,7 @@ namespace Faithful
             baseArmour.text = $"b.arm: {debugController.localBody.baseArmor}";
             baseShield.text = $"b.shd: {debugController.localBody.baseMaxShield}";
             baseDamage.text = $"b.dmg: {debugController.localBody.baseDamage}";
-            baseAttackSpeed.text = $"b.asp: {debugController.localBody.baseAttackSpeed}";
+            baseAttackSpeed.text = $"b.asp: {debugController.localBody.baseAttackSpeed * 100.0f}%";
             baseCrit.text = $"b.crt: {debugController.localBody.baseCrit}%";
             baseSpeed.text = $"b.spd: {debugController.localBody.baseMoveSpeed}";
             baseAcceleration.text = $"b.acc: {debugController.localBody.baseAcceleration}";
@@ -113,7 +113,7 @@ namespace Faithful
             currentBarrierDecay.text = $"c.bdc: {debugController.localBody.barrierDecayRate}";
             currentOneShotProtection.text = $"c.osp: {debugController.localBody.oneShotProtectionFraction * 100.0f}%";
             currentDamage.text = $"c.dmg: {debugController.localBody.damage}";
-            currentAttackSpeed.text = $"c.asp: {debugController.localBody.attackSpeed}";
+            currentAttackSpeed.text = $"c.asp: {debugController.localBody.attackSpeed * 100.0f}%";
             currentCrit.text = $"c.crt: {debugController.localBody.crit}%";
             currentCritMultiplier.text = $"c.cmt: {debugController.localBody.critMultiplier * 100.0f}%";
             currentOutOfCombat.text = $"c.ooc: {debugController.localBody.outOfCombat}";
