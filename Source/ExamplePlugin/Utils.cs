@@ -145,7 +145,7 @@ namespace Faithful
             // COPIED SCRIPT //
 
             NodeGraph groundNodes = SceneInfo.instance.groundNodes;
-            NodeGraph.NodeIndex nodeIndex = groundNodes.FindClosestNode(_target.position, HullClassification.Human, float.PositiveInfinity);
+            NodeGraph.NodeIndex nodeIndex = groundNodes.FindClosestNode(_target.position, spawnCard.hullSize, float.PositiveInfinity);
             NodeGraphSpider nodeGraphSpider = new NodeGraphSpider(groundNodes, HullMask.Human);
             nodeGraphSpider.AddNodeForNextStep(nodeIndex);
             List<NodeGraphSpider.StepInfo> list = new List<NodeGraphSpider.StepInfo>();
