@@ -26,23 +26,23 @@ namespace Faithful
             CreateDisplaySettings("leaderspennondisplaymesh");
 
             // Create Leader's Pennon item and buff
-            leadersPennonBuff = toolbox.buffs.AddBuff("LEADERS_PENNON", "texbuffleaderarea", Color.white, false);
-            leadersPennonItem = toolbox.items.AddItem("LEADERS_PENNON", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy], "texleaderspennonicon", "leaderspennonmesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME", _displaySettings: displaySettings);
+            leadersPennonBuff = Buffs.AddBuff("LEADERS_PENNON", "texbuffleaderarea", Color.white, false);
+            leadersPennonItem = Items.AddItem("LEADERS_PENNON", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy], "texleaderspennonicon", "leaderspennonmesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME", _displaySettings: displaySettings);
 
             // Add ally to ally behaviour
-            toolbox.behaviour.AddAllyToAllyCallback(leadersPennonItem, AllyWithItemToAlly);
+            Behaviour.AddAllyToAllyCallback(leadersPennonItem, AllyWithItemToAlly);
 
             // Add stats modification
-            toolbox.behaviour.AddStatsMod(leadersPennonBuff, LeadersPennonStatsMod);
+            Behaviour.AddStatsMod(leadersPennonBuff, LeadersPennonStatsMod);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }
@@ -92,7 +92,7 @@ namespace Faithful
                 else
                 {
                     // Refresh Leader's Pennon buffs on other ally
-                    toolbox.utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, 1);
+                    Utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, 1);
                 }
             }
         }

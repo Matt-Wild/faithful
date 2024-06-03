@@ -5,9 +5,6 @@ namespace Faithful
 {
     internal class DebugPanel : MonoBehaviour, IDragHandler
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store reference to Debug Controller
         protected DebugController debugController;
 
@@ -15,11 +12,8 @@ namespace Faithful
         protected Canvas canvas;
         protected RectTransform rectTransform;
 
-        public virtual void Init(Toolbox _toolbox, DebugController _debugController, bool _startOpen = false)
+        public virtual void Init(DebugController _debugController, bool _startOpen = false)
         {
-            // Assign toolbox
-            toolbox = _toolbox;
-
             // Assign debug controller
             debugController = _debugController;
 

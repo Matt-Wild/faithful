@@ -18,13 +18,13 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create Vengeance buff
-            vengeanceBuff = toolbox.buffs.AddBuff("VENGEANCE", "texbuffvengefulboost", Color.red);
+            vengeanceBuff = Buffs.AddBuff("VENGEANCE", "texbuffvengefulboost", Color.red);
 
             // Link On Damage Dealt behaviour
-            toolbox.behaviour.AddOnDamageDealtCallback(OnDamageDealt);
+            Behaviour.AddOnDamageDealtCallback(OnDamageDealt);
 
             // Add stats modification
-            toolbox.behaviour.AddStatsMod(vengeanceBuff, VengeanceStatsMod);
+            Behaviour.AddStatsMod(vengeanceBuff, VengeanceStatsMod);
         }
 
         void OnDamageDealt(DamageReport report)

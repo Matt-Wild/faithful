@@ -1,31 +1,23 @@
 ﻿using RoR2;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Faithful
 {
-    internal class Items
+    internal static class Items
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // List of items
-        List<Item> items;
+        static List<Item> items;
 
-        // Constructor
-        public Items(Toolbox _toolbox)
+        public static void Init()
         {
-            toolbox = _toolbox;
-
             // Initialise items list
             items = new List<Item>();
         }
 
-        public Item AddItem(string _token, ItemTag[] _tags, string _iconDir, string _modelDir, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, bool _debugOnly = false)
+        public static Item AddItem(string _token, ItemTag[] _tags, string _iconDir, string _modelDir, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, bool _debugOnly = false)
         {
             // Create item
-            Item newItem = new Item(toolbox, _token, _tags, _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, _hidden, _corruptToken, _displaySettings, _debugOnly);
+            Item newItem = new Item(_token, _tags, _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, _hidden, _corruptToken, _displaySettings, _debugOnly);
 
             // Add item to items list
             items.Add(newItem);
@@ -34,7 +26,7 @@ namespace Faithful
             return newItem;
         }
 
-        public Item GetItem(string _token)
+        public static Item GetItem(string _token)
         {
             // Cycle through items
             foreach (Item item in items)

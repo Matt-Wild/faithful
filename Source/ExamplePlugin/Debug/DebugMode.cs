@@ -7,17 +7,12 @@ namespace Faithful
 {
     internal class DebugMode
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store reference to debug UI
         protected GameObject ui;
 
         // Constructor
-        public DebugMode(Toolbox _toolbox)
+        public DebugMode()
         {
-            toolbox = _toolbox;
-
             // Hook behaviours
             HookBehaviours();
         }
@@ -25,7 +20,7 @@ namespace Faithful
         public void Update()
         {
             // Ensure in debug mode
-            if (!toolbox.utils.debugMode)
+            if (!Utils.debugMode)
             {
                 return;
             }
@@ -38,7 +33,7 @@ namespace Faithful
             }
 
             // Do not allow other debug functionality if not hosting
-            if (!toolbox.utils.hosting)
+            if (!Utils.hosting)
             {
                 return;
             }
@@ -121,7 +116,7 @@ namespace Faithful
         void HookBehaviours()
         {
             // Do not hook behaviours if not in debug mode
-            if (!toolbox.utils.debugMode)
+            if (!Utils.debugMode)
             {
                 return;
             }
@@ -141,11 +136,11 @@ namespace Faithful
         void CreateUI()
         {
             // Create UI
-            ui = Object.Instantiate(toolbox.assets.GetObject("debugcanvas"));
+            ui = Object.Instantiate(Assets.GetObject("debugcanvas"));
 
             // Add Debug Controller component
             DebugController debugController = ui.AddComponent<DebugController>();
-            debugController.Init(toolbox);
+            debugController.Init();
 
             // Disable UI on creation
             ui.SetActive(false);

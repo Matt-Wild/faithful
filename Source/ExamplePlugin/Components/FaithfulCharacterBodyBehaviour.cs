@@ -1,19 +1,12 @@
 ﻿using EntityStates;
 using RoR2;
 using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 using UnityEngine;
-using UnityEngine.TextCore;
 
 namespace Faithful
 {
     internal class FaithfulCharacterBodyBehaviour : MonoBehaviour
     {
-        // Store reference to Toolbox
-        public Toolbox toolbox;
-
         // Store flags
         public Flags frameFlags = new Flags();
         public Flags stageFlags = new Flags();

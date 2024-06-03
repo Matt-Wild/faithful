@@ -24,19 +24,19 @@ namespace Faithful
             CreateDisplaySettings("hasteninggreavedisplaymesh");
 
             // Create Longshot Geode item
-            hasteningGreaveItem = toolbox.items.AddItem("HASTENING_GREAVE", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings);
+            hasteningGreaveItem = Items.AddItem("HASTENING_GREAVE", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings);
 
             // Add On Recalculate Stats behaviour
-            toolbox.behaviour.AddOnRecalculateStatsCallback(OnRecalculateStats);
+            Behaviour.AddOnRecalculateStatsCallback(OnRecalculateStats);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }

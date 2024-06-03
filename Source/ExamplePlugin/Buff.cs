@@ -6,9 +6,6 @@ namespace Faithful
 {
     internal class Buff
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Buff def
         public BuffDef buffDef;
 
@@ -16,17 +13,15 @@ namespace Faithful
         public string token;
 
         // Constructor
-        public Buff(Toolbox _toolbox, string _token, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false)
+        public Buff(string _token, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false)
         {
-            toolbox = _toolbox;
-
             // Should hide this buff due to temporary assets?
-            bool forceHide = !toolbox.utils.debugMode && (_iconName == "texbufftemporalcube" || !toolbox.assets.HasAsset(_iconName));
+            bool forceHide = !Utils.debugMode && (_iconName == "texbufftemporalcube" || !Assets.HasAsset(_iconName));
 
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = !toolbox.config.CheckTag(_token);
+                forceHide = !Config.CheckTag(_token);
             }
 
             // Assign token
@@ -49,7 +44,7 @@ namespace Faithful
             buffDef.isHidden = _isHidden || forceHide;
 
             // Set icon
-            buffDef.iconSprite = toolbox.assets.GetIcon(_iconName);
+            buffDef.iconSprite = Assets.GetIcon(_iconName);
 
             // Add buff
             ContentAddition.AddBuffDef(buffDef);
@@ -58,7 +53,7 @@ namespace Faithful
 
             if (forceHide)
             {
-                if (!toolbox.config.CheckTag(_token))
+                if (!Config.CheckTag(_token))
                 {
                     Log.Debug($"Hiding buff '{_token}' due to user preference");
                 }

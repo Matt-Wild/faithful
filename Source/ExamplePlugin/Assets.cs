@@ -5,16 +5,13 @@ using IL.RoR2.ConVar;
 
 namespace Faithful
 {
-    internal class Assets
+    internal static class Assets
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Asset bundle name
         public const string bundleName = "faithfulbundle";
 
         // Asset bundle
-        public AssetBundle assetBundle;
+        public static AssetBundle assetBundle;
 
         // Default assets
         private const string defaultModel = "temporalcubemesh";
@@ -22,15 +19,13 @@ namespace Faithful
         private const string defaultConsumedIcon = "textemporalcubeconsumedicon";
         private const string defaultBuffIcon = "texbufftemporalcube";
 
-        public Assets(Toolbox _toolbox)
+        public static void Init()
         {
-            toolbox = _toolbox;
-
             // Loads the assetBundle from the path
             assetBundle = AssetBundle.LoadFromFile(AssetBundlePath);
 
             // DEBUG display loading assets
-            if (toolbox.utils.debugMode)
+            if (Utils.debugMode)
             {
                 string[] loaded = assetBundle.GetAllAssetNames();
                 foreach (string current in loaded)
@@ -41,16 +36,16 @@ namespace Faithful
         }
 
         // Get the path to the asset bundle
-        public string AssetBundlePath
+        public static string AssetBundlePath
         {
             get
             {
                 // Returns the path to the asset bundle
-                return Path.Combine(Path.GetDirectoryName(toolbox.utils.pluginInfo.Location), bundleName);
+                return Path.Combine(Path.GetDirectoryName(Utils.pluginInfo.Location), bundleName);
             }
         }
 
-        public string FindAsset(string _file)
+        public static string FindAsset(string _file)
         {
             // Cycle through asset bundle
             foreach (string name in assetBundle.GetAllAssetNames())
@@ -66,7 +61,7 @@ namespace Faithful
             return null;
         }
 
-        public bool HasAsset(string _name)
+        public static bool HasAsset(string _name)
         {
             // Attempt to find asset
             string found = FindAsset(_name);
@@ -75,7 +70,7 @@ namespace Faithful
             return found != null;
         }
 
-        public Sprite GetIcon(string _name)
+        public static Sprite GetIcon(string _name)
         {
             // Add file extension
             string fullName = _name + ".png";
@@ -86,7 +81,7 @@ namespace Faithful
             // Check for asset
             if (asset == null)
             {
-                if (toolbox.utils.debugMode)
+                if (Utils.debugMode)
                 {
                     Log.Error($"Requested asset '{fullName}' could not be found.");
                 }
@@ -102,7 +97,7 @@ namespace Faithful
             return assetBundle.LoadAsset<Sprite>(asset);
         }
 
-        public GameObject GetObject(string _name, string _default = null)
+        public static GameObject GetObject(string _name, string _default = null)
         {
             // Add file extension
             string fullName = _name + ".prefab";
@@ -113,7 +108,7 @@ namespace Faithful
             // Check for asset
             if (asset == null)
             {
-                if (toolbox.utils.debugMode)
+                if (Utils.debugMode)
                 {
                     Log.Error($"Requested asset '{fullName}' could not be found.");
                 }
@@ -133,13 +128,13 @@ namespace Faithful
             return assetBundle.LoadAsset<GameObject>(asset);
         }
 
-        public GameObject GetModel(string _name)
+        public static GameObject GetModel(string _name)
         {
             // Load object and return with default model as fallback
             return GetObject(_name, defaultModel);
         }
 
-        public Shader GetShader(string _name)
+        public static Shader GetShader(string _name)
         {
             // Add file extension
             string fullName = _name + ".shader";

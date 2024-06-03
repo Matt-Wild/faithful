@@ -44,10 +44,10 @@ namespace Faithful
             categoryDropdown.onValueChanged.AddListener(OnChangeCategory);
         }
 
-        public override void Init(Toolbox _toolbox, DebugController _debugController, bool _startOpen = false)
+        public override void Init(DebugController _debugController, bool _startOpen = false)
         {
             // Call base init method
-            base.Init(_toolbox, _debugController, _startOpen);
+            base.Init(_debugController, _startOpen);
 
             // Create selection dropdowns
             CreateSelectionDropdowns();
@@ -74,7 +74,7 @@ namespace Faithful
 
             // Create character selection dropdown
             Dropdown characterSelectionDropdown = transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<Dropdown>();
-            selectionDropdowns.Add(new SelectionDropdown(characterSelectionDropdown, "Character", toolbox.utils.characterCardNames));
+            selectionDropdowns.Add(new SelectionDropdown(characterSelectionDropdown, "Character", Utils.characterCardNames));
         }
 
         protected void OnSpawn()
@@ -98,7 +98,7 @@ namespace Faithful
         protected void SpawnEssence()
         {
             // Get local player body
-            CharacterBody localBody = toolbox.utils.localPlayerBody;
+            CharacterBody localBody = Utils.localPlayerBody;
 
             // Skip if no local player body
             if (localBody == null)
@@ -160,7 +160,7 @@ namespace Faithful
         protected void SpawnCharacter()
         {
             // Get local player body
-            CharacterBody localBody = toolbox.utils.localPlayerBody;
+            CharacterBody localBody = Utils.localPlayerBody;
 
             // Skip if no local player body
             if (localBody == null)
@@ -171,7 +171,7 @@ namespace Faithful
             Log.Debug($"Spawning {spawnAmount} character(s) at target {localBody.transform.position}");
 
             // Request spawn from utils
-            toolbox.utils.SpawnCharacterCard(localBody.transform, selection, spawnAmount);
+            Utils.SpawnCharacterCard(localBody.transform, selection, spawnAmount);
         }
 
         protected void EnableCorrectSelection()

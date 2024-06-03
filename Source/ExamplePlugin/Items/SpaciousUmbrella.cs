@@ -24,19 +24,19 @@ namespace Faithful
             CreateDisplaySettings("spaciousumbrelladisplaymesh");
 
             // Create Copper Gear item and buff
-            spaciousUmbrellaItem = toolbox.items.AddItem("SPACIOUS_UMBRELLA", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.HoldoutZoneRelated], "texspaciousumbrellaicon", "spaciousumbrellamesh", ItemTier.Tier2, _simulacrumBanned: true, _displaySettings: displaySettings);
+            spaciousUmbrellaItem = Items.AddItem("SPACIOUS_UMBRELLA", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.HoldoutZoneRelated], "texspaciousumbrellaicon", "spaciousumbrellamesh", ItemTier.Tier2, _simulacrumBanned: true, _displaySettings: displaySettings);
 
             // Link Holdout Zone behaviour
-            toolbox.behaviour.AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadius);
+            Behaviour.AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadius);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }
@@ -60,7 +60,7 @@ namespace Faithful
         void OnHoldoutZoneCalcRadius(ref float _radius, HoldoutZoneController _zone)
         {
             // Number of Spacious Umbrella items
-            int count = toolbox.utils.GetItemCountForTeam(TeamIndex.Player, spaciousUmbrellaItem.itemDef);
+            int count = Utils.GetItemCountForTeam(TeamIndex.Player, spaciousUmbrellaItem.itemDef);
 
             // Check if players have item
             if (count > 0)

@@ -25,22 +25,22 @@ namespace Faithful
             CreateDisplaySettings("4t0njetpackdisplaymesh");
 
             // Create item
-            item = toolbox.items.AddItem("4T0N_JETPACK", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings, _debugOnly: true);
+            item = Items.AddItem("4T0N_JETPACK", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings, _debugOnly: true);
 
             // Inject on transfer item behaviours
-            toolbox.behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
+            Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
 
             // Inject character body behaviours
-            toolbox.behaviour.AddOnCharacterBodyStartCallback(OnCharacterBodyStart);
+            Behaviour.AddOnCharacterBodyStartCallback(OnCharacterBodyStart);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }
@@ -64,7 +64,7 @@ namespace Faithful
         void OnInventoryChanged(Inventory _inventory)
         {
             // Attempt to get Character Body
-            CharacterBody body = toolbox.utils.GetInventoryBody(_inventory);
+            CharacterBody body = Utils.GetInventoryBody(_inventory);
             if (body == null)
             {
                 return;

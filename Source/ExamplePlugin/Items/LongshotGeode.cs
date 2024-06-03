@@ -24,19 +24,19 @@ namespace Faithful
             CreateDisplaySettings("longshotgeodedisplaymesh");
 
             // Create Longshot Geode item
-            longshotGeodeItem = toolbox.items.AddItem("LONGSHOT_GEODE", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _displaySettings: displaySettings);
+            longshotGeodeItem = Items.AddItem("LONGSHOT_GEODE", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _displaySettings: displaySettings);
 
             // Add On Incoming Damage behaviour
-            toolbox.behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
+            Behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }

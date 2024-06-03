@@ -38,71 +38,65 @@ namespace Faithful
 
     internal delegate void AllyHolderToAllyCallback(int _count, CharacterMaster _holder, CharacterMaster _other);
 
-    internal class Behaviour
+    internal static class Behaviour
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Update callbacks
-        protected List<Callback> updateCallbacks = new List<Callback>();
-        protected List<Callback> debugUpdateCallbacks = new List<Callback>();
-        protected List<Callback> fixedUpdateCallbacks = new List<Callback>();
-        protected List<Callback> debugFixedUpdateCallbacks = new List<Callback>();
+        private static List<Callback> updateCallbacks = new List<Callback>();
+        private static List<Callback> debugUpdateCallbacks = new List<Callback>();
+        private static List<Callback> fixedUpdateCallbacks = new List<Callback>();
+        private static List<Callback> debugFixedUpdateCallbacks = new List<Callback>();
 
         // Holdout Zone callbacks
-        protected List<InHoldoutZoneCallback> inHoldoutZoneCallbacks = new List<InHoldoutZoneCallback>();
-        protected List<OnHoldoutZoneStartCallback> onHoldoutZoneStartCallbacks = new List<OnHoldoutZoneStartCallback>();
-        protected List<OnHoldoutZoneCalcRadiusCallback> onHoldoutZoneCalcRadiusCallbacks = new List<OnHoldoutZoneCalcRadiusCallback>();
+        private static List<InHoldoutZoneCallback> inHoldoutZoneCallbacks = new List<InHoldoutZoneCallback>();
+        private static List<OnHoldoutZoneStartCallback> onHoldoutZoneStartCallbacks = new List<OnHoldoutZoneStartCallback>();
+        private static List<OnHoldoutZoneCalcRadiusCallback> onHoldoutZoneCalcRadiusCallbacks = new List<OnHoldoutZoneCalcRadiusCallback>();
 
         // Stat modification item and buff callbacks
-        List<ItemStatsMod> itemStatsMods = new List<ItemStatsMod>();
-        List<BuffStatsMod> buffStatsMods = new List<BuffStatsMod>();
+        static List<ItemStatsMod> itemStatsMods = new List<ItemStatsMod>();
+        static List<BuffStatsMod> buffStatsMods = new List<BuffStatsMod>();
 
         // Damage Report callbacks
-        protected List<OnIncomingDamageCallback> onIncomingDamageCallbacks = new List<OnIncomingDamageCallback>();
-        protected List<DamageReportCallback> onDamageDealtCallbacks = new List<DamageReportCallback>();
-        protected List<DamageReportCallback> onCharacterDeathCallbacks = new List<DamageReportCallback>();
+        private static List<OnIncomingDamageCallback> onIncomingDamageCallbacks = new List<OnIncomingDamageCallback>();
+        private static List<DamageReportCallback> onDamageDealtCallbacks = new List<DamageReportCallback>();
+        private static List<DamageReportCallback> onCharacterDeathCallbacks = new List<DamageReportCallback>();
 
         // Buff, debuff and DoT callbacks
-        protected List<OnAddBuffCallback> onAddBuffCallbacks = new List<OnAddBuffCallback>();
-        protected List<OnAddTimedBuffCallback> onAddTimedBuffCallbacks = new List<OnAddTimedBuffCallback>();
-        protected List<OnInflictDamageOverTimeCallback> onInflictDamageOverTimeCallbacks = new List<OnInflictDamageOverTimeCallback>();
-        protected List<OnInflictDamageOverTimeRefCallback> onInflictDamageOverTimeRefCallbacks = new List<OnInflictDamageOverTimeRefCallback>();
+        private static List<OnAddBuffCallback> onAddBuffCallbacks = new List<OnAddBuffCallback>();
+        private static List<OnAddTimedBuffCallback> onAddTimedBuffCallbacks = new List<OnAddTimedBuffCallback>();
+        private static List<OnInflictDamageOverTimeCallback> onInflictDamageOverTimeCallbacks = new List<OnInflictDamageOverTimeCallback>();
+        private static List<OnInflictDamageOverTimeRefCallback> onInflictDamageOverTimeRefCallbacks = new List<OnInflictDamageOverTimeRefCallback>();
 
         // Item interaction callbacks
-        protected List<OnTransferItemCallback> onGiveItemCallbacks = new List<OnTransferItemCallback>();
-        protected List<OnTransferItemCallback> onRemoveItemCallbacks = new List<OnTransferItemCallback>();
-        protected List<OnInventoryCallback> onInventoryChangedCallbacks = new List<OnInventoryCallback>();
+        private static List<OnTransferItemCallback> onGiveItemCallbacks = new List<OnTransferItemCallback>();
+        private static List<OnTransferItemCallback> onRemoveItemCallbacks = new List<OnTransferItemCallback>();
+        private static List<OnInventoryCallback> onInventoryChangedCallbacks = new List<OnInventoryCallback>();
 
         // Heal callbacks
-        protected List<OnHealCallback> onHealCallbacks = new List<OnHealCallback>();
+        private static List<OnHealCallback> onHealCallbacks = new List<OnHealCallback>();
 
         // Character Body callbacks
-        protected List<CharacterBodyCallback> onCharacterBodyAwakeCallbacks = new List<CharacterBodyCallback>();
-        protected List<CharacterBodyCallback> onCharacterBodyStartCallbacks = new List<CharacterBodyCallback>();
-        protected List<CharacterBodyCallback> onRecalculateStatsCallbacks = new List<CharacterBodyCallback>();
+        private static List<CharacterBodyCallback> onCharacterBodyAwakeCallbacks = new List<CharacterBodyCallback>();
+        private static List<CharacterBodyCallback> onCharacterBodyStartCallbacks = new List<CharacterBodyCallback>();
+        private static List<CharacterBodyCallback> onRecalculateStatsCallbacks = new List<CharacterBodyCallback>();
 
         // Interactable callbacks
-        protected List<OnPurchaseInteractionBeginCallback> onPurchaseInteractionBeginCallbacks = new List<OnPurchaseInteractionBeginCallback>();
-        protected List<OnPurchaseCanBeAffordedCallback> onPurchaseCanBeAffordedCallbacks = new List<OnPurchaseCanBeAffordedCallback>();
+        private static List<OnPurchaseInteractionBeginCallback> onPurchaseInteractionBeginCallbacks = new List<OnPurchaseInteractionBeginCallback>();
+        private static List<OnPurchaseCanBeAffordedCallback> onPurchaseCanBeAffordedCallbacks = new List<OnPurchaseCanBeAffordedCallback>();
 
         // Character movement callbacks
-        protected List<OnProcessJumpCallback> onProcessJumpCallbacks = new List<OnProcessJumpCallback>();
+        private static List<OnProcessJumpCallback> onProcessJumpCallbacks = new List<OnProcessJumpCallback>();
 
         // Player to player callbacks
-        protected List<PlayerToPlayerCallback> playerToPlayerCallbacks = new List<PlayerToPlayerCallback>();
-        protected List<PlayerItemToPlayer> playerItemToPlayerCallbacks = new List<PlayerItemToPlayer>();
-        protected List<PlayerBuffToPlayer> playerBuffToPlayerCallbacks = new List<PlayerBuffToPlayer>();
+        private static List<PlayerToPlayerCallback> playerToPlayerCallbacks = new List<PlayerToPlayerCallback>();
+        private static List<PlayerItemToPlayer> playerItemToPlayerCallbacks = new List<PlayerItemToPlayer>();
+        private static List<PlayerBuffToPlayer> playerBuffToPlayerCallbacks = new List<PlayerBuffToPlayer>();
 
         // Ally to ally callbacks
-        protected List<AllyItemToAlly> allyItemToAllyCallbacks = new List<AllyItemToAlly>();
-        protected List<AllyBuffToAlly> allyBuffToAllyCallbacks = new List<AllyBuffToAlly>();
+        private static List<AllyItemToAlly> allyItemToAllyCallbacks = new List<AllyItemToAlly>();
+        private static List<AllyBuffToAlly> allyBuffToAllyCallbacks = new List<AllyBuffToAlly>();
 
-        // Constructor
-        public Behaviour(Toolbox _toolbox)
+        public static void Init()
         {
-            toolbox = _toolbox;
-
             // Inject hooks
             On.RoR2.HoldoutZoneController.FixedUpdate += HookHoldoutZoneControllerFixedUpdate;
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
@@ -128,7 +122,7 @@ namespace Faithful
             DebugLog("Behaviour initialised");
         }
 
-        public void Update()
+        public static void Update()
         {
             // Cycle through update callbacks
             foreach (Callback callback in updateCallbacks)
@@ -138,7 +132,7 @@ namespace Faithful
             }
 
             // In debug mode?
-            if (toolbox.utils.debugMode)
+            if (Utils.debugMode)
             {
                 // Cycle through debug mode update callbacks
                 foreach (Callback callback in debugUpdateCallbacks)
@@ -149,7 +143,7 @@ namespace Faithful
             }
         }
 
-        public void FixedUpdate()
+        public static void FixedUpdate()
         {
             // Cycle through fixed update callbacks
             foreach (Callback callback in fixedUpdateCallbacks)
@@ -159,7 +153,7 @@ namespace Faithful
             }
 
             // In debug mode?
-            if (toolbox.utils.debugMode)
+            if (Utils.debugMode)
             {
                 // Cycle through debug mode fixed update callbacks
                 foreach (Callback callback in debugFixedUpdateCallbacks)
@@ -177,7 +171,7 @@ namespace Faithful
         }
 
         // Add update callback
-        public void AddUpdateCallback(Callback _callback, bool _debugOnly = false)
+        public static void AddUpdateCallback(Callback _callback, bool _debugOnly = false)
         {
             // Only for debug mode?
             if (_debugOnly)
@@ -193,7 +187,7 @@ namespace Faithful
         }
 
         // Add fixed update callback
-        public void AddFixedUpdateCallback(Callback _callback, bool _debugOnly = false)
+        public static void AddFixedUpdateCallback(Callback _callback, bool _debugOnly = false)
         {
             // Only for debug mode?
             if (_debugOnly)
@@ -209,7 +203,7 @@ namespace Faithful
         }
 
         // Add item stats mod
-        public void AddStatsMod(Item _item, StatsModCallback _callback)
+        public static void AddStatsMod(Item _item, StatsModCallback _callback)
         {
             // Add item stats mod
             itemStatsMods.Add(new ItemStatsMod(_item, _callback));
@@ -218,7 +212,7 @@ namespace Faithful
         }
 
         // Add buff stats mod
-        public void AddStatsMod(Buff _buff, StatsModCallback _callback)
+        public static void AddStatsMod(Buff _buff, StatsModCallback _callback)
         {
             // Add buff stats mod
             buffStatsMods.Add(new BuffStatsMod(_buff, _callback));
@@ -227,7 +221,7 @@ namespace Faithful
         }
 
         // Add in Holdout Zone callback
-        public void AddInHoldoutZoneCallback(InHoldoutZoneCallback _callback)
+        public static void AddInHoldoutZoneCallback(InHoldoutZoneCallback _callback)
         {
             inHoldoutZoneCallbacks.Add(_callback);
 
@@ -235,7 +229,7 @@ namespace Faithful
         }
 
         // Add on Holdout Zone start callback
-        public void AddOnHoldoutZoneStartCallback(OnHoldoutZoneStartCallback _callback)
+        public static void AddOnHoldoutZoneStartCallback(OnHoldoutZoneStartCallback _callback)
         {
             onHoldoutZoneStartCallbacks.Add(_callback);
 
@@ -243,7 +237,7 @@ namespace Faithful
         }
 
         // Add on Holdout Zone calc radius callback
-        public void AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadiusCallback _callback)
+        public static void AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadiusCallback _callback)
         {
             onHoldoutZoneCalcRadiusCallbacks.Add(_callback);
 
@@ -251,7 +245,7 @@ namespace Faithful
         }
 
         // Add player to player callback
-        public void AddPlayerToPlayerCallback(PlayerToPlayerCallback _callback)
+        public static void AddPlayerToPlayerCallback(PlayerToPlayerCallback _callback)
         {
             playerToPlayerCallbacks.Add(_callback);
 
@@ -259,7 +253,7 @@ namespace Faithful
         }
 
         // Add player with item to player callback
-        public void AddPlayerToPlayerCallback(Item _requiredItem, PlayerHolderToPlayerCallback _callback)
+        public static void AddPlayerToPlayerCallback(Item _requiredItem, PlayerHolderToPlayerCallback _callback)
         {
             playerItemToPlayerCallbacks.Add(new PlayerItemToPlayer(_requiredItem, _callback));
 
@@ -267,7 +261,7 @@ namespace Faithful
         }
 
         // Add player with buff to player callback
-        public void AddPlayerToPlayerCallback(Buff _requiredBuff, PlayerHolderToPlayerCallback _callback)
+        public static void AddPlayerToPlayerCallback(Buff _requiredBuff, PlayerHolderToPlayerCallback _callback)
         {
             playerBuffToPlayerCallbacks.Add(new PlayerBuffToPlayer(_requiredBuff, _callback));
 
@@ -275,7 +269,7 @@ namespace Faithful
         }
 
         // Add ally with item to ally callback
-        public void AddAllyToAllyCallback(Item _requiredItem, AllyHolderToAllyCallback _callback)
+        public static void AddAllyToAllyCallback(Item _requiredItem, AllyHolderToAllyCallback _callback)
         {
             allyItemToAllyCallbacks.Add(new AllyItemToAlly(_requiredItem, _callback));
 
@@ -283,7 +277,7 @@ namespace Faithful
         }
 
         // Add ally with buff to ally callback
-        public void AddAllyToAllyCallback(Buff _requiredBuff, AllyHolderToAllyCallback _callback)
+        public static void AddAllyToAllyCallback(Buff _requiredBuff, AllyHolderToAllyCallback _callback)
         {
             allyBuffToAllyCallbacks.Add(new AllyBuffToAlly(_requiredBuff, _callback));
 
@@ -291,7 +285,7 @@ namespace Faithful
         }
 
         // Add On Incoming Damage callback
-        public void AddOnIncomingDamageCallback(OnIncomingDamageCallback _callback)
+        public static void AddOnIncomingDamageCallback(OnIncomingDamageCallback _callback)
         {
             onIncomingDamageCallbacks.Add(_callback);
 
@@ -299,7 +293,7 @@ namespace Faithful
         }
 
         // Add On Damage Dealt callback
-        public void AddOnDamageDealtCallback(DamageReportCallback _callback)
+        public static void AddOnDamageDealtCallback(DamageReportCallback _callback)
         {
             onDamageDealtCallbacks.Add(_callback);
 
@@ -307,7 +301,7 @@ namespace Faithful
         }
 
         // Add On Character Death callback
-        public void AddOnCharacterDeathCallback(DamageReportCallback _callback)
+        public static void AddOnCharacterDeathCallback(DamageReportCallback _callback)
         {
             onCharacterDeathCallbacks.Add(_callback);
 
@@ -315,7 +309,7 @@ namespace Faithful
         }
 
         // Add On Add Buff callback
-        public void AddOnAddBuffCallback(OnAddBuffCallback _callback)
+        public static void AddOnAddBuffCallback(OnAddBuffCallback _callback)
         {
             onAddBuffCallbacks.Add(_callback);
 
@@ -323,7 +317,7 @@ namespace Faithful
         }
 
         // Add On Add Timed Buff callback
-        public void AddOnAddTimedBuffCallback(OnAddTimedBuffCallback _callback)
+        public static void AddOnAddTimedBuffCallback(OnAddTimedBuffCallback _callback)
         {
             onAddTimedBuffCallbacks.Add(_callback);
 
@@ -331,7 +325,7 @@ namespace Faithful
         }
 
         // Add On Inflict Damage Over Time callback
-        public void AddOnInflictDamageOverTimeCallback(OnInflictDamageOverTimeCallback _callback)
+        public static void AddOnInflictDamageOverTimeCallback(OnInflictDamageOverTimeCallback _callback)
         {
             onInflictDamageOverTimeCallbacks.Add(_callback);
 
@@ -339,7 +333,7 @@ namespace Faithful
         }
 
         // Add On Inflict Damage Over Time Ref callback
-        public void AddOnInflictDamageOverTimeRefCallback(OnInflictDamageOverTimeRefCallback _callback)
+        public static void AddOnInflictDamageOverTimeRefCallback(OnInflictDamageOverTimeRefCallback _callback)
         {
             onInflictDamageOverTimeRefCallbacks.Add(_callback);
 
@@ -347,7 +341,7 @@ namespace Faithful
         }
 
         // Add On Give Item callback (SERVER ONLY)
-        public void AddServerOnGiveItemCallback(OnTransferItemCallback _callback)
+        public static void AddServerOnGiveItemCallback(OnTransferItemCallback _callback)
         {
             onGiveItemCallbacks.Add(_callback);
 
@@ -355,7 +349,7 @@ namespace Faithful
         }
 
         // Add On Remove Item callback (SERVER ONLY)
-        public void AddServerOnRemoveItemCallback(OnTransferItemCallback _callback)
+        public static void AddServerOnRemoveItemCallback(OnTransferItemCallback _callback)
         {
             onRemoveItemCallbacks.Add(_callback);
 
@@ -363,7 +357,7 @@ namespace Faithful
         }
 
         // Add On Inventory Changed callback
-        public void AddOnInventoryChangedCallback(OnInventoryCallback _callback)
+        public static void AddOnInventoryChangedCallback(OnInventoryCallback _callback)
         {
             onInventoryChangedCallbacks.Add(_callback);
 
@@ -371,7 +365,7 @@ namespace Faithful
         }
 
         // Add On Heal callback
-        public void AddOnHealCallback(OnHealCallback _callback)
+        public static void AddOnHealCallback(OnHealCallback _callback)
         {
             onHealCallbacks.Add(_callback);
 
@@ -379,7 +373,7 @@ namespace Faithful
         }
 
         // Add On Character Body Awake callback
-        public void AddOnCharacterBodyAwakeCallback(CharacterBodyCallback _callback)
+        public static void AddOnCharacterBodyAwakeCallback(CharacterBodyCallback _callback)
         {
             onCharacterBodyAwakeCallbacks.Add(_callback);
 
@@ -387,7 +381,7 @@ namespace Faithful
         }
 
         // Add On Character Body Start callback
-        public void AddOnCharacterBodyStartCallback(CharacterBodyCallback _callback)
+        public static void AddOnCharacterBodyStartCallback(CharacterBodyCallback _callback)
         {
             onCharacterBodyStartCallbacks.Add(_callback);
 
@@ -395,7 +389,7 @@ namespace Faithful
         }
 
         // Add On Recalculate Stats callback
-        public void AddOnRecalculateStatsCallback(CharacterBodyCallback _callback)
+        public static void AddOnRecalculateStatsCallback(CharacterBodyCallback _callback)
         {
             onRecalculateStatsCallbacks.Add(_callback);
 
@@ -403,7 +397,7 @@ namespace Faithful
         }
 
         // Add On Purchase Interaction Begin callback
-        public void AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBeginCallback _callback)
+        public static void AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBeginCallback _callback)
         {
             onPurchaseInteractionBeginCallbacks.Add(_callback);
 
@@ -411,7 +405,7 @@ namespace Faithful
         }
 
         // Add On Purchase Can Be Afforded callback
-        public void AddOnPurchaseCanBeAffordedCallback(OnPurchaseCanBeAffordedCallback _callback)
+        public static void AddOnPurchaseCanBeAffordedCallback(OnPurchaseCanBeAffordedCallback _callback)
         {
             onPurchaseCanBeAffordedCallbacks.Add(_callback);
 
@@ -419,7 +413,7 @@ namespace Faithful
         }
 
         // Add On Process Jump callback
-        public void AddOnProcessJumpCallback(OnProcessJumpCallback _callback)
+        public static void AddOnProcessJumpCallback(OnProcessJumpCallback _callback)
         {
             onProcessJumpCallbacks.Add(_callback);
 
@@ -427,10 +421,10 @@ namespace Faithful
         }
 
         // Fixed update for checking player to player interactions
-        private void PlayerOnPlayerFixedUpdate()
+        private static void PlayerOnPlayerFixedUpdate()
         {
             // Get list of players
-            List<PlayerCharacterMasterController> players = toolbox.utils.GetPlayers();
+            List<PlayerCharacterMasterController> players = Utils.GetPlayers();
 
             // Cycle through players
             foreach (PlayerCharacterMasterController player in players)
@@ -465,10 +459,10 @@ namespace Faithful
         }
 
         // Fixed update for checking ally to ally interactions
-        private void AllyOnAllyFixedUpdate()
+        private static void AllyOnAllyFixedUpdate()
         {
             // Get list of allies
-            List<CharacterMaster> allies = toolbox.utils.GetCharactersForTeam(TeamIndex.Player);
+            List<CharacterMaster> allies = Utils.GetCharactersForTeam(TeamIndex.Player);
 
             // Cycle through allies
             foreach (CharacterMaster ally in allies)
@@ -486,12 +480,12 @@ namespace Faithful
         }
 
         // Do stat modifications
-        private void HookStatsMod(CharacterBody _body, RecalculateStatsAPI.StatHookEventArgs _stats)
+        private static void HookStatsMod(CharacterBody _body, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Cycle through item stats mod callbacks
             foreach (ItemStatsMod itemStatsMod in itemStatsMods)
             {
-                // Proess item stats mod
+                // Process item stats mod
                 itemStatsMod.Process(_body, _stats);
             }
 
@@ -503,10 +497,10 @@ namespace Faithful
             }
         }
 
-        protected void HookHoldoutZoneControllerFixedUpdate(On.RoR2.HoldoutZoneController.orig_FixedUpdate orig, HoldoutZoneController self)
+        private static void HookHoldoutZoneControllerFixedUpdate(On.RoR2.HoldoutZoneController.orig_FixedUpdate orig, HoldoutZoneController self)
         {
             // Get Hurt Boxes in range of Holdout Zone
-            HurtBox[] hurtBoxes = toolbox.utils.GetHurtBoxesInSphere(self.transform.position, self.currentRadius);
+            HurtBox[] hurtBoxes = Utils.GetHurtBoxesInSphere(self.transform.position, self.currentRadius);
 
             // Cycle through Hurt Boxes
             foreach (HurtBox hurtBox in hurtBoxes)
@@ -521,7 +515,7 @@ namespace Faithful
             orig(self); // Run normal processes
         }
 
-        protected void HookHoldoutZoneControllerStart(On.RoR2.HoldoutZoneController.orig_Start orig, HoldoutZoneController self)
+        private static void HookHoldoutZoneControllerStart(On.RoR2.HoldoutZoneController.orig_Start orig, HoldoutZoneController self)
         {
             // Add Faithful Holdout Zone mono behaviours
             FaithfulHoldoutZoneBehaviour behaviour = self.gameObject.AddComponent<FaithfulHoldoutZoneBehaviour>();
@@ -537,13 +531,10 @@ namespace Faithful
             orig(self); // Run normal processes
         }
 
-        protected void HookCharacterBodyAwake(On.RoR2.CharacterBody.orig_Awake orig, CharacterBody self)
+        private static void HookCharacterBodyAwake(On.RoR2.CharacterBody.orig_Awake orig, CharacterBody self)
         {
             // Add custom character body behaviour
             FaithfulCharacterBodyBehaviour component = self.gameObject.AddComponent<FaithfulCharacterBodyBehaviour>();
-
-            // Pass Toolbox reference to custom component
-            component.toolbox = toolbox;
 
             orig(self); // Run normal processes
 
@@ -555,7 +546,7 @@ namespace Faithful
             }
         }
 
-        protected void HookCharacterBodyStart(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
+        private static void HookCharacterBodyStart(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
             orig(self); // Run normal processes
 
@@ -567,7 +558,7 @@ namespace Faithful
             }
         }
 
-        protected void HookAddBuffIndex(On.RoR2.CharacterBody.orig_AddBuff_BuffIndex orig, CharacterBody self, BuffIndex buffType)
+        private static void HookAddBuffIndex(On.RoR2.CharacterBody.orig_AddBuff_BuffIndex orig, CharacterBody self, BuffIndex buffType)
         {
             // Cycle through On Add Buff callbacks
             foreach (OnAddBuffCallback callback in onAddBuffCallbacks)
@@ -579,7 +570,7 @@ namespace Faithful
             orig(self, buffType); // Run normal processes
         }
 
-        protected void HookAddTimedBuffDef(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffDef_float orig, CharacterBody self, BuffDef buffDef, float duration)
+        private static void HookAddTimedBuffDef(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffDef_float orig, CharacterBody self, BuffDef buffDef, float duration)
         {
             // Cycle through On Add Timed Buff callbacks
             foreach (OnAddTimedBuffCallback callback in onAddTimedBuffCallbacks)
@@ -591,7 +582,7 @@ namespace Faithful
             orig(self, buffDef, duration); // Run normal processes
         }
 
-        protected void HookInflictDamageOverTime(On.RoR2.DotController.orig_InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 orig, GameObject victimObject, GameObject attackerObject, DotController.DotIndex dotIndex, float duration, float damageMultiplier, uint? maxStacksFromAttacker)
+        private static void HookInflictDamageOverTime(On.RoR2.DotController.orig_InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 orig, GameObject victimObject, GameObject attackerObject, DotController.DotIndex dotIndex, float duration, float damageMultiplier, uint? maxStacksFromAttacker)
         {
             orig(victimObject, attackerObject, dotIndex, duration, damageMultiplier, maxStacksFromAttacker); // Run normal processes
 
@@ -603,7 +594,7 @@ namespace Faithful
             }
         }
 
-        protected void HookInflictDamageOverTimeRef(On.RoR2.DotController.orig_InflictDot_refInflictDotInfo orig, ref InflictDotInfo inflictDotInfo)
+        private static void HookInflictDamageOverTimeRef(On.RoR2.DotController.orig_InflictDot_refInflictDotInfo orig, ref InflictDotInfo inflictDotInfo)
         {
             // Cycle through On Inflict Damage Over Time Ref callbacks
             foreach (OnInflictDamageOverTimeRefCallback callback in onInflictDamageOverTimeRefCallbacks)
@@ -615,7 +606,7 @@ namespace Faithful
             orig(ref inflictDotInfo); // Run normal processes
         }
 
-        protected void HookServerGiveItem(On.RoR2.Inventory.orig_GiveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
+        private static void HookServerGiveItem(On.RoR2.Inventory.orig_GiveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
         {
             // Cycle through On Give Item callbacks
             foreach (OnTransferItemCallback callback in onGiveItemCallbacks)
@@ -627,7 +618,7 @@ namespace Faithful
             orig(self, itemIndex, count); // Run normal processes
         }
 
-        protected void HookServerRemoveItem(On.RoR2.Inventory.orig_RemoveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
+        private static void HookServerRemoveItem(On.RoR2.Inventory.orig_RemoveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
         {
             // Cycle through On Remove Item callbacks
             foreach (OnTransferItemCallback callback in onRemoveItemCallbacks)
@@ -639,7 +630,7 @@ namespace Faithful
             orig(self, itemIndex, count); // Run normal processes
         }
 
-        protected void HookInventoryChanged(On.RoR2.Inventory.orig_HandleInventoryChanged orig, Inventory self)
+        private static void HookInventoryChanged(On.RoR2.Inventory.orig_HandleInventoryChanged orig, Inventory self)
         {
             orig(self); // Run normal processes
 
@@ -651,18 +642,15 @@ namespace Faithful
             }
         }
 
-        protected void HookHealthComponentAwake(On.RoR2.HealthComponent.orig_Awake orig, HealthComponent self)
+        private static void HookHealthComponentAwake(On.RoR2.HealthComponent.orig_Awake orig, HealthComponent self)
         {
             // Add custom health component behaviour
             FaithfulHealthComponentBehaviour component = self.gameObject.AddComponent<FaithfulHealthComponentBehaviour>();
 
-            // Pass Toolbox reference to custom component
-            component.toolbox = toolbox;
-
             orig(self); // Run normal processes
         }
 
-        protected float HookHeal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen)
+        private static float HookHeal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen)
         {
             // Cycle through On Heal callbacks
             foreach (OnHealCallback callback in onHealCallbacks)
@@ -674,7 +662,7 @@ namespace Faithful
             return orig(self, amount, procChainMask, nonRegen); // Run normal processes
         }
 
-        protected void HookRecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
+        private static void HookRecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
         {
             orig(self); // Run normal processes
 
@@ -689,7 +677,7 @@ namespace Faithful
             self.UpdateAllTemporaryVisualEffects();
         }
 
-        protected void HookPurchaseInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)
+        private static void HookPurchaseInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)
         {
             // Cycle through OnPurchaseInteractionBegin callbacks
             foreach (OnPurchaseInteractionBeginCallback callback in onPurchaseInteractionBeginCallbacks)
@@ -706,7 +694,7 @@ namespace Faithful
             orig(self, activator); // Run normal processes
         }
 
-        protected bool HookPurchaseCanBeAfforded(On.RoR2.PurchaseInteraction.orig_CanBeAffordedByInteractor orig, PurchaseInteraction self, Interactor activator)
+        private static bool HookPurchaseCanBeAfforded(On.RoR2.PurchaseInteraction.orig_CanBeAffordedByInteractor orig, PurchaseInteraction self, Interactor activator)
         {
             // Cycle through OnPurchaseCanBeAfforded callbacks
             foreach (OnPurchaseCanBeAffordedCallback callback in onPurchaseCanBeAffordedCallbacks)
@@ -727,7 +715,7 @@ namespace Faithful
             return orig(self, activator); // Run normal processes
         }
 
-        protected void HookProcessJump(On.EntityStates.GenericCharacterMain.orig_ProcessJump orig, EntityStates.GenericCharacterMain self)
+        private static void HookProcessJump(On.EntityStates.GenericCharacterMain.orig_ProcessJump orig, EntityStates.GenericCharacterMain self)
         {
             orig(self); // Run normal processes first
 
@@ -739,7 +727,7 @@ namespace Faithful
             }
         }
 
-        protected void HookOnDamageDealt(DamageReport _report)
+        private static void HookOnDamageDealt(DamageReport _report)
         {
             // Cycle through On Damage Dealt callbacks
             foreach (DamageReportCallback callback in onDamageDealtCallbacks)
@@ -749,7 +737,7 @@ namespace Faithful
             }
         }
 
-        protected void HookOnCharacterDeath(DamageReport _report)
+        private static void HookOnCharacterDeath(DamageReport _report)
         {
             // Cycle through On Character Death callbacks
             foreach (DamageReportCallback callback in onCharacterDeathCallbacks)
@@ -759,7 +747,7 @@ namespace Faithful
             }
         }
 
-        public void OnIncomingDamageServer(DamageInfo _damageInfo, CharacterMaster _attacker, CharacterMaster _victim)
+        public static void OnIncomingDamageServer(DamageInfo _damageInfo, CharacterMaster _attacker, CharacterMaster _victim)
         {
             // Cycle through On Incoming Damage callbacks
             foreach (OnIncomingDamageCallback callback in onIncomingDamageCallbacks)
@@ -769,10 +757,10 @@ namespace Faithful
             }
         }
 
-        public void DebugLog(string _message)
+        public static void DebugLog(string _message)
         {
             // Only log behaviour on debug
-            if (toolbox.utils.debugMode)
+            if (Utils.debugMode)
             {
                 // Log message
                 Log.Debug($"[BEHAVIOUR] - {_message}");

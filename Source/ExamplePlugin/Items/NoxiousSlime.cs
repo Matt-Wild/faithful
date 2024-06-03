@@ -24,19 +24,19 @@ namespace Faithful
             CreateDisplaySettings("noxiousslimedisplaymesh");
 
             // Create Noxious Slime item
-            noxiousSlimeItem = toolbox.items.AddItem("NOXIOUS_SLIME", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _displaySettings: displaySettings);
+            noxiousSlimeItem = Items.AddItem("NOXIOUS_SLIME", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _displaySettings: displaySettings);
 
             // Inject DoT behaviour
-            toolbox.behaviour.AddOnInflictDamageOverTimeRefCallback(OnInflictDamageOverTimeRef);
+            Behaviour.AddOnInflictDamageOverTimeRefCallback(OnInflictDamageOverTimeRef);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }
@@ -61,7 +61,7 @@ namespace Faithful
         void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo)
         {
             // Check if hosting
-            if (!toolbox.utils.hosting)
+            if (!Utils.hosting)
             {
                 return;
             }

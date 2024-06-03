@@ -8,9 +8,6 @@ namespace Faithful
 {
     internal class FaithfulHealthComponentBehaviour : MonoBehaviour, IOnIncomingDamageServerReceiver
     {
-        // Store reference to Toolbox
-        public Toolbox toolbox;
-
         // Store reference to Character Body
         public CharacterBody character;
 
@@ -54,7 +51,7 @@ namespace Faithful
             }
 
             // Send request for behaviour to handle
-            toolbox.behaviour.OnIncomingDamageServer(_damageInfo, attacker, victim);
+            Behaviour.OnIncomingDamageServer(_damageInfo, attacker, victim);
         }
     }
 }
