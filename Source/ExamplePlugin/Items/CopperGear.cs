@@ -25,23 +25,23 @@ namespace Faithful
             CreateDisplaySettings("coppergeardisplaymesh");
 
             // Create Copper Gear item and buff
-            copperGearItem = toolbox.items.AddItem("COPPER_GEAR", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _displaySettings: displaySettings);
-            copperGearBuff = toolbox.buffs.AddBuff("COPPER_GEAR", "texbuffteleportergear", Color.white);
+            copperGearItem = Items.AddItem("COPPER_GEAR", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _displaySettings: displaySettings);
+            copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "texbuffteleportergear", Color.white);
 
             // Add stats modification
-            toolbox.behaviour.AddStatsMod(copperGearBuff, CopperGearStatsMod);
+            Behaviour.AddStatsMod(copperGearBuff, CopperGearStatsMod);
 
             // Link Holdout Zone behaviour
-            toolbox.behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
+            Behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }
@@ -84,7 +84,7 @@ namespace Faithful
                 if (copperGearCount > 0)
                 {
                     // Refresh Copper Gear buffs
-                    toolbox.utils.RefreshTimedBuffs(_body, copperGearBuff.buffDef, 1);
+                    Utils.RefreshTimedBuffs(_body, copperGearBuff.buffDef, 1);
 
                     // Get needed amount of buffs
                     int needed = copperGearCount - _body.GetBuffCount(copperGearBuff.buffDef);

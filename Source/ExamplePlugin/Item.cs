@@ -11,9 +11,6 @@ namespace Faithful
 {
     internal class Item
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Item def
         public ItemDef itemDef;
 
@@ -21,17 +18,15 @@ namespace Faithful
         public string token;
 
         // Constructor
-        public Item(Toolbox _toolbox, string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, bool _debugOnly = false)
+        public Item(string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, bool _debugOnly = false)
         {
-            toolbox = _toolbox;
-
             // Should hide this item due to temporary assets or debug only?
-            bool forceHide = !toolbox.utils.debugMode && (_debugOnly || _iconName == "textemporalcubeicon" || !toolbox.assets.HasAsset(_iconName) || _modelName == "temporalcubemesh" || !toolbox.assets.HasAsset(_modelName));
+            bool forceHide = !Utils.debugMode && (_debugOnly || _iconName == "textemporalcubeicon" || !Assets.HasAsset(_iconName) || _modelName == "temporalcubemesh" || !Assets.HasAsset(_modelName));
 
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = !toolbox.config.CheckTag(_token);
+                forceHide = !Config.CheckTag(_token);
             }
 
             // Assign token
@@ -43,7 +38,7 @@ namespace Faithful
             // Set item texts
             itemDef.name = $"FAITHFUL_{_token}_NAME";
             itemDef.nameToken = $"FAITHFUL_{_token}_NAME";
-            itemDef.pickupToken = toolbox.config.CheckTagFlag(_token, "EXTENDED_PICKUP_DESC", true) ? $"FAITHFUL_{_token}_DESC" : $"FAITHFUL_{_token}_PICKUP";
+            itemDef.pickupToken = Config.CheckTagFlag(_token, "EXTENDED_PICKUP_DESC", true) ? $"FAITHFUL_{_token}_DESC" : $"FAITHFUL_{_token}_PICKUP";
             itemDef.descriptionToken = $"FAITHFUL_{_token}_DESC";
             itemDef.loreToken = $"FAITHFUL_{_token}_LORE";
 
@@ -57,7 +52,7 @@ namespace Faithful
             if (_simulacrumBanned)
             {
                 // Ban from Simulacrum
-                toolbox.utils.BanFromSimulacrum(itemDef);
+                Utils.BanFromSimulacrum(itemDef);
             }
 
             // Set can remove (Can a shrine of chance or printer etc. take this item)
@@ -70,15 +65,15 @@ namespace Faithful
             if (_corruptToken != null)
             {
                 // Add corruption pair
-                toolbox.utils.AddCorruptionPair(itemDef, _corruptToken);
+                Utils.AddCorruptionPair(itemDef, _corruptToken);
             }
 
             // Set icon and model
-            itemDef.pickupIconSprite = toolbox.assets.GetIcon(_iconName);
-            itemDef.pickupModelPrefab = toolbox.assets.GetModel(_modelName);
+            itemDef.pickupIconSprite = Assets.GetIcon(_iconName);
+            itemDef.pickupModelPrefab = Assets.GetModel(_modelName);
 
             // Check for item display settings and against flag
-            if (_displaySettings != null && !toolbox.config.CheckTagFlag(_token, "DISABLE_ITEM_DISPLAYS", true))
+            if (_displaySettings != null && !Config.CheckTagFlag(_token, "DISABLE_ITEM_DISPLAYS", true))
             {
                 // Add item and pass in item display settings
                 ItemAPI.Add(new CustomItem(itemDef, _displaySettings.GetRules()));
@@ -93,7 +88,7 @@ namespace Faithful
 
             if (forceHide)
             {
-                if (!toolbox.config.CheckTag(_token))
+                if (!Config.CheckTag(_token))
                 {
                     Log.Debug($"Hiding item '{_token}' due to user preference");
                 }

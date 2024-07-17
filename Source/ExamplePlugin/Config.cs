@@ -5,25 +5,19 @@ using JetBrains.Annotations;
 
 namespace Faithful
 {
-    internal class Config
+    internal static class Config
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store plugin info
-        public PluginInfo pluginInfo;
+        public static PluginInfo pluginInfo;
 
         // Config tag list
-        List<ConfigTag> tags = new List<ConfigTag>();
+        static List<ConfigTag> tags = new List<ConfigTag>();
 
         // Store default item flags
-        ConfigTag defaultItemFlags;
+        static ConfigTag defaultItemFlags;
 
-        // Constructor
-        public Config(Toolbox _toolbox, PluginInfo _pluginInfo)
+        public static void Init(PluginInfo _pluginInfo)
         {
-            toolbox = _toolbox;
-
             // Set plugin info
             pluginInfo = _pluginInfo;
 
@@ -43,7 +37,7 @@ namespace Faithful
             Log.Debug("Config initialised");
         }
 
-        private void ReadConfig()
+        private static void ReadConfig()
         {
             // Create file reader
             using (StreamReader reader = File.OpenText(ConfigFilePath))
@@ -103,7 +97,7 @@ namespace Faithful
         }
 
         // Get if tag is enabled in config
-        public bool CheckTag(string _tag)
+        public static bool CheckTag(string _tag)
         {
             // Force tag uppercase
             _tag = _tag.ToUpper();
@@ -130,7 +124,7 @@ namespace Faithful
         }
 
         // Get if tag has a flag
-        public bool CheckTagFlag(string _tag, string _flag, bool _isItem = false)
+        public static bool CheckTagFlag(string _tag, string _flag, bool _isItem = false)
         {
             // Force tag uppercase
             _tag = _tag.ToUpper();
@@ -167,7 +161,7 @@ namespace Faithful
         }
 
         // Get the path to the asset bundle
-        public string ConfigFilePath
+        public static string ConfigFilePath
         {
             get
             {

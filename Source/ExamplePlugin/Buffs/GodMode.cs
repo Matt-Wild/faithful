@@ -19,26 +19,26 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create God Mode buff
-            godModeBuff = toolbox.buffs.AddBuff("DEBUG_MODE", "texbuffdevmode", Color.white, _canStack: false);
+            godModeBuff = Buffs.AddBuff("DEBUG_MODE", "texbuffdevmode", Color.white, _canStack: false);
 
             // Link Holdout Zone behaviour
-            toolbox.behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
+            Behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
 
             // Link On Incoming Damage behaviour
-            toolbox.behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
+            Behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
 
             // Link On Purchase Interaction behaviour
-            toolbox.behaviour.AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBegin);
-            toolbox.behaviour.AddOnPurchaseCanBeAffordedCallback(OnPurchaseCanBeAfforded);
+            Behaviour.AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBegin);
+            Behaviour.AddOnPurchaseCanBeAffordedCallback(OnPurchaseCanBeAfforded);
 
             // Add stats modification
-            toolbox.behaviour.AddStatsMod(godModeBuff, GodModeStatsMod);
+            Behaviour.AddStatsMod(godModeBuff, GodModeStatsMod);
 
             // Add On Heal behaviour
-            toolbox.behaviour.AddOnHealCallback(OnHeal);
+            Behaviour.AddOnHealCallback(OnHeal);
 
             // Link update function
-            toolbox.behaviour.AddUpdateCallback(Update, true);
+            Behaviour.AddUpdateCallback(Update, true);
 
             // Add On Get User Name behaviour
             On.RoR2.CharacterBody.GetUserName += OnGetUsername;
@@ -50,13 +50,13 @@ namespace Faithful
         void InHoldoutZone(CharacterBody _body, HoldoutZoneController _zone)
         {
             // Debug mode behaviour
-            if (toolbox.utils.debugMode)
+            if (Utils.debugMode)
             {
                 // Is character in God Mode
                 if (_body.GetBuffCount(godModeBuff.buffDef) > 0)
                 {
                     // Instantly charge Holdout Zone
-                    toolbox.utils.ChargeHoldoutZone(_zone);
+                    Utils.ChargeHoldoutZone(_zone);
                 }
             }
         }
@@ -161,7 +161,7 @@ namespace Faithful
         void Update()
         {
             // Host only
-            if (!toolbox.utils.hosting)
+            if (!Utils.hosting)
             {
                 return;
             }

@@ -25,23 +25,23 @@ namespace Faithful
             CreateDisplaySettings("brassscrewsdisplaymesh");
 
             // Create Brass Screws item and buff
-            brassScrewsItem = toolbox.items.AddItem("BRASS_SCREWS", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_COPPER_GEAR_NAME", _displaySettings: displaySettings);
-            brassScrewsBuff = toolbox.buffs.AddBuff("BRASS_SCREWS", "texbuffteleporterscrew", Color.white);
+            brassScrewsItem = Items.AddItem("BRASS_SCREWS", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_COPPER_GEAR_NAME", _displaySettings: displaySettings);
+            brassScrewsBuff = Buffs.AddBuff("BRASS_SCREWS", "texbuffteleporterscrew", Color.white);
 
             // Add stats modification
-            toolbox.behaviour.AddStatsMod(brassScrewsBuff, BrassScrewsStatsMod);
+            Behaviour.AddStatsMod(brassScrewsBuff, BrassScrewsStatsMod);
 
             // Link Holdout Zone behaviour
-            toolbox.behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
+            Behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }
@@ -84,7 +84,7 @@ namespace Faithful
                 if (copperGearCount > 0)
                 {
                     // Refresh Brass Screws buffs
-                    toolbox.utils.RefreshTimedBuffs(_body, brassScrewsBuff.buffDef, 1);
+                    Utils.RefreshTimedBuffs(_body, brassScrewsBuff.buffDef, 1);
 
                     // Get needed amount of buffs
                     int needed = copperGearCount - _body.GetBuffCount(brassScrewsBuff.buffDef);

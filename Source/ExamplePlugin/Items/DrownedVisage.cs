@@ -24,19 +24,19 @@ namespace Faithful
             CreateDisplaySettings("drownedvisagedisplaymesh");
 
             // Create Drowned Visage item
-            drownedVisageItem = toolbox.items.AddItem("DROWNED_VISAGE", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_SPACIOUS_UMBRELLA_NAME", _displaySettings: displaySettings);
+            drownedVisageItem = Items.AddItem("DROWNED_VISAGE", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_SPACIOUS_UMBRELLA_NAME", _displaySettings: displaySettings);
 
             // Link On Character Death behaviour
-            toolbox.behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
+            Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }
@@ -101,13 +101,13 @@ namespace Faithful
             if (Util.CheckRoll(2.5f * count, character))
             {
                 // Get Holdout Zones containing character
-                List<HoldoutZoneController> zones = toolbox.utils.GetHoldoutZonesContainingCharacter(character);
+                List<HoldoutZoneController> zones = Utils.GetHoldoutZonesContainingCharacter(character);
 
                 // Cycle through Holdout Zones
                 foreach (HoldoutZoneController zone in zones)
                 {
                     // Add charge to zone
-                    toolbox.utils.ChargeHoldoutZone(zone, 0.02f);
+                    Utils.ChargeHoldoutZone(zone, 0.02f);
                 }
             }
         }

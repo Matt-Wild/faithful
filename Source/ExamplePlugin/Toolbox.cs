@@ -10,13 +10,7 @@ namespace Faithful
         public Faithful plugin;
 
         // Tool references
-        public Config config;
-        public Utils utils;
         public DebugMode debugMode;
-        public Behaviour behaviour;
-        public Assets assets;
-        public Items items;
-        public Buffs buffs;
 
         // Constructor
         public Toolbox(Faithful _plugin, PluginInfo _pluginInfo)
@@ -25,13 +19,13 @@ namespace Faithful
             plugin = _plugin;
 
             // Create tools
-            config = new Config(this, _pluginInfo);
-            utils = new Utils(this, _pluginInfo);
-            debugMode = new DebugMode(this);
-            behaviour = new Behaviour(this);
-            assets = new Assets(this);
-            items = new Items(this);
-            buffs = new Buffs(this);
+            Config.Init(_pluginInfo);
+            Utils.Init(_pluginInfo);
+            debugMode = new DebugMode();
+            Behaviour.Init();
+            Assets.Init();
+            Items.Init();
+            Buffs.Init();
 
             Log.Debug("Toolbox built");
         }
@@ -40,13 +34,13 @@ namespace Faithful
         {
             // Update tools
             debugMode.Update();
-            behaviour.Update();
+            Behaviour.Update();
         }
 
         public void FixedUpdate()
         {
             // Update tools
-            behaviour.FixedUpdate();
+            Behaviour.FixedUpdate();
         }
     }
 }

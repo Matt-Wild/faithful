@@ -21,25 +21,25 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Get Vengeance buff
-            inspirationBuff = toolbox.buffs.GetBuff("INSPIRATION");
+            inspirationBuff = Buffs.GetBuff("INSPIRATION");
 
             // Create display settings
             CreateDisplaySettings("collectorsvisiondisplaymesh");
 
             // Create Collector's Vision item
-            collectorsVisionItem = toolbox.items.AddItem("COLLECTORS_VISION", [ItemTag.Damage], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings);
+            collectorsVisionItem = Items.AddItem("COLLECTORS_VISION", [ItemTag.Damage], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings);
 
             // Link On Give Item behaviour
-            toolbox.behaviour.AddServerOnGiveItemCallback(OnGiveItem);
+            Behaviour.AddServerOnGiveItemCallback(OnGiveItem);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }
@@ -72,7 +72,7 @@ namespace Faithful
             }
 
             // Attempt to get Character Body
-            CharacterBody body = toolbox.utils.GetInventoryBody(_inventory);
+            CharacterBody body = Utils.GetInventoryBody(_inventory);
             if (body == null)
             {
                 return;

@@ -17,10 +17,10 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create Inspiration buff
-            inspirationBuff = toolbox.buffs.AddBuff("INSPIRATION", "texbuffinspiredboost", Color.white);
+            inspirationBuff = Buffs.AddBuff("INSPIRATION", "texbuffinspiredboost", Color.white);
 
             // Add stats modification
-            toolbox.behaviour.AddStatsMod(inspirationBuff, InspirationStatsMod);
+            Behaviour.AddStatsMod(inspirationBuff, InspirationStatsMod);
         }
 
         void InspirationStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)

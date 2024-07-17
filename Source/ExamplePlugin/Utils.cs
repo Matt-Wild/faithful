@@ -7,36 +7,32 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using static RoR2.DirectorPlacementRule;
 
 namespace Faithful
 {
-    internal class Utils
+    internal static class Utils
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
-        // Store plugin info
-        public PluginInfo pluginInfo;
+        // Plugin info
+        public static PluginInfo pluginInfo;
 
         // Store debug mode
-        private bool _debugMode = false;
+        static private bool _debugMode = false;
 
         // Store local player master and body
-        private CharacterMaster _localPlayer;
-        private CharacterBody _localPlayerBody;
+        static private CharacterMaster _localPlayer;
+        static private CharacterBody _localPlayerBody;
 
         // Store character spawn cards
-        private List<CharacterSpawnCard> characterSpawnCards = new List<CharacterSpawnCard>();
+        static private List<CharacterSpawnCard> characterSpawnCards = new List<CharacterSpawnCard>();
 
         // Simulacrum banned items
-        List<ItemDef> simulacrumBanned = new List<ItemDef>();
+        static List<ItemDef> simulacrumBanned = new List<ItemDef>();
 
         // Corruption item pairs
-        List<CorruptPair> corruptionPairs = new List<CorruptPair>();
+        static List<CorruptPair> corruptionPairs = new List<CorruptPair>();
 
         // Character model names
-        private Dictionary<string, string> characterModelNames = new Dictionary<string, string>()
+        static private Dictionary<string, string> characterModelNames = new Dictionary<string, string>()
         {
             { "commando", "mdlCommandoDualies" },
             { "huntress", "mdlHuntress" },
@@ -56,14 +52,11 @@ namespace Faithful
         };
 
         // HG shader
-        private Shader HGShader;
+        static private Shader HGShader;
 
-        // Constructor
-        public Utils(Toolbox _toolbox, PluginInfo _pluginInfo)
+        public static void Init(PluginInfo _pluginInfo)
         {
-            toolbox = _toolbox;
-
-            // Set plugin info
+            // Provide plugin info
             pluginInfo = _pluginInfo;
 
             // Get HG shader
@@ -79,13 +72,13 @@ namespace Faithful
             On.RoR2.CharacterSpawnCard.Awake += OnCharacterSpawnCardAwake;
 
             // Update debug mode from config
-            _debugMode = toolbox.config.CheckTag("DEBUG_MODE");
+            _debugMode = Config.CheckTag("DEBUG_MODE");
 
             Log.Debug("Utils initialised");
         }
 
         // Refresh chosen buff on chosen character
-        public void RefreshTimedBuffs(CharacterBody body, BuffDef buffDef, float duration)
+        public static void RefreshTimedBuffs(CharacterBody body, BuffDef buffDef, float duration)
         {
             if (!body || body.GetBuffCount(buffDef) <= 0)
             {
@@ -104,19 +97,19 @@ namespace Faithful
             }
         }
 
-        public void BanFromSimulacrum(ItemDef _item)
+        public static void BanFromSimulacrum(ItemDef _item)
         {
             // Add item def to banned list for Simulacrum
             simulacrumBanned.Add(_item);
         }
 
-        public void AddCorruptionPair(ItemDef _corrupter, string _corruptedToken)
+        public static void AddCorruptionPair(ItemDef _corrupter, string _corruptedToken)
         {
             // Add item pair to corruption pairs
             corruptionPairs.Add(new CorruptPair(_corrupter, _corruptedToken));
         }
 
-        public void SpawnCharacterCard(Transform _target, string _name, int _amount = 1)
+        public static void SpawnCharacterCard(Transform _target, string _name, int _amount = 1)
         {
             // Attempt to get character spawn card
             CharacterSpawnCard spawnCard = GetCharacterSpawnCard(_name);
@@ -168,7 +161,7 @@ namespace Faithful
             }
         }
 
-        void InjectSimulacrumBannedItems(On.RoR2.InfiniteTowerRun.orig_OverrideRuleChoices orig, InfiniteTowerRun self, RuleChoiceMask mustInclude, RuleChoiceMask mustExclude, ulong runSeed)
+        static void InjectSimulacrumBannedItems(On.RoR2.InfiniteTowerRun.orig_OverrideRuleChoices orig, InfiniteTowerRun self, RuleChoiceMask mustInclude, RuleChoiceMask mustExclude, ulong runSeed)
         {
             // List of items needing to be banned
             List<ItemDef> newBanned = [];
@@ -202,7 +195,7 @@ namespace Faithful
             orig(self, mustInclude, mustExclude, runSeed);  // Run normal processes
         }
 
-        private void SetupItemCorruptions(On.RoR2.Items.ContagiousItemManager.orig_Init orig)
+        private static void SetupItemCorruptions(On.RoR2.Items.ContagiousItemManager.orig_Init orig)
         {
             // Create item pair list
             List<ItemDef.Pair> itemPairs = new List<ItemDef.Pair>();
@@ -222,7 +215,7 @@ namespace Faithful
             orig(); // Run normal processes
         }
 
-        private void OnCharacterSpawnCardAwake(On.RoR2.CharacterSpawnCard.orig_Awake orig, CharacterSpawnCard self)
+        private static void OnCharacterSpawnCardAwake(On.RoR2.CharacterSpawnCard.orig_Awake orig, CharacterSpawnCard self)
         {
             orig(self); // Run normal processes
 
@@ -242,7 +235,7 @@ namespace Faithful
             }
         }
 
-        public HoldoutZoneController ChargeHoldoutZone(HoldoutZoneController _zone)
+        public static HoldoutZoneController ChargeHoldoutZone(HoldoutZoneController _zone)
         {
             // Instantly charge Holdout Zone
             _zone.baseChargeDuration = 0.0f;
@@ -251,7 +244,7 @@ namespace Faithful
             return _zone;
         }
 
-        public HoldoutZoneController ChargeHoldoutZone(HoldoutZoneController _zone, float _amount, bool _percentage = true)
+        public static HoldoutZoneController ChargeHoldoutZone(HoldoutZoneController _zone, float _amount, bool _percentage = true)
         {
             // Check if percentage based
             if (!_percentage)
@@ -269,7 +262,7 @@ namespace Faithful
             return _zone;
         }
 
-        public void AddPulverizeBuildup(CharacterBody _target, CharacterBody _applier, float _duration)
+        public static void AddPulverizeBuildup(CharacterBody _target, CharacterBody _applier, float _duration)
         {
             // Check for target and applier
             if (_target == null || _applier == null)
@@ -313,16 +306,16 @@ namespace Faithful
             }
         }
 
-        public ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _useHopooShader = true, bool _ignoreOverlays = false, bool _dithering = true)
+        public static ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _useHopooShader = true, bool _ignoreOverlays = false, bool _dithering = true)
         {
             // In debug mode?
-            if (toolbox.utils.debugMode)
+            if (debugMode)
             {
                 Log.Debug($"Creating item display for '{_modelFile}'");
             }
 
             // Get model asset
-            GameObject model = toolbox.assets.GetModel(_modelFile);
+            GameObject model = Assets.GetModel(_modelFile);
 
             // Check for model
             if (model == null)
@@ -387,11 +380,11 @@ namespace Faithful
             itemDisplay.rendererInfos = renderInfos;
 
             // Return item display settings
-            return new ItemDisplaySettings(this, model, new ItemDisplayRuleDict());
+            return new ItemDisplaySettings(model, new ItemDisplayRuleDict());
         }
 
         // Attempt to fetch local player master
-        private void FetchLocalPlayer()
+        private static void FetchLocalPlayer()
         {
             // Check for local user
             LocalUser local = LocalUserManager.GetFirstLocalUser();
@@ -402,13 +395,13 @@ namespace Faithful
             }
         }
 
-        public bool HasCharacterSpawnCard(string _name)
+        public static bool HasCharacterSpawnCard(string _name)
         {
             // Check for character spawn card
             return GetCharacterSpawnCard(_name) != null;
         }
 
-        public CharacterSpawnCard GetCharacterSpawnCard(string _name)
+        public static CharacterSpawnCard GetCharacterSpawnCard(string _name)
         {
             // Cycle through character spawn cards
             foreach (CharacterSpawnCard current in characterSpawnCards)
@@ -426,7 +419,7 @@ namespace Faithful
         }
 
         // Get all Holdout Zones this character is in
-        public List<HoldoutZoneController> GetHoldoutZonesContainingCharacter(CharacterMaster _character)
+        public static List<HoldoutZoneController> GetHoldoutZonesContainingCharacter(CharacterMaster _character)
         {
             // Check for character body
             if (!_character.hasBody)
@@ -462,7 +455,7 @@ namespace Faithful
         }
 
         // Return Hurt Boxes from RoR2 Sphere Search
-        public HurtBox[] GetHurtBoxesInSphere(Vector3 position, float radius)
+        public static HurtBox[] GetHurtBoxesInSphere(Vector3 position, float radius)
         {
             if (radius <= 0)
             {
@@ -480,19 +473,19 @@ namespace Faithful
             return hurtBoxes;   // Return found hurt boxes
         }
 
-        public List<PlayerCharacterMasterController> GetPlayers()
+        public static List<PlayerCharacterMasterController> GetPlayers()
         {
             // Return list of all characters
             return new List<PlayerCharacterMasterController>(PlayerCharacterMasterController.instances);
         }
 
-        public List<CharacterMaster> GetCharacters()
+        public static List<CharacterMaster> GetCharacters()
         {
             // Return list of all characters
             return new List<CharacterMaster>(CharacterMaster.readOnlyInstancesList);
         }
 
-        public List<CharacterMaster> GetCharactersForTeam(TeamIndex _teamIndex, bool _requiresBody = true)
+        public static List<CharacterMaster> GetCharactersForTeam(TeamIndex _teamIndex, bool _requiresBody = true)
         {
             // Initialise list
             List<CharacterMaster> characters = new List<CharacterMaster>();
@@ -512,7 +505,7 @@ namespace Faithful
             return characters;
         }
 
-        public int GetItemCountForTeam(TeamIndex _teamIndex, ItemDef _itemDef, bool _requiresAlive = true, bool _requiresConnected = true)
+        public static int GetItemCountForTeam(TeamIndex _teamIndex, ItemDef _itemDef, bool _requiresAlive = true, bool _requiresConnected = true)
         {
             // Found item count
             int count = 0;
@@ -538,7 +531,7 @@ namespace Faithful
             return count;
         }
 
-        public CharacterMaster GetLastAttacker(CharacterBody _victim)
+        public static CharacterMaster GetLastAttacker(CharacterBody _victim)
         {
             // Check for victim
             if (_victim == null)
@@ -558,7 +551,7 @@ namespace Faithful
             return null;
         }
 
-        public CharacterBody GetInventoryBody(Inventory _inventory)
+        public static CharacterBody GetInventoryBody(Inventory _inventory)
         {
             // Attempt to get Character Master
             CharacterMaster master = _inventory.gameObject.GetComponent<CharacterMaster>();
@@ -577,7 +570,7 @@ namespace Faithful
             return master.GetBody();
         }
 
-        public string GetCharacterModelName(string _character)
+        public static string GetCharacterModelName(string _character)
         {
             // Check for name
             if (characterModelNames.ContainsKey(_character))
@@ -590,17 +583,17 @@ namespace Faithful
             return null;
         }
 
-        public bool debugMode
+        public static bool debugMode
         {
             get { return _debugMode; }
         }
 
-        public bool hosting
+        public static bool hosting
         {
             get { return NetworkServer.active; }
         }
 
-        public CharacterMaster localPlayer
+        public static CharacterMaster localPlayer
         {
             get
             {
@@ -616,7 +609,7 @@ namespace Faithful
             }
         }
 
-        public CharacterBody localPlayerBody
+        public static CharacterBody localPlayerBody
         {
             get
             {
@@ -642,7 +635,7 @@ namespace Faithful
             }
         }
 
-        public List<string> characterCardNames
+        public static List<string> characterCardNames
         {
             get
             {
@@ -702,9 +695,6 @@ namespace Faithful
 
     internal class ItemDisplaySettings
     {
-        // Utils reference
-        private Utils utils;
-
         // Store model and display rules
         private GameObject model;
         private ItemDisplayRuleDict displayRules;
@@ -712,11 +702,8 @@ namespace Faithful
         // List of models with display rules already assigned
         List<string> assignedModels = new List<string>();
 
-        public ItemDisplaySettings(Utils _utils, GameObject _model, ItemDisplayRuleDict _displayRules)
+        public ItemDisplaySettings(GameObject _model, ItemDisplayRuleDict _displayRules)
         {
-            // Assign utils
-            utils = _utils;
-
             // Assign model and display rules
             model = _model;
             displayRules = _displayRules;
@@ -725,7 +712,7 @@ namespace Faithful
         public void AddCharacterDisplay(string _character, string _childName, Vector3 _position, Vector3 _angle, Vector3 _scale)
         {
             // Get character model name
-            string modelName = utils.GetCharacterModelName(_character.ToLower());
+            string modelName = Utils.GetCharacterModelName(_character.ToLower());
 
             // Check for model name
             if (modelName == null)

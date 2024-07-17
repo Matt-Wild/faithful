@@ -77,7 +77,7 @@ namespace Faithful
             toolbox = new Toolbox(this, PInfo);
 
             // Create God Mode if in debug
-            if (toolbox.utils.debugMode)
+            if (Utils.debugMode)
             {
                 godMode = new GodMode(toolbox);
             }

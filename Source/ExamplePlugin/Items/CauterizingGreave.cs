@@ -24,22 +24,22 @@ namespace Faithful
             CreateDisplaySettings("cauterizinggreavedisplaymesh");
 
             // Create Longshot Geode item
-            cauterizingGreaveItem = toolbox.items.AddItem("CAUTERIZING_GREAVE", [ItemTag.Utility], "texcauterizinggreaveicon", "cauterizinggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings);
+            cauterizingGreaveItem = Items.AddItem("CAUTERIZING_GREAVE", [ItemTag.Utility], "texcauterizinggreaveicon", "cauterizinggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings);
 
             // Add stats modification
-            toolbox.behaviour.AddStatsMod(cauterizingGreaveItem, StatsMod);
+            Behaviour.AddStatsMod(cauterizingGreaveItem, StatsMod);
 
             // Add On Heal behaviour
-            toolbox.behaviour.AddOnHealCallback(OnHeal);
+            Behaviour.AddOnHealCallback(OnHeal);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = toolbox.utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
 
             // Check for required asset
-            if (!toolbox.assets.HasAsset(_displayMeshName))
+            if (!Assets.HasAsset(_displayMeshName))
             {
                 return;
             }
