@@ -51,12 +51,12 @@
 	"FAITHFUL_HASTENING_GREAVE_NAME": "Hastening Greave",
 	"FAITHFUL_HASTENING_GREAVE_PICKUP": "Double your attack speed… <color=#FF7F7F>BUT halve your damage.</color>",
 	"FAITHFUL_HASTENING_GREAVE_DESC": "Increase attack speed by <style=cIsDamage>100%</style> <style=cStack>(+100% per stack)</style>. Reduce damage by <style=cIsDamage>50%</style> <style=cStack>(+50% per stack)</style>.",
-	"FAITHFUL_HASTENING_GREAVE_LORE": "<style=cMono>WILL HASTEN YOUR GREAVES</style>\n\nNo refunds.",
+	"FAITHFUL_HASTENING_GREAVE_LORE": "\u201CYour inexperience shows and it slows you down.\nLighten your mind and look inwards.\nYou will find latent skill.\n\nYour weakness is irrelevant. Forge ahead.\u201C\n\n-Bloodied Notes, Page V",
 	
 	"FAITHFUL_CAUTERIZING_GREAVE_NAME": "Cauterizing Greave",
 	"FAITHFUL_CAUTERIZING_GREAVE_PICKUP": "Double your health… <color=#FF7F7F>BUT halve incoming healing.</color>",
 	"FAITHFUL_CAUTERIZING_GREAVE_DESC": "Increase <style=cIsHealing>max health</style> by <style=cIsHealing>100%</style> <style=cStack>(+100% per stack)</style>. Reduce <style=cIsHealing>healing</style> received by <style=cIsHealing>50%</style> <style=cStack>(+50% per stack)</style>.",
-	"FAITHFUL_CAUTERIZING_GREAVE_LORE": "<style=cMono>WILL CAUTERIZE YOUR GREAVES</style>\n\nAlso no refunds.",
+	"FAITHFUL_CAUTERIZING_GREAVE_LORE": "\u201CThe pain of those you have lost holds you down.\nSeal your wounds and move forward.\nYou will find great resilience.\n\nYour blood will flow with new purpose.\u201C\n\n-Bloodied Notes, Page X",
 	
 	"FAITHFUL_NOXIOUS_SLIME_NAME": "Noxious Slimes",
 	"FAITHFUL_NOXIOUS_SLIME_PICKUP": "Debuffs deal double damage.",
