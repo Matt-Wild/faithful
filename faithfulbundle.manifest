@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 333050466
+CRC: 3396439
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4515f480f1758f5fba8e88a7a4a03952
+    Hash: 161735d48eab29fbb8cf0db823cc396e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8cc11e8936bb4493736f09f054c2e68c
@@ -79,6 +79,7 @@ Assets:
 - Assets/Skills/Railgunner/texRailgunnerCoin.png
 - Assets/Items/LongshotGeode/LongshotGeodeMesh.prefab
 - Assets/Items/CauterizingGreave/CauterizingGreaveMesh.prefab
+- Assets/Items/SecondHand/texSecondHandIcon.png
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeRockNormal.png
 - Assets/Items/LeadersPennon/LeadersPennonMesh.prefab
@@ -107,6 +108,7 @@ Assets:
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
 - Assets/Items/HasteningGreave/texHasteningGreave.png
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
+- Assets/UI/texCustomExpansionIcon.png
 - Assets/Items/NoxiousSlimes/NoxiousSlimeDisplayMesh.prefab
 - Assets/Items/CopperGear/texCopperGearIcon.png
 - Assets/Shader/hgstandard.shader
@@ -133,6 +135,7 @@ Assets:
 - Assets/Placeholder/Item/texTemporalCube.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveNormal.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaNormal.png
+- Assets/Items/SecondHand/SecondHandDisplayMesh.prefab
 - Assets/Items/Chakram/texChakramIcon.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrella.png
 - Assets/Items/Chakram/texBuffPrimarySkillChakram.png
@@ -151,11 +154,14 @@ Assets:
 - Assets/Items/Chakram/texChakramNormal.png
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeEmission.png
+- Assets/Items/SecondHand/texSecondHand.png
 - Assets/Items/Chakram/ChakramDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeNormal.png
 - Assets/Placeholder/Item/TemporalCubeMesh.prefab
 - Assets/Items/MeltingWarbler/texMeltingWarbler.png
+- Assets/Items/SecondHand/SecondHandMesh.prefab
 - Assets/Items/BrassScrews/texBuffTeleporterScrew.png
+- Assets/Items/SecondHand/texBuffSecondHand.png
 - Assets/Items/DrownedVisage/DrownedVisageMesh.prefab
 - Assets/Items/CopperGear/texCopperGearNormal.png
 - Assets/Items/CopperGear/CopperGearMesh.prefab
