@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 760394009
+CRC: 2267089834
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0826d780beded76f1a81437595cf689d
+    Hash: a178ba17e61845b43a26644066f18ca4
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8cc11e8936bb4493736f09f054c2e68c
@@ -68,15 +68,14 @@ Assets:
 - Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.prefab
 - Assets/Items/LeadersPennon/texLeadersPennonNormal.png
 - Assets/Items/Chakram/ChakramMesh.prefab
-- Assets/Items/4-T0NJetpack/4T0NJetpackMesh.prefab
 - Assets/Items/NoxiousSlimes/NoxiousSlimeMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlime.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
-- Assets/Items/4-T0NJetpack/tex4T0NJetpackIcon.png
 - Assets/Debug/UI/DebugCanvas.prefab
 - Assets/Items/HasteningGreave/texHasteningGreaveEmission.png
 - Assets/Skills/Railgunner/texRailgunnerCoin.png
+- Assets/Items/4-T0NJetpack/tex4T0NJetpackHolo.png
 - Assets/Items/LongshotGeode/LongshotGeodeMesh.prefab
 - Assets/Items/CauterizingGreave/CauterizingGreaveMesh.prefab
 - Assets/Items/SecondHand/texSecondHandIcon.png
@@ -100,6 +99,7 @@ Assets:
 - Assets/Items/LeadersPennon/texBuffLeaderArea.png
 - Assets/Items/CollectorsVision/texCollectorsVision.png
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystalNormal.png
+- Assets/Items/4-T0NJetpack/tex4T0NJetpackIcon.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeNormal.png
 - Assets/Items/LeadersPennon/texLeadersPennonIcon.png
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
@@ -109,6 +109,7 @@ Assets:
 - Assets/Items/HasteningGreave/texHasteningGreave.png
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
 - Assets/UI/texCustomExpansionIcon.png
+- Assets/Items/4-T0NJetpack/4T0NJetpackMesh.prefab
 - Assets/Items/NoxiousSlimes/NoxiousSlimeDisplayMesh.prefab
 - Assets/Items/CopperGear/texCopperGearIcon.png
 - Assets/Shader/hgstandard.shader
@@ -118,11 +119,8 @@ Assets:
 - Assets/Items/VengefulToaster/texBuffVengefulBoost.png
 - Assets/Status/texBuffDevMode.png
 - Assets/Items/HasteningGreave/HasteningGreaveDisplayMesh.prefab
-- Assets/Items/4-T0NJetpack/4T0NJetpackDisplayMesh.prefab
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
 - Assets/Items/LeadersPennon/texLeadersPennon.png
-- Assets/Items/4-T0NJetpack/tex4T0NJetpackFlare.png
-- Assets/Items/4-T0NJetpack/4T0NJetpackMageDisplayMesh.prefab
 - Assets/Items/DrownedVisage/DrownedVisageDisplayMesh.prefab
 - Assets/Items/CauterizingGreave/texCauterizingGreaveEmission.png
 - Assets/Items/BrassScrews/texBrassScrews.png
@@ -141,16 +139,18 @@ Assets:
 - Assets/Items/Chakram/texBuffPrimarySkillChakram.png
 - Assets/Items/Chakram/ChakramProjectileMesh.prefab
 - Assets/Items/HasteningGreave/texHasteningGreaveNormal.png
-- Assets/Items/4-T0NJetpack/tex4T0NJetpackEmissionLight.png
+- Assets/Items/4-T0NJetpack/tex4T0NJetpackEmission.png
 - Assets/Items/CopperGear/texCopperGear.png
 - Assets/Items/CollectorsVision/texBuffInspiredBoost.png
 - Assets/Items/VengefulToaster/texVengefulToasterIcon.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaIcon.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerIcon.png
-- Assets/Items/4-T0NJetpack/tex4T0NJetpack.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveIcon.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.prefab
+- Assets/Items/4-T0NJetpack/tex4T0NJetpackHoloEmission.png
 - Assets/Items/CollectorsVision/CollectorsVisionDisplayMesh.prefab
+- Assets/Items/4-T0NJetpack/tex4T0NJetpack.png
+- Assets/Items/4-T0NJetpack/4T0NJetpackDisplayMesh.prefab
 - Assets/Items/Chakram/texChakramNormal.png
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeEmission.png
