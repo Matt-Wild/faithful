@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 using UnityEngine;
 using System.Linq;
+using System.Collections;
 
 namespace Faithful
 {
@@ -125,12 +126,13 @@ namespace Faithful
             On.RoR2.Stage.Start += OnStageStart;
         }
 
-        void OnStageStart(On.RoR2.Stage.orig_Start orig, Stage self)
+        IEnumerator OnStageStart(On.RoR2.Stage.orig_Start orig, Stage self)
         {
-            orig(self); // Run normal processes
 
             // Create UI
             CreateUI();
+
+            return orig(self); // Run normal processes
         }
 
         void CreateUI()

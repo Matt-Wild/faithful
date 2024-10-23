@@ -677,7 +677,7 @@ namespace Faithful
             string localCorruptedToken = corruptedToken;
 
             // Get item to corrupt
-            ItemDef corrupted = ItemCatalog.itemDefs.Where(x => x.nameToken == localCorruptedToken).FirstOrDefault();
+            ItemDef corrupted = ItemCatalog.allItemDefs.Where(x => x.nameToken == localCorruptedToken).FirstOrDefault();
 
             // Found item?
             if (!corrupted)

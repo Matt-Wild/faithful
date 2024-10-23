@@ -98,7 +98,7 @@ namespace Faithful
         public static void Init()
         {
             // Inject hooks
-            On.RoR2.HoldoutZoneController.FixedUpdate += HookHoldoutZoneControllerFixedUpdate;
+            On.RoR2.HoldoutZoneController.Update += HookHoldoutZoneControllerUpdate;
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
             On.RoR2.CharacterBody.Awake += HookCharacterBodyAwake;
             On.RoR2.CharacterBody.Start += HookCharacterBodyStart;
@@ -497,7 +497,7 @@ namespace Faithful
             }
         }
 
-        private static void HookHoldoutZoneControllerFixedUpdate(On.RoR2.HoldoutZoneController.orig_FixedUpdate orig, HoldoutZoneController self)
+        private static void HookHoldoutZoneControllerUpdate(On.RoR2.HoldoutZoneController.orig_Update orig, HoldoutZoneController self)
         {
             // Get Hurt Boxes in range of Holdout Zone
             HurtBox[] hurtBoxes = Utils.GetHurtBoxesInSphere(self.transform.position, self.currentRadius);
