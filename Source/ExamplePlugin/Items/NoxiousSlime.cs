@@ -56,6 +56,9 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Railgunner", "Pelvis", new Vector3(0.165F, 0.066F, 0.005F), new Vector3(20.5F, 80F, 197.25F), new Vector3(0.07F, 0.07F, 0.07F));
             displaySettings.AddCharacterDisplay("Void Fiend", "Pelvis", new Vector3(0.05275F, 0.045F, 0.1725F), new Vector3(353.5F, 19.8F, 186.25F), new Vector3(0.09F, 0.09F, 0.09F));
             displaySettings.AddCharacterDisplay("Scavenger", "Backpack", new Vector3(-4.0285F, 13.375F, 0.00053F), new Vector3(359.2F, 359.85F, 10.175F), new Vector3(1F, 1F, 1F));
+            displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(-0.096F, -0.17875F, 0.1775F), new Vector3(316F, 305F, 160F), new Vector3(0.05F, 0.05F, 0.05F));
+            displaySettings.AddCharacterDisplay("False Son", "Pelvis", new Vector3(0.0146F, 0.3535F, -0.03525F), new Vector3(10F, 275F, 95F), new Vector3(0.05F, 0.05F, 0.05F));
+            displaySettings.AddCharacterDisplay("Chef", "Pelvis", new Vector3(5.19109F, 2.45005F, -2.17756F), new Vector3(342.2899F, 335.8934F, 339.8638F), new Vector3(1F, 1F, 1F));
         }
 
         void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo)

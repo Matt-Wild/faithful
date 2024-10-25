@@ -12,9 +12,6 @@ namespace Faithful
         // Store reference to Artificer jetpack (OFTEN NULL)
         protected GameObject artificerJetpack;
 
-        // Store whether Artificer jetpack should normally be active
-        protected bool artificerJetpackDefaultState = false;
-
         // Store if active
         protected bool active = false;
 
@@ -90,10 +87,11 @@ namespace Faithful
             fuelUsed = 0.0f;
 
             // Inject hooks
-            On.EntityStates.GenericCharacterMain.FixedUpdate += OnFixedUpdate;
-            On.EntityStates.Mage.JetpackOn.OnEnter += OnArtificerJetpackOnEnter;
-            On.EntityStates.Mage.JetpackOn.OnExit += OnArtificerJetpackOnExit;
+            On.EntityStates.GenericCharacterMain.ProcessJump += OnProcessJump;
+            //On.EntityStates.Mage.JetpackOn.OnEnter += OnArtificerJetpackOnEnter;
+            //On.EntityStates.Mage.JetpackOn.OnExit += OnArtificerJetpackOnExit;
             On.EntityStates.Mage.JetpackOn.FixedUpdate += OnArtificerJetpackFixedUpdate;
+            On.EntityStates.Mage.MageCharacterMain.ProcessJump += OnArtificerProcessJump;
         }
 
         protected void Deactivate()
@@ -108,22 +106,74 @@ namespace Faithful
             active = false;
 
             // Remove hooks
-            On.EntityStates.GenericCharacterMain.FixedUpdate -= OnFixedUpdate;
-            On.EntityStates.Mage.JetpackOn.OnEnter -= OnArtificerJetpackOnEnter;
-            On.EntityStates.Mage.JetpackOn.OnExit -= OnArtificerJetpackOnExit;
+            On.EntityStates.GenericCharacterMain.ProcessJump -= OnProcessJump;
+            //On.EntityStates.Mage.JetpackOn.OnEnter -= OnArtificerJetpackOnEnter;
+            //On.EntityStates.Mage.JetpackOn.OnExit -= OnArtificerJetpackOnExit;
             On.EntityStates.Mage.JetpackOn.FixedUpdate -= OnArtificerJetpackFixedUpdate;
+            On.EntityStates.Mage.MageCharacterMain.ProcessJump -= OnArtificerProcessJump;
         }
 
-        protected void OnFixedUpdate(On.EntityStates.GenericCharacterMain.orig_FixedUpdate orig, GenericCharacterMain self)
+        protected void OnArtificerProcessJump(On.EntityStates.Mage.MageCharacterMain.orig_ProcessJump orig, EntityStates.Mage.MageCharacterMain self)
         {
-            orig(self); // Run normal processes first
+            // Check if Artificer is this character
+            if (self == null || self.characterBody != character)
+            {
+                orig(self); // Run normal processes
+                return;
+            }
 
+            // Get if jetpack state is currently on
+            bool jetOn = self.jetpackStateMachine.state.GetType() == typeof(EntityStates.Mage.JetpackOn);
+
+            // Check if TJetpack behaviour should be run
+            if (self.hasCharacterMotor && self.hasInputBank && self.isAuthority && (jetActivated || (character.inputBank.jump.down && canBeActivated)))
+            {
+                // Do jetpack behaviour
+                JetpackBehaviour(self);
+
+                // Is jetpack state currently on but needs to be turned off?
+                if (jetOn && !jetActivated)
+                {
+                    // Deactivate jetpack state
+                    self.jetpackStateMachine.SetNextState(new Idle());
+                }
+
+                // Is jetpack state currently off but needs to be turned on?
+                else if (!jetOn && jetActivated)
+                {
+                    // Activate jetpack state
+                    self.jetpackStateMachine.SetNextState(new EntityStates.Mage.JetpackOn());
+                }
+            }
+            else
+            {
+                orig(self); // Run normal processes
+            }
+        }
+
+        protected void OnProcessJump(On.EntityStates.GenericCharacterMain.orig_ProcessJump orig, GenericCharacterMain self)
+        {
             // Check if valid and correct character
             if (self == null || self.characterBody != character || !self.hasCharacterMotor || !self.hasInputBank || !self.isAuthority)
+            {
+                orig(self); // Otherwise run normal processes
+                return;
+            }
+
+            // Do jetpack behaviour
+            JetpackBehaviour(self);
+
+            // Check if not to run normal processes
+            if (jetActivated || (character.inputBank.jump.down && canBeActivated))
             {
                 return;
             }
 
+            orig(self); // Otherwise run normal processes
+        }
+
+        protected void JetpackBehaviour(GenericCharacterMain self)
+        {
             // Check if game is paused
             if (Time.timeScale == 0.0f)
             {
@@ -159,9 +209,6 @@ namespace Faithful
                 return;
             }
 
-            // Update Artificer jetpack default state
-            artificerJetpackDefaultState = true;
-
             // Attempt to get Jet On effect
             Transform jetOnEffect = self.FindModelChild("JetOn");
 
@@ -185,9 +232,6 @@ namespace Faithful
                 return;
             }
 
-            // Update Artificer jetpack default state
-            artificerJetpackDefaultState = false;
-
             // Check for jetpack object
             if (artificerJetpack)
             {
@@ -209,8 +253,8 @@ namespace Faithful
                 return;
             }
 
-            // Check if should prioritise jetpack
-            if (fuelRemaining > minimumFuelToActivate || jetActivated)
+            // Check if doing TJetpack behaviour
+            if (jetActivated)
             {
                 // Skip Artificer jetpack behaviour to prioritise 4-T0N Jetpack
                 return;
@@ -247,7 +291,7 @@ namespace Faithful
             }
             
             // Check if should activate jetpack
-            if (character.inputBank.jump.down && character.characterMotor.velocity.y < 0.0f && fuelRemaining > minimumFuelToActivate)
+            if (character.inputBank.jump.down && canBeActivated)
             {
                 // Activate jetpack
                 ActivateJet();
@@ -259,8 +303,8 @@ namespace Faithful
 
         protected void Refuel()
         {
-            // Do not attempt to refuel if currently jetting
-            if (jetActivated)
+            // Do not attempt to refuel if currently jetting or not grounded
+            if (jetActivated || !grounded)
             {
                 // Ensure not refueling
                 refueling = false;
@@ -268,7 +312,7 @@ namespace Faithful
             }
 
             // Skip if no fuel used or artificer hover is active
-            if (fuelUsed == 0.0f || artificerJetpackDefaultState)
+            if (fuelUsed == 0.0f)
             {
                 return;
             }
@@ -317,13 +361,6 @@ namespace Faithful
         {
             // Deactivate jetpack
             jetActivated = false;
-
-            // Check if Artificer jetpack is linked and would normally be non-active
-            if (artificerJetpack != null && !artificerJetpackDefaultState)
-            {
-                // Disable Artificer jetpack effect
-                artificerJetpack.SetActive(false);
-            }
         }
 
         protected void Jet()
@@ -427,6 +464,15 @@ namespace Faithful
             get
             {
                 return fallingAcceleration - risingAcceleration;
+            }
+        }
+
+        protected bool canBeActivated
+        {
+            get
+            {
+                // Return if the jetpack can be activated
+                return character.characterMotor.velocity.y < 0.0f && fuelRemaining > minimumFuelToActivate;
             }
         }
     }

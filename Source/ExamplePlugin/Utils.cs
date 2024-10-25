@@ -48,7 +48,10 @@ namespace Faithful
             { "captain", "mdlCaptain" },
             { "railgunner", "mdlRailGunner" },
             { "void fiend", "mdlVoidSurvivor" },
-            { "scavenger", "mdlScav" }
+            { "scavenger", "mdlScav" },
+            { "seeker", "mdlSeeker" },
+            { "false son", "mdlFalseSon" },
+            { "chef", "mdlChef" }
         };
 
         // HG shader
