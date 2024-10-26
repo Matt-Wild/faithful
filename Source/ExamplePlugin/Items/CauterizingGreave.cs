@@ -60,9 +60,9 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Railgunner", "CalfR", new Vector3(0F, 0.325F, 0.00825F), new Vector3(0F, 280F, 180F), new Vector3(0.195F, 0.15F, 0.195F));
             displaySettings.AddCharacterDisplay("Void Fiend", "CalfR", new Vector3(0.00335F, 0.378F, 0F), new Vector3(5F, 260F, 176.5F), new Vector3(0.13F, 0.125F, 0.14F));
             displaySettings.AddCharacterDisplay("Scavenger", "CalfR", new Vector3(0.025F, 1.55F, -0.16F), new Vector3(8.5F, 180F, 180F), new Vector3(1.7F, 0.75F, 1.7F));
-            displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(-0.096F, -0.17875F, 0.1775F), new Vector3(316F, 305F, 160F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("False Son", "Pelvis", new Vector3(0.0146F, 0.3535F, -0.03525F), new Vector3(10F, 275F, 95F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Chef", "Pelvis", new Vector3(5.19109F, 2.45005F, -2.17756F), new Vector3(342.2899F, 335.8934F, 339.8638F), new Vector3(1F, 1F, 1F));
+            displaySettings.AddCharacterDisplay("Seeker", "CalfL", new Vector3(-0.00875F, 0.3325F, -0.01375F), new Vector3(348.5723F, 270.4153F, 357.9048F), new Vector3(0.175F, 0.15F, 0.175F));
+            displaySettings.AddCharacterDisplay("False Son", "CalfL", new Vector3(-0.0315F, 0.31835F, -0.0125F), new Vector3(12.5F, 90F, 0F), new Vector3(0.275F, 0.2F, 0.275F));
+            displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.1925F, 0F, 0.54F), new Vector3(0F, 0F, 90F), new Vector3(0.1F, 0.075F, 0.1F));
         }
 
         void StatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)

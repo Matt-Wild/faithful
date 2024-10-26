@@ -55,9 +55,9 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Captain", "ThighR", new Vector3(-0.12F, 0.3225F, 0.0375F), new Vector3(7.5F, 110F, 175F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(0.0375F, 0.00325F, -0.14F), new Vector3(359.5F, 180F, 11.35F), new Vector3(0.35F, 0.35F, 0.35F));
             displaySettings.AddCharacterDisplay("Void Fiend", "ForeArmL", new Vector3(0.0825F, 0.05F, 0.0175F), new Vector3(0F, 0F, 200F), new Vector3(0.25F, 0.25F, 0.25F));
-            displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(-0.096F, -0.17875F, 0.1775F), new Vector3(316F, 305F, 160F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("False Son", "Pelvis", new Vector3(0.0146F, 0.3535F, -0.03525F), new Vector3(10F, 275F, 95F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Chef", "Pelvis", new Vector3(5.19109F, 2.45005F, -2.17756F), new Vector3(342.2899F, 335.8934F, 339.8638F), new Vector3(1F, 1F, 1F));
+            displaySettings.AddCharacterDisplay("Seeker", "Pack", new Vector3(-0.248F, 0.162F, -0.2245F), new Vector3(342.5F, 16F, 60F), new Vector3(0.3F, 0.3F, 0.3F));
+            displaySettings.AddCharacterDisplay("False Son", "LowerArmR", new Vector3(-0.05125F, 0.3195F, 0.1375F), new Vector3(3.5F, 180.5F, 188.5F), new Vector3(0.25F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(0.0355F, 0.22875F, 0.11475F), new Vector3(0F, 270F, 315F), new Vector3(0.35F, 0.35F, 0.35F));
         }
 
         void OnHoldoutZoneCalcRadius(ref float _radius, HoldoutZoneController _zone)

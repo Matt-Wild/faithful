@@ -56,9 +56,9 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Captain", "ThighR", new Vector3(-0.135F, 0.35F, 0.0564F), new Vector3(2.5F, 293.7499F, 187.5F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(-0.091F, -0.1825F, -0.165F), new Vector3(355F, 180F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
             displaySettings.AddCharacterDisplay("Void Fiend", "ForeArmL", new Vector3(0.11F, 0.1325F, 0.0155F), new Vector3(320F, 90F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(-0.096F, -0.17875F, 0.1775F), new Vector3(316F, 305F, 160F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("False Son", "Pelvis", new Vector3(0.0146F, 0.3535F, -0.03525F), new Vector3(10F, 275F, 95F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Chef", "Pelvis", new Vector3(5.19109F, 2.45005F, -2.17756F), new Vector3(342.2899F, 335.8934F, 339.8638F), new Vector3(1F, 1F, 1F));
+            displaySettings.AddCharacterDisplay("Seeker", "Pack", new Vector3(-0.2475F, 0.1875F, -0.24F), new Vector3(330F, 275F, 35F), new Vector3(0.05F, 0.05F, 0.05F));
+            displaySettings.AddCharacterDisplay("False Son", "LowerArmR", new Vector3(-0.056F, 0.21F, 0.1325F), new Vector3(3.5F, 348.25F, 180F), new Vector3(0.075F, 0.075F, 0.075F));
+            displaySettings.AddCharacterDisplay("Chef", "OvenDoor", new Vector3(-0.51325F, -0.025F, 0.145F), new Vector3(0F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
         }
 
         void OnCharacterDeath(DamageReport _report)

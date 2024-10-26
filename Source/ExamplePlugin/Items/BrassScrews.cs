@@ -63,9 +63,9 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Railgunner", "GunScope", new Vector3(-0.096F, -0.17875F, 0.1775F), new Vector3(316F, 305F, 160F), new Vector3(0.05F, 0.05F, 0.05F));
             displaySettings.AddCharacterDisplay("Void Fiend", "CalfL", new Vector3(0.0146F, 0.3535F, -0.03525F), new Vector3(10F, 275F, 95F), new Vector3(0.05F, 0.05F, 0.05F));
             displaySettings.AddCharacterDisplay("Scavenger", "Head", new Vector3(5.19109F, 2.45005F, -2.17756F), new Vector3(342.2899F, 335.8934F, 339.8638F), new Vector3(1F, 1F, 1F));
-            displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(-0.096F, -0.17875F, 0.1775F), new Vector3(316F, 305F, 160F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("False Son", "Pelvis", new Vector3(0.0146F, 0.3535F, -0.03525F), new Vector3(10F, 275F, 95F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Chef", "Pelvis", new Vector3(5.19109F, 2.45005F, -2.17756F), new Vector3(342.2899F, 335.8934F, 339.8638F), new Vector3(1F, 1F, 1F));
+            displaySettings.AddCharacterDisplay("Seeker", "Chest", new Vector3(-0.03825F, 0.3525F, -0.0625F), new Vector3(5.5F, 196.5F, 250F), new Vector3(0.05F, 0.05F, 0.05F));
+            displaySettings.AddCharacterDisplay("False Son", "LowerArmL", new Vector3(-0.1165F, 0.3125F, -0.052F), new Vector3(340F, 0.5F, 70F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("Chef", "OvenDoor", new Vector3(-0.04625F, 0.10875F, 0.03775F), new Vector3(65F, 190F, 150F), new Vector3(0.075F, 0.075F, 0.075F));
         }
 
         void BrassScrewsStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)

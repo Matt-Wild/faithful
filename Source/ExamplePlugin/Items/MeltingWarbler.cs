@@ -57,9 +57,9 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Railgunner", "GunStock", new Vector3(-0.001F, -0.015F, 0.09F), new Vector3(85.00005F, 180F, 180F), new Vector3(0.06F, 0.06F, 0.06F));
             displaySettings.AddCharacterDisplay("Void Fiend", "Head", new Vector3(0F, 0.25F, -0.065F), new Vector3(345F, 0F, 0F), new Vector3(0.11F, 0.11F, 0.11F));
             displaySettings.AddCharacterDisplay("Scavenger", "Chest", new Vector3(0F, 7.25F, 1.4F), new Vector3(350F, 180F, 0F), new Vector3(2.4F, 2.4F, 2.4F));
-            displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(-0.096F, -0.17875F, 0.1775F), new Vector3(316F, 305F, 160F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("False Son", "Pelvis", new Vector3(0.0146F, 0.3535F, -0.03525F), new Vector3(10F, 275F, 95F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Chef", "Pelvis", new Vector3(5.19109F, 2.45005F, -2.17756F), new Vector3(342.2899F, 335.8934F, 339.8638F), new Vector3(1F, 1F, 1F));
+            displaySettings.AddCharacterDisplay("Seeker", "Head", new Vector3(0F, 0.30125F, 0.011F), new Vector3(30F, 0F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("False Son", "Head", new Vector3(-0.3925F, 0.45F, -0.0675F), new Vector3(1.25F, 262.25F, 0.5F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.8325F, -0.2225F, 0.20175F), new Vector3(35F, 40F, 135F), new Vector3(0.15F, 0.15F, 0.15F));
         }
 
         void MeltingWarblerStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
