@@ -9,9 +9,6 @@ namespace Faithful
         // Store reference to Character Body and Character Inventory
         public CharacterBody character;
 
-        // Store reference to Artificer jetpack (OFTEN NULL)
-        protected GameObject artificerJetpack;
-
         // Store if active
         protected bool active = false;
 
@@ -30,8 +27,8 @@ namespace Faithful
         protected float maxVelocity = 30.0f;
         protected float risingAcceleration = 36.0f;
         protected float fallingAcceleration = 100.0f;
-        protected float baseFuel = 2.0f;
-        protected float fuelPerStack = 1.0f;
+        protected float baseFuel = 4.0f;
+        protected float fuelPerStack = 2.0f;
         protected float baseRefuelDuration = 12.0f;
         protected float refuelWaitRatio = 0.4f;
         protected float minimumFuelToActivate = 0.5f;
@@ -44,10 +41,56 @@ namespace Faithful
         protected float fuelUsed = 0.0f;
         protected float lastJetTime;
 
+        // Store if this jetpack belongs to Artificer
+        protected bool artificer = false;
+
+        // Store reference to 4-T0N Jetpack game objects
+        protected GameObject jetpack;
+        protected GameObject additionalBoosters;
+        protected GameObject dial;
+        protected GameObject jetMiddle;
+        protected GameObject jetLeft;
+        protected GameObject jetRight;
+
+        // Store if this jetpack has initialised
+        protected bool initialised = false;
+
         public FaithfulTJetpackBehaviour(CharacterBody _character)
         {
             // Assign character
             character = _character;
+        }
+
+        protected void Init(CharacterBody _characterBody)
+        {
+            // Check if already initialised
+            if (initialised && jetpack != null) return;
+
+            // Set as initialised
+            initialised = true;
+
+            // Get character model
+            Transform characterModel = _characterBody.modelLocator.modelTransform;
+
+            // Get jetpack game object
+            jetpack = Utils.FindChildByName(characterModel, "4T0NJetpackDisplayMesh(Clone)");
+
+            // Fetch the additional boosters and dial game objects
+            additionalBoosters = Utils.FindChildByName(jetpack.transform, "Pack");
+            dial = Utils.FindChildByName(jetpack.transform, "Dial");
+            jetMiddle = Utils.FindChildByName(jetpack.transform, "Jet_Middle");
+            jetLeft = Utils.FindChildByName(jetpack.transform, "Jet_Left");
+            jetRight = Utils.FindChildByName(jetpack.transform, "Jet_Right");
+
+            // Check if Artificer
+            if (characterModel.name == "mdlMage")
+            {
+                // Jetpack belongs to Artificer
+                artificer = true;
+
+                // Disable additional boosters
+                additionalBoosters.transform.localScale = Vector3.zero;
+            }
         }
 
         public void UpdateItemCount(int _itemCount)
@@ -160,6 +203,9 @@ namespace Faithful
                 return;
             }
 
+            // Ensure jetpack is initialised
+            Init(self.characterBody);
+
             // Do jetpack behaviour
             JetpackBehaviour(self);
 
@@ -198,9 +244,12 @@ namespace Faithful
 
             // Run refuel behaviour
             Refuel();
+
+            // Update dial rotation
+            dial.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 360.0f * fuelRemainingPerc);
         }
 
-        protected void OnArtificerJetpackOnEnter(On.EntityStates.Mage.JetpackOn.orig_OnEnter orig, EntityStates.Mage.JetpackOn self)
+        /*protected void OnArtificerJetpackOnEnter(On.EntityStates.Mage.JetpackOn.orig_OnEnter orig, EntityStates.Mage.JetpackOn self)
         {
             // Check if Artificer is this character
             if (self == null || self.characterBody != character)
@@ -242,7 +291,7 @@ namespace Faithful
                     artificerJetpack.SetActive(false);
                 }
             }
-        }
+        }*/
 
         protected void OnArtificerJetpackFixedUpdate(On.EntityStates.Mage.JetpackOn.orig_FixedUpdate orig, EntityStates.Mage.JetpackOn self)
         {
@@ -350,17 +399,33 @@ namespace Faithful
 
         protected void ActivateJet()
         {
+            // Skip if jet is already active
+            if (jetActivated) return;
+
             // Activate jetpack
             jetActivated = true;
 
             // Indicate that jet is recently activated
             firstJet = true;
+
+            // Update visuals
+            jetMiddle.transform.localScale = new Vector3(1.0f, 2.0f, 1.0f);
+            jetLeft.transform.localScale = new Vector3(1.0f, 2.0f, 1.0f);
+            jetRight.transform.localScale = new Vector3(1.0f, 2.0f, 1.0f);
         }
 
         protected void DeactivateJet()
         {
+            // Skip if jet is already inactive
+            if (!jetActivated) return;
+
             // Deactivate jetpack
             jetActivated = false;
+
+            // Update visuals
+            jetMiddle.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            jetLeft.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            jetRight.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         }
 
         protected void Jet()
@@ -411,6 +476,15 @@ namespace Faithful
             {
                 // Calculate fuel remaining based on fuel capacity and fuel used
                 return fuelCapacity - fuelUsed;
+            }
+        }
+
+        protected float fuelRemainingPerc
+        {
+            get
+            {
+                // Calculate remaining fuel percentage
+                return 1.0f - fuelUsed / fuelCapacity;
             }
         }
 

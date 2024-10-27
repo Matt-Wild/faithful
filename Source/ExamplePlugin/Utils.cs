@@ -398,6 +398,32 @@ namespace Faithful
             }
         }
 
+        public static GameObject FindChildByName(Transform _parent, string _childName)
+        {
+            // Cycle through children
+            foreach (Transform child in _parent)
+            {
+                // Check child name
+                if (child.name == _childName)
+                {
+                    // Correct child found
+                    return child.gameObject;
+                }
+
+                // Recursively search in the child's children
+                GameObject foundChild = FindChildByName(child, _childName);
+
+                // Check that is not null
+                if (foundChild != null)
+                {
+                    // Return correct child
+                    return foundChild;
+                }
+            }
+
+            return null; // Return null if not found
+        }
+
         public static bool HasCharacterSpawnCard(string _name)
         {
             // Check for character spawn card
@@ -584,6 +610,35 @@ namespace Faithful
 
             // Return null if not found
             return null;
+        }
+
+        public static string GetChildTree(Transform target, int indentation = 0)
+        {
+            // Initialise child tree string
+            string childTree = "";
+
+            // Get next indentation
+            int nextIndentation = indentation + 1;
+
+            // Cycle for indentation
+            for (int i = 0; i < indentation; i++)
+            {
+                // Add indentation
+                childTree += "    ";
+            }
+
+            // Add target to child tree string
+            childTree += $"- {target.name}";
+
+            // Cycle through children
+            foreach (Transform child in target)
+            {
+                // Add child's child tree to this child tree string
+                childTree += $"\n{GetChildTree(child, nextIndentation)}";
+            }
+
+            // Return child tree string
+            return childTree;
         }
 
         public static bool debugMode
