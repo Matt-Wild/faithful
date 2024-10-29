@@ -131,6 +131,7 @@ namespace Faithful
 
             // Inject hooks
             On.EntityStates.GenericCharacterMain.ProcessJump += OnProcessJump;
+            On.EntityStates.GenericCharacterMain.FixedUpdate += OnFixedUpdate;
             //On.EntityStates.Mage.JetpackOn.OnEnter += OnArtificerJetpackOnEnter;
             //On.EntityStates.Mage.JetpackOn.OnExit += OnArtificerJetpackOnExit;
             On.EntityStates.Mage.JetpackOn.FixedUpdate += OnArtificerJetpackFixedUpdate;
@@ -150,10 +151,29 @@ namespace Faithful
 
             // Remove hooks
             On.EntityStates.GenericCharacterMain.ProcessJump -= OnProcessJump;
+            On.EntityStates.GenericCharacterMain.FixedUpdate -= OnFixedUpdate;
             //On.EntityStates.Mage.JetpackOn.OnEnter -= OnArtificerJetpackOnEnter;
             //On.EntityStates.Mage.JetpackOn.OnExit -= OnArtificerJetpackOnExit;
             On.EntityStates.Mage.JetpackOn.FixedUpdate -= OnArtificerJetpackFixedUpdate;
             On.EntityStates.Mage.MageCharacterMain.ProcessJump -= OnArtificerProcessJump;
+        }
+
+        protected void OnFixedUpdate(On.EntityStates.GenericCharacterMain.orig_FixedUpdate orig, GenericCharacterMain self)
+        {
+            // Check if valid and correct character
+            if (self == null || self.characterBody != character)
+            {
+                orig(self); // Otherwise run normal processes
+                return;
+            }
+
+            // Ensure jetpack is initialised
+            Init(self.characterBody);
+
+            // Update visuals
+            UpdateVisuals();
+
+            orig(self); // Run normal processes
         }
 
         protected void OnArtificerProcessJump(On.EntityStates.Mage.MageCharacterMain.orig_ProcessJump orig, EntityStates.Mage.MageCharacterMain self)
@@ -203,9 +223,6 @@ namespace Faithful
                 return;
             }
 
-            // Ensure jetpack is initialised
-            Init(self.characterBody);
-
             // Do jetpack behaviour
             JetpackBehaviour(self);
 
@@ -244,9 +261,20 @@ namespace Faithful
 
             // Run refuel behaviour
             Refuel();
+        }
 
+        protected void UpdateVisuals()
+        {
             // Update dial rotation
             dial.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 360.0f * fuelRemainingPerc);
+
+            // Get new jet visuals scale
+            Vector3 newJetScale = jetActivated ? new Vector3(1.0f, 2.0f, 1.0f) : new Vector3(1.0f, 1.0f, 1.0f);
+
+            // Update jet visuals
+            jetMiddle.transform.localScale = newJetScale;
+            jetLeft.transform.localScale = newJetScale;
+            jetRight.transform.localScale = newJetScale;
         }
 
         /*protected void OnArtificerJetpackOnEnter(On.EntityStates.Mage.JetpackOn.orig_OnEnter orig, EntityStates.Mage.JetpackOn self)
@@ -407,11 +435,6 @@ namespace Faithful
 
             // Indicate that jet is recently activated
             firstJet = true;
-
-            // Update visuals
-            jetMiddle.transform.localScale = new Vector3(1.0f, 2.0f, 1.0f);
-            jetLeft.transform.localScale = new Vector3(1.0f, 2.0f, 1.0f);
-            jetRight.transform.localScale = new Vector3(1.0f, 2.0f, 1.0f);
         }
 
         protected void DeactivateJet()
@@ -421,11 +444,6 @@ namespace Faithful
 
             // Deactivate jetpack
             jetActivated = false;
-
-            // Update visuals
-            jetMiddle.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            jetLeft.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            jetRight.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         }
 
         protected void Jet()
