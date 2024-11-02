@@ -74,7 +74,7 @@ namespace Faithful
             }
 
             // Attempt to get Faithful behaviour
-            FaithfulCharacterBodyBehaviour helper = body.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
+            FaithfulCharacterBodyBehaviour helper = Utils.FindCharacterBodyHelper(body);
             if (helper == null)
             {
                 return;
@@ -102,7 +102,7 @@ namespace Faithful
             if (count > 0)
             {
                 // Attempt to get Faithful behaviour
-                FaithfulCharacterBodyBehaviour helper = _character.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
+                FaithfulCharacterBodyBehaviour helper = _character.gameObject.transform.Find("Faithful Helper").GetComponent<FaithfulCharacterBodyBehaviour>();
                 if (helper == null)
                 {
                     return;

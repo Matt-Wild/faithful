@@ -84,7 +84,7 @@ namespace Faithful
             }
 
             // Attempt to get Faithful behaviour
-            FaithfulCharacterBodyBehaviour helper = body.gameObject.GetComponent<FaithfulCharacterBodyBehaviour>();
+            FaithfulCharacterBodyBehaviour helper = Utils.FindCharacterBodyHelper(body);
             if (helper == null)
             {
                 return;

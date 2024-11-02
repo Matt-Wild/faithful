@@ -54,6 +54,9 @@ namespace Faithful
             { "chef", "mdlChef" }
         };
 
+        // Store list of character bodies and corresponding faithful character behaviours
+        static private Dictionary<CharacterBody, FaithfulCharacterBodyBehaviour> characterBodyLookup = new Dictionary<CharacterBody, FaithfulCharacterBodyBehaviour>();
+
         // HG shader
         static private Shader HGShader;
 
@@ -104,6 +107,12 @@ namespace Faithful
         {
             // Add item def to banned list for Simulacrum
             simulacrumBanned.Add(_item);
+        }
+
+        public static void RegisterFaithfulCharacterBodyBehaviour(CharacterBody _characterBody, FaithfulCharacterBodyBehaviour _faithfulBehaviour)
+        {
+            // Add to dictionary
+            characterBodyLookup[_characterBody] = _faithfulBehaviour;
         }
 
         public static void AddCorruptionPair(ItemDef _corrupter, string _corruptedToken)
@@ -424,6 +433,26 @@ namespace Faithful
             return null; // Return null if not found
         }
 
+        public static FaithfulCharacterBodyBehaviour FindCharacterBodyHelper(CharacterBody _characterBody)
+        {
+            // Check for character body in character body lookup
+            if (characterBodyLookup.ContainsKey(_characterBody))
+            {
+                // Return corresponding faithful behaviour
+                return characterBodyLookup[_characterBody];
+            }
+
+            // Check if debug mode
+            if (debugMode)
+            {
+                // Warn and return null
+                Log.Warning($"[UTILS] - Could not find faithful character body behaviour for character '{_characterBody.name}' with net ID {_characterBody.GetComponent<NetworkIdentity>().netId}.");
+            }
+
+            // Return null
+            return null;
+        }
+
         public static bool HasCharacterSpawnCard(string _name)
         {
             // Check for character spawn card
@@ -625,6 +654,13 @@ namespace Faithful
             {
                 // Add indentation
                 childTree += "    ";
+            }
+
+            // Get for null transform
+            if (target == null)
+            {
+                // Return null tree string
+                return childTree + "- NULL";
             }
 
             // Add target to child tree string

@@ -2,6 +2,7 @@
 using R2API;
 using RoR2;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
@@ -40,6 +41,9 @@ namespace Faithful
 
     internal static class Behaviour
     {
+        // Store character body helper prefab
+        internal static GameObject characterBodyHelperPrefab;
+
         // Update callbacks
         private static List<Callback> updateCallbacks = new List<Callback>();
         private static List<Callback> debugUpdateCallbacks = new List<Callback>();
@@ -97,6 +101,9 @@ namespace Faithful
 
         public static void Init()
         {
+            // Create prefabs
+            CreatePrefabs();
+
             // Inject hooks
             On.RoR2.HoldoutZoneController.Update += HookHoldoutZoneControllerUpdate;
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
@@ -120,6 +127,24 @@ namespace Faithful
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
 
             DebugLog("Behaviour initialised");
+        }
+
+        private static void CreatePrefabs()
+        {
+            // We create an empty gameobject to hold all the networked components
+            var tempGO = new GameObject("temp GO");
+
+            // Add the NetworkIdentity so that Unity knows which Object it's going to be networking all about
+            tempGO.AddComponent<NetworkIdentity>();
+
+            // Use InstantiateClone from the PrefabAPI to make sure we have full control over the GameObject
+            characterBodyHelperPrefab = tempGO.InstantiateClone("faithfulCharacterBodyHelper");
+
+            // Delete the now useless temporary GameObject
+            Object.Destroy(tempGO);
+
+            // Add a specific components (which can be networked)
+            characterBodyHelperPrefab.AddComponent<FaithfulCharacterBodyBehaviour>();
         }
 
         public static void Update()
@@ -533,9 +558,6 @@ namespace Faithful
 
         private static void HookCharacterBodyAwake(On.RoR2.CharacterBody.orig_Awake orig, CharacterBody self)
         {
-            // Add custom character body behaviour
-            FaithfulCharacterBodyBehaviour component = self.gameObject.AddComponent<FaithfulCharacterBodyBehaviour>();
-
             orig(self); // Run normal processes
 
             // Cycle through On Character Body Awake callbacks
@@ -548,6 +570,21 @@ namespace Faithful
 
         private static void HookCharacterBodyStart(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
+            //Log.Message($"Character body start for character '{self.name}' with netID {self.GetComponent<NetworkIdentity>().netId}");
+
+            // Check if server
+            if (NetworkServer.active)
+            {
+                // Add character body behaviour object
+                GameObject characterBodyBehaviourObj = Object.Instantiate(characterBodyHelperPrefab);
+
+                // Spawn object for clients
+                NetworkServer.Spawn(characterBodyBehaviourObj);
+
+                // Link the character body ID
+                characterBodyBehaviourObj.GetComponent<FaithfulCharacterBodyBehaviour>().characterID = self.GetComponent<NetworkIdentity>().netId;
+            }
+
             orig(self); // Run normal processes
 
             // Cycle through On Character Body Start callbacks
