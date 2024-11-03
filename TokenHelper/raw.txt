@@ -1,10 +1,12 @@
-Order: High-Power Photon Jetpack
-Tracking Number: 76*************
-Estimated Delivery: 04/07/2057
-Shipping Method: High Priority/Fragile
-Shipping Address: Floor 77, Corp INC, Jupiter
+Order: Antique Clock Hand (Replica)
+Tracking Number: 77**********
+Estimated Delivery: 08/23/2057
+Shipping Method: Standard/Fragile
+Shipping Address: Antiques Workshop, Continuum St., Saturn
 Shipping Details:
 
-Here's the new jetpack you ordered, sir. This one should last you a good while longer.
+Here's /another/ replacement part.
 
-Although, I do advise that you don't try to use it to fly to the other office again. The higher-ups wanted me to let you know that they wouldn't be paying off your medical costs next time, sir.
+At some point it clearly has to be a fault in the clockwork. I can't imagine how a single hand has caused you so much trouble.
+
+If this continues, we're going to have to start charging you for these parts.

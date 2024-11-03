@@ -33,6 +33,11 @@
 	"FAITHFUL_LEADERS_PENNON_LORE": "We knew we'd never win. This planet was as hellish as it was relentless.\n\nMany died as soon as the blast doors opened. Lizard people, giant jellyfish, constructs made of the very ground beneath our very feet. They all conspired somehow - someway - to massacre us all. We never stood a chance.\n\nAnd our squad leader, that damn idiot... What was left of him was marked with the flag that led us to our demise.",
 	"FAITHFUL_LEADERS_PENNON_BUFF": "Leader's Pennon",
 	
+	"FAITHFUL_SECOND_HAND_NAME": "Second Hand",
+	"FAITHFUL_SECOND_HAND_PICKUP": "Increase attack speed and movement speed while grounded.",
+	"FAITHFUL_SECOND_HAND_DESC": "Increase <style=cIsDamage>attack speed</style> by <style=cIsDamage>20%</style> <style=cStack>(+20% per stack)</style> and <style=cIsUtility>movement speed</style> by <style=cIsUtility>30%</style> <style=cStack>(+30% per stack)</style> while touching the ground.",
+	"FAITHFUL_SECOND_HAND_LORE": "Order: Antique Clock Hand (Replica)\nTracking Number: 77**********\nEstimated Delivery: 08/23/2057\nShipping Method: Standard/Fragile\nShipping Address: Antiques Workshop, Continuum St., Saturn\nShipping Details:\n\nHere's /another/ replacement part.\n\nAt some point it clearly has to be a fault in the clockwork. I can't imagine how a single hand has caused you so much trouble.\n\nIf this continues, we're going to have to start charging you for these parts.",
+	
 	"FAITHFUL_SPACIOUS_UMBRELLA_NAME": "Spacious Umbrella",
 	"FAITHFUL_SPACIOUS_UMBRELLA_PICKUP": "Increase the size of the Teleporter zone.",
 	"FAITHFUL_SPACIOUS_UMBRELLA_DESC": "Increase the size of the Teleporter zone by <style=cIsUtility>25%</style> <style=cStack>(+25% per stack)</style>.",

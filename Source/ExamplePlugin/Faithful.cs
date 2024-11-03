@@ -57,6 +57,7 @@ namespace Faithful
         private static MeltingWarbler meltingWarbler;
         private static VengefulToaster vengefulToaster;
         private static SpaciousUmbrella spaciousUmbrella;
+        private static SecondHand secondHand;
         private static LeadersPennon leadersPennon;
         private static DrownedVisage drownedVisage;
         private static LongshotGeode longshotGeode;
@@ -94,6 +95,7 @@ namespace Faithful
             meltingWarbler = new MeltingWarbler(toolbox);
             vengefulToaster = new VengefulToaster(toolbox);
             spaciousUmbrella = new SpaciousUmbrella(toolbox);
+            secondHand = new SecondHand(toolbox);
             leadersPennon = new LeadersPennon(toolbox);
             drownedVisage = new DrownedVisage(toolbox);
             longshotGeode = new LongshotGeode(toolbox);
@@ -104,7 +106,7 @@ namespace Faithful
             tJetpack = new TJetpack(toolbox);
 
             // Log successful load information
-            Log.Info("Faithful loaded successfully, thank you for playing!");
+            Log.Info("Faithful loaded successfully, thank you for playing our mod!");
         }
 
         // The Update() method is run on every frame of the game.

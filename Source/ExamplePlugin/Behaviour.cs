@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using EntityStates;
 using R2API;
 using RoR2;
 using UnityEngine;
@@ -38,6 +39,8 @@ namespace Faithful
     internal delegate void PlayerHolderToPlayerCallback(int _count, PlayerCharacterMasterController _holder, PlayerCharacterMasterController _other);
 
     internal delegate void AllyHolderToAllyCallback(int _count, CharacterMaster _holder, CharacterMaster _other);
+
+    internal delegate void GenericCharacterCallback(GenericCharacterMain _character);
 
     internal static class Behaviour
     {
@@ -99,6 +102,9 @@ namespace Faithful
         private static List<AllyItemToAlly> allyItemToAllyCallbacks = new List<AllyItemToAlly>();
         private static List<AllyBuffToAlly> allyBuffToAllyCallbacks = new List<AllyBuffToAlly>();
 
+        // Generic character callbacks
+        private static List<GenericCharacterCallback> genericCharacterFixedUpdateCallbacks = new List<GenericCharacterCallback>();
+
         public static void Init()
         {
             // Create prefabs
@@ -122,6 +128,7 @@ namespace Faithful
             On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin;
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
             On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump;
+            On.EntityStates.GenericCharacterMain.FixedUpdate += HookGenericCharacterFixedUpdate;
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
@@ -445,6 +452,14 @@ namespace Faithful
             DebugLog("Added On Process Jump behaviour");
         }
 
+        // Add generic character fixed update callback
+        public static void AddGenericCharacterFixedUpdateCallback(GenericCharacterCallback _callback)
+        {
+            genericCharacterFixedUpdateCallbacks.Add(_callback);
+
+            DebugLog("Added Generic Character Fixed Update behaviour");
+        }
+
         // Fixed update for checking player to player interactions
         private static void PlayerOnPlayerFixedUpdate()
         {
@@ -758,6 +773,18 @@ namespace Faithful
 
             // Cycle through On Process Jump callbacks
             foreach (OnProcessJumpCallback callback in onProcessJumpCallbacks)
+            {
+                // Call
+                callback(self);
+            }
+        }
+
+        private static void HookGenericCharacterFixedUpdate(On.EntityStates.GenericCharacterMain.orig_FixedUpdate orig, EntityStates.GenericCharacterMain self)
+        {
+            orig(self); // Run normal processes first
+
+            // Cycle through Generic Character Fixed Update callbacks
+            foreach (GenericCharacterCallback callback in genericCharacterFixedUpdateCallbacks)
             {
                 // Call
                 callback(self);
