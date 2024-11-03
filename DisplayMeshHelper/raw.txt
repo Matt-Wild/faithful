@@ -1,0 +1,105 @@
+Commando:
+childName = "LowerArmR",
+localPos = new Vector3(-0.005F, 0.25F, -0.064F),
+localAngles = new Vector3(0F, 0F, 180F),
+localScale = new Vector3(0.25F, 0.25F, 0.25F)
+
+Huntress:
+childName = "BowHinge2L",
+localPos = new Vector3(-0.0302F, 0.05125F, 0.00413F),
+localAngles = new Vector3(0F, 90F, 180F),
+localScale = new Vector3(0.125F, 0.125F, 0.125F)
+childName = "BowHinge2R",
+localPos = new Vector3(-0.0302F, 0.05125F, -0.00413F),
+localAngles = new Vector3(0F, 90F, 180F),
+localScale = new Vector3(0.125F, 0.125F, 0.125F)
+
+Bandit:
+childName = "ThighL",
+localPos = new Vector3(0.06113F, 0.3375F, 0.08F),
+localAngles = new Vector3(359.25F, 36.95F, 172.5F),
+localScale = new Vector3(0.15F, 0.15F, 0.15F)
+
+MUL-T:
+childName = "Chest",
+localPos = new Vector3(-1.875F, 0.7125F, 0.25F),
+localAngles = new Vector3(0F, 90F, 270F),
+localScale = new Vector3(1.5F, 1.5F, 1.5F)
+
+Engineer:
+childName = "CannonHeadL",
+localPos = new Vector3(-0.195F, 0.375F, 0.045F),
+localAngles = new Vector3(0F, 90F, 180F),
+localScale = new Vector3(0.25F, 0.25F, 0.25F)
+
+Turret:
+childName = "LegBar1",
+localPos = new Vector3(0.2675F, 1.05F, -0.07F),
+localAngles = new Vector3(0F, 270F, 180F),
+localScale = new Vector3(0.5F, 0.5F, 0.5F)
+
+Artificer:
+childName = "Head",
+localPos = new Vector3(0F, 0.1375F, 0.09825F),
+localAngles = new Vector3(338.5F, 0F, 180F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F)
+
+Mercenary:
+childName = "LowerArmR",
+localPos = new Vector3(-0.02425F, 0.152F, -0.10675F),
+localAngles = new Vector3(3.5F, 18.25F, 177.75F),
+localScale = new Vector3(0.125F, 0.125F, 0.125F)
+
+REX:
+childName = "CalfFrontR",
+localPos = new Vector3(0.05425F, 0.5F, -0.0325F),
+localAngles = new Vector3(0F, 90F, 0F),
+localScale = new Vector3(0.375F, 0.375F, 0.375F)
+
+Loader:
+childName = "MechLowerArmR",
+localPos = new Vector3(-0.045F, 0.26F, -0.0825F),
+localAngles = new Vector3(0F, 1.5F, 175.75F),
+localScale = new Vector3(0.25F, 0.25F, 0.25F)
+
+Acrid:
+childName = "MouthMuzzle",
+localPos = new Vector3(0F, -0.745F, 1.675F),
+localAngles = new Vector3(49.5F, 0F, 0F),
+localScale = new Vector3(1.5F, 1.5F, 2.5F)
+
+Captain:
+childName = "MuzzleGun",
+localPos = new Vector3(0.095F, 0F, -0.0855F),
+localAngles = new Vector3(0F, 90F, 91.5F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F)
+
+Railgunner:
+childName = "GunScope",
+localPos = new Vector3(0F, 0.2375F, 0.3125F),
+localAngles = new Vector3(90F, 180F, 0F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F)
+
+Viend:
+childName = "Head",
+localPos = new Vector3(0F, 0.175F, 0.1125F),
+localAngles = new Vector3(325F, 0F, 180F),
+localScale = new Vector3(0.15F, 0.15F, 0.15F)
+
+Seeker:
+childName = "Head",
+localPos = new Vector3(0F, 0.25F, 0.101F),
+localAngles = new Vector3(334F, 0F, 180F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F)
+
+False Son:
+childName = "HandL",
+localPos = new Vector3(0.74F, 0.41825F, 0.0625F),
+localAngles = new Vector3(293.75F, 264.85F, 184.95F),
+localScale = new Vector3(0.25F, 0.25F, 0.25F)
+
+Chef:
+childName = "Cleaver",
+localPos = new Vector3(-0.01425F, 0.445F, -0.00125F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(0.15F, 0.15F, 1F) 
