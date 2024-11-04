@@ -62,7 +62,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Acrid", "MouthMuzzle", new Vector3(0F, -0.745F, 1.675F), new Vector3(49.5F, 0F, 0F), new Vector3(1.5F, 1.5F, 2.5F));
             displaySettings.AddCharacterDisplay("Captain", "MuzzleGun", new Vector3(0.095F, 0F, -0.0855F), new Vector3(0F, 90F, 91.5F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Railgunner", "GunScope", new Vector3(0F, 0.2375F, 0.3125F), new Vector3(90F, 180F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Viend", "Head", new Vector3(0F, 0.175F, 0.1125F), new Vector3(325F, 0F, 180F), new Vector3(0.15F, 0.15F, 0.15F));
+            displaySettings.AddCharacterDisplay("Void Fiend", "Head", new Vector3(0F, 0.175F, 0.1125F), new Vector3(325F, 0F, 180F), new Vector3(0.15F, 0.15F, 0.15F));
             displaySettings.AddCharacterDisplay("Seeker", "Head", new Vector3(0F, 0.25F, 0.101F), new Vector3(334F, 0F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("False Son", "HandL", new Vector3(0.74F, 0.41825F, 0.0625F), new Vector3(293.75F, 264.85F, 184.95F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Chef", "Cleaver", new Vector3(-0.01425F, 0.445F, -0.00125F), new Vector3(0F, 0F, 0F), new Vector3(0.15F, 0.15F, 1F));
