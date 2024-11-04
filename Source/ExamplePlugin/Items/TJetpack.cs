@@ -102,7 +102,7 @@ namespace Faithful
             if (count > 0)
             {
                 // Attempt to get Faithful behaviour
-                FaithfulCharacterBodyBehaviour helper = _character.gameObject.transform.Find("Faithful Helper").GetComponent<FaithfulCharacterBodyBehaviour>();
+                FaithfulCharacterBodyBehaviour helper = Utils.FindCharacterBodyHelper(_character);
                 if (helper == null)
                 {
                     return;

@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.TextCore.Text;
 
 namespace Faithful
 {
@@ -48,8 +49,6 @@ namespace Faithful
 
         private void CharacterIDChanged(NetworkInstanceId _newValue)
         {
-            Log.Message(NetworkServer.active ? $"Character ID changed on server. New value: {_newValue}." : $"Character ID changed on client. New value: {_newValue}.");
-
             // Ensure new value is set
             characterID = _newValue;
 
@@ -70,8 +69,6 @@ namespace Faithful
 
         private IEnumerator LinkCharacterBody()
         {
-            Log.Message($"Attempting to link character body with net ID {characterID}");
-
             // Cycle until character body is found
             while (character == null)
             {
@@ -85,6 +82,13 @@ namespace Faithful
 
             // Create TJetpack behaviour
             tJetpack = new FaithfulTJetpackBehaviour(character);
+
+            // Check for inventory
+            if (character.inventory != null)
+            {
+                // Update jetpack with jetpack item count
+                tJetpack.UpdateItemCount(character.inventory.GetItemCount(Items.GetItem("4T0N_JETPACK").itemDef));
+            }
 
             // Check if debug mode
             if (Utils.debugMode)
