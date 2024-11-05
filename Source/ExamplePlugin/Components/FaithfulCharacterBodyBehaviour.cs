@@ -21,8 +21,14 @@ namespace Faithful
         // Store reference to Character Body
         private CharacterBody character;
 
+        // Store if character body has been found
+        private bool characterBodyFound = false;
+
         // Store reference to behaviours
         public FaithfulTJetpackBehaviour tJetpack;
+
+        // Store if searching for character body
+        private bool searchingForCharacterBody = false;
 
         /*[Command]
         public void CmdSetCharacterID(NetworkInstanceId _characterID)
@@ -59,6 +65,22 @@ namespace Faithful
         public override void OnStartClient()
         {
             base.OnStartClient();
+
+            // Start coroutine to find and link character body
+            StartCoroutine(LinkCharacterBody());
+
+            // Check for character body on delay
+            Invoke("CheckForCharacterBody", 8.0f);
+        }
+
+        private void CheckForCharacterBody()
+        {
+            // Check if debug mode, not the server and no character body
+            if (!characterBodyFound && !NetworkServer.active && Utils.debugMode)
+            {
+                // Send warning
+                Log.Warning($"Faithful Character Body behaviour not linked for net ID {characterID}.");
+            }
         }
 
         private void LateUpdate()
@@ -69,34 +91,47 @@ namespace Faithful
 
         private IEnumerator LinkCharacterBody()
         {
-            // Cycle until character body is found
-            while (character == null)
+            // Only attempt to link if not already attempting to link
+            if (!searchingForCharacterBody)
             {
-                // Attempt to find character body
-                character = ClientScene.FindLocalObject(characterID)?.GetComponent<CharacterBody>();
-                yield return null;
-            }
+                // Beginning search
+                searchingForCharacterBody = true;
 
-            // Register behaviour with utils
-            Utils.RegisterFaithfulCharacterBodyBehaviour(character, this);
+                // Cycle until character body is found
+                while (character == null)
+                {
+                    // Attempt to find character body
+                    character = ClientScene.FindLocalObject(characterID)?.GetComponent<CharacterBody>();
+                    yield return null;
+                }
 
-            // Create TJetpack behaviour
-            tJetpack = new FaithfulTJetpackBehaviour(character);
+                // Set as character body found
+                characterBodyFound = true;
 
-            // Check for inventory
-            if (character.inventory != null)
-            {
-                // Update jetpack with jetpack item count
-                tJetpack.UpdateItemCount(character.inventory.GetItemCount(Items.GetItem("4T0N_JETPACK").itemDef));
-            }
+                // Register behaviour with utils
+                Utils.RegisterFaithfulCharacterBodyBehaviour(character, this);
 
-            // Check if debug mode
-            if (Utils.debugMode)
-            {
-                // Get string for if client or server
-                string messageSource = NetworkServer.active ? "SERVER" : "CLIENT";
+                // Create TJetpack behaviour
+                tJetpack = new FaithfulTJetpackBehaviour(character);
 
-                Log.Message($"[{messageSource}] - Faithful Character Body behaviour linked for character '{character.name}' with net ID {characterID}");
+                // Check for inventory
+                if (character.inventory != null)
+                {
+                    // Update jetpack with jetpack item count
+                    tJetpack.UpdateItemCount(character.inventory.GetItemCount(Items.GetItem("4T0N_JETPACK").itemDef));
+                }
+
+                // Check if debug mode
+                if (Utils.debugMode)
+                {
+                    // Get string for if client or server
+                    string messageSource = NetworkServer.active ? "SERVER" : "CLIENT";
+
+                    Log.Message($"[{messageSource}] - Faithful Character Body behaviour linked for character '{character.name}' with net ID {characterID}.");
+                }
+
+                // Done searching
+                searchingForCharacterBody = false;
             }
         }
     }

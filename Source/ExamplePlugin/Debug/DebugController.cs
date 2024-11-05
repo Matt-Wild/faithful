@@ -9,6 +9,7 @@ namespace Faithful
         public DebugMain debugMain;
         public DebugStatsMonitor debugStatsMonitor;
         public DebugSpawnMenu debugSpawnMenu;
+        public DebugStageControls debugStageControls;
 
         public void Init()
         {
@@ -23,6 +24,10 @@ namespace Faithful
             // Add spawn menu behaviour
             debugSpawnMenu = transform.Find("DebugSpawnPanel").gameObject.AddComponent<DebugSpawnMenu>();
             debugSpawnMenu.Init(this);
+
+            // Add spawn menu behaviour
+            debugStageControls = transform.Find("DebugStagePanel").gameObject.AddComponent<DebugStageControls>();
+            debugStageControls.Init(this);
 
             // Create panel toggles
             debugMain.CreateToggles();

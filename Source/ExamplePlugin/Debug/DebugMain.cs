@@ -17,6 +17,10 @@
             // Add spawn menu toggle
             DebugPanelToggle toggle2 = transform.Find("SpawnMenuToggle").gameObject.AddComponent<DebugPanelToggle>();
             toggle2.Init(debugController.debugSpawnMenu);
+
+            // Add stage controls toggle
+            DebugPanelToggle toggle3 = transform.Find("StageControlsToggle").gameObject.AddComponent<DebugPanelToggle>();
+            toggle3.Init(debugController.debugStageControls);
         }
     }
 }

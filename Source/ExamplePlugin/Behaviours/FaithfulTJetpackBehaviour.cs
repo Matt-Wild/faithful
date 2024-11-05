@@ -15,6 +15,9 @@ namespace Faithful
         // Store item count
         protected int itemCount = 0;
 
+        // Store buffed jetpack item count
+        protected int buffedItemCount = 5;
+
         // Store jetting state, last jet frame time and jet time
         //protected bool jetting = false;
         //protected float lastJetTime;
@@ -24,14 +27,17 @@ namespace Faithful
         //protected float deactivatedTime;
 
         // Jetpack stats
-        protected float maxVelocity = 30.0f;
-        protected float risingAcceleration = 36.0f;
+        protected float baseMaxVelocity = 30.0f;
+        protected float baseRisingAcceleration = 36.0f;
         protected float fallingAcceleration = 100.0f;
         protected float baseFuel = 4.0f;
         protected float fuelPerStack = 2.0f;
         protected float baseRefuelDuration = 12.0f;
-        protected float refuelWaitRatio = 0.4f;
         protected float minimumFuelToActivate = 0.5f;
+
+        // Buffed jetpack additive stats
+        protected float maxVelocityBuff = 6.0f;
+        protected float risingAccelerationBuff = 4.0f;
 
         // Store current state of jetpack
         protected bool grounded = false;
@@ -402,12 +408,8 @@ namespace Faithful
             }
             else
             {
-                // Check if should start refueling
-                if (timeSinceLastJet >= refuelWaitDuration)
-                {
-                    // Start refueling
-                    refueling = true;
-                }
+                // Start refueling
+                refueling = true;
             }
         }
 
@@ -515,30 +517,12 @@ namespace Faithful
             }
         }
 
-        protected float refuelingDuration
-        {
-            get
-            {
-                // Based on refuel duration and wait ratio
-                return refuelDuration * (1.0f - refuelWaitRatio);
-            }
-        }
-
-        protected float refuelWaitDuration
-        {
-            get
-            {
-                // Based on refuel duration and wait ratio
-                return refuelDuration * refuelWaitRatio;
-            }
-        }
-
         protected float refuelRate
         {
             get
             {
                 // Refuel rate is calculated based on fuel capacity and refueling duration
-                return fuelCapacity / refuelingDuration;
+                return fuelCapacity / refuelDuration;
             }
         }
 
@@ -565,6 +549,41 @@ namespace Faithful
             {
                 // Return if the jetpack can be activated
                 return character.characterMotor.velocity.y < 0.0f && fuelRemaining > minimumFuelToActivate;
+            }
+        }
+
+        protected float buffPerc
+        {
+            get
+            {
+                // Get buff amount and max buff amount
+                int buffAmount = itemCount - 1;
+                int maxBuffAmount = buffedItemCount - 1;
+
+                // Return buff percentage
+                return Mathf.Min((float)buffAmount / maxBuffAmount, 1.0f);
+            }
+        }
+
+        protected float maxVelocity
+        {
+            get
+            {
+                
+
+                // Return and modify max velocity based on buff
+                return baseMaxVelocity + maxVelocityBuff * buffPerc;
+            }
+        }
+
+        protected float risingAcceleration
+        {
+            get
+            {
+
+
+                // Return and modify rising acceleration based on buff
+                return baseRisingAcceleration + risingAccelerationBuff * buffPerc;
             }
         }
     }

@@ -121,6 +121,12 @@ namespace Faithful
             corruptionPairs.Add(new CorruptPair(_corrupter, _corruptedToken));
         }
 
+        public static void TeleportToNextStage()
+        {
+            // Teleport out of current scene
+            Object.FindObjectOfType<SceneExitController>()?.Begin();
+        }
+
         public static void SpawnCharacterCard(Transform _target, string _name, int _amount = 1)
         {
             // Attempt to get character spawn card
