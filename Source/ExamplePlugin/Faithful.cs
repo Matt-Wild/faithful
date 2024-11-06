@@ -1,5 +1,8 @@
 using BepInEx;
 using R2API;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine;
 
 namespace Faithful
 {
@@ -84,6 +87,15 @@ namespace Faithful
             {
                 godMode = new GodMode(toolbox);
             }
+
+            // Add net utils onto player prefab
+            Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Core/PlayerMaster.prefab").Completed += delegate (AsyncOperationHandle<GameObject> obj)
+            {
+                if (obj.Result)
+                {
+                    obj.Result.AddComponent<NetUtils>();
+                }
+            };
 
             // Create buffs
             vengeance = new Vengeance(toolbox);

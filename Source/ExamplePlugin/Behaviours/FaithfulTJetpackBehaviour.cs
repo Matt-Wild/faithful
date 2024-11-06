@@ -1,10 +1,11 @@
 ﻿using EntityStates;
 using RoR2;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
-    internal class FaithfulTJetpackBehaviour
+    internal class FaithfulTJetpackBehaviour : NetworkBehaviour
     {
         // Store reference to Character Body and Character Inventory
         public CharacterBody character;
@@ -61,7 +62,7 @@ namespace Faithful
         // Store if this jetpack has initialised
         protected bool initialised = false;
 
-        public FaithfulTJetpackBehaviour(CharacterBody _character)
+        public void AssignCharacter(CharacterBody _character)
         {
             // Assign character
             character = _character;
@@ -178,6 +179,9 @@ namespace Faithful
 
             // Update visuals
             UpdateVisuals();
+
+            // Sync jetpack
+            SyncJetpack();
 
             orig(self); // Run normal processes
         }
@@ -481,6 +485,34 @@ namespace Faithful
             fuelUsed = Mathf.Min(fuelUsed + timeSinceLastJet, fuelCapacity);
         }
 
+        protected void SyncJetpack()
+        {
+            // Only sync if belonging to the local player and net utils is found
+            if (character == Utils.localPlayerBody && Utils.netUtils != null)
+            {
+                // Send sync request to net utils
+                Utils.netUtils.SyncJetpack(GetComponent<NetworkIdentity>().netId, new JetpackSyncData(fuelUsed, jetActivated));
+            }
+        }
+
+        [Command]
+        public void CmdSyncJetpack(JetpackSyncData _data)
+        {
+            // Sync on all clients
+            RpcSyncJetpack(_data);
+        }
+
+        [ClientRpc]
+        private void RpcSyncJetpack(JetpackSyncData _data)
+        {
+            // Don't sync if this jetpack belongs to this local player (pretending authority)
+            if (character == Utils.localPlayerBody) return;
+
+            // Sync with incoming data
+            fuelUsed = _data.fuelUsed;
+            jetActivated = _data.jetActivated;
+        }
+
         protected float fuelCapacity
         {
             get
@@ -585,6 +617,20 @@ namespace Faithful
                 // Return and modify rising acceleration based on buff
                 return baseRisingAcceleration + risingAccelerationBuff * buffPerc;
             }
+        }
+    }
+
+    internal struct JetpackSyncData
+    {
+        // Syncs fuel used and jet activated state
+        public float fuelUsed;
+        public bool jetActivated;
+
+        public JetpackSyncData(float _fuelUsed, bool _jetActivated)
+        {
+            // Assign values
+            fuelUsed = _fuelUsed;
+            jetActivated = _jetActivated;
         }
     }
 }

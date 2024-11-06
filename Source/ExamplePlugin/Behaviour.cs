@@ -152,6 +152,7 @@ namespace Faithful
 
             // Add a specific components (which can be networked)
             characterBodyHelperPrefab.AddComponent<FaithfulCharacterBodyBehaviour>();
+            characterBodyHelperPrefab.AddComponent<FaithfulTJetpackBehaviour>();
         }
 
         public static void Update()

@@ -111,8 +111,11 @@ namespace Faithful
                 // Register behaviour with utils
                 Utils.RegisterFaithfulCharacterBodyBehaviour(character, this);
 
-                // Create TJetpack behaviour
-                tJetpack = new FaithfulTJetpackBehaviour(character);
+                // Fetch TJetpack behaviour
+                tJetpack = GetComponent<FaithfulTJetpackBehaviour>();
+
+                // Assign character
+                tJetpack.AssignCharacter(character);
 
                 // Check for inventory
                 if (character.inventory != null)

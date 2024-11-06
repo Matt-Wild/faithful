@@ -22,6 +22,9 @@ namespace Faithful
         static private CharacterMaster _localPlayer;
         static private CharacterBody _localPlayerBody;
 
+        // Store net utils
+        static private NetUtils _netUtils;
+
         // Store character spawn cards
         static private List<CharacterSpawnCard> characterSpawnCards = new List<CharacterSpawnCard>();
 
@@ -732,6 +735,20 @@ namespace Faithful
 
                 // Return local player body
                 return _localPlayerBody;
+            }
+        }
+
+        public static NetUtils netUtils
+        {
+            get
+            {
+                // Return net utils
+                return _netUtils;
+            }
+            set
+            {
+                // Set net utils
+                _netUtils = value;
             }
         }
 
