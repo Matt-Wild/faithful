@@ -26,6 +26,7 @@ namespace Faithful
 
         // Store reference to behaviours
         public FaithfulTJetpackBehaviour tJetpack;
+        public FaithfulLeadersPennonBehaviour leadersPennon;
 
         // Store if searching for character body
         private bool searchingForCharacterBody = false;
@@ -116,6 +117,12 @@ namespace Faithful
 
                 // Assign character
                 tJetpack.AssignCharacter(character);
+
+                // Fetch leaders pennon behaviour
+                leadersPennon = GetComponent<FaithfulLeadersPennonBehaviour>();
+
+                // Initialise leaders pennon behaviour
+                leadersPennon.Init(character);
 
                 // Check for inventory
                 if (character.inventory != null)

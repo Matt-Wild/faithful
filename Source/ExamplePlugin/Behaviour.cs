@@ -153,6 +153,7 @@ namespace Faithful
             // Add a specific components (which can be networked)
             characterBodyHelperPrefab.AddComponent<FaithfulCharacterBodyBehaviour>();
             characterBodyHelperPrefab.AddComponent<FaithfulTJetpackBehaviour>();
+            characterBodyHelperPrefab.AddComponent<FaithfulLeadersPennonBehaviour>();
         }
 
         public static void Update()
@@ -395,6 +396,14 @@ namespace Faithful
             onInventoryChangedCallbacks.Add(_callback);
 
             DebugLog("Added On Inventory Changed behaviour");
+        }
+
+        // Remove On Inventory Changed callback
+        public static void RemoveOnInventoryChangedCallback(OnInventoryCallback _callback)
+        {
+            onInventoryChangedCallbacks.Remove(_callback);
+
+            DebugLog("Removed On Inventory Changed behaviour");
         }
 
         // Add On Heal callback

@@ -468,6 +468,167 @@ namespace Faithful
             return GetCharacterSpawnCard(_name) != null;
         }
 
+        public static void LogComponents(GameObject _gameObject)
+        {
+            // Check if null
+            if (_gameObject == null) return;
+
+            // Create message string
+            string message = $"The GameObject '{_gameObject.name}' has the following components:";
+
+            // Cycle through each component
+            foreach (Component component in _gameObject.GetComponents<Component>())
+            {
+                // Add to message string
+                message += $"\n - {component.GetType()}";
+            }
+
+            // Log
+            Debug.Log($"[UTILS] - {message}");
+        }
+
+        public static void AnalyseGameObject(GameObject _gameObject)
+        {
+            // Create message stirng
+            string message = "\n====================\n";
+
+            // Add analysis to message
+            message += AnalyseGameObject(_gameObject.transform);
+
+            // Log message
+            Log.Info(message);
+        }
+
+        private static string AnalyseGameObject(Transform _current, string _parents = "")
+        {
+            // Add to parents string
+            string parents = _parents == "" ? _current.name : _parents + $" > {_current.name}";
+
+            // Create message string
+            string message = "";
+
+            // Check if original game object
+            if (_parents == "")
+            {
+                // Add name of origin object
+                message += $"Analysing '{_current.name}'\n--------------------\n";
+
+                // Keep track of parents of origin object
+                string originParents = "";
+
+                // Keep track of current parent
+                Transform parent = _current;
+
+                // Cycle until no parent found
+                while (parent.parent != null)
+                {
+                    // Update current parent
+                    parent = parent.parent;
+
+                    // Add parent to parents string
+                    originParents = originParents == "" ? parent.name : $"{parent.name} > {originParents}";
+                }
+
+                // Check for origin parents
+                if (originParents != "")
+                {
+                    // Add details on origin parents
+                    message += $"Origin Parents:\n{originParents}\n--------------------\n";
+                }
+            }
+
+            // Not original game object
+            else
+            {
+                // Add name and parents of current object
+                message += $"Analysing '{_current.name}':\n{parents}\n--------------------\n";
+            }
+
+            // Add information on position
+            message += _current.parent == null ? $"Position: ({_current.position.x}, {_current.position.y}, {_current.position.z})" : $"World Position: ({_current.position.x}, {_current.position.y}, {_current.position.z})\nLocal Position: ({_current.localPosition.x}, {_current.localPosition.y}, {_current.localPosition.z})";
+
+            // Add breaker
+            message += "\n--------------------\n";
+
+            // Add information on rotation
+            message += _current.parent == null ? $"Rotation: ({_current.eulerAngles.x}, {_current.eulerAngles.y}, {_current.eulerAngles.z})" : $"World Rotation: ({_current.eulerAngles.x}, {_current.eulerAngles.y}, {_current.eulerAngles.z})\nLocal Rotation: ({_current.localEulerAngles.x}, {_current.localEulerAngles.y}, {_current.localEulerAngles.z})";
+
+            // Add breaker
+            message += "\n--------------------\n";
+
+            // Add information on scale
+            message += _current.parent == null ? $"Scale: ({_current.lossyScale.x}, {_current.lossyScale.y}, {_current.lossyScale.z})" : $"World Scale: ({_current.lossyScale.x}, {_current.lossyScale.y}, {_current.lossyScale.z})\nLocal Scale: ({_current.localScale.x}, {_current.localScale.y}, {_current.localScale.z})";
+
+            // Add breaker
+            message += "\n--------------------\n";
+
+            // Add information on components
+            message += "Components:";
+
+            // Keep track of materials in renderers
+            string materials = "";
+
+            // Cycle through each component
+            foreach (Component component in _current.GetComponents<Component>())
+            {
+                // Add to message string
+                message += $"\n - {component.GetType()}";
+
+                // Check if component is a renderer
+                if (component is Renderer)
+                {
+                    // Cycle through materials
+                    foreach (Material material in ((Renderer)component).materials)
+                    {
+                        // Check if new line needed
+                        if (materials != "")
+                        {
+                            materials += "\n";
+                        }
+
+                        // Add material details
+                        materials += $" - {material.name}";
+
+                        // Check for texture
+                        if (material.mainTexture != null)
+                        {
+                            // Add texture details
+                            materials += $"\n     Texture: '{material.mainTexture.name}'";
+                        }
+
+                        // Add shader details
+                        materials += $"\n     Shader: '{material.shader.name}'";
+
+                        // Add colour details
+                        materials += $"\n     Colour: ({material.color.r}, {material.color.g}, {material.color.b})";
+                    }
+                }
+            }
+
+            // Check if materials were found
+            if (materials != "")
+            {
+                // Add breaker
+                message += "\n--------------------\n";
+
+                // Add information for materials
+                message += $"Renderer Materials:\n{materials}";
+            }
+
+            // Add breaker
+            message += "\n====================";
+
+            // Cycle through children
+            foreach (Transform child in _current)
+            {
+                // Add analysis of child to message string
+                message += $"\n{AnalyseGameObject(child, parents)}";
+            }
+
+            // Return message string
+            return message;
+        }
+
         public static CharacterSpawnCard GetCharacterSpawnCard(string _name)
         {
             // Cycle through character spawn cards

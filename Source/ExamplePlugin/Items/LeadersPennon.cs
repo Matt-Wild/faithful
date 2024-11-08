@@ -27,7 +27,7 @@ namespace Faithful
 
             // Create Leader's Pennon item and buff
             leadersPennonBuff = Buffs.AddBuff("LEADERS_PENNON", "texbuffleaderarea", Color.white, false);
-            leadersPennonItem = Items.AddItem("LEADERS_PENNON", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy], "texleaderspennonicon", "leaderspennonmesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME", _displaySettings: displaySettings);
+            leadersPennonItem = Items.AddItem("LEADERS_PENNON", [ItemTag.Utility, ItemTag.AIBlacklist], "texleaderspennonicon", "leaderspennonmesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME", _displaySettings: displaySettings);
 
             // Add ally to ally behaviour
             Behaviour.AddAllyToAllyCallback(leadersPennonItem, AllyWithItemToAlly);
@@ -78,7 +78,7 @@ namespace Faithful
         void AllyWithItemToAlly(int _count, CharacterMaster _holder, CharacterMaster _other)
         {
             // Calculate effect radius
-            float radius = 15.0f + (_count - 1) * 5.0f;
+            float radius = 15.0f + (_count - 1) * 5.0f;     // REMEMBER TO SYNC THIS WITH FaithfulLeadersPennonBehaviour
 
             // Other ally in radius
             if ((_holder.GetBodyObject().transform.position - _other.GetBodyObject().transform.position).magnitude <= radius)
