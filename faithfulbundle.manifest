@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1591660926
+CRC: 926631438
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dab30ba006d2d22ab794711c27f86782
+    Hash: 060bba0f33d0bb723a62a9fd75f49a2b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8cc11e8936bb4493736f09f054c2e68c
@@ -73,6 +73,8 @@ Assets:
 - Assets/Items/NoxiousSlimes/texNoxiousSlime.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
 - Assets/Debug/UI/DebugCanvas.prefab
+- Assets/Items/4-T0NJetpack/texRamp4T0NFire.png
+- Assets/Items/4-T0NJetpack/Materials/tex4T0NJetpackBaseFlare.mat
 - Assets/Items/HasteningGreave/texHasteningGreaveEmission.png
 - Assets/Skills/Railgunner/texRailgunnerCoin.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackHolo.png
@@ -100,6 +102,7 @@ Assets:
 - Assets/Items/CollectorsVision/texCollectorsVision.png
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystalNormal.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackIcon.png
+- Assets/Items/4-T0NJetpack/tex4T0NJetpackBaseFlare.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeNormal.png
 - Assets/Items/LeadersPennon/texLeadersPennonIcon.png
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
