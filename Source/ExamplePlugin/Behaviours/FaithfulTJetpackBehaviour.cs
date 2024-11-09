@@ -89,6 +89,9 @@ namespace Faithful
             jetLeft = Utils.FindChildByName(jetpack.transform, "Jet_Left");
             jetRight = Utils.FindChildByName(jetpack.transform, "Jet_Right");
 
+            // Set jet material
+            jetpack.GetComponent<Transform>().Find("4-T0N_Jetpack_Jetflare_Display").GetComponent<SkinnedMeshRenderer>().material = Assets.mageJetMaterial;
+
             // Check if Artificer
             if (characterModel.name == "mdlMage")
             {

@@ -53,6 +53,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Bandit", "MainWeapon", new Vector3(-0.06125F, 0.5415F, -0.0255F), new Vector3(1F, 172.75F, 0F), new Vector3(0.09F, 0.09F, 0.09F));
             displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(0F, 4F, -1.725F), new Vector3(0F, 180F, 0F), new Vector3(1F, 0.8F, 1F));
             displaySettings.AddCharacterDisplay("Engineer", "Chest", new Vector3(0.003F, 0.47825F, -0.2905F), new Vector3(0F, 180F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, 0.325F, -0.20525F), new Vector3(0F, 180F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(0.1165F, 0.448F, -0.275F), new Vector3(0F, 180F, 0F), new Vector3(0.11F, 0.11F, 0.11F));
             displaySettings.AddCharacterDisplay("Mercenary", "UpperArmR", new Vector3(-0.16175F, 0.005F, -0.03925F), new Vector3(3.50988F, 257.5009F, 173.5443F), new Vector3(0.125F, 0.125F, 0.125F));
             displaySettings.AddCharacterDisplay("REX", "PlatformBase", new Vector3(0F, 0.4F, -0.3725F), new Vector3(0F, 180F, 0F), new Vector3(0.12F, 0.12F, 0.12F));

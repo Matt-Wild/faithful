@@ -76,7 +76,7 @@ namespace Faithful
                 if (count == 0)
                 {
                     // Destroy effect
-                    Object.Destroy(effect);
+                    Destroy(effect);
                     return;
                 }
 
@@ -93,8 +93,6 @@ namespace Faithful
                 effect.transform.parent = null;
                 effect.transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);
                 effect.transform.parent = parent;
-
-                Utils.AnalyseGameObject(effect);
             }
 
             // Effect doesn't exist
@@ -102,15 +100,20 @@ namespace Faithful
             {
                 // Create effect
                 GameObject prefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/NearbyDamageBonusIndicator");
-                effect = Object.Instantiate(prefab, character.corePosition, Quaternion.identity);
+                effect = Instantiate(prefab, character.corePosition, Quaternion.identity);
 
                 // Delete unneeded network components
-                Object.Destroy(effect.GetComponent<NetworkedBodyAttachment>());
-                Object.Destroy(effect.GetComponent<NetworkIdentity>());
+                Destroy(effect.GetComponent<NetworkedBodyAttachment>());
+                Destroy(effect.GetComponent<NetworkIdentity>());
+
+                // Create color
+                Color effectColour = new Color(0.58039215f, 0.22745098f, 0.71764705f);
 
                 // Set material colours
-                effect.transform.Find("Donut").GetComponent<MeshRenderer>().material.SetColor("_Color", Color.blue);
-                effect.transform.Find("Radius, Spherical").GetComponent<MeshRenderer>().material.SetColor("_Color", Color.blue);
+                effect.transform.Find("Donut").GetComponent<MeshRenderer>().material.SetColor("_Color", effectColour);
+                effect.transform.Find("Donut").GetComponent<MeshRenderer>().material.SetColor("_TintColor", effectColour);
+                effect.transform.Find("Radius, Spherical").GetComponent<MeshRenderer>().material.SetColor("_Color", effectColour);
+                effect.transform.Find("Radius, Spherical").GetComponent<MeshRenderer>().material.SetColor("_TintColor", effectColour);
 
                 // Set parent
                 effect.transform.parent = character.modelLocator.modelTransform;
@@ -128,8 +131,6 @@ namespace Faithful
                 effect.transform.parent = null;
                 effect.transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);
                 effect.transform.parent = parent;
-
-                Utils.AnalyseGameObject(effect);
             }
         }
     }

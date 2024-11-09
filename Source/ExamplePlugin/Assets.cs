@@ -2,6 +2,10 @@
 using System.IO;
 using BepInEx;
 using IL.RoR2.ConVar;
+using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Faithful
 {
@@ -12,6 +16,9 @@ namespace Faithful
 
         // Asset bundle
         public static AssetBundle assetBundle;
+
+        // Store needed RoR2 resources
+        public static Material mageJetMaterial;
 
         // Default assets
         private const string defaultModel = "temporalcubemesh";
@@ -30,8 +37,24 @@ namespace Faithful
                 string[] loaded = assetBundle.GetAllAssetNames();
                 foreach (string current in loaded)
                 {
-                    Log.Debug($"Loaded asset '{current}'");
+                    Log.Debug($"[ASSETS] - Loaded asset '{current}'");
                 }
+            }
+
+            // Fetch all needed RoR2 resources in advance
+            FetchNeededRoR2Resources();
+        }
+
+        private static void FetchNeededRoR2Resources()
+        {
+            // Fetch all needed resources
+            mageJetMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("Jets, Right").GetComponent<MeshRenderer>().material;
+
+            // Check if debug mode
+            if (Utils.debugMode)
+            {
+                // Log confirmation
+                Log.Debug("[ASSETS] - Fetched all needed resources from RoR2 assets.");
             }
         }
 
@@ -68,6 +91,53 @@ namespace Faithful
 
             // Return if found
             return found != null;
+        }
+
+        public static void LogRoR2Resources()
+        {
+            // Define list of paths to resources and their GUIDs
+            List<KeyValuePair<string, string>> resources = new List<KeyValuePair<string, string>>();
+            RoR2.LegacyResourcesAPI.GetAllPathGuidPairs(resources);
+
+            // Cycle through resources
+            foreach (KeyValuePair<string, string> resource in resources)
+            {
+                // Log details about resource
+                Log.Debug($"[ASSETS] - Resource found: '{resource.Key}' | GUID: {resource.Value}");
+            }
+        }
+
+        public static void FindRoR2Resources(string _searchTerm)
+        {
+            // Define list of paths to resources and their GUIDs
+            List<KeyValuePair<string, string>> resources = new List<KeyValuePair<string, string>>();
+            RoR2.LegacyResourcesAPI.GetAllPathGuidPairs(resources);
+
+            // Create message string
+            string message = $"\n[ASSETS]\n====================\nAttempting to find resources with search term: '{_searchTerm}'\n--------------------";
+
+            // Store if found a matching resources
+            bool found = false;
+
+            // Cycle through resources
+            foreach (KeyValuePair<string, string> resource in resources)
+            {
+                // Check if resource contains search term
+                if (resource.Key.ToUpper().Contains(_searchTerm.ToUpper()))
+                {
+                    // Found matching resource
+                    found = true;
+
+                    // Add to message string
+                    message += $"\nResource found: '{resource.Key}' | GUID: {resource.Value}";
+                }
+            }
+
+            // End message string
+            message += found ? "\n====================" : "\nNo resources found...\n====================";
+
+            // Log message string
+            Log.Info(message);
         }
 
         public static Sprite GetIcon(string _name)

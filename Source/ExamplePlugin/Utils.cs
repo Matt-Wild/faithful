@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Rendering;
 
 namespace Faithful
 {
@@ -598,6 +599,55 @@ namespace Faithful
 
                         // Add shader details
                         materials += $"\n     Shader: '{material.shader.name}'";
+
+                        // Store shader properties
+                        string shaderProperties = "";
+
+                        // Get shader property count
+                        int propertyCount = material.shader.GetPropertyCount();
+
+                        // Cycle through properties
+                        for (int i = 0; i < propertyCount; i++)
+                        {
+                            // Check if new line needed
+                            if (shaderProperties != "")
+                            {
+                                shaderProperties += "\n         ";
+                            }
+
+                            // Get the property name
+                            string propertyName = material.shader.GetPropertyName(i);
+
+                            // Get the property type
+                            ShaderPropertyType propertyType = material.shader.GetPropertyType(i);
+
+                            // Add shader property information based on type
+                            switch (propertyType)
+                            {
+                                case ShaderPropertyType.Color:
+                                    Color colorValue = material.GetColor(propertyName);
+                                    shaderProperties += $"Colour '{propertyName}' - ({colorValue.r}, {colorValue.g}, {colorValue.b})";
+                                    break;
+                                case ShaderPropertyType.Vector:
+                                    Vector4 vectorValue = material.GetVector(propertyName);
+                                    shaderProperties += $"Vector '{propertyName}' - ({vectorValue.x}, {vectorValue.y}, {vectorValue.z}, {vectorValue.w})";
+                                    break;
+                                case ShaderPropertyType.Float:
+                                    shaderProperties += $"Float '{propertyName}' - {material.GetFloat(propertyName)}";
+                                    break;
+                                case ShaderPropertyType.Range:
+                                    shaderProperties += $"Range '{propertyName}' - {material.GetFloat(propertyName)}";
+                                    break;
+                                case ShaderPropertyType.Texture:
+                                    Texture texture = material.GetTexture(propertyName);
+                                    string textureValue = texture != null ? $"'{texture.name}'" : "None";
+                                    shaderProperties += $"Texture '{propertyName}' - {textureValue}";
+                                    break;
+                            }
+                        }
+
+                        // Add shader property details
+                        materials += $"\n{shaderProperties}";
 
                         // Add colour details
                         materials += $"\n     Colour: ({material.color.r}, {material.color.g}, {material.color.b})";
