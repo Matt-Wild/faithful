@@ -58,6 +58,8 @@ namespace Faithful
         protected GameObject jetMiddle;
         protected GameObject jetLeft;
         protected GameObject jetRight;
+        protected GameObject jetLightsOn;
+        protected GameObject jetLightsOff;
 
         // Store if this jetpack has initialised
         protected bool initialised = false;
@@ -89,10 +91,33 @@ namespace Faithful
             jetLeft = Utils.FindChildByName(jetpack.transform, "Jet_Left");
             jetRight = Utils.FindChildByName(jetpack.transform, "Jet_Right");
 
-            // Set jet material
-            jetpack.GetComponent<Transform>().Find("4-T0N_Jetpack_Jetflare_Display").GetComponent<SkinnedMeshRenderer>().material = Assets.mageJetMaterial;
+            // Add jet flate behaviour
+            jetpack.GetComponent<Transform>().Find("4-T0N_Jetpack_Jetflare_Display").gameObject.AddComponent<TJetpackJetFlare>();
 
-            Utils.AnalyseGameObject(jetpack);
+            // Get jet lights objects
+            jetLightsOn = jetpack.GetComponent<Transform>().Find("Jets_On").gameObject;
+            jetLightsOff = jetpack.GetComponent<Transform>().Find("Jets_Off").gameObject;
+
+            // Add flicker light to point lights
+            FlickerLight flickerMiddle = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Middle").gameObject.AddComponent<FlickerLight>();
+            FlickerLight flickerLeft = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Left").gameObject.AddComponent<FlickerLight>();
+            FlickerLight flickerRight = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Right").gameObject.AddComponent<FlickerLight>();
+            flickerMiddle.light = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Middle").GetComponent<Light>();
+            flickerMiddle.sinWaves = Assets.mageJetWaves;
+            flickerLeft.light = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Left").GetComponent<Light>();
+            flickerLeft.sinWaves = Assets.mageJetWaves;
+            flickerRight.light = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Right").GetComponent<Light>();
+            flickerRight.sinWaves = Assets.mageJetWaves;
+
+            FlickerLight flickerMiddleOff = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Middle").gameObject.AddComponent<FlickerLight>();
+            FlickerLight flickerLeftOff = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Left").gameObject.AddComponent<FlickerLight>();
+            FlickerLight flickerRightOff = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Right").gameObject.AddComponent<FlickerLight>();
+            flickerMiddleOff.light = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Middle").GetComponent<Light>();
+            flickerMiddleOff.sinWaves = Assets.mageJetWaves;
+            flickerLeftOff.light = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Left").GetComponent<Light>();
+            flickerLeftOff.sinWaves = Assets.mageJetWaves;
+            flickerRightOff.light = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Right").GetComponent<Light>();
+            flickerRightOff.sinWaves = Assets.mageJetWaves;
 
             // Check if Artificer
             if (characterModel.name == "mdlMage")
@@ -290,6 +315,10 @@ namespace Faithful
             jetMiddle.transform.localScale = newJetScale;
             jetLeft.transform.localScale = newJetScale;
             jetRight.transform.localScale = newJetScale;
+
+            // Update jet lights
+            jetLightsOn.SetActive(jetActivated);
+            jetLightsOff.SetActive(!jetActivated);
         }
 
         /*protected void OnArtificerJetpackOnEnter(On.EntityStates.Mage.JetpackOn.orig_OnEnter orig, EntityStates.Mage.JetpackOn self)
@@ -621,6 +650,31 @@ namespace Faithful
 
                 // Return and modify rising acceleration based on buff
                 return baseRisingAcceleration + risingAccelerationBuff * buffPerc;
+            }
+        }
+    }
+
+    internal class TJetpackJetFlare : MonoBehaviour
+    {
+        // Store reference to renderer
+        Renderer renderer;
+
+        private void Awake()
+        {
+            // Get renderer
+            renderer = GetComponent<Renderer>();
+
+            // Set renderer material
+            renderer.material = Assets.mageJetMaterial;
+        }
+
+        private void FixedUpdate()
+        {
+            // Check if incorrect material is currently applied
+            if (!renderer.material.name.Contains("mage"))
+            {
+                // Reapply material
+                renderer.material = Assets.mageJetMaterial;
             }
         }
     }

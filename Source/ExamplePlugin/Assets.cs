@@ -19,6 +19,7 @@ namespace Faithful
 
         // Store needed RoR2 resources
         public static Material mageJetMaterial;
+        public static Wave[] mageJetWaves;
 
         // Default assets
         private const string defaultModel = "temporalcubemesh";
@@ -50,6 +51,8 @@ namespace Faithful
             // Fetch all needed resources
             mageJetMaterial = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("Jets, Right").GetComponent<MeshRenderer>().material);
             mageJetMaterial.SetTexture("_RemapTex", GetTexture("texRamp4T0NFire"));
+
+            mageJetWaves = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("JetsOn").Find("Point Light").GetComponent<RoR2.FlickerLight>().sinWaves;
 
             // Check if debug mode
             if (Utils.debugMode)
