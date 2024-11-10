@@ -5,12 +5,24 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Networking.Match;
 using UnityEngine.UI;
 
 namespace Faithful
 {
     internal class DebugSpawnMenu : DebugPanel
     {
+        // Store dictionary of string and team index relationships
+        protected Dictionary<string, TeamIndex> teamLookup = new Dictionary<string, TeamIndex>()
+        {
+            { "Lunar", TeamIndex.Lunar },
+            { "Monster", TeamIndex.Monster },
+            { "Neutral", TeamIndex.Neutral },
+            { "None", TeamIndex.None },
+            { "Player", TeamIndex.Player },
+            { "Void", TeamIndex.Void }
+        };
+
         // Store reference to spawn button
         protected Button spawnButton;
 
@@ -19,9 +31,18 @@ namespace Faithful
 
         // Store reference to category dropdown
         protected Dropdown categoryDropdown;
-        
+
+        // Store reference to team dropdown
+        protected Dropdown teamDropdown;
+
         // Store reference to selection dropdowns
         protected List<SelectionDropdown> selectionDropdowns = new List<SelectionDropdown>();
+
+        // Store dictionary of additional dropdowns and their corresponding categories
+        protected Dictionary<string, List<Dropdown>> additionalDropdowns = new Dictionary<string, List<Dropdown>>();
+
+        // Store list of all additional dropdowns
+        protected List<Dropdown> allAdditionalDropdowns = new List<Dropdown>();
 
         public override void Awake()
         {
@@ -52,8 +73,17 @@ namespace Faithful
             // Create selection dropdowns
             CreateSelectionDropdowns();
 
+            // Find team dropdown
+            teamDropdown = transform.Find("TeamDropdown").gameObject.GetComponent<Dropdown>();
+
+            // Register additional dropdowns
+            RegisterAdditionalDropdown("Character", teamDropdown);
+
             // Enable correct selection dropdown
             EnableCorrectSelection();
+
+            // Create additional dropdowns
+            CreateAdditionalDropdowns();
         }
 
         void Update()
@@ -75,6 +105,27 @@ namespace Faithful
             // Create character selection dropdown
             Dropdown characterSelectionDropdown = transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<Dropdown>();
             selectionDropdowns.Add(new SelectionDropdown(characterSelectionDropdown, "Character", Utils.characterCardNames));
+        }
+
+        protected void RegisterAdditionalDropdown(string _category, Dropdown _dropdown)
+        {
+            // Add dropdown to all dropdowns list
+            allAdditionalDropdowns.Add(_dropdown);
+
+            // Check for category in dictionary
+            if (additionalDropdowns.ContainsKey(_category))
+            {
+                // Add to list
+                additionalDropdowns[_category].Add(_dropdown);
+                return;
+            }
+
+            // Create new list for category
+            additionalDropdowns[_category] =
+            [
+                // Add dropdown to list
+                _dropdown
+            ];
         }
 
         protected void OnSpawn()
@@ -171,7 +222,7 @@ namespace Faithful
             Log.Debug($"Spawning {spawnAmount} character(s) at target {localBody.transform.position}");
 
             // Request spawn from utils
-            Utils.SpawnCharacterCard(localBody.transform, selection, spawnAmount);
+            Utils.SpawnCharacterCard(localBody.transform, selection, spawnAmount, teamLookup[teamDropdown.options[teamDropdown.value].text]);
         }
 
         protected void EnableCorrectSelection()
@@ -193,10 +244,34 @@ namespace Faithful
             }
         }
 
+        protected void CreateAdditionalDropdowns()
+        {
+            // Cycle through all additional dropdowns
+            foreach (Dropdown dropdown in allAdditionalDropdowns)
+            {
+                // Disable dropdown
+                dropdown.gameObject.SetActive(false);
+            }
+
+            // Check for additional dropdowns for current category
+            if (additionalDropdowns.ContainsKey(category))
+            {
+                // Cycle through additional dropdowns for category
+                foreach (Dropdown dropdown in additionalDropdowns[category])
+                {
+                    // Enable dropdown
+                    dropdown.gameObject.SetActive(true);
+                }
+            }
+        }
+
         protected void OnChangeCategory(int _index)
         {
             // Enable correct selection dropdown
             EnableCorrectSelection();
+
+            // Create additional dropdowns
+            CreateAdditionalDropdowns();
         }
 
         protected int spawnAmount

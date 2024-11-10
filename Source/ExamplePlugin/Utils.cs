@@ -131,7 +131,33 @@ namespace Faithful
             Object.FindObjectOfType<SceneExitController>()?.Begin();
         }
 
-        public static void SpawnCharacterCard(Transform _target, string _name, int _amount = 1)
+        public static void KillAllEnemies()
+        {
+            // Get all character bodies
+            CharacterBody[] characterBodies = Object.FindObjectsOfType<CharacterBody>();
+
+            // Cycle through character bodies
+            foreach (CharacterBody characterBody in characterBodies)
+            {
+                // Check if not player team
+                if (characterBody.teamComponent.teamIndex != TeamIndex.Player)
+                {
+                    // Attempt to kill
+                    try
+                    {
+                        // Kill character
+                        characterBody.healthComponent.Die();
+                    }
+                    catch
+                    {
+                        // Ignore and continue
+                        continue;
+                    }
+                }
+            }
+        }
+
+        public static void SpawnCharacterCard(Transform _target, string _name, int _amount = 1, TeamIndex _team = TeamIndex.Monster)
         {
             // Attempt to get character spawn card
             CharacterSpawnCard spawnCard = GetCharacterSpawnCard(_name);
@@ -153,7 +179,7 @@ namespace Faithful
             // Create director spawn request
             DirectorSpawnRequest directorSpawnRequest = new DirectorSpawnRequest(spawnCard, directorPlacementRule, new Xoroshiro128Plus((ulong)Run.instance.stageRng.nextUint));
             directorSpawnRequest.ignoreTeamMemberLimit = true;
-            directorSpawnRequest.teamIndexOverride = TeamIndex.Monster;
+            directorSpawnRequest.teamIndexOverride = _team;
 
             // COPIED SCRIPT //
             // ORIGINAL -> RoR2.CombatDirector.GenerateAmbush

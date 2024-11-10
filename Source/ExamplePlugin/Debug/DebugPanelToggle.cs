@@ -3,18 +3,16 @@ using UnityEngine.UI;
 
 namespace Faithful
 {
-    internal class DebugPanelToggle : MonoBehaviour
+    internal class DebugPanelToggle : DebugToggle
     {
-        // Store reference to toggle and debug panel
-        protected Toggle toggle;
+        // Store reference to debug panel
         protected DebugPanel panel;
-
-        // Store toggle colours
-        protected ColorBlock normalColours;
-        protected ColorBlock selectedColours;
 
         public void Init(DebugPanel _panel)
         {
+            // Initialise base class
+            Init(OnToggleOn, OnToggleOff);
+
             // Assign panel
             panel = _panel;
 
@@ -27,43 +25,16 @@ namespace Faithful
             }
         }
 
-        void Awake()
+        protected void OnToggleOn()
         {
-            // Get toggle
-            toggle = GetComponent<Toggle>();
-
-            // Create colour blocks
-            normalColours = toggle.colors;
-            normalColours.selectedColor = normalColours.normalColor;
-            selectedColours = toggle.colors;
-            selectedColours.normalColor = selectedColours.selectedColor;
-
-            // Link on panel toggle changed behaviour
-            toggle.onValueChanged.AddListener(SetState);
+            // Open panel
+            panel.Open();
         }
 
-        public void SetState(bool _state)
+        protected void OnToggleOff()
         {
-            // Ensure state
-            toggle.isOn = _state;
-
-            // Check toggle state
-            if (_state)
-            {
-                // Open panel
-                panel.Open();
-
-                // Set toggle colours
-                toggle.colors = selectedColours;
-            }
-            else
-            {
-                // Close panel
-                panel.Close();
-
-                // Set toggle colours
-                toggle.colors = normalColours;
-            }
+            // Close panel
+            panel.Close();
         }
     }
 }
