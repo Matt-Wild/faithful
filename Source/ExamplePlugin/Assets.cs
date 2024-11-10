@@ -48,7 +48,8 @@ namespace Faithful
         private static void FetchNeededRoR2Resources()
         {
             // Fetch all needed resources
-            mageJetMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("Jets, Right").GetComponent<MeshRenderer>().material;
+            mageJetMaterial = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("Jets, Right").GetComponent<MeshRenderer>().material);
+            mageJetMaterial.SetTexture("_RemapTex", GetTexture("texRamp4T0NFire"));
 
             // Check if debug mode
             if (Utils.debugMode)
@@ -70,11 +71,14 @@ namespace Faithful
 
         public static string FindAsset(string _file)
         {
+            // Ensure lower case
+            _file = _file.ToLower();
+
             // Cycle through asset bundle
             foreach (string name in assetBundle.GetAllAssetNames())
             {
                 // Is correct asset?
-                if (name.Contains(_file))
+                if (name.ToLower().Contains(_file))
                 {
                     return name;
                 }
@@ -202,6 +206,25 @@ namespace Faithful
         {
             // Load object and return with default model as fallback
             return GetObject(_name, defaultModel);
+        }
+
+        public static Texture GetTexture(string _name)
+        {
+            // Add file extension
+            string fullName = _name + ".png";
+
+            // Attempt to find asset
+            string asset = FindAsset(fullName);
+
+            // Check for asset
+            if (asset == null)
+            {
+                Log.Error($"Requested asset '{fullName}' could not be found.");
+                return null;
+            }
+
+            // Return asset
+            return assetBundle.LoadAsset<Texture>(asset);
         }
 
         public static Shader GetShader(string _name)

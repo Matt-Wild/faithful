@@ -545,6 +545,9 @@ namespace Faithful
                 message += $"Analysing '{_current.name}':\n{parents}\n--------------------\n";
             }
 
+            // Add information on tag and layer
+            message += $"Tag: '{_current.tag}'\nLayer: '{LayerMask.LayerToName(_current.gameObject.layer)}' ({_current.gameObject.layer})\n--------------------\n";
+
             // Add information on position
             message += _current.parent == null ? $"Position: ({_current.position.x}, {_current.position.y}, {_current.position.z})" : $"World Position: ({_current.position.x}, {_current.position.y}, {_current.position.z})\nLocal Position: ({_current.localPosition.x}, {_current.localPosition.y}, {_current.localPosition.z})";
 

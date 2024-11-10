@@ -92,6 +92,8 @@ namespace Faithful
             // Set jet material
             jetpack.GetComponent<Transform>().Find("4-T0N_Jetpack_Jetflare_Display").GetComponent<SkinnedMeshRenderer>().material = Assets.mageJetMaterial;
 
+            Utils.AnalyseGameObject(jetpack);
+
             // Check if Artificer
             if (characterModel.name == "mdlMage")
             {
@@ -282,7 +284,7 @@ namespace Faithful
             dial.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 360.0f * fuelRemainingPerc);
 
             // Get new jet visuals scale
-            Vector3 newJetScale = jetActivated ? new Vector3(1.0f, 2.0f, 1.0f) : new Vector3(1.0f, 1.0f, 1.0f);
+            Vector3 newJetScale = jetActivated ? new Vector3(1.0f, 3.5f, 1.0f) : new Vector3(1.0f, 1.0f, 1.0f);
 
             // Update jet visuals
             jetMiddle.transform.localScale = newJetScale;
