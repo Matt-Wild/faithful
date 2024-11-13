@@ -6,8 +6,11 @@ namespace Faithful
 {
     internal class DebugPanelButtons : MonoBehaviour
     {
+        // Store reference to debug panel
+        protected DebugPanel panel;
+
         // Store reference to menu panel tranform
-        protected RectTransform panel;
+        protected RectTransform panelRect;
 
         // Store reference to panel toggle
         protected DebugPanelToggle toggle;
@@ -27,8 +30,11 @@ namespace Faithful
 
         void Awake()
         {
+            // Get debug panel behaviour
+            panel = GetComponent<DebugPanel>();
+
             // Get menu panel transform from parent
-            panel = GetComponent<RectTransform>();
+            panelRect = GetComponent<RectTransform>();
 
             // Get tab panel buttons
             tabButton = transform.Find("TabPanelButton").gameObject;
@@ -37,7 +43,7 @@ namespace Faithful
             closeButton = transform.Find("ClosePanelButton") != null ? transform.Find("ClosePanelButton").gameObject : null;
 
             // Get menu panel opened height
-            openedHeight = panel.sizeDelta.y;
+            openedHeight = panelRect.sizeDelta.y;
 
             // Get rect transform of tab button
             RectTransform tabButtonTransform = tabButton.GetComponent<RectTransform>();
@@ -114,10 +120,10 @@ namespace Faithful
         public void OnTabButtonClicked()
         {
             // Check if menu panel is closed
-            if (panel.sizeDelta.y <= closedHeight)
+            if (panelRect.sizeDelta.y <= closedHeight)
             {
                 // Open menu panel
-                panel.sizeDelta = new Vector2(panel.sizeDelta.x, openedHeight);
+                panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, openedHeight);
 
                 // Enable children
                 SetChildrenActive(true);
@@ -125,11 +131,14 @@ namespace Faithful
                 // Set tab button sprite
                 tabButtonOpen.SetActive(false);
                 tabButtonClose.SetActive(true);
+
+                // Tell panel it is maximised
+                panel.OnMaximise();
             }
             else
             {
                 // Close menu panel
-                panel.sizeDelta = new Vector2(panel.sizeDelta.x, closedHeight);
+                panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, closedHeight);
 
                 // Disable children
                 SetChildrenActive(false);
@@ -137,6 +146,9 @@ namespace Faithful
                 // Set tab button sprite
                 tabButtonOpen.SetActive(true);
                 tabButtonClose.SetActive(false);
+
+                // Tell panel it is minimised
+                panel.OnMinimise();
             }
         }
 

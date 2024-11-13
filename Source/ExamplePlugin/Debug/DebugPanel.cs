@@ -12,6 +12,9 @@ namespace Faithful
         protected Canvas canvas;
         protected RectTransform rectTransform;
 
+        // Store if panel is minimised
+        public bool minimised = false;
+
         public virtual void Init(DebugController _debugController, bool _startOpen = false)
         {
             // Assign debug controller
@@ -49,6 +52,18 @@ namespace Faithful
         {
             // Set inactive
             gameObject.SetActive(false);
+        }
+
+        public virtual void OnMinimise()
+        {
+            // Set as minimised
+            minimised = true;
+        }
+
+        public virtual void OnMaximise()
+        {
+            // Set as maximised
+            minimised = false;
         }
     }
 }

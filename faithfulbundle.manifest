@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2036308314
+CRC: 3568964882
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ae6f505258b189bd1c92f7dc614ba759
+    Hash: cac259769f54659cdf2ea95307694b39
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 270d4d5f056c35d7e3d1b85cacfeebc8
+    Hash: 23fc884cd6e84630289bedeca7251550
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -42,9 +42,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
 - Class: 114
@@ -168,6 +172,7 @@ Assets:
 - Assets/Items/BrassScrews/texBuffTeleporterScrew.png
 - Assets/Items/SecondHand/texBuffSecondHand.png
 - Assets/Items/DrownedVisage/DrownedVisageMesh.prefab
+- Assets/Debug/UI/DebugObjectAnalysisEntry.prefab
 - Assets/Items/CopperGear/texCopperGearNormal.png
 - Assets/Items/CopperGear/CopperGearMesh.prefab
 - Assets/Items/LongshotGeode/texLongshotGeodeRock.png

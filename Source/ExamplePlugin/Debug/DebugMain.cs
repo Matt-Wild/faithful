@@ -21,6 +21,10 @@
             // Add stage controls toggle
             DebugPanelToggle toggle3 = transform.Find("StageControlsToggle").gameObject.AddComponent<DebugPanelToggle>();
             toggle3.Init(debugController.debugStageControls);
+
+            // Add debug tools toggle
+            DebugPanelToggle toggle4 = transform.Find("DebugToolsToggle").gameObject.AddComponent<DebugPanelToggle>();
+            toggle4.Init(debugController.debugToolsMenu);
         }
     }
 }
