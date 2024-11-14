@@ -8,6 +8,9 @@ namespace Faithful
         // Store reference to Debug Controller
         protected DebugController debugController;
 
+        // Store reference to panel buttons
+        protected DebugPanelButtons panelButtons;
+
         // Store reference to canvas and rect transform
         protected Canvas canvas;
         protected RectTransform rectTransform;
@@ -27,7 +30,7 @@ namespace Faithful
         public virtual void Awake()
         {
             // Add Debug Tab Buttons behaviour
-            gameObject.AddComponent<DebugPanelButtons>();
+            panelButtons = gameObject.AddComponent<DebugPanelButtons>();
 
             // Get canvas
             canvas = transform.parent.gameObject.GetComponent<Canvas>();
@@ -52,6 +55,18 @@ namespace Faithful
         {
             // Set inactive
             gameObject.SetActive(false);
+        }
+
+        public void Maximise()
+        {
+            // Maximise panel
+            panelButtons.MaximisePanel();
+        }
+
+        public void Minimise()
+        {
+            // Minimise panel
+            panelButtons.MinimisePanel();
         }
 
         public virtual void OnMinimise()

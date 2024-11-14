@@ -146,7 +146,7 @@ namespace Faithful
                     try
                     {
                         // Kill character
-                        characterBody.healthComponent.Die();
+                        characterBody.healthComponent.gameObject.GetComponent<CharacterDeathBehavior>().OnDeath();
                     }
                     catch
                     {

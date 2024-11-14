@@ -122,33 +122,13 @@ namespace Faithful
             // Check if menu panel is closed
             if (panelRect.sizeDelta.y <= closedHeight)
             {
-                // Open menu panel
-                panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, openedHeight);
-
-                // Enable children
-                SetChildrenActive(true);
-
-                // Set tab button sprite
-                tabButtonOpen.SetActive(false);
-                tabButtonClose.SetActive(true);
-
-                // Tell panel it is maximised
-                panel.OnMaximise();
+                // Maximise panel
+                MaximisePanel();
             }
             else
             {
-                // Close menu panel
-                panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, closedHeight);
-
-                // Disable children
-                SetChildrenActive(false);
-
-                // Set tab button sprite
-                tabButtonOpen.SetActive(true);
-                tabButtonClose.SetActive(false);
-
-                // Tell panel it is minimised
-                panel.OnMinimise();
+                // Minimise panel
+                MinimisePanel();
             }
         }
 
@@ -159,7 +139,43 @@ namespace Faithful
             {
                 // Close panel
                 toggle.SetState(false);
+                return;
             }
+
+            // Close panel
+            panel.Close();
+        }
+
+        public void MaximisePanel()
+        {
+            // Open menu panel
+            panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, openedHeight);
+
+            // Enable children
+            SetChildrenActive(true);
+
+            // Set tab button sprite
+            tabButtonOpen.SetActive(false);
+            tabButtonClose.SetActive(true);
+
+            // Tell panel it is maximised
+            panel.OnMaximise();
+        }
+
+        public void MinimisePanel()
+        {
+            // Close menu panel
+            panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, closedHeight);
+
+            // Disable children
+            SetChildrenActive(false);
+
+            // Set tab button sprite
+            tabButtonOpen.SetActive(true);
+            tabButtonClose.SetActive(false);
+
+            // Tell panel it is minimised
+            panel.OnMinimise();
         }
 
         protected void SetChildrenActive(bool _active)

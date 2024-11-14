@@ -247,12 +247,12 @@ PrefabInstance:
     - target: {fileID: 437136582786716622, guid: bc4a235edf32aa742b8cad78bd4d4185,
         type: 3}
       propertyPath: m_Name
-      value: DebugToolsToggle
+      value: ObjectAnalysisToggle
       objectReference: {fileID: 0}
     - target: {fileID: 2866775917307990815, guid: bc4a235edf32aa742b8cad78bd4d4185,
         type: 3}
       propertyPath: m_Text
-      value: Debug Tools
+      value: Object Analysis
       objectReference: {fileID: 0}
     - target: {fileID: 6059729435904239205, guid: bc4a235edf32aa742b8cad78bd4d4185,
         type: 3}
