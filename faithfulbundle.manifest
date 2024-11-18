@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2637126468
+CRC: 1766190985
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 05125e91709d85b351db681c877866ed
+    Hash: d929702c2c4f17a9e4a7b10423727c60
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -96,6 +96,7 @@ Assets:
 - Assets/Items/CauterizingGreave/CauterizingGreaveDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeConsumedIcon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeIcon.png
+- Assets/Debug/UI/DebugAudioInstanceCanvas.prefab
 - Assets/Items/HasteningGreave/texHasteningGreaveIcon.png
 - Assets/Items/LeadersPennon/LeadersPennonDisplayMesh.prefab
 - Assets/Items/LongshotGeode/LongshotGeodeDisplayMesh.prefab

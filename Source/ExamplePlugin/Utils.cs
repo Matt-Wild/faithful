@@ -926,6 +926,32 @@ namespace Faithful
             return childTree;
         }
 
+        public static void SetLayer(GameObject _object, string _layer)
+        {
+            // Fetch layer index and call alternate method
+            SetLayer(_object, LayerMask.NameToLayer(_layer));
+        }
+
+        public static void SetLayer(GameObject _object, int _layer)
+        {
+            // Check for object
+            if (_object == null) return;
+
+            // Set layer
+            _object.layer = _layer;
+
+            // Recursively assign the layer to all children
+            foreach (Transform child in _object.transform)
+            {
+                // Check for child
+                if (child != null)
+                {
+                    // Perform recursion
+                    SetLayer(child.gameObject, _layer);
+                }
+            }
+        }
+
         public static bool debugMode
         {
             get { return _debugMode; }

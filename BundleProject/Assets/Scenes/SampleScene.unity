@@ -498,6 +498,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 4T0NJetpackDisplayMesh
       objectReference: {fileID: 0}
+    - target: {fileID: 7492895294769136158, guid: 73cecefce1d89d44f97cb40775a79e88,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7833954647073708196, guid: 73cecefce1d89d44f97cb40775a79e88,
         type: 3}
       propertyPath: m_RootOrder

@@ -12,6 +12,7 @@ namespace Faithful
         public DebugStageControls debugStageControls;
         public DebugObjectAnalysis debugObjectAnalysis;
         public DebugComponentAnalysis debugComponentAnalysis;
+        public DebugAudioAnalysis debugAudioAnalysis;
 
         public void Init()
         {
@@ -30,6 +31,10 @@ namespace Faithful
             // Add stage controls menu behaviour
             debugStageControls = transform.Find("DebugStagePanel").gameObject.AddComponent<DebugStageControls>();
             debugStageControls.Init(this);
+
+            // Add audio analysis menu behaviour
+            debugAudioAnalysis = transform.Find("DebugAudioPanel").gameObject.AddComponent<DebugAudioAnalysis>();
+            debugAudioAnalysis.Init(this);
 
             // Add object analysis behaviour
             debugObjectAnalysis = transform.Find("DebugObjectAnalysisPanel").gameObject.AddComponent<DebugObjectAnalysis>();

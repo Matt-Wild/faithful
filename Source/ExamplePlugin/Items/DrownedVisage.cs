@@ -110,7 +110,7 @@ namespace Faithful
                 foreach (HoldoutZoneController zone in zones)
                 {
                     // Add charge to zone
-                    Utils.ChargeHoldoutZone(zone, 0.02f);
+                    Utils.ChargeHoldoutZone(zone, 0.05f);
                 }
             }
         }

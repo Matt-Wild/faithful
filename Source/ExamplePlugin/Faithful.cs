@@ -3,6 +3,8 @@ using R2API;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
+using HarmonyLib;
+using RoR2;
 
 namespace Faithful
 {
@@ -96,6 +98,12 @@ namespace Faithful
                     obj.Result.AddComponent<NetUtils>();
                 }
             };
+
+            // Use harmony to patch methods inaccessible to mmhook
+            Harmony harmony = new Harmony("com.faithful.patcher");
+            AkSoundEngineDynamicPatcher.Init();
+            AkSoundEngineDynamicPatcher.PatchAll(harmony);
+            Log.Info("Patched all additional methods for faithful.");
 
             // Create buffs
             vengeance = new Vengeance(toolbox);

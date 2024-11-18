@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
+using R2API;
 
 namespace Faithful
 {
@@ -20,6 +21,7 @@ namespace Faithful
         // Store needed RoR2 resources
         public static Material mageJetMaterial;
         public static Wave[] mageJetWaves;
+        public static GameObject mageJetAkEventsPrefab;
 
         // Default assets
         private const string defaultModel = "temporalcubemesh";
@@ -53,6 +55,21 @@ namespace Faithful
             mageJetMaterial.SetTexture("_RemapTex", GetTexture("texRamp4T0NFire"));
 
             mageJetWaves = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("JetsOn").Find("Point Light").GetComponent<RoR2.FlickerLight>().sinWaves;
+
+            // Create mage jet ak events prefab
+            GameObject mageJetOn = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").transform.Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("JetsOn").gameObject);
+            mageJetAkEventsPrefab = mageJetOn.InstantiateClone("faithfulMageJetAkEvents");
+            Object.DestroyImmediate(mageJetOn);
+            Object.DestroyImmediate(mageJetAkEventsPrefab.transform.Find("Fire").gameObject);
+            Object.DestroyImmediate(mageJetAkEventsPrefab.transform.Find("Point Light").gameObject);
+            Object.DestroyImmediate(mageJetAkEventsPrefab.transform.Find("JetsL").gameObject);
+            Object.DestroyImmediate(mageJetAkEventsPrefab.transform.Find("JetsR").gameObject);
+            Object.DestroyImmediate(mageJetAkEventsPrefab.transform.Find("FireRing").gameObject);
+            mageJetAkEventsPrefab.transform.SetParent(null);
+            mageJetAkEventsPrefab.transform.position = Vector3.zero;
+            mageJetAkEventsPrefab.transform.localEulerAngles = Vector3.zero;
+            mageJetAkEventsPrefab.transform.localScale = Vector3.zero;
+            Object.DestroyImmediate(mageJetAkEventsPrefab.GetComponent<Rigidbody>());
 
             // Check if debug mode
             if (Utils.debugMode)

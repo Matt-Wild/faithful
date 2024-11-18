@@ -98,6 +98,14 @@ namespace Faithful
             jetLightsOn = jetpack.GetComponent<Transform>().Find("Jets_On").gameObject;
             jetLightsOff = jetpack.GetComponent<Transform>().Find("Jets_Off").gameObject;
 
+            // Disable jet lights
+            jetLightsOn.SetActive(false);
+
+            // Create mage jet ak events
+            GameObject mageJetAkEvents = Instantiate(Assets.mageJetAkEventsPrefab);
+            mageJetAkEvents.transform.SetParent(jetLightsOn.transform, false);
+            mageJetAkEvents.SetActive(true);
+
             // Add flicker light to point lights
             FlickerLight flickerMiddle = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Middle").gameObject.AddComponent<FlickerLight>();
             FlickerLight flickerLeft = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Left").gameObject.AddComponent<FlickerLight>();
