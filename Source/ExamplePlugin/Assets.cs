@@ -1,11 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.IO;
-using BepInEx;
-using IL.RoR2.ConVar;
 using System.Collections.Generic;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.ResourceManagement.ResourceLocations;
 using R2API;
 
 namespace Faithful
@@ -22,6 +18,7 @@ namespace Faithful
         public static Material mageJetMaterial;
         public static Wave[] mageJetWaves;
         public static GameObject mageJetAkEventsPrefab;
+        public static GameObject radiusIndicatorPrefab;
 
         // Default assets
         private const string defaultModel = "temporalcubemesh";
@@ -70,6 +67,21 @@ namespace Faithful
             mageJetAkEventsPrefab.transform.localEulerAngles = Vector3.zero;
             mageJetAkEventsPrefab.transform.localScale = Vector3.zero;
             Object.DestroyImmediate(mageJetAkEventsPrefab.GetComponent<Rigidbody>());
+
+            // Create radius indicator prefab
+            GameObject radiusIndicator = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/NearbyDamageBonusIndicator"));
+            radiusIndicatorPrefab = radiusIndicator.InstantiateClone("faithfulRadiusIndicator");
+            Object.DestroyImmediate(radiusIndicator);
+            Object.DestroyImmediate(radiusIndicatorPrefab.GetComponent<RoR2.NetworkedBodyAttachment>());
+            Object.DestroyImmediate(radiusIndicatorPrefab.GetComponent<NetworkIdentity>());
+            radiusIndicatorPrefab.transform.Find("Donut").GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+            radiusIndicatorPrefab.transform.Find("Donut").GetComponent<MeshRenderer>().material.SetColor("_TintColor", Color.white);
+            radiusIndicatorPrefab.transform.Find("Radius, Spherical").GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+            radiusIndicatorPrefab.transform.Find("Radius, Spherical").GetComponent<MeshRenderer>().material.SetColor("_TintColor", Color.white);
+            radiusIndicatorPrefab.transform.position = Vector3.zero;
+            radiusIndicatorPrefab.transform.eulerAngles = Vector3.zero;
+            radiusIndicatorPrefab.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            radiusIndicatorPrefab.AddComponent<FaithfulRadiusIndicatorBehaviour>();
 
             // Check if debug mode
             if (Utils.debugMode)

@@ -708,6 +708,54 @@ namespace Faithful
             return message;
         }
 
+        public static FaithfulRadiusIndicatorBehaviour CreateRadiusIndicator(Transform _parent, float _startingSize, Color _colour, float _adjustmentSpeed = 1.0f)
+        {
+            // Assume starting size is starting target size
+            return CreateRadiusIndicator(_parent, _startingSize, _startingSize, _colour, _adjustmentSpeed);
+        }
+
+        public static FaithfulRadiusIndicatorBehaviour CreateRadiusIndicator(Transform _parent, float _startingSize, float _startingTargetSize, Color _colour, float _adjustmentSpeed = 1.0f)
+        {
+            // Instantiate new radius indicator
+            GameObject newObj = Object.Instantiate(Assets.radiusIndicatorPrefab, _parent);
+
+            // Get radius behaviour
+            FaithfulRadiusIndicatorBehaviour behaviour = newObj.GetComponent<FaithfulRadiusIndicatorBehaviour>();
+
+            // Initialise radius behaviour
+            behaviour.Init(_parent, _startingSize, _colour, _adjustmentSpeed);
+
+            // Set radius target size
+            behaviour.SetTargetSize(_startingTargetSize);
+
+            // Return behaviour
+            return behaviour;
+        }
+
+        public static FaithfulRadiusIndicatorBehaviour CreateRadiusIndicator(CharacterBody _parent, float _startingSize, Color _colour, float _adjustmentSpeed = 1.0f)
+        {
+            // Assume starting size is starting target size
+            return CreateRadiusIndicator(_parent, _startingSize, _startingSize, _colour, _adjustmentSpeed);
+        }
+
+        public static FaithfulRadiusIndicatorBehaviour CreateRadiusIndicator(CharacterBody _parent, float _startingSize, float _startingTargetSize, Color _colour, float _adjustmentSpeed = 1.0f)
+        {
+            // Instantiate new radius indicator
+            GameObject newObj = Object.Instantiate(Assets.radiusIndicatorPrefab, _parent.corePosition, Quaternion.identity);
+
+            // Get radius behaviour
+            FaithfulRadiusIndicatorBehaviour behaviour = newObj.GetComponent<FaithfulRadiusIndicatorBehaviour>();
+
+            // Initialise radius behaviour
+            behaviour.Init(_parent.modelLocator.modelTransform, _startingSize, _colour, _adjustmentSpeed);
+
+            // Set radius target size
+            behaviour.SetTargetSize(_startingTargetSize);
+
+            // Return behaviour
+            return behaviour;
+        }
+
         public static CharacterSpawnCard GetCharacterSpawnCard(string _name)
         {
             // Cycle through character spawn cards

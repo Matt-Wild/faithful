@@ -13,8 +13,8 @@ namespace Faithful
         // Store previous registered item count
         int count = 0;
 
-        // Store reference to effect
-        GameObject effect;
+        // Store reference to radius indicator
+        FaithfulRadiusIndicatorBehaviour radiusIndicator;
 
         public void Init(CharacterBody _character)
         {
@@ -69,68 +69,32 @@ namespace Faithful
             // Update count
             count = _newCount;
 
-            // Check if effect exists
-            if (effect != null)
+            // Check if radius indicator exists
+            if (radiusIndicator != null)
             {
-                // Check if needs to destroy effect
+                // Check if needs to destroy radius indicator
                 if (count == 0)
                 {
-                    // Destroy effect
-                    Destroy(effect);
+                    // Destroy radius indicator
+                    Destroy(radiusIndicator.gameObject);
                     return;
                 }
 
-                // Calculate effect radius
+                // Calculate radius indicator radius
                 float radius = 15.0f + (count - 1) * 5.0f;  // REMEMBER TO SYNC THIS WITH LeadersPennon
 
-                // Calculate scale multiplier
-                float scaleMult = radius / 13.0f;
-
-                // Remember parent
-                Transform parent = effect.transform.parent;
-
-                // Set scale
-                effect.transform.parent = null;
-                effect.transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);
-                effect.transform.parent = parent;
+                // Set radius indicator target size
+                radiusIndicator.SetTargetSize(radius);
             }
 
-            // Effect doesn't exist
+            // Radius indicator doesn't exist
             else
             {
-                // Create effect
-                GameObject prefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/NearbyDamageBonusIndicator");
-                effect = Instantiate(prefab, character.corePosition, Quaternion.identity);
-
-                // Delete unneeded network components
-                Destroy(effect.GetComponent<NetworkedBodyAttachment>());
-                Destroy(effect.GetComponent<NetworkIdentity>());
-
-                // Create color
-                Color effectColour = new Color(0.58039215f, 0.22745098f, 0.71764705f);
-
-                // Set material colours
-                effect.transform.Find("Donut").GetComponent<MeshRenderer>().material.SetColor("_Color", effectColour);
-                effect.transform.Find("Donut").GetComponent<MeshRenderer>().material.SetColor("_TintColor", effectColour);
-                effect.transform.Find("Radius, Spherical").GetComponent<MeshRenderer>().material.SetColor("_Color", effectColour);
-                effect.transform.Find("Radius, Spherical").GetComponent<MeshRenderer>().material.SetColor("_TintColor", effectColour);
-
-                // Set parent
-                effect.transform.parent = character.modelLocator.modelTransform;
-
                 // Calculate effect radius
                 float radius = 15.0f + (count - 1) * 5.0f;  // REMEMBER TO SYNC THIS WITH LeadersPennon
 
-                // Calculate scale multiplier
-                float scaleMult = radius / 13.0f;
-
-                // Remember parent
-                Transform parent = effect.transform.parent;
-
-                // Set scale
-                effect.transform.parent = null;
-                effect.transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);
-                effect.transform.parent = parent;
+                // Create radius indicator
+                radiusIndicator = Utils.CreateRadiusIndicator(character, 0.0f, radius, new Color(0.58039215f, 0.22745098f, 0.71764705f));
             }
         }
     }
