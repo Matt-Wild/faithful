@@ -29,7 +29,7 @@
 	
 	"FAITHFUL_LEADERS_PENNON_NAME": "Leader's Pennon",
 	"FAITHFUL_LEADERS_PENNON_PICKUP": "Carry a flag that creates a ward around yourself. Grants nearby allies attack speed and regeneration. <style=cIsVoid>Corrupts all Warbanners</style>.",
-	"FAITHFUL_LEADERS_PENNON_DESC": "Create a ward around yourself that strengthens all allies within <style=cIsUtility>15m</style> <style=cStack>(+5m per stack)</style>. Raise <style=cIsDamage>attack speed</style> and <style=cIsHealing>passive health regeneration</style> by <style=cIsDamage>30%</style>. <style=cIsVoid>Corrupts all Warbanners</style>.",
+	"FAITHFUL_LEADERS_PENNON_DESC": "Create a ward around yourself that strengthens all allies within <style=cIsUtility>15m</style> <style=cStack>(+5m per stack)</style>. Raise <style=cIsDamage>attack speed</style> by <style=cIsDamage>30%</style> and <style=cIsHealing>passive health regeneration</style> by <style=cIsHealing>+5hp/s</style>. <style=cIsVoid>Corrupts all Warbanners</style>.",
 	"FAITHFUL_LEADERS_PENNON_LORE": "We knew we'd never win. This planet was as hellish as it was relentless.\n\nMany died as soon as the blast doors opened. Lizard people, giant jellyfish, constructs made of the very ground beneath our very feet. They all conspired somehow - someway - to massacre us all. We never stood a chance.\n\nAnd our squad leader, that damn idiot... What was left of him was marked with the flag that led us to our demise.",
 	"FAITHFUL_LEADERS_PENNON_BUFF": "Leader's Pennon",
 	
