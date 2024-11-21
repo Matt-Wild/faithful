@@ -83,7 +83,7 @@ namespace Faithful
             if (characterBody && inventory)
             {
                 // Get target Second Hand buff amount
-                int targetSecondHandCount = _character.isGrounded ? inventory.GetItemCount(secondHandItem.itemDef) : 0;
+                int targetSecondHandCount = _character.isGrounded || _character.characterMotor == null ? inventory.GetItemCount(secondHandItem.itemDef) : 0;
 
                 // Get current amount of Second Hand buffs
                 int currentSecondHandCount = characterBody.GetBuffCount(secondHandBuff.buffDef);

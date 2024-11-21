@@ -1,14 +1,11 @@
 ﻿using RoR2;
 using R2API;
 using UnityEngine;
-using RoR2.ExpansionManagement;
-using IL.RoR2.Items;
-using HarmonyLib;
-using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace Faithful
 {
+    internal delegate void ModifyPrefabCallback(GameObject _prefab);
+
     internal class Item
     {
         // Item def
@@ -18,7 +15,7 @@ namespace Faithful
         public string token;
 
         // Constructor
-        public Item(string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, bool _debugOnly = false)
+        public Item(string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _debugOnly = false)
         {
             // Should hide this item due to temporary assets or debug only?
             bool forceHide = !Utils.debugMode && (_debugOnly || _iconName == "textemporalcubeicon" || !Assets.HasAsset(_iconName) || _modelName == "temporalcubemesh" || !Assets.HasAsset(_modelName));
@@ -72,9 +69,30 @@ namespace Faithful
             itemDef.pickupIconSprite = Assets.GetIcon(_iconName);
             itemDef.pickupModelPrefab = Assets.GetModel(_modelName);
 
+            // Modify pickup model prefab
+            ModelPanelParameters mdlPanelParams = itemDef.pickupModelPrefab.AddComponent<ModelPanelParameters>();
+            mdlPanelParams.focusPointTransform = new GameObject("FocusPoint").transform;
+            mdlPanelParams.focusPointTransform.SetParent(itemDef.pickupModelPrefab.transform);
+            mdlPanelParams.cameraPositionTransform = new GameObject("CameraPosition").transform;
+            mdlPanelParams.cameraPositionTransform.SetParent(itemDef.pickupModelPrefab.transform);
+
+            // Check for model prefab modify callback
+            if (_modifyItemModelPrefabCallback != null)
+            {
+                // Call modify model prefab callback
+                _modifyItemModelPrefabCallback(itemDef.pickupModelPrefab);
+            }
+
             // Check for item display settings and against flag
             if (_displaySettings != null && !Config.CheckTagFlag(_token, "DISABLE_ITEM_DISPLAYS", true))
             {
+                // Check for display prefab modify callback
+                if (_modifyItemDisplayPrefabCallback != null)
+                {
+                    // Call modify display prefab callback
+                    _modifyItemDisplayPrefabCallback(_displaySettings.GetModel());
+                }
+
                 // Add item and pass in item display settings
                 ItemAPI.Add(new CustomItem(itemDef, _displaySettings.GetRules()));
             }

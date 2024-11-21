@@ -24,7 +24,7 @@ namespace Faithful
             CreateDisplaySettings("hasteninggreavedisplaymesh");
 
             // Create Longshot Geode item
-            hasteningGreaveItem = Items.AddItem("HASTENING_GREAVE", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings);
+            hasteningGreaveItem = Items.AddItem("HASTENING_GREAVE", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
 
             // Add On Recalculate Stats behaviour
             Behaviour.AddOnRecalculateStatsCallback(OnRecalculateStats);
@@ -60,6 +60,21 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Seeker", "CalfR", new Vector3(-0.00085F, 0.325F, 0.013F), new Vector3(0F, 94F, 359F), new Vector3(0.175F, 0.15F, 0.175F));
             displaySettings.AddCharacterDisplay("False Son", "CalfR", new Vector3(-0.06F, 0.288F, 0.00415F), new Vector3(5F, 90F, 0F), new Vector3(0.275F, 0.2F, 0.275F));
             displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.1925F, 0F, -0.54F), new Vector3(0F, 180F, 270F), new Vector3(0.1F, 0.075F, 0.1F));
+        }
+
+        void ModifyModelPrefab(GameObject _prefab)
+        {
+            // Get rings
+            GameObject ringT = Utils.FindChildByName(_prefab.transform, "Ring.T");
+            GameObject ringB = Utils.FindChildByName(_prefab.transform, "Ring.B");
+
+            // Add rotators
+            FaithfulRotatorBehaviour ringTRotator = ringT.AddComponent<FaithfulRotatorBehaviour>();
+            FaithfulRotatorBehaviour ringBRotator = ringB.AddComponent<FaithfulRotatorBehaviour>();
+
+            // Initialise rotators
+            ringTRotator.Init(new Vector3(0.0f, 1.0f, 0.0f), 90.0f);
+            ringBRotator.Init(new Vector3(0.0f, 1.0f, 0.0f), 90.0f);
         }
 
         void OnRecalculateStats(CharacterBody _body)

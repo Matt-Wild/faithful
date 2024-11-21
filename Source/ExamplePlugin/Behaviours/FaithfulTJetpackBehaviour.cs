@@ -51,6 +51,9 @@ namespace Faithful
         // Store if this jetpack belongs to Artificer
         protected bool artificer = false;
 
+        // Store if this jetpack has a display
+        protected bool hasDisplay = false;
+
         // Store reference to 4-T0N Jetpack game objects
         protected GameObject jetpack;
         protected GameObject additionalBoosters;
@@ -58,8 +61,8 @@ namespace Faithful
         protected GameObject jetMiddle;
         protected GameObject jetLeft;
         protected GameObject jetRight;
-        protected GameObject jetLightsOn;
-        protected GameObject jetLightsOff;
+        protected GameObject jetsOn;
+        protected GameObject jetsOff;
 
         // Store if this jetpack has initialised
         protected bool initialised = false;
@@ -73,7 +76,7 @@ namespace Faithful
         protected void Init(CharacterBody _characterBody)
         {
             // Check if already initialised
-            if (initialised && jetpack != null) return;
+            if (initialised && (jetpack != null || !hasDisplay)) return;
 
             // Set as initialised
             initialised = true;
@@ -83,6 +86,41 @@ namespace Faithful
 
             // Get jetpack game object
             jetpack = Utils.FindChildByName(characterModel, "4T0NJetpackDisplayMesh(Clone)");
+
+            // Check for jetpack
+            if (jetpack == null)
+            {
+                // Jetpack does not belong to Artificer
+                artificer = false;
+
+                // Does not have display
+                hasDisplay = false;
+
+                // Set additional components to null
+                additionalBoosters = null;
+                dial = null;
+                jetMiddle = null;
+                jetLeft = null;
+                jetRight = null;
+                jetsOff = null;
+
+                // Create empty jets on game object
+                jetsOn = new GameObject("JetsOn");
+
+                // Set jets on parent
+                jetsOn.transform.SetParent(characterModel, false);
+
+                // Create mage jet ak events
+                GameObject mageJetEffects = Instantiate(Assets.mageJetAkEventsPrefab);
+                mageJetEffects.transform.SetParent(jetsOn.transform, false);
+                mageJetEffects.SetActive(true);
+
+                // Done
+                return;
+            }
+
+            // Has display
+            hasDisplay = true;
 
             // Fetch the additional boosters and dial game objects
             additionalBoosters = Utils.FindChildByName(jetpack.transform, "Pack");
@@ -95,36 +133,36 @@ namespace Faithful
             jetpack.GetComponent<Transform>().Find("4-T0N_Jetpack_Jetflare_Display").gameObject.AddComponent<TJetpackJetFlare>();
 
             // Get jet lights objects
-            jetLightsOn = jetpack.GetComponent<Transform>().Find("Jets_On").gameObject;
-            jetLightsOff = jetpack.GetComponent<Transform>().Find("Jets_Off").gameObject;
+            jetsOn = jetpack.GetComponent<Transform>().Find("Jets_On").gameObject;
+            jetsOff = jetpack.GetComponent<Transform>().Find("Jets_Off").gameObject;
 
             // Disable jet lights
-            jetLightsOn.SetActive(false);
+            jetsOn.SetActive(false);
 
             // Create mage jet ak events
             GameObject mageJetAkEvents = Instantiate(Assets.mageJetAkEventsPrefab);
-            mageJetAkEvents.transform.SetParent(jetLightsOn.transform, false);
+            mageJetAkEvents.transform.SetParent(jetsOn.transform, false);
             mageJetAkEvents.SetActive(true);
 
             // Add flicker light to point lights
-            FlickerLight flickerMiddle = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Middle").gameObject.AddComponent<FlickerLight>();
-            FlickerLight flickerLeft = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Left").gameObject.AddComponent<FlickerLight>();
-            FlickerLight flickerRight = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Right").gameObject.AddComponent<FlickerLight>();
-            flickerMiddle.light = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Middle").GetComponent<Light>();
+            FlickerLight flickerMiddle = jetsOn.GetComponent<Transform>().Find("Point_Light_Middle").gameObject.AddComponent<FlickerLight>();
+            FlickerLight flickerLeft = jetsOn.GetComponent<Transform>().Find("Point_Light_Left").gameObject.AddComponent<FlickerLight>();
+            FlickerLight flickerRight = jetsOn.GetComponent<Transform>().Find("Point_Light_Right").gameObject.AddComponent<FlickerLight>();
+            flickerMiddle.light = jetsOn.GetComponent<Transform>().Find("Point_Light_Middle").GetComponent<Light>();
             flickerMiddle.sinWaves = Assets.mageJetWaves;
-            flickerLeft.light = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Left").GetComponent<Light>();
+            flickerLeft.light = jetsOn.GetComponent<Transform>().Find("Point_Light_Left").GetComponent<Light>();
             flickerLeft.sinWaves = Assets.mageJetWaves;
-            flickerRight.light = jetLightsOn.GetComponent<Transform>().Find("Point_Light_Right").GetComponent<Light>();
+            flickerRight.light = jetsOn.GetComponent<Transform>().Find("Point_Light_Right").GetComponent<Light>();
             flickerRight.sinWaves = Assets.mageJetWaves;
 
-            FlickerLight flickerMiddleOff = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Middle").gameObject.AddComponent<FlickerLight>();
-            FlickerLight flickerLeftOff = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Left").gameObject.AddComponent<FlickerLight>();
-            FlickerLight flickerRightOff = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Right").gameObject.AddComponent<FlickerLight>();
-            flickerMiddleOff.light = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Middle").GetComponent<Light>();
+            FlickerLight flickerMiddleOff = jetsOff.GetComponent<Transform>().Find("Point_Light_Middle").gameObject.AddComponent<FlickerLight>();
+            FlickerLight flickerLeftOff = jetsOff.GetComponent<Transform>().Find("Point_Light_Left").gameObject.AddComponent<FlickerLight>();
+            FlickerLight flickerRightOff = jetsOff.GetComponent<Transform>().Find("Point_Light_Right").gameObject.AddComponent<FlickerLight>();
+            flickerMiddleOff.light = jetsOff.GetComponent<Transform>().Find("Point_Light_Middle").GetComponent<Light>();
             flickerMiddleOff.sinWaves = Assets.mageJetWaves;
-            flickerLeftOff.light = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Left").GetComponent<Light>();
+            flickerLeftOff.light = jetsOff.GetComponent<Transform>().Find("Point_Light_Left").GetComponent<Light>();
             flickerLeftOff.sinWaves = Assets.mageJetWaves;
-            flickerRightOff.light = jetLightsOff.GetComponent<Transform>().Find("Point_Light_Right").GetComponent<Light>();
+            flickerRightOff.light = jetsOff.GetComponent<Transform>().Find("Point_Light_Right").GetComponent<Light>();
             flickerRightOff.sinWaves = Assets.mageJetWaves;
 
             // Check if Artificer
@@ -135,6 +173,13 @@ namespace Faithful
 
                 // Disable additional boosters
                 additionalBoosters.transform.localScale = Vector3.zero;
+            }
+
+            // Otherwise say jetpack does not belong to artificer
+            else
+            {
+                // Jetpack does not belong to Artificer
+                artificer = false;
             }
         }
 
@@ -313,20 +358,31 @@ namespace Faithful
 
         protected void UpdateVisuals()
         {
-            // Update dial rotation
-            dial.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 360.0f * fuelRemainingPerc);
+            // Check if has display
+            if (hasDisplay)
+            {
+                // Update dial rotation
+                dial.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 360.0f * fuelRemainingPerc);
 
-            // Get new jet visuals scale
-            Vector3 newJetScale = jetActivated ? new Vector3(1.0f, 3.5f, 1.0f) : new Vector3(1.0f, 1.0f, 1.0f);
+                // Get new jet visuals scale
+                Vector3 newJetScale = jetActivated ? new Vector3(1.0f, 3.5f, 1.0f) : new Vector3(1.0f, 1.0f, 1.0f);
 
-            // Update jet visuals
-            jetMiddle.transform.localScale = newJetScale;
-            jetLeft.transform.localScale = newJetScale;
-            jetRight.transform.localScale = newJetScale;
+                // Update jet visuals
+                jetMiddle.transform.localScale = newJetScale;
+                jetLeft.transform.localScale = newJetScale;
+                jetRight.transform.localScale = newJetScale;
 
-            // Update jet lights
-            jetLightsOn.SetActive(jetActivated);
-            jetLightsOff.SetActive(!jetActivated);
+                // Update jet effects
+                jetsOn.SetActive(jetActivated);
+                jetsOff.SetActive(!jetActivated);
+            }
+            
+            // Does not have display
+            else
+            {
+                // Update jet effects
+                jetsOn.SetActive(jetActivated);
+            }
         }
 
         /*protected void OnArtificerJetpackOnEnter(On.EntityStates.Mage.JetpackOn.orig_OnEnter orig, EntityStates.Mage.JetpackOn self)

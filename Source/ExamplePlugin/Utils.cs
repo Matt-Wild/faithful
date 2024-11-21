@@ -1199,5 +1199,11 @@ namespace Faithful
             // Return item display rules
             return displayRules;
         }
+
+        public GameObject GetModel()
+        {
+            // Return display model
+            return model;
+        }
     }
 }

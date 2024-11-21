@@ -73,6 +73,8 @@ namespace Faithful
             _stats.attackSpeedMultAdd += 0.3f;
 
             // Modify regen speed
+            _stats.baseRegenAdd += 5.0f;
+            _stats.levelRegenAdd += 1.0f;
             _stats.regenMultAdd += 0.3f;
         }
 
