@@ -71,10 +71,36 @@ namespace Faithful
 
             // Modify pickup model prefab
             ModelPanelParameters mdlPanelParams = itemDef.pickupModelPrefab.AddComponent<ModelPanelParameters>();
-            mdlPanelParams.focusPointTransform = new GameObject("FocusPoint").transform;
-            mdlPanelParams.focusPointTransform.SetParent(itemDef.pickupModelPrefab.transform);
-            mdlPanelParams.cameraPositionTransform = new GameObject("CameraPosition").transform;
-            mdlPanelParams.cameraPositionTransform.SetParent(itemDef.pickupModelPrefab.transform);
+
+            // Check for focus point
+            GameObject focusPoint = Utils.FindChildByName(itemDef.pickupModelPrefab.transform, "FocusPoint");
+            if (focusPoint != null)
+            {
+                // Set focus point transform
+                mdlPanelParams.focusPointTransform = focusPoint.transform;
+            }
+
+            else
+            {
+                // No focus point found so create one
+                mdlPanelParams.focusPointTransform = new GameObject("FocusPoint").transform;
+                mdlPanelParams.focusPointTransform.SetParent(itemDef.pickupModelPrefab.transform);
+            }
+
+            // Check for camera position
+            GameObject cameraPos = Utils.FindChildByName(itemDef.pickupModelPrefab.transform, "CameraPosition");
+            if (cameraPos != null)
+            {
+                // Set camera position transform
+                mdlPanelParams.cameraPositionTransform = cameraPos.transform;
+            }
+
+            else
+            {
+                // No camera position found so create one
+                mdlPanelParams.cameraPositionTransform = new GameObject("CameraPosition").transform;
+                mdlPanelParams.cameraPositionTransform.SetParent(itemDef.pickupModelPrefab.transform);
+            }
 
             // Check for model prefab modify callback
             if (_modifyItemModelPrefabCallback != null)
