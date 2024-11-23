@@ -99,9 +99,6 @@ namespace Faithful
 
                 // Create radius indicator
                 radiusIndicator = Utils.CreateRadiusIndicator(character, 0.0f, radius, new Color(0.58039215f, 0.22745098f, 0.71764705f));
-
-                GameObject gameObject = Instantiate<GameObject>(RoR2.Items.WardOnLevelManager.wardPrefab);
-                Utils.AnalyseGameObject(gameObject);
             }
         }
 
