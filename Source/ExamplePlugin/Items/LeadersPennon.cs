@@ -32,6 +32,9 @@ namespace Faithful
             // Add ally to ally behaviour
             Behaviour.AddAllyToAllyCallback(leadersPennonItem, AllyWithItemToAlly);
 
+            // Add update visual effects callback
+            Behaviour.AddOnUpdateVisualEffectsCallback(UpdateVisualEffects);
+
             // Add stats modification
             Behaviour.AddStatsMod(leadersPennonBuff, LeadersPennonStatsMod);
         }
@@ -101,6 +104,19 @@ namespace Faithful
                     Utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, 1);
                 }
             }
+        }
+
+        void UpdateVisualEffects(CharacterBody _body)
+        {
+            // Check for character body
+            if (_body == null) return;
+
+            // Check for faithful character body behaviour
+            FaithfulCharacterBodyBehaviour faithfulBehaviour = Utils.FindCharacterBodyHelper(_body);
+            if (faithfulBehaviour == null) return;
+
+            // Tell faithful leader's pennon behaviour to update it's visual effect
+            faithfulBehaviour.leadersPennon.UpdateVisualEffect(_body.HasBuff(leadersPennonBuff.buffDef));
         }
     }
 }

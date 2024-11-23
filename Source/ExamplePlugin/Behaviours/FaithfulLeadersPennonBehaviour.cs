@@ -1,7 +1,5 @@
-﻿using EntityStates;
-using RoR2;
+﻿using RoR2;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Faithful
 {
@@ -9,6 +7,9 @@ namespace Faithful
     {
         // Store reference to Character Body and Character Inventory
         public CharacterBody character;
+
+        // Store reference to visual effect
+        private TemporaryVisualEffect visualEffect;
 
         // Store previous registered item count
         int count = 0;
@@ -31,6 +32,9 @@ namespace Faithful
 
             // Hook behaviour
             Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
+
+            // Update temporary visual effects
+            character.UpdateAllTemporaryVisualEffects();
         }
 
         private void OnDestroy()
@@ -95,7 +99,44 @@ namespace Faithful
 
                 // Create radius indicator
                 radiusIndicator = Utils.CreateRadiusIndicator(character, 0.0f, radius, new Color(0.58039215f, 0.22745098f, 0.71764705f));
+
+                GameObject gameObject = Instantiate<GameObject>(RoR2.Items.WardOnLevelManager.wardPrefab);
+                Utils.AnalyseGameObject(gameObject);
             }
+        }
+
+        public void UpdateVisualEffect(bool _active)
+        {
+            // Check if visual effect should be active
+            if (_active)
+            {
+                // Check if already has visual effect
+                if (visualEffect != null) return;
+
+                // Create visual effect
+                GameObject gameObject = Instantiate(Assets.pennonEffectPrefab, character.corePosition, Quaternion.identity);
+                visualEffect = gameObject.GetComponent<TemporaryVisualEffect>();
+                visualEffect.parentTransform = character.coreTransform;
+                visualEffect.visualState = TemporaryVisualEffect.VisualState.Enter;
+                visualEffect.healthComponent = character.healthComponent;
+                visualEffect.radius = character.radius;
+                LocalCameraEffect component = gameObject.GetComponent<LocalCameraEffect>();
+                if (component)
+                {
+                    component.targetCharacter = base.gameObject;
+                }
+
+                // Done
+                return;
+            }
+
+            // Visual effect not supposed to be active
+
+            // Check if visual effect is already not active
+            if (visualEffect == null) return;
+
+            // Remove visual effect
+            visualEffect.visualState = TemporaryVisualEffect.VisualState.Exit;
         }
     }
 }

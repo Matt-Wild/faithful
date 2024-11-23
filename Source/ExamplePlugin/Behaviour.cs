@@ -85,6 +85,7 @@ namespace Faithful
         private static List<CharacterBodyCallback> onCharacterBodyAwakeCallbacks = new List<CharacterBodyCallback>();
         private static List<CharacterBodyCallback> onCharacterBodyStartCallbacks = new List<CharacterBodyCallback>();
         private static List<CharacterBodyCallback> onRecalculateStatsCallbacks = new List<CharacterBodyCallback>();
+        private static List<CharacterBodyCallback> onUpdateVisualEffectsCallbacks = new List<CharacterBodyCallback>();
 
         // Interactable callbacks
         private static List<OnPurchaseInteractionBeginCallback> onPurchaseInteractionBeginCallbacks = new List<OnPurchaseInteractionBeginCallback>();
@@ -125,6 +126,7 @@ namespace Faithful
             On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
             On.RoR2.HealthComponent.Heal += HookHeal;
             On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats;
+            On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects += HookUpdateVisualEffects;
             On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin;
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
             On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump;
@@ -438,6 +440,14 @@ namespace Faithful
             DebugLog("Added On Recalculate Stats behaviour");
         }
 
+        // Add On Update Visual Effects callback
+        public static void AddOnUpdateVisualEffectsCallback(CharacterBodyCallback _callback)
+        {
+            onUpdateVisualEffectsCallbacks.Add(_callback);
+
+            DebugLog("Added On Update Visual Effects behaviour");
+        }
+
         // Add On Purchase Interaction Begin callback
         public static void AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBeginCallback _callback)
         {
@@ -737,6 +747,18 @@ namespace Faithful
 
             // Update all temporary visual effects (again)
             self.UpdateAllTemporaryVisualEffects();
+        }
+
+        private static void HookUpdateVisualEffects(On.RoR2.CharacterBody.orig_UpdateAllTemporaryVisualEffects orig, CharacterBody self)
+        {
+            orig(self); // Run normal processes
+
+            // Cycle through On Update Visual Effects callbacks
+            foreach (CharacterBodyCallback callback in onUpdateVisualEffectsCallbacks)
+            {
+                // Call
+                callback(self);
+            }
         }
 
         private static void HookPurchaseInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)

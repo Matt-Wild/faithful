@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 65256280
+CRC: 901808899
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e30454a971504ba50c503d71a643d7bd
+    Hash: 91457238e20db9590821e5a48a4f9b2e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -142,6 +142,7 @@ Assets:
 - Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.prefab
 - Assets/Items/CollectorsVision/texCollectorsVisionEmission.png
 - Assets/Placeholder/Item/texTemporalCube.png
+- Assets/Items/LeadersPennon/texRampPennonBuff.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveNormal.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaNormal.png
 - Assets/Items/SecondHand/SecondHandDisplayMesh.prefab
