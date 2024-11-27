@@ -88,6 +88,17 @@ namespace Faithful
         {
             // Reset flags
             frameFlags.Reset();
+
+            // Check if character body is destroyed
+            if (characterBodyFound && character == null)
+            {
+                // Check if server
+                if (NetworkServer.active)
+                {
+                    // Destroy faithful behaviour
+                    NetworkServer.Destroy(gameObject);
+                }
+            }
         }
 
         private IEnumerator LinkCharacterBody()

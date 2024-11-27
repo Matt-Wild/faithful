@@ -28,6 +28,9 @@ namespace Faithful
         // Store object children section behaviour
         DebugObjectAnalysisChildrenSection childrenSection;
 
+        // Store object search section behaviour
+        DebugObjectAnalysisSearchSection searchSection;
+
         // Store reference to component analysis panel
         DebugComponentAnalysis componentAnalyser;
 
@@ -64,6 +67,10 @@ namespace Faithful
             // Add children section behaviour
             childrenSection = transform.Find("ChildrenSection").gameObject.AddComponent<DebugObjectAnalysisChildrenSection>();
             childrenSection.Init(this);
+
+            // Add search section behaviour
+            searchSection = transform.Find("SearchSection").gameObject.AddComponent<DebugObjectAnalysisSearchSection>();
+            searchSection.Init(this);
 
             // Set to analysing nothing by default
             AnalyseObject(null);
@@ -139,6 +146,16 @@ namespace Faithful
 
                 // Set as not analysing an object
                 analysing = false;
+
+                // Disable analysis sections
+                tagText.gameObject.SetActive(false);
+                layerText.gameObject.SetActive(false);
+                parentSection.gameObject.SetActive(false);
+                componentsSection.gameObject.SetActive(false);
+                childrenSection.gameObject.SetActive(false);
+
+                // Enable search section if not minimised
+                searchSection.gameObject.SetActive(true && !minimised);
             }
 
             // Object exists
@@ -153,6 +170,16 @@ namespace Faithful
 
                 // Set as analysing an object
                 analysing = true;
+
+                // Enable analysis sections if not minimised
+                tagText.gameObject.SetActive(true && !minimised);
+                layerText.gameObject.SetActive(true && !minimised);
+                parentSection.gameObject.SetActive(true && !minimised);
+                componentsSection.gameObject.SetActive(true && !minimised);
+                childrenSection.gameObject.SetActive(true && !minimised);
+
+                // Disable search section
+                searchSection.gameObject.SetActive(false);
             }
 
             // Set analysed game object for parent section
@@ -761,7 +788,7 @@ namespace Faithful
             title = transform.Find("Title").GetComponent<Text>();
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             // Get scroll rect
             scrollRect = transform.Find("ScrollMenu").gameObject.GetComponent<ScrollRect>();
@@ -794,7 +821,7 @@ namespace Faithful
             analysisBehaviour.AnalyseObject(_newObject);
         }
 
-        private void DestroyScrollEntries()
+        protected void DestroyScrollEntries()
         {
             // Cycle through scroll entries
             foreach (DebugObjectAnalysisScrollEntry entry in scrollEntries)
@@ -807,7 +834,7 @@ namespace Faithful
             scrollEntries.Clear();
         }
 
-        protected DebugObjectAnalysisScrollEntry CreateScrollEntry(Object _entryObject)
+        protected DebugObjectAnalysisScrollEntry CreateScrollEntry(Object _entryObject, bool _searchEntry = false)
         {
             // Create new scroll entry
             GameObject scrollEntry = Instantiate(scrollEntryPrefab);
@@ -815,7 +842,7 @@ namespace Faithful
 
             // Add scroll entry behaviour
             DebugObjectAnalysisScrollEntry behaviour = scrollEntry.AddComponent<DebugObjectAnalysisScrollEntry>();
-            behaviour.Init(this, _entryObject);
+            behaviour.Init(this, _entryObject, _searchEntry);
 
             // Add to scroll entries list
             scrollEntries.Add(behaviour);
@@ -916,6 +943,63 @@ namespace Faithful
         }
     }
 
+    internal class DebugObjectAnalysisSearchSection : DebugObjectAnalysisScrollSection
+    {
+        // Store reference to search input field
+        InputField inputField;
+
+        // Store reference to search button
+        Button searchButton;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            // Get input field
+            inputField = transform.Find("SearchField").GetComponent<InputField>();
+
+            // Get search button
+            searchButton = transform.Find("SearchButton").GetComponent<Button>();
+
+            // Add input field behaviour
+            inputField.onEndEdit.AddListener(OnSearchInputGiven);
+
+            // Add search button behaviour
+            searchButton.onClick.AddListener(OnSearchPressed);
+        }
+
+        private void OnSearchPressed()
+        {
+            // Do search behaviour with current input field text
+            OnSearchInputGiven(inputField.text);
+        }
+
+        private void OnSearchInputGiven(string _inputText)
+        {
+            // Destroy old scroll entries
+            DestroyScrollEntries();
+
+            // Check for search term
+            if (_inputText == "") return;
+
+            // Find game objects using search term
+            GameObject[] matchingObjects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name.ToLower().Contains(_inputText.ToLower())).ToArray();
+
+            // Cycle through matching objects
+            foreach (GameObject matching in matchingObjects)
+            {
+                // Create scroll entry
+                DebugObjectAnalysisScrollEntry entry = CreateScrollEntry(matching, true);
+
+                // Set entry title
+                entry.SetTitle($"'{matching.name}'");
+            }
+
+            // Update title text
+            title.text = $"Search Results ({matchingObjects.Length}):";
+        }
+    }
+
     internal class DebugObjectAnalysisScrollEntry : MonoBehaviour
     {
         // Store reference to scroll section
@@ -930,6 +1014,7 @@ namespace Faithful
         // Store reference to entry titles
         Text activeTitle;
         Text inactiveTitle;
+        Text nullTitle;
 
         // Store reference to buttons
         Button selectButton;
@@ -940,7 +1025,13 @@ namespace Faithful
         // Store if entry object is enabled
         bool objectEnabled = true;
 
-        public void Init(DebugObjectAnalysisScrollSection _scrollSection, Object _entryObject)
+        // Store if entry object exists
+        bool objectExists = true;
+
+        // Store if this entry is a search entry
+        bool searchEntry = false;
+
+        public void Init(DebugObjectAnalysisScrollSection _scrollSection, Object _entryObject, bool _searchEntry = false)
         {
             // Assign scroll section
             scrollSection = _scrollSection;
@@ -948,12 +1039,16 @@ namespace Faithful
             // Assign entry object
             entryObject = _entryObject;
 
+            // Update if search entry
+            searchEntry = _searchEntry;
+
             // Assign parent transform
             parentTransform = GetParentTransform();
 
             // Get titles
             activeTitle = transform.Find("ActiveTitle").GetComponent<Text>();
             inactiveTitle = transform.Find("InactiveTitle").GetComponent<Text>();
+            nullTitle = transform.Find("NullTitle").GetComponent<Text>();
 
             // Get buttons
             selectButton = transform.Find("SelectButton").GetComponent<Button>();
@@ -976,33 +1071,71 @@ namespace Faithful
 
         private void FixedUpdate()
         {
-            // Check if entry object is null or if parent transform has changed
-            if (entryObject == null || parentTransform != GetParentTransform())
+            // Check if search entry
+            if (searchEntry)
             {
-                // Refresh analysed object
-                scrollSection.RefreshAnalysedObject();
-                return;
+                // Check if entry object is active on this frame
+                bool currentEnabled = CheckEntryObjectActive();
+
+                // Check if different from stored state
+                if (currentEnabled != objectEnabled)
+                {
+                    // Update object enabled
+                    objectEnabled = currentEnabled;
+
+                    // Update Titles
+                    UpdateTitles();
+                }
+
+                // Check if entry object still exists
+                bool currentExists = !(entryObject == null || ReferenceEquals(entryObject, null) || entryObject.Equals(null));
+
+                // Check if difference from stored state
+                if (currentExists != objectExists)
+                {
+                    // Update object exists state
+                    objectExists = currentExists;
+
+                    // Update Titles
+                    UpdateTitles();
+
+                    // Update buttons
+                    UpdateButtons();
+                }
             }
 
-            // Check if entry object is active on this frame
-            bool currentEnabled = CheckEntryObjectActive();
-
-            // Check if different from stored state
-            if (currentEnabled != objectEnabled)
+            // Not a search entry
+            else
             {
-                // Update object enabled
-                objectEnabled = currentEnabled;
+                // Check if entry object is null or if parent transform has changed
+                if (entryObject == null || parentTransform != GetParentTransform())
+                {
+                    // Refresh analysed object
+                    scrollSection.RefreshAnalysedObject();
+                    return;
+                }
 
-                // Update Titles
-                UpdateTitles();
+                // Check if entry object is active on this frame
+                bool currentEnabled = CheckEntryObjectActive();
+
+                // Check if different from stored state
+                if (currentEnabled != objectEnabled)
+                {
+                    // Update object enabled
+                    objectEnabled = currentEnabled;
+
+                    // Update Titles
+                    UpdateTitles();
+                }
             }
         }
 
         private void UpdateTitles()
         {
             // Update which title is enabled
-            activeTitle.gameObject.SetActive(objectEnabled);
-            inactiveTitle.gameObject.SetActive(!objectEnabled);
+            activeTitle.gameObject.SetActive(objectExists && objectEnabled);
+            inactiveTitle.gameObject.SetActive(objectExists && !objectEnabled);
+            nullTitle.gameObject.SetActive(!objectExists);
         }
 
         private void UpdateButtons()
@@ -1190,8 +1323,8 @@ namespace Faithful
                 return componentCast.gameObject.activeInHierarchy;
             }
 
-            // Otherwise assume active
-            return true;
+            // Otherwise check if null
+            return !(entryObject == null || ReferenceEquals(entryObject, null) || entryObject.Equals(null));
         }
 
         private Transform GetParentTransform()
@@ -1213,6 +1346,7 @@ namespace Faithful
             // Set titles
             activeTitle.text = _title;
             inactiveTitle.text = _title;
+            nullTitle.text = _title;
         }
     }
 
@@ -1453,6 +1587,9 @@ namespace Faithful
         Button analyseButton;
         Button displayValueButton;
 
+        // Store reference to input fields
+        InputField displayValueInput;
+
         // Store reference to value holders
         Text displayValue;
         Text displayValueButtonText;
@@ -1480,6 +1617,9 @@ namespace Faithful
             analyseButton = transform.Find("AnalyseButton").GetComponent<Button>();
             displayValueButton = transform.Find("DisplayValueButton").GetComponent<Button>();
 
+            // Get input fields
+            displayValueInput = transform.Find("DisplayValueInput").GetComponent<InputField>();
+
             // Get value holders
             displayValue = transform.Find("DisplayValue").Find("Text").GetComponent<Text>();
             displayValueButtonText = displayValueButton.transform.Find("Text").GetComponent<Text>();
@@ -1488,6 +1628,9 @@ namespace Faithful
             callButton.onClick.AddListener(OnCallPressed);
             analyseButton.onClick.AddListener(OnAnalysePressed);
             displayValueButton.onClick.AddListener(OnValueButtonPressed);
+
+            // Add input field behaviour
+            displayValueInput.onEndEdit.AddListener(OnAttributeSet);
 
             // Update Titles
             UpdateTitles();
@@ -1513,8 +1656,18 @@ namespace Faithful
                 // Update member value
                 memberValue = newValue;
 
+                // Get new value string
+                string value = memberValue == null ? "Null" : memberValue.ToString();
+
                 // Update display value
-                displayValue.text = displayValueButtonText.text = memberValue == null ? "Null" : memberValue.ToString();
+                displayValue.text = displayValueButtonText.text = value;
+
+                // Check if the user is not editting the input field
+                if (!displayValueInput.isFocused)
+                {
+                    // Update the display value input field
+                    displayValueInput.text = value;
+                }
 
                 // Update buttons
                 UpdateElements();
@@ -1576,6 +1729,9 @@ namespace Faithful
                 analyseButton.gameObject.SetActive(false);
                 displayValueButton.gameObject.SetActive(false);
 
+                // Hide input field
+                displayValueInput.gameObject.SetActive(false);
+
                 // Check how many required parameters the method has
                 int parameterCount = methodInfoCast.GetParameters().Count(p => !p.IsOptional);
 
@@ -1598,12 +1754,63 @@ namespace Faithful
             // Show analyse button if value is not null
             analyseButton.gameObject.SetActive(memberValue != null);
 
-            // Get if member value is a bool and is writable
-            bool memberValueIsBool = memberValue is bool && canWrite;
+            // Check if member value is writable
+            if (canWrite)
+            {
+                // Check if member value is a bool
+                if (memberValue is bool)
+                {
+                    // Enable only display value button
+                    displayValue.transform.parent.gameObject.SetActive(false);
+                    displayValueButton.gameObject.SetActive(true);
+                    displayValueInput.gameObject.SetActive(false);
+                    return;
+                }
 
-            // Switch out display value and display value button if necessary
-            displayValue.transform.parent.gameObject.SetActive(!memberValueIsBool);
-            displayValueButton.gameObject.SetActive(memberValueIsBool);
+                // Check if member value is a int
+                if (memberValue is int)
+                {
+                    // Enable only display value input
+                    displayValue.transform.parent.gameObject.SetActive(false);
+                    displayValueButton.gameObject.SetActive(false);
+                    displayValueInput.gameObject.SetActive(true);
+
+                    // Set input field content type
+                    displayValueInput.contentType = InputField.ContentType.IntegerNumber;
+                    return;
+                }
+
+                // Check if member value is a float
+                if (memberValue is float)
+                {
+                    // Enable only display value input
+                    displayValue.transform.parent.gameObject.SetActive(false);
+                    displayValueButton.gameObject.SetActive(false);
+                    displayValueInput.gameObject.SetActive(true);
+
+                    // Set input field content type
+                    displayValueInput.contentType = InputField.ContentType.DecimalNumber;
+                    return;
+                }
+
+                // Check if member value is a string
+                if (memberValue is string)
+                {
+                    // Enable only display value input
+                    displayValue.transform.parent.gameObject.SetActive(false);
+                    displayValueButton.gameObject.SetActive(false);
+                    displayValueInput.gameObject.SetActive(true);
+
+                    // Set input field content type
+                    displayValueInput.contentType = InputField.ContentType.Standard;
+                    return;
+                }
+            }
+
+            // Otherwise only enable display value
+            displayValue.transform.parent.gameObject.SetActive(true);
+            displayValueButton.gameObject.SetActive(false);
+            displayValueInput.gameObject.SetActive(false);
         }
 
         private void OnCallPressed()
@@ -1656,6 +1863,66 @@ namespace Faithful
                 {
                     // Change bool field
                     fieldInfoCast.SetValue(component, !System.Convert.ToBoolean(memberValue));
+                }
+                return;
+            }
+        }
+
+        private void OnAttributeSet(string _newValue)
+        {
+            // Ensure can write
+            if (!canWrite) return;
+
+            // Check if property info
+            PropertyInfo propertyInfoCast = entryMemberInfo as PropertyInfo;
+            if (propertyInfoCast != null)
+            {
+                // Attempt to convert to appropriate type
+                try
+                {
+                    // Store reference to converted value
+                    object convertedValue;
+
+                    // Get type converter
+                    System.ComponentModel.TypeConverter converter = System.ComponentModel.TypeDescriptor.GetConverter(propertyInfoCast.PropertyType);
+
+                    // Convert value
+                    convertedValue = converter.ConvertFromInvariantString(_newValue);
+
+                    // Set property
+                    propertyInfoCast.SetValue(component, convertedValue);
+                }
+                catch
+                {
+                    // Send warning
+                    Log.Warning($"[OBJECT ANALYSIS] - Was not able to update property '{propertyInfoCast.Name}' to value '{_newValue}'.");
+                }
+                return;
+            }
+
+            // Check if field info
+            FieldInfo fieldInfoCast = entryMemberInfo as FieldInfo;
+            if (fieldInfoCast != null)
+            {
+                // Attempt to convert to appropriate type
+                try
+                {
+                    // Store reference to converted value
+                    object convertedValue;
+
+                    // Get type converter
+                    System.ComponentModel.TypeConverter converter = System.ComponentModel.TypeDescriptor.GetConverter(fieldInfoCast.FieldType);
+
+                    // Convert value
+                    convertedValue = converter.ConvertFromInvariantString(_newValue);
+
+                    // Set property
+                    fieldInfoCast.SetValue(component, convertedValue);
+                }
+                catch
+                {
+                    // Send warning
+                    Log.Warning($"[OBJECT ANALYSIS] - Was not able to update field '{fieldInfoCast.Name}' to value '{_newValue}'.");
                 }
                 return;
             }
