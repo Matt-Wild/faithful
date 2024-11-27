@@ -174,7 +174,7 @@ namespace Faithful
             AnalyseObject(analysedObject);
         }
 
-        public void AnalyseComponent(Component _component)
+        public void AnalyseComponent(object _component)
         {
             // Open component analysis panel
             componentAnalyser.Open();
@@ -264,7 +264,7 @@ namespace Faithful
         DebugComponentAnalysisAttributesSection attributesSection;
 
         // Store current component that is being analysed
-        Component analysedComponent;
+        object analysedComponent;
 
         // Store if currently analysing a component
         bool analysing = false;
@@ -300,7 +300,7 @@ namespace Faithful
         private void FixedUpdate()
         {
             // Check if analysing but analysed component reference is null
-            if (analysing && analysedComponent == null)
+            if (analysing && (analysedComponent == null || ReferenceEquals(analysedComponent, null) || analysedComponent.Equals(null)))
             {
                 // Stop analysing
                 AnalyseComponent();
@@ -314,6 +314,10 @@ namespace Faithful
         {
             // Assign object analysis
             objectAnalysis = _objectAnalysis;
+            
+            // Initialise scroll sections
+            methodsSection.Init(objectAnalysis);
+            attributesSection.Init(objectAnalysis);
         }
 
         public override void OnMinimise()
@@ -334,7 +338,7 @@ namespace Faithful
             AnalyseComponent();
         }
 
-        public void AnalyseComponent(Component _component = null)
+        public void AnalyseComponent(object _component = null)
         {
             // Check if panel is minimised
             if (minimised)
@@ -343,11 +347,14 @@ namespace Faithful
                 _component = null;
             }
 
+            // Check if unity component
+            bool isComponent = _component is Component;
+
             // Assign analysed object
             analysedComponent = _component;
 
             // Check if null object
-            if (analysedComponent == null)
+            if (analysedComponent == null || ReferenceEquals(analysedComponent, null) || analysedComponent.Equals(null))
             {
                 // Set panel title
                 titleText.text = "Component Analysis";
@@ -374,8 +381,19 @@ namespace Faithful
                 // Set namespace text
                 namespaceText.text = nameArgs.Length > 1 ? $"Namespace: {string.Join('.', nameArgs.Take(nameArgs.Length - 1))}" : "Namespace: None";
 
-                // Set owner text
-                ownerText.text = $"Owner: '{analysedComponent.gameObject.name}'";
+                // Check if unity component
+                if (isComponent)
+                {
+                    // Set owner text
+                    ownerText.text = $"Owner: '{(analysedComponent as Component).gameObject.name}'";
+                }
+                
+                // Not a unity component
+                else
+                {
+                    // Set owner text
+                    ownerText.text = "Owner: N/A";
+                }
 
                 // Set as analysing a component
                 analysing = true;
@@ -573,7 +591,7 @@ namespace Faithful
         Button deleteButton;
 
         // Store current component that is being analysed
-        Component analysedComponent;
+        object analysedComponent;
 
         public void Init(DebugComponentAnalysis _analysisBehaviour)
         {
@@ -597,7 +615,7 @@ namespace Faithful
             UpdateButtons();
         }
 
-        public void AnalyseComponent(Component _component)
+        public void AnalyseComponent(object _component)
         {
             // Assign analysed component
             analysedComponent = _component;
@@ -609,7 +627,7 @@ namespace Faithful
         private void UpdateButtons()
         {
             // Check if component is null
-            if (analysedComponent == null)
+            if (analysedComponent == null || ReferenceEquals(analysedComponent, null) || analysedComponent.Equals(null))
             {
                 // Disable all buttons
                 enableButton.gameObject.SetActive(false);
@@ -640,16 +658,27 @@ namespace Faithful
                 return;
             }
 
-            // Otherwise enable only delete button
+            // Check if unity engine object
+            Object unityObjectCast = analysedComponent as Object;
+            if (unityObjectCast != null)
+            {
+                // Enable only delete button
+                enableButton.gameObject.SetActive(false);
+                disableButton.gameObject.SetActive(false);
+                deleteButton.gameObject.SetActive(true);
+                return;
+            }
+
+            // Otherwise disable all buttons
             enableButton.gameObject.SetActive(false);
             disableButton.gameObject.SetActive(false);
-            deleteButton.gameObject.SetActive(true);
+            deleteButton.gameObject.SetActive(false);
         }
 
         private void OnEnablePressed()
         {
             // Check if no object being analysed
-            if (analysedComponent == null) return;
+            if (analysedComponent == null || ReferenceEquals(analysedComponent, null) || analysedComponent.Equals(null)) return;
 
             // Check if unity engine behaviour
             UnityEngine.Behaviour behaviourCast = analysedComponent as UnityEngine.Behaviour;
@@ -663,7 +692,7 @@ namespace Faithful
         private void OnDisablePressed()
         {
             // Check if no object being analysed
-            if (analysedComponent == null) return;
+            if (analysedComponent == null || ReferenceEquals(analysedComponent, null) || analysedComponent.Equals(null)) return;
 
             // Check if unity engine behaviour
             UnityEngine.Behaviour behaviourCast = analysedComponent as UnityEngine.Behaviour;
@@ -677,7 +706,7 @@ namespace Faithful
         private void OnDeletePressed()
         {
             // Check if no object being analysed
-            if (analysedComponent == null) return;
+            if (analysedComponent == null || ReferenceEquals(analysedComponent, null) || analysedComponent.Equals(null)) return;
 
             // Check if transform
             Transform transformCast = analysedComponent as Transform;
@@ -687,11 +716,16 @@ namespace Faithful
                 return;
             }
 
-            // Destroy component
-            Destroy(analysedComponent);
+            // Check if unity engine object
+            Object unityObjectCast = analysedComponent as Object;
+            if (unityObjectCast != null)
+            {
+                // Destroy component
+                Destroy(unityObjectCast);
 
-            // Analyse null object
-            analysisBehaviour.RefreshAnalysedObject();
+                // Analyse null object
+                analysisBehaviour.RefreshAnalysedObject();
+            }
         }
     }
 
@@ -748,7 +782,7 @@ namespace Faithful
             analysisBehaviour.RefreshAnalysedObject();
         }
 
-        public void AnalyseComponent(Component _component)
+        public void AnalyseComponent(object _component)
         {
             // Analyse component
             analysisBehaviour.AnalyseComponent(_component);
@@ -1184,6 +1218,9 @@ namespace Faithful
 
     internal class DebugComponentAnalysisScrollSection : MonoBehaviour
     {
+        // Store reference to debug object analysis behaviour
+        DebugObjectAnalysis analysisBehaviour;
+
         // Store scroll entry prefab
         GameObject scrollEntryPrefab;
 
@@ -1198,6 +1235,12 @@ namespace Faithful
 
         // Store list of current scroll entries
         List<DebugComponentAnalysisScrollEntry> scrollEntries = new List<DebugComponentAnalysisScrollEntry>();
+
+        public void Init(DebugObjectAnalysis _analysisBehaviour)
+        {
+            // Assign analysis behaviour
+            analysisBehaviour = _analysisBehaviour;
+        }
 
         private void Awake()
         {
@@ -1214,12 +1257,24 @@ namespace Faithful
             scrollPanel = transform.Find("ScrollMenu").Find("ScrollPanel");
         }
 
-        public virtual void AnalyseComponent(Component _component)
+        public virtual void AnalyseComponent(object _component)
         {
             // Destroy existing scroll entries
             DestroyScrollEntries();
         }
-        
+
+        public void ChangeAnalysedComponent(object _component)
+        {
+            // Ask object analysis to change analysed component
+            analysisBehaviour.AnalyseComponent(_component);
+        }
+
+        public void ChangeAnalysedObject(GameObject _newObject)
+        {
+            // Analyse new game object
+            analysisBehaviour.AnalyseObject(_newObject);
+        }
+
         private void DestroyScrollEntries()
         {
             // Cycle through scroll entries
@@ -1233,7 +1288,7 @@ namespace Faithful
             scrollEntries.Clear();
         }
 
-        protected DebugComponentAnalysisScrollEntry CreateScrollEntry(Component _component, MemberInfo _memberInfo)
+        protected DebugComponentAnalysisScrollEntry CreateScrollEntry(object _component, MemberInfo _memberInfo)
         {
             // Create new scroll entry
             GameObject scrollEntry = Instantiate(scrollEntryPrefab);
@@ -1257,13 +1312,13 @@ namespace Faithful
 
     internal class DebugComponentAnalysisMethodsSection : DebugComponentAnalysisScrollSection
     {
-        public override void AnalyseComponent(Component _component)
+        public override void AnalyseComponent(object _component)
         {
             // Call base method
             base.AnalyseComponent(_component);
 
             // Check for null component
-            if (_component == null)
+            if (_component == null || ReferenceEquals(_component, null) || _component.Equals(null))
             {
                 // Set title
                 title.text = "Methods:";
@@ -1305,13 +1360,13 @@ namespace Faithful
 
     internal class DebugComponentAnalysisAttributesSection : DebugComponentAnalysisScrollSection
     {
-        public override void AnalyseComponent(Component _component)
+        public override void AnalyseComponent(object _component)
         {
             // Call base method
             base.AnalyseComponent(_component);
 
             // Check for null object
-            if (_component == null)
+            if (_component == null || ReferenceEquals(_component, null) || _component.Equals(null))
             {
                 // Set title
                 title.text = "Attributes:";
@@ -1322,8 +1377,22 @@ namespace Faithful
             // Get properties
             PropertyInfo[] properties = _component.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
+            // Initialise filtered properties list
+            List<PropertyInfo> filteredProperties = new List<PropertyInfo>();
+
             // Cycle through properties
             foreach (PropertyInfo property in properties)
+            {
+                // Exclude indexers
+                if (property.GetIndexParameters().Length == 0)
+                {
+                    // Add to filtered properties
+                    filteredProperties.Add(property);
+                }
+            }
+
+            // Cycle through properties
+            foreach (PropertyInfo property in filteredProperties)
             {
                 // Create scroll entry
                 DebugComponentAnalysisScrollEntry entry = CreateScrollEntry(_component, property);
@@ -1370,7 +1439,7 @@ namespace Faithful
         DebugComponentAnalysisScrollSection scrollSection;
 
         // Store component reference
-        Component component;
+        object component;
 
         // Store member info
         MemberInfo entryMemberInfo;
@@ -1381,14 +1450,17 @@ namespace Faithful
 
         // Store reference to buttons
         Button callButton;
+        Button analyseButton;
+        Button displayValueButton;
 
         // Store reference to value holders
         Text displayValue;
+        Text displayValueButtonText;
 
         // Store previously sampled member value
         object memberValue;
 
-        public void Init(DebugComponentAnalysisScrollSection _scrollSection, Component _component, MemberInfo _entryMemberInfo)
+        public void Init(DebugComponentAnalysisScrollSection _scrollSection, object _component, MemberInfo _entryMemberInfo)
         {
             // Assign scroll section
             scrollSection = _scrollSection;
@@ -1405,24 +1477,23 @@ namespace Faithful
 
             // Get buttons
             callButton = transform.Find("CallButton").GetComponent<Button>();
+            analyseButton = transform.Find("AnalyseButton").GetComponent<Button>();
+            displayValueButton = transform.Find("DisplayValueButton").GetComponent<Button>();
 
             // Get value holders
             displayValue = transform.Find("DisplayValue").Find("Text").GetComponent<Text>();
+            displayValueButtonText = displayValueButton.transform.Find("Text").GetComponent<Text>();
 
             // Add button behaviours
             callButton.onClick.AddListener(OnCallPressed);
+            analyseButton.onClick.AddListener(OnAnalysePressed);
+            displayValueButton.onClick.AddListener(OnValueButtonPressed);
 
             // Update Titles
             UpdateTitles();
 
-            // Update buttons
-            UpdateButtons();
-
-            // Update value holders
-            UpdateValueHolders();
-
             // Update display value
-            UpdateDisplayValue();
+            UpdateDisplayValue(true);
         }
 
         private void FixedUpdate()
@@ -1431,19 +1502,22 @@ namespace Faithful
             UpdateDisplayValue();
         }
 
-        private void UpdateDisplayValue()
+        private void UpdateDisplayValue(bool _forceUpdate = false)
         {
             // Get member value
             object newValue = GetValue();
 
-            // Check if value has changed
-            if (newValue != memberValue)
+            // Check if value has changed or update is forced
+            if (newValue != memberValue || _forceUpdate)
             {
                 // Update member value
                 memberValue = newValue;
 
                 // Update display value
-                displayValue.text = memberValue.ToString();
+                displayValue.text = displayValueButtonText.text = memberValue == null ? "Null" : memberValue.ToString();
+
+                // Update buttons
+                UpdateElements();
             }
         }
 
@@ -1489,12 +1563,19 @@ namespace Faithful
             privateTitle.gameObject.SetActive(true);
         }
 
-        private void UpdateButtons()
+        private void UpdateElements()
         {
             // Check if method info
             MethodInfo methodInfoCast = entryMemberInfo as MethodInfo;
             if (methodInfoCast != null)
             {
+                // Ensure display value is hidden
+                displayValue.transform.parent.gameObject.SetActive(false);
+
+                // Hide property and field buttons
+                analyseButton.gameObject.SetActive(false);
+                displayValueButton.gameObject.SetActive(false);
+
                 // Check how many required parameters the method has
                 int parameterCount = methodInfoCast.GetParameters().Count(p => !p.IsOptional);
 
@@ -1513,32 +1594,16 @@ namespace Faithful
 
             // Assume that this member info cannot be called
             callButton.gameObject.SetActive(false);
-            return;
-        }
 
-        private void UpdateValueHolders()
-        {
-            // Check if property info
-            PropertyInfo propertyInfoCast = entryMemberInfo as PropertyInfo;
-            if (propertyInfoCast != null)
-            {
-                // Show display value
-                displayValue.transform.parent.gameObject.SetActive(true);
-                return;
-            }
+            // Show analyse button if value is not null
+            analyseButton.gameObject.SetActive(memberValue != null);
 
-            // Check if field info
-            FieldInfo fieldInfoCast = entryMemberInfo as FieldInfo;
-            if (fieldInfoCast != null)
-            {
-                // Show display value
-                displayValue.transform.parent.gameObject.SetActive(true);
-                return;
-            }
+            // Get if member value is a bool and is writable
+            bool memberValueIsBool = memberValue is bool && canWrite;
 
-            // Otherwise don't show display value
-            displayValue.transform.parent.gameObject.SetActive(false);
-            return;
+            // Switch out display value and display value button if necessary
+            displayValue.transform.parent.gameObject.SetActive(!memberValueIsBool);
+            displayValueButton.gameObject.SetActive(memberValueIsBool);
         }
 
         private void OnCallPressed()
@@ -1552,14 +1617,72 @@ namespace Faithful
             }
         }
 
-        private object GetValue()
+        private void OnAnalysePressed()
+        {
+            // Check if member value is a game object
+            GameObject gameObjectCast = memberValue as GameObject;
+            if (gameObjectCast != null)
+            {
+                // Analyse new game object
+                scrollSection.ChangeAnalysedObject(gameObjectCast);
+                return;
+            }
+
+            // Change analysed component
+            scrollSection.ChangeAnalysedComponent(memberValue);
+        }
+
+        private void OnValueButtonPressed()
         {
             // Check if property info
             PropertyInfo propertyInfoCast = entryMemberInfo as PropertyInfo;
             if (propertyInfoCast != null)
             {
-                // Return property value
-                return propertyInfoCast.GetValue(component);
+                // Check if a bool and can write
+                if (propertyInfoCast.PropertyType == typeof(bool) && canWrite)
+                {
+                    // Change bool property
+                    propertyInfoCast.SetValue(component, !System.Convert.ToBoolean(memberValue));
+                }
+                return;
+            }
+
+            // Check if field info
+            FieldInfo fieldInfoCast = entryMemberInfo as FieldInfo;
+            if (fieldInfoCast != null)
+            {
+                // Check if a bool and can write
+                if (fieldInfoCast.FieldType == typeof(bool) && canWrite)
+                {
+                    // Change bool field
+                    fieldInfoCast.SetValue(component, !System.Convert.ToBoolean(memberValue));
+                }
+                return;
+            }
+        }
+
+        private object GetValue()
+        {
+            // Check if component is null
+            if (component == null || ReferenceEquals(component, null) || component.Equals(null))
+            {
+                // Return null
+                return null;
+            }
+
+            // Check if property info
+            PropertyInfo propertyInfoCast = entryMemberInfo as PropertyInfo;
+            if (propertyInfoCast != null)
+            {
+                // Ensure can read property without parameters
+                if (propertyInfoCast.CanRead && propertyInfoCast.GetIndexParameters().Length == 0)
+                {
+                    // Return property value
+                    return propertyInfoCast.GetValue(component);
+                }
+
+                // Can't read property
+                return "???";
             }
 
             // Check if field info
@@ -1579,6 +1702,31 @@ namespace Faithful
             // Set titles
             publicTitle.text = _title;
             privateTitle.text = _title;
+        }
+
+        public bool canWrite
+        {
+            get
+            {
+                // Check if property info
+                PropertyInfo propertyInfoCast = entryMemberInfo as PropertyInfo;
+                if (propertyInfoCast != null)
+                {
+                    // Return if can write
+                    return propertyInfoCast.CanWrite;
+                }
+
+                // Check if field info
+                FieldInfo fieldInfoCast = entryMemberInfo as FieldInfo;
+                if (fieldInfoCast != null)
+                {
+                    // Fields are writable
+                    return true;
+                }
+
+                // Assume unwritable method
+                return false;
+            }
         }
     }
 }
