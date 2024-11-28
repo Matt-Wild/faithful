@@ -201,7 +201,7 @@ namespace Faithful
             AnalyseObject(analysedObject);
         }
 
-        public void AnalyseComponent(object _component)
+        public void AnalyseComponent(object _component, List<ComponentLookupPair> _lookupTree = null)
         {
             // Open component analysis panel
             componentAnalyser.Open();
@@ -210,7 +210,7 @@ namespace Faithful
             componentAnalyser.Maximise();
 
             // Analyse component
-            componentAnalyser.AnalyseComponent(_component);
+            componentAnalyser.AnalyseComponent(_component, _lookupTree);
         }
 
         private void OnAttemptPing(On.RoR2.PingerController.orig_AttemptPing orig, RoR2.PingerController self, Ray aimRay, GameObject bodyObject)
@@ -296,6 +296,9 @@ namespace Faithful
         // Store if currently analysing a component
         bool analysing = false;
 
+        // Store lookup tree for value type attributes
+        List<ComponentLookupPair> lookupTree = new List<ComponentLookupPair>();
+
         public override void Awake()
         {
             // Call base awake
@@ -321,13 +324,13 @@ namespace Faithful
             attributesSection = transform.Find("AttributesSection").gameObject.AddComponent<DebugComponentAnalysisAttributesSection>();
 
             // Set to analysing nothing by default
-            AnalyseComponent(null);
+            AnalyseComponent();
         }
 
         private void FixedUpdate()
         {
             // Check if analysing but analysed component reference is null
-            if (analysing && (analysedComponent == null || ReferenceEquals(analysedComponent, null) || analysedComponent.Equals(null)))
+            if (analysing && (analysedComponent == null || ReferenceEquals(analysedComponent, null) || analysedComponent.Equals(null) || (lookupTree.Count > 0 && lookupTree[0].GetValue() == null)))
             {
                 // Stop analysing
                 AnalyseComponent();
@@ -365,8 +368,20 @@ namespace Faithful
             AnalyseComponent();
         }
 
-        public void AnalyseComponent(object _component = null)
+        public void AnalyseComponent(object _component = null, List<ComponentLookupPair> _lookupTree = null)
         {
+            // Check for lookup tree
+            if (_lookupTree != null)
+            {
+                // Assign lookup tree
+                lookupTree = _lookupTree;
+            }
+            else
+            {
+                // Clear lookup tree
+                lookupTree.Clear();
+            }
+
             // Check if panel is minimised
             if (minimised)
             {
@@ -418,8 +433,22 @@ namespace Faithful
                 // Not a unity component
                 else
                 {
-                    // Set owner text
-                    ownerText.text = "Owner: N/A";
+                    // Check for lookup tree
+                    if (_lookupTree != null && _lookupTree.Count > 0)
+                    {
+                        // Get owner name args
+                        string[] ownerArgs = _lookupTree[_lookupTree.Count - 1].type.ToString().Split('.');
+
+                        // Set owner text
+                        ownerText.text = $"Owner: {ownerArgs[ownerArgs.Length - 1]}";
+                    }
+
+                    // No lookup tree
+                    else
+                    {
+                        // Set owner text
+                        ownerText.text = "Owner: N/A";
+                    }
                 }
 
                 // Set as analysing a component
@@ -430,10 +459,10 @@ namespace Faithful
             stateButtons.AnalyseComponent(analysedComponent);
 
             // Set analysed component for methods section
-            methodsSection.AnalyseComponent(analysedComponent);
+            methodsSection.AnalyseComponent(analysedComponent, _lookupTree);
 
             // Set analysed component for attributes section
-            attributesSection.AnalyseComponent(analysedComponent);
+            attributesSection.AnalyseComponent(analysedComponent, _lookupTree);
         }
 
         public void RefreshAnalysedObject()
@@ -1391,16 +1420,16 @@ namespace Faithful
             scrollPanel = transform.Find("ScrollMenu").Find("ScrollPanel");
         }
 
-        public virtual void AnalyseComponent(object _component)
+        public virtual void AnalyseComponent(object _component, List<ComponentLookupPair> _lookupTree = null)
         {
             // Destroy existing scroll entries
             DestroyScrollEntries();
         }
 
-        public void ChangeAnalysedComponent(object _component)
+        public void ChangeAnalysedComponent(object _component, List<ComponentLookupPair> _lookupTree = null)
         {
             // Ask object analysis to change analysed component
-            analysisBehaviour.AnalyseComponent(_component);
+            analysisBehaviour.AnalyseComponent(_component, _lookupTree);
         }
 
         public void ChangeAnalysedObject(GameObject _newObject)
@@ -1422,7 +1451,7 @@ namespace Faithful
             scrollEntries.Clear();
         }
 
-        protected DebugComponentAnalysisScrollEntry CreateScrollEntry(object _component, MemberInfo _memberInfo)
+        protected DebugComponentAnalysisScrollEntry CreateScrollEntry(object _component, MemberInfo _memberInfo, List<ComponentLookupPair> _lookupTree = null)
         {
             // Create new scroll entry
             GameObject scrollEntry = Instantiate(scrollEntryPrefab);
@@ -1430,7 +1459,7 @@ namespace Faithful
 
             // Add scroll entry behaviour
             DebugComponentAnalysisScrollEntry behaviour = scrollEntry.AddComponent<DebugComponentAnalysisScrollEntry>();
-            behaviour.Init(this, _component, _memberInfo);
+            behaviour.Init(this, _component, _memberInfo, _lookupTree);
 
             // Add to scroll entries list
             scrollEntries.Add(behaviour);
@@ -1446,7 +1475,7 @@ namespace Faithful
 
     internal class DebugComponentAnalysisMethodsSection : DebugComponentAnalysisScrollSection
     {
-        public override void AnalyseComponent(object _component)
+        public override void AnalyseComponent(object _component, List<ComponentLookupPair> _lookupTree = null)
         {
             // Call base method
             base.AnalyseComponent(_component);
@@ -1484,7 +1513,7 @@ namespace Faithful
             foreach (MethodInfo method in filteredMethods)
             {
                 // Create scroll entry
-                DebugComponentAnalysisScrollEntry entry = CreateScrollEntry(_component, method);
+                DebugComponentAnalysisScrollEntry entry = CreateScrollEntry(_component, method, _lookupTree);
 
                 // Set entry title
                 entry.SetTitle($"{method.Name} [{method.GetParameters().Length}]");
@@ -1494,7 +1523,7 @@ namespace Faithful
 
     internal class DebugComponentAnalysisAttributesSection : DebugComponentAnalysisScrollSection
     {
-        public override void AnalyseComponent(object _component)
+        public override void AnalyseComponent(object _component, List<ComponentLookupPair> _lookupTree = null)
         {
             // Call base method
             base.AnalyseComponent(_component);
@@ -1529,7 +1558,7 @@ namespace Faithful
             foreach (PropertyInfo property in filteredProperties)
             {
                 // Create scroll entry
-                DebugComponentAnalysisScrollEntry entry = CreateScrollEntry(_component, property);
+                DebugComponentAnalysisScrollEntry entry = CreateScrollEntry(_component, property, _lookupTree);
 
                 // Set entry title
                 entry.SetTitle(property.Name);
@@ -1556,7 +1585,7 @@ namespace Faithful
             foreach (FieldInfo field in filteredFields)
             {
                 // Create scroll entry
-                DebugComponentAnalysisScrollEntry entry = CreateScrollEntry(_component, field);
+                DebugComponentAnalysisScrollEntry entry = CreateScrollEntry(_component, field, _lookupTree);
 
                 // Set entry title
                 entry.SetTitle(field.Name);
@@ -1597,7 +1626,13 @@ namespace Faithful
         // Store previously sampled member value
         object memberValue;
 
-        public void Init(DebugComponentAnalysisScrollSection _scrollSection, object _component, MemberInfo _entryMemberInfo)
+        // Store lookup tree for value type attributes
+        List<ComponentLookupPair> lookupTree = new List<ComponentLookupPair>();
+
+        // Store input validation flags
+        List<ValueValidations> inputValidations = new List<ValueValidations>();
+
+        public void Init(DebugComponentAnalysisScrollSection _scrollSection, object _component, MemberInfo _entryMemberInfo, List<ComponentLookupPair> _lookupTree = null)
         {
             // Assign scroll section
             scrollSection = _scrollSection;
@@ -1607,6 +1642,13 @@ namespace Faithful
 
             // Assign member info
             entryMemberInfo = _entryMemberInfo;
+
+            // Check for lookup tree
+            if (_lookupTree != null)
+            {
+                // Assign lookup tree
+                lookupTree = new List<ComponentLookupPair>(_lookupTree);
+            }
 
             // Get titles
             publicTitle = transform.Find("PublicTitle").GetComponent<Text>();
@@ -1631,6 +1673,7 @@ namespace Faithful
 
             // Add input field behaviour
             displayValueInput.onEndEdit.AddListener(OnAttributeSet);
+            displayValueInput.onValueChanged.AddListener(OnInputValueChanged);
 
             // Update Titles
             UpdateTitles();
@@ -1718,6 +1761,9 @@ namespace Faithful
 
         private void UpdateElements()
         {
+            // Clear input validations
+            inputValidations.Clear();
+
             // Check if method info
             MethodInfo methodInfoCast = entryMemberInfo as MethodInfo;
             if (methodInfoCast != null)
@@ -1767,8 +1813,8 @@ namespace Faithful
                     return;
                 }
 
-                // Check if member value is a int
-                if (memberValue is int)
+                // Check if member value is a signed int
+                if (memberValue is sbyte || memberValue is short || memberValue is int || memberValue is long)
                 {
                     // Enable only display value input
                     displayValue.transform.parent.gameObject.SetActive(false);
@@ -1777,6 +1823,22 @@ namespace Faithful
 
                     // Set input field content type
                     displayValueInput.contentType = InputField.ContentType.IntegerNumber;
+                    return;
+                }
+
+                // Check if member value is an unsigned int
+                if (memberValue is byte || memberValue is ushort || memberValue is uint || memberValue is ulong)
+                {
+                    // Enable only display value input
+                    displayValue.transform.parent.gameObject.SetActive(false);
+                    displayValueButton.gameObject.SetActive(false);
+                    displayValueInput.gameObject.SetActive(true);
+
+                    // Set input field content type
+                    displayValueInput.contentType = InputField.ContentType.IntegerNumber;
+
+                    // Add input validation
+                    inputValidations.Add(ValueValidations.PositiveInteger);
                     return;
                 }
 
@@ -1813,6 +1875,25 @@ namespace Faithful
             displayValueInput.gameObject.SetActive(false);
         }
 
+        private void UpdateComponent()
+        {
+            // Check for lookup tree (exists if this is a value type and needs to be looked up)
+            if (lookupTree.Count == 0) return;
+
+            // Get first component
+            object currentComponent = lookupTree[0].component;
+
+            // Cycle through lookup tree
+            foreach (ComponentLookupPair pair in lookupTree)
+            {
+                // Update current component
+                currentComponent = pair.GetValue(currentComponent);
+            }
+
+            // Set as component
+            component = currentComponent;
+        }
+
         private void OnCallPressed()
         {
             // Check if method info
@@ -1835,8 +1916,22 @@ namespace Faithful
                 return;
             }
 
-            // Change analysed component
-            scrollSection.ChangeAnalysedComponent(memberValue);
+            // Check if member value is a value type
+            if (isValueType)
+            {
+                // Add to lookup tree
+                lookupTree.Add(new ComponentLookupPair(component, entryMemberInfo));
+
+                // Change analysed component
+                scrollSection.ChangeAnalysedComponent(memberValue, lookupTree);
+            }
+
+            // Not a value type
+            else
+            {
+                // Change analysed component
+                scrollSection.ChangeAnalysedComponent(memberValue);
+            }
         }
 
         private void OnValueButtonPressed()
@@ -1848,8 +1943,8 @@ namespace Faithful
                 // Check if a bool and can write
                 if (propertyInfoCast.PropertyType == typeof(bool) && canWrite)
                 {
-                    // Change bool property
-                    propertyInfoCast.SetValue(component, !System.Convert.ToBoolean(memberValue));
+                    // Set value
+                    SetValue(!System.Convert.ToBoolean(memberValue));
                 }
                 return;
             }
@@ -1861,8 +1956,8 @@ namespace Faithful
                 // Check if a bool and can write
                 if (fieldInfoCast.FieldType == typeof(bool) && canWrite)
                 {
-                    // Change bool field
-                    fieldInfoCast.SetValue(component, !System.Convert.ToBoolean(memberValue));
+                    // Set value
+                    SetValue(!System.Convert.ToBoolean(memberValue));
                 }
                 return;
             }
@@ -1889,8 +1984,8 @@ namespace Faithful
                     // Convert value
                     convertedValue = converter.ConvertFromInvariantString(_newValue);
 
-                    // Set property
-                    propertyInfoCast.SetValue(component, convertedValue);
+                    // Set value
+                    SetValue(convertedValue);
                 }
                 catch
                 {
@@ -1916,8 +2011,8 @@ namespace Faithful
                     // Convert value
                     convertedValue = converter.ConvertFromInvariantString(_newValue);
 
-                    // Set property
-                    fieldInfoCast.SetValue(component, convertedValue);
+                    // Set value
+                    SetValue(convertedValue);
                 }
                 catch
                 {
@@ -1928,8 +2023,28 @@ namespace Faithful
             }
         }
 
+        private void OnInputValueChanged(string _newValue)
+        {
+            // Check for positive integer validation
+            if (inputValidations.Contains(ValueValidations.PositiveInteger))
+            {
+                // Remove non-digit characters and ensure it starts with a non-zero (unless input is "0").
+                string validated = System.Text.RegularExpressions.Regex.Replace(_newValue, "[^0-9]", "");
+                if (validated.StartsWith("0") && validated.Length > 1)
+                {
+                    validated = validated.TrimStart('0');
+                }
+
+                // Update input
+                displayValueInput.text = validated;
+            }
+        }
+
         private object GetValue()
         {
+            // Update component reference
+            UpdateComponent();
+
             // Check if component is null
             if (component == null || ReferenceEquals(component, null) || component.Equals(null))
             {
@@ -1964,6 +2079,46 @@ namespace Faithful
             return null;
         }
 
+        public void SetValue(object _value)
+        {
+            // Check if can write
+            if (!canWrite) return;
+
+            // Check if property info
+            if (entryMemberInfo is PropertyInfo propertyInfo)
+            {
+                // Set value
+                propertyInfo.SetValue(component, _value);
+            }
+
+            // Check if field info
+            else if (entryMemberInfo is FieldInfo fieldInfo)
+            {
+                // Set value
+                fieldInfo.SetValue(component, _value);
+            }
+
+            // Check if value type attribute
+            if (lookupTree.Count > 0)
+            {
+                // Apply value through lookup tree
+                ApplyValue(component);
+            }
+        }
+
+        private void ApplyValue(object _value)
+        {
+            // Cycle backwards through lookup tree
+            for (int lookupTreeIndex = lookupTree.Count - 1; lookupTreeIndex >= 0; lookupTreeIndex--)
+            {
+                // Set value
+                lookupTree[lookupTreeIndex].SetValue(_value);
+
+                // Update value
+                _value = lookupTree[lookupTreeIndex].component;
+            }
+        }
+
         public void SetTitle(string _title)
         {
             // Set titles
@@ -1995,5 +2150,112 @@ namespace Faithful
                 return false;
             }
         }
+
+        public bool isValueType
+        {
+            get
+            {
+                // Define member type
+                System.Type memberType = null;
+
+                // Check if property info
+                if (entryMemberInfo is PropertyInfo propertyInfo)
+                {
+                    // Update member type
+                    memberType = propertyInfo.PropertyType;
+                }
+
+                // Check if field info
+                else if (entryMemberInfo is FieldInfo fieldInfo)
+                {
+                    // Update member type
+                    memberType = fieldInfo.FieldType;
+                }
+
+                // Check if the type is a value type
+                return memberType != null && memberType.IsValueType;
+            }
+        }
+    }
+
+    internal class ComponentLookupPair
+    {
+        // Store component and member info
+        public object component;
+        public MemberInfo memberInfo;
+
+        public ComponentLookupPair(object _component, MemberInfo _memberInfo)
+        {
+            // Assign component and member info
+            component = _component;
+            memberInfo = _memberInfo;
+        }
+
+        public object GetValue()
+        {
+            // Get value using own component
+            return GetValue(component);
+        }
+
+        public object GetValue(object _component)
+        {
+            // Check for component
+            if (_component == null || ReferenceEquals(_component, null) || _component.Equals(null)) return null;
+
+            // Check if property info
+            PropertyInfo propertyInfoCast = memberInfo as PropertyInfo;
+            if (propertyInfoCast != null)
+            {
+                // Return property value
+                return propertyInfoCast.GetValue(_component);
+            }
+
+            // Check if field info
+            FieldInfo fieldInfoCast = memberInfo as FieldInfo;
+            if (fieldInfoCast != null)
+            {
+                // Return field value
+                return fieldInfoCast.GetValue(_component);
+            }
+
+            // Otherwise return null
+            return null;
+        }
+
+        public void SetValue(object _value)
+        {
+            // Check if property info
+            PropertyInfo propertyInfoCast = memberInfo as PropertyInfo;
+            if (propertyInfoCast != null)
+            {
+                // Set property value
+                propertyInfoCast.SetValue(component, _value);
+            }
+
+            // Check if field info
+            FieldInfo fieldInfoCast = memberInfo as FieldInfo;
+            if (fieldInfoCast != null)
+            {
+                // Set field value
+                fieldInfoCast.SetValue(component, _value);
+            }
+        }
+
+        public System.Type type
+        {
+            get
+            {
+                // Check for component
+                if (component == null || ReferenceEquals(component, null) || component.Equals(null)) return null;
+
+                // No type found
+                return component.GetType();
+            }
+        }
+    }
+
+    internal enum ValueValidations
+    {
+        PositiveInteger
     }
 }
