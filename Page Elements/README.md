@@ -15,7 +15,7 @@ All items can be disabled individually in this mod's config.
 	<thead>
 		<tr>
 			<th>Icon</th>
-			<th>Name/Effect</th>
+			<th>Name / Effect</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -26,7 +26,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Copper Gear</b><br>
-				Increase attack speed by 25% (+25% per stack) while inside the Teleporter zone.
+				Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone.
 			</td>
 		</tr>
     <tr>
@@ -36,21 +36,21 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSpaciousUmbrellaIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Spacious Umbrella</b><br>
-				Increase the size of the Teleporter zone by 25% (+25% per stack).
+				Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>.
 			</td>
 		</tr>
 		<tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texVengefulToasterIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Vengeful Toaster</b><br>
-				Getting hit grants Vengeance for 4 (+1 per stack) seconds. Each stack of Vengeance increases damage by +75%. All stacks of Vengeance are consumed upon dealing damage.
+				Getting hit grants Vengeance for <b>4 (</b>+1 per stack<b>)</b> seconds. Each stack of Vengeance increases damage by <b>+75%</b>. All stacks of Vengeance are consumed upon dealing damage.
 			</td>
 		</tr>
 		<tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSecondHandIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Second Hand</b><br>
-				Increase attack speed by 20% (+20% per stack) and movement speed by 30% (+30% per stack) while touching the ground.
+				Increase attack speed by <b>20% (</b>+20% per stack<b>)</b> and movement speed by <b>30% (</b>+30% per stack<b>)</b> while touching the ground.
 			</td>
 		</tr>
     <tr>
@@ -60,14 +60,14 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/tex4T0NJetpackIcon.png?raw=true" width=128></td>
 			<td>
 				<b>4-T0N Jetpack</b><br>
-				Holding the jump key boosts you upwards for up to 4 (+2 per stack) seconds. Fully recharges in 12 (-20% per stack) seconds while touching the ground.
+				Holding the jump key boosts you upwards for up to <b>4 (</b>+2 per stack<b>)</b> seconds. Fully recharges in <b>12 (</b>-20% per stack<b>)</b> seconds while touching the ground.
       </td>
 		</tr>
     <tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texNoxiousSlimeIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Noxious Slimes</b><br>
-				All damaging debuffs deal +100% (+100% per stack) damage.
+				All damaging debuffs deal <b>+100% (</b>+100% per stack<b>)</b> damage.
       </td>
 		</tr>
     <tr>
@@ -96,7 +96,7 @@ All items can be disabled individually in this mod's config.
 	<thead>
 		<tr>
 			<th>Icon</th>
-			<th>Name/Effect</th>
+			<th>Name / Effect</th>
       <th>Non-Void Pair</th>
 		</tr>
 	</thead>
