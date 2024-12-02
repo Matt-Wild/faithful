@@ -1,7 +1,7 @@
 {
     "name": "Faithful",
     "version_number": "1.0.0",
-    "website_url": "",
+    "website_url": "https://github.com/Matt-Wild/faithful",
     "description": "Faithful additions to RoR2.",
     "dependencies": [
 		"bbepis-BepInExPack-5.4.2117",
