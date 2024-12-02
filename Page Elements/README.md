@@ -1,7 +1,7 @@
 # Faithful
 Multiplayer compatible!
 
-Currently adds 14 items, 6 of which require the Survivors of the Void DLC. All items have item displays!
+Currently adds <b>14</b> items, <b>6</b> of which require the <b>Survivors of the Void DLC</b>. All items have item displays!
 
 Also adds some custom debug tools to help other mod developers and those curious about the inner workings of the game.
 
@@ -97,7 +97,7 @@ All items can be disabled individually in this mod's config.
 		<tr>
 			<th>Icon</th>
 			<th>Name / Effect</th>
-      <th>Non-Void Pair</th>
+      <th>Corrupts</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -108,7 +108,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texBrassScrewsIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Brass Screws</b><br>
-				Increase damage by 20% (+20% per stack) while inside the Teleporter zone.
+				Increase damage by <b>20% (</b>+20% per stack<b>)</b> while inside the Teleporter zone.
 			</td>
       <td> 
 				Corrupts all <b>Copper Gears</b>.
@@ -118,7 +118,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLongshotGeodeIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Longshot Geode</b><br>
-			  Increase damage to enemies further than 50m away by 15% (+15% per stack).
+			  Increase damage to enemies further than <b>50m</b> away by <b>15% (</b>+15% per stack<b>)</b>.
 			</td>
       <td> 
 				Corrupts all <b>Focus Crystals</b>.
@@ -128,7 +128,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLeadersPennonIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Leader's Pennon</b><br>
-				Create a ward around yourself that strengthens all allies within 15m (+5m per stack). Raise attack speed by 30% and passive health regeneration by +5hp/s.
+				Create a ward around yourself that strengthens all allies within <b>15m (</b>+5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>.
 			</td>
       <td> 
 				Corrupts all <b>Warbanners</b>.
@@ -141,7 +141,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texDrownedVisageIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Drowned Visage</b><br>
-				Killing an enemy while within the Teleporter radius has a 2.5% (+2.5% per stack) chance to charge the Teleporter by 5%.
+				Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>.
 			</td>
       <td> 
 				Corrupts all <b>Spacious Umbrellas</b>.
@@ -151,7 +151,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texMeltingWarblerIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Melting Warbler</b><br>
-				Increase jump height by 1m (+1m per stack).
+				Increase jump height by <b>1m (</b>+1m per stack<b>)</b>.
 			</td>
       <td> 
 				Corrupts all <b>Wax Quails</b>.
@@ -164,7 +164,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCollectorsVisionIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Collector's Vision</b><br>
-				Each unique item collected per stage grants 1 (+1 per stack) permanent Inspiration. Each stack of Inspiration increases Critical Strike chance by +1% and grants an additional +20% Critical Strike damage.
+				Each unique item collected per stage grants <b>1 (</b>+1 per stack<b>)</b> permanent Inspiration. Each stack of Inspiration increases Critical Strike chance by <b>+1%</b> and grants an additional <b>+20%</b> Critical Strike damage.
       </td>
       <td> 
 				Corrupts all <b>Laser Scopes</b>.
