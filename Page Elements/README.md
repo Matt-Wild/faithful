@@ -77,14 +77,14 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texHasteningGreaveIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Hastening Greave</b><br>
-				Increase attack speed by 100% (+100% per stack). Reduce base damage by 50% (+50% per stack).
+				Increase attack speed by <b>100% (</b>+100% per stack<b>)</b>. Reduce base damage by <b>50% (</b>+50% per stack<b>)</b>.
       </td>
 		</tr>
     <tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCauterizingGreaveIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Cauterizing Greave</b><br>
-				Increase max health by 100% (+100% per stack). Reduce healing received by 50% (+50% per stack).
+				Increase max health by <b>100% (</b>+100% per stack<b>)</b>. Reduce healing received by <b>50% (</b>+50% per stack<b>)</b>.
       </td>
 		</tr>
 	</tbody>
