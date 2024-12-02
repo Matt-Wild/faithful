@@ -2,7 +2,7 @@
     "name": "Faithful",
     "version_number": "1.0.0",
     "website_url": "https://github.com/Matt-Wild/faithful",
-    "description": "An in-development faithful modded expansion for RoR2!",
+    "description": "A faithful modded expansion for Risk of Rain 2! Multiplayer-ready new items and buffs, item displays and custom VFX included.",
     "dependencies": [
 		"bbepis-BepInExPack-5.4.2117",
 		"RiskofThunder-R2API_Core-5.1.2",
