@@ -1,0 +1,110 @@
+[Header]
+Multiplayer compatible!
+
+Currently adds 14 items, 6 of which require the Survivors of the Void DLC.
+
+Also adds some custom debug tools to help other mod developers and those curious about the inner workings of the game.
+
+
+
+[Items]
+- Common -
+Copper Gear
+Increase attack speed by 25% (+25% per stack) while inside the Teleporter zone.
+
+- Tier 1 Void -
+Brass Screws
+Increase damage by 20% (+20% per stack) while inside the Teleporter zone. Corrupts all Copper Gears.
+
+Longshot Geode
+Increase damage to enemies further than 50m away by 15% (+15% per stack). Corrupts all Focus Crystals.
+
+Leader's Pennon
+Create a ward around yourself that strengthens all allies within 15m (+5m per stack). Raise attack speed by 30% and passive health regeneration by +5hp/s. Corrupts all Warbanners.
+
+- Uncommon -
+Spacious Umbrella
+Increase the size of the Teleporter zone by 25% (+25% per stack).
+
+Vengeful Toaster
+Getting hit grants Vengeance for 4 (+1 per stack) seconds. Each stack of Vengeance increases damage by +75%. All stacks of Vengeance are consumed upon dealing damage.
+
+Second Hand
+Increase attack speed by 20% (+20% per stack) and movement speed by 30% (+30% per stack) while touching the ground.
+
+- Tier 2 Void -
+Drowned Visage
+Killing an enemy while within the Teleporter radius has a 2.5% (+2.5% per stack) chance to charge the Teleporter by 5%. Corrupts all Spacious Umbrellas.
+
+Melting Warbler
+Increase jump height by 1m (+1m per stack). Corrupts all Wax Quails.
+
+- Legendary -
+4-T0N Jetpack
+Holding the jump key boosts you upwards for up to 4 (+2 per stack) seconds. Fully recharges in 12 (-20% per stack) seconds while touching the ground.
+
+Noxious Slimes
+All damaging debuffs deal +100% (+100% per stack) damage.
+
+- Tier 3 Void -
+Collector's Vision
+Each unique item collected per stage grants 1 (+1 per stack) permanent Inspiration. Each stack of Inspiration increases Critical Strike chance by +1% and grants an additional +20% Critical Strike damage. Corrupts all Laser Scopes.
+
+- Lunar -
+Hastening Greave
+Increase attack speed by 100% (+100% per stack). Reduce base damage by 50% (+50% per stack).
+
+Cauterizing Greave
+Increase max health by 100% (+100% per stack). Reduce healing received by 50% (+50% per stack).
+
+
+
+[Debug Tools]
+While disabled by default in the config file, we've added some optional debug features that can be used to help other mod creators.
+In multiplayer, only the host can access these debugging tools.
+
+F1	| Hold to spawn a Command Essence:
+ ⮡ 1	| Common
+ ⮡ 2	| Uncommon
+ ⮡ 3	| Legendary
+ ⮡ 4	| Planet
+ ⮡ 5	| Lunar
+ ⮡ 6	| Tier 1 Void
+ ⮡ 7	| Tier 2 Void
+ ⮡ 8	| Tier 3 Void
+ ⮡ 9	| Equipment
+ ⮡ -	| Lunar Equipment
+
+Holding F1 as you press one of the listed keys will spawn the corrosponding tier of Command Essence.
+
+F2	| Toggle Godmode
+
+Godmode provides the following when enabled:
+- Increased movement speed, attack speed and jump height.
+- All damage dealt will instantly kill anything.
+- All incoming damage is ignored as well as (most) instant kill abilities.
+- Forced teleportation (such as falling out of bounds) will be ignored.
+
+F3	| Toggle Debug Menu
+F4	| Spawn from Debug Menu
+
+The Debug menu has various functions that can help developers in creating and testing their own mods:
+- The Stats Monitor shows the base and current stats of the host.
+- The Spawn Menu let's the host spawn enemies, allies and Command Essences.
+- The Stage Controls let the host skip the current stage and clear all enemies from the map.
+- {Object Analysis description}
+- {Audio Analysis description}
+
+
+
+[Addendum]
+This mod is still currently in-development and lacks a lot of the content we have planned.
+We've got plans for more items, survivors, enemies and stages. And maybe even some other things.
+
+You can support us in making this mod (or in our other work) through the link below:
+https://www.patreon.com/c/spilledsoupprojects
+
+
+
+[Thanks]
+{This is where the extra credits go, I guess}
