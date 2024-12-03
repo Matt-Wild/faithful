@@ -237,6 +237,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.3 Readme Swap
+  - Fixed the readme for the store page.
 - v1.0.2 Version Mismatch
   - Fixed minor version mismatch issue.
 - v1.0.1 Oopsies
