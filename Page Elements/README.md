@@ -237,5 +237,9 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.2 Version Mismatch
+  - Fixed minor version mismatch issue.
+- v1.0.1 Oopsies
+  - Forgor smth...
 - v1.0.0 Release
   - Praying I didn't forget anything...
