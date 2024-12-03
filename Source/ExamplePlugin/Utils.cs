@@ -267,19 +267,31 @@ namespace Faithful
         {
             orig(self); // Run normal processes
 
-            // Check for card
-            if (HasCharacterSpawnCard(self.prefab.name))
+            // Encounters issues with modded spawn cards
+            try
             {
-                return;
+                // Check for card
+                if (HasCharacterSpawnCard(self.prefab.name))
+                {
+                    return;
+                }
+
+                // Add to character spawn cards
+                characterSpawnCards.Add(self);
+
+                // Debug only message
+                if (debugMode)
+                {
+                    Log.Debug($"[UTILS] - New character spawn card found for '{self.prefab.name}'");
+                }
             }
-
-            // Add to character spawn cards
-            characterSpawnCards.Add(self);
-
-            // Debug only message
-            if (debugMode)
+            catch
             {
-                Log.Debug($"[UTILS] - New character spawn card found for '{self.prefab.name}'");
+                // Debug only message
+                if (debugMode)
+                {
+                    Log.Warning($"[UTILS] - Could not add character spawn card to spawn list.");
+                }
             }
         }
 

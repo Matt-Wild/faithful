@@ -237,6 +237,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.4 Modded Spawn Card Conflicts
+  - Fixed errors with debugging tools when modded spawn cards are created.
 - v1.0.3 Readme Swap
   - Fixed the readme for the store page.
 - v1.0.2 Version Mismatch
