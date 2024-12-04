@@ -70,7 +70,7 @@ namespace Faithful
             Object.DestroyImmediate(mageJetAkEventsPrefab.GetComponent<Rigidbody>());
 
             // Create Leader's Pennon effect
-            GameObject tempLPEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/TemporaryVisualEffects/WarbannerBuffEffect");
+            GameObject tempLPEffect = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/TemporaryVisualEffects/WarbannerBuffEffect"));
             pennonEffectPrefab = tempLPEffect.InstantiateClone("faithfulLeadersPennonEffect");
             Object.DestroyImmediate(tempLPEffect);
             pennonEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(0.58039215f, 0.22745098f, 0.71764705f));

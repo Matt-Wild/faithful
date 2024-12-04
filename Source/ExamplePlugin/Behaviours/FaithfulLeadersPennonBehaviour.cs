@@ -104,6 +104,9 @@ namespace Faithful
 
         public void UpdateVisualEffect(bool _active)
         {
+            // Check for necessary asset
+            if (Assets.pennonEffectPrefab == null) return;
+
             // Check if visual effect should be active
             if (_active)
             {
