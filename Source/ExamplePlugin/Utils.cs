@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using HarmonyLib;
+using Newtonsoft.Json;
 using R2API;
 using RoR2;
 using RoR2.Navigation;
@@ -35,6 +36,9 @@ namespace Faithful
         // Corruption item pairs
         static List<CorruptPair> corruptionPairs = new List<CorruptPair>();
 
+        // Create debug mode config
+        static private Setting<bool> debugModeSetting;
+
         // Character model names
         static private Dictionary<string, string> characterModelNames = new Dictionary<string, string>()
         {
@@ -64,8 +68,14 @@ namespace Faithful
         // HG shader
         static private Shader HGShader;
 
+        // Store language dictionary for early lookups
+        static private Dictionary<string, string> languageDictionary;
+
         public static void Init(PluginInfo _pluginInfo)
         {
+            // Create debug mode setting
+            debugModeSetting = Config.CreateSetting("DEBUG_MODE", "Debug Tools", "Debug Mode", false, "Do you want to enable this mod's debug mode?");
+
             // Provide plugin info
             pluginInfo = _pluginInfo;
 
@@ -82,9 +92,34 @@ namespace Faithful
             On.RoR2.CharacterSpawnCard.Awake += OnCharacterSpawnCardAwake;
 
             // Update debug mode from config
-            _debugMode = Config.CheckTag("DEBUG_MODE");
+            _debugMode = debugModeSetting.Value;
+
+            // Load language file
+            LoadLanguageFile();
 
             Log.Debug("Utils initialised");
+        }
+
+        private static void LoadLanguageFile()
+        {
+            // Get language file path
+            string languageFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(pluginInfo.Location), "Faithful.language");
+
+            // Check for the language file
+            if (System.IO.File.Exists(languageFilePath))
+            {
+                // Read the language file
+                string json = System.IO.File.ReadAllText(languageFilePath);
+
+                // Deserialize the JSON using the wrapper into the language dictionary
+                languageDictionary = JsonConvert.DeserializeObject<LanguageWrapper>(json).strings;
+            }
+
+            // Language file doesn't exist
+            else
+            {
+                Log.Error("[UTILS]- Language file not found at: " + languageFilePath);
+            }
         }
 
         // Refresh chosen buff on chosen character
@@ -986,6 +1021,23 @@ namespace Faithful
             return childTree;
         }
 
+        public static string GetLanguageString(string _token)
+        {
+            // Check for token
+            if (languageDictionary.ContainsKey(_token))
+            {
+                // Return corresponding value
+                return languageDictionary[_token];
+            }
+
+            // Token not found
+            else
+            {
+                Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
+                return _token; // Return original token
+            }
+        }
+
         public static void SetLayer(GameObject _object, string _layer)
         {
             // Fetch layer index and call alternate method
@@ -1217,5 +1269,11 @@ namespace Faithful
             // Return display model
             return model;
         }
+    }
+
+    // Wrapper class for deserialization of the language file
+    public class LanguageWrapper
+    {
+        public Dictionary<string, string> strings; // The tokens and their corresponding strings
     }
 }

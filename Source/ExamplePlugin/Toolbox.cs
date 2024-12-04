@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using IL.RoR2.Items;
 using System.Diagnostics;
 
@@ -13,13 +14,13 @@ namespace Faithful
         public DebugMode debugMode;
 
         // Constructor
-        public Toolbox(Faithful _plugin, PluginInfo _pluginInfo)
+        public Toolbox(Faithful _plugin, PluginInfo _pluginInfo, ConfigFile _configFile)
         {
             // Assign reference to plugin
             plugin = _plugin;
 
             // Create tools
-            Config.Init(_pluginInfo);
+            Config.Init(_configFile);
             Utils.Init(_pluginInfo);
             debugMode = new DebugMode();
             Behaviour.Init();

@@ -17,10 +17,10 @@ namespace Faithful
             buffs = new List<Buff>();
         }
 
-        public static Buff AddBuff(string _token, string _iconDir, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false)
+        public static Buff AddBuff(string _token, string _iconDir, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true)
         {
             // Create buff
-            Buff newBuff = new Buff(_token, _iconDir, _colour, _canStack, _isDebuff, _isHidden);
+            Buff newBuff = new Buff(_token, _iconDir, _colour, _canStack, _isDebuff, _isHidden, _hasConfig);
 
             // Add buff to buffs list
             buffs.Add(newBuff);

@@ -43,7 +43,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.0.5";
+        public const string PluginVersion = "1.0.6";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -82,7 +82,7 @@ namespace Faithful
             Log.Init(Logger);
 
             // Initialise toolbox
-            toolbox = new Toolbox(this, PInfo);
+            toolbox = new Toolbox(this, PInfo, Config);
 
             // Create God Mode if in debug
             if (Utils.debugMode)
@@ -129,7 +129,6 @@ namespace Faithful
             Log.Info("Faithful loaded successfully, thank you for playing our mod!");
         }
 
-        // The Update() method is run on every frame of the game.
         private void Update()
         {
             // Update toolbox

@@ -8,26 +8,38 @@ namespace Faithful
 
     internal class Item
     {
+        // Create default settings that all items have
+        public Setting<bool> enabled;
+        public Setting<bool> extendedPickupDesc;
+        public Setting<bool> enableItemDisplays;
+
         // Item def
         public ItemDef itemDef;
 
-        // Item token
+        // Item token and name
         public string token;
+        public string name;
 
         // Constructor
         public Item(string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _debugOnly = false)
         {
+            // Assign token
+            token = _token;
+
+            // Assign name
+            name = Utils.GetLanguageString($"FAITHFUL_{_token}_NAME");
+
+            // Create default settings (MUST HAPPEN AFTER TOKEN AND NAME IS ASSIGNED)
+            CreateDefaultSettings();
+
             // Should hide this item due to temporary assets or debug only?
             bool forceHide = !Utils.debugMode && (_debugOnly || _iconName == "textemporalcubeicon" || !Assets.HasAsset(_iconName) || _modelName == "temporalcubemesh" || !Assets.HasAsset(_modelName));
 
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = !Config.CheckTag(_token);
+                forceHide = !enabled.Value;
             }
-
-            // Assign token
-            token = _token;
 
             // Create item def
             itemDef = ScriptableObject.CreateInstance<ItemDef>();
@@ -35,7 +47,7 @@ namespace Faithful
             // Set item texts
             itemDef.name = $"FAITHFUL_{_token}_NAME";
             itemDef.nameToken = $"FAITHFUL_{_token}_NAME";
-            itemDef.pickupToken = Config.CheckTagFlag(_token, "EXTENDED_PICKUP_DESC", true) ? $"FAITHFUL_{_token}_DESC" : $"FAITHFUL_{_token}_PICKUP";
+            itemDef.pickupToken = extendedPickupDesc.Value ? $"FAITHFUL_{_token}_DESC" : $"FAITHFUL_{_token}_PICKUP";
             itemDef.descriptionToken = $"FAITHFUL_{_token}_DESC";
             itemDef.loreToken = $"FAITHFUL_{_token}_LORE";
 
@@ -109,8 +121,8 @@ namespace Faithful
                 _modifyItemModelPrefabCallback(itemDef.pickupModelPrefab);
             }
 
-            // Check for item display settings and against flag
-            if (_displaySettings != null && !Config.CheckTagFlag(_token, "DISABLE_ITEM_DISPLAYS", true))
+            // Check for item display settings and if config allows it
+            if (_displaySettings != null && enableItemDisplays.Value)
             {
                 // Check for display prefab modify callback
                 if (_modifyItemDisplayPrefabCallback != null)
@@ -132,7 +144,7 @@ namespace Faithful
 
             if (forceHide)
             {
-                if (!Config.CheckTag(_token))
+                if (!enabled.Value)
                 {
                     Log.Debug($"Hiding item '{_token}' due to user preference");
                 }
@@ -145,6 +157,20 @@ namespace Faithful
                     Log.Debug($"Hiding item '{_token}' due to use of temporary assets outside of debug mode");
                 }
             }
+        }
+
+        private void CreateDefaultSettings()
+        {
+            // Create the settings which every item should have
+            enabled = CreateSetting("ENABLED", "Enable item?", true, "Should this item appear in runs?");
+            enableItemDisplays = CreateSetting("ENABLE_ITEM_DISPLAYS", "Enable item displays?", true, "Should this item have item displays on the compatible character models?");
+            extendedPickupDesc = CreateSetting("EXTENDED_PICKUP_DESC", "Extended Pickup Description", false, "Should this item have the logbook description appear when picking it up during runs?");
+        }
+
+        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description)
+        {
+            // Return new setting
+            return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {name.Replace("'", "")}", _key, _defaultValue, _description);
         }
     }
 }

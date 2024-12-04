@@ -1,11 +1,115 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using BepInEx;
-using JetBrains.Annotations;
+using BepInEx.Configuration;
 
 namespace Faithful
 {
     internal static class Config
+    {
+        // Store a reference to BepInEx config file
+        static ConfigFile configFile;
+
+        // Store dictionary of all settings
+        static Dictionary<string, ISetting> settings = new Dictionary<string, ISetting>();
+
+        public static void Init(ConfigFile _configFile)
+        {
+            // Assign config file
+            configFile = _configFile;
+        }
+
+        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description)
+        {
+            // Check for token in settings dictionary
+            if (settings.ContainsKey(_token))
+            {
+                // Log warning
+                Log.Warning($"[CONFIG] - Could not create setting for token '{_token}' as token already exists.");
+                return null;
+            }
+
+            // Create setting
+            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description);
+
+            // Add setting to dictionary
+            settings.Add(_token, setting);
+
+            // Return setting
+            return setting;
+        }
+
+        public static Setting<T> FetchSetting<T>(string _token)
+        {
+            // Check for token in settings dictionary
+            if (!settings.ContainsKey(_token))
+            {
+                // Log warning
+                Log.Warning($"[CONFIG] - Attempted to fetch setting with token '{_token}' but token was not found.");
+                return null;
+            }
+
+            // Attempt to return casted setting
+            try
+            {
+                // Return casted setting
+                return settings[_token] as Setting<T>;
+            }
+            catch
+            {
+                // Log warning
+                Log.Warning($"[CONFIG] - Could not fetch setting with token '{_token}' as type '{typeof(T).Name}'.");
+                return null;
+            }
+        }
+    }
+
+    internal class Setting<T> : ISetting
+    {
+        // Store token
+        public string token;
+
+        // Store config entry
+        public ConfigEntry<T> configEntry;
+
+        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description)
+        {
+            // Assign token
+            token = _token;
+
+            // Create config entry
+            configEntry = _configFile.Bind(_section, _key, _defaultValue, _description);
+        }
+
+        public T Value
+        {
+            get
+            {
+                // Return value of config entry
+                return configEntry.Value;
+            }
+            set
+            {
+                // Set value of config entry
+                configEntry.Value = value;
+            }
+        }
+
+        public object ValueObject
+        {
+            get
+            {
+                // Return config entry value
+                return configEntry.Value;
+            }
+        }
+    }
+
+    public interface ISetting
+    {
+        public object ValueObject { get; }
+    }
+
+    /*internal static class Config
     {
         // Store plugin info
         public static PluginInfo pluginInfo;
@@ -203,5 +307,5 @@ namespace Faithful
             // Flag not found
             return false;
         }
-    }
+    }*/
 }

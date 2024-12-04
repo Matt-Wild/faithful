@@ -237,6 +237,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.6 BepInEx Config
+  - Replaced config text file with BepInEx config
 - v1.0.5 Warbanner Visual Effect Fix
   - Fixed the warbanner temporary visual effect getting yeeted, oops.
 - v1.0.4 Modded Spawn Card Conflicts
