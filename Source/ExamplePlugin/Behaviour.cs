@@ -44,6 +44,9 @@ namespace Faithful
 
     internal static class Behaviour
     {
+        // Store if behaviour is enabled
+        static bool enabled = false;
+
         // Store character body helper prefab
         internal static GameObject characterBodyHelperPrefab;
 
@@ -111,6 +114,20 @@ namespace Faithful
             // Create prefabs
             CreatePrefabs();
 
+            // Enable behaviour
+            Enable();
+
+            DebugLog("Behaviour initialised");
+        }
+
+        public static void Enable()
+        {
+            // Check if already enabled
+            if (enabled) return;
+
+            // Update enabled
+            enabled = true;
+
             // Inject hooks
             On.RoR2.HoldoutZoneController.Update += HookHoldoutZoneControllerUpdate;
             On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
@@ -134,8 +151,39 @@ namespace Faithful
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
+        }
 
-            DebugLog("Behaviour initialised");
+        public static void Disable()
+        {
+            // Check if already disabled
+            if (!enabled) return;
+
+            // Update enabled
+            enabled = false;
+
+            // Inject hooks
+            On.RoR2.HoldoutZoneController.Update -= HookHoldoutZoneControllerUpdate;
+            On.RoR2.HoldoutZoneController.Start -= HookHoldoutZoneControllerStart;
+            On.RoR2.CharacterBody.Awake -= HookCharacterBodyAwake;
+            On.RoR2.CharacterBody.Start -= HookCharacterBodyStart;
+            On.RoR2.CharacterBody.AddBuff_BuffIndex -= HookAddBuffIndex;
+            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float -= HookAddTimedBuffDef;
+            On.RoR2.Inventory.GiveItem_ItemIndex_int -= HookServerGiveItem;
+            On.RoR2.Inventory.RemoveItem_ItemIndex_int -= HookServerRemoveItem;
+            On.RoR2.Inventory.HandleInventoryChanged -= HookInventoryChanged;
+            On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 -= HookInflictDamageOverTime;
+            On.RoR2.DotController.InflictDot_refInflictDotInfo -= HookInflictDamageOverTimeRef;
+            On.RoR2.HealthComponent.Awake -= HookHealthComponentAwake;
+            On.RoR2.HealthComponent.Heal -= HookHeal;
+            On.RoR2.CharacterBody.RecalculateStats -= HookRecalculateStats;
+            On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects -= HookUpdateVisualEffects;
+            On.RoR2.PurchaseInteraction.OnInteractionBegin -= HookPurchaseInteractionBegin;
+            On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor -= HookPurchaseCanBeAfforded;
+            On.EntityStates.GenericCharacterMain.ProcessJump -= HookProcessJump;
+            On.EntityStates.GenericCharacterMain.FixedUpdate -= HookGenericCharacterFixedUpdate;
+            RecalculateStatsAPI.GetStatCoefficients -= HookStatsMod;
+            GlobalEventManager.onServerDamageDealt -= HookOnDamageDealt;
+            GlobalEventManager.onCharacterDeathGlobal -= HookOnCharacterDeath;
         }
 
         private static void CreatePrefabs()

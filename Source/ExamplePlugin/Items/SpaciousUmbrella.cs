@@ -1,5 +1,6 @@
 ﻿using R2API;
 using RoR2;
+using System;
 using UnityEngine;
 
 namespace Faithful
@@ -15,6 +16,14 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> sizeSetting;
+        Setting<float> sizeStackingSetting;
+
+        // Store item stats
+        float size;
+        float sizeStacking;
+
         // Constructor
         public SpaciousUmbrella(Toolbox _toolbox)
         {
@@ -25,6 +34,12 @@ namespace Faithful
 
             // Create Copper Gear item and buff
             spaciousUmbrellaItem = Items.AddItem("SPACIOUS_UMBRELLA", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.HoldoutZoneRelated], "texspaciousumbrellaicon", "spaciousumbrellamesh", ItemTier.Tier2, _simulacrumBanned: true, _displaySettings: displaySettings);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Link Holdout Zone behaviour
             Behaviour.AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadius);
@@ -60,16 +75,40 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(0.0355F, 0.22875F, 0.11475F), new Vector3(0F, 270F, 315F), new Vector3(0.35F, 0.35F, 0.35F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            sizeSetting = spaciousUmbrellaItem.CreateSetting("SIZE", "Radius Increase", 25.0f, "How much should this item increase the size of the teleporter radius? (25.0 = 25% increase)");
+            sizeStackingSetting = spaciousUmbrellaItem.CreateSetting("SIZE_STACKING", "Radius Increase Stacking", 25.0f, "How much should additional stacks of this item increase the size of the teleporter radius? (25.0 = 25% increase)");
+
+            // Update item texts with new settings
+            spaciousUmbrellaItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            size = sizeSetting.Value / 100.0f;
+            sizeStacking = sizeStackingSetting.Value / 100.0f;
+        }
+
         void OnHoldoutZoneCalcRadius(ref float _radius, HoldoutZoneController _zone)
         {
             // Number of Spacious Umbrella items
             int count = Utils.GetItemCountForTeam(TeamIndex.Player, spaciousUmbrellaItem.itemDef);
 
-            // Check if players have item
-            if (count > 0)
+            // Check if players have one of the item
+            if (count == 1)
             {
                 // Add onto radius
-                _radius += Mathf.Log(count + 1.0f, 16.0f) * _zone.baseRadius;
+                _radius += size * _zone.baseRadius;
+            }
+
+            // Check if players have multiple of the item
+            else if (count > 1)
+            {
+                // Add onto radius
+                _radius += (size + Mathf.Log(count + 1, Mathf.Pow(2.0f, 1.0f / sizeStacking)) - sizeStacking) * _zone.baseRadius;
             }
         }
     }

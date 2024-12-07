@@ -160,8 +160,8 @@ namespace Faithful
 
         void Update()
         {
-            // Host only
-            if (!Utils.hosting)
+            // Host only (requires expansion enabled)
+            if (!Utils.hosting || !Utils.expansionEnabled)
             {
                 return;
             }

@@ -15,6 +15,16 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> chanceSetting;
+        Setting<float> chanceStackingSetting;
+        Setting<float> chargeAmountSetting;
+
+        // Store item stats
+        float chance;
+        float chanceStacking;
+        float chargeAmount;
+
         // Constructor
         public DrownedVisage(Toolbox _toolbox)
         {
@@ -25,6 +35,12 @@ namespace Faithful
 
             // Create Drowned Visage item
             drownedVisageItem = Items.AddItem("DROWNED_VISAGE", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_SPACIOUS_UMBRELLA_NAME", _displaySettings: displaySettings);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Link On Character Death behaviour
             Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
@@ -59,6 +75,25 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Seeker", "Pack", new Vector3(-0.2475F, 0.1875F, -0.24F), new Vector3(330F, 275F, 35F), new Vector3(0.05F, 0.05F, 0.05F));
             displaySettings.AddCharacterDisplay("False Son", "LowerArmR", new Vector3(-0.056F, 0.21F, 0.1325F), new Vector3(3.5F, 348.25F, 180F), new Vector3(0.075F, 0.075F, 0.075F));
             displaySettings.AddCharacterDisplay("Chef", "OvenDoor", new Vector3(-0.51325F, -0.025F, 0.145F), new Vector3(0F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+        }
+
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            chanceSetting = drownedVisageItem.CreateSetting("CHANCE", "Charge Chance", 2.5f, "What should the chance be for this item to charge the teleporter when killing an enemy within the teleporter zone? (2.5 = 2.5% chance)");
+            chanceStackingSetting = drownedVisageItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 2.5f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (2.5 = 2.5% chance)");
+            chargeAmountSetting = drownedVisageItem.CreateSetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, "How much should this item charge the teleporter? (5.0 = 5% charge)");
+
+            // Update item texts with new settings
+            drownedVisageItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            chance = chanceSetting.Value;
+            chanceStacking = chanceStackingSetting.Value;
+            chargeAmount = chargeAmountSetting.Value / 100.0f;
         }
 
         void OnCharacterDeath(DamageReport _report)
@@ -101,7 +136,7 @@ namespace Faithful
             }
 
             // Roll the dice
-            if (Util.CheckRoll(2.5f * count, character))
+            if (Util.CheckRoll(chance + (chanceStacking * (count - 1)), character))
             {
                 // Get Holdout Zones containing character
                 List<HoldoutZoneController> zones = Utils.GetHoldoutZonesContainingCharacter(character);
@@ -110,7 +145,7 @@ namespace Faithful
                 foreach (HoldoutZoneController zone in zones)
                 {
                     // Add charge to zone
-                    Utils.ChargeHoldoutZone(zone, 0.05f);
+                    Utils.ChargeHoldoutZone(zone, chargeAmount);
                 }
             }
         }

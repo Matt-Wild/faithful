@@ -61,10 +61,49 @@ namespace Faithful
                 return null;
             }
         }
+
+        public static string FormatLanguageString(string _languageString, string _tokenPrefix = "")
+        {
+            // Check for token prefix
+            if (_tokenPrefix != "")
+            {
+                // Add underscore to prefix
+                _tokenPrefix += "_";
+            }
+
+            // Cycle through settings
+            foreach (KeyValuePair<string, ISetting> setting in settings)
+            {
+                // Get setting token
+                string settingToken = setting.Key;
+
+                // Check for token prefix
+                if (_tokenPrefix != "")
+                {
+                    // Check if token prefix is in setting token
+                    if (!settingToken.Contains(_tokenPrefix)) continue;
+
+                    // Remove token prefix from setting token
+                    settingToken = settingToken.Replace(_tokenPrefix, "");
+                }
+
+                // Add language formatting indicator
+                settingToken = $"[{settingToken}]";
+
+                // Replace setting token in language string with appropriate value
+                _languageString = _languageString.Replace(settingToken, setting.Value.ValueObject.ToString());
+            }
+
+            // Return formatted language string
+            return _languageString;
+        }
     }
 
     internal class Setting<T> : ISetting
     {
+        // Store config file
+        private ConfigFile configFile;
+
         // Store token
         public string token;
 
@@ -73,11 +112,20 @@ namespace Faithful
 
         public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description)
         {
+            // Assign config file
+            configFile = _configFile;
+
             // Assign token
             token = _token;
 
             // Create config entry
-            configEntry = _configFile.Bind(_section, _key, _defaultValue, _description);
+            configEntry = configFile.Bind(_section, _key, _defaultValue, _description);
+        }
+
+        public void Delete()
+        {
+            // Delete this setting
+            configFile.Remove(configEntry.Definition);
         }
 
         public T Value

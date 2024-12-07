@@ -36,7 +36,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSpaciousUmbrellaIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Spacious Umbrella</b><br>
-				Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>.
+				Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>. <b>This item can be customised in the config!</b>.
 			</td>
 		</tr>
 		<tr>
@@ -141,7 +141,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texDrownedVisageIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Drowned Visage</b><br>
-				Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>.
+				Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>. <b>This item can be customised in the config!</b>.
 			</td>
       <td> 
 				Corrupts all <b>Spacious Umbrellas</b>.
@@ -199,14 +199,14 @@ Holding F1 as you press one of the listed keys will spawn the corrosponding tier
   - All incoming damage is ignored as well as (most) instant kill abilities.
   - Forced teleportation (such as falling out of bounds) will be ignored.
 
-- F3 | Toggle Debug Menu
+- 'F3' | Toggle Debug Menu
   - The Stats Monitor shows the base and current stats of the host.
   - The Spawn Menu let's the host spawn enemies, allies and Command Essences.
   - The Stage Controls let the host skip the current stage and clear all enemies from the map.
   - Object Analysis allows you to search for Unity GameObjects and cycle through their components and children. Object Analysis also allows you to call some methods and change some attributes of components during runtime.
   - Audio Analysis shows you what audio events are firing and where from.
 
-- F4 | Spawn from Debug Menu Hotkey
+- 'F4' | Spawn from Debug Menu Hotkey
 
 # Addendum
 
@@ -234,11 +234,17 @@ You can support us in making this mod (or in our other work) through the link be
   - Buns
   - KomradeSpectre
   - Harb
+  - viliger
+  - KingEnderBrine
 
 # Changelog
 
+- v1.0.8 Spacious Umbrella and Drowned Visage Customisation
+  - The Spacious Umbrella and Drowned Visage items can now be customised in the config.
+- v1.0.7 Toggleable Expansion
+  - Added Faithful content into it's own expansion that can be enabled and disabled in the lobby.
 - v1.0.6 BepInEx Config
-  - Replaced config text file with BepInEx config
+  - Replaced config text file with BepInEx config.
 - v1.0.5 Warbanner Visual Effect Fix
   - Fixed the warbanner temporary visual effect getting yeeted, oops.
 - v1.0.4 Modded Spawn Card Conflicts

@@ -7,7 +7,7 @@ namespace Faithful
     internal class Buff
     {
         // Create default settings that all buffs have
-        public Setting<bool> hidden;
+        public Setting<bool> hiddenSetting;
 
         // Buff def
         public BuffDef buffDef;
@@ -38,7 +38,7 @@ namespace Faithful
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = _hasConfig ? hidden.Value : false;
+                forceHide = _hasConfig ? hiddenSetting.Value : false;
             }
 
             // Create buff def
@@ -67,7 +67,7 @@ namespace Faithful
 
             if (forceHide)
             {
-                if (_hasConfig && hidden.Value)
+                if (_hasConfig && hiddenSetting.Value)
                 {
                     Log.Debug($"Hiding buff '{_token}' due to user preference");
                 }
@@ -81,7 +81,11 @@ namespace Faithful
         private void CreateDefaultSettings()
         {
             // Create the settings which every buff should have
-            hidden = CreateSetting("HIDDEN", "Hide buff?", false, "Should the icon for this buff be hidden during runs?");
+            hiddenSetting = CreateSetting("HIDDEN", "Hide Buff?", false, "Should the icon for this buff be hidden during runs?");
+
+            // Clean previous unused default settings
+            Setting<bool> temp1 = CreateSetting("TEMP1", "Hide buff?", false, "Should the icon for this buff be hidden during runs?");
+            temp1.Delete();
         }
 
         public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description)

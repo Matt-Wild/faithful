@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using R2API;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 namespace Faithful
 {
@@ -9,9 +10,9 @@ namespace Faithful
     internal class Item
     {
         // Create default settings that all items have
-        public Setting<bool> enabled;
-        public Setting<bool> extendedPickupDesc;
-        public Setting<bool> enableItemDisplays;
+        public Setting<bool> enabledSetting;
+        public Setting<bool> extendedPickupDescSetting;
+        public Setting<bool> enableItemDisplaysSetting;
 
         // Item def
         public ItemDef itemDef;
@@ -38,18 +39,17 @@ namespace Faithful
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = !enabled.Value;
+                forceHide = !enabledSetting.Value;
             }
 
             // Create item def
             itemDef = ScriptableObject.CreateInstance<ItemDef>();
 
-            // Set item texts
-            itemDef.name = $"FAITHFUL_{_token}_NAME";
-            itemDef.nameToken = $"FAITHFUL_{_token}_NAME";
-            itemDef.pickupToken = extendedPickupDesc.Value ? $"FAITHFUL_{_token}_DESC" : $"FAITHFUL_{_token}_PICKUP";
-            itemDef.descriptionToken = $"FAITHFUL_{_token}_DESC";
-            itemDef.loreToken = $"FAITHFUL_{_token}_LORE";
+            // Update item texts
+            UpdateItemTexts();
+
+            // Set item expansion
+            itemDef.requiredExpansion = Utils.expansionDef;
 
             // Set item tags
             itemDef.tags = _tags;
@@ -122,7 +122,7 @@ namespace Faithful
             }
 
             // Check for item display settings and if config allows it
-            if (_displaySettings != null && enableItemDisplays.Value)
+            if (_displaySettings != null && enableItemDisplaysSetting.Value)
             {
                 // Check for display prefab modify callback
                 if (_modifyItemDisplayPrefabCallback != null)
@@ -144,7 +144,7 @@ namespace Faithful
 
             if (forceHide)
             {
-                if (!enabled.Value)
+                if (!enabledSetting.Value)
                 {
                     Log.Debug($"Hiding item '{_token}' due to user preference");
                 }
@@ -159,12 +159,28 @@ namespace Faithful
             }
         }
 
+        public void UpdateItemTexts()
+        {
+            // Update item texts
+            itemDef.name = $"FAITHFUL_{token}_NAME";
+            itemDef.nameToken = $"FAITHFUL_{token}_NAME";
+            itemDef.pickupToken = Config.FormatLanguageString(Utils.GetLanguageString(extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP"), $"ITEM_{token}");
+            itemDef.descriptionToken = Config.FormatLanguageString(Utils.GetLanguageString($"FAITHFUL_{token}_DESC"), $"ITEM_{token}");
+            itemDef.loreToken = $"FAITHFUL_{token}_LORE";
+        }
+
         private void CreateDefaultSettings()
         {
             // Create the settings which every item should have
-            enabled = CreateSetting("ENABLED", "Enable item?", true, "Should this item appear in runs?");
-            enableItemDisplays = CreateSetting("ENABLE_ITEM_DISPLAYS", "Enable item displays?", true, "Should this item have item displays on the compatible character models?");
-            extendedPickupDesc = CreateSetting("EXTENDED_PICKUP_DESC", "Extended Pickup Description", false, "Should this item have the logbook description appear when picking it up during runs?");
+            enabledSetting = CreateSetting("ENABLED", "Enable Item?", true, "Should this item appear in runs?");
+            enableItemDisplaysSetting = CreateSetting("ENABLE_ITEM_DISPLAYS", "Enable Item Displays?", true, "Should this item have item displays on the compatible character models?");
+            extendedPickupDescSetting = CreateSetting("EXTENDED_PICKUP_DESC", "Extended Pickup Description", false, "Should this item have the logbook description appear when picking it up during runs?");
+
+            // Clean previous unused default settings
+            Setting<bool> temp1 = CreateSetting("TEMP1", "Enable item?", true, "Should this item appear in runs?");
+            Setting<bool> temp2 = CreateSetting("TEMP2", "Enable item displays?", true, "Should this item have item displays on the compatible character models?");
+            temp1.Delete();
+            temp2.Delete();
         }
 
         public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description)

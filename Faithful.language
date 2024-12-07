@@ -1,5 +1,8 @@
 {
   "strings": {
+	"FAITHFUL_EXPANSION_NAME": "Faithful",
+	"FAITHFUL_EXPANSION_DESC": "Adds content from the 'Faithful' mod to the game.",
+  
 	"FAITHFUL_DEBUG_MODE_BUFF": "GOD MODE",
 	
 	"FAITHFUL_VENGEANCE_BUFF": "Vengeance",
@@ -41,12 +44,12 @@
 	
 	"FAITHFUL_SPACIOUS_UMBRELLA_NAME": "Spacious Umbrella",
 	"FAITHFUL_SPACIOUS_UMBRELLA_PICKUP": "Increase the size of the Teleporter zone.",
-	"FAITHFUL_SPACIOUS_UMBRELLA_DESC": "Increase the size of the Teleporter zone by <style=cIsUtility>25%</style> <style=cStack>(+25% per stack)</style>.",
+	"FAITHFUL_SPACIOUS_UMBRELLA_DESC": "Increase the size of the Teleporter zone by <style=cIsUtility>[SIZE]%</style> <style=cStack>(+[SIZE_STACKING]% per stack)</style>.",
 	"FAITHFUL_SPACIOUS_UMBRELLA_LORE": "Order: Plastic Umbrella (Damaged)\nTracking Number: 178******\nEstimated Delivery: 09/02/2056\nShipping Method: Standard\nShipping Address: Earthen Meteorology Institute, Argyllshire, Earth\nShipping Details:\n\nI hope you're not planning to actually use this old thing. If you do, don't blame me when you still get soaked.",
 	
 	"FAITHFUL_DROWNED_VISAGE_NAME": "Drowned Visage",
-	"FAITHFUL_DROWNED_VISAGE_PICKUP": "While charging the Teleporter, gain a small chance on kill to charge the Teleporter by 5%. <style=cIsVoid>Corrupts all Spacious Umbrellas</style>.",
-	"FAITHFUL_DROWNED_VISAGE_DESC": "Killing an enemy while within the Teleporter radius has a <style=cIsUtility>2.5%</style> <style=cStack>(+2.5% per stack)</style> chance to charge the Teleporter by <style=cIsUtility>5%</style>. <style=cIsVoid>Corrupts all Spacious Umbrellas</style>.",
+	"FAITHFUL_DROWNED_VISAGE_PICKUP": "While charging the Teleporter, gain a small chance on kill to charge the Teleporter by [CHARGE_AMOUNT]%. <style=cIsVoid>Corrupts all Spacious Umbrellas</style>.",
+	"FAITHFUL_DROWNED_VISAGE_DESC": "Killing an enemy while within the Teleporter radius has a <style=cIsUtility>[CHANCE]%</style> <style=cStack>(+[CHANCE_STACKING]% per stack)</style> chance to charge the Teleporter by <style=cIsUtility>[CHARGE_AMOUNT]%</style>. <style=cIsVoid>Corrupts all Spacious Umbrellas</style>.",
 	"FAITHFUL_DROWNED_VISAGE_LORE": "> Automated report 4241442054494d4520544f2046495348 is now available from site record 412044524f574e454420564953414745.\n> Please refer to record 412044524f574e454420564953414745 for additional personnel details during your review.\n> Report Type: Transcription\n> - Source: 412044524f574e454420564953414745 (Personal Suit Recorder)\n> Priority: High\n> Report Content:\n\n-- Beginning of Excerpt Flagged for Review --\n\nDave: \u201CYou've heard the nonsense rumors of that giant monster around here, right?\u201C\n\nMichael: \u201CO' course I have. I'd have to be sleeping deeper than Gary to miss that.\u201C\n\nDave: \u201CHah! He's the one who saw it apparently. Said it was the scariest thing he'd seen here.\u201C\n\nMichael: \u201CHa! Can't be that bad, then. Maybe he just dreamed it up while kipping on duty.\u201C\n\nDave: \u201CSounds like 'im. Looked like death when I told him we were planning on fish today.\u201C\n\nMichael: \u201CHaha! Now you're just bullying the poor guy, Dave!\u201C\n\nDave: \u201CFor something apparently so terrifying, he sure had a hard time describing it. Something about a lure and-\u201C\n\nMichael: \u201CHold up, the line's pulling!\u201C\n\nDave: \u201CWoah, you snagged somethin'?!\u201C\n\n[Fishing rod reeling]\n\nMichael: \u201C...Oh. It's just a small fry...\u201C\n\nDave: \u201CHeh... I thought that was it for a moment. Honestly, thought my heart stopped.\u201C\n\nMichael: \u201CMe, too. Wouldn't that've be a story, hu-\u201C\n\n[Metallic crunch]\n\n-- End of Recording --\n\n-- End of Excerpt Flagged for Review --\n\n> Please refer to report 5448455927524520414c4c2044454144 for full audio excerpt.",
 	
 	"FAITHFUL_LONGSHOT_GEODE_NAME": "Longshot Geode",

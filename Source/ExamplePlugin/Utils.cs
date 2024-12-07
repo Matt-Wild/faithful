@@ -3,10 +3,12 @@ using HarmonyLib;
 using Newtonsoft.Json;
 using R2API;
 using RoR2;
+using RoR2.ExpansionManagement;
 using RoR2.Navigation;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
 
@@ -16,6 +18,15 @@ namespace Faithful
     {
         // Plugin info
         public static PluginInfo pluginInfo;
+
+        // Store expansion definition
+        public static ExpansionDef expansionDef;
+
+        // Store expansion run behaviour prefab
+        public static GameObject runBehaviourPrefab;
+
+        // Store if expansion is enabled
+        public static bool expansionEnabled = true;
 
         // Store debug mode
         static private bool _debugMode = false;
@@ -91,6 +102,9 @@ namespace Faithful
             // Inject character spawn card awake behaviour
             On.RoR2.CharacterSpawnCard.Awake += OnCharacterSpawnCardAwake;
 
+            // Add pre-game controller set rule book behaviour
+            PreGameController.onPreGameControllerSetRuleBookGlobal += OnPreGameControllerSetRuleBookGlobal;
+
             // Update debug mode from config
             _debugMode = debugModeSetting.Value;
 
@@ -120,6 +134,51 @@ namespace Faithful
             {
                 Log.Error("[UTILS]- Language file not found at: " + languageFilePath);
             }
+        }
+
+        public static void CreateExpansionDef()
+        {
+            // Get DLC 1 to steal it's stuff
+            ExpansionDef dlc1 = LegacyResourcesAPI.Load<ExpansionDef>("ExpansionDefs/DLC1");
+
+            // Get template for expansion run behaviour prefab
+            GameObject runBehaviourTemplate = Addressables.LoadAssetAsync<GameObject>("12bf89dabb4bb914382a0e31546446cc").WaitForCompletion();
+
+            // Create expansion run behaviour prefab
+            runBehaviourPrefab = PrefabAPI.InstantiateClone(runBehaviourTemplate, "FaithfulExpansionRunBehaviour", true);
+
+            // Destroy global death rewards
+            Object.DestroyImmediate((Object)(object)runBehaviourPrefab.GetComponent<GlobalDeathRewards>());
+
+            // Get expansion requirement component
+            ExpansionRequirementComponent expansionRequirementComponent = runBehaviourPrefab.GetComponent<ExpansionRequirementComponent>();
+
+            // Create expansion def
+            expansionDef = ScriptableObject.CreateInstance<ExpansionDef>();
+
+            // Assign required expansion to expansion run behaviour
+            expansionRequirementComponent.requiredExpansion = expansionDef;
+
+            // Register expansion run behaviour
+            PrefabAPI.RegisterNetworkPrefab(runBehaviourPrefab);
+
+            // Add language tokens
+            expansionDef.name = "FAITHFUL_EXPANSION_NAME";
+            expansionDef.nameToken = "FAITHFUL_EXPANSION_NAME";
+            expansionDef.descriptionToken = "FAITHFUL_EXPANSION_DESC";
+
+            // Set expansion def icon
+            expansionDef.iconSprite = Assets.GetIcon("texCustomExpansionIcon");
+
+            // Assign disabled icon and required entitlement
+            expansionDef.disabledIconSprite = dlc1.disabledIconSprite;
+            expansionDef.requiredEntitlement = dlc1.requiredEntitlement;
+
+            // Assign run behaviour prefab
+            expansionDef.runBehaviorPrefab = runBehaviourPrefab;
+
+            // Register new expansion def with R2API
+            ContentAddition.AddExpansionDef(expansionDef);
         }
 
         // Refresh chosen buff on chosen character
@@ -327,6 +386,29 @@ namespace Faithful
                 {
                     Log.Warning($"[UTILS] - Could not add character spawn card to spawn list.");
                 }
+            }
+        }
+
+        private static void OnPreGameControllerSetRuleBookGlobal(PreGameController preGameController, RuleBook ruleBook)
+        {
+            // Check if expansion is enabled
+            if (ruleBook.IsChoiceActive(expansionDef.enabledChoice))
+            {
+                // Update if expansion is enabled
+                expansionEnabled = true;
+
+                // Enable behaviour
+                Behaviour.Enable();
+            }
+
+            // Expansion disabled
+            else
+            {
+                // Update if expansion is enabled
+                expansionEnabled = false;
+
+                // Disable behaviour
+                Behaviour.Disable();
             }
         }
 

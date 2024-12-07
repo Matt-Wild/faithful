@@ -28,6 +28,9 @@ namespace Faithful
             Items.Init();
             Buffs.Init();
 
+            // Create expansion definition
+            Utils.CreateExpansionDef();
+
             Log.Debug("Toolbox built");
         }
 
