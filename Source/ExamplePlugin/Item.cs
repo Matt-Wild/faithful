@@ -188,5 +188,11 @@ namespace Faithful
             // Return new setting
             return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {name.Replace("'", "")}", _key, _defaultValue, _description);
         }
+
+        public Setting<T> FetchSetting<T>(string _tokenAddition)
+        {
+            // Fetch setting from config
+            return Config.FetchSetting<T>($"ITEM_{token}_{_tokenAddition}");
+        }
     }
 }

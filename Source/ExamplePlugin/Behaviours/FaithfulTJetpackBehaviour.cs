@@ -29,16 +29,18 @@ namespace Faithful
 
         // Jetpack stats
         protected float baseMaxVelocity = 30.0f;
-        protected float baseRisingAcceleration = 36.0f;
-        protected float fallingAcceleration = 100.0f;
+        protected float baseRisingAcceleration = 32.0f;
+        protected float fallingAcceleration = 120.0f;
         protected float baseFuel = 4.0f;
         protected float fuelPerStack = 2.0f;
         protected float baseRefuelDuration = 12.0f;
-        protected float minimumFuelToActivate = 0.5f;
+        protected float refuelDurationReductionPerStack = 0.2f;
+        protected float maxVelocityMultiplier = 1.0f;
+        protected float accelerationMultiplier = 1.0f;
 
         // Buffed jetpack additive stats
         protected float maxVelocityBuff = 6.0f;
-        protected float risingAccelerationBuff = 4.0f;
+        protected float risingAccelerationBuff = 8.0f;
 
         // Store current state of jetpack
         protected bool grounded = false;
@@ -80,6 +82,9 @@ namespace Faithful
 
             // Set as initialised
             initialised = true;
+
+            // Fetch jetpack settings
+            FetchSettings();
 
             // Get character model
             Transform characterModel = _characterBody.modelLocator.modelTransform;
@@ -181,6 +186,20 @@ namespace Faithful
                 // Jetpack does not belong to Artificer
                 artificer = false;
             }
+        }
+
+        private void FetchSettings()
+        {
+            // Get jetpack item
+            Item jetpackItem = Items.GetItem("4T0N_JETPACK");
+
+            // Update stats
+            baseFuel = jetpackItem.FetchSetting<float>("FUEL_TIME").Value;
+            fuelPerStack = jetpackItem.FetchSetting<float>("FUEL_TIME_STACKING").Value;
+            baseRefuelDuration = jetpackItem.FetchSetting<float>("RECHARGE_TIME").Value;
+            refuelDurationReductionPerStack = jetpackItem.FetchSetting<float>("RECHARGE_TIME_REDUCTION").Value / 100.0f;
+            maxVelocityMultiplier = jetpackItem.FetchSetting<float>("MAX_VELOCITY_MULTIPLIER").Value;
+            accelerationMultiplier = jetpackItem.FetchSetting<float>("ACCELERATION_MULTIPLIER").Value;
         }
 
         public void UpdateItemCount(int _itemCount)
@@ -555,8 +574,8 @@ namespace Faithful
             // Get current y velocity
             float yVel = character.characterMotor.velocity.y;
 
-            // Calculate force
-            float force = yVel > 0.0f ? risingAcceleration : risingAcceleration + Mathf.Clamp01(-yVel / 30.0f) * dynamicAccelerationDifference;
+            // Calculate force (give an extra boost until 25% of the max velocity is reached)
+            float force = (risingAcceleration + Mathf.Clamp01((-yVel + maxVelocity / 4.0f) / 40.0f) * dynamicAccelerationDifference) * accelerationMultiplier;
 
             // Apply jet force to character
             character.characterMotor.velocity = new Vector3(character.characterMotor.velocity.x, Mathf.MoveTowards(yVel, maxVelocity, force * Time.fixedDeltaTime), character.characterMotor.velocity.z);
@@ -643,7 +662,7 @@ namespace Faithful
             get
             {
                 // Calculate refuel duration
-                return baseRefuelDuration / (1.0f + Mathf.Log(itemCount, 16));
+                return baseRefuelDuration * Mathf.Max(0.1f, 1.0f - Mathf.Log(itemCount, Mathf.Pow(2.0f, 1.0f / refuelDurationReductionPerStack)));
             }
         }
 
@@ -678,7 +697,7 @@ namespace Faithful
             get
             {
                 // Return if the jetpack can be activated
-                return character.characterMotor.velocity.y < 0.0f && fuelRemaining > minimumFuelToActivate;
+                return character.characterMotor.velocity.y < 0.0f && fuelRemaining > 0.0f;
             }
         }
 
@@ -702,7 +721,7 @@ namespace Faithful
                 
 
                 // Return and modify max velocity based on buff
-                return baseMaxVelocity + maxVelocityBuff * buffPerc;
+                return (baseMaxVelocity + maxVelocityBuff * buffPerc) * maxVelocityMultiplier;
             }
         }
 

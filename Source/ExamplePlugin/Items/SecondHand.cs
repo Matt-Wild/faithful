@@ -17,6 +17,18 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> attackSpeedSetting;
+        Setting<float> attackSpeedStackingSetting;
+        Setting<float> speedSetting;
+        Setting<float> speedStackingSetting;
+
+        // Store item stats
+        float attackSpeed;
+        float attackSpeedStacking;
+        float speed;
+        float speedStacking;
+
         // Constructor
         public SecondHand(Toolbox _toolbox)
         {
@@ -28,6 +40,12 @@ namespace Faithful
             // Create Second Hand item and buff
             secondHandItem = Items.AddItem("SECOND_HAND", [ItemTag.Damage, ItemTag.Utility], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
             secondHandBuff = Buffs.AddBuff("SECOND_HAND", "texbuffsecondhand", Color.white);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Add stats modification
             Behaviour.AddStatsMod(secondHandBuff, SecondHandStatsMod);
@@ -68,11 +86,32 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Cleaver", new Vector3(-0.01425F, 0.445F, -0.00125F), new Vector3(0F, 0F, 0F), new Vector3(0.15F, 0.15F, 1F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            attackSpeedSetting = secondHandItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 20.0f, "How much should this item increase attack speed while touching the ground? (20.0 = 20% increase)");
+            attackSpeedStackingSetting = secondHandItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 20.0f, "How much should further stacks of this item increase attack speed while touching the ground? (20.0 = 20% increase)");
+            speedSetting = secondHandItem.CreateSetting("SPEED", "Movement Speed", 30.0f, "How much should this item increase movement speed while touching the ground? (30.0 = 30% increase)");
+            speedStackingSetting = secondHandItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 30.0f, "How much should further stacks of this item increase movement speed while touching the ground? (30.0 = 30% increase)");
+
+            // Update item texts with new settings
+            secondHandItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            attackSpeed = attackSpeedSetting.Value / 100.0f;
+            attackSpeedStacking = attackSpeedStackingSetting.Value / 100.0f;
+            speed = speedSetting.Value / 100.0f;
+            speedStacking = speedStackingSetting.Value / 100.0f;
+        }
+
         void SecondHandStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify attack speed
-            _stats.attackSpeedMultAdd += 0.20f * _count;
-            _stats.moveSpeedMultAdd += 0.30f * _count;
+            _stats.attackSpeedMultAdd += _count > 1 ? attackSpeed + (attackSpeedStacking * (_count - 1)) : attackSpeed;
+            _stats.moveSpeedMultAdd += _count > 1 ? speed + (speedStacking * (_count - 1)) : speed;
         }
 
         void GenericCharacterFixedUpdate(GenericCharacterMain _character)

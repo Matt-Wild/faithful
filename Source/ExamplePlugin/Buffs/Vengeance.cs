@@ -12,6 +12,9 @@ namespace Faithful
         // Store buff
         Buff vengeanceBuff;
 
+        // Store damage buff per stack
+        public float damage = 0.75f;
+
         // Constructor
         public Vengeance(Toolbox _toolbox)
         {
@@ -45,7 +48,7 @@ namespace Faithful
         void VengeanceStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify damage multiplier
-            _stats.damageMultAdd += 0.75f * _count;
+            _stats.damageMultAdd += damage * _count;
         }
     }
 }

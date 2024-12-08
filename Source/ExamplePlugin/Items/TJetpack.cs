@@ -1,7 +1,5 @@
 ﻿using RoR2;
-using System.Reflection;
 using UnityEngine;
-using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
@@ -16,6 +14,14 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> fuelTimeSetting;
+        Setting<float> fuelTimeStackingSetting;
+        Setting<float> rechargeTimeSetting;
+        Setting<float> rechargeTimeReductionSetting;
+        Setting<float> maxVelocityMultiplierSetting;
+        Setting<float> accelerationMultiplierSetting;
+
         // Constructor
         public TJetpack(Toolbox _toolbox)
         {
@@ -26,6 +32,9 @@ namespace Faithful
 
             // Create item
             item = Items.AddItem("4T0N_JETPACK", [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
+
+            // Create item settings
+            CreateSettings();
 
             // Inject on transfer item behaviours
             Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
@@ -62,6 +71,20 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(0F, 0.1575F, -0.21F), new Vector3(345F, 180F, 0F), new Vector3(0.4F, 0.4F, 0.4F));
             displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(0.00375F, 0F, -0.46F), new Vector3(22.5F, 180.25F, 0.25F), new Vector3(0.5F, 0.5F, 0.5F));
             displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.0375F, -0.3F, 0F), new Vector3(65F, 270F, 0F), new Vector3(0.375F, 0.375F, 0.375F));
+        }
+
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            fuelTimeSetting = item.CreateSetting("FUEL_TIME", "Fuel Time", 4.0f, "How much fuel should the jetpack have? (4.0 = 4 seconds)");
+            fuelTimeStackingSetting = item.CreateSetting("FUEL_TIME_STACKING", "Fuel Time Stacking", 2.0f, "How much additional fuel should the jetpack get per stack? (2.0 = 2 seconds)");
+            rechargeTimeSetting = item.CreateSetting("RECHARGE_TIME", "Recharge Time", 12.0f, "How long should it take for the jetpack to refuel after touching the ground? (12.0 = 12 seconds)");
+            rechargeTimeReductionSetting = item.CreateSetting("RECHARGE_TIME_REDUCTION", "Recharge Time Reduction", 20.0f, "How much should further stacks of this item decrease the recharge time of the jetpack? (20.0 = 20% reduction)");
+            maxVelocityMultiplierSetting = item.CreateSetting("MAX_VELOCITY_MULTIPLIER", "Max Velocity Multiplier", 1.0f, "How much faster or slower would you like the jetpack's max velocity to be? (1.0 = 1x max velocity)");
+            accelerationMultiplierSetting = item.CreateSetting("ACCELERATION_MULTIPLIER", "Acceleration Multiplier", 1.0f, "How much stronger or weaker would you like the jetpack to be? (1.0 = 1x acceleration)");
+
+            // Update item texts with new settings
+            item.UpdateItemTexts();
         }
 
         void OnInventoryChanged(Inventory _inventory)
