@@ -16,6 +16,16 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> damageSetting;
+        Setting<float> damageStackingSetting;
+        Setting<float> buffDurationSetting;
+
+        // Store item stats
+        float damage;
+        float damageStacking;
+        float buffDuration;
+
         // Constructor
         public BrassScrews(Toolbox _toolbox)
         {
@@ -27,6 +37,12 @@ namespace Faithful
             // Create Brass Screws item and buff
             brassScrewsItem = Items.AddItem("BRASS_SCREWS", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_COPPER_GEAR_NAME", _displaySettings: displaySettings);
             brassScrewsBuff = Buffs.AddBuff("BRASS_SCREWS", "texbuffteleporterscrew", Color.white);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Add stats modification
             Behaviour.AddStatsMod(brassScrewsBuff, BrassScrewsStatsMod);
@@ -68,10 +84,32 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "OvenDoor", new Vector3(-0.04625F, 0.10875F, 0.03775F), new Vector3(65F, 190F, 150F), new Vector3(0.075F, 0.075F, 0.075F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            damageSetting = brassScrewsItem.CreateSetting("DAMAGE", "Damage", 20.0f, "How much should this item increase damage while within the teleporter radius? (20.0 = 20% increase)");
+            damageStackingSetting = brassScrewsItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 20.0f, "How much should further stacks of this item increase damage while within the teleporter radius? (20.0 = 20% increase)");
+            buffDurationSetting = brassScrewsItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)");
+
+            // Update item texts with new settings
+            brassScrewsItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            damage = damageSetting.Value / 100.0f;
+            damageStacking = damageStackingSetting.Value / 100.0f;
+            buffDuration = Mathf.Max(0.1f, buffDurationSetting.Value);
+        }
+
         void BrassScrewsStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
+            // Check for buff
+            if (_count == 0) return;
+
             // Modify damage
-            _stats.damageMultAdd += 0.20f * _count;
+            _stats.damageMultAdd += damage + damageStacking * (_count - 1);
         }
 
         void InHoldoutZone(CharacterBody _body, HoldoutZoneController _zone)
@@ -87,7 +125,7 @@ namespace Faithful
                 if (copperGearCount > 0)
                 {
                     // Refresh Brass Screws buffs
-                    Utils.RefreshTimedBuffs(_body, brassScrewsBuff.buffDef, 1);
+                    Utils.RefreshTimedBuffs(_body, brassScrewsBuff.buffDef, buffDuration);
 
                     // Get needed amount of buffs
                     int needed = copperGearCount - _body.GetBuffCount(brassScrewsBuff.buffDef);
@@ -96,7 +134,7 @@ namespace Faithful
                     for (int i = 0; i < needed; i++)
                     {
                         // Add Brass Screws buff
-                        _body.AddTimedBuff(brassScrewsBuff.buffDef, 1);
+                        _body.AddTimedBuff(brassScrewsBuff.buffDef, buffDuration);
                     }
                 }
             }

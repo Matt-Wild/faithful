@@ -947,7 +947,7 @@ namespace Faithful
             }
 
             // Get hurt boxes in sphere search
-            RoR2.HurtBox[] hurtBoxes = new SphereSearch
+            RoR2.HurtBox[] hurtBoxes = new SphereSearch // SPHERE SEARCH IS LIMITED TO ONLY 100 COLLIDERS (BEFORE FILTERS) SO IT CAN BE VERY UNRELIABLE
             {
                 radius = radius,
                 mask = LayerIndex.entityPrecise.mask,
@@ -955,6 +955,27 @@ namespace Faithful
             }.RefreshCandidates().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes();
 
             return hurtBoxes;   // Return found hurt boxes
+        }
+
+        // Returns all character bodies in holdout zone
+        public static CharacterBody[] GetCharacterBodiesInHoldoutZone(HoldoutZoneController _holdoutZone)
+        {
+            // Create list of character bodies
+            List<CharacterBody> inHoldoutZone = new List<CharacterBody>();
+            
+            // Cycle through character bodies
+            foreach (CharacterBody current in CharacterBody.readOnlyInstancesList)
+            {
+                // Check if character body is in holdout zone
+                if (_holdoutZone.IsBodyInChargingRadius(current))
+                {
+                    // Add to in holdout zone list
+                    inHoldoutZone.Add(current);
+                }
+            }
+
+            // Return list converted to array
+            return inHoldoutZone.ToArray();
         }
 
         public static List<PlayerCharacterMasterController> GetPlayers()

@@ -10,13 +10,13 @@
   
     "FAITHFUL_COPPER_GEAR_NAME": "Copper Gear",
 	"FAITHFUL_COPPER_GEAR_PICKUP": "Increase attack speed while within the Teleporter zone.",
-	"FAITHFUL_COPPER_GEAR_DESC": "Increase <style=cIsDamage>attack speed</style> by <style=cIsDamage>25%</style> <style=cStack>(+25% per stack)</style> while inside the Teleporter zone.",
+	"FAITHFUL_COPPER_GEAR_DESC": "Increase <style=cIsDamage>attack speed</style> by <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(+[ATTACK_SPEED_STACKING]% per stack)</style> while inside the Teleporter zone.",
 	"FAITHFUL_COPPER_GEAR_LORE": "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u201CHey, you know those clockmakers we met when we went on that trip to Earth?\u201C\n\n\u201CYeah, I remember. Why are you bringing them up now?\u201C\n\n\u201CA couple o' them told me that they were always in the zone when wearing one of these gears 'round their wrist. Said it helped 'em work way faster.\u201C\n\n\u201CI see but… what does that have to do with the mountain of lemurian corpses behind you?\u201C\n\n\u201CWell, uh… I can tell you that it works.\u201C",
 	"FAITHFUL_COPPER_GEAR_BUFF": "Copper Gear",
 	
 	"FAITHFUL_BRASS_SCREWS_NAME": "Brass Screws",
 	"FAITHFUL_BRASS_SCREWS_PICKUP": "Increase damage while within the Teleporter zone. <style=cIsVoid>Corrupts all Copper Gears</style>.",
-	"FAITHFUL_BRASS_SCREWS_DESC": "Increase damage by <style=cIsDamage>20%</style> <style=cStack>(+20% per stack)</style> while inside the Teleporter zone. <style=cIsVoid>Corrupts all Copper Gears</style>.",
+	"FAITHFUL_BRASS_SCREWS_DESC": "Increase damage by <style=cIsDamage>[DAMAGE]%</style> <style=cStack>(+[DAMAGE_STACKING]% per stack)</style> while inside the Teleporter zone. <style=cIsVoid>Corrupts all Copper Gears</style>.",
 	"FAITHFUL_BRASS_SCREWS_LORE": "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u201CYo, how’re you holding up- woah!\u201C\n\n\u201COh, u-uh... Hey, there. I’ve been... a little busy as you can see.\u201C\n\n\u201CI never thought I'd see so many dead beetles and... a queen? Did you kill an entire nest? By yourself?! How’d you-?! Gah!\u201C\n\n\u201CHeheh... yeah. It was real bloody.\u201C\n\n\u201CH-how’d you even manage all this? Are... are those screws?\u201C\n\n\u201CThese? Yeah, your whole 'gear' talk gave me an idea.\u201C",
 	"FAITHFUL_BRASS_SCREWS_BUFF": "Brass Screws",
 	

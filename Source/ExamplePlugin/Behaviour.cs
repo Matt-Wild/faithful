@@ -607,16 +607,16 @@ namespace Faithful
 
         private static void HookHoldoutZoneControllerUpdate(On.RoR2.HoldoutZoneController.orig_Update orig, HoldoutZoneController self)
         {
-            // Get Hurt Boxes in range of Holdout Zone
-            HurtBox[] hurtBoxes = Utils.GetHurtBoxesInSphere(self.transform.position, self.currentRadius);
+            // Get Character Bodies in holdout zone
+            CharacterBody[] characterBodies = Utils.GetCharacterBodiesInHoldoutZone(self);
 
-            // Cycle through Hurt Boxes
-            foreach (HurtBox hurtBox in hurtBoxes)
+            // Cycle through Character Bodies
+            foreach (CharacterBody current in characterBodies)
             {
                 // Cycle through InHoldoutZone callbacks and call with Character Body
                 foreach (InHoldoutZoneCallback callback in inHoldoutZoneCallbacks)
                 {
-                    callback(hurtBox.healthComponent.body, self);
+                    callback(current, self);
                 }
             }
 

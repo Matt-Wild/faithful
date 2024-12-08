@@ -26,7 +26,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Copper Gear</b><br>
-				Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone.
+				Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be customised</b>!
 			</td>
 		</tr>
     <tr>
@@ -36,7 +36,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSpaciousUmbrellaIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Spacious Umbrella</b><br>
-				Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>. <b>This item can be customised in the config!</b>.
+				Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>. <b>This item can be customised</b>!
 			</td>
 		</tr>
 		<tr>
@@ -108,7 +108,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texBrassScrewsIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Brass Screws</b><br>
-				Increase damage by <b>20% (</b>+20% per stack<b>)</b> while inside the Teleporter zone.
+				Increase damage by <b>20% (</b>+20% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be customised</b>!
 			</td>
       <td> 
 				Corrupts all <b>Copper Gears</b>.
@@ -141,7 +141,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texDrownedVisageIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Drowned Visage</b><br>
-				Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>. <b>This item can be customised in the config!</b>.
+				Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>. <b>This item can be customised</b>!
 			</td>
       <td> 
 				Corrupts all <b>Spacious Umbrellas</b>.
@@ -236,9 +236,13 @@ You can support us in making this mod (or in our other work) through the link be
   - Harb
   - viliger
   - KingEnderBrine
+  - Mystical Chicken
 
 # Changelog
 
+- v1.0.9 Copper Gear and Brass Screw Refinements
+  - Fixed issue with the Copper Gear and Brass Screw sometimes not providing their buffs to the player within the teleporter zone.
+  - The Copper Gear and Brass Screw items can now be customised in the config.
 - v1.0.8 Spacious Umbrella and Drowned Visage Customisation
   - The Spacious Umbrella and Drowned Visage items can now be customised in the config.
 - v1.0.7 Toggleable Expansion

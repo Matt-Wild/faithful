@@ -16,6 +16,16 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> attackSpeedSetting;
+        Setting<float> attackSpeedStackingSetting;
+        Setting<float> buffDurationSetting;
+
+        // Store item stats
+        float attackSpeed;
+        float attackSpeedStacking;
+        float buffDuration;
+
         // Constructor
         public CopperGear(Toolbox _toolbox)
         {
@@ -27,6 +37,12 @@ namespace Faithful
             // Create Copper Gear item and buff
             copperGearItem = Items.AddItem("COPPER_GEAR", [ItemTag.Damage, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _displaySettings: displaySettings);
             copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "texbuffteleportergear", Color.white);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Add stats modification
             Behaviour.AddStatsMod(copperGearBuff, CopperGearStatsMod);
@@ -70,10 +86,32 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "OvenDoor", new Vector3(0F, -0.12975F, 0F), new Vector3(0F, 122.5F, 0F), new Vector3(0.05F, 0.1F, 0.05F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            attackSpeedSetting = copperGearItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 25.0f, "How much should this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)");
+            attackSpeedStackingSetting = copperGearItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 25.0f, "How much should further stacks of this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)");
+            buffDurationSetting = copperGearItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)");
+
+            // Update item texts with new settings
+            copperGearItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            attackSpeed = attackSpeedSetting.Value / 100.0f;
+            attackSpeedStacking = attackSpeedStackingSetting.Value / 100.0f;
+            buffDuration = Mathf.Max(0.1f, buffDurationSetting.Value);
+        }
+
         void CopperGearStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
+            // Check for buff
+            if (_count == 0) return;
+
             // Modify attack speed
-            _stats.attackSpeedMultAdd += 0.25f * _count;
+            _stats.attackSpeedMultAdd += attackSpeed + attackSpeedStacking * (_count - 1);
         }
 
         void InHoldoutZone(CharacterBody _body, HoldoutZoneController _zone)
@@ -89,7 +127,7 @@ namespace Faithful
                 if (copperGearCount > 0)
                 {
                     // Refresh Copper Gear buffs
-                    Utils.RefreshTimedBuffs(_body, copperGearBuff.buffDef, 1);
+                    Utils.RefreshTimedBuffs(_body, copperGearBuff.buffDef, buffDuration);
 
                     // Get needed amount of buffs
                     int needed = copperGearCount - _body.GetBuffCount(copperGearBuff.buffDef);
@@ -98,7 +136,7 @@ namespace Faithful
                     for (int i = 0; i < needed; i++)
                     {
                         // Add Copper Gear buff
-                        _body.AddTimedBuff(copperGearBuff.buffDef, 1);
+                        _body.AddTimedBuff(copperGearBuff.buffDef, buffDuration);
                     }
                 }
             }
