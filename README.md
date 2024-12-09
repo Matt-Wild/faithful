@@ -26,7 +26,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Copper Gear</b><br>
-				Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be customised</b>!
+				Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be adjusted</b>!
 			</td>
 		</tr>
     <tr>
@@ -36,21 +36,21 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSpaciousUmbrellaIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Spacious Umbrella</b><br>
-				Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>. <b>This item can be customised</b>!
+				Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>. <b>This item can be adjusted</b>!
 			</td>
 		</tr>
 		<tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texVengefulToasterIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Vengeful Toaster</b><br>
-				Getting hit grants Vengeance for <b>4 (</b>+1 per stack<b>)</b> seconds. Each stack of Vengeance increases damage by <b>+75%</b>. All stacks of Vengeance are consumed upon dealing damage. <b>This item can be customised</b>!
+				Getting hit grants Vengeance for <b>4 (</b>+1 per stack<b>)</b> seconds. Each stack of Vengeance increases damage by <b>+75%</b>. All stacks of Vengeance are consumed upon dealing damage. <b>This item can be adjusted</b>!
 			</td>
 		</tr>
 		<tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSecondHandIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Second Hand</b><br>
-				Increase attack speed by <b>20% (</b>+20% per stack<b>)</b> and movement speed by <b>30% (</b>+30% per stack<b>)</b> while touching the ground. <b>This item can be customised</b>!
+				Increase attack speed by <b>20% (</b>+20% per stack<b>)</b> and movement speed by <b>30% (</b>+30% per stack<b>)</b> while touching the ground. <b>This item can be adjusted</b>!
 			</td>
 		</tr>
     <tr>
@@ -60,15 +60,15 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/tex4T0NJetpackIcon.png?raw=true" width=128></td>
 			<td>
 				<b>4-T0N Jetpack</b><br>
-				Holding the jump key while falling boosts you upwards for up to <b>4 (</b>+2 per stack<b>)</b> seconds. Fully recharges in <b>12 (</b>-20% per stack<b>)</b> seconds while touching the ground. <b>This item can be customised</b>!
-      </td>
+				Holding the jump key while falling boosts you upwards for up to <b>4 (</b>+2 per stack<b>)</b> seconds. Fully recharges in <b>12 (</b>-20% per stack<b>)</b> seconds while touching the ground. <b>This item can be adjusted</b>!
+      		</td>
 		</tr>
     <tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texNoxiousSlimeIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Noxious Slimes</b><br>
-				All damaging debuffs deal <b>+100% (</b>+100% per stack<b>)</b> damage.
-      </td>
+				All damaging debuffs deal <b>+100% (</b>+100% per stack<b>)</b> damage. <b>This item can be adjusted</b>!
+      		</td>
 		</tr>
     <tr>
       <td colspan="2" align="center"><h3>Lunar Items</h3></td>
@@ -78,14 +78,14 @@ All items can be disabled individually in this mod's config.
 			<td>
 				<b>Hastening Greave</b><br>
 				Increase attack speed by <b>100% (</b>+100% per stack<b>)</b>. Reduce base damage by <b>50% (</b>+50% per stack<b>)</b>.
-      </td>
+      		</td>
 		</tr>
     <tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCauterizingGreaveIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Cauterizing Greave</b><br>
 				Increase max health by <b>100% (</b>+100% per stack<b>)</b>. Reduce healing received by <b>50% (</b>+50% per stack<b>)</b>.
-      </td>
+      		</td>
 		</tr>
 	</tbody>
 </table>
@@ -108,7 +108,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texBrassScrewsIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Brass Screws</b><br>
-				Increase damage by <b>20% (</b>+20% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be customised</b>!
+				Increase damage by <b>20% (</b>+20% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be adjusted</b>!
 			</td>
       <td> 
 				Corrupts all <b>Copper Gears</b>.
@@ -141,7 +141,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texDrownedVisageIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Drowned Visage</b><br>
-				Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>. <b>This item can be customised</b>!
+				Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>. <b>This item can be adjusted</b>!
 			</td>
       <td> 
 				Corrupts all <b>Spacious Umbrellas</b>.
@@ -240,6 +240,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.11 Noxious Slimes Customisation
+  - The Noxious Slimes item can now be adjusted in the config.
 - v1.0.10 Vengeful Toaster, Second Hand and 4-T0N Jetpack Refinements
   - Adjusted 4-T0N Jetpack to make it 'bouncier'.
   - The Vengeful Toaster, Second Hand and 4-T0N Jetpack items can now be customised in the config.

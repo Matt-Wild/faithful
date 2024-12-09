@@ -15,6 +15,14 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> damageSetting;
+        Setting<float> damageStackingSetting;
+
+        // Store item stats
+        float damage;
+        float damageStacking;
+
         // Constructor
         public NoxiousSlime(Toolbox _toolbox)
         {
@@ -25,6 +33,12 @@ namespace Faithful
 
             // Create Noxious Slime item
             noxiousSlimeItem = Items.AddItem("NOXIOUS_SLIME", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _displaySettings: displaySettings);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Inject DoT behaviour
             Behaviour.AddOnInflictDamageOverTimeRefCallback(OnInflictDamageOverTimeRef);
@@ -61,6 +75,23 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(-0.027F, 0.075F, 0.1465F), new Vector3(330F, 0F, 90F), new Vector3(0.075F, 0.075F, 0.075F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            damageSetting = noxiousSlimeItem.CreateSetting("DAMAGE", "Damage", 100.0f, "How much should this item increase the damage of damaging debuffs? (100.0 = 100% increase)");
+            damageStackingSetting = noxiousSlimeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 100.0f, "How much should further stacks of this item increase the damage of damaging debuffs? (100.0 = 100% increase)");
+
+            // Update item texts with new settings
+            noxiousSlimeItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            damage = damageSetting.Value / 100.0f;
+            damageStacking = damageStackingSetting.Value / 100.0f;
+        }
+
         void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo)
         {
             // Check if hosting
@@ -89,8 +120,8 @@ namespace Faithful
             if (count > 0)
             {
                 // Modify DoT damage
-                _inflictDotInfo.damageMultiplier *= 1.0f + (1.0f * count);
-                _inflictDotInfo.totalDamage *= 1.0f + (1.0f * count);
+                _inflictDotInfo.damageMultiplier *= 1.0f + damage + (damageStacking * (count - 1));
+                _inflictDotInfo.totalDamage *= 1.0f + damage + (damageStacking * (count - 1));
             }
         }
     }
