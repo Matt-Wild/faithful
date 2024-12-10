@@ -240,6 +240,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.12 Item Placements
+  - Changed Faithful item placements to have them appear in their proper positions in the logbook and command menus.
 - v1.0.11 Noxious Slimes Customisation
   - The Noxious Slimes item can now be adjusted in the config.
 - v1.0.10 Vengeful Toaster, Second Hand and 4-T0N Jetpack Refinements

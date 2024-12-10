@@ -28,7 +28,7 @@ namespace Faithful
             token = _token;
 
             // Assign name
-            name = Utils.GetLanguageString($"FAITHFUL_{_token}_NAME");
+            name = Utils.GetLanguageString($"FAITHFUL_{token}_NAME");
 
             // Create default settings (MUST HAPPEN AFTER TOKEN AND NAME IS ASSIGNED)
             CreateDefaultSettings();
@@ -140,21 +140,21 @@ namespace Faithful
                 ItemAPI.Add(new CustomItem(itemDef, new ItemDisplayRuleDict(null)));
             }
 
-            Log.Debug($"Created item '{_token}'");
+            Log.Debug($"Created item '{name}'");
 
             if (forceHide)
             {
                 if (!enabledSetting.Value)
                 {
-                    Log.Debug($"Hiding item '{_token}' due to user preference");
+                    Log.Debug($"Hiding item '{name}' due to user preference");
                 }
                 else if (_debugOnly)
                 {
-                    Log.Debug($"Hiding WIP item '{_token}'");
+                    Log.Debug($"Hiding WIP item '{name}'");
                 }
                 else
                 {
-                    Log.Debug($"Hiding item '{_token}' due to use of temporary assets outside of debug mode");
+                    Log.Debug($"Hiding item '{name}' due to use of temporary assets outside of debug mode");
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace Faithful
         public void UpdateItemTexts()
         {
             // Update item texts
-            itemDef.name = $"FAITHFUL_{token}_NAME";
+            itemDef.name = Utils.GetXMLLanguageString($"FAITHFUL_{token}_NAME");
             itemDef.nameToken = $"FAITHFUL_{token}_NAME";
             itemDef.pickupToken = Config.FormatLanguageString(Utils.GetLanguageString(extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP"), $"ITEM_{token}");
             itemDef.descriptionToken = Config.FormatLanguageString(Utils.GetLanguageString($"FAITHFUL_{token}_DESC"), $"ITEM_{token}");

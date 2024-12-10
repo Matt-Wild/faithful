@@ -7,6 +7,7 @@ using RoR2.ExpansionManagement;
 using RoR2.Navigation;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -1131,6 +1132,35 @@ namespace Faithful
             {
                 // Return corresponding value
                 return languageDictionary[_token];
+            }
+
+            // Token not found
+            else
+            {
+                Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
+                return _token; // Return original token
+            }
+        }
+
+        public static string GetXMLLanguageString(string _token)
+        {
+            // Check for token
+            if (languageDictionary.ContainsKey(_token))
+            {
+                // Get string
+                string languageString = languageDictionary[_token];
+
+                // Remove invalid characters for XML
+                languageString = Regex.Replace(languageString, @"[^a-zA-Z0-9_]", "_");
+
+                // Ensure the name starts with a letter or underscore
+                if (char.IsDigit(languageString[0]))
+                {
+                    languageString = $"_{languageString}";
+                }
+
+                // Return processes string
+                return languageString;
             }
 
             // Token not found
