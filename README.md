@@ -243,6 +243,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.14 Alternate Item Pickup Descriptions
+  - Added alternate item pickup descriptions for item adjustments that cause the original descriptions to be inaccurate.
 - v1.0.13 Hastening Greave and Cauterizing Greave Customisation
   - The Hastening Greave and Cauterizing Greave items can now be customised in the config.
 - v1.0.12 Item Placements
