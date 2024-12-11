@@ -18,7 +18,7 @@ namespace Faithful
             configFile = _configFile;
         }
 
-        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description)
+        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true)
         {
             // Check for token in settings dictionary
             if (settings.ContainsKey(_token))
@@ -29,7 +29,7 @@ namespace Faithful
             }
 
             // Create setting
-            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description);
+            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat);
 
             // Add setting to dictionary
             settings.Add(_token, setting);
@@ -62,13 +62,19 @@ namespace Faithful
             }
         }
 
-        public static string FormatLanguageString(string _languageString, string _tokenPrefix = "")
+        public static string FormatLanguageToken(string _token, string _tokenPrefix = "")
         {
+            // Get language string
+            string languageString = Utils.GetLanguageString(_token);
+
+            // Get token prefix
+            string tokenPrefix = _tokenPrefix;
+
             // Check for token prefix
-            if (_tokenPrefix != "")
+            if (tokenPrefix != "")
             {
                 // Add underscore to prefix
-                _tokenPrefix += "_";
+                tokenPrefix += "_";
             }
 
             // Cycle through settings
@@ -78,24 +84,31 @@ namespace Faithful
                 string settingToken = setting.Key;
 
                 // Check for token prefix
-                if (_tokenPrefix != "")
+                if (tokenPrefix != "")
                 {
                     // Check if token prefix is in setting token
-                    if (!settingToken.Contains(_tokenPrefix)) continue;
+                    if (!settingToken.Contains(tokenPrefix)) continue;
+
+                    // Check if setting is not default, is a stat and alt token exists
+                    if (!setting.Value.isDefault && setting.Value.isStat && Utils.HasLanguageString($"{_token}_ALT"))
+                    {
+                        // Return formatted alt token instead
+                        return FormatLanguageToken($"{_token}_ALT", _tokenPrefix);
+                    }
 
                     // Remove token prefix from setting token
-                    settingToken = settingToken.Replace(_tokenPrefix, "");
+                    settingToken = settingToken.Replace(tokenPrefix, "");
                 }
 
                 // Add language formatting indicator
                 settingToken = $"[{settingToken}]";
 
                 // Replace setting token in language string with appropriate value
-                _languageString = _languageString.Replace(settingToken, setting.Value.ValueObject.ToString());
+                languageString = languageString.Replace(settingToken, setting.Value.ValueObject.ToString());
             }
 
             // Return formatted language string
-            return _languageString;
+            return languageString;
         }
     }
 
@@ -110,7 +123,13 @@ namespace Faithful
         // Store config entry
         public ConfigEntry<T> configEntry;
 
-        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description)
+        // Store default value
+        public T defaultValue;
+
+        // Store if setting is stat
+        private bool m_isStat;
+
+        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true)
         {
             // Assign config file
             configFile = _configFile;
@@ -118,8 +137,14 @@ namespace Faithful
             // Assign token
             token = _token;
 
+            // Set default value
+            defaultValue = _defaultValue;
+
             // Create config entry
             configEntry = configFile.Bind(_section, _key, _defaultValue, _description);
+
+            // Assign if setting is stat
+            m_isStat = _isStat;
         }
 
         public void Delete()
@@ -150,11 +175,33 @@ namespace Faithful
                 return configEntry.Value;
             }
         }
+
+        public bool isDefault
+        {
+            get
+            {
+                // Check if setting is default
+                return EqualityComparer<T>.Default.Equals(defaultValue, configEntry.Value);
+            }
+        }
+
+        public bool isStat
+        {
+            get
+            {
+                // Return if setting is a stat
+                return m_isStat;
+            }
+        }
     }
 
     public interface ISetting
     {
         public object ValueObject { get; }
+
+        public bool isDefault { get; }
+
+        public bool isStat { get; }
     }
 
     /*internal static class Config

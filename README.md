@@ -80,14 +80,14 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texHasteningGreaveIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Hastening Greave</b><br>
-				Increase attack speed by <b>100% (</b>+100% per stack<b>)</b>. Reduce base damage by <b>50% (</b>+50% per stack<b>)</b>.
+				Increase attack speed by <b>100% (</b>+100% per stack<b>)</b>. Reduce base damage by <b>50% (</b>+50% per stack<b>)</b>. <b>This item can be adjusted</b>!
       		</td>
 		</tr>
     <tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCauterizingGreaveIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Cauterizing Greave</b><br>
-				Increase max health by <b>100% (</b>+100% per stack<b>)</b>. Reduce healing received by <b>50% (</b>+50% per stack<b>)</b>.
+				Increase max health by <b>100% (</b>+100% per stack<b>)</b>. Reduce healing received by <b>50% (</b>+50% per stack<b>)</b>. <b>This item can be adjusted</b>!
       		</td>
 		</tr>
 	</tbody>
@@ -243,6 +243,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.13 Hastening Greave and Cauterizing Greave Customisation
+  - The Hastening Greave and Cauterizing Greave items can now be customised in the config.
 - v1.0.12 Item Placements
   - Changed Faithful item placements to have them appear in their proper positions in the logbook and command menus.
 - v1.0.11 Noxious Slimes Customisation

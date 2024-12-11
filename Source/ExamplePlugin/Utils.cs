@@ -886,6 +886,12 @@ namespace Faithful
             return behaviour;
         }
 
+        public static bool HasLanguageString(string _token)
+        {
+            // Return if language file has string
+            return languageDictionary.ContainsKey(_token);
+        }
+        
         public static CharacterSpawnCard GetCharacterSpawnCard(string _name)
         {
             // Cycle through character spawn cards

@@ -1,6 +1,7 @@
 ﻿using R2API;
 using RoR2;
 using UnityEngine;
+using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
@@ -15,6 +16,18 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> attackSpeedBuffSetting;
+        Setting<float> attackSpeedBuffStackingSetting;
+        Setting<float> damageNerfSetting;
+        Setting<float> damageNerfStackingSetting;
+
+        // Store item stats
+        float attackSpeedBuff;
+        float attackSpeedBuffStacking;
+        float damageNerf;
+        float damageNerfStacking;
+
         // Constructor
         public HasteningGreave(Toolbox _toolbox)
         {
@@ -25,6 +38,12 @@ namespace Faithful
 
             // Create Longshot Geode item
             hasteningGreaveItem = Items.AddItem("HASTENING_GREAVE", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Add On Recalculate Stats behaviour
             Behaviour.AddOnRecalculateStatsCallback(OnRecalculateStats);
@@ -62,6 +81,27 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.1925F, 0F, -0.54F), new Vector3(0F, 180F, 270F), new Vector3(0.1F, 0.075F, 0.1F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            attackSpeedBuffSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)");
+            attackSpeedBuffStackingSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)");
+            damageNerfSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)");
+            damageNerfStackingSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)");
+
+            // Update item texts with new settings
+            hasteningGreaveItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            attackSpeedBuff = Mathf.Max(attackSpeedBuffSetting.Value / 100.0f, 0.01f) + 1.0f;
+            attackSpeedBuffStacking = Mathf.Max(attackSpeedBuffStackingSetting.Value / 100.0f, 0.01f) + 1.0f;
+            damageNerf = 1.0f - Mathf.Clamp01(damageNerfSetting.Value / 100.0f);
+            damageNerfStacking = 1.0f - Mathf.Clamp01(damageNerfStackingSetting.Value / 100.0f);
+        }
+
         void ModifyModelPrefab(GameObject _prefab)
         {
             // Get rings
@@ -94,9 +134,12 @@ namespace Faithful
             // Get item count
             int count = _body.inventory.GetItemCount(hasteningGreaveItem.itemDef);
 
+            // Check for item
+            if (count == 0) return;
+
             // Modify stats multiplicatively
-            _body.attackSpeed *= Mathf.Pow(2.0f, count);
-            _body.damage *= Mathf.Pow(0.5f, count);
+            _body.attackSpeed *= attackSpeedBuff * Mathf.Pow(attackSpeedBuffStacking, count - 1);
+            _body.damage *= damageNerf * Mathf.Pow(damageNerfStacking, count - 1);
         }
     }
 }

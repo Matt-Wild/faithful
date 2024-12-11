@@ -164,17 +164,17 @@ namespace Faithful
             // Update item texts
             itemDef.name = Utils.GetXMLLanguageString($"FAITHFUL_{token}_NAME");
             itemDef.nameToken = $"FAITHFUL_{token}_NAME";
-            itemDef.pickupToken = Config.FormatLanguageString(Utils.GetLanguageString(extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP"), $"ITEM_{token}");
-            itemDef.descriptionToken = Config.FormatLanguageString(Utils.GetLanguageString($"FAITHFUL_{token}_DESC"), $"ITEM_{token}");
+            itemDef.pickupToken = Config.FormatLanguageToken(extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP", $"ITEM_{token}");
+            itemDef.descriptionToken = Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}");
             itemDef.loreToken = $"FAITHFUL_{token}_LORE";
         }
 
         private void CreateDefaultSettings()
         {
             // Create the settings which every item should have
-            enabledSetting = CreateSetting("ENABLED", "Enable Item?", true, "Should this item appear in runs?");
-            enableItemDisplaysSetting = CreateSetting("ENABLE_ITEM_DISPLAYS", "Enable Item Displays?", true, "Should this item have item displays on the compatible character models?");
-            extendedPickupDescSetting = CreateSetting("EXTENDED_PICKUP_DESC", "Extended Pickup Description", false, "Should this item have the logbook description appear when picking it up during runs?");
+            enabledSetting = CreateSetting("ENABLED", "Enable Item?", true, "Should this item appear in runs?", false);
+            enableItemDisplaysSetting = CreateSetting("ENABLE_ITEM_DISPLAYS", "Enable Item Displays?", true, "Should this item have item displays on the compatible character models?", false);
+            extendedPickupDescSetting = CreateSetting("EXTENDED_PICKUP_DESC", "Extended Pickup Description", false, "Should this item have the logbook description appear when picking it up during runs?", false);
 
             // Clean previous unused default settings
             Setting<bool> temp1 = CreateSetting("TEMP1", "Enable item?", true, "Should this item appear in runs?");
@@ -183,10 +183,10 @@ namespace Faithful
             temp2.Delete();
         }
 
-        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description)
+        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _isStat = true)
         {
             // Return new setting
-            return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {name.Replace("'", "")}", _key, _defaultValue, _description);
+            return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {name.Replace("'", "")}", _key, _defaultValue, _description, _isStat);
         }
 
         public Setting<T> FetchSetting<T>(string _tokenAddition)

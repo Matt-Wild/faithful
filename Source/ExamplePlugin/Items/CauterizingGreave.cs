@@ -15,6 +15,18 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> maxHealthBuffSetting;
+        Setting<float> maxHealthBuffStackingSetting;
+        Setting<float> healingNerfSetting;
+        Setting<float> healingNerfStackingSetting;
+
+        // Store item stats
+        float maxHealthBuff;
+        float maxHealthBuffStacking;
+        float healingNerf;
+        float healingNerfStacking;
+
         // Constructor
         public CauterizingGreave(Toolbox _toolbox)
         {
@@ -25,6 +37,12 @@ namespace Faithful
 
             // Create Longshot Geode item
             cauterizingGreaveItem = Items.AddItem("CAUTERIZING_GREAVE", [ItemTag.Utility], "texcauterizinggreaveicon", "cauterizinggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Add stats modification
             Behaviour.AddStatsMod(cauterizingGreaveItem, StatsMod);
@@ -65,6 +83,27 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.1925F, 0F, 0.54F), new Vector3(0F, 0F, 90F), new Vector3(0.1F, 0.075F, 0.1F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            maxHealthBuffSetting = cauterizingGreaveItem.CreateSetting("MAX_HEALTH_BUFF", "Max Health Increase", 100.0f, "How much should this item increase the max health of the player? (100.0 = 100% increase)");
+            maxHealthBuffStackingSetting = cauterizingGreaveItem.CreateSetting("MAX_HEALTH_BUFF_STACKING", "Max Health Increase Stacking", 100.0f, "How much should further stacks of this item increase the max health of the player? (100.0 = 100% increase)");
+            healingNerfSetting = cauterizingGreaveItem.CreateSetting("HEALING_NERF", "Healing Decrease", 50.0f, "How much should this item decrease the received healing of the player? (50.0 = 50% decrease)");
+            healingNerfStackingSetting = cauterizingGreaveItem.CreateSetting("HEALING_NERF_STACKING", "Healing Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the received healing of the player? (50.0 = 50% decrease)");
+
+            // Update item texts with new settings
+            cauterizingGreaveItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            maxHealthBuff = Mathf.Max(maxHealthBuffSetting.Value / 100.0f, 0.01f);
+            maxHealthBuffStacking = Mathf.Max(maxHealthBuffStackingSetting.Value / 100.0f, 0.01f);
+            healingNerf = 1.0f - Mathf.Clamp01(healingNerfSetting.Value / 100.0f);
+            healingNerfStacking = 1.0f - Mathf.Clamp01(healingNerfStackingSetting.Value / 100.0f);
+        }
+
         void ModifyModelPrefab(GameObject _prefab)
         {
             // Get ring
@@ -79,8 +118,11 @@ namespace Faithful
 
         void StatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
+            // Check for item
+            if (_count == 0) return;
+
             // Increase max health
-            _stats.healthMultAdd += 1.0f * _count;
+            _stats.healthMultAdd += maxHealthBuff + (maxHealthBuffStacking * (_count - 1));
         }
 
         void OnHeal(HealthComponent _healthComponent, ref float _amount, ref ProcChainMask _procChainMask, ref bool _nonRegen)
@@ -107,8 +149,8 @@ namespace Faithful
                 // Has item?
                 if (count > 0)
                 {
-                    // Increase max health on top of items
-                    _amount *= Mathf.Pow(0.5f, count);
+                    // Decrease received healing
+                    _amount *= healingNerf * Mathf.Pow(healingNerfStacking, count - 1);
                 }
             }
         }
