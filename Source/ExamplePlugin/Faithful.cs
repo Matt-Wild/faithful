@@ -122,7 +122,7 @@ namespace Faithful
             hasteningGreave = new HasteningGreave(toolbox);
             cauterizingGreave = new CauterizingGreave(toolbox);
             noxiousSlime = new NoxiousSlime(toolbox);
-            collectorsVision = new CollectorsVision(toolbox);
+            collectorsVision = new CollectorsVision(toolbox, inspiration);
             tJetpack = new TJetpack(toolbox);
 
             // Log successful load information

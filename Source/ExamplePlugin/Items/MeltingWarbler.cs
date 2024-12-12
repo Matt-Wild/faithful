@@ -99,7 +99,7 @@ namespace Faithful
             if (_count == 0) return;
 
             // Modify jump power
-            _stats.baseJumpPowerAdd += 1.8f * jumpBoost + 1.8f * jumpBoostStacking * (_count - 1);
+            _stats.baseJumpPowerAdd += 1.75f * jumpBoost + 1.75f * jumpBoostStacking * (_count - 1);
         }
     }
 }

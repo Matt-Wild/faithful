@@ -15,8 +15,20 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<int> inspirationGainSetting;
+        Setting<int> inspirationGainStackingSetting;
+        Setting<float> critChanceSetting;
+        Setting<float> critDamageSetting;
+
+        // Store item stats
+        int inspirationGain;
+        int inspirationGainStacking;
+        float critChance;
+        float critDamageMult;
+
         // Constructor
-        public CollectorsVision(Toolbox _toolbox)
+        public CollectorsVision(Toolbox _toolbox, Inspiration _inspiration)
         {
             toolbox = _toolbox;
 
@@ -28,6 +40,12 @@ namespace Faithful
 
             // Create Collector's Vision item
             collectorsVisionItem = Items.AddItem("COLLECTORS_VISION", [ItemTag.Damage], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings(_inspiration);
 
             // Link On Give Item behaviour
             Behaviour.AddServerOnGiveItemCallback(OnGiveItem);
@@ -66,6 +84,31 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(-0.399F, 0.2925F, 0.1575F), new Vector3(0F, 0F, 165F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Chef", "Cleaver", new Vector3(0.08025F, 0.5105F, 0F), new Vector3(270F, 270F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
             displaySettings.AddCharacterDisplay("Chef", "PizzaCutter", new Vector3(-0.18175F, 0.4075F, -0.00025F), new Vector3(270F, 90F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
+        }
+
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            inspirationGainSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How many inspiration buffs should this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)");
+            inspirationGainStackingSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How many inspiration buffs should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)");
+            critChanceSetting = collectorsVisionItem.CreateSetting("CRIT_CHANCE", "Crit Chance", 1.0f, "How much should the inspiration buff increase the chance of the player getting a crit? (1.0 = 1% increase)");
+            critDamageSetting = collectorsVisionItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should the inspiration buff increase the crit damage multiplier? (20.0 = 20% increase)");
+
+            // Update item texts with new settings
+            collectorsVisionItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings(Inspiration _inspiration)
+        {
+            // Get item settings
+            inspirationGain = Mathf.Max(1, inspirationGainSetting.Value);
+            inspirationGainStacking = Mathf.Max(1, inspirationGainStackingSetting.Value);
+            critChance = critChanceSetting.Value;
+            critDamageMult = critDamageSetting.Value / 100.0f;
+
+            // Send values to inspiration buff
+            _inspiration.critChance = critChance;
+            _inspiration.critDamageMult = critDamageMult;
         }
 
         void OnGiveItem(Inventory _inventory, ItemIndex _index, int _count)
@@ -112,8 +155,8 @@ namespace Faithful
                 // Set flag
                 helper.stageFlags.Set($"CS_{_index}_FFS");
 
-                // Grant buff amount equal to item count
-                for (int i = 0; i < count; i++)
+                // Grant buffs
+                for (int i = 0; i < inspirationGain + inspirationGainStacking * (count - 1); i++)
                 {
                     body.AddBuff(inspirationBuff.buffDef);
                 }

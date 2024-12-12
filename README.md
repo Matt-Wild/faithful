@@ -243,6 +243,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.16 Melting Warbler and Collector's Vision Customisation
+  - The Melting Warbler and Collector's Vision items can now be customised in the config.
 - v1.0.15 Longshot Geode and Leader's Pennon Customisation
   - The Longshot Geode and Leader's Pennon items can now be customised in the config.
 - v1.0.14 Alternate Item Pickup Descriptions
@@ -263,6 +265,7 @@ You can support us in making this mod (or in our other work) through the link be
   - The Spacious Umbrella and Drowned Visage items can now be customised in the config.
 - v1.0.7 Toggleable Expansion
   - Added Faithful content into it's own expansion that can be enabled and disabled in the lobby.
+<details><summary>Past Changelogs</summary>
 - v1.0.6 BepInEx Config
   - Replaced config text file with BepInEx config.
 - v1.0.5 Warbanner Visual Effect Fix
@@ -277,3 +280,4 @@ You can support us in making this mod (or in our other work) through the link be
   - Forgor smth...
 - v1.0.0 Release
   - Praying I didn't forget anything...
+</details>

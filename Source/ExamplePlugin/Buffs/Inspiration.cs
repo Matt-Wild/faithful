@@ -11,6 +11,10 @@ namespace Faithful
         // Store buff
         Buff inspirationBuff;
 
+        // Store stats
+        public float critChance = 1.0f;
+        public float critDamageMult = 0.20f;
+
         // Constructor
         public Inspiration(Toolbox _toolbox)
         {
@@ -26,10 +30,10 @@ namespace Faithful
         void InspirationStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify crit chance
-            _stats.critAdd += 1.0f * _count;
+            _stats.critAdd += critChance * _count;
 
             // Modify crit damage
-            _stats.critDamageMultAdd += 0.20f * _count;
+            _stats.critDamageMultAdd += critDamageMult * _count;
         }
     }
 }
