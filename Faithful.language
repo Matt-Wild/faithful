@@ -27,12 +27,12 @@
 	
 	"FAITHFUL_MELTING_WARBLER_NAME": "Melting Warbler",
 	"FAITHFUL_MELTING_WARBLER_PICKUP": "Increase jump height. <style=cIsVoid>Corrupts all Wax Quails</style>.",
-	"FAITHFUL_MELTING_WARBLER_DESC": "Increase <style=cIsUtility>jump height</style> by <style=cIsUtility>1m</style> <style=cStack>(+1m per stack)</style>. <style=cIsVoid>Corrupts all Wax Quails</style>.",
+	"FAITHFUL_MELTING_WARBLER_DESC": "Increase <style=cIsUtility>jump height</style> by <style=cIsUtility>[JUMP_BOOST]m</style> <style=cStack>(+[JUMP_BOOST_STACKING]m per stack)</style>. <style=cIsVoid>Corrupts all Wax Quails</style>.",
 	"FAITHFUL_MELTING_WARBLER_LORE": "Order: Wax Warbler\nTracking Number: 27*******\nEstimated Delivery: 02/15/2057\nShipping Method: Priority\nShipping Address: Research Center, Polarity Zone, Neptune\nShipping Details:\n\nHello Buu,\nThis is Mama again, how is everything where you are?\n\nWe’ve had the heat on a bit higher for the colder months which led to some of Papa's wax models melting so we’ve had to move them out of the house for now. I am sending one to you that we thought you might like. There were a few more that he wanted you to have but Papa is moving onto using wood now so look forward to next time.\n\nHope we can meet Buu again soon! :-)\nMama",
 	
 	"FAITHFUL_LEADERS_PENNON_NAME": "Leader's Pennon",
 	"FAITHFUL_LEADERS_PENNON_PICKUP": "Carry a flag that creates a ward around yourself. Grants nearby allies attack speed and regeneration. <style=cIsVoid>Corrupts all Warbanners</style>.",
-	"FAITHFUL_LEADERS_PENNON_DESC": "Create a ward around yourself that strengthens all allies within <style=cIsUtility>15m</style> <style=cStack>(+5m per stack)</style>. Raise <style=cIsDamage>attack speed</style> by <style=cIsDamage>30%</style> and <style=cIsHealing>passive health regeneration</style> by <style=cIsHealing>+5hp/s</style>. <style=cIsVoid>Corrupts all Warbanners</style>.",
+	"FAITHFUL_LEADERS_PENNON_DESC": "Create a ward around yourself that strengthens all allies within <style=cIsUtility>[RADIUS]m</style> <style=cStack>(+[RADIUS_STACKING]m per stack)</style>. Raise <style=cIsDamage>attack speed</style> by <style=cIsDamage>[ATTACK_SPEED]%</style> and <style=cIsHealing>passive health regeneration</style> by <style=cIsHealing>+[REGEN]hp/s</style>. <style=cIsVoid>Corrupts all Warbanners</style>.",
 	"FAITHFUL_LEADERS_PENNON_LORE": "We knew we'd never win. This planet was as hellish as it was relentless.\n\nMany died as soon as the blast doors opened. Lizard people, giant jellyfish, constructs made of the very ground beneath our very feet. They all conspired somehow - someway - to massacre us all. We never stood a chance.\n\nAnd our squad leader, that damn idiot... What was left of him was marked with the flag that led us to our demise.",
 	"FAITHFUL_LEADERS_PENNON_BUFF": "Leader's Pennon",
 	
@@ -54,7 +54,7 @@
 	
 	"FAITHFUL_LONGSHOT_GEODE_NAME": "Longshot Geode",
 	"FAITHFUL_LONGSHOT_GEODE_PICKUP": "Deal bonus damage to distant enemies. <style=cIsVoid>Corrupts all Focus Crystals</style>.",
-	"FAITHFUL_LONGSHOT_GEODE_DESC": "Increase damage to enemies further than <style=cIsDamage>50m</style> away by <style=cIsDamage>15%</style> <style=cStack>(+15% per stack)</style>. <style=cIsVoid>Corrupts all Focus Crystals</style>.",
+	"FAITHFUL_LONGSHOT_GEODE_DESC": "Increase damage to enemies further than <style=cIsDamage>[DISTANCE]m</style> away by <style=cIsDamage>[DAMAGE]%</style> <style=cStack>(+[DAMAGE_STACKING]% per stack)</style>. <style=cIsVoid>Corrupts all Focus Crystals</style>.",
 	"FAITHFUL_LONGSHOT_GEODE_LORE": "Order: Raw Crystal Geode\nTracking Number: 1000******\nEstimated Delivery: 07/16/2057\nShipping Method: High Priority\nShipping Address: Building 17, Campus of Astronomy, Mars\nShipping Details:\n\nThis thing's dense as all hell in its composition but somehow it weighs about as much as a clipboard. I'm sending it your way since you're the analysis guy out of the two of us. This thing will be our ticket to the big leagues of astronomical discoveries!\n\nIt's a longshot but I'm sure of it!\n\n...Oh, and don't worry too much about the biological matter splattered on the side of it. Let's just say it had an audience before it landed.",
 	
 	"FAITHFUL_HASTENING_GREAVE_NAME": "Hastening Greave",

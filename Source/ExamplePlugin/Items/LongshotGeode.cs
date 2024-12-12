@@ -15,6 +15,16 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> damageSetting;
+        Setting<float> damageStackingSetting;
+        Setting<float> distanceSetting;
+
+        // Store item stats
+        float damage;
+        float damageStacking;
+        float distanceThreshold;
+
         // Constructor
         public LongshotGeode(Toolbox _toolbox)
         {
@@ -25,6 +35,12 @@ namespace Faithful
 
             // Create Longshot Geode item
             longshotGeodeItem = Items.AddItem("LONGSHOT_GEODE", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _displaySettings: displaySettings);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Add On Incoming Damage behaviour
             Behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
@@ -62,6 +78,25 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "HandL", new Vector3(0.00315F, 0.01855F, -0.0625F), new Vector3(0F, 180F, 180F), new Vector3(0.05F, 0.05F, 0.05F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            damageSetting = longshotGeodeItem.CreateSetting("DAMAGE", "Damage", 15.0f, "How much should this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)");
+            damageStackingSetting = longshotGeodeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 15.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)");
+            distanceSetting = longshotGeodeItem.CreateSetting("DISTANCE", "Distance", 50.0f, "How far should the target need to be for the damage bonus to be applied? (50.0 = 50 meters)");
+
+            // Update item texts with new settings
+            longshotGeodeItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            damage = damageSetting.Value / 100.0f;
+            damageStacking = damageStackingSetting.Value / 100.0f;
+            distanceThreshold = distanceSetting.Value;
+        }
+
         void OnIncomingDamage(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim)
         {
             // Check for attacker and victim
@@ -96,11 +131,11 @@ namespace Faithful
                 float distance = (attackerBody.transform.position - victimBody.transform.position).magnitude;
 
                 // Check if distance is greater or equal to 50 metres
-                if (distance >= 50.0f)
+                if (distance >= distanceThreshold)
                 {
                     // Apply damage bonus and colour index
                     _report.damageColorIndex = DamageColorIndex.Nearby;
-                    _report.damage *= 1.0f + count * 0.15f;
+                    _report.damage *= 1.0f + damage + (damageStacking * (count - 1));
                 }
             }
         }

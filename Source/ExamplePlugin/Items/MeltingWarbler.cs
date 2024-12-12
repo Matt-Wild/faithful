@@ -15,6 +15,14 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> jumpBoostSetting;
+        Setting<float> jumpBoostStackingSetting;
+
+        // Store item stats
+        float jumpBoost;
+        float jumpBoostStacking;
+
         // Constructor
         public MeltingWarbler(Toolbox _toolbox)
         {
@@ -25,6 +33,12 @@ namespace Faithful
 
             // Create Melting Warbler item
             meltingWarblerItem = Items.AddItem("MELTING_WARBLER", [ItemTag.Utility], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _displaySettings: displaySettings);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Add stats modification
             Behaviour.AddStatsMod(meltingWarblerItem, MeltingWarblerStatsMod);
@@ -62,10 +76,30 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.8325F, -0.2225F, 0.20175F), new Vector3(35F, 40F, 135F), new Vector3(0.15F, 0.15F, 0.15F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            jumpBoostSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST", "Jump Boost", 1.0f, "How much should this item increase the jump height of the player? (1.0 = 1 meter)");
+            jumpBoostStackingSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST_STACKING", "Jump Boost Stacking", 1.0f, "How much should further stacks of this item increase the jump height of the player? (1.0 = 1 meter)");
+
+            // Update item texts with new settings
+            meltingWarblerItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            jumpBoost = jumpBoostSetting.Value;
+            jumpBoostStacking = jumpBoostStackingSetting.Value;
+        }
+
         void MeltingWarblerStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
+            // Check for item
+            if (_count == 0) return;
+
             // Modify jump power
-            _stats.baseJumpPowerAdd += 1.8f * _count;
+            _stats.baseJumpPowerAdd += 1.8f * jumpBoost + 1.8f * jumpBoostStacking * (_count - 1);
         }
     }
 }

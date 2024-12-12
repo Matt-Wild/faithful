@@ -121,7 +121,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLongshotGeodeIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Longshot Geode</b><br>
-			  Increase damage to enemies further than <b>50m</b> away by <b>15% (</b>+15% per stack<b>)</b>.
+			  Increase damage to enemies further than <b>50m</b> away by <b>15% (</b>+15% per stack<b>)</b>. <b>This item can be adjusted</b>!
 			</td>
       <td> 
 				Corrupts all <b>Focus Crystals</b>.
@@ -131,7 +131,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLeadersPennonIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Leader's Pennon</b><br>
-				Create a ward around yourself that strengthens all allies within <b>15m (</b>+5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>.
+				Create a ward around yourself that strengthens all allies within <b>15m (</b>+5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>. <b>This item can be adjusted</b>!
 			</td>
       <td> 
 				Corrupts all <b>Warbanners</b>.
@@ -243,6 +243,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+- v1.0.15 Longshot Geode and Leader's Pennon Customisation
+  - The Longshot Geode and Leader's Pennon items can now be customised in the config.
 - v1.0.14 Alternate Item Pickup Descriptions
   - Added alternate item pickup descriptions for item adjustments that cause the original descriptions to be inaccurate.
 - v1.0.13 Hastening Greave and Cauterizing Greave Customisation

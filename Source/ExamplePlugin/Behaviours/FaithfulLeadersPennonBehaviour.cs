@@ -1,5 +1,7 @@
 ﻿using RoR2;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
@@ -14,6 +16,11 @@ namespace Faithful
         // Store previous registered item count
         int count = 0;
 
+        // Store leader's pennon stats
+        bool enableRadiusIndicator;
+        float baseRadius;
+        float radiusStacking;
+
         // Store reference to radius indicator
         FaithfulRadiusIndicatorBehaviour radiusIndicator;
 
@@ -21,6 +28,9 @@ namespace Faithful
         {
             // Assign character
             character = _character;
+
+            // Fetch leader's pennon settings
+            FetchSettings();
 
             // Check for inventory
             Inventory inventory = character.inventory;
@@ -35,6 +45,17 @@ namespace Faithful
 
             // Update temporary visual effects
             character.UpdateAllTemporaryVisualEffects();
+        }
+
+        private void FetchSettings()
+        {
+            // Get leaders pennon item
+            Item leadersPennonItem = Items.GetItem("LEADERS_PENNON");
+
+            // Update stats
+            enableRadiusIndicator = leadersPennonItem.FetchSetting<bool>("ENABLE_RADIUS_INDICATOR").Value;
+            baseRadius = leadersPennonItem.FetchSetting<float>("RADIUS").Value;
+            radiusStacking = leadersPennonItem.FetchSetting<float>("RADIUS_STACKING").Value;
         }
 
         private void OnDestroy()
@@ -65,13 +86,13 @@ namespace Faithful
         protected void UpdateItemCount(int _newCount)
         {
             // Check if the same as previous count
-            if (_newCount == count)
-            {
-                return;
-            }
+            if (_newCount == count) return;
 
             // Update count
             count = _newCount;
+
+            // Skip adjusting radius indicator if it is disabled
+            if (!enableRadiusIndicator) return;
 
             // Check if radius indicator exists
             if (radiusIndicator != null)
@@ -85,7 +106,7 @@ namespace Faithful
                 }
 
                 // Calculate radius indicator radius
-                float radius = 15.0f + (count - 1) * 5.0f;  // REMEMBER TO SYNC THIS WITH LeadersPennon
+                float radius = baseRadius + (count - 1) * radiusStacking;  // REMEMBER TO SYNC THIS WITH LeadersPennon
 
                 // Set radius indicator target size
                 radiusIndicator.SetTargetSize(radius);
@@ -95,7 +116,7 @@ namespace Faithful
             else
             {
                 // Calculate effect radius
-                float radius = 15.0f + (count - 1) * 5.0f;  // REMEMBER TO SYNC THIS WITH LeadersPennon
+                float radius = baseRadius + (count - 1) * radiusStacking;  // REMEMBER TO SYNC THIS WITH LeadersPennon
 
                 // Create radius indicator
                 radiusIndicator = Utils.CreateRadiusIndicator(character, 0.0f, radius, new Color(0.58039215f, 0.22745098f, 0.71764705f));

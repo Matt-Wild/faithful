@@ -17,6 +17,28 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<bool> enableRadiusIndicatorSetting;
+        Setting<bool> enableBuffEffectSetting;
+        Setting<float> radiusSetting;
+        Setting<float> radiusStackingSetting;
+        Setting<float> attackSpeedSetting;
+        Setting<float> regenSetting;
+        Setting<float> regenPerLevelSetting;
+        Setting<float> regenMultSetting;
+        Setting<float> buffDurationSetting;
+
+        // Store item stats
+        bool enableRadiusIndicator;
+        bool enableBuffEffect;
+        float baseRadius;
+        float radiusStacking;
+        float attackSpeed;
+        float regen;
+        float regenPerLevel;
+        float regenMult;
+        float buffDuration;
+
         // Constructor
         public LeadersPennon(Toolbox _toolbox)
         {
@@ -28,6 +50,12 @@ namespace Faithful
             // Create Leader's Pennon item and buff
             leadersPennonBuff = Buffs.AddBuff("LEADERS_PENNON", "texbuffleaderarea", Color.white, false);
             leadersPennonItem = Items.AddItem("LEADERS_PENNON", [ItemTag.Utility, ItemTag.AIBlacklist], "texleaderspennonicon", "leaderspennonmesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME", _displaySettings: displaySettings);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Add ally to ally behaviour
             Behaviour.AddAllyToAllyCallback(leadersPennonItem, AllyWithItemToAlly);
@@ -70,21 +98,52 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(-0.3335F, -0.2505F, 0.0195F), new Vector3(90F, 270F, 0F), new Vector3(0.11F, 0.1F, 0.11F));
         }
 
+        private void CreateSettings()
+        {
+            // Create settings specific to this item
+            enableRadiusIndicatorSetting = leadersPennonItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", true, "Should this item have a radius indicator visual effect?");
+            enableBuffEffectSetting = leadersPennonItem.CreateSetting("ENABLE_BUFF_EFFECT", "Enable Buff Visual Effect?", true, "Should this item's buff have a visual effect?");
+            radiusSetting = leadersPennonItem.CreateSetting("RADIUS", "Radius", 15.0f, "How big should the base radius be of this item's effect? (15.0 = 15 meters)");
+            radiusStackingSetting = leadersPennonItem.CreateSetting("RADIUS_STACKING", "Radius Stacking", 5.0f, "How much should the radius of this item's effect increase per stack? (5.0 = 5 meters)");
+            attackSpeedSetting = leadersPennonItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 30.0f, "How much should this item increase ally's attack speed? (30.0 = 30% increase)");
+            regenSetting = leadersPennonItem.CreateSetting("REGEN", "Regen", 5.0f, "How much should this item increase ally's base regen? (5.0 = 5 hp/s)");
+            regenPerLevelSetting = leadersPennonItem.CreateSetting("REGEN_PER_LEVEL", "Regen Per Level", 1.0f, "How much should this item increase ally's regen per level? (1.0 = 1 hp/s)");
+            regenMultSetting = leadersPennonItem.CreateSetting("REGEN_MULT", "Regen Multiplier", 30.0f, "How much should this item increase ally's regen multiplicatively? (30.0 = 30% increase)");
+            buffDurationSetting = leadersPennonItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the radius of this item's effect? (1.0 = 1 second)");
+
+            // Update item texts with new settings
+            leadersPennonItem.UpdateItemTexts();
+        }
+
+        private void FetchSettings()
+        {
+            // Get item settings
+            enableRadiusIndicator = enableRadiusIndicatorSetting.Value;
+            enableBuffEffect = enableBuffEffectSetting.Value;
+            baseRadius = radiusSetting.Value;
+            radiusStacking = radiusStackingSetting.Value;
+            attackSpeed = attackSpeedSetting.Value / 100.0f;
+            regen = regenSetting.Value;
+            regenPerLevel = regenPerLevelSetting.Value;
+            regenMult = regenMultSetting.Value / 100.0f;
+            buffDuration = Mathf.Max(0.1f, buffDurationSetting.Value);
+        }
+
         void LeadersPennonStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify attack speed
-            _stats.attackSpeedMultAdd += 0.3f;
+            _stats.attackSpeedMultAdd += attackSpeed;
 
             // Modify regen speed
-            _stats.baseRegenAdd += 5.0f;
-            _stats.levelRegenAdd += 1.0f;
-            _stats.regenMultAdd += 0.3f;
+            _stats.baseRegenAdd += regen;
+            _stats.levelRegenAdd += regenPerLevel;
+            _stats.regenMultAdd += regenMult;
         }
 
         void AllyWithItemToAlly(int _count, CharacterMaster _holder, CharacterMaster _other)
         {
             // Calculate effect radius
-            float radius = 15.0f + (_count - 1) * 5.0f;     // REMEMBER TO SYNC THIS WITH FaithfulLeadersPennonBehaviour
+            float radius = baseRadius + (_count - 1) * radiusStacking;     // REMEMBER TO SYNC THIS WITH FaithfulLeadersPennonBehaviour
 
             // Other ally in radius
             if ((_holder.GetBodyObject().transform.position - _other.GetBodyObject().transform.position).magnitude <= radius)
@@ -96,18 +155,21 @@ namespace Faithful
                 if (body.GetBuffCount(leadersPennonBuff.buffDef) == 0)
                 {
                     // Grant buff
-                    body.AddTimedBuff(leadersPennonBuff.buffDef, 1);
+                    body.AddTimedBuff(leadersPennonBuff.buffDef, buffDuration);
                 }
                 else
                 {
                     // Refresh Leader's Pennon buffs on other ally
-                    Utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, 1);
+                    Utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, buffDuration);
                 }
             }
         }
 
         void UpdateVisualEffects(CharacterBody _body)
         {
+            // Check if buff effect is enabled
+            if (!enableBuffEffect) return;
+
             // Check for character body
             if (_body == null) return;
 
