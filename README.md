@@ -154,7 +154,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texMeltingWarblerIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Melting Warbler</b><br>
-				Increase jump height by <b>1m (</b>+1m per stack<b>)</b>.
+				Increase jump height by <b>1m (</b>+1m per stack<b>)</b>. <b>This item can be adjusted</b>!
 			</td>
       <td> 
 				Corrupts all <b>Wax Quails</b>.
@@ -167,7 +167,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCollectorsVisionIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Collector's Vision</b><br>
-				Each unique item collected per stage grants <b>1 (</b>+1 per stack<b>)</b> permanent Inspiration. Each stack of Inspiration increases Critical Strike chance by <b>+1%</b> and grants an additional <b>+20%</b> Critical Strike damage.
+				Each unique item collected per stage grants <b>1 (</b>+1 per stack<b>)</b> permanent Inspiration. Each stack of Inspiration increases Critical Strike chance by <b>+1%</b> and grants an additional <b>+20%</b> Critical Strike damage. <b>This item can be adjusted</b>!
       </td>
       <td> 
 				Corrupts all <b>Laser Scopes</b>.
@@ -243,6 +243,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+* v1.0.17 Readme Amendment
+  * Fixed inconsistency in Readme.
 * v1.0.16 Melting Warbler and Collector's Vision Customisation
   * The Melting Warbler and Collector's Vision items can now be customised in the config.
 * v1.0.15 Longshot Geode and Leader's Pennon Customisation
@@ -263,11 +265,11 @@ You can support us in making this mod (or in our other work) through the link be
   * The Copper Gear and Brass Screw items can now be customised in the config.
 * v1.0.8 Spacious Umbrella and Drowned Visage Customisation
   * The Spacious Umbrella and Drowned Visage items can now be customised in the config.
-* v1.0.7 Toggleable Expansion
-  * Added Faithful content into it's own expansion that can be enabled and disabled in the lobby.
 
 <details><summary>Past Changelogs</summary>
 
+* v1.0.7 Toggleable Expansion
+  * Added Faithful content into it's own expansion that can be enabled and disabled in the lobby.
 * v1.0.6 BepInEx Config
   * Replaced config text file with BepInEx config.
 * v1.0.5 Warbanner Visual Effect Fix
