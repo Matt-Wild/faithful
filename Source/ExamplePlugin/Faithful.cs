@@ -43,7 +43,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.0.17";
+        public const string PluginVersion = "1.0.18";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }

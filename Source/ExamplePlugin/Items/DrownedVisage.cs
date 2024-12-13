@@ -4,11 +4,8 @@ using System.Collections.Generic;
 
 namespace Faithful
 {
-    internal class DrownedVisage
+    internal class DrownedVisage : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item
         Item drownedVisageItem;
 
@@ -26,10 +23,8 @@ namespace Faithful
         float chargeAmount;
 
         // Constructor
-        public DrownedVisage(Toolbox _toolbox)
+        public DrownedVisage(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("drownedvisagedisplaymesh");
 
@@ -77,23 +72,23 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "OvenDoor", new Vector3(-0.51325F, -0.025F, 0.145F), new Vector3(0F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             chanceSetting = drownedVisageItem.CreateSetting("CHANCE", "Charge Chance", 2.5f, "What should the chance be for this item to charge the teleporter when killing an enemy within the teleporter zone? (2.5 = 2.5% chance)");
             chanceStackingSetting = drownedVisageItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 2.5f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (2.5 = 2.5% chance)");
             chargeAmountSetting = drownedVisageItem.CreateSetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, "How much should this item charge the teleporter? (5.0 = 5% charge)");
-
-            // Update item texts with new settings
-            drownedVisageItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             chance = chanceSetting.Value;
             chanceStacking = chanceStackingSetting.Value;
             chargeAmount = chargeAmountSetting.Value / 100.0f;
+
+            // Update item texts with new settings
+            drownedVisageItem.UpdateItemTexts();
         }
 
         void OnCharacterDeath(DamageReport _report)

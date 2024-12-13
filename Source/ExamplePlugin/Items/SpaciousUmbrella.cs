@@ -5,11 +5,8 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class SpaciousUmbrella
+    internal class SpaciousUmbrella : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item
         Item spaciousUmbrellaItem;
 
@@ -25,10 +22,8 @@ namespace Faithful
         float sizeStacking;
 
         // Constructor
-        public SpaciousUmbrella(Toolbox _toolbox)
+        public SpaciousUmbrella(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("spaciousumbrelladisplaymesh");
 
@@ -75,21 +70,21 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(0.0355F, 0.22875F, 0.11475F), new Vector3(0F, 270F, 315F), new Vector3(0.35F, 0.35F, 0.35F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             sizeSetting = spaciousUmbrellaItem.CreateSetting("SIZE", "Radius Increase", 25.0f, "How much should this item increase the size of the teleporter radius? (25.0 = 25% increase)");
             sizeStackingSetting = spaciousUmbrellaItem.CreateSetting("SIZE_STACKING", "Radius Increase Stacking", 25.0f, "How much should additional stacks of this item increase the size of the teleporter radius? (25.0 = 25% increase)");
-
-            // Update item texts with new settings
-            spaciousUmbrellaItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             size = sizeSetting.Value / 100.0f;
             sizeStacking = sizeStackingSetting.Value / 100.0f;
+
+            // Update item texts with new settings
+            spaciousUmbrellaItem.UpdateItemTexts();
         }
 
         void OnHoldoutZoneCalcRadius(ref float _radius, HoldoutZoneController _zone)

@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class VengefulToaster
+    internal class VengefulToaster : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item and buff
         Buff vengeanceBuff;
         Item vengefulToasterItem;
+
+        // Store reference to vengeance behaviour
+        Vengeance vengeanceBehaviour;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
@@ -25,9 +25,10 @@ namespace Faithful
         float durationStacking;
 
         // Constructor
-        public VengefulToaster(Toolbox _toolbox, Vengeance _vengeance)
+        public VengefulToaster(Toolbox _toolbox, Vengeance _vengeance) : base(_toolbox)
         {
-            toolbox = _toolbox;
+            // Assign vengeance behaviour
+            vengeanceBehaviour = _vengeance;
 
             // Get Vengeance buff
             vengeanceBuff = Buffs.GetBuff("VENGEANCE");
@@ -42,7 +43,7 @@ namespace Faithful
             CreateSettings();
 
             // Fetch item settings
-            FetchSettings(_vengeance);
+            FetchSettings();
 
             // Link On Damage Dealt behaviour
             Behaviour.AddOnDamageDealtCallback(OnDamageDealt);
@@ -79,25 +80,25 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(0.125F, -0.4F, -0.15F), new Vector3(85F, 12.5F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             durationSetting = vengefulToasterItem.CreateSetting("DURATION", "Duration", 4.0f, "How long should the vengeance buff last when granted? (4.0 = 4 seconds)");
             durationStackingSetting = vengefulToasterItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much longer should the vengeance buff last when granted with additional item stacks? (1.0 = 1 second)");
             damageSetting = vengefulToasterItem.CreateSetting("DAMAGE", "Damage", 75.0f, "How much should each stack of vengeance increase damage? (75.0 = 75% increase)");
-
-            // Update item texts with new settings
-            vengefulToasterItem.UpdateItemTexts();
         }
 
-        private void FetchSettings(Vengeance _vengeance)
+        public override void FetchSettings()
         {
             // Get item settings
             duration = durationSetting.Value;
             durationStacking = durationStackingSetting.Value;
 
             // Apply damage to buff
-            _vengeance.damage = damageSetting.Value / 100.0f;
+            vengeanceBehaviour.damage = damageSetting.Value / 100.0f;
+
+            // Update item texts with new settings
+            vengefulToasterItem.UpdateItemTexts();
         }
 
         void OnDamageDealt(DamageReport report)

@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class CauterizingGreave
+    internal class CauterizingGreave : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item
         Item cauterizingGreaveItem;
 
@@ -28,10 +25,8 @@ namespace Faithful
         float healingNerfStacking;
 
         // Constructor
-        public CauterizingGreave(Toolbox _toolbox)
+        public CauterizingGreave(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("cauterizinggreavedisplaymesh");
 
@@ -83,25 +78,25 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.1925F, 0F, 0.54F), new Vector3(0F, 0F, 90F), new Vector3(0.1F, 0.075F, 0.1F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             maxHealthBuffSetting = cauterizingGreaveItem.CreateSetting("MAX_HEALTH_BUFF", "Max Health Increase", 100.0f, "How much should this item increase the max health of the player? (100.0 = 100% increase)");
             maxHealthBuffStackingSetting = cauterizingGreaveItem.CreateSetting("MAX_HEALTH_BUFF_STACKING", "Max Health Increase Stacking", 100.0f, "How much should further stacks of this item increase the max health of the player? (100.0 = 100% increase)");
             healingNerfSetting = cauterizingGreaveItem.CreateSetting("HEALING_NERF", "Healing Decrease", 50.0f, "How much should this item decrease the received healing of the player? (50.0 = 50% decrease)");
             healingNerfStackingSetting = cauterizingGreaveItem.CreateSetting("HEALING_NERF_STACKING", "Healing Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the received healing of the player? (50.0 = 50% decrease)");
-
-            // Update item texts with new settings
-            cauterizingGreaveItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             maxHealthBuff = Mathf.Max(maxHealthBuffSetting.Value / 100.0f, 0.01f);
             maxHealthBuffStacking = Mathf.Max(maxHealthBuffStackingSetting.Value / 100.0f, 0.01f);
             healingNerf = 1.0f - Mathf.Clamp01(healingNerfSetting.Value / 100.0f);
             healingNerfStacking = 1.0f - Mathf.Clamp01(healingNerfStackingSetting.Value / 100.0f);
+
+            // Update item texts with new settings
+            cauterizingGreaveItem.UpdateItemTexts();
         }
 
         void ModifyModelPrefab(GameObject _prefab)

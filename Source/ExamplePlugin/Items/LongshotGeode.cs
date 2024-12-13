@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class LongshotGeode
+    internal class LongshotGeode : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item
         Item longshotGeodeItem;
 
@@ -26,10 +23,8 @@ namespace Faithful
         float distanceThreshold;
 
         // Constructor
-        public LongshotGeode(Toolbox _toolbox)
+        public LongshotGeode(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("longshotgeodedisplaymesh");
 
@@ -78,23 +73,23 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "HandL", new Vector3(0.00315F, 0.01855F, -0.0625F), new Vector3(0F, 180F, 180F), new Vector3(0.05F, 0.05F, 0.05F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             damageSetting = longshotGeodeItem.CreateSetting("DAMAGE", "Damage", 15.0f, "How much should this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)");
             damageStackingSetting = longshotGeodeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 15.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)");
             distanceSetting = longshotGeodeItem.CreateSetting("DISTANCE", "Distance", 50.0f, "How far should the target need to be for the damage bonus to be applied? (50.0 = 50 meters)");
-
-            // Update item texts with new settings
-            longshotGeodeItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             damage = damageSetting.Value / 100.0f;
             damageStacking = damageStackingSetting.Value / 100.0f;
             distanceThreshold = distanceSetting.Value;
+
+            // Update item texts with new settings
+            longshotGeodeItem.UpdateItemTexts();
         }
 
         void OnIncomingDamage(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim)

@@ -5,11 +5,8 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class SecondHand
+    internal class SecondHand : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item and buff
         Item secondHandItem;
         Buff secondHandBuff;
@@ -30,10 +27,8 @@ namespace Faithful
         float speedStacking;
 
         // Constructor
-        public SecondHand(Toolbox _toolbox)
+        public SecondHand(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("secondhanddisplaymesh");
 
@@ -86,25 +81,25 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Cleaver", new Vector3(-0.01425F, 0.445F, -0.00125F), new Vector3(0F, 0F, 0F), new Vector3(0.15F, 0.15F, 1F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             attackSpeedSetting = secondHandItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 20.0f, "How much should this item increase attack speed while touching the ground? (20.0 = 20% increase)");
             attackSpeedStackingSetting = secondHandItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 20.0f, "How much should further stacks of this item increase attack speed while touching the ground? (20.0 = 20% increase)");
             speedSetting = secondHandItem.CreateSetting("SPEED", "Movement Speed", 30.0f, "How much should this item increase movement speed while touching the ground? (30.0 = 30% increase)");
             speedStackingSetting = secondHandItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 30.0f, "How much should further stacks of this item increase movement speed while touching the ground? (30.0 = 30% increase)");
-
-            // Update item texts with new settings
-            secondHandItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             attackSpeed = attackSpeedSetting.Value / 100.0f;
             attackSpeedStacking = attackSpeedStackingSetting.Value / 100.0f;
             speed = speedSetting.Value / 100.0f;
             speedStacking = speedStackingSetting.Value / 100.0f;
+
+            // Update item texts with new settings
+            secondHandItem.UpdateItemTexts();
         }
 
         void SecondHandStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)

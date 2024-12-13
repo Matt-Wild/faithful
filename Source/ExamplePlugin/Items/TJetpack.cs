@@ -3,11 +3,8 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class TJetpack
+    internal class TJetpack : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item
         Item item;
 
@@ -23,10 +20,8 @@ namespace Faithful
         Setting<float> accelerationMultiplierSetting;
 
         // Constructor
-        public TJetpack(Toolbox _toolbox)
+        public TJetpack(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("4t0njetpackdisplaymesh");
 
@@ -35,6 +30,9 @@ namespace Faithful
 
             // Create item settings
             CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Inject on transfer item behaviours
             Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
@@ -73,7 +71,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.0375F, -0.3F, 0F), new Vector3(65F, 270F, 0F), new Vector3(0.375F, 0.375F, 0.375F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             fuelTimeSetting = item.CreateSetting("FUEL_TIME", "Fuel Time", 4.0f, "How much fuel should the jetpack have? (4.0 = 4 seconds)");
@@ -82,7 +80,10 @@ namespace Faithful
             rechargeTimeReductionSetting = item.CreateSetting("RECHARGE_TIME_REDUCTION", "Recharge Time Reduction", 20.0f, "How much should further stacks of this item decrease the recharge time of the jetpack? (20.0 = 20% reduction)");
             maxVelocityMultiplierSetting = item.CreateSetting("MAX_VELOCITY_MULTIPLIER", "Max Velocity Multiplier", 1.0f, "How much faster or slower would you like the jetpack's max velocity to be? (1.0 = 1x max velocity)");
             accelerationMultiplierSetting = item.CreateSetting("ACCELERATION_MULTIPLIER", "Acceleration Multiplier", 1.0f, "How much stronger or weaker would you like the jetpack to be? (1.0 = 1x acceleration)");
+        }
 
+        public override void FetchSettings()
+        {
             // Update item texts with new settings
             item.UpdateItemTexts();
         }

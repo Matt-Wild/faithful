@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class BrassScrews
+    internal class BrassScrews : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item and buff
         Item brassScrewsItem;
         Buff brassScrewsBuff;
@@ -27,10 +24,8 @@ namespace Faithful
         float buffDuration;
 
         // Constructor
-        public BrassScrews(Toolbox _toolbox)
+        public BrassScrews(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("brassscrewsdisplaymesh");
 
@@ -84,23 +79,23 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "OvenDoor", new Vector3(-0.04625F, 0.10875F, 0.03775F), new Vector3(65F, 190F, 150F), new Vector3(0.075F, 0.075F, 0.075F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             damageSetting = brassScrewsItem.CreateSetting("DAMAGE", "Damage", 20.0f, "How much should this item increase damage while within the teleporter radius? (20.0 = 20% increase)");
             damageStackingSetting = brassScrewsItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 20.0f, "How much should further stacks of this item increase damage while within the teleporter radius? (20.0 = 20% increase)");
             buffDurationSetting = brassScrewsItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)");
-
-            // Update item texts with new settings
-            brassScrewsItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             damage = damageSetting.Value / 100.0f;
             damageStacking = damageStackingSetting.Value / 100.0f;
             buffDuration = Mathf.Max(0.1f, buffDurationSetting.Value);
+
+            // Update item texts with new settings
+            brassScrewsItem.UpdateItemTexts();
         }
 
         void BrassScrewsStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)

@@ -83,10 +83,13 @@ namespace Faithful
         // Store language dictionary for early lookups
         static private Dictionary<string, string> languageDictionary;
 
+        // Store list of item behaviours
+        static private List<ItemBase> itemBehaviours = new List<ItemBase>();
+
         public static void Init(PluginInfo _pluginInfo)
         {
             // Create debug mode setting
-            debugModeSetting = Config.CreateSetting("DEBUG_MODE", "Debug Tools", "Debug Mode", false, "Do you want to enable this mod's debug mode?");
+            debugModeSetting = Config.CreateSetting("DEBUG_MODE", "Debug Tools", "Debug Mode", false, "Do you want to enable this mod's debug mode?", false, true);
 
             // Provide plugin info
             pluginInfo = _pluginInfo;
@@ -105,6 +108,9 @@ namespace Faithful
 
             // Add pre-game controller set rule book behaviour
             PreGameController.onPreGameControllerSetRuleBookGlobal += OnPreGameControllerSetRuleBookGlobal;
+
+            // Add behaviour to menus on enter
+            On.RoR2.UI.MainMenu.BaseMainMenuScreen.OnEnter += OnMainMenuEnter;
 
             // Update debug mode from config
             _debugMode = debugModeSetting.Value;
@@ -202,10 +208,26 @@ namespace Faithful
             }
         }
 
+        public static void RefreshItemSettings()
+        {
+            // Cycle through item behaviours
+            foreach (ItemBase itemBehaviour in itemBehaviours)
+            {
+                // Tell item behaviour to fetch it's settings again
+                itemBehaviour.FetchSettings();
+            }
+        }
+
         public static void BanFromSimulacrum(ItemDef _item)
         {
             // Add item def to banned list for Simulacrum
             simulacrumBanned.Add(_item);
+        }
+
+        public static void RegisterItemBehaviour(ItemBase _itemBehaviour)
+        {
+            // Add to dictionary
+            itemBehaviours.Add(_itemBehaviour);
         }
 
         public static void RegisterFaithfulCharacterBodyBehaviour(CharacterBody _characterBody, FaithfulCharacterBodyBehaviour _faithfulBehaviour)
@@ -411,6 +433,15 @@ namespace Faithful
                 // Disable behaviour
                 Behaviour.Disable();
             }
+        }
+
+        private static void OnMainMenuEnter(On.RoR2.UI.MainMenu.BaseMainMenuScreen.orig_OnEnter orig, RoR2.UI.MainMenu.BaseMainMenuScreen self, RoR2.UI.MainMenu.MainMenuController mainMenuController)
+        {
+            // Run original processes
+            orig(self, mainMenuController);
+
+            // Refresh item settings
+            RefreshItemSettings();
         }
 
         public static HoldoutZoneController ChargeHoldoutZone(HoldoutZoneController _zone)

@@ -1,6 +1,9 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using BepInEx.Configuration;
+using System.Collections;
+using Newtonsoft.Json.Linq;
+using System;
 
 namespace Faithful
 {
@@ -18,7 +21,7 @@ namespace Faithful
             configFile = _configFile;
         }
 
-        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true)
+        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false)
         {
             // Check for token in settings dictionary
             if (settings.ContainsKey(_token))
@@ -29,7 +32,7 @@ namespace Faithful
             }
 
             // Create setting
-            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat);
+            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat, _isClientSide);
 
             // Add setting to dictionary
             settings.Add(_token, setting);
@@ -60,6 +63,20 @@ namespace Faithful
                 Log.Warning($"[CONFIG] - Could not fetch setting with token '{_token}' as type '{typeof(T).Name}'.");
                 return null;
             }
+        }
+
+        public static ISetting FetchSetting(string _token)
+        {
+            // Check for token in settings dictionary
+            if (!settings.ContainsKey(_token))
+            {
+                // Log warning
+                Log.Warning($"[CONFIG] - Attempted to fetch setting with token '{_token}' but token was not found.");
+                return null;
+            }
+
+            // Return setting
+            return settings[_token];
         }
 
         public static string FormatLanguageToken(string _token, string _tokenPrefix = "")
@@ -110,6 +127,24 @@ namespace Faithful
             // Return formatted language string
             return languageString;
         }
+
+        public static void DeleteSetting(string _token)
+        {
+            // Check for setting
+            if (!settings.ContainsKey(_token)) return;
+
+            // Tell setting to delete from config file
+            settings[_token].DeleteFromConfigFile();
+
+            // Remove setting
+            settings.Remove(_token);
+        }
+
+        public static Dictionary<string, ISetting> GetSettings()
+        {
+            // Return settings
+            return settings;
+        }
     }
 
     internal class Setting<T> : ISetting
@@ -118,7 +153,7 @@ namespace Faithful
         private ConfigFile configFile;
 
         // Store token
-        public string token;
+        private string m_token;
 
         // Store config entry
         public ConfigEntry<T> configEntry;
@@ -129,13 +164,22 @@ namespace Faithful
         // Store if setting is stat
         private bool m_isStat;
 
-        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true)
+        // Store if setting is client side
+        private bool m_isClientSide;
+
+        // Store if setting is synced with host
+        private bool synced = true;
+
+        // Store synced value from host
+        private T syncedValue;
+
+        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false)
         {
             // Assign config file
             configFile = _configFile;
 
             // Assign token
-            token = _token;
+            m_token = _token;
 
             // Set default value
             defaultValue = _defaultValue;
@@ -145,18 +189,99 @@ namespace Faithful
 
             // Assign if setting is stat
             m_isStat = _isStat;
+
+            // Assign if setting if client side
+            m_isClientSide = _isClientSide;
+        }
+
+        public void Sync()
+        {
+            // Set as not synced
+            synced = false;
+
+            // Check for net utils
+            if (Utils.netUtils != null)
+            {
+                // Request a sync for this setting
+                Utils.netUtils.SyncSetting(this);
+            }
         }
 
         public void Delete()
         {
-            // Delete this setting
+            // Ask config to delete
+            Config.DeleteSetting(token);
+        }
+
+        public void DeleteFromConfigFile()
+        {
+            // Remove config entry definition from config file
             configFile.Remove(configEntry.Definition);
+        }
+
+        public SettingData GetSettingData()
+        {
+            // Return setting data made using this setting
+            return new SettingData(this);
+        }
+
+        public void SetSyncedValue(SettingData _settingData)
+        {
+            // Ignore if already synced
+            if (synced) return;
+
+            // Set as synced
+            synced = true;
+
+            // Check if setting is a bool type
+            if (type == typeof(bool))
+            {
+                // Take bool from setting data
+                syncedValue = (T)(object)_settingData.boolValue;
+            }
+
+            // Check if setting is an int type
+            else if (type == typeof(int))
+            {
+                // Take int from setting data
+                syncedValue = (T)(object)_settingData.intValue;
+            }
+
+            // Check if setting is a float type
+            else if (type == typeof(float))
+            {
+                // Take float from setting data
+                syncedValue = (T)(object)_settingData.floatValue;
+            }
+
+            // No valid setting type found
+            else
+            {
+                // Warn
+                Log.Warning($"[CONFIG] - Could not sync setting '{token}' with type '{type}'.");
+            }
+        }
+
+        public string token
+        {
+            get
+            {
+                // Return token
+                return m_token;
+            }
         }
 
         public T Value
         {
             get
             {
+                // Check if should retrieve synced value
+                if (Utils.netUtils != null && !Utils.hosting && synced && !EqualityComparer<T>.Default.Equals(syncedValue, default) && !isClientSide)
+                {
+                    // Return synced value instead
+                    return syncedValue;
+                }
+
                 // Return value of config entry
                 return configEntry.Value;
             }
@@ -172,7 +297,7 @@ namespace Faithful
             get
             {
                 // Return config entry value
-                return configEntry.Value;
+                return Value;
             }
         }
 
@@ -193,15 +318,98 @@ namespace Faithful
                 return m_isStat;
             }
         }
+
+        public bool isClientSide
+        {
+            get
+            {
+                // Return if setting is client side
+                return m_isClientSide;
+            }
+        }
+
+        public bool isSynced
+        {
+            get
+            {
+                // Return if item is synced with host
+                return synced;
+            }
+        }
+
+        public Type type
+        {
+            get
+            {
+                // Return setting type
+                return typeof(T);
+            }
+        }
     }
 
     public interface ISetting
     {
+        public void Sync();
+
+        public void DeleteFromConfigFile();
+
+        public SettingData GetSettingData();
+
+        public void SetSyncedValue(SettingData _settingData);
+
+        public string token { get; }
+
         public object ValueObject { get; }
 
         public bool isDefault { get; }
 
         public bool isStat { get; }
+
+        public bool isClientSide { get; }
+
+        public bool isSynced { get; }
+
+        public Type type { get; }
+    }
+
+    // Wrapper for sending setting data across the network
+    public struct SettingData
+    {
+        // Store setting token
+        public string token;
+
+        // Store different serialisable settings values
+        public bool boolValue; 
+        public int intValue;
+        public float floatValue;
+
+        // Construct this struct using a setting
+        public SettingData(ISetting _setting)
+        {
+            // Set token
+            token = _setting.token;
+
+            // Check if setting is of type bool
+            if (_setting.type == typeof(bool))
+            {
+                // Set bool value
+                boolValue = (bool)_setting.ValueObject;
+            }
+
+            // Check if setting is of type int
+            else if (_setting.type == typeof(int))
+            {
+                // Set int value
+                intValue = (int)_setting.ValueObject;
+            }
+
+            // Check if setting is of type float
+            else if (_setting.type == typeof(float))
+            {
+                // Set float value
+                floatValue = (float)_setting.ValueObject;
+            }
+        }
     }
 
     /*internal static class Config

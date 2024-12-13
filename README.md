@@ -243,6 +243,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+* v1.0.18 Config Passing
+  * The host's config now gets passed to clients who use it while in the host's game.
 * v1.0.17 Readme Amendment
   * Fixed inconsistency in Readme.
 * v1.0.16 Melting Warbler and Collector's Vision Customisation
@@ -263,11 +265,11 @@ You can support us in making this mod (or in our other work) through the link be
 * v1.0.9 Copper Gear and Brass Screw Refinements
   * Fixed issue with the Copper Gear and Brass Screw sometimes not providing their buffs to the player within the teleporter zone.
   * The Copper Gear and Brass Screw items can now be customised in the config.
-* v1.0.8 Spacious Umbrella and Drowned Visage Customisation
-  * The Spacious Umbrella and Drowned Visage items can now be customised in the config.
 
 <details><summary>Past Changelogs</summary>
 
+* v1.0.8 Spacious Umbrella and Drowned Visage Customisation
+  * The Spacious Umbrella and Drowned Visage items can now be customised in the config.
 * v1.0.7 Toggleable Expansion
   * Added Faithful content into it's own expansion that can be enabled and disabled in the lobby.
 * v1.0.6 BepInEx Config

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using static ProBuilder.MeshOperations.pb_MeshImporter;
 
 namespace Faithful
 {
@@ -51,6 +52,13 @@ namespace Faithful
                 // Register net utils with utils
                 Utils.netUtils = this;
 
+                // Check if not hosting
+                if (!Utils.hosting)
+                {
+                    // Sync settings with host
+                    StartCoroutine(SyncSettingsWithHost());
+                }
+
                 // Check if debug mode
                 if (Utils.debugMode)
                 {
@@ -59,6 +67,94 @@ namespace Faithful
                 }
             }
         }
+
+        private static IEnumerator SyncSettingsWithHost()
+        {
+            // Create list of settings that currently exist
+            List<ISetting> currentSettings = new List<ISetting>();
+
+            // Cycle through settings
+            foreach (KeyValuePair<string, ISetting> pair in Config.GetSettings())
+            {
+                // Add setting to current settings
+                currentSettings.Add(pair.Value);
+            }
+
+            Log.Info($"[CONFIG SYNC] - Syncing {currentSettings.Count} settings.");
+
+            // Cycle through settings
+            foreach (ISetting setting in currentSettings)
+            {
+                // Tell setting to sync
+                setting.Sync();
+            }
+
+            // Store if all settings have synced
+            bool synced = false;
+
+            // Cycle until all settings have synced
+            while (!synced)
+            {
+                // Assume has synced
+                synced = true;
+
+                // Cycle through settings
+                foreach (ISetting setting in currentSettings)
+                {
+                    // Check if setting has not synced yet
+                    if (!setting.isSynced)
+                    {
+                        // Set as not synced
+                        synced = false;
+
+                        // No need to check other settings
+                        break;
+                    }
+                }
+
+                // Go to next frame
+                yield return null;
+            }
+
+            Log.Info($"[CONFIG SYNC] - Synced {currentSettings.Count} settings.");
+
+            // Refresh all item settings
+            Utils.RefreshItemSettings();
+        }
+
+        public void SyncSetting(ISetting _setting)
+        {
+            // Ask server to sync setting
+            CmdSyncSetting(_setting.token);
+        }
+
+        [Command]
+        private void CmdSyncSetting(string _token)
+        {
+            // Log message on all clients
+            RpcSyncSetting(Config.FetchSetting(_token).GetSettingData());
+        }
+
+        [ClientRpc]
+        private void RpcSyncSetting(SettingData _setting)
+        {
+            // Sync setting on client
+            Config.FetchSetting(_setting.token).SetSyncedValue(_setting);
+        }
+
+        /*[Command]
+        private void CmdSyncSetting(ISetting _setting)
+        {
+            // Log message on all clients
+            RpcSyncSetting(_setting.token, _setting.GetSettingData());
+        }
+
+        [ClientRpc]
+        private void RpcSyncSetting(string _token, SettingData _settingData)
+        {
+            // Sync setting on client
+            Config.FetchSetting(_token).SetSyncedValue(_settingData);
+        }*/
 
         public void LogMessage(string _message)
         {

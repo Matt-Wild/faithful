@@ -1,15 +1,11 @@
 ﻿using R2API;
 using RoR2;
 using UnityEngine;
-using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
-    internal class HasteningGreave
+    internal class HasteningGreave : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item
         Item hasteningGreaveItem;
 
@@ -29,10 +25,8 @@ namespace Faithful
         float damageNerfStacking;
 
         // Constructor
-        public HasteningGreave(Toolbox _toolbox)
+        public HasteningGreave(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("hasteninggreavedisplaymesh");
 
@@ -81,25 +75,25 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.1925F, 0F, -0.54F), new Vector3(0F, 180F, 270F), new Vector3(0.1F, 0.075F, 0.1F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             attackSpeedBuffSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)");
             attackSpeedBuffStackingSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)");
             damageNerfSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)");
             damageNerfStackingSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)");
-
-            // Update item texts with new settings
-            hasteningGreaveItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             attackSpeedBuff = Mathf.Max(attackSpeedBuffSetting.Value / 100.0f, 0.01f) + 1.0f;
             attackSpeedBuffStacking = Mathf.Max(attackSpeedBuffStackingSetting.Value / 100.0f, 0.01f) + 1.0f;
             damageNerf = 1.0f - Mathf.Clamp01(damageNerfSetting.Value / 100.0f);
             damageNerfStacking = 1.0f - Mathf.Clamp01(damageNerfStackingSetting.Value / 100.0f);
+
+            // Update item texts with new settings
+            hasteningGreaveItem.UpdateItemTexts();
         }
 
         void ModifyModelPrefab(GameObject _prefab)

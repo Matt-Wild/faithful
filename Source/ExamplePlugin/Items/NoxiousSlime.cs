@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class NoxiousSlime
+    internal class NoxiousSlime : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item
         Item noxiousSlimeItem;
 
@@ -24,10 +21,8 @@ namespace Faithful
         float damageStacking;
 
         // Constructor
-        public NoxiousSlime(Toolbox _toolbox)
+        public NoxiousSlime(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("noxiousslimedisplaymesh");
 
@@ -75,21 +70,21 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(-0.027F, 0.075F, 0.1465F), new Vector3(330F, 0F, 90F), new Vector3(0.075F, 0.075F, 0.075F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             damageSetting = noxiousSlimeItem.CreateSetting("DAMAGE", "Damage", 100.0f, "How much should this item increase the damage of damaging debuffs? (100.0 = 100% increase)");
             damageStackingSetting = noxiousSlimeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 100.0f, "How much should further stacks of this item increase the damage of damaging debuffs? (100.0 = 100% increase)");
-
-            // Update item texts with new settings
-            noxiousSlimeItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             damage = damageSetting.Value / 100.0f;
             damageStacking = damageStackingSetting.Value / 100.0f;
+
+            // Update item texts with new settings
+            noxiousSlimeItem.UpdateItemTexts();
         }
 
         void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo)

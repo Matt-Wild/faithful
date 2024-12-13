@@ -5,11 +5,8 @@ using UnityEngine.Networking;
 
 namespace Faithful
 {
-    internal class LeadersPennon
+    internal class LeadersPennon : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item and buff
         Buff leadersPennonBuff;
         Item leadersPennonItem;
@@ -40,10 +37,8 @@ namespace Faithful
         float buffDuration;
 
         // Constructor
-        public LeadersPennon(Toolbox _toolbox)
+        public LeadersPennon(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("leaderspennondisplaymesh");
 
@@ -98,11 +93,11 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(-0.3335F, -0.2505F, 0.0195F), new Vector3(90F, 270F, 0F), new Vector3(0.11F, 0.1F, 0.11F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
-            enableRadiusIndicatorSetting = leadersPennonItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", true, "Should this item have a radius indicator visual effect?");
-            enableBuffEffectSetting = leadersPennonItem.CreateSetting("ENABLE_BUFF_EFFECT", "Enable Buff Visual Effect?", true, "Should this item's buff have a visual effect?");
+            enableRadiusIndicatorSetting = leadersPennonItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", true, "Should this item have a radius indicator visual effect?", false, true);
+            enableBuffEffectSetting = leadersPennonItem.CreateSetting("ENABLE_BUFF_EFFECT", "Enable Buff Visual Effect?", true, "Should this item's buff have a visual effect?", false, true);
             radiusSetting = leadersPennonItem.CreateSetting("RADIUS", "Radius", 15.0f, "How big should the base radius be of this item's effect? (15.0 = 15 meters)");
             radiusStackingSetting = leadersPennonItem.CreateSetting("RADIUS_STACKING", "Radius Stacking", 5.0f, "How much should the radius of this item's effect increase per stack? (5.0 = 5 meters)");
             attackSpeedSetting = leadersPennonItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 30.0f, "How much should this item increase ally's attack speed? (30.0 = 30% increase)");
@@ -110,12 +105,9 @@ namespace Faithful
             regenPerLevelSetting = leadersPennonItem.CreateSetting("REGEN_PER_LEVEL", "Regen Per Level", 1.0f, "How much should this item increase ally's regen per level? (1.0 = 1 hp/s)");
             regenMultSetting = leadersPennonItem.CreateSetting("REGEN_MULT", "Regen Multiplier", 30.0f, "How much should this item increase ally's regen multiplicatively? (30.0 = 30% increase)");
             buffDurationSetting = leadersPennonItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the radius of this item's effect? (1.0 = 1 second)");
-
-            // Update item texts with new settings
-            leadersPennonItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             enableRadiusIndicator = enableRadiusIndicatorSetting.Value;
@@ -127,6 +119,9 @@ namespace Faithful
             regenPerLevel = regenPerLevelSetting.Value;
             regenMult = regenMultSetting.Value / 100.0f;
             buffDuration = Mathf.Max(0.1f, buffDurationSetting.Value);
+
+            // Update item texts with new settings
+            leadersPennonItem.UpdateItemTexts();
         }
 
         void LeadersPennonStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)

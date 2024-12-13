@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class MeltingWarbler
+    internal class MeltingWarbler : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item
         Item meltingWarblerItem;
 
@@ -24,10 +21,8 @@ namespace Faithful
         float jumpBoostStacking;
 
         // Constructor
-        public MeltingWarbler(Toolbox _toolbox)
+        public MeltingWarbler(Toolbox _toolbox) : base(_toolbox)
         {
-            toolbox = _toolbox;
-
             // Create display settings
             CreateDisplaySettings("meltingwarblerdisplaymesh");
 
@@ -76,21 +71,21 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.8325F, -0.2225F, 0.20175F), new Vector3(35F, 40F, 135F), new Vector3(0.15F, 0.15F, 0.15F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             jumpBoostSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST", "Jump Boost", 1.0f, "How much should this item increase the jump height of the player? (1.0 = 1 meter)");
             jumpBoostStackingSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST_STACKING", "Jump Boost Stacking", 1.0f, "How much should further stacks of this item increase the jump height of the player? (1.0 = 1 meter)");
-
-            // Update item texts with new settings
-            meltingWarblerItem.UpdateItemTexts();
         }
 
-        private void FetchSettings()
+        public override void FetchSettings()
         {
             // Get item settings
             jumpBoost = jumpBoostSetting.Value;
             jumpBoostStacking = jumpBoostStackingSetting.Value;
+
+            // Update item texts with new settings
+            meltingWarblerItem.UpdateItemTexts();
         }
 
         void MeltingWarblerStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)

@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class CollectorsVision
+    internal class CollectorsVision : ItemBase
     {
-        // Toolbox
-        protected Toolbox toolbox;
-
         // Store item and buff
         Buff inspirationBuff;
         Item collectorsVisionItem;
+
+        // Store reference to inspiration buff behaviour
+        Inspiration inspirationBehaviour;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
@@ -28,9 +28,10 @@ namespace Faithful
         float critDamageMult;
 
         // Constructor
-        public CollectorsVision(Toolbox _toolbox, Inspiration _inspiration)
+        public CollectorsVision(Toolbox _toolbox, Inspiration _inspiration) : base(_toolbox)
         {
-            toolbox = _toolbox;
+            // Assign inspiration buff behaviour
+            inspirationBehaviour = _inspiration;
 
             // Get Vengeance buff
             inspirationBuff = Buffs.GetBuff("INSPIRATION");
@@ -45,7 +46,7 @@ namespace Faithful
             CreateSettings();
 
             // Fetch item settings
-            FetchSettings(_inspiration);
+            FetchSettings();
 
             // Link On Give Item behaviour
             Behaviour.AddServerOnGiveItemCallback(OnGiveItem);
@@ -86,19 +87,16 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Chef", "PizzaCutter", new Vector3(-0.18175F, 0.4075F, -0.00025F), new Vector3(270F, 90F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
         }
 
-        private void CreateSettings()
+        protected override void CreateSettings()
         {
             // Create settings specific to this item
             inspirationGainSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How many inspiration buffs should this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)");
             inspirationGainStackingSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How many inspiration buffs should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)");
             critChanceSetting = collectorsVisionItem.CreateSetting("CRIT_CHANCE", "Crit Chance", 1.0f, "How much should the inspiration buff increase the chance of the player getting a crit? (1.0 = 1% increase)");
             critDamageSetting = collectorsVisionItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should the inspiration buff increase the crit damage multiplier? (20.0 = 20% increase)");
-
-            // Update item texts with new settings
-            collectorsVisionItem.UpdateItemTexts();
         }
 
-        private void FetchSettings(Inspiration _inspiration)
+        public override void FetchSettings()
         {
             // Get item settings
             inspirationGain = Mathf.Max(1, inspirationGainSetting.Value);
@@ -107,8 +105,11 @@ namespace Faithful
             critDamageMult = critDamageSetting.Value / 100.0f;
 
             // Send values to inspiration buff
-            _inspiration.critChance = critChance;
-            _inspiration.critDamageMult = critDamageMult;
+            inspirationBehaviour.critChance = critChance;
+            inspirationBehaviour.critDamageMult = critDamageMult;
+
+            // Update item texts with new settings
+            collectorsVisionItem.UpdateItemTexts();
         }
 
         void OnGiveItem(Inventory _inventory, ItemIndex _index, int _count)
