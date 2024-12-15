@@ -31,29 +31,6 @@ namespace Faithful
         // Store if searching for character body
         private bool searchingForCharacterBody = false;
 
-        /*[Command]
-        public void CmdSetCharacterID(NetworkInstanceId _characterID)
-        {
-            // Set character body network ID
-            characterID = _characterID;
-
-            // Notify clients via RPC
-            //RpcUpdateCharacterID(_characterID);
-
-            // Start coroutine to find and link character body
-            //StartCoroutine(LinkCharacterBody(true));
-        }*/
-
-        /*[ClientRpc]
-        private void RpcUpdateCharacterID(NetworkInstanceId _value)
-        {
-            // Update character body net ID
-            characterID = _value;
-
-            // Start coroutine to find and link character body
-            StartCoroutine(LinkCharacterBody());
-        }*/
-
         private void CharacterIDChanged(NetworkInstanceId _newValue)
         {
             // Ensure new value is set
@@ -155,5 +132,10 @@ namespace Faithful
                 searchingForCharacterBody = false;
             }
         }
+    }
+
+    internal interface ICharacterBehaviour
+    {
+        public void FetchSettings();
     }
 }

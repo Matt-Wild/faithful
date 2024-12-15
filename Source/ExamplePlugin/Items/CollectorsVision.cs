@@ -90,8 +90,8 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            inspirationGainSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How many inspiration buffs should this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)");
-            inspirationGainStackingSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How many inspiration buffs should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)");
+            inspirationGainSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How many inspiration buffs should this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)", _minValue: 1);
+            inspirationGainStackingSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How many inspiration buffs should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)", _minValue: 1);
             critChanceSetting = collectorsVisionItem.CreateSetting("CRIT_CHANCE", "Crit Chance", 1.0f, "How much should the inspiration buff increase the chance of the player getting a crit? (1.0 = 1% increase)");
             critDamageSetting = collectorsVisionItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should the inspiration buff increase the crit damage multiplier? (20.0 = 20% increase)");
         }
@@ -99,8 +99,8 @@ namespace Faithful
         public override void FetchSettings()
         {
             // Get item settings
-            inspirationGain = Mathf.Max(1, inspirationGainSetting.Value);
-            inspirationGainStacking = Mathf.Max(1, inspirationGainStackingSetting.Value);
+            inspirationGain = inspirationGainSetting.Value;
+            inspirationGainStacking = inspirationGainStackingSetting.Value;
             critChance = critChanceSetting.Value;
             critDamageMult = critDamageSetting.Value / 100.0f;
 

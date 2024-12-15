@@ -1,11 +1,9 @@
 ﻿using RoR2;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
-    internal class FaithfulLeadersPennonBehaviour : MonoBehaviour
+    internal class FaithfulLeadersPennonBehaviour : MonoBehaviour, ICharacterBehaviour
     {
         // Store reference to Character Body and Character Inventory
         public CharacterBody character;
@@ -23,6 +21,12 @@ namespace Faithful
 
         // Store reference to radius indicator
         FaithfulRadiusIndicatorBehaviour radiusIndicator;
+
+        public FaithfulLeadersPennonBehaviour()
+        {
+            // Register with utils
+            Utils.RegisterCharacterBehaviour(this);
+        }
 
         public void Init(CharacterBody _character)
         {
@@ -47,7 +51,7 @@ namespace Faithful
             character.UpdateAllTemporaryVisualEffects();
         }
 
-        private void FetchSettings()
+        public void FetchSettings()
         {
             // Get leaders pennon item
             Item leadersPennonItem = Items.GetItem("LEADERS_PENNON");
@@ -60,6 +64,23 @@ namespace Faithful
 
         private void OnDestroy()
         {
+            // Unregister with utils
+            Utils.UnregisterCharacterBehaviour(this);
+
+            // Check for radius indicator exists
+            if (radiusIndicator != null)
+            {
+                // Destroy radius indicator
+                Destroy(radiusIndicator.gameObject);
+            }
+
+            // Check for visual effect
+            if (visualEffect != null)
+            {
+                // Remove visual effect
+                visualEffect.visualState = TemporaryVisualEffect.VisualState.Exit;
+            }
+
             // Unhook behaviour
             Behaviour.RemoveOnInventoryChangedCallback(OnInventoryChanged);
         }

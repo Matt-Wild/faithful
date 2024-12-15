@@ -1,8 +1,5 @@
-﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BepInEx.Configuration;
-using System.Collections;
-using Newtonsoft.Json.Linq;
 using System;
 
 namespace Faithful
@@ -21,7 +18,7 @@ namespace Faithful
             configFile = _configFile;
         }
 
-        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false)
+        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default)
         {
             // Check for token in settings dictionary
             if (settings.ContainsKey(_token))
@@ -32,7 +29,7 @@ namespace Faithful
             }
 
             // Create setting
-            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat, _isClientSide);
+            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax);
 
             // Add setting to dictionary
             settings.Add(_token, setting);
@@ -140,6 +137,16 @@ namespace Faithful
             settings.Remove(_token);
         }
 
+        public static void ResetSettingRandomisers()
+        {
+            // Cycle through settings
+            foreach (KeyValuePair<string, ISetting> setting in settings)
+            {
+                // Reset is setting has been randomised
+                setting.Value.isRandomised = false;
+            }
+        }
+
         public static Dictionary<string, ISetting> GetSettings()
         {
             // Return settings
@@ -173,7 +180,21 @@ namespace Faithful
         // Store synced value from host
         private T syncedValue;
 
-        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false)
+        // Store if setting has generated randomised value
+        private bool m_isRandomised = false;
+
+        // Store randomised value
+        private T randomisedValue;
+
+        // Store optional min and max values
+        private T minValue;
+        private T maxValue;
+
+        // Store optional min and max randomiser values
+        private T randomiserMin;
+        private T randomiserMax;
+
+        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default)
         {
             // Assign config file
             configFile = _configFile;
@@ -183,6 +204,28 @@ namespace Faithful
 
             // Set default value
             defaultValue = _defaultValue;
+
+            // Assign min and max values
+            minValue = _minValue;
+            maxValue = _maxValue;
+
+            // Assign min and max randomiser values
+            randomiserMin = _randomiserMin;
+            randomiserMax = _randomiserMax;
+
+            // Check for min value
+            if (!EqualityComparer<T>.Default.Equals(minValue, default))
+            {
+                // Add to description
+                _description += $"\nMin value: {minValue}";
+            }
+
+            // Check for max value
+            if (!EqualityComparer<T>.Default.Equals(maxValue, default))
+            {
+                // Add to description
+                _description += $"\nMax value: {maxValue}";
+            }
 
             // Create config entry
             configEntry = configFile.Bind(_section, _key, _defaultValue, _description);
@@ -219,10 +262,182 @@ namespace Faithful
             configFile.Remove(configEntry.Definition);
         }
 
+        private void GenerateRandomisedValue()
+        {
+            // Skip if randomised already
+            if (m_isRandomised) return;
+
+            // Set as randomised
+            m_isRandomised = true;
+
+            // Set default randomised value
+            randomisedValue = defaultValue;
+
+            // Don't randomise if not stat
+            if (!isStat)
+            {
+                return;
+            }
+
+            // Get randomiser value (leans towards 1 with a rare chance of reaching up to 10)
+            float randomiserValue = UnityEngine.Random.Range(0, 2) == 0 ? UnityEngine.Random.Range(1.0f, 2.0f) : UnityEngine.Random.Range(0, 2) == 0 ? UnityEngine.Random.Range(1.0f, 5.0f) : UnityEngine.Random.Range(1.0f, 10.0f);
+
+            // Check if type is int
+            if (type == typeof(int))
+            {
+                // Define random float
+                float floatRandom;
+
+                // Check for min or max randomiser values
+                if (!EqualityComparer<T>.Default.Equals(randomiserMin, default) || !EqualityComparer<T>.Default.Equals(randomiserMax, default))
+                {
+                    // Get float min and max
+                    float min = Convert.ToSingle(randomiserMin);
+                    float max = Convert.ToSingle(randomiserMax);
+
+                    // Override randomised value
+                    floatRandom = UnityEngine.Random.Range(min, max);
+                }
+
+                // No min or max randomiser values provided
+                else
+                {
+                    // Get float random value
+                    floatRandom = Convert.ToSingle(randomisedValue);
+
+                    // Check if multiplied or divided
+                    if (UnityEngine.Random.Range(0, 2) == 0)
+                    {
+                        // Multiply random value
+                        floatRandom *= randomiserValue;
+                    }
+
+                    // Divide
+                    else
+                    {
+                        // Divide random value
+                        floatRandom /= randomiserValue;
+                    }
+                }
+
+                // Assign as new randomised value
+                randomisedValue = (T)(object)UnityEngine.Mathf.RoundToInt(floatRandom);
+
+                // Done
+                return;
+            }
+
+            // Check if type is float
+            else if (type == typeof(float))
+            {
+                // Define random float
+                float floatRandom;
+
+                // Check for min or max randomiser values
+                if (!EqualityComparer<T>.Default.Equals(randomiserMin, default) || !EqualityComparer<T>.Default.Equals(randomiserMax, default))
+                {
+                    // Get float min and max
+                    float min = (float)(object)randomiserMin;
+                    float max = (float)(object)randomiserMax;
+
+                    // Override randomised value
+                    floatRandom = UnityEngine.Random.Range(min, max);
+                }
+
+                // No min or max randomiser values provided
+                else
+                {
+                    // Get float random value
+                    floatRandom = (float)(object)randomisedValue;
+
+                    // Check if multiplied or divided
+                    if (UnityEngine.Random.Range(0, 2) == 0)
+                    {
+                        // Multiply random value
+                        floatRandom *= randomiserValue;
+                    }
+
+                    // Divide
+                    else
+                    {
+                        // Divide random value
+                        floatRandom /= randomiserValue;
+                    }
+                }
+
+                // Check if float is greater than 10
+                if (floatRandom >= 100.0f)
+                {
+                    // Round float to nearest 25
+                    floatRandom = UnityEngine.Mathf.Round(floatRandom / 25.0f) * 25.0f;
+                }
+
+                // Check if float is greater than 10
+                else if (floatRandom >= 10.0f)
+                {
+                    // Round float to nearest 5
+                    floatRandom = UnityEngine.Mathf.Round(floatRandom / 5.0f) * 5.0f;
+                }
+
+                // Check if float is greater than 5
+                else if (floatRandom >= 5.0f)
+                {
+                    // Round float to nearest 0.5
+                    floatRandom = UnityEngine.Mathf.Round(floatRandom * 2.0f) / 2.0f;
+                }    
+
+                // Check if float is greater than 1
+                else if (floatRandom >= 1.0f)
+                {
+                    // Round float to nearest 0.25
+                    floatRandom = UnityEngine.Mathf.Round(floatRandom * 4.0f) / 4.0f;
+                }
+
+                // Float value is below 1
+                else
+                {
+                    // Round float to nearest 0.05
+                    floatRandom = UnityEngine.Mathf.Round(floatRandom * 20.0f) / 20.0f;
+                }
+
+                // Assign rounded value as new randomised value
+                randomisedValue = (T)(object)floatRandom;
+
+                // Done
+                return;
+            }
+        }
+
         public SettingData GetSettingData()
         {
             // Return setting data made using this setting
             return new SettingData(this);
+        }
+
+        public T GetClampedValue(T _originalValue)
+        {
+            // Check if setting is an int type
+            if (type == typeof(int))
+            {
+                // Clamp value
+                int clampedValue = UnityEngine.Mathf.Clamp((int)(object)_originalValue, EqualityComparer<T>.Default.Equals(minValue, default) ? (int)(object)defaultValue * -9999999 : (int)(object)minValue, EqualityComparer<T>.Default.Equals(maxValue, default) ? (int)(object)defaultValue * 9999999 : (int)(object)maxValue);
+
+                // Return clamped value
+                return (T)(object)clampedValue;
+            }
+
+            // Check if setting is a float type
+            else if (type == typeof(float))
+            {
+                // Clamp value
+                float clampedValue = UnityEngine.Mathf.Clamp((float)(object)_originalValue, EqualityComparer<T>.Default.Equals(minValue, default) ? (float)(object)defaultValue * -9999999.9f : (float)(object)minValue, EqualityComparer<T>.Default.Equals(maxValue, default) ? (float)(object)defaultValue * 9999999.9f : (float)(object)maxValue);
+
+                // Return clamped value
+                return (T)(object)clampedValue;
+            }
+
+            // Otherwise just return given value
+            else return _originalValue;
         }
 
         public void SetSyncedValue(SettingData _settingData)
@@ -279,16 +494,39 @@ namespace Faithful
                 if (Utils.netUtils != null && !Utils.hosting && synced && !EqualityComparer<T>.Default.Equals(syncedValue, default) && !isClientSide)
                 {
                     // Return synced value instead
-                    return syncedValue;
+                    return GetClampedValue(syncedValue);
+                }
+
+                // Check if randomiser mode is enabled and this is a stat
+                if (Utils.randomiserMode && isStat)
+                {
+                    // Return randomised value
+                    return GetClampedValue(RandomisedValue);
                 }
 
                 // Return value of config entry
-                return configEntry.Value;
+                return GetClampedValue(configEntry.Value);
             }
             set
             {
                 // Set value of config entry
                 configEntry.Value = value;
+            }
+        }
+
+        private T RandomisedValue
+        {
+            get
+            {
+                // Check if randomised
+                if (!m_isRandomised)
+                {
+                    // Generate randomised value
+                    GenerateRandomisedValue();
+                }
+
+                // Return randomised value
+                return randomisedValue;
             }
         }
 
@@ -306,7 +544,7 @@ namespace Faithful
             get
             {
                 // Check if setting is default
-                return EqualityComparer<T>.Default.Equals(defaultValue, configEntry.Value);
+                return EqualityComparer<T>.Default.Equals(defaultValue, Value);
             }
         }
 
@@ -334,6 +572,20 @@ namespace Faithful
             {
                 // Return if item is synced with host
                 return synced;
+            }
+        }
+
+        public bool isRandomised
+        {
+            get
+            {
+                // Return if this setting had been randomised
+                return m_isRandomised;
+            }
+            set
+            {
+                // Set if this setting has been randomised
+                m_isRandomised = value;
             }
         }
 
@@ -368,6 +620,8 @@ namespace Faithful
         public bool isClientSide { get; }
 
         public bool isSynced { get; }
+
+        public bool isRandomised { get; set; }
 
         public Type type { get; }
     }

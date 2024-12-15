@@ -78,19 +78,19 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedBuffSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)");
-            attackSpeedBuffStackingSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)");
-            damageNerfSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)");
-            damageNerfStackingSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)");
+            attackSpeedBuffSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f);
+            attackSpeedBuffStackingSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f);
+            damageNerfSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f);
+            damageNerfStackingSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f);
         }
 
         public override void FetchSettings()
         {
             // Get item settings
-            attackSpeedBuff = Mathf.Max(attackSpeedBuffSetting.Value / 100.0f, 0.01f) + 1.0f;
-            attackSpeedBuffStacking = Mathf.Max(attackSpeedBuffStackingSetting.Value / 100.0f, 0.01f) + 1.0f;
-            damageNerf = 1.0f - Mathf.Clamp01(damageNerfSetting.Value / 100.0f);
-            damageNerfStacking = 1.0f - Mathf.Clamp01(damageNerfStackingSetting.Value / 100.0f);
+            attackSpeedBuff = attackSpeedBuffSetting.Value / 100.0f + 1.0f;
+            attackSpeedBuffStacking = attackSpeedBuffStackingSetting.Value / 100.0f + 1.0f;
+            damageNerf = 1.0f - damageNerfSetting.Value / 100.0f;
+            damageNerfStacking = 1.0f - damageNerfStackingSetting.Value / 100.0f;
 
             // Update item texts with new settings
             hasteningGreaveItem.UpdateItemTexts();

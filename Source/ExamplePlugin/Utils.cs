@@ -32,6 +32,9 @@ namespace Faithful
         // Store debug mode
         static private bool _debugMode = false;
 
+        // Store randomiser mode
+        static private bool _randomiserMode = false;
+
         // Store local player master and body
         static private CharacterMaster _localPlayer;
         static private CharacterBody _localPlayerBody;
@@ -50,6 +53,9 @@ namespace Faithful
 
         // Create debug mode config
         static private Setting<bool> debugModeSetting;
+
+        // Create randomiser mode config
+        static private Setting<bool> randomiserModeSetting;
 
         // Character model names
         static private Dictionary<string, string> characterModelNames = new Dictionary<string, string>()
@@ -86,10 +92,16 @@ namespace Faithful
         // Store list of item behaviours
         static private List<ItemBase> itemBehaviours = new List<ItemBase>();
 
+        // Store list of character behaviours
+        static private List<System.WeakReference<ICharacterBehaviour>> characterBehaviours = new List<System.WeakReference<ICharacterBehaviour>>();
+
         public static void Init(PluginInfo _pluginInfo)
         {
             // Create debug mode setting
             debugModeSetting = Config.CreateSetting("DEBUG_MODE", "Debug Tools", "Debug Mode", false, "Do you want to enable this mod's debug mode?", false, true);
+
+            // Create randomiser mode setting
+            randomiserModeSetting = Config.CreateSetting("RANDOMISER_MODE", "Extras", "Randomizer Mode", false, "Do you want to randomize the stats of items introduced by the Faithful mod?\n[WARNING] - This setting is likely to dramatically alter the balance of items introduced by the Faithful mod.", false, true);
 
             // Provide plugin info
             pluginInfo = _pluginInfo;
@@ -109,11 +121,17 @@ namespace Faithful
             // Add pre-game controller set rule book behaviour
             PreGameController.onPreGameControllerSetRuleBookGlobal += OnPreGameControllerSetRuleBookGlobal;
 
-            // Add behaviour to menus on enter
+            // Add behaviour to main menu on enter
             On.RoR2.UI.MainMenu.BaseMainMenuScreen.OnEnter += OnMainMenuEnter;
+
+            // Add behaviour to loadout panel
+            On.RoR2.UI.LoadoutPanelController.OnEnable += OnLoadoutPanelEnable;
 
             // Update debug mode from config
             _debugMode = debugModeSetting.Value;
+
+            // Update randomiser mode from config
+            _randomiserMode = randomiserModeSetting.Value;
 
             // Load language file
             LoadLanguageFile();
@@ -216,6 +234,20 @@ namespace Faithful
                 // Tell item behaviour to fetch it's settings again
                 itemBehaviour.FetchSettings();
             }
+
+            // Cycle through character behaviours
+            foreach (System.WeakReference<ICharacterBehaviour> weakCharacterBehaviour in characterBehaviours)
+            {
+                // Check if the behaviour is still alive and access it
+                if (weakCharacterBehaviour.TryGetTarget(out ICharacterBehaviour characterBehaviour))
+                {
+                    // Check for character behaviour
+                    if (characterBehaviour == null) continue;
+
+                    // Fetch settings for character behaviour
+                    characterBehaviour.FetchSettings();
+                }
+            }
         }
 
         public static void BanFromSimulacrum(ItemDef _item)
@@ -226,8 +258,31 @@ namespace Faithful
 
         public static void RegisterItemBehaviour(ItemBase _itemBehaviour)
         {
-            // Add to dictionary
+            // Add to list
             itemBehaviours.Add(_itemBehaviour);
+        }
+
+        public static void RegisterCharacterBehaviour(ICharacterBehaviour _characterBehaviour)
+        {
+            // Add to list
+            characterBehaviours.Add(new System.WeakReference<ICharacterBehaviour>(_characterBehaviour));
+        }
+
+        public static void UnregisterCharacterBehaviour(ICharacterBehaviour _characterBehaviour)
+        {
+            // Remove all matching references
+            characterBehaviours.RemoveAll(weakReference =>
+            {
+                // Try get reference to behaviour
+                if (weakReference.TryGetTarget(out ICharacterBehaviour behaviour))
+                {
+                    // Remove if behaviour is null or the reference matches
+                    return behaviour == null || ReferenceEquals(behaviour, _characterBehaviour);
+                }
+
+                // Don't remove
+                return false;
+            });
         }
 
         public static void RegisterFaithfulCharacterBodyBehaviour(CharacterBody _characterBody, FaithfulCharacterBodyBehaviour _faithfulBehaviour)
@@ -440,8 +495,36 @@ namespace Faithful
             // Run original processes
             orig(self, mainMenuController);
 
-            // Refresh item settings
-            RefreshItemSettings();
+            // Randomise item stats and refresh items
+            RandomiseAndRefresh();
+        }
+
+        private static void OnLoadoutPanelEnable(On.RoR2.UI.LoadoutPanelController.orig_OnEnable orig, RoR2.UI.LoadoutPanelController self)
+        {
+            // Run original processes
+            orig(self);
+
+            // Randomise item stats and refresh items
+            RandomiseAndRefresh();
+        }
+
+        public static void RandomiseAndRefresh()
+        {
+            // Check if randomiser mode is enabled
+            if (randomiserMode)
+            {
+                // Re-randomise settings
+                Config.ResetSettingRandomisers();
+
+                // Refresh item settings
+                RefreshItemSettings();
+
+                // Check if debug mode is enabled
+                if (debugMode)
+                {
+                    Log.Debug($"[UTILS] - Randomised item stats.");
+                }
+            }
         }
 
         public static HoldoutZoneController ChargeHoldoutZone(HoldoutZoneController _zone)
@@ -1237,6 +1320,11 @@ namespace Faithful
         public static bool debugMode
         {
             get { return _debugMode; }
+        }
+
+        public static bool randomiserMode
+        {
+            get { return _randomiserMode; }
         }
 
         public static bool hosting

@@ -243,6 +243,8 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Changelog
 
+* v1.0.19 Item Randomizer
+  * Added option to randomize the stats of all items added by this mod (disabled by default).
 * v1.0.18 Config Passing
   * The host's config now gets passed to clients who use it while in the host's game.
 * v1.0.17 Readme Amendment
@@ -262,12 +264,12 @@ You can support us in making this mod (or in our other work) through the link be
 * v1.0.10 Vengeful Toaster, Second Hand and 4-T0N Jetpack Refinements
   * Adjusted 4-T0N Jetpack to make it 'bouncier'.
   * The Vengeful Toaster, Second Hand and 4-T0N Jetpack items can now be customised in the config.
-* v1.0.9 Copper Gear and Brass Screw Refinements
-  * Fixed issue with the Copper Gear and Brass Screw sometimes not providing their buffs to the player within the teleporter zone.
-  * The Copper Gear and Brass Screw items can now be customised in the config.
 
 <details><summary>Past Changelogs</summary>
 
+* v1.0.9 Copper Gear and Brass Screw Refinements
+  * Fixed issue with the Copper Gear and Brass Screw sometimes not providing their buffs to the player within the teleporter zone.
+  * The Copper Gear and Brass Screw items can now be customised in the config.
 * v1.0.8 Spacious Umbrella and Drowned Visage Customisation
   * The Spacious Umbrella and Drowned Visage items can now be customised in the config.
 * v1.0.7 Toggleable Expansion

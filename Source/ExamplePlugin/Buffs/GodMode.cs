@@ -19,7 +19,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create God Mode buff
-            godModeBuff = Buffs.AddBuff("DEBUG_MODE", "texbuffdevmode", Color.white, _canStack: false, _hasConfig: false);
+            godModeBuff = Buffs.AddBuff("DEBUG_MODE", "texbuffdevmode", Color.white, _canStack: false, _hasConfig: false, _isHidden: !Utils.debugMode);
 
             // Link Holdout Zone behaviour
             Behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
@@ -49,15 +49,11 @@ namespace Faithful
 
         void InHoldoutZone(CharacterBody _body, HoldoutZoneController _zone)
         {
-            // Debug mode behaviour
-            if (Utils.debugMode)
+            // Is character in God Mode
+            if (_body.GetBuffCount(godModeBuff.buffDef) > 0)
             {
-                // Is character in God Mode
-                if (_body.GetBuffCount(godModeBuff.buffDef) > 0)
-                {
-                    // Instantly charge Holdout Zone
-                    Utils.ChargeHoldoutZone(_zone);
-                }
+                // Instantly charge Holdout Zone
+                Utils.ChargeHoldoutZone(_zone);
             }
         }
 
@@ -160,6 +156,9 @@ namespace Faithful
 
         void Update()
         {
+            // Check debug mode
+            if (!Utils.debugMode) return;
+
             // Host only (requires expansion enabled)
             if (!Utils.hosting || !Utils.expansionEnabled)
             {

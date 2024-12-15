@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace Faithful
 {
-    internal class FaithfulTJetpackBehaviour : NetworkBehaviour
+    internal class FaithfulTJetpackBehaviour : NetworkBehaviour, ICharacterBehaviour
     {
         // Store reference to Character Body and Character Inventory
         public CharacterBody character;
@@ -68,6 +68,12 @@ namespace Faithful
 
         // Store if this jetpack has initialised
         protected bool initialised = false;
+
+        public FaithfulTJetpackBehaviour()
+        {
+            // Register with utils
+            Utils.RegisterCharacterBehaviour(this);
+        }
 
         public void AssignCharacter(CharacterBody _character)
         {
@@ -188,7 +194,13 @@ namespace Faithful
             }
         }
 
-        private void FetchSettings()
+        private void OnDestroy()
+        {
+            // Unregister with utils
+            Utils.UnregisterCharacterBehaviour(this);
+        }
+
+        public void FetchSettings()
         {
             // Get jetpack item
             Item jetpackItem = Items.GetItem("4T0N_JETPACK");
