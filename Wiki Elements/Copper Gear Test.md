@@ -1,7 +1,6 @@
 <table>
   <tr>
     <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width="32"></td>
-    <td align="center"><strong>Copper Gear</strong></td>
   </tr>
 </table>
 
