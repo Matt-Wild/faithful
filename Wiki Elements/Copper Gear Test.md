@@ -1,7 +1,7 @@
 <details>
 <summary><strong>Copper Gear</strong></summary>
 
-<table cellspacing="0" cellpadding="0">
+<table>
   <tr>
     <td><strong>Name</strong></td>
     <td><strong>Copper Gear</strong></td>
@@ -25,7 +25,7 @@
   <tr>
     <td><strong>Stats</strong></td>
     <td>
-      <table border="1" cellspacing="0" cellpadding="4">
+      <table>
           <tr>
             <th>Stat</th>
             <th>Value</th>
@@ -33,10 +33,10 @@
             <th>Add</th>
           </tr>
           <tr>
-            <td>Attack Speed</td>
-            <td>25%</td>
-            <td>Linear</td>
-            <td>+25%</td>
+            <td align="center">Attack Speed</td>
+            <td align="center">25%</td>
+            <td align="center">Linear</td>
+            <td align="center">+25%</td>
           </tr>
       </table>
     </td>
