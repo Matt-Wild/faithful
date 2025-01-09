@@ -12,7 +12,7 @@
   </tr>
   <tr>
     <td><strong>Details</strong></td>
-    <td>Increase **attack speed** by **25%** (*+25% per stack*) while inside the Teleporter zone.</td>
+    <td>Increase <strong>attack speed</strong> by <strong>25%</strong> (<em>+25% per stack</em>) while inside the Teleporter zone.</td>
   </tr>
   <tr>
     <td><strong>Rarity</strong></td>
@@ -29,10 +29,7 @@
   <tr>
     <td><strong>Stats</strong></td>
     <td>
-      <details>
-        <summary><strong>View Stats Grid</strong></summary>
-        <br>
-        <table border="1">
+      <table border="1">
           <tr>
             <th>Stat</th>
             <th>Value</th>
@@ -46,7 +43,6 @@
             <td>+25%</td>
           </tr>
         </table>
-      </details>
     </td>
   </tr>
   <tr>
