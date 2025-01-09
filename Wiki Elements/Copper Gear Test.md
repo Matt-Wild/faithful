@@ -23,20 +23,27 @@
     <td><strong>Brass Screws</strong></td>
   </tr>
   <tr>
-    <td><strong>Stats</strong></td>
-    <td>
-      | **Stat**       | **Value**   | **Stack** | **Add**   |
-      |:--------------:|:-----------:|:---------:|:---------:|
-      | Attack Speed   | 25%         | Linear    | +25%      |
-    </td>
-  </tr>
-  <tr>
     <td><strong>Notes</strong></td>
     <td>
       • Provides the Copper Gear buff while within the teleporter radius.<br>
       • Leaving the teleporter radius will result in the buff expiring after 1 second.<br>
       • Unavailable in the Simulacrum alternate gamemode.<br>
     </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td align="center"><strong>Stat</strong></th>
+    <td align="center"><strong>Value</strong></th>
+    <td align="center"><strong>Stack</strong></th>
+    <td align="center"><strong>Add</strong></th>
+  </tr>
+  <tr>
+    <td align="center">Attack Speed</td>
+    <td align="center">25%</td>
+    <td align="center">Linear</td>
+    <td align="center">+25%</td>
   </tr>
 </table>
 
