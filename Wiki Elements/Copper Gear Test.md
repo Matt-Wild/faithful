@@ -25,7 +25,7 @@
   <tr>
     <td><strong>Stats</strong></td>
     <td>
-      <br>
+      <div style="height: 5px;"></div>
       <table>
           <tr>
             <td align="center"><strong>Stat</strong></th>
