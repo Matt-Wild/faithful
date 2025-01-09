@@ -25,21 +25,9 @@
   <tr>
     <td><strong>Stats</strong></td>
     <td>
-      &nbsp;
-      <table>
-          <tr>
-            <td align="center"><strong>Stat</strong></th>
-            <td align="center"><strong>Value</strong></th>
-            <td align="center"><strong>Stack</strong></th>
-            <td align="center"><strong>Add</strong></th>
-          </tr>
-          <tr>
-            <td align="center">Attack Speed</td>
-            <td align="center">25%</td>
-            <td align="center">Linear</td>
-            <td align="center">+25%</td>
-          </tr>
-      </table>
+      | **Stat**       | **Value**   | **Stack** | **Add**   |
+      |:--------------:|:-----------:|:---------:|:---------:|
+      | Attack Speed   | 25%         | Linear    | +25%      |
     </td>
   </tr>
   <tr>
