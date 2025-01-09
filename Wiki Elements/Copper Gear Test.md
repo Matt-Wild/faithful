@@ -55,17 +55,6 @@
       </ul>
     </td>
   </tr>
-  <tr>
-    <td><strong>Logbook</strong></td>
-    <td>
-      <em>//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</em><br><br>
-      <em>"Hey, you know those clockmakers we met when we went on that trip to Earth?"</em><br><br>
-      <em>"Yeah, I remember. Why are you bringing them up now?"</em><br><br>
-      <em>"A couple o' them told me that they were always in the zone when wearing one of these gears 'round their wrist. Said it helped 'em work way faster."</em><br><br>
-      <em>"I see but… what does that have to do with the mountain of lemurian corpses behind you?"</em><br><br>
-      <em>"Well, uh… I can tell you that it works."</em>
-    </td>
-  </tr>
 </table>
 
 </details>
