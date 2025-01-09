@@ -25,6 +25,7 @@
   <tr>
     <td><strong>Stats</strong></td>
     <td>
+      <br>
       <table>
           <tr>
             <td align="center"><strong>Stat</strong></th>
