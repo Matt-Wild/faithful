@@ -44,9 +44,9 @@
   <tr>
     <td><strong>Notes</strong></td>
     <td>
-      <em>• Provides the Copper Gear buff while within the teleporter radius.</em><br>
-      <em>• Leaving the teleporter radius will result in the buff expiring after 1 second.</em><br>
-      <em>• Unavailable in the Simulacrum alternate gamemode.</em><br>
+      • Provides the Copper Gear buff while within the teleporter radius.<br>
+      • Leaving the teleporter radius will result in the buff expiring after 1 second.<br>
+      • Unavailable in the Simulacrum alternate gamemode.<br>
     </td>
   </tr>
 </table>
