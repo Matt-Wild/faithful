@@ -4,7 +4,7 @@
   <strong>Copper Gear</strong>
 </summary>
 
-<div style="height: 5px;"></div>
+<div style="height: 16px;"></div>
 <table>
   <tr>
     <td align="center"><strong>Stat</strong></td>
