@@ -1,0 +1,29 @@
+<details>
+<summary><strong>Copper Gear</strong></summary>
+
+| **Title**       | **Description**                                                                                                                                                   |
+|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Name**        | <span style="color: grey; font-weight: bold;">Copper Gear</span>                                                                                                  |
+| **Description** | Increase attack speed while within the Teleporter zone.                                                                                                           |
+| **Details**     | Increase <span style="color: yellow; font-weight: bold;">attack speed</span> by <span style="color: yellow; font-weight: bold;">25%</span> (<em>+25% per stack</em>) while inside the Teleporter zone. |
+| **Rarity**      | <span style="color: grey;">Common</span>                                                                                                                          |
+| **Category**    | Damage, HoldoutZoneRelated                                                                                                                                        |
+| **Corrupt**     | <span style="color: purple; font-weight: bold;">Brass Screws</span>                                                                                               |
+| **Stats**       | <details><summary><strong>View Stats Grid</strong></summary><br>
+  
+  | **Stat**        | **Value**    | **Stack**   | **Add**    |
+  |----------------|-------------|------------|-------------|
+  | Attack Speed   | 25%         | Linear     | +25%        |
+
+</details>                                                                                                                                                                           |
+| **Notes**       | > Provides the Copper Gear buff while within the teleporter radius.                                                                                               |
+> Leaving the teleporter radius will result in the buff expiring after 1 second.                                                                                                 |
+> Unavailable in the Simulacrum alternate gamemode.                                                                                                                             |
+| **Logbook**     | *//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//*                                                                                                                 |
+|                  | *"Hey, you know those clockmakers we met when we went on that trip to Earth?"*                                                                                  |
+|                  | *"Yeah, I remember. Why are you bringing them up now?"*                                                                                                        |
+|                  | *"A couple o' them told me that they were always in the zone when wearing one of these gears 'round their wrist. Said it helped 'em work way faster."*         |
+|                  | *"I see but… what does that have to do with the mountain of lemurian corpses behind you?"*                                                                    |
+|                  | *"Well, uh… I can tell you that it works."*                                                                                                                     |
+
+</details>
