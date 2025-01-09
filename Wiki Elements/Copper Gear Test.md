@@ -1,12 +1,8 @@
-<table>
-  <tr>
-    <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width="32"></td>
-    <td align="center"><strong>Copper Gear</strong></td>
-  </tr>
-</table>
-
 <details>
-<summary><strong>Show Details</strong></summary>
+<summary>
+  <img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width="32" style="vertical-align: middle; margin-right: 8px">
+  <strong>Copper Gear</strong>
+</summary>
 
 <table>
   <tr>
