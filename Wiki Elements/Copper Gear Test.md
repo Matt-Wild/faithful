@@ -25,7 +25,7 @@
   <tr>
     <td><strong>Stats</strong></td>
     <td>
-      &nbsp;<span style="padding-top: 3px;"></span>
+      &nbsp;<span style="padding-top: 1px;"></span>
       <table>
           <tr>
             <td align="center"><strong>Stat</strong></th>
