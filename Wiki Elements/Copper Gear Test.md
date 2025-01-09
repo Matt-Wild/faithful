@@ -1,6 +1,6 @@
 <details>
 <summary>
-  <img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width="16" style="vertical-align: middle; margin-right: 8px">
+  <img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width="32" style="vertical-align: middle; margin-right: 8px">
   <strong>Copper Gear</strong>
 </summary>
 
