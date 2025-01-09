@@ -3,10 +3,6 @@
 
 <table>
   <tr>
-    <th>Title</th>
-    <th>Description</th>
-  </tr>
-  <tr>
     <td><strong>Name</strong></td>
     <td><span style="color: grey; font-weight: bold;">Copper Gear</span></td>
   </tr>
