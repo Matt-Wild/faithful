@@ -15,10 +15,6 @@
     <td>Increase <strong>attack speed</strong> by <strong>25%</strong> (<em>+25% per stack</em>) while inside the Teleporter zone.</td>
   </tr>
   <tr>
-    <td><strong>Rarity</strong></td>
-    <td><strong>Common</strong></td>
-  </tr>
-  <tr>
     <td><strong>Category</strong></td>
     <td>Damage, HoldoutZoneRelated</td>
   </tr>
