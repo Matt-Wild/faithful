@@ -27,10 +27,10 @@
     <td>
       <table>
           <tr>
-            <th align="center">Stat</th>
-            <th align="center">Value</th>
-            <th align="center">Stack</th>
-            <th align="center">Add</th>
+            <td align="center"><strong>Stat</strong></th>
+            <td align="center"><strong>Value</strong></th>
+            <td align="center"><strong>Stack</strong></th>
+            <td align="center"><strong>Add</strong></th>
           </tr>
           <tr>
             <td align="center">Attack Speed</td>
