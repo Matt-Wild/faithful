@@ -1,21 +1,7 @@
 <details>
 <summary><strong>Copper Gear</strong></summary>
 
-<table>
-  <tr>
-    <td><strong>Name</strong></td>
-    <td><strong>Copper Gear</strong></td>
-  </tr>
-  <tr>
-    <td><strong>Description</strong></td>
-    <td>Increase attack speed while within the Teleporter zone.</td>
-  </tr>
-  <tr>
-    <td><strong>Details</strong></td>
-    <td>Increase <strong>attack speed</strong> by <strong>25%</strong> (<em>+25% per stack</em>) while inside the Teleporter zone.</td>
-  </tr>
-</table>
-
+<br>
 <table>
   <tr>
     <td align="center"><strong>Stat</strong></td>
@@ -32,6 +18,14 @@
 </table>
 
 <table>
+  <tr>
+    <td><strong>Description</strong></td>
+    <td>Increase attack speed while within the Teleporter zone.</td>
+  </tr>
+  <tr>
+    <td><strong>Details</strong></td>
+    <td>Increase <strong>attack speed</strong> by <strong>25%</strong> (<em>+25% per stack</em>) while inside the Teleporter zone.</td>
+  </tr>
   <tr>
     <td><strong>Category</strong></td>
     <td>Damage, HoldoutZoneRelated</td>
