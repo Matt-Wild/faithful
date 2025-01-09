@@ -25,7 +25,7 @@
   <tr>
     <td><strong>Stats</strong></td>
     <td>
-      <table border="1">
+      <table border="1" cellspacing="0" cellpadding="4">
           <tr>
             <th align="center">Stat</th>
             <th align="center">Value</th>
@@ -38,13 +38,13 @@
             <td align="center">Linear</td>
             <td align="center">+25%</td>
           </tr>
-        </table>
+      </table>
     </td>
   </tr>
   <tr>
     <td><strong>Notes</strong></td>
     <td>
-      <ul>
+      <ul style="margin: 0; padding-left: 20px;">
         <li>Provides the Copper Gear buff while within the teleporter radius.</li>
         <li>Leaving the teleporter radius will result in the buff expiring after 1 second.</li>
         <li>Unavailable in the Simulacrum alternate gamemode.</li>
