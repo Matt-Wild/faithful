@@ -31,16 +31,16 @@
     <td>
       <table border="1">
           <tr>
-            <th>Stat</th>
-            <th>Value</th>
-            <th>Stack</th>
-            <th>Add</th>
+            <th align="center">Stat</th>
+            <th align="center">Value</th>
+            <th align="center">Stack</th>
+            <th align="center">Add</th>
           </tr>
           <tr>
-            <td>Attack Speed</td>
-            <td>25%</td>
-            <td>Linear</td>
-            <td>+25%</td>
+            <td align="center">Attack Speed</td>
+            <td align="center">25%</td>
+            <td align="center">Linear</td>
+            <td align="center">+25%</td>
           </tr>
         </table>
     </td>
