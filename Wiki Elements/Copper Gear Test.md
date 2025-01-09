@@ -25,13 +25,12 @@
   <tr>
     <td><strong>Stats</strong></td>
     <td>
-      <center>
-        <table>
+      <table align="center">
           <tr>
-            <td align="center"><strong>Stat</strong></td>
-            <td align="center"><strong>Value</strong></td>
-            <td align="center"><strong>Stack</strong></td>
-            <td align="center"><strong>Add</strong></td>
+            <td align="center"><strong>Stat</strong></th>
+            <td align="center"><strong>Value</strong></th>
+            <td align="center"><strong>Stack</strong></th>
+            <td align="center"><strong>Add</strong></th>
           </tr>
           <tr>
             <td align="center">Attack Speed</td>
@@ -39,8 +38,7 @@
             <td align="center">Linear</td>
             <td align="center">+25%</td>
           </tr>
-        </table>
-      </center>
+      </table>
     </td>
   </tr>
   <tr>
