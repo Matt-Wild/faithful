@@ -1,8 +1,6 @@
 <details>
 <summary><strong>Copper Gear</strong></summary>
 
-| **Title**       | **Description**                                                                                                                                                   |
-|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Name**        | <span style="color: grey; font-weight: bold;">Copper Gear</span>                                                                                                  |
 | **Description** | Increase attack speed while within the Teleporter zone.                                                                                                           |
 | **Details**     | Increase <span style="color: yellow; font-weight: bold;">attack speed</span> by <span style="color: yellow; font-weight: bold;">25%</span> (<em>+25% per stack</em>) while inside the Teleporter zone. |
