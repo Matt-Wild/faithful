@@ -4,7 +4,7 @@
 <table>
   <tr>
     <td><strong>Name</strong></td>
-    <td><span style="color: grey; font-weight: bold;">Copper Gear</span></td>
+    <td><strong>Copper Gear</strong></td>
   </tr>
   <tr>
     <td><strong>Description</strong></td>
@@ -12,11 +12,11 @@
   </tr>
   <tr>
     <td><strong>Details</strong></td>
-    <td>Increase <span style="color: yellow; font-weight: bold;">attack speed</span> by <span style="color: yellow; font-weight: bold;">25%</span> (<em>+25% per stack</em>) while inside the Teleporter zone.</td>
+    <td>Increase **attack speed** by **25%** (*+25% per stack*) while inside the Teleporter zone.</td>
   </tr>
   <tr>
     <td><strong>Rarity</strong></td>
-    <td><span style="color: grey;">Common</span></td>
+    <td><strong>Common</strong></td>
   </tr>
   <tr>
     <td><strong>Category</strong></td>
@@ -24,7 +24,7 @@
   </tr>
   <tr>
     <td><strong>Corrupt</strong></td>
-    <td><span style="color: purple; font-weight: bold;">Brass Screws</span></td>
+    <td><strong>Brass Screws</strong></td>
   </tr>
   <tr>
     <td><strong>Stats</strong></td>
