@@ -1,5 +1,5 @@
 <details>
-<summary><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width=128><strong>Copper Gear</strong></summary>
+<summary><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true"><strong>Copper Gear</strong></summary>
 
 <br>
 <table>
