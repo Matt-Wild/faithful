@@ -8,7 +8,7 @@ Also adds some custom debug tools to help other mod developers and those curious
 [![Thunderstore Version](https://img.shields.io/thunderstore/v/SpilledSoup_Projects/Faithful?style=for-the-badge&logo=thunderstore&color=blue)](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/)
 [![Thunderstore Downloads](https://img.shields.io/thunderstore/dt/SpilledSoup_Projects/Faithful?style=for-the-badge&logo=thunderstore&color=cyan)](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/)
 
-For more detailed information about the additions made by this mod check out the wiki page.
+For more detailed information about the additions made by this mod check out the [wiki](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/wiki/).
 
 # Join Our Discord!
 
