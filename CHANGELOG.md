@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.0.19 Item Randomizer
+### v1.0.19 Item Randomizer
 - Added option to randomize the stats of all items added by this mod (disabled by default).
 - Fixed Leader's Pennon radius indicator staying when the player owning it dies.
 - Fixed lots of problems when some players in a multiplayer lobby have godmode enabled while the others do not.
@@ -33,7 +33,7 @@
 - Adjusted 4-T0N Jetpack to make it 'bouncier'.
 - The Vengeful Toaster, Second Hand and 4-T0N Jetpack items can now be customised in the config.
 
-<details><summary>Old Changelogs</summary>
+<details><summary><strong>Old Changelogs</strong></summary>
 
 ## v1.0.9 Copper Gear and Brass Screw Refinements
 - Fixed issue with the Copper Gear and Brass Screw sometimes not providing their buffs to the player within the teleporter zone.
