@@ -1,5 +1,8 @@
 # Changelog
 
+### v1.0.20 Changelog
+- Improved mod changelog
+
 ### v1.0.19 Item Randomizer
 - Added option to randomize the stats of all items added by this mod (disabled by default).
 - Fixed Leader's Pennon radius indicator staying when the player owning it dies.
