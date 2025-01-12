@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 118717747
+CRC: 1577356389
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2c6f8777a97e01bdbff5f2f9688c1a43
+    Hash: 58ec53e526276859b5116de7e193d839
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -102,6 +102,7 @@ Assets:
 - Assets/Items/LongshotGeode/LongshotGeodeDisplayMesh.prefab
 - Assets/Items/CauterizingGreave/texCauterizingGreave.png
 - Assets/Items/CollectorsVision/texCollectorsVisionNormal.png
+- Assets/Items/TargetingMatrix/TargetingMatrixDisplayMesh.prefab
 - Assets/Items/MeltingWarbler/MeltingWarblerMesh.prefab
 - Assets/Items/VengefulToaster/texVengefulToaster.png
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
@@ -114,6 +115,7 @@ Assets:
 - Assets/Items/LeadersPennon/texLeadersPennonIcon.png
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
 - Assets/Items/DrownedVisage/texDrownedVisageNormal.png
+- Assets/Items/TargetingMatrix/texTargetingMatrixIcon.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeIcon.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
 - Assets/Items/HasteningGreave/texHasteningGreave.png
@@ -129,6 +131,7 @@ Assets:
 - Assets/Items/VengefulToaster/texBuffVengefulBoost.png
 - Assets/Status/texBuffDevMode.png
 - Assets/Items/HasteningGreave/HasteningGreaveDisplayMesh.prefab
+- Assets/Items/TargetingMatrix/texTargetingMatrixEmission.png
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
 - Assets/Items/LeadersPennon/texLeadersPennon.png
 - Assets/Items/DrownedVisage/DrownedVisageDisplayMesh.prefab
@@ -136,12 +139,14 @@ Assets:
 - Assets/Items/BrassScrews/texBrassScrews.png
 - Assets/Debug/UI/DebugComponentAnalysisEntry.prefab
 - Assets/Items/HasteningGreave/HasteningGreaveMesh.prefab
+- Assets/Items/TargetingMatrix/TargetingMatrixMesh.prefab
 - Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
 - Assets/Items/VengefulToaster/VengefulToasterMesh.prefab
 - Assets/Skills/Railgunner/texRailgunnerCoinNormal.png
 - Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.prefab
 - Assets/Items/CollectorsVision/texCollectorsVisionEmission.png
 - Assets/Placeholder/Item/texTemporalCube.png
+- Assets/Items/TargetingMatrix/texTargetingMatrix.png
 - Assets/Items/LeadersPennon/texRampPennonBuff.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveNormal.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaNormal.png
