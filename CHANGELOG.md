@@ -1,7 +1,7 @@
 # Changelog
 
 ### v1.0.20 Changelog
-- Improved mod changelog
+- Improved mod changelog.
 
 ### v1.0.19 Item Randomizer
 - Added option to randomize the stats of all items added by this mod (disabled by default).
@@ -32,11 +32,11 @@
 ### v1.0.11 Noxious Slimes Customisation
 - The Noxious Slimes item can now be adjusted in the config.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.0.10 Vengeful Toaster, Second Hand and 4-T0N Jetpack Refinements
 - Adjusted 4-T0N Jetpack to make it 'bouncier'.
 - The Vengeful Toaster, Second Hand and 4-T0N Jetpack items can now be customised in the config.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.0.9 Copper Gear and Brass Screw Refinements
 - Fixed issue with the Copper Gear and Brass Screw sometimes not providing their buffs to the player within the teleporter zone.

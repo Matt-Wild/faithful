@@ -43,7 +43,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.0.20";
+        public const string PluginVersion = "1.0.21";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -58,6 +58,7 @@ namespace Faithful
 
         // Items
         private static CopperGear copperGear;
+        private static TargetingMatrix targetingMatrix;
         private static BrassScrews brassScrews;
         private static MeltingWarbler meltingWarbler;
         private static VengefulToaster vengefulToaster;
@@ -108,6 +109,7 @@ namespace Faithful
 
             // Create items
             copperGear = new CopperGear(toolbox);
+            targetingMatrix = new TargetingMatrix(toolbox);
             brassScrews = new BrassScrews(toolbox);
             meltingWarbler = new MeltingWarbler(toolbox);
             vengefulToaster = new VengefulToaster(toolbox, vengeance);

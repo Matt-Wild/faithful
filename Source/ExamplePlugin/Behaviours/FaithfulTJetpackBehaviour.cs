@@ -7,7 +7,7 @@ namespace Faithful
 {
     internal class FaithfulTJetpackBehaviour : NetworkBehaviour, ICharacterBehaviour
     {
-        // Store reference to Character Body and Character Inventory
+        // Store reference to Character Body
         public CharacterBody character;
 
         // Store if active

@@ -5,7 +5,7 @@ namespace Faithful
 {
     internal class FaithfulLeadersPennonBehaviour : MonoBehaviour, ICharacterBehaviour
     {
-        // Store reference to Character Body and Character Inventory
+        // Store reference to Character Body
         public CharacterBody character;
 
         // Store reference to visual effect

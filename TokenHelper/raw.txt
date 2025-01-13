@@ -1,12 +1,10 @@
-Order: Antique Clock Hand (Replica)
-Tracking Number: 77**********
-Estimated Delivery: 08/23/2057
-Shipping Method: Standard/Fragile
-Shipping Address: Antiques Workshop, Continuum St., Saturn
+Order: Prototype Targeting System
+Tracking Number: 1981******
+Estimated Delivery: 03/31/2057
+Shipping Method: Priority
+Shipping Address: Royal Drive, Bubble Station, Mars
 Shipping Details:
 
-Here's /another/ replacement part.
+Here's that new snazzy little gizmo we've been working on for a while. I thought you might like to have a look at it in person so I went ahead and sent you one of the prototypes.
 
-At some point it clearly has to be a fault in the clockwork. I can't imagine how a single hand has caused you so much trouble.
-
-If this continues, we're going to have to start charging you for these parts.
+NOTE: Do NOT follow its targeting recommendations. The software is still unreliable and seems to often select targets at random. Or at least it appears to be random. It has a habit of targeting non-combatants which is... a little worrying but I’m sure we'll have that fixed soon.

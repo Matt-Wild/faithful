@@ -27,6 +27,7 @@ namespace Faithful
         // Store reference to behaviours
         public FaithfulTJetpackBehaviour tJetpack;
         public FaithfulLeadersPennonBehaviour leadersPennon;
+        public FaithfulTargetingMatrixBehaviour targetingMatrix;
 
         // Store if searching for character body
         private bool searchingForCharacterBody = false;
@@ -111,6 +112,12 @@ namespace Faithful
 
                 // Initialise leaders pennon behaviour
                 leadersPennon.Init(character);
+
+                // Fetch targeting matrix behaviour
+                targetingMatrix = GetComponent<FaithfulTargetingMatrixBehaviour>();
+
+                // Initialise targeting matrix behaviour
+                targetingMatrix.Init(character);
 
                 // Check for inventory
                 if (character.inventory != null)
