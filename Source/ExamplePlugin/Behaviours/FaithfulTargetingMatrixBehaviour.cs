@@ -66,6 +66,9 @@ namespace Faithful
                     // Check if on the same team as the targeter
                     if (characterBody.teamComponent.teamIndex == character.teamComponent.teamIndex) continue;
 
+                    // Check if character body has a master
+                    if (characterBody.master == null) continue;
+
                     // Check if character just got killed
                     if (_killed == characterBody) continue;
 

@@ -32,7 +32,7 @@ namespace Faithful
         private void CreateDisplaySettings(string _displayMeshName)
         {
             // Create display settings
-            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName);
+            displaySettings = Utils.CreateItemDisplaySettings(_displayMeshName, _useHopooShader: false);
 
             // Check for required asset
             if (!Assets.HasAsset(_displayMeshName))
@@ -70,7 +70,7 @@ namespace Faithful
             if (_report.attackerMaster == null) return;
 
             // Check for victim character
-            if (_report.victimBody == null) return;
+            if (_report.victimBody == null || _report.victimMaster == null) return;
 
             // Get attacker character master
             CharacterMaster character = _report.attackerMaster;
