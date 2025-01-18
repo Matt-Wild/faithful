@@ -86,7 +86,7 @@ namespace Faithful
 
             // Create Targeting Matrix effect
             GameObject tempTMEffect = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/TemporaryVisualEffects/WarbannerBuffEffect"));
-            matrixEffectPrefab = tempTMEffect.InstantiateClone("faithfulLeadersPennonEffect");
+            matrixEffectPrefab = tempTMEffect.InstantiateClone("faithfulTargetingMatrixEffect");
             Object.DestroyImmediate(tempTMEffect);
             matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
             matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));

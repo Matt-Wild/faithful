@@ -1,5 +1,6 @@
 ﻿using R2API;
 using RoR2;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,6 +28,9 @@ namespace Faithful
 
             // Add On Incoming Damage behaviour
             Behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
+
+            // Add fix for Huntress Flurry (modifies Seeking Arrow)
+            On.EntityStates.Huntress.HuntressWeapon.FireSeekingArrow.OnEnter += OnHuntressSeekingArrayEnter;
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -66,9 +70,6 @@ namespace Faithful
             // Check for attacking character
             if (_report.attackerMaster == null) return;
 
-            // Check for victim character
-            if (_report.victimBody == null || _report.victimMaster == null) return;
-
             // Get attacker character master
             CharacterMaster character = _report.attackerMaster;
 
@@ -102,38 +103,77 @@ namespace Faithful
             // Check for attacker and victim
             if (_attacker == null || _victim == null) return;
 
-            // Check for attacker and victim bodies
-            if (!_attacker.hasBody || !_victim.hasBody) return;
-
-            // Get attacker and victim bodies
-            CharacterBody attackerBody = _attacker.GetBody();
-            CharacterBody victimBody = _victim.GetBody();
-
-            // Check for attacker inventory
-            if (!attackerBody.inventory) return;
+            // Check if targeting matrix should be activated
+            if (!GetMatrixActivated(_report, _attacker.GetBody(), _victim.GetBody())) return;
 
             // Get item count
-            int count = attackerBody.inventory.GetItemCount(targetingMatrixItem.itemDef);
-
-            // Check for item
-            if (count == 0) return;
-
-            // Get faithful behaviour for attacker
-            FaithfulCharacterBodyBehaviour characterBehaviour = Utils.FindCharacterBodyHelper(attackerBody);
-            if (characterBehaviour == null) return;
-
-            // Get targeting matrix behaviour
-            FaithfulTargetingMatrixBehaviour targetingMatrixBehaviour = characterBehaviour.targetingMatrix;
-            if (targetingMatrixBehaviour == null) return;
-
-            // Check if targeting matrix target is victim
-            if (targetingMatrixBehaviour.target != victimBody) return;
+            int count = _attacker.inventory.GetItemCount(targetingMatrixItem.itemDef);
 
             // Always crit target
             _report.crit = true;
 
             // Increase damage
             _report.damage *= 1.0f + (0.25f * (count - 1));
+        }
+
+        void OnHuntressSeekingArrayEnter(On.EntityStates.Huntress.HuntressWeapon.FireSeekingArrow.orig_OnEnter orig, EntityStates.Huntress.HuntressWeapon.FireSeekingArrow self)
+        {
+            // Run original process
+            orig(self);
+
+            // Check for victim
+            if (self.initialOrbTarget == null) return;
+
+            // Check for victim health component
+            if (self.initialOrbTarget.healthComponent == null) return;
+
+            // Check for victim body
+            CharacterBody victim = self.initialOrbTarget.healthComponent.body;
+            if (victim == null) return;
+
+            // Check for attacker body
+            CharacterBody attacker = self.characterBody;
+            if (attacker == null) return;
+
+            // Check if targeting matrix should be activated
+            if (!GetMatrixActivated(null, attacker, victim)) return;
+
+            // Set to crit
+            self.isCrit = true;
+        }
+
+        bool GetMatrixActivated(DamageInfo _report, CharacterBody _attacker, CharacterBody _victim)
+        {
+            // REPORT CAN BE NULL
+
+            // Check for attacker and victim
+            if (_attacker == null || _victim == null) return false;
+
+            // Do not effect DoTs
+            if (_report != null && _report.dotIndex != DotController.DotIndex.None) return false;
+
+            // Check for attacker inventory
+            if (!_attacker.inventory) return false;
+
+            // Get item count
+            int count = _attacker.inventory.GetItemCount(targetingMatrixItem.itemDef);
+
+            // Check for item
+            if (count == 0) return false;
+
+            // Get faithful behaviour for attacker
+            FaithfulCharacterBodyBehaviour characterBehaviour = Utils.FindCharacterBodyHelper(_attacker);
+            if (characterBehaviour == null) return false;
+
+            // Get targeting matrix behaviour
+            FaithfulTargetingMatrixBehaviour targetingMatrixBehaviour = characterBehaviour.targetingMatrix;
+            if (targetingMatrixBehaviour == null) return false;
+
+            // Check if targeting matrix target is victim
+            if (targetingMatrixBehaviour.target != _victim) return false;
+
+            // Damage should be effected by targeting matrix
+            return true;
         }
     }
 }
