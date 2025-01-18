@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2315237169
+CRC: 355013395
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1ab745d614182d3e6c296e0f9197c9cd
+    Hash: 2f5f227e3bbd918db9ed60fd1a399666
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -119,6 +119,7 @@ Assets:
 - Assets/Items/TargetingMatrix/texTargetingMatrixIcon.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeIcon.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
+- Assets/Items/LeadersPennon/texIndicatorPennonMask.png
 - Assets/Items/HasteningGreave/texHasteningGreave.png
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
 - Assets/UI/texCustomExpansionIcon.png
@@ -170,6 +171,7 @@ Assets:
 - Assets/Items/CollectorsVision/CollectorsVisionDisplayMesh.prefab
 - Assets/Items/4-T0NJetpack/tex4T0NJetpack.png
 - Assets/Items/4-T0NJetpack/4T0NJetpackDisplayMesh.prefab
+- Assets/Items/TargetingMatrix/texIndicatorMatrixMask.png
 - Assets/Items/Chakram/texChakramNormal.png
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeEmission.png
