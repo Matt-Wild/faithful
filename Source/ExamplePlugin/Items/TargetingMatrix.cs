@@ -21,11 +21,11 @@ namespace Faithful
             CreateDisplaySettings("targetingmatrixdisplaymesh");
 
             // Create Copper Gear item and buff
-            targetingMatrixItem = Items.AddItem("TARGETING_MATRIX", [ItemTag.Damage, ItemTag.OnKillEffect, ItemTag.AIBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", _displaySettings: displaySettings);
+            targetingMatrixItem = Items.AddItem("TARGETING_MATRIX", [ItemTag.Damage, ItemTag.OnKillEffect, ItemTag.AIBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
 
             // Link On Character Death behaviour
             Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
-
+            
             // Add On Incoming Damage behaviour
             Behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
 
@@ -63,6 +63,23 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Seeker", "Head", new Vector3(-0.056F, 0.08975F, 0.112F), new Vector3(0F, 353.25F, 0F), new Vector3(0.065F, 0.065F, 0.055F));
             displaySettings.AddCharacterDisplay("False Son", "Head", new Vector3(0F, 0.2175F, 0.13F), new Vector3(0F, 0F, 270F), new Vector3(0.15F, 0.15F, 0.15F));
             displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.206F, 0.1105F, 0.09725F), new Vector3(270F, 90F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+        }
+
+        void ModifyModelPrefab(GameObject _prefab)
+        {
+            // Get clockwise lens
+            GameObject clockwise = Utils.FindChildByName(_prefab.transform, "Lens_Clock");
+
+            // Get anti-clockwise lens
+            GameObject antiClockwise = Utils.FindChildByName(_prefab.transform, "Lens_Anti");
+
+            // Add rotators
+            FaithfulRotatorBehaviour clockwiseRotator = clockwise.AddComponent<FaithfulRotatorBehaviour>();
+            FaithfulRotatorBehaviour antiClockwiseRotator = antiClockwise.AddComponent<FaithfulRotatorBehaviour>();
+
+            // Initialise rotators
+            clockwiseRotator.Init(new Vector3(0.0f, 1.0f, 0.0f), 45.0f);
+            antiClockwiseRotator.Init(new Vector3(0.0f, 1.0f, 0.0f), -20.0f);
         }
 
         void OnCharacterDeath(DamageReport _report)

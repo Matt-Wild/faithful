@@ -38,6 +38,14 @@ namespace Faithful
         // Reference to display bone
         private GameObject m_display;
 
+        // Lens bones
+        private GameObject m_clockwiseLens;
+        private GameObject m_antiClockwiseLens;
+
+        // Lens initial scales
+        private Vector3 clockwiseLensScale;
+        private Vector3 antiClockwiseLensScale;
+
         public FaithfulTargetingMatrixBehaviour()
         {
             // Register with utils
@@ -130,6 +138,10 @@ namespace Faithful
             {
                 // Set display bone position
                 display.transform.localPosition = displayPos;
+
+                // Set lens scales
+                clockwiseLens.transform.localScale = clockwiseLensScale;
+                antiClockwiseLens.transform.localScale = antiClockwiseLensScale;
             }
 
             // Not targeting
@@ -137,6 +149,10 @@ namespace Faithful
             {
                 // Set display bone position
                 display.transform.localPosition = displayPos + displayTargetingMovement;
+
+                // Set lens scales
+                clockwiseLens.transform.localScale = Vector3.zero;
+                antiClockwiseLens.transform.localScale = Vector3.zero;
             }    
         }
 
@@ -246,11 +262,11 @@ namespace Faithful
 
                         // Get faithful behaviour for chosen target
                         FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(chosenTarget);
-                        if (targetCharacterBehaviour == null) return;
+                        if (targetCharacterBehaviour == null) continue;
 
                         // Get targeting matrix behaviour for chosen target
                         FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
-                        if (targetTargetingMatrixBehaviour == null) return;
+                        if (targetTargetingMatrixBehaviour == null) continue;
 
                         // Set target
                         targetTargetingMatrixBehaviour.SetTargeted(character);
@@ -409,6 +425,50 @@ namespace Faithful
 
                 // Return display
                 return m_display;
+            }
+        }
+
+        GameObject clockwiseLens
+        {
+            get
+            {
+                // Check for display mesh
+                if (displayMesh == null) return null;
+
+                // Check for lens
+                if (m_clockwiseLens == null)
+                {
+                    // Attempt to find display
+                    m_clockwiseLens = Utils.FindChildByName(displayMesh.transform, "Lens_Clock");
+
+                    // Get initial lens scale
+                    clockwiseLensScale = m_clockwiseLens.transform.localScale;
+                }
+
+                // Return lens
+                return m_clockwiseLens;
+            }
+        }
+
+        GameObject antiClockwiseLens
+        {
+            get
+            {
+                // Check for display mesh
+                if (displayMesh == null) return null;
+
+                // Check for lens
+                if (m_antiClockwiseLens == null)
+                {
+                    // Attempt to find display
+                    m_antiClockwiseLens = Utils.FindChildByName(displayMesh.transform, "Lens_Anti");
+
+                    // Get initial lens scale
+                    antiClockwiseLensScale = m_antiClockwiseLens.transform.localScale;
+                }
+
+                // Return lens
+                return m_antiClockwiseLens;
             }
         }
 
