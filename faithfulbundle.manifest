@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3006704985
+CRC: 2753745973
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 24c234580d30775cf27b98d95c513294
+    Hash: 7e4e47310d74b90fb813a7bfe5617b44
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -86,7 +86,6 @@ Assets:
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackHolo.png
 - Assets/Items/LongshotGeode/LongshotGeodeMesh.prefab
 - Assets/Items/CauterizingGreave/CauterizingGreaveMesh.prefab
-- Assets/Items/TargetingMatrix/TargetingMatrixMesh.fbx
 - Assets/Items/SecondHand/texSecondHandIcon.png
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeRockNormal.png
@@ -136,7 +135,6 @@ Assets:
 - Assets/Items/TargetingMatrix/texTargetingMatrixEmission.png
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
 - Assets/Items/LeadersPennon/texLeadersPennon.png
-- Assets/Items/TargetingMatrix/TargetingMatrixDisplayMesh.fbx
 - Assets/Items/DrownedVisage/DrownedVisageDisplayMesh.prefab
 - Assets/Items/CauterizingGreave/texCauterizingGreaveEmission.png
 - Assets/Items/BrassScrews/texBrassScrews.png
