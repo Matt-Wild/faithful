@@ -52,6 +52,9 @@ namespace Faithful
             // Setup display model behaviour relay
             DisplayModelBehaviourRelay relay = character.modelLocator.modelTransform.gameObject.AddComponent<DisplayModelBehaviourRelay>();
             relay.Init(this);
+
+            // Attempt to update display model
+            UpdateDisplayObject();
         }
 
         public void FetchSettings()

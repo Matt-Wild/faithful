@@ -699,8 +699,8 @@ namespace Faithful
         {
             //Log.Message($"Character body start for character '{self.name}' with netID {self.GetComponent<NetworkIdentity>().netId}");
 
-            // Check if server
-            if (NetworkServer.active)
+            // Check if server and valid character
+            if (NetworkServer.active && self.master != null)
             {
                 // Add character body behaviour object
                 GameObject characterBodyBehaviourObj = Object.Instantiate(characterBodyHelperPrefab);
