@@ -2,10 +2,11 @@
 using UnityEngine;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
-    internal class FaithfulTargetingMatrixBehaviour : MonoBehaviour, ICharacterBehaviour
+    internal class FaithfulTargetingMatrixBehaviour : NetworkBehaviour, ICharacterBehaviour, IDisplayModelBehaviour
     {
         // Store reference to Character Body
         public CharacterBody character;
@@ -22,6 +23,21 @@ namespace Faithful
         // Store last known position of target
         private Vector3 targetPos = Vector3.zero;
 
+        // Store starting local position of display bone
+        private Vector3 displayPos;
+
+        // How the display moves when targeting
+        private Vector3 displayTargetingMovement = new Vector3(-0.0135f, 0.0f, 0.0f);
+
+        // Store if currently targeting something
+        private bool targeting = false;
+
+        // Reference to display mesh
+        private GameObject m_displayMesh;
+
+        // Reference to display bone
+        private GameObject m_display;
+
         public FaithfulTargetingMatrixBehaviour()
         {
             // Register with utils
@@ -32,6 +48,10 @@ namespace Faithful
         {
             // Assign character
             character = _character;
+
+            // Setup display model behaviour relay
+            DisplayModelBehaviourRelay relay = character.modelLocator.modelTransform.gameObject.AddComponent<DisplayModelBehaviourRelay>();
+            relay.Init(this);
         }
 
         public void FetchSettings()
@@ -41,8 +61,30 @@ namespace Faithful
 
         void FixedUpdate()
         {
+            // Check if no longer targeting something
+            if (targeting && target == null)
+            {
+                // Set as no longer targeting
+                targeting = false;
+
+                // Update display object
+                UpdateDisplayObject();
+            }
+
+            // Check if starting to target something
+            if (!targeting && target != null)
+            {
+                // Set as targeting
+                targeting = true;
+
+                // Update display object
+                UpdateDisplayObject();
+            }
+
             // Check if hosting
             if (!Utils.hosting) return;
+
+            // BELOW IS HOST ONLY BEHAVIOUR
 
             // Check for target
             if (target == null) return;
@@ -65,22 +107,34 @@ namespace Faithful
             }
 
             // Check if out of range for too long
-            if (outOfRangeTimer > 30.0f)
+            if (outOfRangeTimer > 15.0f)
             {
-                // Get faithful behaviour for target
-                FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(target);
-                if (targetCharacterBehaviour == null) return;
-
-                // Get targeting matrix behaviour for target
-                FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
-                if (targetTargetingMatrixBehaviour == null) return;
-
-                // Tell target targeting matrix behaviour that it's no longer being targeted
-                targetTargetingMatrixBehaviour.SetNotTargeted();
-
                 // Remove target
-                target = null;
+                RemoveTarget();
+
+                // Sync target with clients
+                CmdSyncTarget();
             }
+        }
+
+        void UpdateDisplayObject()
+        {
+            // Check for display
+            if (display == null) return;
+
+            // Check if targeting
+            if (targeting)
+            {
+                // Set display bone position
+                display.transform.localPosition = displayPos;
+            }
+
+            // Not targeting
+            else
+            {
+                // Set display bone position
+                display.transform.localPosition = displayPos + displayTargetingMovement;
+            }    
         }
 
         private void OnDestroy()
@@ -94,8 +148,6 @@ namespace Faithful
                 // Remove visual effect
                 visualEffect.visualState = TemporaryVisualEffect.VisualState.Exit;
             }
-
-            // Unhook behaviour
         }
 
         public void OnKill(CharacterBody _killed)
@@ -128,11 +180,17 @@ namespace Faithful
                     // Check if character just got killed
                     if (_killed == characterBody) continue;
 
+                    // Get distance to target
+                    float targetDistance = Vector3.Distance(targeterPos, characterBody.corePosition);
+
+                    // Check if character body is too far from player
+                    if (targetDistance > 300.0f) continue;
+
                     // Valid target
                     filteredCharacterBodies.Add(characterBody);
 
                     // Check if target is "close" to target
-                    if (Vector3.Distance(targeterPos, characterBody.corePosition) <= 120.0f) closeCharacterBodies.Add(characterBody);
+                    if (targetDistance <= 120.0f) closeCharacterBodies.Add(characterBody);
                 }
 
                 // Check if close targets were found
@@ -195,11 +253,34 @@ namespace Faithful
                         targetTargetingMatrixBehaviour.SetTargeted(character);
                         target = chosenTarget;
 
+                        // Sync target with clients
+                        CmdSyncTarget();
+
                         // Done
                         return;
                     }
                 }
             }
+        }
+
+        void RemoveTarget()
+        {
+            // Check for target
+            if (target == null) return;
+
+            // Get faithful behaviour for target
+            FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(target);
+            if (targetCharacterBehaviour == null) return;
+
+            // Get targeting matrix behaviour for target
+            FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
+            if (targetTargetingMatrixBehaviour == null) return;
+
+            // Tell target targeting matrix behaviour that it's no longer being targeted
+            targetTargetingMatrixBehaviour.SetNotTargeted();
+
+            // Remove target
+            target = null;
         }
 
         public void SetTargeted(CharacterBody _targeter)
@@ -231,6 +312,110 @@ namespace Faithful
 
             // Remove visual effect
             visualEffect.visualState = TemporaryVisualEffect.VisualState.Exit;
+        }
+
+        [Command]
+        public void CmdSyncTarget()
+        {
+            // Check for target
+            if (target != null)
+            {
+                // Sync target on all clients
+                RpcSyncTarget(target.GetComponent<NetworkIdentity>().netId);
+            }
+
+            // No target
+            else
+            {
+                // Sync no target on all clients
+                RpcSyncNoTarget();
+            }
+        }
+
+        [ClientRpc]
+        private void RpcSyncTarget(NetworkInstanceId _targetNetID)
+        {
+            // Unnecessary for host
+            if (Utils.hosting) return;
+
+            // Fetch target to sync
+            if (NetworkServer.objects.TryGetValue(_targetNetID, out NetworkIdentity networkIdentity))
+            {
+                // Attempt to get target character body
+                CharacterBody targetBody = networkIdentity.gameObject.GetComponent<CharacterBody>();
+                if (targetBody == null) return;
+
+                // Attempt to get target targeting matrix behaviour
+                FaithfulTargetingMatrixBehaviour matrixBehaviour = networkIdentity.gameObject.GetComponent<FaithfulTargetingMatrixBehaviour>();
+                if (matrixBehaviour == null) return;
+
+                // Set target
+                matrixBehaviour.SetTargeted(character);
+                target = targetBody;
+            }
+        }
+
+        [ClientRpc]
+        private void RpcSyncNoTarget()
+        {
+            // Unnecessary for host
+            if (Utils.hosting) return;
+
+            // Remove target
+            RemoveTarget();
+        }
+
+        public void OnDisplayModelCreated()
+        {
+            // Update item display object
+            UpdateDisplayObject();
+        }
+
+        GameObject displayMesh
+        {
+            get
+            {
+                // Check for display mesh
+                if (m_displayMesh == null)
+                {
+                    // Attempt to find display mesh
+                    m_displayMesh = Utils.FindChildByName(character.modelLocator.modelTransform, "TargetingMatrixDisplayMesh(Clone)");
+                }
+
+                 // Return display mesh
+                 return m_displayMesh;
+            }
+        }
+
+        GameObject display
+        {
+            get
+            {
+                // Check for display mesh
+                if (displayMesh == null) return null;
+
+                // Check for display
+                if (m_display == null)
+                {
+                    // Attempt to find display
+                    m_display = Utils.FindChildByName(displayMesh.transform, "Display");
+
+                    // Get initial display position
+                    displayPos = m_display.transform.localPosition;
+                }
+
+                // Return display
+                return m_display;
+            }
+        }
+
+        public string relatedItemToken
+        {
+            get
+            {
+                // Related item
+                return "TARGETING_MATRIX";
+            }
         }
     }
 }

@@ -103,14 +103,32 @@ namespace Faithful
             // Check for attacker and victim
             if (_attacker == null || _victim == null) return;
 
+            // Get attacker character body
+            CharacterBody attacker = _attacker.GetBody();
+
             // Check if targeting matrix should be activated
-            if (!GetMatrixActivated(_report, _attacker.GetBody(), _victim.GetBody())) return;
+            if (!GetMatrixActivated(_report, attacker, _victim.GetBody())) return;
 
             // Get item count
             int count = _attacker.inventory.GetItemCount(targetingMatrixItem.itemDef);
 
-            // Always crit target
-            _report.crit = true;
+            // Check if railgunner
+            if (attacker.modelLocator.modelTransform.name == "mdlRailGunner")
+            {
+                // Check if crit
+                if (_report.crit)
+                {
+                    // Increase damage
+                    _report.damage *= (attacker.critMultiplier + 1.0f) / attacker.critMultiplier;
+                }
+            }
+
+            // Not railgunner
+            else
+            {
+                // Always crit target
+                _report.crit = true;
+            }
 
             // Increase damage
             _report.damage *= 1.0f + (0.25f * (count - 1));

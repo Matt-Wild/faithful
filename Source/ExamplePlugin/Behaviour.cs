@@ -80,6 +80,7 @@ namespace Faithful
         private static List<OnTransferItemCallback> onGiveItemCallbacks = new List<OnTransferItemCallback>();
         private static List<OnTransferItemCallback> onRemoveItemCallbacks = new List<OnTransferItemCallback>();
         private static List<OnInventoryCallback> onInventoryChangedCallbacks = new List<OnInventoryCallback>();
+        private static Dictionary<ItemDef, List<OnInventoryCallback>> onItemAddedCallbacks = new Dictionary<ItemDef, List<OnInventoryCallback>>();
 
         // Heal callbacks
         private static List<OnHealCallback> onHealCallbacks = new List<OnHealCallback>();
@@ -138,6 +139,7 @@ namespace Faithful
             On.RoR2.Inventory.GiveItem_ItemIndex_int += HookServerGiveItem;
             On.RoR2.Inventory.RemoveItem_ItemIndex_int += HookServerRemoveItem;
             On.RoR2.Inventory.HandleInventoryChanged += HookInventoryChanged;
+            On.RoR2.Inventory.RpcItemAdded += HookItemAdded;
             On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 += HookInflictDamageOverTime;
             On.RoR2.DotController.InflictDot_refInflictDotInfo += HookInflictDamageOverTimeRef;
             On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
@@ -171,6 +173,7 @@ namespace Faithful
             On.RoR2.Inventory.GiveItem_ItemIndex_int -= HookServerGiveItem;
             On.RoR2.Inventory.RemoveItem_ItemIndex_int -= HookServerRemoveItem;
             On.RoR2.Inventory.HandleInventoryChanged -= HookInventoryChanged;
+            On.RoR2.Inventory.RpcItemAdded -= HookItemAdded;
             On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 -= HookInflictDamageOverTime;
             On.RoR2.DotController.InflictDot_refInflictDotInfo -= HookInflictDamageOverTimeRef;
             On.RoR2.HealthComponent.Awake -= HookHealthComponentAwake;
@@ -455,6 +458,46 @@ namespace Faithful
             onInventoryChangedCallbacks.Remove(_callback);
 
             DebugLog("Removed On Inventory Changed behaviour");
+        }
+
+        // Add item added callback
+        public static void AddOnItemAddedCallback(ItemDef _itemDef, OnInventoryCallback _callback)
+        {
+            // Check for dictionary entry for item
+            if (onItemAddedCallbacks.ContainsKey(_itemDef))
+            {
+                // Add to list
+                onItemAddedCallbacks[_itemDef].Add(_callback);
+            }
+
+            // New entry needed
+            else
+            {
+                // Add new entry
+                onItemAddedCallbacks[_itemDef] = new List<OnInventoryCallback>() { _callback };
+            }
+
+            DebugLog("Added On Item Added behaviour");
+        }
+
+        // Remove item added callback
+        public static void RemoveOnItemAddedCallback(ItemDef _itemDef, OnInventoryCallback _callback)
+        {
+            // Check for dictionary entry for item
+            if (onItemAddedCallbacks.ContainsKey(_itemDef))
+            {
+                // Remove from list
+                onItemAddedCallbacks[_itemDef].Remove(_callback);
+
+                // Check if list is empty
+                if (onItemAddedCallbacks[_itemDef].Count == 0)
+                {
+                    // Remove entry
+                    onItemAddedCallbacks.Remove(_itemDef);
+                }
+
+                DebugLog("Removed On Item Added behaviour");
+            }
         }
 
         // Add On Heal callback
@@ -760,6 +803,26 @@ namespace Faithful
             {
                 // Call
                 callback(self);
+            }
+        }
+
+        private static void HookItemAdded(On.RoR2.Inventory.orig_RpcItemAdded orig, Inventory self, ItemIndex itemIndex)
+        {
+            orig(self, itemIndex); // Run normal processes
+
+            // Get item def
+            ItemDef itemDef = ItemCatalog.GetItemDef(itemIndex);
+            if (itemDef == null) return;
+
+            // Check for item added callbacks
+            if (onItemAddedCallbacks.ContainsKey(itemDef))
+            {
+                // Cycle through item added callbacks
+                foreach (OnInventoryCallback callback in onItemAddedCallbacks[itemDef])
+                {
+                    // Call
+                    callback(self);
+                }
             }
         }
 

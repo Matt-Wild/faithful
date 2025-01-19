@@ -1291,6 +1291,36 @@ namespace Faithful
             }
         }
 
+        public static List<T> GetComponentsInParentsWithInterface<T>(Transform _transform)
+        {
+            // Initialise list of components with interface
+            List<T> components = new List<T>();
+
+            // Start at given transform
+            Transform current = _transform;
+
+            // Cycle until no more parents are found
+            while (current != null)
+            {
+                // Cycle through components
+                foreach (Component component in current.GetComponents<Component>())
+                {
+                    // Check if component uses interface
+                    if (component is T validComponent)
+                    {
+                        // Add to components with interface
+                        components.Add(validComponent);
+                    }
+                }
+
+                // Move to parent transform
+                current = current.parent;
+            }
+
+            // Return list of components with interface
+            return components;
+        }
+
         public static void SetLayer(GameObject _object, string _layer)
         {
             // Fetch layer index and call alternate method

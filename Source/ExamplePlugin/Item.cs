@@ -1,7 +1,7 @@
 ﻿using RoR2;
 using R2API;
 using UnityEngine;
-using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Faithful
 {
@@ -124,11 +124,20 @@ namespace Faithful
             // Check for item display settings and if config allows it
             if (_displaySettings != null && enableItemDisplaysSetting.Value)
             {
+                // Get display model
+                GameObject displayModel = _displaySettings.GetModel();
+
+                // Add item display model behaviour
+                ItemDisplayModel displayModelBehaviour = displayModel.AddComponent<ItemDisplayModel>();
+
+                // Initialise display model behaviour
+                displayModelBehaviour.Init(_token);
+
                 // Check for display prefab modify callback
                 if (_modifyItemDisplayPrefabCallback != null)
                 {
                     // Call modify display prefab callback
-                    _modifyItemDisplayPrefabCallback(_displaySettings.GetModel());
+                    _modifyItemDisplayPrefabCallback(displayModel);
                 }
 
                 // Add item and pass in item display settings
@@ -194,5 +203,43 @@ namespace Faithful
             // Fetch setting from config
             return Config.FetchSetting<T>($"ITEM_{token}_{_tokenAddition}");
         }
+    }
+
+    internal class ItemDisplayModel : MonoBehaviour
+    {
+        // Item this display model is related to
+        [SerializeField] string relatedItemToken;
+
+        public void Init(string _relatedItemToken)
+        {
+            // Assign related item token
+            relatedItemToken = _relatedItemToken;
+        }
+
+        void Start()
+        {
+            // Get list of components with display model behaviour from parents
+            List<IDisplayModelBehaviour> displayModelBehaviours = Utils.GetComponentsInParentsWithInterface<IDisplayModelBehaviour>(transform);
+
+            // Cycle through display model behaviour
+            foreach (IDisplayModelBehaviour displayModelBehaviour in displayModelBehaviours)
+            {
+                // Check if display model behaviour is for this display model's related item
+                if (displayModelBehaviour.relatedItemToken == relatedItemToken)
+                {
+                    // Call on display model created behaviour
+                    displayModelBehaviour.OnDisplayModelCreated();
+                }
+            }
+        }
+    }
+
+    internal interface IDisplayModelBehaviour
+    {
+        // Item this display model behaviour is related to
+        public string relatedItemToken { get; }
+
+        // Behaviour to run when item display model is created
+        public void OnDisplayModelCreated();
     }
 }
