@@ -171,8 +171,20 @@ namespace Faithful
 
         public void OnKill(CharacterBody _killed)
         {
-            // Check if hosting and there is no current target (or the current target just died)
-            if (Utils.hosting && (target == null || target == _killed))
+            // Check if target needs to be wiped
+            if (target != null && target == _killed)
+            {
+                // Remove target
+                RemoveTarget();
+            }
+
+            Invoke("SearchForTarget", 0.1f);
+        }
+
+        void SearchForTarget()
+        {
+            // Check if hosting and there is no current target
+            if (Utils.hosting && target == null)
             {
                 // Get character bodies in scene
                 ReadOnlyCollection<CharacterBody> characterBodies = CharacterBody.readOnlyInstancesList;
@@ -196,8 +208,11 @@ namespace Faithful
                     // Check if character body has a master
                     if (characterBody.master == null) continue;
 
-                    // Check if character just got killed
-                    if (_killed == characterBody) continue;
+                    // Check if character body has a health component
+                    if (characterBody.healthComponent == null) continue;
+
+                    // Check if character is alive
+                    if (!characterBody.healthComponent.alive) continue;
 
                     // Get distance to target
                     float targetDistance = Vector3.Distance(targeterPos, characterBody.corePosition);
@@ -211,6 +226,9 @@ namespace Faithful
                     // Check if target is "close" to target
                     if (targetDistance <= 120.0f) closeCharacterBodies.Add(characterBody);
                 }
+
+                Debug.Log($"Potential targets found: {filteredCharacterBodies.Count}");
+                Debug.Log($"Close potential targets found: {closeCharacterBodies.Count}");
 
                 // Check if close targets were found
                 if (closeCharacterBodies.Count > 0)
