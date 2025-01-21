@@ -1,5 +1,10 @@
 # Changelog
 
+### v1.0.21 Targeting Matrix
+- Added the Targeting Matrix item.
+- Added unique visual effect for Leader's Pennon.
+- Fixed some minor config issues.
+
 ### v1.0.20 Changelog
 - Improved mod changelog.
 
@@ -29,10 +34,10 @@
 ### v1.0.12 Item Placements
 - Changed Faithful item placements to have them appear in their proper positions in the logbook and command menus.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.0.11 Noxious Slimes Customisation
 - The Noxious Slimes item can now be adjusted in the config.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.0.10 Vengeful Toaster, Second Hand and 4-T0N Jetpack Refinements
 - Adjusted 4-T0N Jetpack to make it 'bouncier'.

@@ -14,6 +14,24 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<bool> enableTargetEffectSetting;
+        Setting<float> damageSetting;
+        Setting<float> damageStackingSetting;
+        Setting<float> maxDistanceSetting;
+        Setting<float> closeDistanceSetting;
+        Setting<float> preferredDistanceSetting;
+        Setting<float> outOfRangeTimeSetting;
+
+        // Store item stats
+        bool enableTargetEffect;
+        float damage;
+        float damageStacking;
+        float maxDistance;
+        float closeDistance;
+        float preferredDistance;
+        float outOfRangeTime;
+
         // Constructor
         public TargetingMatrix(Toolbox _toolbox) : base(_toolbox)
         {
@@ -22,6 +40,12 @@ namespace Faithful
 
             // Create Copper Gear item and buff
             targetingMatrixItem = Items.AddItem("TARGETING_MATRIX", [ItemTag.Damage, ItemTag.OnKillEffect, ItemTag.AIBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+
+            // Create item settings
+            CreateSettings();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Link On Character Death behaviour
             Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
@@ -63,6 +87,33 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Seeker", "Head", new Vector3(-0.056F, 0.08975F, 0.112F), new Vector3(0F, 353.25F, 0F), new Vector3(0.065F, 0.065F, 0.055F));
             displaySettings.AddCharacterDisplay("False Son", "Head", new Vector3(0F, 0.2175F, 0.13F), new Vector3(0F, 0F, 270F), new Vector3(0.15F, 0.15F, 0.15F));
             displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.206F, 0.1105F, 0.09725F), new Vector3(270F, 90F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+        }
+
+        protected override void CreateSettings()
+        {
+            // Create settings specific to this item
+            enableTargetEffectSetting = targetingMatrixItem.CreateSetting("ENABLE_TARGET_EFFECT", "Enable Target Visual Effect?", true, "Should the target have a visual effect?", false, true);
+            damageSetting = targetingMatrixItem.CreateSetting("DAMAGE", "Damage", 0.0f, "How much should the first stack of this item increase damage dealt to target? (0.0 = 0% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f);
+            damageStackingSetting = targetingMatrixItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 25.0f, "How much should further stacks of this item increase damage dealt to target? (25.0 = 25% increase)");
+            maxDistanceSetting = targetingMatrixItem.CreateSetting("MAX_DISTANCE", "Max Targeting Distance", 300.0f, "How far away does the target need to be to be considered out of range? (300.0 = 300 meters)", false, _minValue: 100.0f);
+            closeDistanceSetting = targetingMatrixItem.CreateSetting("CLOSE_DISTANCE", "Close Targeting Distance", 120.0f, "How close does the target need to be to be prioritised by target selection? (120.0 = 120 meters)", false, _minValue: 0.0f);
+            preferredDistanceSetting = targetingMatrixItem.CreateSetting("PREFERRED_DISTANCE", "Preferred Targeting Distance", 30.0f, "How close does the target need to be to the previous target to be preferred by target selection? (30.0 = 30 meters)", false, _minValue: 0.0f);
+            outOfRangeTimeSetting = targetingMatrixItem.CreateSetting("OUT_OF_RANGE_TIME", "Out Of Range Time", 15.0f, "How long does a target need to be out of range until it is removed from being a target? (15.0 = 15 seconds)", false, _minValue: 0.0f);
+        }
+
+        public override void FetchSettings()
+        {
+            // Get item settings
+            enableTargetEffect = enableTargetEffectSetting.Value;
+            damage = damageSetting.Value / 100.0f;
+            damageStacking = damageStackingSetting.Value / 100.0f;
+            maxDistance = maxDistanceSetting.Value;
+            closeDistance = closeDistanceSetting.Value;
+            preferredDistance = preferredDistanceSetting.Value;
+            outOfRangeTime = outOfRangeTimeSetting.Value;
+
+            // Update item texts with new settings
+            targetingMatrixItem.UpdateItemTexts();
         }
 
         void ModifyModelPrefab(GameObject _prefab)
@@ -148,7 +199,7 @@ namespace Faithful
             }
 
             // Increase damage
-            _report.damage *= 1.0f + (0.25f * (count - 1));
+            _report.damage *= 1.0f + damage + (damageStacking * (count - 1));
         }
 
         void OnHuntressSeekingArrayEnter(On.EntityStates.Huntress.HuntressWeapon.FireSeekingArrow.orig_OnEnter orig, EntityStates.Huntress.HuntressWeapon.FireSeekingArrow self)

@@ -16,7 +16,7 @@
 	
 	"FAITHFUL_TARGETING_MATRIX_NAME": "Targeting Matrix",
 	"FAITHFUL_TARGETING_MATRIX_PICKUP": "Target a random enemy on kill. Damage dealt to the target is increased and will 'Critically Strike'.",
-	"FAITHFUL_TARGETING_MATRIX_DESC": "<style=cIsDamage>Target</style> a random enemy on kill. Damage dealt to the <style=cIsDamage>target</style> is increased by <style=cIsDamage>0%</style> <style=cStack>(+25% per stack)</style> and has a <style=cIsDamage>100%</style> chance to '<style=cIsDamage>Critically Strike</style>'.",
+	"FAITHFUL_TARGETING_MATRIX_DESC": "<style=cIsDamage>Target</style> a random enemy on kill. Damage dealt to the <style=cIsDamage>target</style> is increased by <style=cIsDamage>[DAMAGE]%</style> <style=cStack>(+[DAMAGE_STACKING]% per stack)</style> and has a <style=cIsDamage>100%</style> chance to '<style=cIsDamage>Critically Strike</style>'.",
 	"FAITHFUL_TARGETING_MATRIX_LORE": "Order: Prototype Targeting System\nTracking Number: 1981******\nEstimated Delivery: 03/31/2057\nShipping Method: Priority\nShipping Address: Royal Drive, Bubble Station, Mars\nShipping Details:\n\nHere's that new snazzy little gizmo we've been working on for a while. I thought you might like to have a look at it in person so I went ahead and sent you one of the prototypes.\n\nNOTE: Do NOT follow its targeting recommendations. The software is still unreliable and seems to often select targets at random. Or at least it appears to be random. It has a habit of targeting non-combatants which is... a little worrying but I’m sure we'll have that fixed soon.\n",
 	
 	"FAITHFUL_BRASS_SCREWS_NAME": "Brass Screws",

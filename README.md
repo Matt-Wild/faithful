@@ -1,7 +1,7 @@
 # A Faithful Expansion
 Multiplayer compatible!
 
-Currently adds <b>14</b> items, <b>6</b> of which require the <b>Survivors of the Void DLC</b>. All items have item displays!
+Currently adds <b>15</b> items, <b>6</b> of which require the <b>Survivors of the Void DLC</b>. All items have item displays!
 
 Also adds some custom debug tools to help other mod developers and those curious about the inner workings of the game.
 
@@ -32,6 +32,13 @@ All items can be disabled individually in this mod's config.
 			<td>
 				<b>Copper Gear</b><br>
 				Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be adjusted</b>!
+			</td>
+		</tr>
+		<tr>
+			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texTargetingMatrixIcon.png?raw=true" width=128></td>
+			<td>
+				<b>Targeting Matrix</b><br>
+				Target a random enemy on kill. Damage dealt to the target is increased by <b>0% (</b>+25% per stack<b>)</b> and has a <b>100%</b> chance to 'Critically Strike'. <b>This item can be adjusted</b>!
 			</td>
 		</tr>
     <tr>

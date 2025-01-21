@@ -420,7 +420,7 @@ namespace Faithful
             if (type == typeof(int))
             {
                 // Clamp value
-                int clampedValue = UnityEngine.Mathf.Clamp((int)(object)_originalValue, EqualityComparer<T>.Default.Equals(minValue, default) ? (int)(object)defaultValue * -9999999 : (int)(object)minValue, EqualityComparer<T>.Default.Equals(maxValue, default) ? (int)(object)defaultValue * 9999999 : (int)(object)maxValue);
+                int clampedValue = UnityEngine.Mathf.Clamp((int)(object)_originalValue, EqualityComparer<T>.Default.Equals(minValue, default) ? int.MinValue : (int)(object)minValue, EqualityComparer<T>.Default.Equals(maxValue, default) ? int.MaxValue : (int)(object)maxValue);
 
                 // Return clamped value
                 return (T)(object)clampedValue;
@@ -430,7 +430,7 @@ namespace Faithful
             else if (type == typeof(float))
             {
                 // Clamp value
-                float clampedValue = UnityEngine.Mathf.Clamp((float)(object)_originalValue, EqualityComparer<T>.Default.Equals(minValue, default) ? (float)(object)defaultValue * -9999999.9f : (float)(object)minValue, EqualityComparer<T>.Default.Equals(maxValue, default) ? (float)(object)defaultValue * 9999999.9f : (float)(object)maxValue);
+                float clampedValue = UnityEngine.Mathf.Clamp((float)(object)_originalValue, EqualityComparer<T>.Default.Equals(minValue, default) ? float.MinValue : (float)(object)minValue, EqualityComparer<T>.Default.Equals(maxValue, default) ? float.MaxValue : (float)(object)maxValue);
 
                 // Return clamped value
                 return (T)(object)clampedValue;

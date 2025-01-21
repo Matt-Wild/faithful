@@ -46,6 +46,13 @@ namespace Faithful
         private Vector3 clockwiseLensScale;
         private Vector3 antiClockwiseLensScale;
 
+        // Store targeting matrix stats
+        bool enableTargetEffect;
+        float maxDistance;
+        float closeDistance;
+        float preferredDistance;
+        float outOfRangeTime;
+
         public FaithfulTargetingMatrixBehaviour()
         {
             // Register with utils
@@ -57,6 +64,9 @@ namespace Faithful
             // Assign character
             character = _character;
 
+            // Fetch item settings
+            FetchSettings();
+
             // Setup display model behaviour relay
             DisplayModelBehaviourRelay relay = character.modelLocator.modelTransform.gameObject.AddComponent<DisplayModelBehaviourRelay>();
             relay.Init(this);
@@ -67,7 +77,15 @@ namespace Faithful
 
         public void FetchSettings()
         {
-            
+            // Get targeting matrix item
+            Item item = Items.GetItem("TARGETING_MATRIX");
+
+            // Update stats
+            enableTargetEffect = item.FetchSetting<bool>("ENABLE_TARGET_EFFECT").Value;
+            maxDistance = item.FetchSetting<float>("MAX_DISTANCE").Value;
+            closeDistance = item.FetchSetting<float>("CLOSE_DISTANCE").Value;
+            preferredDistance = item.FetchSetting<float>("PREFERRED_DISTANCE").Value;
+            outOfRangeTime = item.FetchSetting<float>("OUT_OF_RANGE_TIME").Value;
         }
 
         void FixedUpdate()
@@ -104,7 +122,7 @@ namespace Faithful
             targetPos = target.corePosition;
 
             // Check if target is out of range
-            if (Vector3.Distance(targetPos, character.corePosition) > 300.0f)
+            if (Vector3.Distance(targetPos, character.corePosition) > maxDistance)
             {
                 // Add to out of range timer
                 outOfRangeTimer += Time.fixedDeltaTime;
@@ -118,7 +136,7 @@ namespace Faithful
             }
 
             // Check if out of range for too long
-            if (outOfRangeTimer > 15.0f)
+            if (outOfRangeTimer > outOfRangeTime)
             {
                 // Remove target
                 RemoveTarget();
@@ -218,17 +236,14 @@ namespace Faithful
                     float targetDistance = Vector3.Distance(targeterPos, characterBody.corePosition);
 
                     // Check if character body is too far from player
-                    if (targetDistance > 300.0f) continue;
+                    if (targetDistance > maxDistance) continue;
 
                     // Valid target
                     filteredCharacterBodies.Add(characterBody);
 
                     // Check if target is "close" to target
-                    if (targetDistance <= 120.0f) closeCharacterBodies.Add(characterBody);
+                    if (targetDistance <= closeDistance) closeCharacterBodies.Add(characterBody);
                 }
-
-                Debug.Log($"Potential targets found: {filteredCharacterBodies.Count}");
-                Debug.Log($"Close potential targets found: {closeCharacterBodies.Count}");
 
                 // Check if close targets were found
                 if (closeCharacterBodies.Count > 0)
@@ -255,7 +270,7 @@ namespace Faithful
 
                     // Avoid division by zero, assign a very high weight to objects at the exact position
                     // Assign more favourable weights to character bodies within a small distance
-                    float weight = distance > 0.0f ? (distance > 30.0f ? 1.0f / distance : 2.0f / distance) : float.MaxValue;
+                    float weight = distance > 0.0f ? (distance > preferredDistance ? 1.0f / distance : 2.0f / distance) : float.MaxValue;
 
                     // Add to total weight and weights array
                     totalWeight += weight;
@@ -328,17 +343,21 @@ namespace Faithful
             // Check for visual effect
             if (visualEffect != null) return;
 
-            // Create visual effect
-            GameObject gameObject = Instantiate(Assets.matrixEffectPrefab, character.corePosition, Quaternion.identity);
-            visualEffect = gameObject.GetComponent<TemporaryVisualEffect>();
-            visualEffect.parentTransform = character.coreTransform;
-            visualEffect.visualState = TemporaryVisualEffect.VisualState.Enter;
-            visualEffect.healthComponent = character.healthComponent;
-            visualEffect.radius = character.radius;
-            LocalCameraEffect component = gameObject.GetComponent<LocalCameraEffect>();
-            if (component)
+            // Check if should create visual effect
+            if (enableTargetEffect)
             {
-                component.targetCharacter = base.gameObject;
+                // Create visual effect
+                GameObject gameObject = Instantiate(Assets.matrixEffectPrefab, character.corePosition, Quaternion.identity);
+                visualEffect = gameObject.GetComponent<TemporaryVisualEffect>();
+                visualEffect.parentTransform = character.coreTransform;
+                visualEffect.visualState = TemporaryVisualEffect.VisualState.Enter;
+                visualEffect.healthComponent = character.healthComponent;
+                visualEffect.radius = character.radius;
+                LocalCameraEffect component = gameObject.GetComponent<LocalCameraEffect>();
+                if (component)
+                {
+                    component.targetCharacter = base.gameObject;
+                }
             }
         }
 
@@ -375,21 +394,28 @@ namespace Faithful
             // Unnecessary for host
             if (Utils.hosting) return;
 
-            // Fetch target to sync
-            if (NetworkServer.objects.TryGetValue(_targetNetID, out NetworkIdentity networkIdentity))
+            // Attempt to find target character body
+            CharacterBody targetBody = ClientScene.FindLocalObject(_targetNetID)?.GetComponent<CharacterBody>();
+
+            // Check for target body
+            if (targetBody == null)
             {
-                // Attempt to get target character body
-                CharacterBody targetBody = networkIdentity.gameObject.GetComponent<CharacterBody>();
-                if (targetBody == null) return;
-
-                // Attempt to get target targeting matrix behaviour
-                FaithfulTargetingMatrixBehaviour matrixBehaviour = networkIdentity.gameObject.GetComponent<FaithfulTargetingMatrixBehaviour>();
-                if (matrixBehaviour == null) return;
-
-                // Set target
-                matrixBehaviour.SetTargeted(character);
-                target = targetBody;
+                // Warn and return
+                Log.Warning($"[TARGETING MATRIX] | Could not find target body with net ID {_targetNetID} - Sync unsuccessful.");
+                return;
             }
+
+            // Get faithful behaviour for target
+            FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(targetBody);
+            if (targetCharacterBehaviour == null) return;
+
+            // Get targeting matrix behaviour for target
+            FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
+            if (targetTargetingMatrixBehaviour == null) return;
+
+            // Set target
+            targetTargetingMatrixBehaviour.SetTargeted(character);
+            target = targetBody;
         }
 
         [ClientRpc]
