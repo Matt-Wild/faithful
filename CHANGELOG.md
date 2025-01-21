@@ -1,5 +1,8 @@
 # Changelog
 
+### v1.1.0 Finalized Targeting Matrix
+- Finalized adjustments for Targeting Matrix.
+
 ### v1.0.21 Targeting Matrix
 - Added the Targeting Matrix item.
 - Added unique visual effect for Leader's Pennon.
@@ -31,10 +34,10 @@
 ### v1.0.13 Hastening Greave and Cauterizing Greave Customisation
 - The Hastening Greave and Cauterizing Greave items can now be customised in the config.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.0.12 Item Placements
 - Changed Faithful item placements to have them appear in their proper positions in the logbook and command menus.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.0.11 Noxious Slimes Customisation
 - The Noxious Slimes item can now be adjusted in the config.
