@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using UnityEngine.Networking;
+using System.Collections;
 
 namespace Faithful
 {
@@ -29,6 +30,15 @@ namespace Faithful
         // How the display moves when targeting
         private Vector3 displayTargetingMovement = new Vector3(-0.0135f, 0.0f, 0.0f);
 
+        // How the lens move when targeting
+        private Vector3 lensMovement = new Vector3(0.0f, 0.00675f, 0.0f);
+
+        // How 'open' the display is
+        private float displayOpen = 0.0f;
+
+        // How fast the display opens and closes
+        private float displaySpeed = 4.0f;
+
         // Store if currently targeting something
         private bool targeting = false;
 
@@ -45,6 +55,10 @@ namespace Faithful
         // Lens initial scales
         private Vector3 clockwiseLensScale;
         private Vector3 antiClockwiseLensScale;
+
+        // Lens initial positions
+        private Vector3 clockwiseLensPos;
+        private Vector3 antiClockwiseLensPos;
 
         // Store targeting matrix stats
         bool enableTargetEffect;
@@ -96,8 +110,11 @@ namespace Faithful
                 // Set as no longer targeting
                 targeting = false;
 
-                // Update display object
-                UpdateDisplayObject();
+                // Stop all coroutines
+                StopAllCoroutines();
+
+                // Close display
+                StartCoroutine(CloseDisplay());
             }
 
             // Check if starting to target something
@@ -106,8 +123,11 @@ namespace Faithful
                 // Set as targeting
                 targeting = true;
 
-                // Update display object
-                UpdateDisplayObject();
+                // Stop all coroutines
+                StopAllCoroutines();
+
+                // Open display
+                StartCoroutine(OpenDisplay());
             }
 
             // Check if hosting
@@ -151,27 +171,48 @@ namespace Faithful
             // Check for display
             if (display == null) return;
 
-            // Check if targeting
-            if (targeting)
-            {
-                // Set display bone position
-                display.transform.localPosition = displayPos;
+            // Set display bone position
+            display.transform.localPosition = displayPos + displayTargetingMovement * (1.0f - displayOpen);
 
-                // Set lens scales
-                clockwiseLens.transform.localScale = clockwiseLensScale;
-                antiClockwiseLens.transform.localScale = antiClockwiseLensScale;
+            // Set lens positions
+            clockwiseLens.transform.localPosition = clockwiseLensPos + lensMovement * (1.0f - displayOpen);
+            antiClockwiseLens.transform.localPosition = antiClockwiseLensPos + lensMovement * (1.0f - displayOpen);
+
+            // Set lens scales
+            clockwiseLens.transform.localScale = clockwiseLensScale * displayOpen;
+            antiClockwiseLens.transform.localScale = antiClockwiseLensScale * displayOpen;
+        }
+
+        IEnumerator OpenDisplay()
+        {
+            // Cycle until fully open
+            while (displayOpen < 1.0f)
+            {
+                // Add to how "open" the display is
+                displayOpen = Mathf.Clamp01(displayOpen + Time.deltaTime * displaySpeed);
+
+                // Update display model
+                UpdateDisplayObject();
+
+                // Go to next frame
+                yield return null;
             }
+        }
 
-            // Not targeting
-            else
+        IEnumerator CloseDisplay()
+        {
+            // Cycle until fully closed
+            while (displayOpen > 0.0f)
             {
-                // Set display bone position
-                display.transform.localPosition = displayPos + displayTargetingMovement;
+                // Remove from how "open" the display is
+                displayOpen = Mathf.Clamp01(displayOpen - Time.deltaTime * displaySpeed);
 
-                // Set lens scales
-                clockwiseLens.transform.localScale = Vector3.zero;
-                antiClockwiseLens.transform.localScale = Vector3.zero;
-            }    
+                // Update display model
+                UpdateDisplayObject();
+
+                // Go to next frame
+                yield return null;
+            }
         }
 
         private void OnDestroy()
@@ -485,8 +526,9 @@ namespace Faithful
                     // Attempt to find display
                     m_clockwiseLens = Utils.FindChildByName(displayMesh.transform, "Lens_Clock");
 
-                    // Get initial lens scale
+                    // Get initial lens scale and position
                     clockwiseLensScale = m_clockwiseLens.transform.localScale;
+                    clockwiseLensPos = m_clockwiseLens.transform.localPosition;
                 }
 
                 // Return lens
@@ -507,8 +549,9 @@ namespace Faithful
                     // Attempt to find display
                     m_antiClockwiseLens = Utils.FindChildByName(displayMesh.transform, "Lens_Anti");
 
-                    // Get initial lens scale
+                    // Get initial lens scale and position
                     antiClockwiseLensScale = m_antiClockwiseLens.transform.localScale;
+                    antiClockwiseLensPos = m_antiClockwiseLens.transform.localPosition;
                 }
 
                 // Return lens

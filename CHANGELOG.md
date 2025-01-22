@@ -1,5 +1,8 @@
 # Changelog
 
+### v1.1.1 Targeting Matrix Animation
+- Added animation for Targeting Matrix activation/deactivation.
+
 ### v1.1.0 Finalized Targeting Matrix
 - Finalized adjustments for Targeting Matrix.
 
@@ -31,10 +34,10 @@
 ### v1.0.14 Alternate Item Pickup Descriptions
 - Added alternate item pickup descriptions for item adjustments that cause the original descriptions to be inaccurate.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.0.13 Hastening Greave and Cauterizing Greave Customisation
 - The Hastening Greave and Cauterizing Greave items can now be customised in the config.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.0.12 Item Placements
 - Changed Faithful item placements to have them appear in their proper positions in the logbook and command menus.
