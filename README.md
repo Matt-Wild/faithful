@@ -1,5 +1,5 @@
 # A Faithful Expansion
-Multiplayer compatible!
+Multiplayer compatible and highly configurable!
 
 Currently adds <b>15</b> items, <b>6</b> of which require the <b>Survivors of the Void DLC</b>. All items have item displays!
 

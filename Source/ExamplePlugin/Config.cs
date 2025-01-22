@@ -18,7 +18,7 @@ namespace Faithful
             configFile = _configFile;
         }
 
-        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default)
+        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true)
         {
             // Check for token in settings dictionary
             if (settings.ContainsKey(_token))
@@ -29,7 +29,7 @@ namespace Faithful
             }
 
             // Create setting
-            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax);
+            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise);
 
             // Add setting to dictionary
             settings.Add(_token, setting);
@@ -183,6 +183,9 @@ namespace Faithful
         // Store if setting has generated randomised value
         private bool m_isRandomised = false;
 
+        // Store if setting can randomise
+        private bool canRandomise = true;
+
         // Store randomised value
         private T randomisedValue;
 
@@ -194,7 +197,7 @@ namespace Faithful
         private T randomiserMin;
         private T randomiserMax;
 
-        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default)
+        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true)
         {
             // Assign config file
             configFile = _configFile;
@@ -235,6 +238,9 @@ namespace Faithful
 
             // Assign if setting if client side
             m_isClientSide = _isClientSide;
+
+            // Assign if setting can randomise
+            canRandomise = _canRandomise;
         }
 
         public void Sync()
@@ -497,8 +503,8 @@ namespace Faithful
                     return GetClampedValue(syncedValue);
                 }
 
-                // Check if randomiser mode is enabled and this is a stat
-                if (Utils.randomiserMode && isStat)
+                // Check if randomiser mode is enabled and this is a stat (that can randomise)
+                if (Utils.randomiserMode && isStat && canRandomise)
                 {
                     // Return randomised value
                     return GetClampedValue(RandomisedValue);

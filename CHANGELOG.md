@@ -1,7 +1,11 @@
 # Changelog
 
+### v1.1.3 Adjusted Randomized Stats
+- Leader's Pennon, Copper Gear and Brass Screws buff durations no longer get randomized in the randomizer mode.
+- Leader's Pennon hidden regen multiplicative buff no longer gets randomized in the randomizer mode.
+
 ### v1.1.2 Fixed Target Matrix Lag On Death
-- Fixed NRE errors when dying with the Target Matrix.
+- Fixed NRE errors that sometimes occurred when dying with the Target Matrix.
 
 ### v1.1.1 Targeting Matrix Animation
 - Added animation for Targeting Matrix activation/deactivation.
@@ -31,10 +35,10 @@
 ### v1.0.16 Melting Warbler and Collector's Vision Customisation
 - The Melting Warbler and Collector's Vision items can now be customised in the config.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.0.15 Longshot Geode and Leader's Pennon Customisation
 - The Longshot Geode and Leader's Pennon items can now be customised in the config.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.0.14 Alternate Item Pickup Descriptions
 - Added alternate item pickup descriptions for item adjustments that cause the original descriptions to be inaccurate.
