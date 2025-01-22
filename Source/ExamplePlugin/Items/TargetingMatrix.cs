@@ -181,7 +181,7 @@ namespace Faithful
             int count = _attacker.inventory.GetItemCount(targetingMatrixItem.itemDef);
 
             // Check if railgunner
-            if (attacker.modelLocator.modelTransform.name == "mdlRailGunner")
+            if (attacker?.modelLocator?.modelTransform != null && attacker.modelLocator.modelTransform && attacker.modelLocator.modelTransform.name == "mdlRailGunner")
             {
                 // Check if crit
                 if (_report.crit)
