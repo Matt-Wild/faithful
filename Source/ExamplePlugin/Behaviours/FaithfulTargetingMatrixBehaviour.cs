@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Linq;
 
 namespace Faithful
 {
@@ -67,6 +68,10 @@ namespace Faithful
         float preferredDistance;
         float outOfRangeTime;
 
+        // Blacklisted characters for targeting
+        string[] blacklisted = ["AffixEarthHealerBody"];
+        BodyIndex[] blacklistedIndexes;
+
         public FaithfulTargetingMatrixBehaviour()
         {
             // Register with utils
@@ -78,6 +83,9 @@ namespace Faithful
             // Assign character
             character = _character;
 
+            // Get blacklisted indexes
+            FetchBlacklistedIndexes();
+
             // Fetch item settings
             FetchSettings();
 
@@ -87,6 +95,22 @@ namespace Faithful
 
             // Attempt to update display model
             UpdateDisplayObject();
+        }
+
+        void FetchBlacklistedIndexes()
+        {
+            // Create list of blacklisted indexes
+            List<BodyIndex> bodyIndexes = new List<BodyIndex>();
+
+            // Cycle through blacklisted characters for targeting
+            foreach (string name in blacklisted)
+            {
+                // Add index to indexes list
+                bodyIndexes.Add(BodyCatalog.FindBodyIndex(name));
+            }
+
+            // Set blacklisted indexes
+            blacklistedIndexes = bodyIndexes.ToArray();
         }
 
         public void FetchSettings()
@@ -278,6 +302,9 @@ namespace Faithful
 
                     // Check if character body is too far from player
                     if (targetDistance > maxDistance) continue;
+
+                    // Check if blacklisted
+                    if (blacklistedIndexes.Contains(characterBody.bodyIndex)) continue;
 
                     // Valid target
                     filteredCharacterBodies.Add(characterBody);

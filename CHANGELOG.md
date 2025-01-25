@@ -1,5 +1,8 @@
 # Changelog
 
+### v1.1.4 Targeting Matrix Target Blacklist
+- Targeting Matrix can no longer target Healing Cores.
+
 ### v1.1.3 Adjusted Randomized Stats
 - Leader's Pennon, Copper Gear and Brass Screws buff durations no longer get randomized in the randomizer mode.
 - Leader's Pennon hidden regen multiplicative buff no longer gets randomized in the randomizer mode.
@@ -32,10 +35,10 @@
 ### v1.0.17 Readme Amendment
 - Fixed inconsistency in Readme.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.0.16 Melting Warbler and Collector's Vision Customisation
 - The Melting Warbler and Collector's Vision items can now be customised in the config.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.0.15 Longshot Geode and Leader's Pennon Customisation
 - The Longshot Geode and Leader's Pennon items can now be customised in the config.

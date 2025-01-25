@@ -5,6 +5,7 @@ using R2API;
 using RoR2;
 using RoR2.ExpansionManagement;
 using RoR2.Navigation;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
