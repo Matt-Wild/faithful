@@ -104,6 +104,12 @@ namespace Faithful
             // Create randomiser mode setting
             randomiserModeSetting = Config.CreateSetting("RANDOMISER_MODE", "Extras", "Randomizer Mode", false, "Do you want to randomize the stats of items introduced by the Faithful mod?\n[WARNING] - This setting is likely to dramatically alter the balance of items introduced by the Faithful mod.", false, true);
 
+            // Update debug mode from config
+            _debugMode = debugModeSetting.Value;
+
+            // Update randomiser mode from config
+            _randomiserMode = randomiserModeSetting.Value;
+
             // Provide plugin info
             pluginInfo = _pluginInfo;
 
@@ -116,8 +122,13 @@ namespace Faithful
             // Config item corruptions
             On.RoR2.Items.ContagiousItemManager.Init += SetupItemCorruptions;
 
-            // Inject character spawn card awake behaviour
-            On.RoR2.CharacterSpawnCard.Awake += OnCharacterSpawnCardAwake;
+            // Check if debug mode is enabled
+            if (debugMode)
+            {
+                // Inject character spawn card awake and spawn behaviour
+                On.RoR2.CharacterSpawnCard.Awake += OnCharacterSpawnCardAwake;
+                On.RoR2.CharacterSpawnCard.Spawn += OnCharacterSpawnCardSpawn;
+            }
 
             // Add pre-game controller set rule book behaviour
             PreGameController.onPreGameControllerSetRuleBookGlobal += OnPreGameControllerSetRuleBookGlobal;
@@ -127,12 +138,6 @@ namespace Faithful
 
             // Add behaviour to loadout panel
             On.RoR2.UI.LoadoutPanelController.OnEnable += OnLoadoutPanelEnable;
-
-            // Update debug mode from config
-            _debugMode = debugModeSetting.Value;
-
-            // Update randomiser mode from config
-            _randomiserMode = randomiserModeSetting.Value;
 
             // Load language file
             LoadLanguageFile();
@@ -330,7 +335,7 @@ namespace Faithful
             }
         }
 
-        public static void SpawnCharacterCard(Transform _target, string _name, int _amount = 1, TeamIndex _team = TeamIndex.Monster)
+        public static void SpawnCharacterCard(Transform _target, string _name, int _amount = 1, TeamIndex _team = TeamIndex.Monster, System.Action<SpawnCard.SpawnResult> _onSpawn = null)
         {
             // Attempt to get character spawn card
             CharacterSpawnCard spawnCard = GetCharacterSpawnCard(_name);
@@ -353,6 +358,13 @@ namespace Faithful
             DirectorSpawnRequest directorSpawnRequest = new DirectorSpawnRequest(spawnCard, directorPlacementRule, new Xoroshiro128Plus((ulong)Run.instance.stageRng.nextUint));
             directorSpawnRequest.ignoreTeamMemberLimit = true;
             directorSpawnRequest.teamIndexOverride = _team;
+
+            // Check if on spawn callback is provided
+            if (_onSpawn != null)
+            {
+                directorSpawnRequest.onSpawnedServer = _onSpawn;
+            }
+            
 
             // COPIED SCRIPT //
             // ORIGINAL -> RoR2.CombatDirector.GenerateAmbush
@@ -380,6 +392,21 @@ namespace Faithful
                 groundNodes.GetNodePosition(list[j].node, out position);
                 spawnCard.DoSpawn(position, Quaternion.identity, directorSpawnRequest); // REPLACED LOAD RESOURCES WITH CACHED SPAWN CARD AND INJECT DIRECTOR SPAWN REQUEST
             }
+        }
+
+        public static void MakeElite(CharacterBody _character, Inventory _inventory, EliteDef _eliteDef)
+        {
+            // Make elite
+            _inventory.SetEquipmentIndex(_eliteDef.eliteEquipmentDef.equipmentIndex);
+
+            Debug.Log($"Set equipment index to {_eliteDef.eliteEquipmentDef.equipmentIndex}");
+
+            // Modify stats
+            _character.baseDamage *= _eliteDef.damageBoostCoefficient;
+            _character.baseMaxHealth *= _eliteDef.healthBoostCoefficient;
+
+            Debug.Log($"Modifying damage by {_eliteDef.damageBoostCoefficient}");
+            Debug.Log($"Modifying health by {_eliteDef.healthBoostCoefficient}");
         }
 
         static void InjectSimulacrumBannedItems(On.RoR2.InfiniteTowerRun.orig_OverrideRuleChoices orig, InfiniteTowerRun self, RuleChoiceMask mustInclude, RuleChoiceMask mustExclude, ulong runSeed)
@@ -416,6 +443,36 @@ namespace Faithful
             orig(self, mustInclude, mustExclude, runSeed);  // Run normal processes
         }
 
+        static void RegisterCharacterSpawnCard(CharacterSpawnCard _spawnCard)
+        {
+            // Encounters issues with modded spawn cards
+            try
+            {
+                // Check for card
+                if (HasCharacterSpawnCard(_spawnCard.prefab.name))
+                {
+                    return;
+                }
+
+                // Add to character spawn cards
+                characterSpawnCards.Add(_spawnCard);
+
+                // Debug only message
+                if (debugMode)
+                {
+                    Log.Debug($"[UTILS] - New character spawn card found for '{_spawnCard.prefab.name}'");
+                }
+            }
+            catch
+            {
+                // Debug only message
+                if (debugMode)
+                {
+                    Log.Warning($"[UTILS] - Could not add character spawn card to spawn list.");
+                }
+            }
+        }
+
         private static void SetupItemCorruptions(On.RoR2.Items.ContagiousItemManager.orig_Init orig)
         {
             // Create item pair list
@@ -440,32 +497,16 @@ namespace Faithful
         {
             orig(self); // Run normal processes
 
-            // Encounters issues with modded spawn cards
-            try
-            {
-                // Check for card
-                if (HasCharacterSpawnCard(self.prefab.name))
-                {
-                    return;
-                }
+            // Register spawn card
+            RegisterCharacterSpawnCard(self);
+        }
 
-                // Add to character spawn cards
-                characterSpawnCards.Add(self);
+        private static void OnCharacterSpawnCardSpawn(On.RoR2.CharacterSpawnCard.orig_Spawn orig, CharacterSpawnCard self, Vector3 position, Quaternion rotation, DirectorSpawnRequest directorSpawnRequest, ref SpawnCard.SpawnResult result)
+        {
+            orig(self, position, rotation, directorSpawnRequest, ref result); // Run normal processes
 
-                // Debug only message
-                if (debugMode)
-                {
-                    Log.Debug($"[UTILS] - New character spawn card found for '{self.prefab.name}'");
-                }
-            }
-            catch
-            {
-                // Debug only message
-                if (debugMode)
-                {
-                    Log.Warning($"[UTILS] - Could not add character spawn card to spawn list.");
-                }
-            }
+            // Register spawn card
+            RegisterCharacterSpawnCard(self);
         }
 
         private static void OnPreGameControllerSetRuleBookGlobal(PreGameController preGameController, RuleBook ruleBook)

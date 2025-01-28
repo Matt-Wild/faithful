@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using RewiredConsts;
-using RoR2;
+﻿using RoR2;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Networking.Match;
 using UnityEngine.UI;
 
 namespace Faithful
@@ -23,6 +20,9 @@ namespace Faithful
             { "Void", TeamIndex.Void }
         };
 
+        // Store dictionary of string and elite def relationships
+        protected Dictionary<string, EliteDef> m_eliteLookup = null;
+
         // Store reference to spawn button
         protected Button spawnButton;
 
@@ -35,14 +35,11 @@ namespace Faithful
         // Store reference to team dropdown
         protected Dropdown teamDropdown;
 
+        // Store reference to elite type dropdown
+        protected Dropdown eliteDropdown;
+
         // Store reference to selection dropdowns
         protected List<SelectionDropdown> selectionDropdowns = new List<SelectionDropdown>();
-
-        // Store dictionary of additional dropdowns and their corresponding categories
-        protected Dictionary<string, List<Dropdown>> additionalDropdowns = new Dictionary<string, List<Dropdown>>();
-
-        // Store list of all additional dropdowns
-        protected List<Dropdown> allAdditionalDropdowns = new List<Dropdown>();
 
         public override void Awake()
         {
@@ -65,25 +62,28 @@ namespace Faithful
             categoryDropdown.onValueChanged.AddListener(OnChangeCategory);
         }
 
+        void Start()
+        {
+            // Populate elite dropdown
+            eliteDropdown.AddOptions(eliteLookup.Keys.ToList());
+        }
+
         public override void Init(DebugController _debugController, bool _startOpen = false)
         {
             // Call base init method
             base.Init(_debugController, _startOpen);
 
-            // Create selection dropdowns
-            CreateSelectionDropdowns();
-
             // Find team dropdown
             teamDropdown = transform.Find("TeamDropdown").gameObject.GetComponent<Dropdown>();
 
-            // Register additional dropdowns
-            RegisterAdditionalDropdown("Character", teamDropdown);
+            // Find elite dropdown
+            eliteDropdown = transform.Find("EliteTypeDropdown").gameObject.GetComponent<Dropdown>();
+
+            // Create selection dropdowns
+            RegisterSelectionDropdowns();
 
             // Enable correct selection dropdown
             EnableCorrectSelection();
-
-            // Create additional dropdowns
-            CreateAdditionalDropdowns();
         }
 
         void Update()
@@ -96,36 +96,21 @@ namespace Faithful
             }
         }
 
-        protected void CreateSelectionDropdowns()
+        protected void RegisterSelectionDropdowns()
         {
-            // Create essence selection dropdown
+            // Register essence selection dropdown
             Dropdown essenceSelectionDropdown = transform.Find("EssenceSelectionDropdown").gameObject.GetComponent<Dropdown>();
             selectionDropdowns.Add(new SelectionDropdown(essenceSelectionDropdown, "Essence", ["Common", "Uncommon", "Legendary", "Boss/Planet", "Lunar", "Void Common", "Void Uncommon", "Void Legendary", "Void Boss/Planet", "Equipment", "Lunar Equipment"]));
 
-            // Create character selection dropdown
+            // Register character selection dropdown
             Dropdown characterSelectionDropdown = transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<Dropdown>();
             selectionDropdowns.Add(new SelectionDropdown(characterSelectionDropdown, "Character", Utils.characterCardNames));
-        }
 
-        protected void RegisterAdditionalDropdown(string _category, Dropdown _dropdown)
-        {
-            // Add dropdown to all dropdowns list
-            allAdditionalDropdowns.Add(_dropdown);
+            // Register team selection dropdown
+            selectionDropdowns.Add(new SelectionDropdown(teamDropdown, "Character"));
 
-            // Check for category in dictionary
-            if (additionalDropdowns.ContainsKey(_category))
-            {
-                // Add to list
-                additionalDropdowns[_category].Add(_dropdown);
-                return;
-            }
-
-            // Create new list for category
-            additionalDropdowns[_category] =
-            [
-                // Add dropdown to list
-                _dropdown
-            ];
+            // Register elite selection dropdown
+            selectionDropdowns.Add(new SelectionDropdown(eliteDropdown, "Character"));
         }
 
         protected void OnSpawn()
@@ -222,7 +207,37 @@ namespace Faithful
             Log.Debug($"Spawning {spawnAmount} character(s) at target {localBody.transform.position}");
 
             // Request spawn from utils
-            Utils.SpawnCharacterCard(localBody.transform, selection, spawnAmount, teamLookup[teamDropdown.options[teamDropdown.value].text]);
+            Utils.SpawnCharacterCard(localBody.transform, selection, spawnAmount, teamLookup[teamDropdown.options[teamDropdown.value].text], CharacterCardSpawned);
+        }
+
+        protected void CharacterCardSpawned(SpawnCard.SpawnResult result)
+        {
+            // Check if spawn was successful
+            if (!result.success) return;
+
+            // Get elite selection
+            string eliteSelection = eliteDropdown.options[eliteDropdown.value].text;
+
+            Debug.Log(eliteSelection);
+
+            // Check for elite type
+            if (eliteSelection != "None")
+            {
+                // Get character master
+                CharacterMaster master = result.spawnedInstance.GetComponent<CharacterMaster>();
+                if (master == null) return;
+
+                // Get character body
+                CharacterBody body = master.GetBody();
+                if (body == null) return;
+
+                // Get character inventory
+                Inventory inventory = master.inventory;
+                if (inventory == null) return;
+
+                // Make elite
+                Utils.MakeElite(body, inventory, eliteLookup[eliteSelection]);
+            }
         }
 
         protected void EnableCorrectSelection()
@@ -244,34 +259,39 @@ namespace Faithful
             }
         }
 
-        protected void CreateAdditionalDropdowns()
-        {
-            // Cycle through all additional dropdowns
-            foreach (Dropdown dropdown in allAdditionalDropdowns)
-            {
-                // Disable dropdown
-                dropdown.gameObject.SetActive(false);
-            }
-
-            // Check for additional dropdowns for current category
-            if (additionalDropdowns.ContainsKey(category))
-            {
-                // Cycle through additional dropdowns for category
-                foreach (Dropdown dropdown in additionalDropdowns[category])
-                {
-                    // Enable dropdown
-                    dropdown.gameObject.SetActive(true);
-                }
-            }
-        }
-
         protected void OnChangeCategory(int _index)
         {
             // Enable correct selection dropdown
             EnableCorrectSelection();
+        }
 
-            // Create additional dropdowns
-            CreateAdditionalDropdowns();
+        protected Dictionary<string, EliteDef> eliteLookup
+        {
+            get
+            {
+                // Check elite lookup and elite defs
+                if (m_eliteLookup == null && EliteCatalog.eliteDefs != null)
+                {
+                    // Create dictionary
+                    m_eliteLookup = new Dictionary<string, EliteDef>();
+
+                    // Cycle through elite defs
+                    foreach (EliteDef def in EliteCatalog.eliteDefs)
+                    {
+                        // Check for elite def
+                        if (def == null) continue;
+
+                        // Check for equipment def
+                        if (def.eliteEquipmentDef == null) continue;
+
+                        // Add to dictionary
+                        m_eliteLookup[def.name] = def;
+                    }
+                }
+
+                // Return lookup
+                return m_eliteLookup;
+            }
         }
 
         protected int spawnAmount
@@ -321,7 +341,7 @@ namespace Faithful
         // Store selection dropdown tag
         public string tag;
 
-        public SelectionDropdown(Dropdown _dropdown, string _tag, List<string> _options)
+        public SelectionDropdown(Dropdown _dropdown, string _tag, List<string> _options = null)
         {
             // Assign dropdown
             dropdown = _dropdown;
@@ -329,8 +349,12 @@ namespace Faithful
             // Assign tag
             tag = _tag;
 
-            // Add options to dropdown
-            dropdown.AddOptions(_options);
+            // Check for additional options
+            if (_options != null)
+            {
+                // Add options to dropdown
+                dropdown.AddOptions(_options);
+            }
         }
 
         public void Enable()
