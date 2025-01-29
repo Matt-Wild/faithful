@@ -399,14 +399,9 @@ namespace Faithful
             // Make elite
             _inventory.SetEquipmentIndex(_eliteDef.eliteEquipmentDef.equipmentIndex);
 
-            Debug.Log($"Set equipment index to {_eliteDef.eliteEquipmentDef.equipmentIndex}");
-
             // Modify stats
             _character.baseDamage *= _eliteDef.damageBoostCoefficient;
             _character.baseMaxHealth *= _eliteDef.healthBoostCoefficient;
-
-            Debug.Log($"Modifying damage by {_eliteDef.damageBoostCoefficient}");
-            Debug.Log($"Modifying health by {_eliteDef.healthBoostCoefficient}");
         }
 
         static void InjectSimulacrumBannedItems(On.RoR2.InfiniteTowerRun.orig_OverrideRuleChoices orig, InfiniteTowerRun self, RuleChoiceMask mustInclude, RuleChoiceMask mustExclude, ulong runSeed)

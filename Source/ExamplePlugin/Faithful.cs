@@ -43,7 +43,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.1.4";
+        public const string PluginVersion = "1.1.5";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -72,6 +72,7 @@ namespace Faithful
         private static NoxiousSlime noxiousSlime;
         private static CollectorsVision collectorsVision;
         private static TJetpack tJetpack;
+        private static DebugItem debugItem;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -123,6 +124,7 @@ namespace Faithful
             noxiousSlime = new NoxiousSlime(toolbox);
             collectorsVision = new CollectorsVision(toolbox, inspiration);
             tJetpack = new TJetpack(toolbox);
+            debugItem = new DebugItem(toolbox);
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing our mod!");

@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.1.5 Debug Spawning Improvements
+- The debug spawn menu now allows you to spawn elites.
+- The debug spawn menu now allows you to modify the power of the characters you spawn.
+
 ### v1.1.4 Targeting Matrix Target Blacklist
 - Targeting Matrix can no longer target Healing Cores.
 
@@ -32,10 +36,10 @@
 ### v1.0.18 Config Passing
 - The host's config now gets passed to clients who use it while in the host's game.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.0.17 Readme Amendment
 - Fixed inconsistency in Readme.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.0.16 Melting Warbler and Collector's Vision Customisation
 - The Melting Warbler and Collector's Vision items can now be customised in the config.

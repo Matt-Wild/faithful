@@ -29,6 +29,9 @@ namespace Faithful
         // Store reference to amount input
         protected InputField amountInput;
 
+        // Store reference to power input
+        protected InputField powerInput;
+
         // Store reference to category dropdown
         protected Dropdown categoryDropdown;
 
@@ -51,6 +54,9 @@ namespace Faithful
 
             // Find amount input
             amountInput = transform.Find("AmountInputField").gameObject.GetComponent<InputField>();
+
+            // Find amount input
+            powerInput = transform.Find("PowerInputField").gameObject.GetComponent<InputField>();
 
             // Find category dropdown
             categoryDropdown = transform.Find("CategoryDropdown").gameObject.GetComponent<Dropdown>();
@@ -218,8 +224,6 @@ namespace Faithful
             // Get elite selection
             string eliteSelection = eliteDropdown.options[eliteDropdown.value].text;
 
-            Debug.Log(eliteSelection);
-
             // Check for elite type
             if (eliteSelection != "None")
             {
@@ -237,6 +241,26 @@ namespace Faithful
 
                 // Make elite
                 Utils.MakeElite(body, inventory, eliteLookup[eliteSelection]);
+
+                // Modify stats by power
+                body.baseDamage *= spawnPower;
+                body.baseMaxHealth *= spawnPower;
+            }
+
+            // Not elite
+            else
+            {
+                // Get character master
+                CharacterMaster master = result.spawnedInstance.GetComponent<CharacterMaster>();
+                if (master == null) return;
+
+                // Get character body
+                CharacterBody body = master.GetBody();
+                if (body == null) return;
+
+                // Modify stats by power
+                body.baseDamage *= spawnPower;
+                body.baseMaxHealth *= spawnPower;
             }
         }
 
@@ -300,6 +324,15 @@ namespace Faithful
             {
                 // Return clamped spawn amount field value
                 return Mathf.Clamp(int.Parse(amountInput.text), 1, 100);
+            }
+        }
+
+        protected float spawnPower
+        {
+            get
+            {
+                // Return spawn power limited to 0.0001
+                return Mathf.Max(float.Parse(powerInput.text), 0.0001f);
             }
         }
 
