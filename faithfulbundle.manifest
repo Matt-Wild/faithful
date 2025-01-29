@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 315021099
+CRC: 3107138824
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1f9db5ff6b170cb84642e30807bd9296
+    Hash: 8822af3dada081f8520e3b280a13671a
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -76,6 +76,7 @@ Assets:
 - Assets/Items/Chakram/ChakramMesh.prefab
 - Assets/Items/NoxiousSlimes/NoxiousSlimeMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
+- Assets/Placeholder/Model/Cube_TemporaryAsset.prefab
 - Assets/Items/NoxiousSlimes/texNoxiousSlime.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
 - Assets/Debug/UI/DebugCanvas.prefab
@@ -92,6 +93,7 @@ Assets:
 - Assets/Items/LeadersPennon/LeadersPennonMesh.prefab
 - Assets/Items/CollectorsVision/texCollectorsVisionIcon.png
 - Assets/Items/Chakram/texChakram.png
+- Assets/Items/HermitsShawl/HermitShawlMesh.prefab
 - Assets/Placeholder/Item/texBuffTemporalCube.png
 - Assets/Items/CauterizingGreave/CauterizingGreaveDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeConsumedIcon.png
@@ -172,6 +174,7 @@ Assets:
 - Assets/Items/TargetingMatrix/texIndicatorMatrixMask.png
 - Assets/Items/Chakram/texChakramNormal.png
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
+- Assets/Items/HermitsShawl/texBuffHermitShawl.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeEmission.png
 - Assets/Items/SecondHand/texSecondHand.png
 - Assets/Items/Chakram/ChakramDisplayMesh.prefab
