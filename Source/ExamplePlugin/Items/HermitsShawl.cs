@@ -93,15 +93,18 @@ namespace Faithful
             item.UpdateItemTexts();
         }
 
-        void OnDamageDealt(DamageReport report)
+        void OnDamageDealt(DamageReport _report)
         {
+            // Ignore DoTs
+            if (_report.dotType != DotController.DotIndex.None) return;
+
             // Check for attacker body
-            CharacterBody attacker = report.attackerBody;
+            CharacterBody attacker = _report.attackerBody;
             if (attacker != null)
             {
                 // Get patience buff count
                 int buffCount = attacker.GetBuffCount(buff.buffDef);
-
+                
                 // Check for buff
                 if (buffCount > 0)
                 {
@@ -124,7 +127,7 @@ namespace Faithful
             }
 
             // Check for victim body
-            CharacterBody victim = report.victimBody;
+            CharacterBody victim = _report.victimBody;
             if (victim != null)
             {
                 // Get patience buff count
