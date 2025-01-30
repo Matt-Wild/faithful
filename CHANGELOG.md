@@ -1,5 +1,8 @@
 # Changelog
 
+### v1.1.6 Fixed Rogue Config Entries
+- Fixed rogue config entries for debug items (delete old config to clean).
+
 ### v1.1.5 Debug Spawning Improvements
 - The debug spawn menu now allows you to spawn elites.
 - The debug spawn menu now allows you to modify the power of the characters you spawn.
@@ -33,10 +36,10 @@
 - Fixed Leader's Pennon radius indicator staying when the player owning it dies.
 - Fixed lots of problems when some players in a multiplayer lobby have godmode enabled while the others do not.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.0.18 Config Passing
 - The host's config now gets passed to clients who use it while in the host's game.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.0.17 Readme Amendment
 - Fixed inconsistency in Readme.

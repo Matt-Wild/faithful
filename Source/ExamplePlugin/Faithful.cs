@@ -43,7 +43,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.1.5";
+        public const string PluginVersion = "1.1.6";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -54,6 +54,7 @@ namespace Faithful
         // Buffs
         private static GodMode godMode;
         private static Vengeance vengeance;
+        private static Patience patience;
         private static Inspiration inspiration;
 
         // Items
@@ -62,6 +63,7 @@ namespace Faithful
         private static BrassScrews brassScrews;
         private static MeltingWarbler meltingWarbler;
         private static VengefulToaster vengefulToaster;
+        private static HermitsShawl hermitsShawl;
         private static SpaciousUmbrella spaciousUmbrella;
         private static SecondHand secondHand;
         private static LeadersPennon leadersPennon;
@@ -106,6 +108,7 @@ namespace Faithful
 
             // Create buffs
             vengeance = new Vengeance(toolbox);
+            patience = new Patience(toolbox);
             inspiration = new Inspiration(toolbox);
 
             // Create items
@@ -114,6 +117,7 @@ namespace Faithful
             brassScrews = new BrassScrews(toolbox);
             meltingWarbler = new MeltingWarbler(toolbox);
             vengefulToaster = new VengefulToaster(toolbox, vengeance);
+            hermitsShawl = new HermitsShawl(toolbox, patience);
             spaciousUmbrella = new SpaciousUmbrella(toolbox);
             secondHand = new SecondHand(toolbox);
             leadersPennon = new LeadersPennon(toolbox);

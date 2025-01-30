@@ -33,7 +33,7 @@ namespace Faithful
     internal delegate void OnPurchaseInteractionBeginCallback(PurchaseInteraction _shop, CharacterMaster _activator);
     internal delegate bool OnPurchaseCanBeAffordedCallback(PurchaseInteraction _shop, CharacterMaster _activator);
 
-    internal delegate void OnProcessJumpCallback(EntityStates.GenericCharacterMain _character);
+    internal delegate void OnProcessJumpCallback(GenericCharacterMain _character);
 
     internal delegate void PlayerToPlayerCallback(PlayerCharacterMasterController _player1, PlayerCharacterMasterController _player2);
     internal delegate void PlayerHolderToPlayerCallback(int _count, PlayerCharacterMasterController _holder, PlayerCharacterMasterController _other);
@@ -90,6 +90,7 @@ namespace Faithful
         private static List<CharacterBodyCallback> onCharacterBodyStartCallbacks = new List<CharacterBodyCallback>();
         private static List<CharacterBodyCallback> onRecalculateStatsCallbacks = new List<CharacterBodyCallback>();
         private static List<CharacterBodyCallback> onUpdateVisualEffectsCallbacks = new List<CharacterBodyCallback>();
+        private static List<CharacterBodyCallback> onCharacterBodyFixedUpdateCallbacks = new List<CharacterBodyCallback>();
 
         // Interactable callbacks
         private static List<OnPurchaseInteractionBeginCallback> onPurchaseInteractionBeginCallbacks = new List<OnPurchaseInteractionBeginCallback>();
@@ -146,6 +147,7 @@ namespace Faithful
             On.RoR2.HealthComponent.Heal += HookHeal;
             On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats;
             On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects += HookUpdateVisualEffects;
+            On.RoR2.CharacterBody.FixedUpdate += HookCharacterBodyFixedUpdate;
             On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin;
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
             On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump;
@@ -180,6 +182,7 @@ namespace Faithful
             On.RoR2.HealthComponent.Heal -= HookHeal;
             On.RoR2.CharacterBody.RecalculateStats -= HookRecalculateStats;
             On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects -= HookUpdateVisualEffects;
+            On.RoR2.CharacterBody.FixedUpdate -= HookCharacterBodyFixedUpdate;
             On.RoR2.PurchaseInteraction.OnInteractionBegin -= HookPurchaseInteractionBegin;
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor -= HookPurchaseCanBeAfforded;
             On.EntityStates.GenericCharacterMain.ProcessJump -= HookProcessJump;
@@ -208,6 +211,7 @@ namespace Faithful
             characterBodyHelperPrefab.AddComponent<FaithfulTJetpackBehaviour>();
             characterBodyHelperPrefab.AddComponent<FaithfulLeadersPennonBehaviour>();
             characterBodyHelperPrefab.AddComponent<FaithfulTargetingMatrixBehaviour>();
+            characterBodyHelperPrefab.AddComponent<FaithfulHermitsShawlBehaviour>();
         }
 
         public static void Update()
@@ -540,6 +544,20 @@ namespace Faithful
             DebugLog("Added On Update Visual Effects behaviour");
         }
 
+        public static void AddOnCharacterBodyFixedUpdateCallback(CharacterBodyCallback _callback)
+        {
+            onCharacterBodyFixedUpdateCallbacks.Add(_callback);
+
+            DebugLog("Added On Character Body Fixed Update behaviour");
+        }
+
+        public static void RemoveOnCharacterBodyFixedUpdateCallback(CharacterBodyCallback _callback)
+        {
+            onCharacterBodyFixedUpdateCallbacks.Remove(_callback);
+
+            DebugLog("Removed On Character Body Fixed Update behaviour");
+        }
+
         // Add On Purchase Interaction Begin callback
         public static void AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBeginCallback _callback)
         {
@@ -867,6 +885,18 @@ namespace Faithful
 
             // Cycle through On Update Visual Effects callbacks
             foreach (CharacterBodyCallback callback in onUpdateVisualEffectsCallbacks)
+            {
+                // Call
+                callback(self);
+            }
+        }
+
+        private static void HookCharacterBodyFixedUpdate(On.RoR2.CharacterBody.orig_FixedUpdate orig, CharacterBody self)
+        {
+            orig(self); // Run normal processes
+
+            // Cycle through callbacks
+            foreach (CharacterBodyCallback callback in onCharacterBodyFixedUpdateCallbacks)
             {
                 // Call
                 callback(self);

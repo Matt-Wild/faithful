@@ -9,7 +9,7 @@ namespace Faithful
 
     internal class Item
     {
-        // Create default settings that all items have
+        // Create default settings that all items have (CAN BE NULL)
         public Setting<bool> enabledSetting;
         public Setting<bool> extendedPickupDescSetting;
         public Setting<bool> enableItemDisplaysSetting;
@@ -21,17 +21,27 @@ namespace Faithful
         public string token;
         public string name;
 
+        // Is this item hidden
+        public bool hidden = false;
+
         // Constructor
         public Item(string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _debugOnly = false)
         {
             // Assign token
             token = _token;
 
+            // Assign if hidden
+            hidden = _hidden;
+
             // Assign name
             name = Utils.GetLanguageString($"FAITHFUL_{token}_NAME");
 
-            // Create default settings (MUST HAPPEN AFTER TOKEN AND NAME IS ASSIGNED)
-            CreateDefaultSettings();
+            // Don't create settings for hidden items
+            if (!_hidden)
+            {
+                // Create default settings (MUST HAPPEN AFTER TOKEN AND NAME IS ASSIGNED)
+                CreateDefaultSettings();
+            }
 
             // Should hide this item due to temporary assets or debug only?
             bool forceHide = !Utils.debugMode && (_debugOnly || _iconName == "textemporalcubeicon" || !Assets.HasAsset(_iconName) || _modelName == "temporalcubemesh" || !Assets.HasAsset(_modelName));
@@ -39,7 +49,7 @@ namespace Faithful
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = !enabledSetting.Value;
+                forceHide = _hidden || !enabledSetting.Value;
             }
 
             // Create item def
@@ -122,7 +132,7 @@ namespace Faithful
             }
 
             // Check for item display settings and if config allows it
-            if (_displaySettings != null && enableItemDisplaysSetting.Value)
+            if (_displaySettings != null && (enableItemDisplaysSetting == null || enableItemDisplaysSetting.Value))
             {
                 // Get display model
                 GameObject displayModel = _displaySettings.GetModel();
@@ -153,7 +163,14 @@ namespace Faithful
 
             if (forceHide)
             {
-                if (!enabledSetting.Value)
+                if (_hidden)
+                {
+                    if (Utils.debugMode)
+                    {
+                        Log.Debug($"Hiding item '{name}'");
+                    }
+                }
+                else if (!enabledSetting.Value)
                 {
                     Log.Debug($"Hiding item '{name}' due to user preference");
                 }
@@ -173,7 +190,7 @@ namespace Faithful
             // Update item texts
             itemDef.name = Utils.GetXMLLanguageString($"FAITHFUL_{token}_NAME");
             itemDef.nameToken = $"FAITHFUL_{token}_NAME";
-            itemDef.pickupToken = Config.FormatLanguageToken(extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP", $"ITEM_{token}");
+            itemDef.pickupToken = Config.FormatLanguageToken(extendedPickupDescSetting == null ? $"FAITHFUL_{token}_PICKUP" : extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP", $"ITEM_{token}");
             itemDef.descriptionToken = Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}");
             itemDef.loreToken = $"FAITHFUL_{token}_LORE";
         }
@@ -194,12 +211,28 @@ namespace Faithful
 
         public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true)
         {
+            // Check if hidden
+            if (hidden)
+            {
+                // Error and return
+                Debug.LogError($"ATTEMPTED TO CREATE SETTING ON HIDDEN ITEM '{name}'!");
+                return null;
+            }
+
             // Return new setting
             return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {name.Replace("'", "")}", _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise);
         }
 
         public Setting<T> FetchSetting<T>(string _tokenAddition)
         {
+            // Check if hidden
+            if (hidden)
+            {
+                // Error and return
+                Debug.LogError($"ATTEMPTED TO FETCH SETTING ON HIDDEN ITEM '{name}'!");
+                return null;
+            }
+
             // Fetch setting from config
             return Config.FetchSetting<T>($"ITEM_{token}_{_tokenAddition}");
         }

@@ -3,41 +3,37 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class VengefulToaster : ItemBase
+    internal class HermitsShawl : ItemBase
     {
         // Store item and buff
-        Buff vengeanceBuff;
-        Item vengefulToasterItem;
+        Buff buff;
+        Item item;
 
-        // Store reference to vengeance behaviour
-        Vengeance vengeanceBehaviour;
+        // Store reference to buff behaviour
+        Patience buffBehaviour;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
 
         // Store additional item settings
-        Setting<float> durationSetting;
-        Setting<float> durationStackingSetting;
+        Setting<int> maxBuffsStackingSetting;
+        Setting<float> buffCooldownSetting;
         Setting<float> damageSetting;
 
-        // Store item stats
-        float duration;
-        float durationStacking;
-
         // Constructor
-        public VengefulToaster(Toolbox _toolbox, Vengeance _vengeance) : base(_toolbox)
+        public HermitsShawl(Toolbox _toolbox, Patience _patience) : base(_toolbox)
         {
             // Assign vengeance behaviour
-            vengeanceBehaviour = _vengeance;
+            buffBehaviour = _patience;
 
-            // Get Vengeance buff
-            vengeanceBuff = Buffs.GetBuff("VENGEANCE");
+            // Get buff
+            buff = Buffs.GetBuff("PATIENCE");
 
             // Create display settings
-            CreateDisplaySettings("vengefultoasterdisplaymesh");
+            CreateDisplaySettings("HermitShawlDisplayMesh");
 
-            // Create Vengeful Toaster item
-            vengefulToasterItem = Items.AddItem("VENGEFUL_TOASTER", [ItemTag.Damage, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2, _displaySettings: displaySettings);
+            // Create item
+            item = Items.AddItem("HERMITS_SHAWL", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _debugOnly: true);
 
             // Create item settings
             CreateSettings();
@@ -83,41 +79,48 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            durationSetting = vengefulToasterItem.CreateSetting("DURATION", "Duration", 4.0f, "How long should the vengeance buff last when granted? (4.0 = 4 seconds)");
-            durationStackingSetting = vengefulToasterItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much longer should the vengeance buff last when granted with additional item stacks? (1.0 = 1 second)");
-            damageSetting = vengefulToasterItem.CreateSetting("DAMAGE", "Damage", 75.0f, "How much should each stack of vengeance increase damage? (75.0 = 75% increase)");
+            maxBuffsStackingSetting = item.CreateSetting("MAX_BUFFS_STACKING", "Max Buffs", 4, "How many stacks of patience should the player receive per stack of this item? (4 = 4 stacks)");
+            buffCooldownSetting = item.CreateSetting("BUFF_RECHARGE", "Buff Recharge Time", 10.0f, "After leaving combat how long does it take to receive the maximum amount of patience? (10.0 = 10 seconds)");
+            damageSetting = item.CreateSetting("DAMAGE", "Damage", 25.0f, "How much should each stack of patience increase damage? (25.0 = 25% increase)");
         }
 
         public override void FetchSettings()
         {
-            // Get item settings
-            duration = durationSetting.Value;
-            durationStacking = durationStackingSetting.Value;
-
             // Apply damage to buff
-            vengeanceBehaviour.damage = damageSetting.Value / 100.0f;
+            buffBehaviour.damage = damageSetting.Value / 100.0f;
 
             // Update item texts with new settings
-            vengefulToasterItem.UpdateItemTexts();
+            item.UpdateItemTexts();
         }
 
         void OnDamageDealt(DamageReport report)
         {
-            // Check for inventory of victim
-            Inventory inventory = report.victimBody.inventory;
-            if (inventory)
+            // Check for attacker body
+            CharacterBody attacker = report.attackerBody;
+            if (attacker == null) return;
+
+            // Get patience buff count
+            int buffCount = attacker.GetBuffCount(buff.buffDef);
+
+            // Check for buff
+            if (buffCount > 0)
             {
-                // Get Vengeful Toaster amount
-                int vengefulToasterCount = inventory.GetItemCount(vengefulToasterItem.itemDef.itemIndex);
+                // Remove patience buff
+                attacker.SetBuffCount(buff.buffDef.buffIndex, 0);
 
-                // Has Vengeful Toasters?
-                if (vengefulToasterCount > 0)
+                // Check if needing to force attacker into combat
+                if (attacker.outOfCombat)
                 {
-                    // Calculate buff duration
-                    float buffDuration = vengefulToasterCount > 1 ? duration + (durationStacking * (vengefulToasterCount - 1)) : duration;
+                    // Get faithful helper
+                    FaithfulCharacterBodyBehaviour helper = Utils.FindCharacterBodyHelper(attacker);
+                    if (helper == null) return;
 
-                    // Add Vengeance buff
-                    report.victimBody.AddTimedBuff(vengeanceBuff.buffDef, buffDuration);
+                    // Get hermit's shawl behaviour
+                    FaithfulHermitsShawlBehaviour behaviour = helper.hermitsShawl;
+                    if (behaviour == null) return;
+
+                    // Force attacker into combat
+                    behaviour.ForceIntoCombat();
                 }
             }
         }

@@ -28,6 +28,7 @@ namespace Faithful
         public FaithfulTJetpackBehaviour tJetpack;
         public FaithfulLeadersPennonBehaviour leadersPennon;
         public FaithfulTargetingMatrixBehaviour targetingMatrix;
+        public FaithfulHermitsShawlBehaviour hermitsShawl;
 
         // Store if searching for character body
         private bool searchingForCharacterBody = false;
@@ -118,6 +119,12 @@ namespace Faithful
 
                 // Initialise targeting matrix behaviour
                 targetingMatrix.Init(character);
+
+                // Fetch hermits shawl behaviour
+                hermitsShawl = GetComponent<FaithfulHermitsShawlBehaviour>();
+
+                // Initialise hermits shawl behaviour
+                hermitsShawl.Init(character);
 
                 // Check for inventory
                 if (character.inventory != null)
