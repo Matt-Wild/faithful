@@ -97,30 +97,44 @@ namespace Faithful
         {
             // Check for attacker body
             CharacterBody attacker = report.attackerBody;
-            if (attacker == null) return;
-
-            // Get patience buff count
-            int buffCount = attacker.GetBuffCount(buff.buffDef);
-
-            // Check for buff
-            if (buffCount > 0)
+            if (attacker != null)
             {
-                // Remove patience buff
-                attacker.SetBuffCount(buff.buffDef.buffIndex, 0);
+                // Get patience buff count
+                int buffCount = attacker.GetBuffCount(buff.buffDef);
 
-                // Check if needing to force attacker into combat
-                if (attacker.outOfCombat)
+                // Check for buff
+                if (buffCount > 0)
                 {
+                    // Remove patience buff
+                    attacker.SetBuffCount(buff.buffDef.buffIndex, 0);
+
                     // Get faithful helper
                     FaithfulCharacterBodyBehaviour helper = Utils.FindCharacterBodyHelper(attacker);
-                    if (helper == null) return;
+                    if (helper != null)
+                    {
+                        // Get hermit's shawl behaviour
+                        FaithfulHermitsShawlBehaviour behaviour = helper.hermitsShawl;
+                        if (behaviour != null)
+                        {
+                            // Force attacker into combat
+                            behaviour.ForceIntoCombat();
+                        }
+                    }
+                }
+            }
 
-                    // Get hermit's shawl behaviour
-                    FaithfulHermitsShawlBehaviour behaviour = helper.hermitsShawl;
-                    if (behaviour == null) return;
+            // Check for victim body
+            CharacterBody victim = report.victimBody;
+            if (victim != null)
+            {
+                // Get patience buff count
+                int buffCount = victim.GetBuffCount(buff.buffDef);
 
-                    // Force attacker into combat
-                    behaviour.ForceIntoCombat();
+                // Check for buff
+                if (buffCount > 0)
+                {
+                    // Remove patience buff
+                    victim.SetBuffCount(buff.buffDef.buffIndex, 0);
                 }
             }
         }

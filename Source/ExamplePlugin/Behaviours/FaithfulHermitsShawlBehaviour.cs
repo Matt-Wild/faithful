@@ -166,11 +166,14 @@ namespace Faithful
 
         void UpdateOutOfCombat()
         {
+            // Check if currently out of combat
+            bool curreentOOC = character.outOfCombat && !forcedInCombat;
+
             // Check if out of combat update needed
-            if (character.outOfCombat != ooc)
+            if (curreentOOC != ooc)
             {
                 // Update out of combat
-                ooc = character.outOfCombat;
+                ooc = curreentOOC;
 
                 // Check if out of combat
                 if (ooc)
@@ -188,26 +191,31 @@ namespace Faithful
                     // Provide another buff on a delay
                     Invoke("DelayedBuff", currentBuffCooldown);
                 }
-
-                // In combat
-                else
-                {
-                    // No longer forced into combat
-                    forcedInCombat = false;
-                }
             }
         }
 
         public void ForceIntoCombat()
         {
+            // Cancel previous invokes for allow out of combat
+            CancelInvoke("AllowOutOfCombat");
+
             // Set as forced into combat
             forcedInCombat = true;
+
+            // Allow out of combat after 5 seconds
+            Invoke("AllowOutOfCombat", 5);
+        }
+
+        void AllowOutOfCombat()
+        {
+            // Set as not forced into combat
+            forcedInCombat = false;
         }
 
         private void DelayedBuff()
         {
             // Ignore if in combat
-            if (!ooc || forcedInCombat) return;
+            if (!ooc) return;
 
             // Get current buff count
             int buffCount = character.GetBuffCount(patienceBuff.buffDef);
