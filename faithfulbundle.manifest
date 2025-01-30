@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 179461037
+CRC: 2996533802
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 18ad7791863f6c95c5c7ff863abf8d59
+    Hash: dd6f8abf8afce9a9750734ca8b7dc0cd
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -74,6 +74,7 @@ Assets:
 - Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.prefab
 - Assets/Items/LeadersPennon/texLeadersPennonNormal.png
 - Assets/Items/Chakram/ChakramMesh.prefab
+- Assets/Items/HermitsShawl/HermitShawlDisplayMesh.prefab
 - Assets/Items/NoxiousSlimes/NoxiousSlimeMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
 - Assets/Placeholder/Model/Cube_TemporaryAsset.prefab
@@ -108,6 +109,7 @@ Assets:
 - Assets/Items/MeltingWarbler/MeltingWarblerMesh.prefab
 - Assets/Items/VengefulToaster/texVengefulToaster.png
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
+- Assets/Items/HermitsShawl/texHermitShawlIcon.png
 - Assets/Items/LeadersPennon/texBuffLeaderArea.png
 - Assets/Items/CollectorsVision/texCollectorsVision.png
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystalNormal.png
