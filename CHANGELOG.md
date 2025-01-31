@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.2.0 Hermit's Shawl
+- Added the Hermit's Shawl item.
+
 ### v1.1.6 Fixed Rogue Config Entries
 - Fixed rogue config entries for debug items (delete old config to clean).
 
@@ -20,7 +23,7 @@
 ### v1.1.1 Targeting Matrix Animation
 - Added animation for Targeting Matrix activation/deactivation.
 
-### v1.1.0 Finalized Targeting Matrix
+## v1.1.0 Finalized Targeting Matrix
 - Finalized adjustments for Targeting Matrix.
 
 ### v1.0.21 Targeting Matrix
@@ -36,8 +39,6 @@
 - Fixed Leader's Pennon radius indicator staying when the player owning it dies.
 - Fixed lots of problems when some players in a multiplayer lobby have godmode enabled while the others do not.
 
-<details><summary><strong>Old Changelogs</strong></summary>
-
 ### v1.0.18 Config Passing
 - The host's config now gets passed to clients who use it while in the host's game.
 
@@ -49,6 +50,8 @@
 
 ### v1.0.15 Longshot Geode and Leader's Pennon Customisation
 - The Longshot Geode and Leader's Pennon items can now be customised in the config.
+
+<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.0.14 Alternate Item Pickup Descriptions
 - Added alternate item pickup descriptions for item adjustments that cause the original descriptions to be inaccurate.

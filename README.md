@@ -52,6 +52,13 @@ All items can be disabled individually in this mod's config.
 			</td>
 		</tr>
 		<tr>
+			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texHermitShawlIcon.png?raw=true" width=128></td>
+			<td>
+				<b>Hermit's Shawl</b><br>
+				Leaving combat grants Patience, increasing damage by <b>+25%</b>. You can have up to <b>4 (</b>+4 per stack<b>)</b> stacks that are all gained over <b>10</b> seconds. All stacks of Patience are consumed upon dealing damage. <b>This item can be adjusted</b>!
+			</td>
+		</tr>
+		<tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texVengefulToasterIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Vengeful Toaster</b><br>
