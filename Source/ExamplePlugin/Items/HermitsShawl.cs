@@ -102,30 +102,7 @@ namespace Faithful
             DynamicBone dynamicBone = shawl.AddComponent<DynamicBone>();
             
             // Set up dynamic bone
-            dynamicBone.m_Root = shawl.transform;
-            dynamicBone.m_UpdateRate = 60.0f;
-            dynamicBone.m_UpdateMode = DynamicBone.UpdateMode.Normal;
-            dynamicBone.m_Damping = 0.576f;
-            dynamicBone.m_DampingDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
-            dynamicBone.m_Elasticity = 0.016f;
-            dynamicBone.m_ElasticityDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
-            dynamicBone.m_Stiffness = 0.0f;
-            dynamicBone.m_StiffnessDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
-            dynamicBone.m_Inert = 0.0f;
-            dynamicBone.m_InertDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
-            dynamicBone.m_Radius = 0.0f;
-            dynamicBone.m_RadiusDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
-            dynamicBone.m_EndLength = 0.69f;
-            dynamicBone.m_EndOffset = Vector3.zero;
-            dynamicBone.m_Gravity = new Vector3(0.0f, -0.01f, 0.0f);
-            dynamicBone.m_Force = Vector3.zero;
-            dynamicBone.m_Colliders = new System.Collections.Generic.List<DynamicBoneCollider>();
-            dynamicBone.m_Exclusions = new System.Collections.Generic.List<Transform>();
-            dynamicBone.m_FreezeAxis = DynamicBone.FreezeAxis.None;
-            dynamicBone.m_DistantDisable = false;
-            dynamicBone.m_ReferenceObject = null;
-            dynamicBone.m_DistanceToObject = 20.0f;
-            dynamicBone.neverOptimize = false;
+            Utils.ConfigureScarfDynamicBone(dynamicBone);
         }
 
         void OnDamageDealt(DamageReport _report)

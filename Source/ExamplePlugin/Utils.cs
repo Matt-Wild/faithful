@@ -776,6 +776,47 @@ namespace Faithful
             return GetCharacterSpawnCard(_name) != null;
         }
 
+        public static void ConfigureScarfDynamicBone(DynamicBone _dynamicBone)
+        {
+            // Set up dynamic bone
+            _dynamicBone.m_Root = _dynamicBone.transform;
+            _dynamicBone.m_UpdateRate = 60.0f;
+            _dynamicBone.m_UpdateMode = DynamicBone.UpdateMode.Normal;
+            _dynamicBone.m_Damping = 0.576f;
+            _dynamicBone.m_Elasticity = 0.016f;
+            _dynamicBone.m_Stiffness = 0.0f;
+            _dynamicBone.m_Inert = 0.0f;
+            _dynamicBone.m_Radius = 0.0f;
+            _dynamicBone.m_EndLength = 0.69f;
+            _dynamicBone.m_EndOffset = Vector3.zero;
+            _dynamicBone.m_Gravity = new Vector3(0.0f, -0.01f, 0.0f);
+            _dynamicBone.m_LocalGravity = new Vector3(0.0f, 0.01f, -0.01f);
+            _dynamicBone.m_Force = Vector3.zero;
+            _dynamicBone.m_Colliders = new List<DynamicBoneCollider>();
+            _dynamicBone.m_Exclusions = new List<Transform>();
+            _dynamicBone.m_FreezeAxis = DynamicBone.FreezeAxis.None;
+            _dynamicBone.m_DistantDisable = false;
+            _dynamicBone.m_ReferenceObject = null;
+            _dynamicBone.m_DistanceToObject = 20.0f;
+            _dynamicBone.neverOptimize = false;
+
+            // Check for scarf dynamic bone
+            DynamicBone scarfDynamicBone = Assets.scarfDynamicBone;
+            if (scarfDynamicBone == null)
+            {
+                // Warn and return
+                Log.Warning($"[UTILS] | Could not find scarf dynamic bone in assets. Unable to set up animation curves for scarf '{_dynamicBone.gameObject.name}'!");
+                return;
+            }
+
+            // Set up animation curves
+            _dynamicBone.m_DampingDistrib = scarfDynamicBone.m_DampingDistrib;
+            _dynamicBone.m_ElasticityDistrib = scarfDynamicBone.m_ElasticityDistrib;
+            _dynamicBone.m_StiffnessDistrib = scarfDynamicBone.m_StiffnessDistrib;
+            _dynamicBone.m_InertDistrib = scarfDynamicBone.m_InertDistrib;
+            _dynamicBone.m_RadiusDistrib = scarfDynamicBone.m_RadiusDistrib;
+        }
+
         public static void LogComponents(GameObject _gameObject)
         {
             // Check if null

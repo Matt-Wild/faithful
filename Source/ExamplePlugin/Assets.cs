@@ -3,6 +3,8 @@ using UnityEngine.Networking;
 using System.IO;
 using System.Collections.Generic;
 using R2API;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Faithful
 {
@@ -21,6 +23,9 @@ namespace Faithful
         public static GameObject radiusIndicatorPrefab;
         public static GameObject pennonEffectPrefab;
         public static GameObject matrixEffectPrefab;
+
+        // Store useful lookup assets
+        public static DynamicBone scarfDynamicBone;
 
         // Default assets
         private const string defaultModel = "temporalcubemesh";
@@ -116,12 +121,24 @@ namespace Faithful
             radiusIndicatorPrefab.transform.eulerAngles = Vector3.zero;
             radiusIndicatorPrefab.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             radiusIndicatorPrefab.AddComponent<FaithfulRadiusIndicatorBehaviour>();
+            
+            // Fetch ego scarf asset
+            Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/LunarSun/DisplaySunHeadNeck.prefab").Completed += OnScarfLoaded;
 
             // Check if debug mode
             if (Utils.debugMode)
             {
                 // Log confirmation
                 Log.Debug("[ASSETS] - Fetched all needed resources from RoR2 assets.");
+            }
+        }
+
+        static void OnScarfLoaded(AsyncOperationHandle<GameObject> _handle)
+        {
+            if (_handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                // Get scarf dynamic bone
+                scarfDynamicBone = Utils.FindChildByName(_handle.Result.transform, "Bandage1").GetComponent<DynamicBone>();
             }
         }
 
