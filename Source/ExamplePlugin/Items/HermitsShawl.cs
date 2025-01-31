@@ -71,7 +71,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Captain", "Chest", new Vector3(0F, 0.37125F, 0.037F), new Vector3(340F, 175F, 5F), new Vector3(0.1675F, 0.1675F, 0.1675F));
             displaySettings.AddCharacterDisplay("Railgunner", "Neck", new Vector3(-0.01168F, -0.02155F, 0.00168F), new Vector3(345F, 180F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
             displaySettings.AddCharacterDisplay("Void Fiend", "Chest", new Vector3(-0.0045F, 0.26625F, -0.01544F), new Vector3(0F, 22.5F, 0F), new Vector3(0.2125F, 0.2125F, 0.2125F));
-            displaySettings.AddCharacterDisplay("Scavenger", "Head", new Vector3(5.13896F, 3.45994F, 0.08489F), new Vector3(338.495F, 358.5428F, 334.8337F), new Vector3(1.5F, 1.5F, 1.5F));
+            displaySettings.AddCharacterDisplay("Scavenger", "MuzzleEnergyCannon", new Vector3(0F, 0F, -16.5F), new Vector3(75F, 270F, 270F), new Vector3(4.5F, 4.5F, 4.5F));
             displaySettings.AddCharacterDisplay("Seeker", "Chest", new Vector3(0F, 0.2805F, -0.07725F), new Vector3(357.5F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(0.0075F, 0.45F, -0.01213F), new Vector3(0F, 220F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.305F, 0F, 0F), new Vector3(290F, 180F, 270F), new Vector3(0.2375F, 0.2375F, 0.2375F));
