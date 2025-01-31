@@ -33,7 +33,7 @@ namespace Faithful
             CreateDisplaySettings("HermitShawlDisplayMesh");
 
             // Create item
-            item = Items.AddItem("HERMITS_SHAWL", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _debugOnly: true);
+            item = Items.AddItem("HERMITS_SHAWL", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyModelPrefab, _debugOnly: true);
 
             // Create item settings
             CreateSettings();
@@ -57,23 +57,23 @@ namespace Faithful
             }
 
             // Add character display settings
-            displaySettings.AddCharacterDisplay("Commando", "ThighR", new Vector3(-0.1738F, 0.0778F, 0.0148F), new Vector3(0F, 6F, 90F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("Huntress", "ThighR", new Vector3(-0.105F, -0.065F, 0.02785F), new Vector3(347.5F, 334F, 117.5F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Bandit", "ThighR", new Vector3(-0.09275F, 0.4F, 0.0715F), new Vector3(0F, 35F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(-1.75F, 2.875F, -1.31F), new Vector3(0F, 0F, 0F), new Vector3(0.75F, 0.75F, 0.75F));
-            displaySettings.AddCharacterDisplay("Engineer", "CannonHeadR", new Vector3(0.055F, 0.24F, 0.2575F), new Vector3(270F, 180F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, -0.3F, 0F), new Vector3(0F, 270F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
-            displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(-0.239F, 0.05525F, -0.2225F), new Vector3(9.5F, 0F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Mercenary", "ThighL", new Vector3(0.11575F, 0.13425F, -0.115F), new Vector3(2F, 45F, 260F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("REX", "Chest", new Vector3(0.48F, 0.425F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.25F, 0.25F, 0.25F));
-            displaySettings.AddCharacterDisplay("Loader", "MechLowerArmL", new Vector3(0.0535F, 0.1525F, -0.1415F), new Vector3(352F, 90F, 270F), new Vector3(0.115F, 0.115F, 0.115F));
-            displaySettings.AddCharacterDisplay("Acrid", "Chest", new Vector3(-1.83F, 3.05F, 3.025F), new Vector3(317.2F, 186.25F, 321F), new Vector3(1F, 1F, 1F));
-            displaySettings.AddCharacterDisplay("Captain", "UpperArmL", new Vector3(0.0575F, 0.1375F, -0.1255F), new Vector3(0F, 61F, 265.25F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(0.1315F, 0.461F, -0.02325F), new Vector3(0F, 180F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Void Fiend", "ForeArmR", new Vector3(0.082F, 0.27F, -0.191F), new Vector3(8F, 280F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Seeker", "Pack", new Vector3(-0.3675F, 0.012F, -0.21F), new Vector3(5F, 180F, 250F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("False Son", "Pelvis", new Vector3(0.20668F, 0.2025F, 0.021F), new Vector3(4.5F, 40.5F, 15.25F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(0.125F, -0.4F, -0.15F), new Vector3(85F, 12.5F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Commando", "Chest", new Vector3(0F, 0.3375F, 0F), new Vector3(20F, 0F, 0F), new Vector3(0.2375F, 0.2375F, 0.2375F));
+            displaySettings.AddCharacterDisplay("Huntress", "Chest", new Vector3(0F, 0.25025F, 0F), new Vector3(0F, 0F, 0F), new Vector3(0.2F, 0.2F, 0.2F));
+            displaySettings.AddCharacterDisplay("Bandit", "Chest", new Vector3(0F, 0.37F, 0.004F), new Vector3(0F, 0F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(0F, 1.925F, 0.645F), new Vector3(0F, 0F, 0F), new Vector3(1F, 1F, 1F));
+            displaySettings.AddCharacterDisplay("Engineer", "Chest", new Vector3(0F, 0.4125F, 0F), new Vector3(0F, 0F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, -0.33F, 0F), new Vector3(0F, 0F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
+            displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(0F, 0.25F, 0F), new Vector3(15F, 0F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
+            displaySettings.AddCharacterDisplay("Mercenary", "Chest", new Vector3(0F, 0.295F, 0.0285F), new Vector3(10F, 0F, 0F), new Vector3(0.175F, 0.175F, 0.175F));
+            displaySettings.AddCharacterDisplay("REX", "PlatformBase", new Vector3(0F, 0.265F, 0F), new Vector3(0F, 0F, 0F), new Vector3(0.75F, 0.75F, 0.75F));
+            displaySettings.AddCharacterDisplay("Loader", "Chest", new Vector3(0F, 0.3F, 0.0125F), new Vector3(0F, 0F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
+            displaySettings.AddCharacterDisplay("Acrid", "Head", new Vector3(0F, -0.6F, -0.64F), new Vector3(0F, 270F, 340F), new Vector3(2.125F, 2.125F, 2.125F));
+            displaySettings.AddCharacterDisplay("Captain", "Chest", new Vector3(0F, 0.37125F, 0.037F), new Vector3(340F, 175F, 5F), new Vector3(0.1675F, 0.1675F, 0.1675F));
+            displaySettings.AddCharacterDisplay("Railgunner", "Neck", new Vector3(-0.01168F, -0.02155F, 0.00168F), new Vector3(345F, 180F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
+            displaySettings.AddCharacterDisplay("Void Fiend", "Chest", new Vector3(-0.0045F, 0.26625F, -0.01544F), new Vector3(0F, 22.5F, 0F), new Vector3(0.2125F, 0.2125F, 0.2125F));
+            displaySettings.AddCharacterDisplay("Seeker", "Chest", new Vector3(0F, 0.2805F, -0.07725F), new Vector3(357.5F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(0.0075F, 0.45F, -0.01213F), new Vector3(0F, 220F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.305F, 0F, 0F), new Vector3(290F, 180F, 270F), new Vector3(0.2375F, 0.2375F, 0.2375F));
         }
 
         protected override void CreateSettings()
@@ -91,6 +91,41 @@ namespace Faithful
 
             // Update item texts with new settings
             item.UpdateItemTexts();
+        }
+
+        void ModifyModelPrefab(GameObject _prefab)
+        {
+            // Get first shawl object
+            GameObject shawl = Utils.FindChildByName(_prefab.transform, "Shawl.001");
+
+            // Add dynamic bone behaviour
+            DynamicBone dynamicBone = shawl.AddComponent<DynamicBone>();
+            
+            // Set up dynamic bone
+            dynamicBone.m_Root = shawl.transform;
+            dynamicBone.m_UpdateRate = 60.0f;
+            dynamicBone.m_UpdateMode = DynamicBone.UpdateMode.Normal;
+            dynamicBone.m_Damping = 0.576f;
+            dynamicBone.m_DampingDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
+            dynamicBone.m_Elasticity = 0.016f;
+            dynamicBone.m_ElasticityDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
+            dynamicBone.m_Stiffness = 0.0f;
+            dynamicBone.m_StiffnessDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
+            dynamicBone.m_Inert = 0.0f;
+            dynamicBone.m_InertDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
+            dynamicBone.m_Radius = 0.0f;
+            dynamicBone.m_RadiusDistrib = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
+            dynamicBone.m_EndLength = 0.69f;
+            dynamicBone.m_EndOffset = Vector3.zero;
+            dynamicBone.m_Gravity = new Vector3(0.0f, -0.01f, 0.0f);
+            dynamicBone.m_Force = Vector3.zero;
+            dynamicBone.m_Colliders = new System.Collections.Generic.List<DynamicBoneCollider>();
+            dynamicBone.m_Exclusions = new System.Collections.Generic.List<Transform>();
+            dynamicBone.m_FreezeAxis = DynamicBone.FreezeAxis.None;
+            dynamicBone.m_DistantDisable = false;
+            dynamicBone.m_ReferenceObject = null;
+            dynamicBone.m_DistanceToObject = 20.0f;
+            dynamicBone.neverOptimize = false;
         }
 
         void OnDamageDealt(DamageReport _report)
