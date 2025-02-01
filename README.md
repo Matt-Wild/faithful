@@ -1,7 +1,7 @@
 # A Faithful Expansion
 Multiplayer compatible and highly configurable!
 
-Currently adds <b>15</b> items, <b>6</b> of which require the <b>Survivors of the Void DLC</b>. All items have item displays!
+Currently adds <b>16</b> items, <b>6</b> of which require the <b>Survivors of the Void DLC</b>. All items have item displays!
 
 Also adds some custom debug tools to help other mod developers and those curious about the inner workings of the game.
 
@@ -237,7 +237,7 @@ You can support us in making this mod (or in our other work) through the link be
 
 # Special Thanks
 
-- Thank you to all the people who helped on the Risk of Rain 2 Modding Discord server!
+- Thank you to all the people who helped turn ideas into reality on the Risk of Rain 2 Modding Discord server!
   - .score
   - Chinchi
   - Bubbet
@@ -256,3 +256,7 @@ You can support us in making this mod (or in our other work) through the link be
   - viliger
   - KingEnderBrine
   - Mystical Chicken
+
+- ...and thank you to our Discord members who helped to refine Faithful through suggestions, bug reports and more!
+  - Expakun
+  - MiztarPi314
