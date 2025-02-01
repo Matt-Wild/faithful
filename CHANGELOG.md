@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.2 Hermit's Shawl No Longer Debug Only
+- Fixed Hermit's Shawl being left as debug only - oops.
+
 #### v1.2.1 All Item Configs
 - Added override configs for all items - Allows disabling all items, disabling all item displays and enabling extended pickup descriptions for all items with one simple config change.
 
@@ -48,10 +51,10 @@
 #### v1.0.17 Readme Amendment
 - Fixed inconsistency in Readme.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.0.16 Melting Warbler and Collector's Vision Customisation
 - The Melting Warbler and Collector's Vision items can now be customised in the config.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.0.15 Longshot Geode and Leader's Pennon Customisation
 - The Longshot Geode and Leader's Pennon items can now be customised in the config.

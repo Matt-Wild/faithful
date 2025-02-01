@@ -260,3 +260,4 @@ You can support us in making this mod (or in our other work) through the link be
 - ...and thank you to our Discord members who helped to refine Faithful through suggestions, bug reports and more!
   - Expakun
   - MiztarPi314
+  - gaylesbean

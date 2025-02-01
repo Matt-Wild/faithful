@@ -33,7 +33,7 @@ namespace Faithful
             CreateDisplaySettings("HermitShawlDisplayMesh");
 
             // Create item
-            item = Items.AddItem("HERMITS_SHAWL", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyModelPrefab, _debugOnly: true);
+            item = Items.AddItem("HERMITS_SHAWL", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
 
             // Create item settings
             CreateSettings();
