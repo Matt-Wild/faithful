@@ -49,7 +49,7 @@ namespace Faithful
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = _hidden || !enabledSetting.Value;
+                forceHide = _hidden || (!enabledSetting.Value || Items.allItemsDisabled);
             }
 
             // Create item def
@@ -132,7 +132,7 @@ namespace Faithful
             }
 
             // Check for item display settings and if config allows it
-            if (_displaySettings != null && (enableItemDisplaysSetting == null || enableItemDisplaysSetting.Value))
+            if (_displaySettings != null && (enableItemDisplaysSetting == null || enableItemDisplaysSetting.Value) && !Items.allItemDisplaysDisabled)
             {
                 // Get display model
                 GameObject displayModel = _displaySettings.GetModel();
@@ -170,7 +170,7 @@ namespace Faithful
                         Log.Debug($"Hiding item '{name}'");
                     }
                 }
-                else if (!enabledSetting.Value)
+                else if (!enabledSetting.Value || Items.allItemsDisabled)
                 {
                     Log.Debug($"Hiding item '{name}' due to user preference");
                 }
@@ -190,7 +190,7 @@ namespace Faithful
             // Update item texts
             itemDef.name = Utils.GetXMLLanguageString($"FAITHFUL_{token}_NAME");
             itemDef.nameToken = $"FAITHFUL_{token}_NAME";
-            itemDef.pickupToken = Config.FormatLanguageToken(extendedPickupDescSetting == null ? $"FAITHFUL_{token}_PICKUP" : extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP", $"ITEM_{token}");
+            itemDef.pickupToken = Config.FormatLanguageToken(Items.extendAllPickupDescriptions ? $"FAITHFUL_{token}_DESC" : extendedPickupDescSetting == null ? $"FAITHFUL_{token}_PICKUP" : extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP", $"ITEM_{token}");
             itemDef.descriptionToken = Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}");
             itemDef.loreToken = $"FAITHFUL_{token}_LORE";
         }

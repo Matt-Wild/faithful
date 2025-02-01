@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.1 All Item Configs
+- Added override configs for all items - Allows disabling all items, disabling all item displays and enabling extended pickup descriptions for all items with one simple config change.
+
 ### v1.2.0 Hermit's Shawl
 - Added the Hermit's Shawl item.
 
@@ -48,10 +51,10 @@
 #### v1.0.16 Melting Warbler and Collector's Vision Customisation
 - The Melting Warbler and Collector's Vision items can now be customised in the config.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.0.15 Longshot Geode and Leader's Pennon Customisation
 - The Longshot Geode and Leader's Pennon items can now be customised in the config.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.0.14 Alternate Item Pickup Descriptions
 - Added alternate item pickup descriptions for item adjustments that cause the original descriptions to be inaccurate.
