@@ -13,7 +13,8 @@ For more detailed information about the additions made by this mod check out the
 # Join Our Discord!
 
 We genuinely love hearing feedback about our mod! If you'd like to give your thoughts, report an issue or just feel like seeing what we're up to please join our Discord!<br>
-![Discord](https://img.shields.io/discord/1019915684353933392?label=Discord&logo=discord)
+
+[![Discord](https://img.shields.io/discord/1019915684353933392?label=Discord&logo=discord)](https://discord.com/invite/CCSauYkpzP)
 
 # New Items
 All items can be disabled individually in this mod's config.
