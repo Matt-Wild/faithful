@@ -12,7 +12,8 @@ For more detailed information about the additions made by this mod check out the
 
 # Join Our Discord!
 
-We genuinely love hearing feedback about our mod! If you'd like to give your thoughts, report an issue or just feel like seeing what we're up to please join our Discord!<br>https://discord.gg/CCSauYkpzP
+We genuinely love hearing feedback about our mod! If you'd like to give your thoughts, report an issue or just feel like seeing what we're up to please join our Discord!<br>
+![Discord](https://img.shields.io/discord/1019915684353933392?label=Discord&logo=discord)
 
 # New Items
 All items can be disabled individually in this mod's config.
@@ -137,7 +138,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLongshotGeodeIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Longshot Geode</b><br>
-			  Increase damage to enemies further than <b>50m</b> away by <b>15% (</b>+15% per stack<b>)</b>. <b>This item can be adjusted</b>!
+			  Increase damage to enemies further than <b>40m</b> away by <b>15% (</b>+15% per stack<b>)</b>. <b>This item can be adjusted</b>!
 			</td>
       <td> 
 				Corrupts all <b>Focus Crystals</b>.
@@ -147,7 +148,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLeadersPennonIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Leader's Pennon</b><br>
-				Create a ward around yourself that strengthens all allies within <b>15m (</b>+5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>. <b>This item can be adjusted</b>!
+				Create a ward around yourself that strengthens all allies within <b>15m (</b>+7.5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>. <b>This item can be adjusted</b>!
 			</td>
       <td> 
 				Corrupts all <b>Warbanners</b>.
@@ -170,7 +171,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texMeltingWarblerIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Melting Warbler</b><br>
-				Increase jump height by <b>1m (</b>+1m per stack<b>)</b>. <b>This item can be adjusted</b>!
+				Increase jump height by <b>2m (</b>+2m per stack<b>)</b>. <b>This item can be adjusted</b>!
 			</td>
       <td> 
 				Corrupts all <b>Wax Quails</b>.

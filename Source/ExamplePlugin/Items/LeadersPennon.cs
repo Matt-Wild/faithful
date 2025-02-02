@@ -99,7 +99,7 @@ namespace Faithful
             enableRadiusIndicatorSetting = leadersPennonItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", true, "Should this item have a radius indicator visual effect?", false, true);
             enableBuffEffectSetting = leadersPennonItem.CreateSetting("ENABLE_BUFF_EFFECT", "Enable Buff Visual Effect?", true, "Should this item's buff have a visual effect?", false, true);
             radiusSetting = leadersPennonItem.CreateSetting("RADIUS", "Radius", 15.0f, "How big should the base radius be of this item's effect? (15.0 = 15 meters)");
-            radiusStackingSetting = leadersPennonItem.CreateSetting("RADIUS_STACKING", "Radius Stacking", 5.0f, "How much should the radius of this item's effect increase per stack? (5.0 = 5 meters)");
+            radiusStackingSetting = leadersPennonItem.CreateSetting("RADIUS_STACKING", "Radius Stacking", 7.5f, "How much should the radius of this item's effect increase per stack? (7.5 = 7.5 meters)");
             attackSpeedSetting = leadersPennonItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 30.0f, "How much should this item increase ally's attack speed? (30.0 = 30% increase)");
             regenSetting = leadersPennonItem.CreateSetting("REGEN", "Regen", 5.0f, "How much should this item increase ally's base regen? (5.0 = 5 hp/s)");
             regenPerLevelSetting = leadersPennonItem.CreateSetting("REGEN_PER_LEVEL", "Regen Per Level", 1.0f, "How much should this item increase ally's regen per level? (1.0 = 1 hp/s)");

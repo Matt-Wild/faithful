@@ -1,5 +1,12 @@
 # Changelog
 
+#### v1.2.3 Balance Changes
+- Decreased Longshot Geode's range condition from 50m -> 40m.
+- Increased Leader's Pennon radius stacking from 5m -> 7.5m.
+- Increased Melting Warbler's jump height bonus from 1m -> 2m.
+- Vengeance buff from Vengeful Toaster is no longer removed by DoTs.
+- Please note that balance changes require a config reset to apply (or manual config adjustment).
+
 #### v1.2.2 Hermit's Shawl No Longer Debug Only
 - Fixed Hermit's Shawl being left as debug only - oops.
 
@@ -48,10 +55,10 @@
 #### v1.0.18 Config Passing
 - The host's config now gets passed to clients who use it while in the host's game.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.0.17 Readme Amendment
 - Fixed inconsistency in Readme.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.0.16 Melting Warbler and Collector's Vision Customisation
 - The Melting Warbler and Collector's Vision items can now be customised in the config.

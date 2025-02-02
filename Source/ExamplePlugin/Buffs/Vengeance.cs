@@ -30,17 +30,20 @@ namespace Faithful
             Behaviour.AddStatsMod(vengeanceBuff, VengeanceStatsMod);
         }
 
-        void OnDamageDealt(DamageReport report)
+        void OnDamageDealt(DamageReport _report)
         {
+            // Ignore if DoT
+            if (_report.dotType != DotController.DotIndex.None) return;
+
             // Check for attacker body
-            CharacterBody attackerBody = report.attackerBody;
+            CharacterBody attackerBody = _report.attackerBody;
             if (attackerBody)
             {
                 // Does attacker have Vengeance
-                if (report.attackerBody.GetBuffCount(vengeanceBuff.buffDef) > 0)
+                if (attackerBody.GetBuffCount(vengeanceBuff.buffDef) > 0)
                 {
                     // Remove Vengeance
-                    report.attackerBody.ClearTimedBuffs(vengeanceBuff.buffDef);
+                    attackerBody.ClearTimedBuffs(vengeanceBuff.buffDef);
                 }
             }
         }

@@ -74,8 +74,8 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            jumpBoostSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST", "Jump Boost", 1.0f, "How much should this item increase the jump height of the player? (1.0 = 1 meter)");
-            jumpBoostStackingSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST_STACKING", "Jump Boost Stacking", 1.0f, "How much should further stacks of this item increase the jump height of the player? (1.0 = 1 meter)");
+            jumpBoostSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST", "Jump Boost", 2.0f, "How much should this item increase the jump height of the player? (2.0 = 2 meters)");
+            jumpBoostStackingSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST_STACKING", "Jump Boost Stacking", 2.0f, "How much should further stacks of this item increase the jump height of the player? (2.0 = 2 meters)");
         }
 
         public override void FetchSettings()

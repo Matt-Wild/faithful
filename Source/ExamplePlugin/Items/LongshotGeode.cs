@@ -78,7 +78,7 @@ namespace Faithful
             // Create settings specific to this item
             damageSetting = longshotGeodeItem.CreateSetting("DAMAGE", "Damage", 15.0f, "How much should this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)");
             damageStackingSetting = longshotGeodeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 15.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)");
-            distanceSetting = longshotGeodeItem.CreateSetting("DISTANCE", "Distance", 50.0f, "How far should the target need to be for the damage bonus to be applied? (50.0 = 50 meters)");
+            distanceSetting = longshotGeodeItem.CreateSetting("DISTANCE", "Distance", 40.0f, "How far should the target need to be for the damage bonus to be applied? (40.0 = 40 meters)");
         }
 
         public override void FetchSettings()
