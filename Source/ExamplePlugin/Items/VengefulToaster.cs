@@ -101,10 +101,10 @@ namespace Faithful
             vengefulToasterItem.UpdateItemTexts();
         }
 
-        void OnDamageDealt(DamageReport report)
+        void OnDamageDealt(DamageReport _report)
         {
             // Check for inventory of victim
-            Inventory inventory = report.victimBody.inventory;
+            Inventory inventory = _report.victimBody.inventory;
             if (inventory)
             {
                 // Get Vengeful Toaster amount
@@ -117,7 +117,7 @@ namespace Faithful
                     float buffDuration = vengefulToasterCount > 1 ? duration + (durationStacking * (vengefulToasterCount - 1)) : duration;
 
                     // Add Vengeance buff
-                    report.victimBody.AddTimedBuff(vengeanceBuff.buffDef, buffDuration);
+                    _report.victimBody.AddTimedBuff(vengeanceBuff.buffDef, buffDuration);
                 }
             }
         }

@@ -15,10 +15,12 @@ namespace Faithful
         // Store additional item settings
         Setting<float> damageSetting;
         Setting<float> damageStackingSetting;
+        Setting<float> blightChanceSetting;
 
         // Store item stats
         float damage;
         float damageStacking;
+        float blightChance;
 
         // Constructor
         public NoxiousSlime(Toolbox _toolbox) : base(_toolbox)
@@ -37,6 +39,9 @@ namespace Faithful
 
             // Inject DoT behaviour
             Behaviour.AddOnInflictDamageOverTimeRefCallback(OnInflictDamageOverTimeRef);
+
+            // Link On Damage Dealt behaviour
+            Behaviour.AddOnDamageDealtCallback(OnDamageDealt);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -75,6 +80,7 @@ namespace Faithful
             // Create settings specific to this item
             damageSetting = noxiousSlimeItem.CreateSetting("DAMAGE", "Damage", 100.0f, "How much should this item increase the damage of damaging debuffs? (100.0 = 100% increase)");
             damageStackingSetting = noxiousSlimeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 100.0f, "How much should further stacks of this item increase the damage of damaging debuffs? (100.0 = 100% increase)");
+            blightChanceSetting = noxiousSlimeItem.CreateSetting("BLIGHT_CHANCE", "Blight Chance", 10.0f, "What percentage chance should this item have to inflict blight on hit? (10.0 = 10% chance)");
         }
 
         public override void FetchSettings()
@@ -82,6 +88,7 @@ namespace Faithful
             // Get item settings
             damage = damageSetting.Value / 100.0f;
             damageStacking = damageStackingSetting.Value / 100.0f;
+            blightChance = blightChanceSetting.Value;
 
             // Update item texts with new settings
             noxiousSlimeItem.UpdateItemTexts();
@@ -114,9 +121,47 @@ namespace Faithful
             // Has item?
             if (count > 0)
             {
+                // Calculate damage multiplier
+                float damageMult = 1.0f + damage + (damageStacking * (count - 1));
+
                 // Modify DoT damage
-                _inflictDotInfo.damageMultiplier *= 1.0f + damage + (damageStacking * (count - 1));
-                _inflictDotInfo.totalDamage *= 1.0f + damage + (damageStacking * (count - 1));
+                _inflictDotInfo.damageMultiplier *= damageMult;
+                _inflictDotInfo.totalDamage *= damageMult;
+            }
+        }
+
+        void OnDamageDealt(DamageReport _report)
+        {
+            // Ignore DoTs
+            if (_report.dotType != DotController.DotIndex.None) return;
+
+            // Ignore attacks with no proc
+            if (_report.damageInfo.procCoefficient <= 0.0f) return;
+
+            // Check for attack character master
+            CharacterMaster attacker = _report.attackerMaster;
+            if (attacker == null) return;
+
+            // Check for attacker body
+            CharacterBody attackerBody = _report.attackerBody;
+            if (attackerBody == null) return;
+
+            // Check for victim body
+            CharacterBody victimBody = _report.victimBody;
+            if (victimBody == null || !victimBody.healthComponent.alive) return;
+
+            // Check for inventory of attacker
+            Inventory inventory = attacker.inventory;
+            if (inventory == null) return;
+
+            // Check for item
+            if (inventory.GetItemCount(noxiousSlimeItem.itemDef.itemIndex) == 0) return;
+
+            // Roll dice
+            if (Util.CheckRoll(blightChance * _report.damageInfo.procCoefficient, attacker))
+            {
+                // Inflict blight
+                DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, DotController.DotIndex.Blight, 5.0f);
             }
         }
     }

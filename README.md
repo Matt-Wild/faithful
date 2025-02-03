@@ -88,7 +88,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texNoxiousSlimeIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Noxious Slimes</b><br>
-				All damaging debuffs deal <b>+100% (</b>+100% per stack<b>)</b> damage. <b>This item can be adjusted</b>!
+				<b>10%</b> chance to blight an enemy for <b>300%</b> base damage. All damaging debuffs deal <b>+100% (</b>+100% per stack<b>)</b> damage. <b>This item can be adjusted</b>!
       		</td>
 		</tr>
     <tr>

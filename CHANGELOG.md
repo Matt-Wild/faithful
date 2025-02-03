@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.4 Noxious Slimes Blight
+- Noxious Slimes now has a small chance to blight enemies on hit.
+
 #### v1.2.3 Balance Changes
 - Decreased Longshot Geode's range condition from 50m -> 40m.
 - Increased Leader's Pennon radius stacking from 5m -> 7.5m.
@@ -52,10 +55,10 @@
 - Fixed Leader's Pennon radius indicator staying when the player owning it dies.
 - Fixed lots of problems when some players in a multiplayer lobby have godmode enabled while the others do not.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.0.18 Config Passing
 - The host's config now gets passed to clients who use it while in the host's game.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.0.17 Readme Amendment
 - Fixed inconsistency in Readme.
