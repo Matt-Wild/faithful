@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2996533802
+CRC: 2550993308
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dd6f8abf8afce9a9750734ca8b7dc0cd
+    Hash: 72803da75ca951d40b2a88e7a0cbeb7c
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -92,8 +92,10 @@ Assets:
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeRockNormal.png
 - Assets/Items/LeadersPennon/LeadersPennonMesh.prefab
+- Assets/Items/CollectorsVision/Shrine/texShrineRecollectionEmission.png
 - Assets/Items/CollectorsVision/texCollectorsVisionIcon.png
 - Assets/Items/Chakram/texChakram.png
+- Assets/Items/CollectorsVision/Shrine/texShrineRecollectionSymbol.png
 - Assets/Items/HermitsShawl/HermitShawlMesh.prefab
 - Assets/Placeholder/Item/texBuffTemporalCube.png
 - Assets/Items/CauterizingGreave/CauterizingGreaveDisplayMesh.prefab
@@ -156,6 +158,7 @@ Assets:
 - Assets/Items/CauterizingGreave/texCauterizingGreaveNormal.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaNormal.png
 - Assets/Items/SecondHand/SecondHandDisplayMesh.prefab
+- Assets/Items/CollectorsVision/Shrine/texShrineRecollection.png
 - Assets/Items/Chakram/texChakramIcon.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrella.png
 - Assets/Items/Chakram/texBuffPrimarySkillChakram.png
@@ -171,6 +174,7 @@ Assets:
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.prefab
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackHoloEmission.png
 - Assets/Items/CollectorsVision/CollectorsVisionDisplayMesh.prefab
+- Assets/Items/CollectorsVision/Shrine/RecollectionShrineMesh.prefab
 - Assets/Items/4-T0NJetpack/tex4T0NJetpack.png
 - Assets/Items/4-T0NJetpack/4T0NJetpackDisplayMesh.prefab
 - Assets/Items/TargetingMatrix/texIndicatorMatrixMask.png
