@@ -28,8 +28,8 @@ namespace Faithful
         //protected float deactivatedTime;
 
         // Jetpack stats
-        protected float baseMaxVelocity = 30.0f;
-        protected float baseRisingAcceleration = 32.0f;
+        protected float baseMaxVelocity = 38.0f;
+        protected float baseRisingAcceleration = 36.0f;
         protected float fallingAcceleration = 120.0f;
         protected float baseFuel = 4.0f;
         protected float fuelPerStack = 2.0f;
@@ -39,7 +39,7 @@ namespace Faithful
         protected float accelerationMultiplier = 1.0f;
 
         // Buffed jetpack additive stats
-        protected float maxVelocityBuff = 6.0f;
+        protected float maxVelocityBuff = 10.0f;
         protected float risingAccelerationBuff = 8.0f;
 
         // Store current state of jetpack
@@ -587,7 +587,7 @@ namespace Faithful
             float yVel = character.characterMotor.velocity.y;
 
             // Calculate force (give an extra boost until 25% of the max velocity is reached)
-            float force = (risingAcceleration + Mathf.Clamp01((-yVel + maxVelocity / 4.0f) / 40.0f) * dynamicAccelerationDifference) * accelerationMultiplier;
+            float force = (risingAcceleration + Mathf.Clamp01((-yVel + maxVelocity / 4.0f) / 40.0f) * dynamicAccelerationDifference) * jumpPowerModifier * accelerationMultiplier;
 
             // Apply jet force to character
             character.characterMotor.velocity = new Vector3(character.characterMotor.velocity.x, Mathf.MoveTowards(yVel, maxVelocity, force * Time.fixedDeltaTime), character.characterMotor.velocity.z);
@@ -733,7 +733,7 @@ namespace Faithful
                 
 
                 // Return and modify max velocity based on buff
-                return (baseMaxVelocity + maxVelocityBuff * buffPerc) * maxVelocityMultiplier;
+                return (baseMaxVelocity + maxVelocityBuff * buffPerc) * jumpPowerModifier * maxVelocityMultiplier;
             }
         }
 
@@ -745,6 +745,15 @@ namespace Faithful
 
                 // Return and modify rising acceleration based on buff
                 return baseRisingAcceleration + risingAccelerationBuff * buffPerc;
+            }
+        }
+
+        protected float jumpPowerModifier
+        {
+            get
+            {
+                // Return modifier for max velocity and acceleration based on jump power
+                return Mathf.Sqrt(character.jumpPower / character.baseJumpPower);
             }
         }
     }

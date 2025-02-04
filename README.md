@@ -81,7 +81,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/tex4T0NJetpackIcon.png?raw=true" width=128></td>
 			<td>
 				<b>4-T0N Jetpack</b><br>
-				Holding the jump key while falling boosts you upwards for up to <b>4 (</b>+2 per stack<b>)</b> seconds. Fully recharges in <b>12 (</b>-20% per stack<b>)</b> seconds while touching the ground. <b>This item can be adjusted</b>!
+				Holding the jump key while falling boosts you upwards for up to <b>3 (</b>+1.5 per stack<b>)</b> seconds. Fully recharges in <b>8 (</b>-20% per stack<b>)</b> seconds while touching the ground. <b>This item can be adjusted</b>!
       		</td>
 		</tr>
     <tr>

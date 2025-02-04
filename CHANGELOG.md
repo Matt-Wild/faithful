@@ -1,5 +1,12 @@
 # Changelog
 
+#### v1.2.5 Jetpack Changes
+- Made 4-T0N Jetpack stronger over a shorter duration.
+- Decreased fuel time from 4s -> 3s.
+- Decreased fuel time stacking from 2s -> 1.5s.
+- Decreased recharge time from 12s -> 8s.
+- 4-T0N Jetpack is now affected by jump power inceasing items.
+
 #### v1.2.4 Noxious Slimes Blight
 - Noxious Slimes now has a small chance to blight enemies on hit.
 
@@ -50,12 +57,12 @@
 #### v1.0.20 Changelog
 - Improved mod changelog.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.0.19 Item Randomizer
 - Added option to randomize the stats of all items added by this mod (disabled by default).
 - Fixed Leader's Pennon radius indicator staying when the player owning it dies.
 - Fixed lots of problems when some players in a multiplayer lobby have godmode enabled while the others do not.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.0.18 Config Passing
 - The host's config now gets passed to clients who use it while in the host's game.
