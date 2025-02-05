@@ -33,7 +33,7 @@
 	
 	"FAITHFUL_HERMITS_SHAWL_NAME": "Hermit's Shawl",
 	"FAITHFUL_HERMITS_SHAWL_PICKUP": "Deal more damage the longer you've been out of combat.",
-	"FAITHFUL_HERMITS_SHAWL_DESC": "Leaving combat grants <style=cIsDamage>Patience</style>, increasing damage by <style=cIsDamage>+[DAMAGE]%</style>. You can have up to <style=cIsDamage>[MAX_BUFFS_STACKING]</style> <style=cStack>(+[MAX_BUFFS_STACKING] per stack)</style> stacks that are all gained over <style=cIsUtility>[BUFF_RECHARGE]</style> seconds. All stacks of <style=cIsDamage>Patience</style> are consumed upon dealing damage.",
+	"FAITHFUL_HERMITS_SHAWL_DESC": "Leaving combat grants <style=cIsDamage>Patience</style>, increasing damage by <style=cIsDamage>+[DAMAGE]%</style>. You can have up to <style=cIsDamage>[MAX_BUFFS]</style> <style=cStack>(+[MAX_BUFFS_STACKING] per stack)</style> stacks that are all gained over <style=cIsUtility>[BUFF_RECHARGE]</style> seconds. All stacks of <style=cIsDamage>Patience</style> are consumed upon dealing damage.",
 	"FAITHFUL_HERMITS_SHAWL_LORE": "\u201C...And as the great hermit stepped down from her mountainside abode,\nseeing the crowd of pilgrims that had come to be in her presence,\nshe gracefully said,\n\n'STEP THE HELL OFF MY GARDEN!'\n\nMaybe modern humans should not be deified, but just the values they hold.\u201C\n\n- Records of Future Faith 2052\n",
 	
 	"FAITHFUL_MELTING_WARBLER_NAME": "Melting Warbler",

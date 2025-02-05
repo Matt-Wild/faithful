@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.6 Hermit's Shawl Config
+- Added separate config value for Hermit's Shawl max buff stacking.
+
 #### v1.2.5 Jetpack Changes
 - Made 4-T0N Jetpack stronger over a shorter duration.
 - Decreased fuel time from 4s -> 3s.
@@ -54,10 +57,10 @@
 - Added unique visual effect for Leader's Pennon.
 - Fixed some minor config issues.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.0.20 Changelog
 - Improved mod changelog.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.0.19 Item Randomizer
 - Added option to randomize the stats of all items added by this mod (disabled by default).

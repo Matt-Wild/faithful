@@ -30,6 +30,7 @@ namespace Faithful
         bool forcedInCombat = false;
 
         // Store item stats
+        int maxBuffs;
         int maxBuffsStacking;
         float buffCooldown;
 
@@ -72,6 +73,7 @@ namespace Faithful
         {
             // Update stats
             maxBuffsStacking = hermitShawlItem.FetchSetting<int>("MAX_BUFFS_STACKING").Value;
+            maxBuffs = hermitShawlItem.FetchSetting<int>("MAX_BUFFS").Value;
             buffCooldown = hermitShawlItem.FetchSetting<float>("BUFF_RECHARGE").Value;
         }
 
@@ -182,7 +184,7 @@ namespace Faithful
                     int buffCount = character.GetBuffCount(patienceBuff.buffDef);
 
                     // Check if buff count should increase
-                    if (buffCount < maxBuffs)
+                    if (buffCount < currentMaxBuffs)
                     {
                         // Add buff
                         character.AddBuff(patienceBuff.buffDef);
@@ -221,7 +223,7 @@ namespace Faithful
             int buffCount = character.GetBuffCount(patienceBuff.buffDef);
 
             // Check if buff count should increase
-            if (buffCount < maxBuffs)
+            if (buffCount < currentMaxBuffs)
             {
                 // Add buff
                 character.AddBuff(patienceBuff.buffDef);
@@ -247,12 +249,12 @@ namespace Faithful
             }
         }
 
-        int maxBuffs
+        int currentMaxBuffs
         {
             get
             {
                 // Calculate max buffs
-                return maxBuffsStacking * itemCount;
+                return maxBuffs + maxBuffsStacking * (itemCount - 1);
             }
         }
 
@@ -261,10 +263,10 @@ namespace Faithful
             get
             {
                 // Get max buffs
-                int currentMaxBuffs = maxBuffs;
+                int _currentMaxBuffs = currentMaxBuffs;
 
                 // Calculate current buff cooldown
-                return buffCooldown / (currentMaxBuffs > 1 ? (currentMaxBuffs - 1) : 1);
+                return buffCooldown / (_currentMaxBuffs > 1 ? (_currentMaxBuffs - 1) : 1);
             }
         }
     }
