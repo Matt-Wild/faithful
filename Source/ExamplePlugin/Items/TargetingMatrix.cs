@@ -74,7 +74,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Bandit", "Head", new Vector3(-0.00457F, 0.0605F, 0.11F), new Vector3(0F, 0F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
             displaySettings.AddCharacterDisplay("MUL-T", "Head", new Vector3(0.4475F, 2.8375F, -0.9325F), new Vector3(305F, 180F, 0F), new Vector3(0.5F, 0.5F, 0.5F));
             displaySettings.AddCharacterDisplay("Engineer", "CannonHeadR", new Vector3(0.02F, 0.378F, 0F), new Vector3(270F, 180F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
-            // displaySettings.AddCharacterDisplay("Turret", Why don't they have different mdl names?!);
+            displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, 0.325F, -0.20525F), new Vector3(0F, 180F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Artificer", "Head", new Vector3(-0.0515F, 0.0585F, 0.095F), new Vector3(0F, 355F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
             displaySettings.AddCharacterDisplay("Mercenary", "Head", new Vector3(-0.06525F, 0.1525F, 0.1085F), new Vector3(0F, 355F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
             displaySettings.AddCharacterDisplay("REX", "Eye", new Vector3(-0.01875F, 0.775F, -0.0015F), new Vector3(270F, 0F, 0F), new Vector3(0.175F, 0.175F, 0.175F));
