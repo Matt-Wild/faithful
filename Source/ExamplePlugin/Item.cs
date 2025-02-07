@@ -139,9 +139,9 @@ namespace Faithful
 
                 // Add item display model behaviour
                 ItemDisplayModel displayModelBehaviour = displayModel.AddComponent<ItemDisplayModel>();
-
+                
                 // Initialise display model behaviour
-                displayModelBehaviour.Init(_token);
+                displayModelBehaviour.Init(_token, _displaySettings.displaySpecifiers);
 
                 // Check for display prefab modify callback
                 if (_modifyItemDisplayPrefabCallback != null)
@@ -243,14 +243,58 @@ namespace Faithful
         // Item this display model is related to
         [SerializeField] string relatedItemToken;
 
-        public void Init(string _relatedItemToken)
+        // List of character body specifiers
+        [SerializeField] List<ItemDisplaySpecifier> displaySpecifiers = new List<ItemDisplaySpecifier>();
+
+        public void Init(string _relatedItemToken, List<ItemDisplaySpecifier> _displaySpecifiers = null)
         {
             // Assign related item token
             relatedItemToken = _relatedItemToken;
+
+            // Check for character body specifiers
+            if (_displaySpecifiers != null)
+            {
+                // Assign display specifiers
+                displaySpecifiers = _displaySpecifiers;
+            }
         }
 
         void Start()
         {
+            // Skip if no character body specifiers provided
+            if (displaySpecifiers.Count == 0) return;
+
+            // Attempt to get character body
+            CharacterBody characterBody = body;
+
+            // Return if no body found
+            if (characterBody == null) return;
+
+            // Get body index for this character
+            BodyIndex bodyIndex = BodyCatalog.FindBodyIndex(characterBody);
+
+
+            // Cycle through display specifiers
+            foreach (ItemDisplaySpecifier itemDisplaySpecifier in displaySpecifiers)
+            {
+                // Check if for this item display instance
+                if (itemDisplaySpecifier.MatchesSpecifier(gameObject))
+                {
+                    // Check if body index is incorrect
+                    if (bodyIndex != itemDisplaySpecifier.bodyIndex)
+                    {
+                        // Destroy this item display
+                        DestroyImmediate(gameObject);
+
+                        // Done
+                        return;
+                    }
+
+                    // Done
+                    break;
+                }
+            }
+
             // Get list of components with display model behaviour from parents
             List<IDisplayModelBehaviour> displayModelBehaviours = Utils.GetComponentsInParentsWithInterface<IDisplayModelBehaviour>(transform);
 
@@ -263,6 +307,49 @@ namespace Faithful
                     // Call on display model created behaviour
                     displayModelBehaviour.OnDisplayModelCreated();
                 }
+            }
+        }
+
+        public CharacterBody body
+        {
+            get
+            {
+                // Get parent
+                Transform parent = transform.parent;
+
+                // Cycle until no new parent found
+                while (parent.parent != null)
+                {
+                    // Get new parent
+                    parent = parent.parent;
+                }
+
+                // Attempt to get character body
+                CharacterBody body = parent.GetComponent<CharacterBody>();
+
+                // Check for character body
+                if (body == null)
+                {
+                    // Attempt to get character model
+                    CharacterModel model = parent.GetComponent<CharacterModel>();
+
+                    // Check for character model
+                    if (model != null)
+                    {
+                        // Fetch character body
+                        body = model.body;
+                    }
+                }
+
+                // Check for character body
+                if (body != null)
+                {
+                    // Return character body
+                    return body;
+                }
+
+                // No character body found
+                return null;
             }
         }
     }

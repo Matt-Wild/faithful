@@ -5,7 +5,6 @@ using R2API;
 using RoR2;
 using RoR2.ExpansionManagement;
 using RoR2.Navigation;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -1563,6 +1562,9 @@ namespace Faithful
         // List of models with display rules already assigned
         List<string> assignedModels = new List<string>();
 
+        // List of item display specifies
+        public List<ItemDisplaySpecifier> displaySpecifiers = new List<ItemDisplaySpecifier>();
+
         public ItemDisplaySettings(GameObject _model, ItemDisplayRuleDict _displayRules)
         {
             // Assign model and display rules
@@ -1570,7 +1572,7 @@ namespace Faithful
             displayRules = _displayRules;
         }
 
-        public void AddCharacterDisplay(string _character, string _childName, Vector3 _position, Vector3 _angle, Vector3 _scale)
+        public void AddCharacterDisplay(string _character, string _childName, Vector3 _position, Vector3 _angle, Vector3 _scale, string _characterBodySpecifier = null)
         {
             // Get character model name
             string modelName = Utils.GetCharacterModelName(_character.ToLower());
@@ -1580,6 +1582,13 @@ namespace Faithful
             {
                 Log.Error($"Couldn't assign item on character display data for character '{_character}', character not found");
                 return;
+            }
+
+            // Check for character body specifier
+            if (_characterBodySpecifier != null)
+            {
+                // Add to display specifiers
+                displaySpecifiers.Add(new ItemDisplaySpecifier(_childName, _position, _angle, _scale, _characterBodySpecifier));
             }
 
             // Test if character already has display rules assigned
@@ -1635,6 +1644,45 @@ namespace Faithful
             // Return display model
             return model;
         }
+    }
+
+    [System.Serializable]
+    internal struct ItemDisplaySpecifier
+    {
+        // Store identifiers for display
+        [SerializeField] string parentName;
+        [SerializeField] Vector3 position;
+        [SerializeField] Vector3 angle;
+        [SerializeField] Vector3 scale;
+
+        // Character specifier string
+        [SerializeField] string characterSpecifier;
+
+        public ItemDisplaySpecifier(string _parentName, Vector3 _position, Vector3 _angle, Vector3 _scale, string _characterSpecifier)
+        {
+            // Assign identifiers
+            parentName = _parentName.ToLower();
+            position = _position;
+            angle = _angle;
+            scale = _scale;
+
+            // Assign character specifier
+            characterSpecifier = _characterSpecifier;
+        }
+
+        public bool MatchesSpecifier(GameObject _gameObject)
+        {
+            // Get game object transform
+            Transform transform = _gameObject.transform;
+            
+            // Compare identifiers
+            if (parentName == transform.parent.name.ToLower() && position == transform.localPosition && angle == transform.localEulerAngles && scale == transform.localScale) return true;
+
+            // Doesn't match identifiers
+            return false;
+        }
+
+        public BodyIndex bodyIndex => BodyCatalog.FindBodyIndex(characterSpecifier);
     }
 
     // Wrapper class for deserialization of the language file
