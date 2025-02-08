@@ -61,7 +61,8 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Bandit", "Pelvis", new Vector3(-0.1815F, -0.061F, 0.085F), new Vector3(348F, 130F, 180.5F), new Vector3(0.06F, 0.06F, 0.06F));
             displaySettings.AddCharacterDisplay("MUL-T", "Hip", new Vector3(0.01F, -0.45F, 1.725F), new Vector3(0F, 0F, 180F), new Vector3(0.65F, 0.65F, 0.65F));
             displaySettings.AddCharacterDisplay("Engineer", "Pelvis", new Vector3(0.278F, -0.006F, 0.009F), new Vector3(350F, 281.25F, 173.5F), new Vector3(0.09F, 0.09F, 0.09F));
-            displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, 0.325F, -0.20525F), new Vector3(0F, 180F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Turret", "Head", new Vector3(0F, 0.2F, -1.225F), new Vector3(0F, 210F, 0F), new Vector3(0.25F, 0.25F, 0.25F), "EngiTurretBody");
+            displaySettings.AddCharacterDisplay("Turret", "Head", new Vector3(0F, 0.7125F, -1.165F), new Vector3(20F, 180F, 0F), new Vector3(0.25F, 0.25F, 0.25F), "EngiWalkerTurretBody");
             displaySettings.AddCharacterDisplay("Artificer", "Pelvis", new Vector3(0.2F, 0.04F, 0.098F), new Vector3(12F, 66F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Mercenary", "Pelvis", new Vector3(0.255F, 0.128F, 0.022F), new Vector3(350F, 264.25F, 176.5F), new Vector3(0.095F, 0.095F, 0.095F));
             displaySettings.AddCharacterDisplay("REX", "PlatformBase", new Vector3(-0.505F, 0.3995F, 0F), new Vector3(0F, 0F, 0F), new Vector3(0.175F, 0.175F, 0.175F));
