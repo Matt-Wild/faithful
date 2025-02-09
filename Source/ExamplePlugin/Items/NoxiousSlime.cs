@@ -80,9 +80,9 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            damageSetting = noxiousSlimeItem.CreateSetting("DAMAGE", "Damage", 100.0f, "How much should this item increase the damage of damaging debuffs? (100.0 = 100% increase)");
-            damageStackingSetting = noxiousSlimeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 100.0f, "How much should further stacks of this item increase the damage of damaging debuffs? (100.0 = 100% increase)");
-            blightChanceSetting = noxiousSlimeItem.CreateSetting("BLIGHT_CHANCE", "Blight Chance", 10.0f, "What percentage chance should this item have to inflict blight on hit? (10.0 = 10% chance)");
+            damageSetting = noxiousSlimeItem.CreateSetting("DAMAGE", "Damage", 100.0f, "How much should this item increase the damage of damaging debuffs? (100.0 = 100% increase)", _valueFormatting: "{0:0.0}%");
+            damageStackingSetting = noxiousSlimeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 100.0f, "How much should further stacks of this item increase the damage of damaging debuffs? (100.0 = 100% increase)", _valueFormatting: "{0:0.0}%");
+            blightChanceSetting = noxiousSlimeItem.CreateSetting("BLIGHT_CHANCE", "Blight Chance", 10.0f, "What percentage chance should this item have to inflict blight on hit? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()

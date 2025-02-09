@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using System;
 using System.Reflection;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 namespace Faithful
 {
@@ -23,7 +24,7 @@ namespace Faithful
             RiskOfOptionsWrapper.Init();
         }
 
-        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false)
+        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false, string _valueFormatting = "{0:0}")
         {
             // Check for token in settings dictionary
             if (settings.ContainsKey(_token))
@@ -34,7 +35,7 @@ namespace Faithful
             }
 
             // Create setting
-            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired);
+            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
 
             // Check if setting is temp
             if (!_token.ToUpper().Contains("TEMP"))
@@ -181,10 +182,10 @@ namespace Faithful
         // Type references for Risk of Options
         static Type baseOptionType;
         static Type checkBoxOptionType;
-        static Type sliderOptionType;
+        static Type stepSliderOptionType;
         static Type intSliderOptionType;
         static Type checkBoxConfigType;
-        static Type sliderConfigType;
+        static Type stepSliderConfigType;
         static Type intSliderConfigType;
 
         // Method references for Risk of Options
@@ -267,28 +268,33 @@ namespace Faithful
             else if (typeof(T) == typeof(float))
             {
                 // Check for slider option type and slider config type
-                if (sliderOptionType == null || sliderConfigType == null) return;
+                if (stepSliderOptionType == null || stepSliderConfigType == null) return;
 
                 // Create slider config
-                object sliderConfig = Activator.CreateInstance(sliderConfigType);
+                object stepSliderConfig = Activator.CreateInstance(stepSliderConfigType);
 
                 // Set min and max fields
-                sliderConfigType.GetField("min")?.SetValue(sliderConfig, Convert.ToSingle(_setting.sliderMin));
-                sliderConfigType.GetField("max")?.SetValue(sliderConfig, Convert.ToSingle(_setting.sliderMax));
+                stepSliderConfigType.GetField("min")?.SetValue(stepSliderConfig, Convert.ToSingle(_setting.sliderMin));
+                stepSliderConfigType.GetField("max")?.SetValue(stepSliderConfig, Convert.ToSingle(_setting.sliderMax));
+                stepSliderConfigType.GetField("increment")?.SetValue(stepSliderConfig, _setting.stepSliderIncrement);
+
+                Debug.Log(stepSliderConfigType.ToString());
+                Debug.Log(stepSliderConfigType.GetField("increment").ToString());
+                Log.Debug($"Formatting: {_setting.valueFormatting} | Increment: {_setting.stepSliderIncrement}");
 
                 // Set if restart is required
-                sliderConfigType.GetField("restartRequired")?.SetValue(sliderConfig, _setting.restartRequired);
+                stepSliderConfigType.GetField("restartRequired")?.SetValue(stepSliderConfig, _setting.restartRequired);
 
                 // Set value formatting
-                sliderConfigType.GetProperty("FormatString")?.SetValue(sliderConfig, "{0:0.00}");
+                stepSliderConfigType.GetProperty("FormatString")?.SetValue(stepSliderConfig, _setting.valueFormatting);
 
                 // Create slider option
-                object sliderOption = Activator.CreateInstance(sliderOptionType, [_setting.configEntry, sliderConfig]);
+                object stepSliderOption = Activator.CreateInstance(stepSliderOptionType, [_setting.configEntry, stepSliderConfig]);
 
                 try
                 {
                     // Add into Risk of Options
-                    addOptionMethod.Invoke(null, [sliderOption, pluginGUID, pluginName]);
+                    addOptionMethod.Invoke(null, [stepSliderOption, pluginGUID, pluginName]);
                 }
                 catch (Exception ex)
                 {
@@ -313,7 +319,7 @@ namespace Faithful
                 intSliderConfigType.GetField("restartRequired")?.SetValue(intSliderConfig, _setting.restartRequired);
 
                 // Set value formatting
-                intSliderConfigType.GetProperty("FormatString")?.SetValue(intSliderConfig, "{0}");
+                intSliderConfigType.GetProperty("FormatString")?.SetValue(intSliderConfig, _setting.valueFormatting);
 
                 // Create int slider option
                 object intSliderOption = Activator.CreateInstance(intSliderOptionType, [_setting.configEntry, intSliderConfig]);
@@ -353,13 +359,13 @@ namespace Faithful
                 Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'CheckBoxOption' could not be found.");
             }
 
-            // Get slider option type
-            sliderOptionType = assembly.GetType("RiskOfOptions.Options.SliderOption");
+            // Get step slider option type
+            stepSliderOptionType = assembly.GetType("RiskOfOptions.Options.StepSliderOption");
 
-            // Check for slider option
-            if (sliderOptionType == null)
+            // Check for step slider option
+            if (stepSliderOptionType == null)
             {
-                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'SliderOption' could not be found.");
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'StepSliderOption' could not be found.");
             }
 
             // Get int slider option type
@@ -380,13 +386,13 @@ namespace Faithful
                 Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'CheckBoxConfig' could not be found.");
             }
 
-            // Get slider config type
-            sliderConfigType = assembly.GetType("RiskOfOptions.OptionConfigs.SliderConfig");
+            // Get step slider config type
+            stepSliderConfigType = assembly.GetType("RiskOfOptions.OptionConfigs.StepSliderConfig");
 
-            // Check for slider config
-            if (sliderConfigType == null)
+            // Check for step slider config
+            if (stepSliderConfigType == null)
             {
-                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'SliderConfig' could not be found.");
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'StepSliderConfig' could not be found.");
             }
 
             // Get int slider config type
@@ -470,7 +476,10 @@ namespace Faithful
         // Whether this config requires a restart
         public bool restartRequired;
 
-        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false)
+        // Formatting for Risk Of Options
+        public string valueFormatting;
+
+        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false, string _valueFormatting = "{0:0}")
         {
             // Assign config file
             configFile = _configFile;
@@ -517,6 +526,9 @@ namespace Faithful
 
             // If restart is required for this setting's changes to take effect
             restartRequired = _restartRequired;
+
+            // Assign value formatting
+            valueFormatting = _valueFormatting;
         }
 
         public void Sync()
@@ -809,6 +821,43 @@ namespace Faithful
 
                 // Return randomised value
                 return randomisedValue;
+            }
+        }
+
+        public float stepSliderIncrement
+        {
+            get
+            {
+                // Check if bool or int
+                if (typeof(T) == typeof(bool) || typeof(T) == typeof(int))
+                {
+                    // Return default fallback
+                    return 1.0f;
+                }
+
+                // Check for float and valid value formatting
+                else if (typeof(T) == typeof(float) && !string.IsNullOrEmpty(valueFormatting))
+                {
+                    // Regex to count decimal places in formatting like "{0:0.00}" or "{0:0.0}s"
+                    Match match = Regex.Match(valueFormatting, @"{0:0+(\.(0+))?}");
+                    if (match.Success)
+                    {
+                        string decimalPart = match.Groups[1].Value; // Extract the decimal portion (e.g., ".00")
+                        int decimalPlaces = decimalPart.Length > 1 ? decimalPart.Length - 1 : 0; // Subtract 1 for the leading '.'
+
+                        // Return increment based on decimal places
+                        return decimalPlaces switch
+                        {
+                            0 => 1.0f,
+                            1 => 0.1f,
+                            2 => 0.01f,
+                            _ => 0.01f // Default fallback for more decimal places
+                        };
+                    }
+                }
+
+                // Return default fallback
+                return 1.0f;
             }
         }
 

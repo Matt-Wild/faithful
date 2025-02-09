@@ -88,10 +88,10 @@ namespace Faithful
             temp1.Delete();
         }
 
-        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _restartRequired = false)
+        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _restartRequired = false, string _valueFormatting = "{0:0}")
         {
             // Return new setting
-            return Config.CreateSetting($"BUFF_{token}_{_tokenAddition}", $"Buff: {name.Replace("'", "")}", _key, _defaultValue, _description, _restartRequired: _restartRequired);
+            return Config.CreateSetting($"BUFF_{token}_{_tokenAddition}", $"Buff: {name.Replace("'", "")}", _key, _defaultValue, _description, _restartRequired: _restartRequired, _valueFormatting: _valueFormatting);
         }
     }
 }

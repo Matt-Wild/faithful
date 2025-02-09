@@ -73,8 +73,8 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            sizeSetting = spaciousUmbrellaItem.CreateSetting("SIZE", "Radius Increase", 25.0f, "How much should this item increase the size of the teleporter radius? (25.0 = 25% increase)");
-            sizeStackingSetting = spaciousUmbrellaItem.CreateSetting("SIZE_STACKING", "Radius Increase Stacking", 25.0f, "How much should additional stacks of this item increase the size of the teleporter radius? (25.0 = 25% increase)");
+            sizeSetting = spaciousUmbrellaItem.CreateSetting("SIZE", "Radius Increase", 25.0f, "How much should this item increase the size of the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            sizeStackingSetting = spaciousUmbrellaItem.CreateSetting("SIZE_STACKING", "Radius Increase Stacking", 25.0f, "How much should additional stacks of this item increase the size of the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()

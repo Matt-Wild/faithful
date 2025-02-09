@@ -74,12 +74,12 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            fuelTimeSetting = item.CreateSetting("FUEL_TIME", "Fuel Time", 3.0f, "How much fuel should the jetpack have? (3.0 = 3 seconds)");
-            fuelTimeStackingSetting = item.CreateSetting("FUEL_TIME_STACKING", "Fuel Time Stacking", 1.5f, "How much additional fuel should the jetpack get per stack? (1.5 = 1.5 seconds)");
-            rechargeTimeSetting = item.CreateSetting("RECHARGE_TIME", "Recharge Time", 8.0f, "How long should it take for the jetpack to refuel after touching the ground? (8.0 = 8 seconds)");
-            rechargeTimeReductionSetting = item.CreateSetting("RECHARGE_TIME_REDUCTION", "Recharge Time Reduction", 20.0f, "How much should further stacks of this item decrease the recharge time of the jetpack? (20.0 = 20% reduction)", _randomiserMin: 1.0f, _randomiserMax: 40.0f);
-            maxVelocityMultiplierSetting = item.CreateSetting("MAX_VELOCITY_MULTIPLIER", "Max Velocity Multiplier", 1.0f, "How much faster or slower would you like the jetpack's max velocity to be? (1.0 = 1x max velocity)");
-            accelerationMultiplierSetting = item.CreateSetting("ACCELERATION_MULTIPLIER", "Acceleration Multiplier", 1.0f, "How much stronger or weaker would you like the jetpack to be? (1.0 = 1x acceleration)");
+            fuelTimeSetting = item.CreateSetting("FUEL_TIME", "Fuel Time", 3.0f, "How much fuel should the jetpack have? (3.0 = 3 seconds)", _valueFormatting: "{0:0.00}s");
+            fuelTimeStackingSetting = item.CreateSetting("FUEL_TIME_STACKING", "Fuel Time Stacking", 1.5f, "How much additional fuel should the jetpack get per stack? (1.5 = 1.5 seconds)", _valueFormatting: "{0:0.00}s");
+            rechargeTimeSetting = item.CreateSetting("RECHARGE_TIME", "Recharge Time", 8.0f, "How long should it take for the jetpack to refuel after touching the ground? (8.0 = 8 seconds)", _valueFormatting: "{0:0.00}s");
+            rechargeTimeReductionSetting = item.CreateSetting("RECHARGE_TIME_REDUCTION", "Recharge Time Reduction", 20.0f, "How much should further stacks of this item decrease the recharge time of the jetpack? (20.0 = 20% reduction)", _randomiserMin: 1.0f, _randomiserMax: 40.0f, _valueFormatting: "{0:0.0}%");
+            maxVelocityMultiplierSetting = item.CreateSetting("MAX_VELOCITY_MULTIPLIER", "Max Velocity Multiplier", 1.0f, "How much faster or slower would you like the jetpack's max velocity to be? (1.0 = 1x max velocity)", _valueFormatting: "{0:0.00}x");
+            accelerationMultiplierSetting = item.CreateSetting("ACCELERATION_MULTIPLIER", "Acceleration Multiplier", 1.0f, "How much stronger or weaker would you like the jetpack to be? (1.0 = 1x acceleration)", _valueFormatting: "{0:0.00}x");
         }
 
         public override void FetchSettings()

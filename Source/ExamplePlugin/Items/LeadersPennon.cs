@@ -98,13 +98,13 @@ namespace Faithful
             // Create settings specific to this item
             enableRadiusIndicatorSetting = leadersPennonItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", true, "Should this item have a radius indicator visual effect?", false, true);
             enableBuffEffectSetting = leadersPennonItem.CreateSetting("ENABLE_BUFF_EFFECT", "Enable Buff Visual Effect?", true, "Should this item's buff have a visual effect?", false, true);
-            radiusSetting = leadersPennonItem.CreateSetting("RADIUS", "Radius", 15.0f, "How big should the base radius be of this item's effect? (15.0 = 15 meters)");
-            radiusStackingSetting = leadersPennonItem.CreateSetting("RADIUS_STACKING", "Radius Stacking", 7.5f, "How much should the radius of this item's effect increase per stack? (7.5 = 7.5 meters)");
-            attackSpeedSetting = leadersPennonItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 30.0f, "How much should this item increase ally's attack speed? (30.0 = 30% increase)");
-            regenSetting = leadersPennonItem.CreateSetting("REGEN", "Regen", 5.0f, "How much should this item increase ally's base regen? (5.0 = 5 hp/s)");
-            regenPerLevelSetting = leadersPennonItem.CreateSetting("REGEN_PER_LEVEL", "Regen Per Level", 1.0f, "How much should this item increase ally's regen per level? (1.0 = 1 hp/s)");
-            regenMultSetting = leadersPennonItem.CreateSetting("REGEN_MULT", "Regen Multiplier", 30.0f, "How much should this item increase ally's regen multiplicatively? (30.0 = 30% increase)", _canRandomise: false);
-            buffDurationSetting = leadersPennonItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the radius of this item's effect? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false);
+            radiusSetting = leadersPennonItem.CreateSetting("RADIUS", "Radius", 15.0f, "How big should the base radius be of this item's effect? (15.0 = 15 meters)", _valueFormatting: "{0:0.0}m");
+            radiusStackingSetting = leadersPennonItem.CreateSetting("RADIUS_STACKING", "Radius Stacking", 7.5f, "How much should the radius of this item's effect increase per stack? (7.5 = 7.5 meters)", _valueFormatting: "{0:0.00}m");
+            attackSpeedSetting = leadersPennonItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 30.0f, "How much should this item increase ally's attack speed? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            regenSetting = leadersPennonItem.CreateSetting("REGEN", "Regen", 5.0f, "How much should this item increase ally's base regen? (5.0 = 5 hp/s)", _valueFormatting: "{0:0.00}hp/s");
+            regenPerLevelSetting = leadersPennonItem.CreateSetting("REGEN_PER_LEVEL", "Regen Per Level", 1.0f, "How much should this item increase ally's regen per level? (1.0 = 1 hp/s)", _valueFormatting: "{0:0.00}hp/s");
+            regenMultSetting = leadersPennonItem.CreateSetting("REGEN_MULT", "Regen Multiplier", 30.0f, "How much should this item increase ally's regen multiplicatively? (30.0 = 30% increase)", _canRandomise: false, _valueFormatting: "{0:0.0}%");
+            buffDurationSetting = leadersPennonItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the radius of this item's effect? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
         }
 
         public override void FetchSettings()

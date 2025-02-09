@@ -209,7 +209,7 @@ namespace Faithful
             temp2.Delete();
         }
 
-        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false)
+        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false, string _valueFormatting = "{0:0}")
         {
             // Check if hidden
             if (hidden)
@@ -220,7 +220,7 @@ namespace Faithful
             }
 
             // Return new setting
-            return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {name.Replace("'", "")}", _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired);
+            return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {name.Replace("'", "")}", _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
         }
 
         public Setting<T> FetchSetting<T>(string _tokenAddition)

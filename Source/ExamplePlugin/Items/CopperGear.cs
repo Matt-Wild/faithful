@@ -84,9 +84,9 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedSetting = copperGearItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 25.0f, "How much should this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)");
-            attackSpeedStackingSetting = copperGearItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 25.0f, "How much should further stacks of this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)");
-            buffDurationSetting = copperGearItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false);
+            attackSpeedSetting = copperGearItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 25.0f, "How much should this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            attackSpeedStackingSetting = copperGearItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 25.0f, "How much should further stacks of this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            buffDurationSetting = copperGearItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
         }
 
         public override void FetchSettings()

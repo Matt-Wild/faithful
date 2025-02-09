@@ -82,9 +82,9 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            damageSetting = brassScrewsItem.CreateSetting("DAMAGE", "Damage", 20.0f, "How much should this item increase damage while within the teleporter radius? (20.0 = 20% increase)");
-            damageStackingSetting = brassScrewsItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 20.0f, "How much should further stacks of this item increase damage while within the teleporter radius? (20.0 = 20% increase)");
-            buffDurationSetting = brassScrewsItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false);
+            damageSetting = brassScrewsItem.CreateSetting("DAMAGE", "Damage", 20.0f, "How much should this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            damageStackingSetting = brassScrewsItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 20.0f, "How much should further stacks of this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            buffDurationSetting = brassScrewsItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
         }
 
         public override void FetchSettings()

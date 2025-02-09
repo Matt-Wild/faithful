@@ -83,8 +83,8 @@ namespace Faithful
             // Create settings specific to this item
             maxBuffsSetting = item.CreateSetting("MAX_BUFFS", "Max Buffs", 4, "What's the maximum stack of patience the player should be able to receive with a single stack of this item? (4 = 4 stacks)");
             maxBuffsStackingSetting = item.CreateSetting("MAX_BUFFS_STACKING", "Max Buffs Stacking", 4, "How many additional stacks of patience should the player be able to receive per extra stack of this item? (4 = 4 stacks)");
-            buffCooldownSetting = item.CreateSetting("BUFF_RECHARGE", "Buff Recharge Time", 10.0f, "After leaving combat how long does it take to receive the maximum amount of patience? (10.0 = 10 seconds)");
-            damageSetting = item.CreateSetting("DAMAGE", "Damage", 25.0f, "How much should each stack of patience increase damage? (25.0 = 25% increase)");
+            buffCooldownSetting = item.CreateSetting("BUFF_RECHARGE", "Buff Recharge Time", 10.0f, "After leaving combat how long does it take to receive the maximum amount of patience? (10.0 = 10 seconds)", _valueFormatting: "{0:0.0}s");
+            damageSetting = item.CreateSetting("DAMAGE", "Damage", 25.0f, "How much should each stack of patience increase damage? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()

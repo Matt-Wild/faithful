@@ -78,10 +78,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedBuffSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f);
-            attackSpeedBuffStackingSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f);
-            damageNerfSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f);
-            damageNerfStackingSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f);
+            attackSpeedBuffSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
+            attackSpeedBuffStackingSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
+            damageNerfSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
+            damageNerfStackingSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()

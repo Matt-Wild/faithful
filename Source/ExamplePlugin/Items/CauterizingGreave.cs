@@ -81,10 +81,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            maxHealthBuffSetting = cauterizingGreaveItem.CreateSetting("MAX_HEALTH_BUFF", "Max Health Increase", 100.0f, "How much should this item increase the max health of the player? (100.0 = 100% increase)", _minValue: 0.1f);
-            maxHealthBuffStackingSetting = cauterizingGreaveItem.CreateSetting("MAX_HEALTH_BUFF_STACKING", "Max Health Increase Stacking", 100.0f, "How much should further stacks of this item increase the max health of the player? (100.0 = 100% increase)", _minValue: 0.1f);
-            healingNerfSetting = cauterizingGreaveItem.CreateSetting("HEALING_NERF", "Healing Decrease", 50.0f, "How much should this item decrease the received healing of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f);
-            healingNerfStackingSetting = cauterizingGreaveItem.CreateSetting("HEALING_NERF_STACKING", "Healing Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the received healing of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f);
+            maxHealthBuffSetting = cauterizingGreaveItem.CreateSetting("MAX_HEALTH_BUFF", "Max Health Increase", 100.0f, "How much should this item increase the max health of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
+            maxHealthBuffStackingSetting = cauterizingGreaveItem.CreateSetting("MAX_HEALTH_BUFF_STACKING", "Max Health Increase Stacking", 100.0f, "How much should further stacks of this item increase the max health of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
+            healingNerfSetting = cauterizingGreaveItem.CreateSetting("HEALING_NERF", "Healing Decrease", 50.0f, "How much should this item decrease the received healing of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
+            healingNerfStackingSetting = cauterizingGreaveItem.CreateSetting("HEALING_NERF_STACKING", "Healing Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the received healing of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()

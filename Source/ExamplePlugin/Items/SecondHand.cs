@@ -84,10 +84,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedSetting = secondHandItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 20.0f, "How much should this item increase attack speed while touching the ground? (20.0 = 20% increase)");
-            attackSpeedStackingSetting = secondHandItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 20.0f, "How much should further stacks of this item increase attack speed while touching the ground? (20.0 = 20% increase)");
-            speedSetting = secondHandItem.CreateSetting("SPEED", "Movement Speed", 30.0f, "How much should this item increase movement speed while touching the ground? (30.0 = 30% increase)");
-            speedStackingSetting = secondHandItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 30.0f, "How much should further stacks of this item increase movement speed while touching the ground? (30.0 = 30% increase)");
+            attackSpeedSetting = secondHandItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 20.0f, "How much should this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            attackSpeedStackingSetting = secondHandItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 20.0f, "How much should further stacks of this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            speedSetting = secondHandItem.CreateSetting("SPEED", "Movement Speed", 30.0f, "How much should this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            speedStackingSetting = secondHandItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 30.0f, "How much should further stacks of this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()

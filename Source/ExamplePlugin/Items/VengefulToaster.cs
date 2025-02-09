@@ -84,9 +84,9 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            durationSetting = vengefulToasterItem.CreateSetting("DURATION", "Duration", 4.0f, "How long should the vengeance buff last when granted? (4.0 = 4 seconds)");
-            durationStackingSetting = vengefulToasterItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much longer should the vengeance buff last when granted with additional item stacks? (1.0 = 1 second)");
-            damageSetting = vengefulToasterItem.CreateSetting("DAMAGE", "Damage", 75.0f, "How much should each stack of vengeance increase damage? (75.0 = 75% increase)");
+            durationSetting = vengefulToasterItem.CreateSetting("DURATION", "Duration", 4.0f, "How long should the vengeance buff last when granted? (4.0 = 4 seconds)", _valueFormatting: "{0:0.00}s");
+            durationStackingSetting = vengefulToasterItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much longer should the vengeance buff last when granted with additional item stacks? (1.0 = 1 second)", _valueFormatting: "{0:0.00}s");
+            damageSetting = vengefulToasterItem.CreateSetting("DAMAGE", "Damage", 75.0f, "How much should each stack of vengeance increase damage? (75.0 = 75% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
