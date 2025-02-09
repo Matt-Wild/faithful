@@ -25,8 +25,8 @@ namespace Faithful
         static void CreateAllItemsSettings()
         {
             // Create setting for disabling all items
-            allItemsDisableSetting = Config.CreateSetting("ALL_ITEMS_DISABLED", "All Items", "Disable All Items", false, "Should all items from the Faithful mod be disabled?", false);
-            allItemsDisableItemDisplaysSetting = Config.CreateSetting("ALL_ITEM_DISPLAYS_DISABLED", "All Items", "Disable All Item Displays", false, "Should all items have their item displays disabled on compatible character models?", false, true);
+            allItemsDisableSetting = Config.CreateSetting("ALL_ITEMS_DISABLED", "All Items", "Disable All Items", false, "Should all items from the Faithful mod be disabled?", false, _restartRequired: true);
+            allItemsDisableItemDisplaysSetting = Config.CreateSetting("ALL_ITEM_DISPLAYS_DISABLED", "All Items", "Disable All Item Displays", false, "Should all items have their item displays disabled on compatible character models?", false, true, _restartRequired: true);
             allItemsExtendedPickupDescSetting = Config.CreateSetting("ALL_ITEMS_EXTENDED_PICKUP_DESC", "All Items", "All Items Extended Pickup Description", false, "Should all items have the logbook description appear when picking them up during runs?", false, true);
         }
 

@@ -81,17 +81,17 @@ namespace Faithful
         private void CreateDefaultSettings()
         {
             // Create the settings which every buff should have
-            hiddenSetting = CreateSetting("HIDDEN", "Hide Buff?", false, "Should the icon for this buff be hidden during runs?");
+            hiddenSetting = CreateSetting("HIDDEN", "Hide Buff?", false, "Should the icon for this buff be hidden during runs?", _restartRequired: true);
 
             // Clean previous unused default settings
             Setting<bool> temp1 = CreateSetting("TEMP1", "Hide buff?", false, "Should the icon for this buff be hidden during runs?");
             temp1.Delete();
         }
 
-        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description)
+        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _restartRequired = false)
         {
             // Return new setting
-            return Config.CreateSetting($"BUFF_{token}_{_tokenAddition}", $"Buff: {name.Replace("'", "")}", _key, _defaultValue, _description);
+            return Config.CreateSetting($"BUFF_{token}_{_tokenAddition}", $"Buff: {name.Replace("'", "")}", _key, _defaultValue, _description, _restartRequired: _restartRequired);
         }
     }
 }

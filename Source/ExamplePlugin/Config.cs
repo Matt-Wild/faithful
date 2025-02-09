@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using BepInEx.Configuration;
 using System;
+using System.Reflection;
+using UnityEngine;
 
 namespace Faithful
 {
@@ -16,9 +18,12 @@ namespace Faithful
         {
             // Assign config file
             configFile = _configFile;
+
+            // Initialise Risk of Options wrapper
+            RiskOfOptionsWrapper.Init();
         }
 
-        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true)
+        public static Setting<T> CreateSetting<T>(string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false)
         {
             // Check for token in settings dictionary
             if (settings.ContainsKey(_token))
@@ -29,7 +34,14 @@ namespace Faithful
             }
 
             // Create setting
-            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise);
+            Setting<T> setting = new Setting<T>(configFile, _token, _section, _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired);
+
+            // Check if setting is temp
+            if (!_token.ToUpper().Contains("TEMP"))
+            {
+                // Create Risk of Options option
+                RiskOfOptionsWrapper.AddOption(setting);
+            }
 
             // Add setting to dictionary
             settings.Add(_token, setting);
@@ -154,6 +166,264 @@ namespace Faithful
         }
     }
 
+    internal static class RiskOfOptionsWrapper
+    {
+        // Plugin GUID and mod name
+        public static string pluginGUID;
+        public static string pluginName;
+
+        // Whether Risk of Options is usable
+        static bool enabled = false;
+
+        // Assembly reference for Risk of Options
+        static Assembly assembly;
+
+        // Type references for Risk of Options
+        static Type baseOptionType;
+        static Type checkBoxOptionType;
+        static Type sliderOptionType;
+        static Type intSliderOptionType;
+        static Type checkBoxConfigType;
+        static Type sliderConfigType;
+        static Type intSliderConfigType;
+
+        // Method references for Risk of Options
+        static MethodInfo setModIconMethod;
+        static MethodInfo addOptionMethod;
+
+        public static void Init()
+        {
+            // Cycle through loaded assemblies
+            foreach (Assembly currentAssembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                // Check if Risk of Options is installed
+                if (currentAssembly.GetName().Name == "RiskOfOptions")
+                {
+                    // Assign assembly
+                    assembly = currentAssembly;
+
+                    // Risk of Options installed
+                    enabled = true;
+
+                    // Get types
+                    GetTypes();
+
+                    // Get methods
+                    GetMethods();
+
+                    Log.Info("Risk Of Options wrapper created successfully.");
+                }
+            }
+        }
+
+        public static void UpdateModIcon()
+        {
+            // Ignore if not enabled
+            if (!enabled) return;
+
+            // Check for set mod icon method
+            if (setModIconMethod != null)
+            {
+                // Set Risk of Options mod icon
+                setModIconMethod.Invoke(null, [Assets.GetIcon("texCustomExpansionIcon")]);
+            }
+        }
+
+        public static void AddOption<T>(Setting<T> _setting)
+        {
+            // Ignore if not enabled
+            if (!enabled) return;
+
+            // Check for add option method
+            if (addOptionMethod == null) return;
+
+            // Bool behaviour
+            if (typeof(T) == typeof(bool))
+            {
+                // Check for check box option type and check box config type
+                if (checkBoxOptionType == null || checkBoxConfigType == null) return;
+
+                // Create check box config
+                object checkBoxConfig = Activator.CreateInstance(checkBoxConfigType);
+
+                // Set if restart is required
+                checkBoxConfigType.GetField("restartRequired")?.SetValue(checkBoxConfig, _setting.restartRequired);
+
+                // Create check box option
+                object checkBoxOption = Activator.CreateInstance(checkBoxOptionType, [_setting.configEntry, checkBoxConfig]);
+
+                try
+                {
+                    // Add into Risk of Options
+                    addOptionMethod.Invoke(null, [checkBoxOption, pluginGUID, pluginName]);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning($"[CONFIG] | Failed to add Risk Of Options option for setting '{_setting.token}'.\nException: {ex}");
+                }
+            }
+
+            // Float behaviour
+            else if (typeof(T) == typeof(float))
+            {
+                // Check for slider option type and slider config type
+                if (sliderOptionType == null || sliderConfigType == null) return;
+
+                // Create slider config
+                object sliderConfig = Activator.CreateInstance(sliderConfigType);
+
+                // Set min and max fields
+                sliderConfigType.GetField("min")?.SetValue(sliderConfig, Convert.ToSingle(_setting.sliderMin));
+                sliderConfigType.GetField("max")?.SetValue(sliderConfig, Convert.ToSingle(_setting.sliderMax));
+
+                // Set if restart is required
+                sliderConfigType.GetField("restartRequired")?.SetValue(sliderConfig, _setting.restartRequired);
+
+                // Set value formatting
+                sliderConfigType.GetProperty("FormatString")?.SetValue(sliderConfig, "{0:0.00}");
+
+                // Create slider option
+                object sliderOption = Activator.CreateInstance(sliderOptionType, [_setting.configEntry, sliderConfig]);
+
+                try
+                {
+                    // Add into Risk of Options
+                    addOptionMethod.Invoke(null, [sliderOption, pluginGUID, pluginName]);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning($"[CONFIG] | Failed to add Risk Of Options option for setting '{_setting.token}'.\nException: {ex}");
+                }
+            }
+
+            // Int behaviour
+            else if (typeof(T) == typeof(int))
+            {
+                // Check for int slider option type and int slider config type
+                if (intSliderOptionType == null || intSliderConfigType == null) return;
+
+                // Create int slider config
+                object intSliderConfig = Activator.CreateInstance(intSliderConfigType);
+
+                // Set min and max fields
+                intSliderConfigType.GetField("min")?.SetValue(intSliderConfig, Convert.ToInt32(_setting.sliderMin));
+                intSliderConfigType.GetField("max")?.SetValue(intSliderConfig, Convert.ToInt32(_setting.sliderMax));
+
+                // Set if restart is required
+                intSliderConfigType.GetField("restartRequired")?.SetValue(intSliderConfig, _setting.restartRequired);
+
+                // Set value formatting
+                intSliderConfigType.GetProperty("FormatString")?.SetValue(intSliderConfig, "{0}");
+
+                // Create int slider option
+                object intSliderOption = Activator.CreateInstance(intSliderOptionType, [_setting.configEntry, intSliderConfig]);
+
+                try
+                {
+                    // Add into Risk of Options
+                    addOptionMethod.Invoke(null, [intSliderOption, pluginGUID, pluginName]);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning($"[CONFIG] | Failed to add Risk Of Options option for setting '{_setting.token}'.\nException: {ex}");
+                }
+            }
+        }
+
+        static void GetTypes()
+        {
+            // Check for assembly
+            if (assembly == null) return;
+
+            // Get base option type
+            baseOptionType = assembly.GetType("RiskOfOptions.Options.BaseOption");
+
+            // Check for base option
+            if (baseOptionType == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'BaseOption' could not be found.");
+            }
+
+            // Get check box option type
+            checkBoxOptionType = assembly.GetType("RiskOfOptions.Options.CheckBoxOption");
+
+            // Check for check box option
+            if (checkBoxOptionType == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'CheckBoxOption' could not be found.");
+            }
+
+            // Get slider option type
+            sliderOptionType = assembly.GetType("RiskOfOptions.Options.SliderOption");
+
+            // Check for slider option
+            if (sliderOptionType == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'SliderOption' could not be found.");
+            }
+
+            // Get int slider option type
+            intSliderOptionType = assembly.GetType("RiskOfOptions.Options.IntSliderOption");
+
+            // Check for int slider option
+            if (intSliderOptionType == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'IntSliderOption' could not be found.");
+            }
+
+            // Get check box config type
+            checkBoxConfigType = assembly.GetType("RiskOfOptions.OptionConfigs.CheckBoxConfig");
+
+            // Check for check box config
+            if (checkBoxConfigType == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'CheckBoxConfig' could not be found.");
+            }
+
+            // Get slider config type
+            sliderConfigType = assembly.GetType("RiskOfOptions.OptionConfigs.SliderConfig");
+
+            // Check for slider config
+            if (sliderConfigType == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'SliderConfig' could not be found.");
+            }
+
+            // Get int slider config type
+            intSliderConfigType = assembly.GetType("RiskOfOptions.OptionConfigs.IntSliderConfig");
+
+            // Check for slider config
+            if (intSliderConfigType == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'IntSliderConfig' could not be found.");
+            }
+        }
+
+        static void GetMethods()
+        {
+            // Check for assembly and base option type
+            if (assembly == null || baseOptionType == null) return;
+
+            // Get the set mod icon method
+            setModIconMethod = assembly.GetType("RiskOfOptions.ModSettingsManager")?.GetMethod("SetModIcon", [typeof(Sprite)]);
+
+            // Check for set mod icon method
+            if (setModIconMethod == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the method 'SetModIcon' could not be found.");
+            }
+
+            // Get the add option method
+            addOptionMethod = assembly.GetType("RiskOfOptions.ModSettingsManager")?.GetMethod("AddOption", [baseOptionType, typeof(string), typeof(string)]);
+
+            // Check for add option method
+            if (addOptionMethod == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the method 'AddOption' could not be found.");
+            }
+        }
+    }
+
     internal class Setting<T> : ISetting
     {
         // Store config file
@@ -197,7 +467,10 @@ namespace Faithful
         private T randomiserMin;
         private T randomiserMax;
 
-        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true)
+        // Whether this config requires a restart
+        public bool restartRequired;
+
+        public Setting(ConfigFile _configFile, string _token, string _section, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false)
         {
             // Assign config file
             configFile = _configFile;
@@ -241,6 +514,9 @@ namespace Faithful
 
             // Assign if setting can randomise
             canRandomise = _canRandomise;
+
+            // If restart is required for this setting's changes to take effect
+            restartRequired = _restartRequired;
         }
 
         public void Sync()
@@ -533,6 +809,33 @@ namespace Faithful
 
                 // Return randomised value
                 return randomisedValue;
+            }
+        }
+
+        public T sliderMin
+        {
+            get
+            {
+                // Check if bool or default min value
+                if (typeof(T) == typeof(bool) || EqualityComparer<T>.Default.Equals(minValue, default)) return (T)Convert.ChangeType(0, typeof(T)); ;
+
+                // Otherwise return min value
+                return minValue;
+            }
+        }
+
+        public T sliderMax
+        {
+            get
+            {
+                // Check if bool
+                if (typeof(T) == typeof(bool)) return (T)Convert.ChangeType(0, typeof(T));
+
+                // Check if default max value
+                if (EqualityComparer<T>.Default.Equals(maxValue, default)) return (T)Convert.ChangeType(Convert.ToDouble(defaultValue) * 10, typeof(T));
+
+                // Otherwise return max value
+                return maxValue;
             }
         }
 

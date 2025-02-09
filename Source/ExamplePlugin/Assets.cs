@@ -50,6 +50,9 @@ namespace Faithful
 
             // Fetch all needed RoR2 resources in advance
             FetchNeededRoR2Resources();
+
+            // Update mod icon for Risk of Options
+            RiskOfOptionsWrapper.UpdateModIcon();
         }
 
         private static void FetchNeededRoR2Resources()

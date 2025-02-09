@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
 using HarmonyLib;
-using RoR2;
+using System;
 
 namespace Faithful
 {
@@ -81,6 +81,10 @@ namespace Faithful
         {
             // Update plugin info
             PInfo = Info;
+
+            // Pass GUID and mod name to Risk of Options wrapper
+            RiskOfOptionsWrapper.pluginGUID = PluginGUID;
+            RiskOfOptionsWrapper.pluginName = PluginName;
 
             // Init our logging class so that we can properly log for debugging
             Log.Init(Logger);
