@@ -531,8 +531,19 @@ namespace Faithful
             // Run original processes
             orig(self, mainMenuController);
 
-            // Randomise item stats and refresh items
-            RandomiseAndRefresh();
+            // Check if randomiser mode is enabled
+            if (randomiserMode)
+            {
+                // Randomise item stats and refresh items
+                RandomiseAndRefresh();
+            }
+
+            // Not randomiser mode
+            else
+            {
+                // Refresh item settings
+                RefreshItemSettings();
+            }
         }
 
         private static void OnLoadoutPanelEnable(On.RoR2.UI.LoadoutPanelController.orig_OnEnable orig, RoR2.UI.LoadoutPanelController self)
