@@ -71,6 +71,9 @@ namespace Faithful
 
         public void FetchSettings()
         {
+            // Check for null item
+            if (hermitShawlItem == null) return;
+
             // Update stats
             maxBuffsStacking = hermitShawlItem.FetchSetting<int>("MAX_BUFFS_STACKING").Value;
             maxBuffs = hermitShawlItem.FetchSetting<int>("MAX_BUFFS").Value;

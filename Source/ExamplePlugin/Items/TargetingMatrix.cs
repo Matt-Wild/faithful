@@ -94,7 +94,7 @@ namespace Faithful
         {
             // Create settings specific to this item
             enableTargetEffectSetting = targetingMatrixItem.CreateSetting("ENABLE_TARGET_EFFECT", "Enable Target Visual Effect?", true, "Should the target have a visual effect?", false, true);
-            damageSetting = targetingMatrixItem.CreateSetting("DAMAGE", "Damage", 0.0f, "How much should the first stack of this item increase damage dealt to target? (0.0 = 0% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.00}%");
+            damageSetting = targetingMatrixItem.CreateSetting("DAMAGE", "Damage", 0.0f, "How much should the first stack of this item increase damage dealt to target? (0.0 = 0% increase)", _maxValue: 100.0f, _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.00}%");
             damageStackingSetting = targetingMatrixItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 25.0f, "How much should further stacks of this item increase damage dealt to target? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
             maxDistanceSetting = targetingMatrixItem.CreateSetting("MAX_DISTANCE", "Max Targeting Distance", 300.0f, "How far away does the target need to be to be considered out of range? (300.0 = 300 meters)", false, _minValue: 100.0f, _valueFormatting: "{0:0}m");
             closeDistanceSetting = targetingMatrixItem.CreateSetting("CLOSE_DISTANCE", "Close Targeting Distance", 120.0f, "How close does the target need to be to be prioritised by target selection? (120.0 = 120 meters)", false, _minValue: 0.0f, _valueFormatting: "{0:0}m");
