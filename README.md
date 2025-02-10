@@ -5,6 +5,8 @@ Currently adds <b>16</b> items, <b>6</b> of which require the <b>Survivors of th
 
 Also adds some custom debug tools to help other mod developers and those curious about the inner workings of the game.
 
+Risk Of Options compatible!
+
 [![Thunderstore Version](https://img.shields.io/thunderstore/v/SpilledSoup_Projects/Faithful?style=for-the-badge&logo=thunderstore&color=blue)](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/)
 [![Thunderstore Downloads](https://img.shields.io/thunderstore/dt/SpilledSoup_Projects/Faithful?style=for-the-badge&logo=thunderstore&color=cyan)](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/)
 

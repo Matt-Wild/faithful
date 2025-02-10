@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.8 Risk Of Options Compatibility
+- Added compatibility for Risk Of Options.
+
 #### v1.2.7 Turret Item Displays
 - Added all missing item displays for Engineer's turrets.
 
@@ -52,10 +55,10 @@
 #### v1.1.1 Targeting Matrix Animation
 - Added animation for Targeting Matrix activation/deactivation.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.1.0 Finalized Targeting Matrix
 - Finalized adjustments for Targeting Matrix.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.0.21 Targeting Matrix
 - Added the Targeting Matrix item.
