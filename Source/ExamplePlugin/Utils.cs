@@ -531,6 +531,9 @@ namespace Faithful
             // Run original processes
             orig(self, mainMenuController);
 
+            // Update randomiser mode from config
+            _randomiserMode = randomiserModeSetting.Value;
+
             // Check if randomiser mode is enabled
             if (randomiserMode)
             {
