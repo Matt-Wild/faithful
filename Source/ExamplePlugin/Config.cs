@@ -278,10 +278,6 @@ namespace Faithful
                 stepSliderConfigType.GetField("max")?.SetValue(stepSliderConfig, Convert.ToSingle(_setting.sliderMax));
                 stepSliderConfigType.GetField("increment")?.SetValue(stepSliderConfig, _setting.stepSliderIncrement);
 
-                Debug.Log(stepSliderConfigType.ToString());
-                Debug.Log(stepSliderConfigType.GetField("increment").ToString());
-                Log.Debug($"Formatting: {_setting.valueFormatting} | Increment: {_setting.stepSliderIncrement}");
-
                 // Set if restart is required
                 stepSliderConfigType.GetField("restartRequired")?.SetValue(stepSliderConfig, _setting.restartRequired);
 

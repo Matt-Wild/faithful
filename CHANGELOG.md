@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.9 LookingGlass Compatibility
+- LookingGlass now overrides the extended item descriptions config.
+
 #### v1.2.8 Risk Of Options Compatibility
 - Added compatibility for Risk Of Options.
 
@@ -52,10 +55,10 @@
 #### v1.1.2 Fixed Target Matrix Lag On Death
 - Fixed NRE errors that sometimes occurred when dying with the Target Matrix.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.1.1 Targeting Matrix Animation
 - Added animation for Targeting Matrix activation/deactivation.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.1.0 Finalized Targeting Matrix
 - Finalized adjustments for Targeting Matrix.

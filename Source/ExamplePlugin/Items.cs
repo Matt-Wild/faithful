@@ -27,7 +27,7 @@ namespace Faithful
             // Create setting for disabling all items
             allItemsDisableSetting = Config.CreateSetting("ALL_ITEMS_DISABLED", "All Items", "Disable All Items", false, "Should all items from the Faithful mod be disabled?", false, _restartRequired: true);
             allItemsDisableItemDisplaysSetting = Config.CreateSetting("ALL_ITEM_DISPLAYS_DISABLED", "All Items", "Disable All Item Displays", false, "Should all items have their item displays disabled on compatible character models?", false, true, _restartRequired: true);
-            allItemsExtendedPickupDescSetting = Config.CreateSetting("ALL_ITEMS_EXTENDED_PICKUP_DESC", "All Items", "All Items Extended Pickup Description", false, "Should all items have the logbook description appear when picking them up during runs?", false, true);
+            allItemsExtendedPickupDescSetting = Config.CreateSetting("ALL_ITEMS_EXTENDED_PICKUP_DESC", "All Items", "All Items Extended Pickup Description", false, Utils.lookingGlassInstalled ? "Should all items have the logbook description appear when picking them up during runs?\n\n[THIS SETTING IS BEING OVERWRITTEN BY LookingGlass]" : "Should all items have the logbook description appear when picking them up during runs?", false, true);
         }
 
         public static Item AddItem(string _token, ItemTag[] _tags, string _iconDir, string _modelDir, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _debugOnly = false)
@@ -82,8 +82,8 @@ namespace Faithful
         {
             get
             {
-                // Return if all item pickup descriptions should be extended according to config
-                return allItemsExtendedPickupDescSetting.Value;
+                // Return if all item pickup descriptions should be extended according to config (or LookingGlass)
+                return allItemsExtendedPickupDescSetting.Value || Utils.lookingGlassInstalled;
             }
         }
     }

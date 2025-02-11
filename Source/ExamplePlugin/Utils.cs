@@ -7,6 +7,7 @@ using RoR2.ExpansionManagement;
 using RoR2.Navigation;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -28,6 +29,9 @@ namespace Faithful
 
         // Store if expansion is enabled
         public static bool expansionEnabled = true;
+
+        // Detected assemblies
+        static private bool _lookingGlassInstalled = false;
 
         // Store debug mode
         static private bool _debugMode = false;
@@ -97,6 +101,9 @@ namespace Faithful
 
         public static void Init(PluginInfo _pluginInfo)
         {
+            // Detect assemblies
+            DetectAssemblies();
+
             // Create debug mode setting
             debugModeSetting = Config.CreateSetting("DEBUG_MODE", "Debug Tools", "Debug Mode", false, "Do you want to enable this mod's debug mode?", false, true, _restartRequired: true);
 
@@ -142,6 +149,20 @@ namespace Faithful
             LoadLanguageFile();
 
             Log.Debug("Utils initialised");
+        }
+
+        private static void DetectAssemblies()
+        {
+            // Cycle through loaded assemblies
+            foreach (Assembly currentAssembly in System.AppDomain.CurrentDomain.GetAssemblies())
+            {
+                // Check if Risk of Options is installed
+                if (currentAssembly.GetName().Name == "LookingGlass")
+                {
+                    // Looking glass module detected
+                    _lookingGlassInstalled = true;
+                }
+            }
         }
 
         private static void LoadLanguageFile()
@@ -1446,6 +1467,11 @@ namespace Faithful
         public static bool randomiserMode
         {
             get { return _randomiserMode; }
+        }
+
+        public static bool lookingGlassInstalled
+        {
+            get { return _lookingGlassInstalled; }
         }
 
         public static bool hosting
