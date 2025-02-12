@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.11 Language Token Fix
+- Fixed various issues by switching to use of overlay language tokens from the Language API.
+
 #### v1.2.10 LookingGlass Compatibility Fix
 - LookingGlass now only overrides the extended item descriptions config if full pickup descriptions has been enabled.
 
@@ -51,11 +54,11 @@
 #### v1.1.4 Targeting Matrix Target Blacklist
 - Targeting Matrix can no longer target Healing Cores.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.1.3 Adjusted Randomized Stats
 - Leader's Pennon, Copper Gear and Brass Screws buff durations no longer get randomized in the randomizer mode.
 - Leader's Pennon hidden regen multiplicative buff no longer gets randomized in the randomizer mode.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.1.2 Fixed Target Matrix Lag On Death
 - Fixed NRE errors that sometimes occurred when dying with the Target Matrix.

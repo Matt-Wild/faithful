@@ -83,7 +83,7 @@ namespace Faithful
             get
             {
                 // Return if all item pickup descriptions should be extended according to config (or LookingGlass)
-                return allItemsExtendedPickupDescSetting.Value || Utils.lookingGlassFullItemDescsEnabled;
+                return allItemsExtendedPickupDescSetting.Value;
             }
         }
     }

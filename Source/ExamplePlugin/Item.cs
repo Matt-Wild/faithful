@@ -187,11 +187,15 @@ namespace Faithful
 
         public void UpdateItemTexts()
         {
+            // Use 3 parameter version to add language override for specific language
+            LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}"));
+            LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}"));
+
             // Update item texts
             itemDef.name = Utils.GetXMLLanguageString($"FAITHFUL_{token}_NAME");
             itemDef.nameToken = $"FAITHFUL_{token}_NAME";
-            itemDef.pickupToken = Config.FormatLanguageToken(Items.extendAllPickupDescriptions ? $"FAITHFUL_{token}_DESC" : extendedPickupDescSetting == null ? $"FAITHFUL_{token}_PICKUP" : extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP", $"ITEM_{token}");
-            itemDef.descriptionToken = Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}");
+            itemDef.pickupToken = Items.extendAllPickupDescriptions ? $"FAITHFUL_{token}_DESC" : extendedPickupDescSetting == null ? $"FAITHFUL_{token}_PICKUP" : extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP";
+            itemDef.descriptionToken = $"FAITHFUL_{token}_DESC";
             itemDef.loreToken = $"FAITHFUL_{token}_LORE";
         }
 

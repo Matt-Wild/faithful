@@ -31,11 +31,11 @@ namespace Faithful
         // Store if expansion is enabled
         public static bool expansionEnabled = true;
 
-        // Detected assemblies
+        /*// Detected assemblies
         static private Assembly lookingGlassAssembly = null;
 
         // Optional tracked components from other assemblies
-        static private ConfigEntry<bool> lookingGlassFullItemDescs = null;
+        static private ConfigEntry<bool> lookingGlassFullItemDescs = null;*/
 
         // Store debug mode
         static private bool _debugMode = false;
@@ -157,7 +157,7 @@ namespace Faithful
 
         private static void DetectAssemblies()
         {
-            // Cycle through loaded assemblies
+            /*// Cycle through loaded assemblies
             foreach (Assembly currentAssembly in System.AppDomain.CurrentDomain.GetAssemblies())
             {
                 // Check if LookingGlass is installed
@@ -166,7 +166,7 @@ namespace Faithful
                     // Assign LookingGlass assembly
                     lookingGlassAssembly = currentAssembly;
                 }
-            }
+            }*/
         }
 
         private static void LoadLanguageFile()
@@ -1473,7 +1473,7 @@ namespace Faithful
             get { return _randomiserMode; }
         }
 
-        public static bool lookingGlassInstalled
+        /*public static bool lookingGlassInstalled
         {
             get { return lookingGlassAssembly != null; }
         }
@@ -1513,7 +1513,7 @@ namespace Faithful
                 // Return value of config entry
                 return lookingGlassFullItemDescs.Value;
             }
-        }
+        }*/
 
         public static bool hosting
         {
