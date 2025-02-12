@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.10 LookingGlass Compatibility Fix
+- LookingGlass now only overrides the extended item descriptions config if full pickup descriptions has been enabled.
+
 #### v1.2.9 LookingGlass Compatibility
 - LookingGlass now overrides the extended item descriptions config.
 
@@ -52,10 +55,10 @@
 - Leader's Pennon, Copper Gear and Brass Screws buff durations no longer get randomized in the randomizer mode.
 - Leader's Pennon hidden regen multiplicative buff no longer gets randomized in the randomizer mode.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.1.2 Fixed Target Matrix Lag On Death
 - Fixed NRE errors that sometimes occurred when dying with the Target Matrix.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.1.1 Targeting Matrix Animation
 - Added animation for Targeting Matrix activation/deactivation.

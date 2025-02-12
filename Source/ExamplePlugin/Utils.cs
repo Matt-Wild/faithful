@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using Newtonsoft.Json;
 using R2API;
@@ -31,7 +32,10 @@ namespace Faithful
         public static bool expansionEnabled = true;
 
         // Detected assemblies
-        static private bool _lookingGlassInstalled = false;
+        static private Assembly lookingGlassAssembly = null;
+
+        // Optional tracked components from other assemblies
+        static private ConfigEntry<bool> lookingGlassFullItemDescs = null;
 
         // Store debug mode
         static private bool _debugMode = false;
@@ -156,11 +160,11 @@ namespace Faithful
             // Cycle through loaded assemblies
             foreach (Assembly currentAssembly in System.AppDomain.CurrentDomain.GetAssemblies())
             {
-                // Check if Risk of Options is installed
+                // Check if LookingGlass is installed
                 if (currentAssembly.GetName().Name == "LookingGlass")
                 {
-                    // Looking glass module detected
-                    _lookingGlassInstalled = true;
+                    // Assign LookingGlass assembly
+                    lookingGlassAssembly = currentAssembly;
                 }
             }
         }
@@ -1471,7 +1475,44 @@ namespace Faithful
 
         public static bool lookingGlassInstalled
         {
-            get { return _lookingGlassInstalled; }
+            get { return lookingGlassAssembly != null; }
+        }
+
+        public static bool lookingGlassFullItemDescsEnabled
+        {
+            get
+            {
+                // False if LookingGlass not installed
+                if (!lookingGlassInstalled) return false;
+
+                // Check for config entry
+                if (lookingGlassFullItemDescs == null)
+                {
+                    // Get the ItemStats type
+                    System.Type itemStatsType = lookingGlassAssembly.GetType("LookingGlass.ItemStatsNameSpace.ItemStats");
+                    if (itemStatsType != null)
+                    {
+                        // Get the fullDescOnPickup field
+                        FieldInfo field = itemStatsType.GetField("fullDescOnPickup", BindingFlags.Public | BindingFlags.Static);
+                        if (field != null)
+                        {
+                            // Get the value of the field
+                            object value = field.GetValue(null);
+                            if (value != null)
+                            {
+                                // Assign LookingGlass full item descriptions setting reference
+                                lookingGlassFullItemDescs = value as ConfigEntry<bool>;
+                            }
+                        }
+                    }
+
+                    // Check for config entry again
+                    if (lookingGlassFullItemDescs == null) return false;
+                }
+
+                // Return value of config entry
+                return lookingGlassFullItemDescs.Value;
+            }
         }
 
         public static bool hosting
