@@ -44,8 +44,8 @@ namespace Faithful
             // Create buff def
             buffDef = ScriptableObject.CreateInstance<BuffDef>();
 
-            // Set buff token
-            buffDef.name = $"FAITHFUL_{_token}_BUFF";
+            // Set buff name
+            buffDef.name = Utils.GetLanguageString($"FAITHFUL_{_token}_BUFF");
 
             // Set buff colour
             buffDef.buffColor = _colour;

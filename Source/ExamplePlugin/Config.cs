@@ -89,7 +89,7 @@ namespace Faithful
             return settings[_token];
         }
 
-        public static string FormatLanguageToken(string _token, string _tokenPrefix = "")
+        public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "")
         {
             // Get language string
             string languageString = Utils.GetLanguageString(_token);
@@ -132,6 +132,13 @@ namespace Faithful
 
                 // Replace setting token in language string with appropriate value
                 languageString = languageString.Replace(settingToken, setting.Value.ValueObject.ToString());
+            }
+
+            // Check for corrupted item name
+            if (_corruptedItemName != "")
+            {
+                // Replace unique CORRUPTED_ITEM token
+                languageString = languageString.Replace("[CORRUPTED_ITEM]", Utils.Pluralize(_corruptedItemName));
             }
 
             // Return formatted language string
@@ -184,9 +191,11 @@ namespace Faithful
         static Type checkBoxOptionType;
         static Type stepSliderOptionType;
         static Type intSliderOptionType;
+        static Type stringInputFieldOptionType;
         static Type checkBoxConfigType;
         static Type stepSliderConfigType;
         static Type intSliderConfigType;
+        static Type inputFieldConfigType;
 
         // Method references for Risk of Options
         static MethodInfo setModIconMethod;
@@ -330,6 +339,32 @@ namespace Faithful
                     Log.Warning($"[CONFIG] | Failed to add Risk Of Options option for setting '{_setting.token}'.\nException: {ex}");
                 }
             }
+
+            // String behaviour
+            else if (typeof(T) == typeof(string))
+            {
+                // Check for string input field option type and input field config type
+                if (stringInputFieldOptionType == null || inputFieldConfigType == null) return;
+
+                // Create input field config
+                object inputFieldConfig = Activator.CreateInstance(inputFieldConfigType);
+
+                // Set if restart is required
+                inputFieldConfigType.GetField("restartRequired")?.SetValue(inputFieldConfig, _setting.restartRequired);
+
+                // Create string input field option
+                object stringInputFieldOption = Activator.CreateInstance(stringInputFieldOptionType, [_setting.configEntry, inputFieldConfig]);
+
+                try
+                {
+                    // Add into Risk of Options
+                    addOptionMethod.Invoke(null, [stringInputFieldOption, pluginGUID, pluginName]);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning($"[CONFIG] | Failed to add Risk Of Options option for setting '{_setting.token}'.\nException: {ex}");
+                }
+            }
         }
 
         static void GetTypes()
@@ -373,6 +408,15 @@ namespace Faithful
                 Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'IntSliderOption' could not be found.");
             }
 
+            // Get string input field option type
+            stringInputFieldOptionType = assembly.GetType("RiskOfOptions.Options.StringInputFieldOption");
+
+            // Check for string input field option
+            if (stringInputFieldOptionType == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'StringInputFieldOption' could not be found.");
+            }
+
             // Get check box config type
             checkBoxConfigType = assembly.GetType("RiskOfOptions.OptionConfigs.CheckBoxConfig");
 
@@ -394,10 +438,19 @@ namespace Faithful
             // Get int slider config type
             intSliderConfigType = assembly.GetType("RiskOfOptions.OptionConfigs.IntSliderConfig");
 
-            // Check for slider config
+            // Check for int slider config
             if (intSliderConfigType == null)
             {
                 Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'IntSliderConfig' could not be found.");
+            }
+
+            // Get input field config type
+            inputFieldConfigType = assembly.GetType("RiskOfOptions.OptionConfigs.InputFieldConfig");
+
+            // Check for input field config
+            if (inputFieldConfigType == null)
+            {
+                Log.Warning($"[CONFIG] | Risk Of Options was found but the type 'InputFieldConfig' could not be found.");
             }
         }
 

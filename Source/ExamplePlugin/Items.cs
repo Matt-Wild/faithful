@@ -30,6 +30,16 @@ namespace Faithful
             allItemsExtendedPickupDescSetting = Config.CreateSetting("ALL_ITEMS_EXTENDED_PICKUP_DESC", "All Items", "All Items Extended Pickup Description", false, "Should all items have the logbook description appear when picking them up during runs?\n\nPlease note:\nThis setting can sometimes be overwritten by mods such as LookingGlass.", false, true);
         }
 
+        public static void FetchSettings()
+        {
+            // Cycle through items
+            foreach (Item item in items)
+            {
+                // Fetch settings for item
+                item.FetchSettings();
+            }
+        }
+
         public static Item AddItem(string _token, ItemTag[] _tags, string _iconDir, string _modelDir, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _debugOnly = false)
         {
             // Create item

@@ -1,5 +1,4 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using HarmonyLib;
 using Newtonsoft.Json;
 using R2API;
@@ -8,8 +7,8 @@ using RoR2.ExpansionManagement;
 using RoR2.Navigation;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -86,6 +85,30 @@ namespace Faithful
             { "seeker", "mdlSeeker" },
             { "false son", "mdlFalseSon" },
             { "chef", "mdlChef" }
+        };
+
+        // Common irregular words dictionary - used for pluralization
+        static private Dictionary<string, string> irregularPlurals = new Dictionary<string, string>()
+        {
+            { "Child", "Children" },
+            { "Person", "People" },
+            { "Mouse", "Mice" },
+            { "Goose", "Geese" },
+            { "Tooth", "Teeth" },
+            { "Foot", "Feet" },
+            { "Ox", "Oxen" },
+            { "Fish", "Fish" },
+            { "Sheep", "Sheep" },
+            { "Deer", "Deer" },
+            { "Potato", "Potatoes" },
+            { "Tomato", "Tomatoes" },
+            { "Hero", "Heroes" },
+            { "Echo", "Echoes" },
+            { "Torpedo", "Torpedoes" },
+            { "Embargo", "Embargoes" },
+            { "Mosquito", "Mosquitoes" },
+            { "Buffalo", "Buffaloes" },
+            { "Volcano", "Volcanoes" }
         };
 
         // Store list of character bodies and corresponding faithful character behaviours
@@ -258,6 +281,9 @@ namespace Faithful
 
         public static void RefreshItemSettings()
         {
+            // Fetch settings for items
+            Items.FetchSettings();
+
             // Cycle through item behaviours
             foreach (ItemBase itemBehaviour in itemBehaviours)
             {
@@ -321,10 +347,10 @@ namespace Faithful
             characterBodyLookup[_characterBody] = _faithfulBehaviour;
         }
 
-        public static void AddCorruptionPair(ItemDef _corrupter, string _corruptedToken)
+        public static void AddCorruptionPair(ItemDef _corrupter, string _corruptedToken, string _corruptedOverride = "")
         {
             // Add item pair to corruption pairs
-            corruptionPairs.Add(new CorruptPair(_corrupter, _corruptedToken));
+            corruptionPairs.Add(new CorruptPair(_corrupter, _corruptedToken, _corruptedOverride));
         }
 
         public static void TeleportToNextStage()
@@ -874,6 +900,49 @@ namespace Faithful
             Debug.Log($"[UTILS] - {message}");
         }
 
+        public static string Pluralize(string _phrase)
+        {
+            // Check for phrase
+            if (string.IsNullOrWhiteSpace(_phrase)) return _phrase;
+
+            // Split into words
+            string[] words = _phrase.Split(' ');
+            string lastWord = words[words.Length - 1];
+
+            // Check if the last word is an irregular plural
+            if (irregularPlurals.TryGetValue(lastWord, out string pluralForm))
+            {
+                // Replace last word with plural form
+                words[words.Length - 1] = pluralForm;
+            }
+            else
+            {
+                // Apply standard pluralization rules to the last word
+                words[words.Length - 1] = PluralizeWord(lastWord);
+            }
+
+            // Return joined words
+            return string.Join(" ", words);
+        }
+
+        private static string PluralizeWord(string _word)
+        {
+            // When ending with 's' assume already plural
+            if (Regex.IsMatch(_word, "(s)$", RegexOptions.IgnoreCase)) return _word;
+
+            // Common last letters for 'es' ending
+            if (Regex.IsMatch(_word, "(x|z|ch|sh)$", RegexOptions.IgnoreCase)) return _word + "es";
+
+            // Common last letters for 'ies' ending
+            if (Regex.IsMatch(_word, "[^aeiou]y$", RegexOptions.IgnoreCase)) return _word.Substring(0, _word.Length - 1) + "ies";
+
+            // Common last letters for 'ves' ending
+            if (Regex.IsMatch(_word, "(f|fe)$", RegexOptions.IgnoreCase)) return Regex.Replace(_word, "(f|fe)$", "ves");
+
+            // Just add 's' by default
+            return _word + "s";
+        }
+
         public static void AnalyseGameObject(GameObject _gameObject)
         {
             // Create message stirng
@@ -1273,6 +1342,31 @@ namespace Faithful
             return count;
         }
 
+        public static ItemDef GetItem(string _identifier)
+        {
+            // Attempt to get item def normally
+            ItemDef corruptedItem = ItemCatalog.GetItemDef(ItemCatalog.FindItemIndex(_identifier));
+
+            // Check for item def
+            if (corruptedItem == null)
+            {
+                // This can error if Item Catalog isn't ready
+                try
+                {
+                    // Attempt to fetch item with proper name
+                    corruptedItem = ItemCatalog.allItemDefs.Where(x => Language.GetString(x.nameToken) == _identifier).FirstOrDefault();
+                }
+                catch
+                {
+                    // Couldn't find item yet
+                    return null;
+                }
+            }
+
+            // Return result
+            return corruptedItem;
+        }
+
         public static CharacterMaster GetLastAttacker(CharacterBody _victim)
         {
             // Check for victim
@@ -1604,18 +1698,41 @@ namespace Faithful
         // Store corrupter and corrupted
         private ItemDef corrupter;
         private string corruptedToken;
+        private string corruptedOverride = "";
 
-        public CorruptPair(ItemDef _corrupter, string _corruptedToken)
+        public CorruptPair(ItemDef _corrupter, string _corruptedToken, string _corruptedOverride)
         {
             // Assign corrupter and corrupted
             corrupter = _corrupter;
             corruptedToken = _corruptedToken;
+            corruptedOverride = _corruptedOverride;
         }
 
         public ItemDef.Pair GetPair()
         {
             // Copy corrupted token to local
             string localCorruptedToken = corruptedToken;
+
+            // Check for corrupt override
+            if (corruptedOverride != "")
+            {
+                // Get item to corrupt
+                ItemDef overrideCorrupted = Utils.GetItem(corruptedOverride);
+
+                // Check for new corrupted item
+                if (overrideCorrupted != null)
+                {
+                    // Return setup item pair
+                    return new ItemDef.Pair { itemDef1 = overrideCorrupted, itemDef2 = corrupter };
+                }
+
+                // Override not found
+                else
+                {
+                    // Log warning
+                    Log.Warning($"[UTILS] | Failed to assign override for corrupted item '{corruptedOverride}' for void item '{corrupter.name}' reverting to default item.");
+                }
+            }
 
             // Get item to corrupt
             ItemDef corrupted = ItemCatalog.allItemDefs.Where(x => x.nameToken == localCorruptedToken).FirstOrDefault();

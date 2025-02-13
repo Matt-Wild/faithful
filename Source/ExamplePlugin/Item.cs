@@ -2,6 +2,7 @@
 using R2API;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Faithful
 {
@@ -13,16 +14,22 @@ namespace Faithful
         public Setting<bool> enabledSetting;
         public Setting<bool> extendedPickupDescSetting;
         public Setting<bool> enableItemDisplaysSetting;
+        public Setting<string> corruptedOverrideSetting;
 
         // Item def
         public ItemDef itemDef;
 
-        // Item token and name
+        // Item token, name and tier
         public string token;
         public string name;
+        public ItemTier tier;
 
         // Is this item hidden
         public bool hidden = false;
+
+        // Corrupted item token for default corrupted item and proper name for corrupted item
+        private string defaultCorruptedToken;
+        public string corruptedName = "";
 
         // Constructor
         public Item(string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _debugOnly = false)
@@ -35,6 +42,12 @@ namespace Faithful
 
             // Assign name
             name = Utils.GetLanguageString($"FAITHFUL_{token}_NAME");
+
+            // Assign tier
+            tier = _tier;
+
+            // Assign default corrupted token
+            defaultCorruptedToken = _corruptToken;
 
             // Don't create settings for hidden items
             if (!_hidden)
@@ -57,6 +70,9 @@ namespace Faithful
 
             // Update item texts
             UpdateItemTexts();
+
+            // Fetch item settings
+            FetchSettings();
 
             // Set item expansion
             itemDef.requiredExpansion = Utils.expansionDef;
@@ -84,7 +100,7 @@ namespace Faithful
             if (_corruptToken != null)
             {
                 // Add corruption pair
-                Utils.AddCorruptionPair(itemDef, _corruptToken);
+                Utils.AddCorruptionPair(itemDef, _corruptToken, corruptedOverrideSetting != null ? corruptedOverrideSetting.Value : "");
             }
 
             // Set icon and model
@@ -188,8 +204,8 @@ namespace Faithful
         public void UpdateItemTexts()
         {
             // Use 3 parameter version to add language override for specific language
-            LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}"));
-            LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}"));
+            LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}", corruptedName));
+            LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}", corruptedName));
 
             // Update item texts
             itemDef.name = Utils.GetXMLLanguageString($"FAITHFUL_{token}_NAME");
@@ -199,12 +215,55 @@ namespace Faithful
             itemDef.loreToken = $"FAITHFUL_{token}_LORE";
         }
 
+        public void FetchSettings()
+        {
+            // Update corrupted name
+            UpdateCorruptedName();
+        }
+
+        private void UpdateCorruptedName()
+        {
+            // Check if void item
+            if (tier == ItemTier.VoidTier1 || tier == ItemTier.VoidTier2 || tier == ItemTier.VoidTier3 || tier == ItemTier.VoidBoss)
+            {
+                // Check for corrupted item override
+                if (corruptedOverrideSetting != null)
+                {
+                    // Try and find item
+                    ItemDef corruptedItem = Utils.GetItem(corruptedOverrideSetting.Value);
+                    if (corruptedItem != null && !corruptedItem.hidden)
+                    {
+                        // Set corrupted item name
+                        corruptedName = Language.GetString(corruptedItem.nameToken);
+
+                        // Done
+                        return;
+                    }
+                }
+
+                // Corrupted override not found or not provided
+
+                // Check for default corrupted token
+                if (defaultCorruptedToken == null) return;
+
+                // Set corrupted item name as default corrupted item proper name
+                corruptedName = Language.GetString(defaultCorruptedToken);
+            }
+        }
+
         private void CreateDefaultSettings()
         {
             // Create the settings which every item should have
             enabledSetting = CreateSetting("ENABLED", "Enable Item?", true, "Should this item appear in runs?", false, _restartRequired: true);
             enableItemDisplaysSetting = CreateSetting("ENABLE_ITEM_DISPLAYS", "Enable Item Displays?", true, "Should this item have item displays on the compatible character models?", false, true, _restartRequired: true);
             extendedPickupDescSetting = CreateSetting("EXTENDED_PICKUP_DESC", "Extended Pickup Description", false, "Should this item have the logbook description appear when picking it up during runs?", false, true);
+
+            // Check if void item
+            if (tier == ItemTier.VoidTier1 || tier == ItemTier.VoidTier2 || tier == ItemTier.VoidTier3 || tier == ItemTier.VoidBoss)
+            {
+                // Create corrupt override setting
+                corruptedOverrideSetting = CreateSetting("CORRUPTED_OVERRIDE", "Override Corrupted Item", "", "Should this item corrupt something else instead of it's default item?", false, _canRandomise: false, _restartRequired: true);
+            }
 
             // Clean previous unused default settings
             Setting<bool> temp1 = CreateSetting("TEMP1", "Enable item?", true, "Should this item appear in runs?");
