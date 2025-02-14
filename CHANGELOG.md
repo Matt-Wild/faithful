@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.12 Corruption Overrides
+- Added configs for overriding the corrupted items for void items.
+
 #### v1.2.11 Language Token Fix
 - Fixed various issues by switching to use of overlay language tokens from the Language API.
 
@@ -51,10 +54,10 @@
 - The debug spawn menu now allows you to spawn elites.
 - The debug spawn menu now allows you to modify the power of the characters you spawn.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.1.4 Targeting Matrix Target Blacklist
 - Targeting Matrix can no longer target Healing Cores.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.1.3 Adjusted Randomized Stats
 - Leader's Pennon, Copper Gear and Brass Screws buff durations no longer get randomized in the randomizer mode.
