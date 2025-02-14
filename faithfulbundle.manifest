@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 7763770
+CRC: 1785096647
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 338f97f4a05b5be347de63b38e4453cc
+    Hash: cccb89289c1346f58f900422ecd5c16e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -77,6 +77,8 @@ Assets:
 - Assets/Items/HermitsShawl/HermitShawlDisplayMesh.prefab
 - Assets/Items/NoxiousSlimes/NoxiousSlimeMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
+- Assets/Equipment/ChargefieldPylon/ChargefieldPylonDeployMesh.prefab
+- Assets/Equipment/ChargefieldPylon/ChargefieldPylonDisplayMesh.prefab
 - Assets/Placeholder/Model/Cube_TemporaryAsset.prefab
 - Assets/Items/NoxiousSlimes/texNoxiousSlime.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
@@ -148,6 +150,7 @@ Assets:
 - Assets/Items/HasteningGreave/HasteningGreaveMesh.prefab
 - Assets/Items/TargetingMatrix/TargetingMatrixMesh.prefab
 - Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
+- Assets/Equipment/ChargefieldPylon/texChargefieldPylonIcon.png
 - Assets/Items/VengefulToaster/VengefulToasterMesh.prefab
 - Assets/Skills/Railgunner/texRailgunnerCoinNormal.png
 - Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.prefab
@@ -191,6 +194,7 @@ Assets:
 - Assets/Items/BrassScrews/texBuffTeleporterScrew.png
 - Assets/Items/SecondHand/texBuffSecondHand.png
 - Assets/Items/DrownedVisage/DrownedVisageMesh.prefab
+- Assets/Equipment/ChargefieldPylon/ChargefieldPylonMesh.prefab
 - Assets/Debug/UI/DebugObjectAnalysisEntry.prefab
 - Assets/Items/CopperGear/texCopperGearNormal.png
 - Assets/Items/CopperGear/CopperGearMesh.prefab
