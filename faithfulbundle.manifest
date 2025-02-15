@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1785096647
+CRC: 3596930536
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cccb89289c1346f58f900422ecd5c16e
+    Hash: 7d44384f6cdd33cecbbb4dd50ec5174e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 34fbcb76eae8425daa0404087004d340
@@ -90,6 +90,7 @@ Assets:
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackHolo.png
 - Assets/Items/LongshotGeode/LongshotGeodeMesh.prefab
 - Assets/Items/CauterizingGreave/CauterizingGreaveMesh.prefab
+- Assets/Equipment/Divider/DividerDisplayMesh.prefab
 - Assets/Items/SecondHand/texSecondHandIcon.png
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeRockNormal.png
@@ -103,7 +104,9 @@ Assets:
 - Assets/Items/CauterizingGreave/CauterizingGreaveDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeConsumedIcon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeIcon.png
+- Assets/Equipment/Divider/texDividerArrow.png
 - Assets/Debug/UI/DebugAudioInstanceCanvas.prefab
+- Assets/Equipment/Divider/texDividerIcon.png
 - Assets/Items/HasteningGreave/texHasteningGreaveIcon.png
 - Assets/Items/LeadersPennon/LeadersPennonDisplayMesh.prefab
 - Assets/Items/LongshotGeode/LongshotGeodeDisplayMesh.prefab
@@ -147,6 +150,7 @@ Assets:
 - Assets/Items/CauterizingGreave/texCauterizingGreaveEmission.png
 - Assets/Items/BrassScrews/texBrassScrews.png
 - Assets/Debug/UI/DebugComponentAnalysisEntry.prefab
+- Assets/Equipment/Divider/DividerMesh.prefab
 - Assets/Items/HasteningGreave/HasteningGreaveMesh.prefab
 - Assets/Items/TargetingMatrix/TargetingMatrixMesh.prefab
 - Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
