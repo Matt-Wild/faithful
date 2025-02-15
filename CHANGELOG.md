@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.13 Survivors Of The Void Requirement Fix
+- The Faithful expansion no longer requires Survivors of the Void to be enabled.
+
 #### v1.2.12 Corruption Overrides
 - Added configs for overriding the corrupted items for void items.
 
@@ -50,11 +53,11 @@
 #### v1.1.6 Fixed Rogue Config Entries
 - Fixed rogue config entries for debug items (delete old config to clean).
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.1.5 Debug Spawning Improvements
 - The debug spawn menu now allows you to spawn elites.
 - The debug spawn menu now allows you to modify the power of the characters you spawn.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.1.4 Targeting Matrix Target Blacklist
 - Targeting Matrix can no longer target Healing Cores.

@@ -250,7 +250,7 @@ namespace Faithful
 
             // Assign disabled icon and required entitlement
             expansionDef.disabledIconSprite = dlc1.disabledIconSprite;
-            expansionDef.requiredEntitlement = dlc1.requiredEntitlement;
+            expansionDef.requiredEntitlement = null;
 
             // Assign run behaviour prefab
             expansionDef.runBehaviorPrefab = runBehaviourPrefab;
