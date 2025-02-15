@@ -1,6 +1,6 @@
 # Changelog
 
-#### v1.2.13 Item Name Configs
+#### v1.2.14 Item Name Configs
 - Added configs for overriding the name of items.
 - Changed description and details of the Leader's Pennon to make it's use more clear.
 
