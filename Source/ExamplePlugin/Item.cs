@@ -14,7 +14,11 @@ namespace Faithful
         public Setting<bool> enabledSetting;
         public Setting<bool> extendedPickupDescSetting;
         public Setting<bool> enableItemDisplaysSetting;
+        public Setting<string> nameOverrideSetting;
         public Setting<string> corruptedOverrideSetting;
+
+        // Language overlays
+        LanguageAPI.LanguageOverlay nameOverlay;
 
         // Item def
         public ItemDef itemDef;
@@ -203,6 +207,20 @@ namespace Faithful
 
         public void UpdateItemTexts()
         {
+            // Check for name override
+            if (nameOverrideSetting != null && !string.IsNullOrWhiteSpace(nameOverrideSetting.Value))
+            {
+                // Set name overlay
+                nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_{token}_NAME", nameOverrideSetting.Value);
+            }
+
+            // No name override and needs to remove overlay
+            else if (nameOverlay != null)
+            {
+                // Set name overlay
+                nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_{token}_NAME", Utils.GetLanguageString($"FAITHFUL_{token}_NAME"));
+            }
+
             // Use 3 parameter version to add language override for specific language
             LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}", corruptedName));
             LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}", corruptedName));
@@ -257,6 +275,7 @@ namespace Faithful
             enabledSetting = CreateSetting("ENABLED", "Enable Item?", true, "Should this item appear in runs?", false, _restartRequired: true);
             enableItemDisplaysSetting = CreateSetting("ENABLE_ITEM_DISPLAYS", "Enable Item Displays?", true, "Should this item have item displays on the compatible character models?", false, true, _restartRequired: true);
             extendedPickupDescSetting = CreateSetting("EXTENDED_PICKUP_DESC", "Extended Pickup Description", false, "Should this item have the logbook description appear when picking it up during runs?", false, true);
+            nameOverrideSetting = CreateSetting("NAME_OVERRIDE", "Override Item Name", "", "Should this item be called something different?", false, _canRandomise: false);
 
             // Check if void item
             if (tier == ItemTier.VoidTier1 || tier == ItemTier.VoidTier2 || tier == ItemTier.VoidTier3 || tier == ItemTier.VoidBoss)
