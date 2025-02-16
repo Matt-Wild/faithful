@@ -34,6 +34,12 @@ namespace Faithful
             Log.Debug("Toolbox built");
         }
 
+        public void Start()
+        {
+            // Update tools
+            Utils.Start();
+        }
+
         public void Update()
         {
             // Update tools

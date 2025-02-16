@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using IL.RoR2.Networking;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -10,11 +12,11 @@ namespace Faithful
     internal class DebugObjectAnalysis : DebugPanel
     {
         // Store title reference
-        Text titleText;
+        TextMeshProUGUI titleText;
 
         // Store tag and layer text elements
-        Text tagText;
-        Text layerText;
+        TextMeshProUGUI tagText;
+        TextMeshProUGUI layerText;
 
         // Store parent section behaviour
         DebugObjectAnalysisParentSection parentSection;
@@ -46,11 +48,11 @@ namespace Faithful
             base.Awake();
 
             // Get title text
-            titleText = transform.Find("PanelTitle").GetComponent<Text>();
+            titleText = Utils.FindChildWithTerm(transform, "PanelTitle")?.GetComponent<TextMeshProUGUI>();
 
             // Get tag and layer text
-            tagText = transform.Find("TagTitle").GetComponent<Text>();
-            layerText = transform.Find("LayerTitle").GetComponent<Text>();
+            tagText = Utils.FindChildWithTerm(transform, "TagTitle").GetComponent<TextMeshProUGUI>();
+            layerText = Utils.FindChildWithTerm(transform, "LayerTitle").GetComponent<TextMeshProUGUI>();
 
             // Add parent section behaviour
             parentSection = transform.Find("ParentSection").gameObject.AddComponent<DebugObjectAnalysisParentSection>();
@@ -273,7 +275,7 @@ namespace Faithful
         DebugObjectAnalysis objectAnalysis;
 
         // Store title reference
-        Text titleText;
+        TextMeshProUGUI titleText;
 
         // Store namespace text reference
         Text namespaceText;
@@ -305,7 +307,7 @@ namespace Faithful
             base.Awake();
 
             // Get title text
-            titleText = transform.Find("PanelTitle").GetComponent<Text>();
+            titleText = Utils.FindChildWithTerm(transform, "PanelTitle")?.GetComponent<TextMeshProUGUI>();
 
             // Get namespace text
             namespaceText = transform.Find("NamespaceTitle").GetComponent<Text>();
@@ -478,7 +480,7 @@ namespace Faithful
         DebugObjectAnalysis analysisBehaviour;
 
         // Store reference to title
-        Text title;
+        TextMeshProUGUI title;
 
         // Store reference to select parent button
         Button selectParentButton;
@@ -495,7 +497,9 @@ namespace Faithful
         private void Awake()
         {
             // Get title text
-            title = transform.Find("Title").GetComponent<Text>();
+            title = Utils.FindChildWithTerm(transform, "Title").GetComponent<TextMeshProUGUI>();
+
+            Debug.Log($"ABC: {title}");
 
             // Get select parent button
             selectParentButton = transform.Find("SelectParentButton").GetComponent<Button>();
@@ -800,7 +804,7 @@ namespace Faithful
         Transform scrollPanel;
 
         // Store reference to title
-        protected Text title;
+        protected TextMeshProUGUI title;
 
         // Store list of current scroll entries
         List<DebugObjectAnalysisScrollEntry> scrollEntries = new List<DebugObjectAnalysisScrollEntry>();
@@ -814,7 +818,7 @@ namespace Faithful
             scrollEntryPrefab = Assets.GetObject("DebugObjectAnalysisEntry");
 
             // Get title
-            title = transform.Find("Title").GetComponent<Text>();
+            title = Utils.FindChildWithTerm(transform, "Title").GetComponent<TextMeshProUGUI>();
         }
 
         protected virtual void Awake()
@@ -975,7 +979,7 @@ namespace Faithful
     internal class DebugObjectAnalysisSearchSection : DebugObjectAnalysisScrollSection
     {
         // Store reference to search input field
-        InputField inputField;
+        TMP_InputField inputField;
 
         // Store reference to search button
         Button searchButton;
@@ -985,7 +989,7 @@ namespace Faithful
             base.Awake();
 
             // Get input field
-            inputField = transform.Find("SearchField").GetComponent<InputField>();
+            inputField = transform.Find("SearchField").GetComponent<TMP_InputField>();
 
             // Get search button
             searchButton = transform.Find("SearchButton").GetComponent<Button>();

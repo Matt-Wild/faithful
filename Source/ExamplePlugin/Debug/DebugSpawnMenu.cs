@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -27,19 +28,19 @@ namespace Faithful
         protected Button spawnButton;
 
         // Store reference to amount input
-        protected InputField amountInput;
+        protected TMP_InputField amountInput;
 
         // Store reference to power input
-        protected InputField powerInput;
+        protected TMP_InputField powerInput;
 
         // Store reference to category dropdown
-        protected Dropdown categoryDropdown;
+        protected TMP_Dropdown categoryDropdown;
 
         // Store reference to team dropdown
-        protected Dropdown teamDropdown;
+        protected TMP_Dropdown teamDropdown;
 
         // Store reference to elite type dropdown
-        protected Dropdown eliteDropdown;
+        protected TMP_Dropdown eliteDropdown;
 
         // Store reference to selection dropdowns
         protected List<SelectionDropdown> selectionDropdowns = new List<SelectionDropdown>();
@@ -53,13 +54,13 @@ namespace Faithful
             spawnButton = transform.Find("SpawnButton").gameObject.GetComponent<Button>();
 
             // Find amount input
-            amountInput = transform.Find("AmountInputField").gameObject.GetComponent<InputField>();
+            amountInput = transform.Find("AmountInputField").gameObject.GetComponent<TMP_InputField>();
 
             // Find amount input
-            powerInput = transform.Find("PowerInputField").gameObject.GetComponent<InputField>();
+            powerInput = transform.Find("PowerInputField").gameObject.GetComponent<TMP_InputField>();
 
             // Find category dropdown
-            categoryDropdown = transform.Find("CategoryDropdown").gameObject.GetComponent<Dropdown>();
+            categoryDropdown = transform.Find("CategoryDropdown").gameObject.GetComponent<TMP_Dropdown>();
 
             // Add on spawn behaviour
             spawnButton.onClick.AddListener(OnSpawn);
@@ -80,10 +81,10 @@ namespace Faithful
             base.Init(_debugController, _startOpen);
 
             // Find team dropdown
-            teamDropdown = transform.Find("TeamDropdown").gameObject.GetComponent<Dropdown>();
+            teamDropdown = transform.Find("TeamDropdown").gameObject.GetComponent<TMP_Dropdown>();
 
             // Find elite dropdown
-            eliteDropdown = transform.Find("EliteTypeDropdown").gameObject.GetComponent<Dropdown>();
+            eliteDropdown = transform.Find("EliteTypeDropdown").gameObject.GetComponent<TMP_Dropdown>();
 
             // Create selection dropdowns
             RegisterSelectionDropdowns();
@@ -105,11 +106,11 @@ namespace Faithful
         protected void RegisterSelectionDropdowns()
         {
             // Register essence selection dropdown
-            Dropdown essenceSelectionDropdown = transform.Find("EssenceSelectionDropdown").gameObject.GetComponent<Dropdown>();
+            TMP_Dropdown essenceSelectionDropdown = transform.Find("EssenceSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>();
             selectionDropdowns.Add(new SelectionDropdown(essenceSelectionDropdown, "Essence", ["Common", "Uncommon", "Legendary", "Boss/Planet", "Lunar", "Void Common", "Void Uncommon", "Void Legendary", "Void Boss/Planet", "Equipment", "Lunar Equipment"]));
 
             // Register character selection dropdown
-            Dropdown characterSelectionDropdown = transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<Dropdown>();
+            TMP_Dropdown characterSelectionDropdown = transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>();
             selectionDropdowns.Add(new SelectionDropdown(characterSelectionDropdown, "Character", Utils.characterCardNames));
 
             // Register team selection dropdown
@@ -369,12 +370,12 @@ namespace Faithful
     internal struct SelectionDropdown
     {
         // Store reference to dropdown
-        private Dropdown dropdown;
+        private TMP_Dropdown dropdown;
 
         // Store selection dropdown tag
         public string tag;
 
-        public SelectionDropdown(Dropdown _dropdown, string _tag, List<string> _options = null)
+        public SelectionDropdown(TMP_Dropdown _dropdown, string _tag, List<string> _options = null)
         {
             // Assign dropdown
             dropdown = _dropdown;

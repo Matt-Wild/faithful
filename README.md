@@ -151,7 +151,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLeadersPennonIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Leader's Pennon</b><br>
-				Create a ward around yourself that strengthens all allies within <b>15m (</b>+7.5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>. <b>This item can be adjusted</b>!
+				Create a ward around yourself that strengthens all allies other than yourself within <b>15m (</b>+7.5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>. <b>This item can be adjusted</b>!
 			</td>
       <td> 
 				Corrupts all <b>Warbanners</b>.

@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using EntityStates.VoidRaidCrab.Leg;
 using HarmonyLib;
 using Newtonsoft.Json;
 using R2API;
@@ -126,6 +127,9 @@ namespace Faithful
         // Store list of character behaviours
         static private List<System.WeakReference<ICharacterBehaviour>> characterBehaviours = new List<System.WeakReference<ICharacterBehaviour>>();
 
+        // Cache for TMP fonts to avoid redundant searches
+        static private Dictionary<string, TMP_FontAsset> fontCache = new Dictionary<string, TMP_FontAsset>();
+
         public static void Init(PluginInfo _pluginInfo)
         {
             // Detect assemblies
@@ -178,6 +182,12 @@ namespace Faithful
             Log.Debug("Utils initialised");
         }
 
+        public static void Start()
+        {
+            // Load fonts
+            LoadFonts();
+        }
+
         private static void DetectAssemblies()
         {
             /*// Cycle through loaded assemblies
@@ -190,6 +200,22 @@ namespace Faithful
                     lookingGlassAssembly = currentAssembly;
                 }
             }*/
+        }
+
+        private static void LoadFonts()
+        {
+            // Cycle through fonts
+            foreach (TMP_FontAsset tmpFont in Resources.FindObjectsOfTypeAll<TMP_FontAsset>())
+            {
+                // Check if font is already cached
+                if (fontCache.ContainsKey(tmpFont.name)) continue;
+
+                // Store fonts in dictionary for quick lookup
+                fontCache[tmpFont.name] = tmpFont;
+
+                // Log font if in debug mode
+                if (debugMode) Log.Debug($"[UTILS] | Cached font '{tmpFont.name}'.");
+            }
         }
 
         private static void LoadLanguageFile()
@@ -1185,6 +1211,23 @@ namespace Faithful
             return behaviour;
         }
 
+        public static GameObject FindChildWithTerm(Transform _parent, string _searchTerm)
+        {
+            // Cycle through children
+            foreach (Transform child in _parent)
+            {
+                // Check child name
+                if (child.name.Contains(_searchTerm))
+                {
+                    // Return child
+                    return child.gameObject;
+                }
+            }
+
+            // Did not find child
+            return null;
+        }
+
         public static bool HasLanguageString(string _token)
         {
             // Return if language file has string
@@ -1282,6 +1325,25 @@ namespace Faithful
 
             // Return list converted to array
             return inHoldoutZone.ToArray();
+        }
+
+        public static TMP_FontAsset GetFont(string _fontName)
+        {
+            // Check for font name
+            if (_fontName == null) return null;
+
+            // Check for font
+            if (!fontCache.ContainsKey(_fontName))
+            {
+                // Attempt to load more fonts
+                LoadFonts();
+
+                // Check again for font
+                if (!fontCache.ContainsKey(_fontName)) return null;
+            }
+
+            // Return font
+            return fontCache[_fontName];
         }
 
         public static List<PlayerCharacterMasterController> GetPlayers()

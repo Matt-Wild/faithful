@@ -138,6 +138,12 @@ namespace Faithful
             Log.Info("Faithful loaded successfully, thank you for playing our mod!");
         }
 
+        private void Start()
+        {
+            // Update toolbox
+            toolbox.Start();
+        }
+
         private void Update()
         {
             // Update toolbox
