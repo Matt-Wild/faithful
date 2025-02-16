@@ -278,10 +278,10 @@ namespace Faithful
         TextMeshProUGUI titleText;
 
         // Store namespace text reference
-        Text namespaceText;
+        TextMeshProUGUI namespaceText;
 
         // Store owner text reference
-        Text ownerText;
+        TextMeshProUGUI ownerText;
 
         // Store component state buttons behaviour
         DebugComponentAnalysisStateButtons stateButtons;
@@ -310,10 +310,10 @@ namespace Faithful
             titleText = Utils.FindChildWithTerm(transform, "PanelTitle")?.GetComponent<TextMeshProUGUI>();
 
             // Get namespace text
-            namespaceText = transform.Find("NamespaceTitle").GetComponent<Text>();
+            namespaceText = Utils.FindChildWithTerm(transform, "NamespaceTitle").GetComponent<TextMeshProUGUI>();
 
             // Get owner text
-            ownerText = transform.Find("OwnerTitle").GetComponent<Text>();
+            ownerText = Utils.FindChildWithTerm(transform, "OwnerTitle").GetComponent<TextMeshProUGUI>();
 
             // Add state buttons behaviour
             stateButtons = gameObject.AddComponent<DebugComponentAnalysisStateButtons>();
@@ -1045,9 +1045,9 @@ namespace Faithful
         Transform parentTransform = null;
 
         // Store reference to entry titles
-        Text activeTitle;
-        Text inactiveTitle;
-        Text nullTitle;
+        TextMeshProUGUI activeTitle;
+        TextMeshProUGUI inactiveTitle;
+        TextMeshProUGUI nullTitle;
 
         // Store reference to buttons
         Button selectButton;
@@ -1079,9 +1079,9 @@ namespace Faithful
             parentTransform = GetParentTransform();
 
             // Get titles
-            activeTitle = transform.Find("ActiveTitle").GetComponent<Text>();
-            inactiveTitle = transform.Find("InactiveTitle").GetComponent<Text>();
-            nullTitle = transform.Find("NullTitle").GetComponent<Text>();
+            activeTitle = Utils.FindChildWithTerm(transform, "ActiveTitle").GetComponent<TextMeshProUGUI>();
+            inactiveTitle = Utils.FindChildWithTerm(transform, "InactiveTitle").GetComponent<TextMeshProUGUI>();
+            nullTitle = Utils.FindChildWithTerm(transform, "NullTitle").GetComponent<TextMeshProUGUI>();
 
             // Get buttons
             selectButton = transform.Find("SelectButton").GetComponent<Button>();
@@ -1094,6 +1094,9 @@ namespace Faithful
             enableButton.onClick.AddListener(OnEnablePressed);
             disableButton.onClick.AddListener(OnDisablePressed);
             deleteButton.onClick.AddListener(OnDeletePressed);
+
+            // Apply fonts based on GameObject name tags
+            Utils.ApplyFonts(transform);
 
             // Update Titles
             UpdateTitles();
@@ -1398,7 +1401,7 @@ namespace Faithful
         Transform scrollPanel;
 
         // Store reference to title
-        protected Text title;
+        protected TextMeshProUGUI title;
 
         // Store list of current scroll entries
         List<DebugComponentAnalysisScrollEntry> scrollEntries = new List<DebugComponentAnalysisScrollEntry>();
@@ -1415,7 +1418,7 @@ namespace Faithful
             scrollEntryPrefab = Assets.GetObject("DebugComponentAnalysisEntry");
 
             // Get title
-            title = transform.Find("Title").GetComponent<Text>();
+            title = Utils.FindChildWithTerm(transform, "Title").GetComponent<TextMeshProUGUI>();
 
             // Get scroll rect
             scrollRect = transform.Find("ScrollMenu").gameObject.GetComponent<ScrollRect>();
@@ -1612,8 +1615,10 @@ namespace Faithful
         MemberInfo entryMemberInfo;
 
         // Store reference to entry titles
-        Text publicTitle;
-        Text privateTitle;
+        TextMeshProUGUI publicMethodTitle;
+        TextMeshProUGUI privateMethodTitle;
+        TextMeshProUGUI publicAttributeTitle;
+        TextMeshProUGUI privateAttributeTitle;
 
         // Store reference to buttons
         Button callButton;
@@ -1621,11 +1626,11 @@ namespace Faithful
         Button displayValueButton;
 
         // Store reference to input fields
-        InputField displayValueInput;
+        TMP_InputField displayValueInput;
 
         // Store reference to value holders
-        Text displayValue;
-        Text displayValueButtonText;
+        TextMeshProUGUI displayValue;
+        TextMeshProUGUI displayValueButtonText;
 
         // Store previously sampled member value
         object memberValue;
@@ -1655,8 +1660,10 @@ namespace Faithful
             }
 
             // Get titles
-            publicTitle = transform.Find("PublicTitle").GetComponent<Text>();
-            privateTitle = transform.Find("PrivateTitle").GetComponent<Text>();
+            publicMethodTitle = Utils.FindChildWithTerm(transform, "PublicMethodTitle").GetComponent<TextMeshProUGUI>();
+            privateMethodTitle = Utils.FindChildWithTerm(transform, "PrivateMethodTitle").GetComponent<TextMeshProUGUI>();
+            publicAttributeTitle = Utils.FindChildWithTerm(transform, "PublicAttributeTitle").GetComponent<TextMeshProUGUI>();
+            privateAttributeTitle = Utils.FindChildWithTerm(transform, "PrivateAttributeTitle").GetComponent<TextMeshProUGUI>();
 
             // Get buttons
             callButton = transform.Find("CallButton").GetComponent<Button>();
@@ -1664,11 +1671,11 @@ namespace Faithful
             displayValueButton = transform.Find("DisplayValueButton").GetComponent<Button>();
 
             // Get input fields
-            displayValueInput = transform.Find("DisplayValueInput").GetComponent<InputField>();
+            displayValueInput = transform.Find("DisplayValueInput").GetComponent<TMP_InputField>();
 
             // Get value holders
-            displayValue = transform.Find("DisplayValue").Find("Text").GetComponent<Text>();
-            displayValueButtonText = displayValueButton.transform.Find("Text").GetComponent<Text>();
+            displayValue = Utils.FindChildWithTerm(transform.Find("DisplayValue"), "Text").GetComponent<TextMeshProUGUI>();
+            displayValueButtonText = Utils.FindChildWithTerm(displayValueButton.transform, "Text").GetComponent<TextMeshProUGUI>();
 
             // Add button behaviours
             callButton.onClick.AddListener(OnCallPressed);
@@ -1678,6 +1685,9 @@ namespace Faithful
             // Add input field behaviour
             displayValueInput.onEndEdit.AddListener(OnAttributeSet);
             displayValueInput.onValueChanged.AddListener(OnInputValueChanged);
+
+            // Apply fonts based on GameObject name tags
+            Utils.ApplyFonts(transform);
 
             // Update Titles
             UpdateTitles();
@@ -1728,8 +1738,10 @@ namespace Faithful
             if (methodInfoCast != null)
             {
                 // Select correct title
-                publicTitle.gameObject.SetActive(methodInfoCast.IsPublic);
-                privateTitle.gameObject.SetActive(!methodInfoCast.IsPublic);
+                publicMethodTitle.gameObject.SetActive(methodInfoCast.IsPublic);
+                privateMethodTitle.gameObject.SetActive(!methodInfoCast.IsPublic);
+                publicAttributeTitle.gameObject.SetActive(false);
+                privateAttributeTitle.gameObject.SetActive(false);
                 return;
             }
 
@@ -1743,8 +1755,10 @@ namespace Faithful
                 bool isPublic = (getMethod != null && getMethod.IsPublic) || (setMethod != null && setMethod.IsPublic);
 
                 // Select correct title
-                publicTitle.gameObject.SetActive(isPublic);
-                privateTitle.gameObject.SetActive(!isPublic);
+                publicMethodTitle.gameObject.SetActive(false);
+                privateMethodTitle.gameObject.SetActive(false);
+                publicAttributeTitle.gameObject.SetActive(isPublic);
+                privateAttributeTitle.gameObject.SetActive(!isPublic);
                 return;
             }
 
@@ -1753,14 +1767,18 @@ namespace Faithful
             if (fieldInfoCast != null)
             {
                 // Select correct title
-                publicTitle.gameObject.SetActive(fieldInfoCast.IsPublic);
-                privateTitle.gameObject.SetActive(!fieldInfoCast.IsPublic);
+                publicMethodTitle.gameObject.SetActive(false);
+                privateMethodTitle.gameObject.SetActive(false);
+                publicAttributeTitle.gameObject.SetActive(fieldInfoCast.IsPublic);
+                privateAttributeTitle.gameObject.SetActive(!fieldInfoCast.IsPublic);
                 return;
             }
 
-            // Assume private
-            publicTitle.gameObject.SetActive(false);
-            privateTitle.gameObject.SetActive(true);
+            // Assume private attribute
+            publicMethodTitle.gameObject.SetActive(false);
+            privateMethodTitle.gameObject.SetActive(false);
+            publicAttributeTitle.gameObject.SetActive(false);
+            privateAttributeTitle.gameObject.SetActive(true);
         }
 
         private void UpdateElements()
@@ -1826,7 +1844,7 @@ namespace Faithful
                     displayValueInput.gameObject.SetActive(true);
 
                     // Set input field content type
-                    displayValueInput.contentType = InputField.ContentType.IntegerNumber;
+                    displayValueInput.contentType = TMP_InputField.ContentType.IntegerNumber;
                     return;
                 }
 
@@ -1839,7 +1857,7 @@ namespace Faithful
                     displayValueInput.gameObject.SetActive(true);
 
                     // Set input field content type
-                    displayValueInput.contentType = InputField.ContentType.IntegerNumber;
+                    displayValueInput.contentType = TMP_InputField.ContentType.IntegerNumber;
 
                     // Add input validation
                     inputValidations.Add(ValueValidations.PositiveInteger);
@@ -1855,7 +1873,7 @@ namespace Faithful
                     displayValueInput.gameObject.SetActive(true);
 
                     // Set input field content type
-                    displayValueInput.contentType = InputField.ContentType.DecimalNumber;
+                    displayValueInput.contentType = TMP_InputField.ContentType.DecimalNumber;
                     return;
                 }
 
@@ -1868,7 +1886,7 @@ namespace Faithful
                     displayValueInput.gameObject.SetActive(true);
 
                     // Set input field content type
-                    displayValueInput.contentType = InputField.ContentType.Standard;
+                    displayValueInput.contentType = TMP_InputField.ContentType.Standard;
                     return;
                 }
             }
@@ -2126,8 +2144,10 @@ namespace Faithful
         public void SetTitle(string _title)
         {
             // Set titles
-            publicTitle.text = _title;
-            privateTitle.text = _title;
+            publicMethodTitle.text = _title;
+            privateMethodTitle.text = _title;
+            publicAttributeTitle.text = _title;
+            privateAttributeTitle.text = _title;
         }
 
         public bool canWrite

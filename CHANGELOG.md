@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.2.15 Debug UI Refinements
+- Debug UI transformed to fit better with the rest of the game.
+
 #### v1.2.14 Item Name Configs
 - Added configs for overriding the name of items.
 - Changed description and details of the Leader's Pennon to make it's use more clear.
@@ -54,10 +57,10 @@
 ### v1.2.0 Hermit's Shawl
 - Added the Hermit's Shawl item.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.1.6 Fixed Rogue Config Entries
 - Fixed rogue config entries for debug items (delete old config to clean).
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.1.5 Debug Spawning Improvements
 - The debug spawn menu now allows you to spawn elites.

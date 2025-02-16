@@ -3,6 +3,7 @@ using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -364,15 +365,18 @@ namespace Faithful
         AudioAnalysisOwner audioAnalysisOwner;
 
         // Store reference to text
-        Text audioText;
+        TextMeshProUGUI audioText;
 
         public void Init(string _audioID)
         {
             // Get audio text
-            audioText = transform.Find("Panel").Find("AudioText").GetComponent<Text>();
+            audioText = Utils.FindChildWithTerm(transform.Find("Panel"), "AudioText").GetComponent<TextMeshProUGUI>();
 
             // Set audio text
             audioText.text = _audioID;
+
+            // Apply fonts based on GameObject name tags
+            Utils.ApplyFonts(transform);
 
             // Destroy the audio analysis canvas after a delay
             Invoke("DestroyObject", 4.0f);

@@ -635,6 +635,51 @@ namespace Faithful
             RandomiseAndRefresh();
         }
 
+        public static void ApplyFonts(Transform parent)
+        {
+            // Cycle through children
+            foreach (Transform child in parent)
+            {
+                // Get font name
+                string fontName = ExtractFontTag(child.gameObject.name);
+
+                // Get font
+                TMP_FontAsset font = GetFont(fontName);
+
+                // Check for valid font name
+                if (!string.IsNullOrEmpty(fontName) && font != null)
+                {
+                    // Apply font to TextMeshProUGUI
+                    TextMeshProUGUI tmpUGUI = child.GetComponent<TextMeshProUGUI>();
+                    if (tmpUGUI != null)
+                    {
+                        // Apply font
+                        tmpUGUI.font = font;
+                    }
+
+                    // Apply font to TextMeshPro
+                    TextMeshPro tmp = child.GetComponent<TextMeshPro>();
+                    if (tmp != null)
+                    {
+                        // Apply font
+                        tmp.font = font;
+                    }
+                }
+
+                // Recursively check children
+                ApplyFonts(child);
+            }
+        }
+
+        private static string ExtractFontTag(string objectName)
+        {
+            // Match anything inside square brackets at the end
+            Match match = Regex.Match(objectName, @"\[(.*?)\]$");
+
+            // Return match
+            return match.Success ? match.Groups[1].Value : null;
+        }
+
         public static void RandomiseAndRefresh()
         {
             // Check if randomiser mode is enabled
