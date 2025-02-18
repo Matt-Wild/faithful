@@ -1564,6 +1564,14 @@ namespace Faithful
 
         public static string GetLanguageString(string _token)
         {
+            // First attempt to get from RoR2.Language
+            string result = Language.GetString(_token);
+            if (result != _token)
+            {
+                // Found string
+                return result;
+            }
+
             // Check for token
             if (languageDictionary.ContainsKey(_token))
             {

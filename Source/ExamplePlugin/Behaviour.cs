@@ -4,6 +4,7 @@ using R2API;
 using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 namespace Faithful
 {
@@ -41,6 +42,8 @@ namespace Faithful
     internal delegate void AllyHolderToAllyCallback(int _count, CharacterMaster _holder, CharacterMaster _other);
 
     internal delegate void GenericCharacterCallback(GenericCharacterMain _character);
+
+    internal delegate void SceneDirectorCallback(SceneDirector _director);
 
     internal static class Behaviour
     {
@@ -111,6 +114,9 @@ namespace Faithful
         // Generic character callbacks
         private static List<GenericCharacterCallback> genericCharacterFixedUpdateCallbacks = new List<GenericCharacterCallback>();
 
+        // Scene callbacks
+        private static List<SceneDirectorCallback> onPrePopulateSceneCallbacks = new List<SceneDirectorCallback>();
+
         public static void Init()
         {
             // Create prefabs
@@ -155,6 +161,7 @@ namespace Faithful
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
+            SceneDirector.onPrePopulateSceneServer += HookPrePopulateScene;
         }
 
         public static void Disable()
@@ -190,6 +197,7 @@ namespace Faithful
             RecalculateStatsAPI.GetStatCoefficients -= HookStatsMod;
             GlobalEventManager.onServerDamageDealt -= HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal -= HookOnCharacterDeath;
+            SceneDirector.onPrePopulateSceneServer -= HookPrePopulateScene;
         }
 
         private static void CreatePrefabs()
@@ -590,6 +598,13 @@ namespace Faithful
             DebugLog("Added Generic Character Fixed Update behaviour");
         }
 
+        public static void AddOnPrePopulateSceneCallback(SceneDirectorCallback _callback)
+        {
+            onPrePopulateSceneCallbacks.Add(_callback);
+
+            DebugLog("Added On Pre-Populate Scene behaviour");
+        }
+
         // Fixed update for checking player to player interactions
         private static void PlayerOnPlayerFixedUpdate()
         {
@@ -982,6 +997,16 @@ namespace Faithful
             {
                 // Call
                 callback(_report);
+            }
+        }
+
+        private static void HookPrePopulateScene(SceneDirector _director)
+        {
+            // Cycle through callbacks
+            foreach (SceneDirectorCallback callback in onPrePopulateSceneCallbacks)
+            {
+                // Call
+                callback(_director);
             }
         }
 

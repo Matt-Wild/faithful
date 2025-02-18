@@ -2,12 +2,20 @@
   "strings": {
 	"FAITHFUL_EXPANSION_NAME": "Faithful",
 	"FAITHFUL_EXPANSION_DESC": "Adds content from the 'Faithful' mod to the game.",
+	
+	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_NAME" : "Shrine of Recollection",
+	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_CONTEXT" : "Recall...",
   
 	"FAITHFUL_DEBUG_MODE_BUFF": "GOD MODE",
 	
 	"FAITHFUL_VENGEANCE_BUFF": "Vengeance",
 	"FAITHFUL_PATIENCE_BUFF": "Patience",
 	"FAITHFUL_INSPIRATION_BUFF": "Inspiration",
+	
+	"FAITHFUL_DEBUG_ITEM_NAME": "Debug Item",
+	"FAITHFUL_DEBUG_ITEM_PICKUP": "Debug Item Pickup",
+	"FAITHFUL_DEBUG_ITEM_DESC": "Debug Item Description",
+	"FAITHFUL_DEBUG_ITEM_LORE": "Debug Item Lore",
   
     "FAITHFUL_COPPER_GEAR_NAME": "Copper Gear",
 	"FAITHFUL_COPPER_GEAR_PICKUP": "Increase attack speed while within the Teleporter zone.",
