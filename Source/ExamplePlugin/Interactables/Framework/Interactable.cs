@@ -302,7 +302,7 @@ namespace Faithful
         {
             // Set position and rotation
             m_position = _position;
-            m_rotation = Quaternion.LookRotation(_rotation);
+            m_rotation = Quaternion.Euler(_rotation);
         }
 
         // Accessors
