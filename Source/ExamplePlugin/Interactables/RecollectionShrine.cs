@@ -8,7 +8,7 @@ namespace Faithful
         public RecollectionShrine()
         {
             // Initialise interactable
-            Init("RECOLLECTION_SHRINE", "RecollectionShrineMesh");
+            Init("RECOLLECTION_SHRINE", "RecollectionShrineMesh", PingIconType.Shrine, _costType: CostTypeIndex.None);
 
             // Add set spawns
             AddSetSpawn("blackbeach2", new Vector3(-153, 11, -31), new Vector3(0, 0, 0));

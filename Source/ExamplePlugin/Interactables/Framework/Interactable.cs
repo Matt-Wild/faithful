@@ -13,6 +13,18 @@ using UnityEngine.SceneManagement;
 
 namespace Faithful
 {
+    // Used for determining and fetching the ping icon
+    internal enum PingIconType
+    {
+        Drone,
+        Inventory,
+        Loot,
+        Shrine,
+        Teleporter,
+        Mystery,
+        Custom
+    }
+
     internal class Interactable
     {
         // Token of the interactable used for finding and identifying it
@@ -20,6 +32,22 @@ namespace Faithful
 
         // Name of the model used to find the interatable in the asset bund
         private string m_modelName;
+
+        // The type of ping icon this interactable has
+        private PingIconType m_pingIconType;
+
+        // The asset name for custom ping icon
+        private string m_customPingIconAssetName;
+
+        // Purchase interaction customisation
+        private CostTypeIndex m_costType;
+        private int m_cost;
+        private bool m_startAvailable;
+        private bool m_setUnavailableOnTeleporterActivated;
+        private bool m_isShrine;
+
+        // Whether the cost hologram is able to rotate
+        private bool m_disableHologramRotation;
 
         // The model of the interactable from the asset bundle
         private GameObject m_model;
@@ -30,7 +58,8 @@ namespace Faithful
         // Dictionary of stages in which this interactables of set spawns (as well as spawn info such as position and rotation)
         private Dictionary<string, List<SetSpawnInfo>> m_setSpawns = new Dictionary<string, List<SetSpawnInfo>>();
 
-        public void Init(string _token, string _modelName)
+        public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", CostTypeIndex _costType = CostTypeIndex.Money, int _cost = 0,
+                         bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true, bool _disableHologramRotation = true)
         {
             // Assign token
             m_token = _token;
@@ -38,14 +67,34 @@ namespace Faithful
             // Assign model name
             m_modelName = _modelName;
 
-            // Prewarm interactable
-            Prewarm();
+            // Assign ping icon type
+            m_pingIconType = _pingIconType;
+
+            // Assign custom ping icon asset name
+            m_customPingIconAssetName= _customPingIconAssetName;
+
+            // Assign purchase interaction customisation
+            m_costType = _costType;
+            m_cost = _cost;
+            m_startAvailable = _startAvailable;
+            m_setUnavailableOnTeleporterActivated= _setUnavailableOnTeleporterActivated;
+            m_isShrine = _isShrine;
+
+            // Assign whether the hologram of this interactable can rotate
+            m_disableHologramRotation = _disableHologramRotation;
 
             // Register with interactables
             Interactables.RegisterInteractable(this);
+
+            // Check if assets already loaded
+            if (Assets.ready)
+            {
+                // Prewarm interactable
+                Prewarm();
+            }
         }
 
-        private void Prewarm()
+        public void Prewarm()
         {
             // Check for prefab
             if (prefab == null)
@@ -80,16 +129,41 @@ namespace Faithful
             PurchaseInteraction purchaseInteraction = m_prefab.AddComponent<PurchaseInteraction>();
             purchaseInteraction.displayNameToken = nameToken;
             purchaseInteraction.contextToken = contextToken;
-            purchaseInteraction.costType = CostTypeIndex.Money;
-            purchaseInteraction.cost = 1;
-            purchaseInteraction.available = true;
-            purchaseInteraction.setUnavailableOnTeleporterActivated = true;
-            purchaseInteraction.isShrine = true;
+            purchaseInteraction.costType = m_costType;
+            purchaseInteraction.cost = m_cost;
+            purchaseInteraction.available = m_startAvailable;
+            purchaseInteraction.setUnavailableOnTeleporterActivated = m_setUnavailableOnTeleporterActivated;
+            purchaseInteraction.isShrine = m_isShrine;
             purchaseInteraction.isGoldShrine = false;
 
             // Add ping info provider
             PingInfoProvider pingInfoProvider = m_prefab.AddComponent<PingInfoProvider>();
-            pingInfoProvider.pingIconOverride = Assets.GetIcon("TEMP");
+
+            // Check ping icon type and assign ping icon override
+            switch (m_pingIconType)
+            {
+                case PingIconType.Drone:
+                    pingInfoProvider.pingIconOverride = Assets.dronePingIcon;
+                    break;
+                case PingIconType.Inventory:
+                    pingInfoProvider.pingIconOverride = Assets.inventoryPingIcon;
+                    break;
+                case PingIconType.Loot:
+                    pingInfoProvider.pingIconOverride = Assets.lootPingIcon;
+                    break;
+                case PingIconType.Shrine:
+                    pingInfoProvider.pingIconOverride = Assets.shrinePingIcon;
+                    break;
+                case PingIconType.Teleporter:
+                    pingInfoProvider.pingIconOverride = Assets.teleporterPingIcon;
+                    break;
+                case PingIconType.Mystery:
+                    pingInfoProvider.pingIconOverride = Assets.mysteryPingIcon;
+                    break;
+                case PingIconType.Custom:
+                    pingInfoProvider.pingIconOverride = Assets.GetIcon(m_customPingIconAssetName);
+                    break;
+            }
 
             // Add generic display name provider
             GenericDisplayNameProvider genericDisplayNameProvider = m_prefab.AddComponent<GenericDisplayNameProvider>();
@@ -155,8 +229,8 @@ namespace Faithful
 
             // Add hologram projector
             HologramProjector hologramProjector = m_prefab.AddComponent<HologramProjector>();
-            hologramProjector.displayDistance = 10;
-            hologramProjector.disableHologramRotation = true;
+            hologramProjector.displayDistance = m_costType == CostTypeIndex.None ? 0 : 10;
+            hologramProjector.disableHologramRotation = m_disableHologramRotation;
 
             // Attempt to find hologram pivot
             Transform hologramPivot = Utils.FindChildByName(m_prefab.transform, "HologramPivot")?.transform;
