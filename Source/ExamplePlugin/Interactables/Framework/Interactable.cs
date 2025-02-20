@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 
 // TODO:
 // - EXPANSION REQUIREMENTS
-// - PURCHASE INTERACTION CUSTOMISATION
 
 namespace Faithful
 {
@@ -39,6 +38,10 @@ namespace Faithful
         // The asset name for custom ping icon
         private string m_customPingIconAssetName;
 
+        // The asset name and colour for the interactable symbol
+        private string m_symbolAssetName;
+        private Color m_symbolAssetColour;
+
         // Purchase interaction customisation
         private CostTypeIndex m_costType;
         private int m_cost;
@@ -58,8 +61,9 @@ namespace Faithful
         // Dictionary of stages in which this interactables of set spawns (as well as spawn info such as position and rotation)
         private Dictionary<string, List<SetSpawnInfo>> m_setSpawns = new Dictionary<string, List<SetSpawnInfo>>();
 
-        public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", CostTypeIndex _costType = CostTypeIndex.Money, int _cost = 0,
-                         bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true, bool _disableHologramRotation = true)
+        public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", string _symbolName = "", Color? _symbolColour = null, 
+                         CostTypeIndex _costType = CostTypeIndex.Money, int _cost = 0, bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true, 
+                         bool _disableHologramRotation = true)
         {
             // Assign token
             m_token = _token;
@@ -72,6 +76,10 @@ namespace Faithful
 
             // Assign custom ping icon asset name
             m_customPingIconAssetName= _customPingIconAssetName;
+
+            // Assign symbol asset name and colour
+            m_symbolAssetName = _symbolName;
+            m_symbolAssetColour = _symbolColour ?? Color.white;
 
             // Assign purchase interaction customisation
             m_costType = _costType;
@@ -125,6 +133,12 @@ namespace Faithful
             // Create prefab from clone of model
             m_prefab = model.InstantiateClone(name);
 
+            // Add interactable behaviour
+            FaithfulInteractableBehaviour interactableBehaviour = m_prefab.AddComponent<FaithfulInteractableBehaviour>();
+            interactableBehaviour.token = token;
+            interactableBehaviour.startAvailable = m_startAvailable;
+            interactableBehaviour.costType = m_costType;
+
             // Add purchase interaction
             PurchaseInteraction purchaseInteraction = m_prefab.AddComponent<PurchaseInteraction>();
             purchaseInteraction.displayNameToken = nameToken;
@@ -135,6 +149,9 @@ namespace Faithful
             purchaseInteraction.setUnavailableOnTeleporterActivated = m_setUnavailableOnTeleporterActivated;
             purchaseInteraction.isShrine = m_isShrine;
             purchaseInteraction.isGoldShrine = false;
+
+            // Add purchase interaction to interactable behaviour
+            interactableBehaviour.purchaseInteraction = purchaseInteraction;
 
             // Add ping info provider
             PingInfoProvider pingInfoProvider = m_prefab.AddComponent<PingInfoProvider>();
@@ -169,17 +186,30 @@ namespace Faithful
             GenericDisplayNameProvider genericDisplayNameProvider = m_prefab.AddComponent<GenericDisplayNameProvider>();
             genericDisplayNameProvider.displayToken = nameToken;
 
-            // Attempt to find symbol child transform
-            Transform symbolTransform = Utils.FindChildByName(m_prefab.transform, "Symbol")?.transform;
-            if (symbolTransform != null)
+            // Check for symbol asset
+            if (!string.IsNullOrWhiteSpace(m_symbolAssetName))
             {
-                // Add billboard
-                symbolTransform.gameObject.AddComponent<Billboard>();
-            }
-            else
-            {
-                // No symbol transform - warn
-                Log.Warning($"[INTERACTABLE] | No symbol transform found on interactable '{name}'.");
+                // Attempt to find symbol child transform
+                Transform symbolTransform = Utils.FindChildByName(m_prefab.transform, "Symbol")?.transform;
+                if (symbolTransform != null)
+                {
+                    // Add billboard
+                    symbolTransform.gameObject.AddComponent<Billboard>();
+
+                    // Get symbol renderer
+                    Renderer renderer = symbolTransform.GetComponent<Renderer>();
+
+                    // Modify symbol material
+                    renderer.sharedMaterial = Assets.GetShrineSymbolMaterial(Assets.GetTexture(m_symbolAssetName), m_symbolAssetColour);
+
+                    // Add symbol transform reference to interactable behaviour
+                    interactableBehaviour.symbolTransform = symbolTransform;
+                }
+                else
+                {
+                    // No symbol transform - warn
+                    Log.Warning($"[INTERACTABLE] | No symbol transform found on interactable '{name}'.");
+                }
             }
 
             // Cycle through colliders in prefab
@@ -327,6 +357,12 @@ namespace Faithful
             }
         }
 
+        public virtual void OnPurchase(Interactor _interactor)
+        {
+            // Warn that interactable doesn't have on purchase behaviour
+            Log.Warning($"[Interactable] | Interactable '{name}' does not have any purchase behaviour.");
+        }
+
         // Accessors
         public string token { get { return m_token; } }
         public string modelName { get { return m_modelName; } }
@@ -364,6 +400,68 @@ namespace Faithful
             }
         }
         public Dictionary<string, List<SetSpawnInfo>> setSpawns { get { return m_setSpawns; } }
+    }
+
+    internal class FaithfulInteractableBehaviour : NetworkBehaviour
+    {
+        public PurchaseInteraction purchaseInteraction;
+        public Transform symbolTransform;
+
+        // The token used to identify the behaviour of this interactable
+        public string token;
+
+        // Whether the interactable starts as available
+        public bool startAvailable;
+
+        // The cost type of the interactable
+        public CostTypeIndex costType;
+
+        // Callback for purchase interaction
+        public event InteractorCallback onPurchase;
+
+        private void Start()
+        {
+            // Check if hosting and run is valid
+            if (Utils.hosting && Run.instance)
+            {
+                // Check if should start as available
+                if (startAvailable)
+                {
+                    // Set as available
+                    purchaseInteraction.SetAvailableTrue();
+                }
+                
+            }
+
+            // Update cost type
+            purchaseInteraction.costType = costType;
+
+            // Add listener for when interactable is purchased
+            purchaseInteraction.onPurchase.AddListener(InteractablePurchaseAttempt);
+        }
+
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+
+            // Get interactable with token
+            Interactable interactable = Interactables.FetchInteractable(token);
+
+            // Subscribe interactable's on purchase method to the on purchase event
+            onPurchase += interactable.OnPurchase;
+        }
+
+        private void InteractablePurchaseAttempt(Interactor _interactor)
+        {
+            // Return if no valid interactor
+            if (!_interactor) return;
+
+            // Return if not hosting
+            if (!Utils.hosting) return;
+
+            // Call on purchase callback
+            onPurchase.Invoke(_interactor);
+        }
     }
 
     internal struct SetSpawnInfo

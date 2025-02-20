@@ -33,6 +33,7 @@ namespace Faithful
 
     internal delegate void OnPurchaseInteractionBeginCallback(PurchaseInteraction _shop, CharacterMaster _activator);
     internal delegate bool OnPurchaseCanBeAffordedCallback(PurchaseInteraction _shop, CharacterMaster _activator);
+    internal delegate void InteractorCallback(Interactor _interactor);
 
     internal delegate void OnProcessJumpCallback(GenericCharacterMain _character);
 

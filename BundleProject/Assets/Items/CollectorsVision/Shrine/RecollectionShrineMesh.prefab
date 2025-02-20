@@ -66,7 +66,7 @@ Transform:
   m_Children:
   - {fileID: 7391099897835791760}
   m_Father: {fileID: 1193940970881115811}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2001523975032990116
 GameObject:
@@ -108,6 +108,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1193940970881115811}
+  - component: {fileID: 4685108897196813067}
   m_Layer: 0
   m_Name: RecollectionShrineMesh
   m_TagString: Untagged
@@ -126,13 +127,32 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6773284424302416689}
   - {fileID: 3711186138268859471}
   - {fileID: 6058258088223373568}
   - {fileID: 44476898579377826}
+  - {fileID: 6773284424302416689}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &4685108897196813067
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007033476424350745}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4bdae3ccd8ad0cd41bec4c6574a97ca3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2209948259512954245
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,7 +211,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1193940970881115811}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2736717180450796201
 GameObject:
@@ -312,7 +332,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1193940970881115811}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3572598968491930066
 GameObject:
@@ -448,9 +468,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4715754892189363041}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.015, z: 0}
-  m_LocalScale: {x: 0.015, y: 0.015, z: 0.015}
+  m_LocalScale: {x: 0.015000001, y: 0.015000001, z: 0.015000001}
   m_Children: []
   m_Father: {fileID: 8694164172218143074}
   m_RootOrder: 1
@@ -605,6 +625,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3711186138268859471}
   - component: {fileID: 6826319238282058908}
+  - component: {fileID: 7986538193391359034}
   m_Layer: 0
   m_Name: RecollectionShrineMesh [HIGHLIGHT]
   m_TagString: Untagged
@@ -620,11 +641,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7443867930551027778}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.625, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 1193940970881115811}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &6826319238282058908
 SkinnedMeshRenderer:
@@ -689,6 +710,14 @@ SkinnedMeshRenderer:
     m_Center: {x: 9.313226e-10, y: 0.020264264, z: -0.0000031422824}
     m_Extent: {x: 0.012760112, y: 0.021395978, z: 0.010087298}
   m_DirtyAABB: 0
+--- !u!33 &7986538193391359034
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7443867930551027778}
+  m_Mesh: {fileID: -5615233796400855711, guid: db53f134104238443954b88e9282ad12, type: 3}
 --- !u!1 &7957893851039112710
 GameObject:
   m_ObjectHideFlags: 0

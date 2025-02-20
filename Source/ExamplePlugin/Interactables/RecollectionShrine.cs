@@ -8,12 +8,16 @@ namespace Faithful
         public RecollectionShrine()
         {
             // Initialise interactable
-            Init("RECOLLECTION_SHRINE", "RecollectionShrineMesh", PingIconType.Shrine, _costType: CostTypeIndex.None);
+            Init("RECOLLECTION_SHRINE", "RecollectionShrineMesh", PingIconType.Shrine, _costType: CostTypeIndex.None, _symbolName: "texShrineRecollectionSymbol", _symbolColour: new Color(1.0f, 0.23525f, 0.49f));
 
             // Add set spawns
+            AddSetSpawn("blackbeach", new Vector3(31, -211, -122), new Vector3(0, 0, 0));
             AddSetSpawn("blackbeach2", new Vector3(-153, 11, -31), new Vector3(0, 0, 0));
             AddSetSpawn("snowyforest", new Vector3(-138, 5, 8), new Vector3(0, 0, 0));
             AddSetSpawn("village", new Vector3(134, 14, -149), new Vector3(0, 0, 0));
+            AddSetSpawn("golemplains", new Vector3(-120, -139, -160), new Vector3(0, 0, 0));
+            AddSetSpawn("golemplains2", new Vector3(-20, 10, -11), new Vector3(0, 0, 0));
+            AddSetSpawn("lakes", new Vector3(-69, 1, -145), new Vector3(0, 0, 0));
 
             AddSetSpawn("moon2", new Vector3(1038F, -284.05F, 1154F), new Vector3(0, 65, 0));
             AddSetSpawn("limbo", new Vector3(-47.825F, -11.1F, -35F), new Vector3(0, 180, 0));
@@ -42,6 +46,11 @@ namespace Faithful
 
             // Add behaviour
             Behaviour.AddOnPrePopulateSceneCallback(OnPrePopulateScene);
+        }
+
+        public override void OnPurchase(Interactor _interactor)
+        {
+            Debug.Log("SHRINE USED");
         }
 
         private void OnPrePopulateScene(SceneDirector _director)

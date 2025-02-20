@@ -41,6 +41,9 @@ namespace Faithful
         public static Sprite teleporterPingIcon;
         public static Sprite mysteryPingIcon;
 
+        // Interactable symbol materials
+        public static Material chanceShrineSymbolMaterial;
+
         // Default assets
         private const string defaultModel = "temporalcubemesh";
         private const string defaultIcon = "textemporalcubeicon";
@@ -157,6 +160,10 @@ namespace Faithful
             Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").Completed += OnMysteryPingIconLoaded;
             m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
 
+            // Fetch interactable symbol materials
+            Addressables.LoadAssetAsync<Material>("RoR2/Base/ShrineChance/matShrineChanceSymbol.mat").Completed += OnChanceShrineSymbolMaterialLoaded;
+            m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
+
             // Check if debug mode
             if (Utils.debugMode)
             {
@@ -243,6 +250,18 @@ namespace Faithful
             {
                 // Store
                 mysteryPingIcon = _handle.Result;
+            }
+
+            // Async asset has been loaded
+            AsyncAssetLoaded();
+        }
+
+        private static void OnChanceShrineSymbolMaterialLoaded(AsyncOperationHandle<Material> _handle)
+        {
+            if (_handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                // Store
+                chanceShrineSymbolMaterial = _handle.Result;
             }
 
             // Async asset has been loaded
@@ -447,6 +466,17 @@ namespace Faithful
 
             // Return asset
             return assetBundle.LoadAsset<Shader>(asset);
+        }
+
+        public static Material GetShrineSymbolMaterial(Texture _texture, Color _colour)
+        {
+            // Clone material and modify main texture
+            Material clonedMaterial = new Material(chanceShrineSymbolMaterial);
+            clonedMaterial.SetTexture("_MainTex", _texture);
+            clonedMaterial.SetColor("_TintColor", _colour);
+
+            // Return cloned material
+            return clonedMaterial;
         }
 
         // Accessors

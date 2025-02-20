@@ -1,5 +1,4 @@
-﻿using IL.RoR2.Networking;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TMPro;
@@ -499,8 +498,6 @@ namespace Faithful
             // Get title text
             title = Utils.FindChildWithTerm(transform, "Title").GetComponent<TextMeshProUGUI>();
 
-            Debug.Log($"ABC: {title}");
-
             // Get select parent button
             selectParentButton = transform.Find("SelectParentButton").GetComponent<Button>();
 
@@ -563,6 +560,7 @@ namespace Faithful
         // Store reference to buttons
         Button enableButton;
         Button disableButton;
+        Button logButton;
         Button deleteButton;
 
         // Store current object that is being analysed
@@ -579,11 +577,13 @@ namespace Faithful
             // Get buttons
             enableButton = transform.Find("EnableButton").GetComponent<Button>();
             disableButton = transform.Find("DisableButton").GetComponent<Button>();
+            logButton = transform.Find("LogButton").GetComponent<Button>();
             deleteButton = transform.Find("DeleteButton").GetComponent<Button>();
 
             // Add button behaviours
             enableButton.onClick.AddListener(OnEnablePressed);
             disableButton.onClick.AddListener(OnDisablePressed);
+            logButton.onClick.AddListener(OnLogPressed);
             deleteButton.onClick.AddListener(OnDeletePressed);
         }
 
@@ -598,6 +598,7 @@ namespace Faithful
                 // Hide buttons
                 enableButton.gameObject.SetActive(false);
                 disableButton.gameObject.SetActive(false);
+                logButton.gameObject.SetActive(false);
                 deleteButton.gameObject.SetActive(false);
 
                 return;
@@ -606,6 +607,7 @@ namespace Faithful
             // Show buttons
             enableButton.gameObject.SetActive(true);
             disableButton.gameObject.SetActive(true);
+            logButton.gameObject.SetActive(true);
             deleteButton.gameObject.SetActive(true);
         }
 
@@ -625,6 +627,15 @@ namespace Faithful
 
             // Disable object
             analysedObject.SetActive(false);
+        }
+
+        private void OnLogPressed()
+        {
+            // Check if no object being analysed
+            if (analysedObject == null) return;
+
+            // Log to console
+            Utils.AnalyseGameObject(analysedObject);
         }
 
         private void OnDeletePressed()
