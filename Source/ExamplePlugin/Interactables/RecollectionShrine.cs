@@ -22,7 +22,7 @@ namespace Faithful
             AddSetSpawn("moon2", new Vector3(1038F, -284.05F, 1154F), new Vector3(0, 65, 0));
             AddSetSpawn("limbo", new Vector3(-47.825F, -11.1F, -35F), new Vector3(0, 180, 0));
             AddSetSpawn("voidraid", new Vector3(-21F, 28F, -170F), new Vector3(0, 140, 0));
-            AddSetSpawn("meridian", new Vector3(-223F, -188.125F, 238F), new Vector3(0, 0, 0));
+            AddSetSpawn("meridian", new Vector3(-223F, -188.125F, 238F), new Vector3(0, 30, 0));
             AddSetSpawn("goldshores", new Vector3(-8.5F, 69.125F, -66.25F), new Vector3(0, 339, 0));
             AddSetSpawn("goldshores", new Vector3(102F, -6.75F, 67.5F), new Vector3(0, 40, 0));
             AddSetSpawn("goldshores", new Vector3(-90F, -8.125F, -88F), new Vector3(0, 249, 0));
