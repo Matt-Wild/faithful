@@ -1562,28 +1562,50 @@ namespace Faithful
             return childTree;
         }
 
-        public static string GetLanguageString(string _token)
+        public static string GetLanguageString(string _token, bool _prioritiseRoR2Language = false)
         {
-            // First attempt to get from RoR2.Language
-            string result = Language.GetString(_token);
-            if (result != _token)
+            // Check if should prioritise using RoR2.Language
+            if (_prioritiseRoR2Language)
             {
-                // Found string
-                return result;
+                // First attempt to get from RoR2.Language
+                string result = Language.GetString(_token);
+                if (result != _token)
+                {
+                    // Found string
+                    return result;
+                }
+
+                // Check for token
+                if (languageDictionary.ContainsKey(_token))
+                {
+                    // Return corresponding value
+                    return languageDictionary[_token];
+                }
+
+                // Token not found
+                else
+                {
+                    Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
+                    return _token; // Return original token
+                }
             }
 
-            // Check for token
-            if (languageDictionary.ContainsKey(_token))
-            {
-                // Return corresponding value
-                return languageDictionary[_token];
-            }
-
-            // Token not found
             else
             {
-                Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
-                return _token; // Return original token
+                // Check for token
+                if (languageDictionary.ContainsKey(_token))
+                {
+                    // Return corresponding value
+                    return languageDictionary[_token];
+                }
+
+                // Token not found
+                else
+                {
+                    Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
+
+                    return Language.GetString(_token); // Revert to RoR2.Language
+                }
             }
         }
 

@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 // TODO:
 // - EXPANSION REQUIREMENTS
+// - CUSTOM COST TYPE DEF CUSTOMISATION
 
 namespace Faithful
 {
@@ -21,6 +22,29 @@ namespace Faithful
         Shrine,
         Teleporter,
         Mystery,
+        Custom
+    }
+
+    // Used for determining cost type or custom cost type
+    internal enum InteractableCostType
+    {
+        None,
+        Money,
+        PercentHealth,
+        LunarCoin,
+        WhiteItem,
+        GreenItem,
+        RedItem,
+        Equipment,
+        VolatileBattery,
+        LunarItemOrEquipment,
+        BossItem,
+        ArtifactShellKillerItem,
+        TreasureCacheItem,
+        TreasureCacheVoidItem,
+        VoidCoin,
+        SoulCost,
+        Count,
         Custom
     }
 
@@ -49,6 +73,10 @@ namespace Faithful
         private bool m_setUnavailableOnTeleporterActivated;
         private bool m_isShrine;
 
+        // Custom cost type definition customisation
+        private string m_customCostString;
+        private ColorCatalog.ColorIndex m_customCostColour;
+
         // Whether the cost hologram is able to rotate
         private bool m_disableHologramRotation;
 
@@ -58,12 +86,15 @@ namespace Faithful
         // The prefab that's spawned in the game world for this interactable
         private GameObject m_prefab;
 
+        // The definition for this interactables custom cost type
+        private CostTypeDef m_customCostType;
+
         // Dictionary of stages in which this interactables of set spawns (as well as spawn info such as position and rotation)
         private Dictionary<string, List<SetSpawnInfo>> m_setSpawns = new Dictionary<string, List<SetSpawnInfo>>();
 
-        public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", string _symbolName = "", Color? _symbolColour = null, 
-                         CostTypeIndex _costType = CostTypeIndex.Money, int _cost = 0, bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true, 
-                         bool _disableHologramRotation = true)
+        public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", string _symbolName = "", Color? _symbolColour = null,
+                         InteractableCostType _costType = InteractableCostType.Money, int _cost = 1, bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true, 
+                         bool _disableHologramRotation = true, string _customCostString = null, ColorCatalog.ColorIndex _customCostColour = ColorCatalog.ColorIndex.None)
         {
             // Assign token
             m_token = _token;
@@ -75,24 +106,73 @@ namespace Faithful
             m_pingIconType = _pingIconType;
 
             // Assign custom ping icon asset name
-            m_customPingIconAssetName= _customPingIconAssetName;
+            m_customPingIconAssetName = _customPingIconAssetName;
 
             // Assign symbol asset name and colour
             m_symbolAssetName = _symbolName;
             m_symbolAssetColour = _symbolColour ?? Color.white;
 
+            // Assign cost type
+            AssignCostType(_costType);
+
             // Assign purchase interaction customisation
-            m_costType = _costType;
             m_cost = _cost;
             m_startAvailable = _startAvailable;
             m_setUnavailableOnTeleporterActivated= _setUnavailableOnTeleporterActivated;
             m_isShrine = _isShrine;
+
+            // Assign custom cost type definition customisation
+            m_customCostString = _customCostString;
+            m_customCostColour = _customCostColour;
 
             // Assign whether the hologram of this interactable can rotate
             m_disableHologramRotation = _disableHologramRotation;
 
             // Register with interactables
             Interactables.RegisterInteractable(this);
+
+            // Check if assets already loaded (don't immediately prewarm interactables with custom cost types)
+            if (Assets.ready && _costType != InteractableCostType.Custom)
+            {
+                // Prewarm interactable
+                Prewarm();
+            }
+        }
+
+        private void AssignCostType(InteractableCostType _costType)
+        {
+            // Check if custom
+            if (_costType == InteractableCostType.Custom)
+            {
+                // Add custom cost type to cost type catalog
+                CostTypeCatalog.modHelper.getAdditionalEntries += AddCustomCostType;
+            }
+
+            // Standard cost type
+            else
+            {
+                // Assign cost type
+                m_costType = (CostTypeIndex)_costType;
+            }
+        }
+
+        private void AddCustomCostType(List<CostTypeDef> _list)
+        {
+            // Create custom cost type definition
+            m_customCostType = new CostTypeDef();
+            m_customCostType.costStringFormatToken = $"FAITHFUL_COST_{token}_FORMAT";
+            m_customCostType.isAffordable = new CostTypeDef.IsAffordableDelegate(CustomIsAffordable);
+            m_customCostType.payCost = new CostTypeDef.PayCostDelegate(CustomPayCost);
+            m_customCostType.colorIndex = m_customCostColour;
+            m_customCostType.saturateWorldStyledCostString = true;
+            m_customCostType.darkenWorldStyledCostString = false;
+            m_costType = (CostTypeIndex)(CostTypeCatalog.costTypeDefs.Length + _list.Count);
+
+            // Add custom cost formatting to language API
+            LanguageAPI.Add($"FAITHFUL_COST_{token}_FORMAT", m_customCostString == null ? "?" : m_customCostString);
+
+            // Add custom cost type definition to the list of additional cost type definitions
+            _list.Add(m_customCostType);
 
             // Check if assets already loaded
             if (Assets.ready)
@@ -259,7 +339,7 @@ namespace Faithful
 
             // Add hologram projector
             HologramProjector hologramProjector = m_prefab.AddComponent<HologramProjector>();
-            hologramProjector.displayDistance = m_costType == CostTypeIndex.None ? 0 : 10;
+            hologramProjector.displayDistance = (m_costType == CostTypeIndex.None || (m_customCostType != null && m_customCostString == null)) ? 0 : 10;
             hologramProjector.disableHologramRotation = m_disableHologramRotation;
 
             // Attempt to find hologram pivot
@@ -361,6 +441,21 @@ namespace Faithful
         {
             // Warn that interactable doesn't have on purchase behaviour
             Log.Warning($"[Interactable] | Interactable '{name}' does not have any purchase behaviour.");
+        }
+
+        public virtual bool CustomIsAffordable(CostTypeDef _costTypeDef, CostTypeDef.IsAffordableContext _context)
+        {
+            // Warn that interactable doesn't have custom is affordable behaviour
+            Log.Warning($"[Interactable] | Interactable '{name}' has a custom cost type but does not have any custom is affordable behaviour.");
+
+            // Default to true
+            return true;
+        }
+
+        public virtual void CustomPayCost(CostTypeDef _costTypeDef, CostTypeDef.PayCostContext _context)
+        {
+            // Warn that interactable doesn't have custom pay cost behaviour
+            Log.Warning($"[Interactable] | Interactable '{name}' has a custom cost type but does not have any custom pay cost behaviour.");
         }
 
         // Accessors

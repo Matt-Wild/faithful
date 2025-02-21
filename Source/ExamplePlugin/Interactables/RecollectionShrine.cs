@@ -8,7 +8,8 @@ namespace Faithful
         public RecollectionShrine()
         {
             // Initialise interactable
-            Init("RECOLLECTION_SHRINE", "RecollectionShrineMesh", PingIconType.Shrine, _costType: CostTypeIndex.None, _symbolName: "texShrineRecollectionSymbol", _symbolColour: new Color(1.0f, 0.23525f, 0.49f));
+            Init("RECOLLECTION_SHRINE", "RecollectionShrineMesh", PingIconType.Shrine, _costType: InteractableCostType.Custom, _symbolName: "texShrineRecollectionSymbol", 
+                 _symbolColour: new Color(1.0f, 0.23525f, 0.49f), _customCostString: "TEMP", _customCostColour: ColorCatalog.ColorIndex.VoidItem);
 
             // Add set spawns
             AddSetSpawn("blackbeach", new Vector3(31, -211, -122), new Vector3(0, 0, 0));
@@ -51,6 +52,18 @@ namespace Faithful
         public override void OnPurchase(Interactor _interactor)
         {
             Debug.Log("SHRINE USED");
+        }
+
+        public override bool CustomIsAffordable(CostTypeDef _costTypeDef, CostTypeDef.IsAffordableContext _context)
+        {
+            Debug.Log("IS AFFORDABLE");
+
+            return true;
+        }
+
+        public override void CustomPayCost(CostTypeDef _costTypeDef, CostTypeDef.PayCostContext _context)
+        {
+            Debug.Log("PAY COST");
         }
 
         private void OnPrePopulateScene(SceneDirector _director)

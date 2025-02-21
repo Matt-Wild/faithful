@@ -276,6 +276,9 @@ namespace Faithful
             // Check if all async assets have been loaded
             if (m_asyncAssetsNeeded == 0)
             {
+                // Set as ready
+                m_ready = true;
+
                 // Prewarm interactables
                 Interactables.Prewarm();
             }
