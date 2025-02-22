@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1704428467
+CRC: 64233758
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1456967a540a6fc995f11d80a3e1fbac
+    Hash: b716052a78d673287a514e436d248e47
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1c7c2ec4467805492b6a7002c6b862f5
+    Hash: b0da3797eb263d2a0137e17d5baef4e9
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -60,13 +60,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 261c50d8a80898e4ebf2e8e415ea6766, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 261c50d8a80898e4ebf2e8e415ea6766, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 751bd37d2e55f5f448dbb0d97812d9ba, type: 3}
 - Class: 115
@@ -91,6 +91,7 @@ Assets:
 - Assets/Items/LeadersPennon/texLeadersPennonEmission.png
 - Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.prefab
 - Assets/Survivors/Technician/Mesh/TechnicianMasteryMesh.fbx
+- Assets/Survivors/Technician/Projectiles/Mesh/TechnicianPointlinkMesh.fbx
 - Assets/Items/LeadersPennon/texLeadersPennonNormal.png
 - Assets/Items/Chakram/ChakramMesh.prefab
 - Assets/Items/HermitsShawl/HermitShawlDisplayMesh.prefab
@@ -102,6 +103,7 @@ Assets:
 - Assets/Survivors/Technician/Icons/texTechnicianProximitySeekerIcon.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlime.png
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
+- Assets/Survivors/Technician/Allies/Mesh/TechnicianTurretMesh.fbx
 - Assets/Debug/UI/DebugCanvas.prefab
 - Assets/Items/4-T0NJetpack/texRamp4T0NFire.png
 - Assets/Items/4-T0NJetpack/Materials/tex4T0NJetpackBaseFlare.mat
@@ -123,9 +125,11 @@ Assets:
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionEmission.png
 - Assets/Survivors/Technician/Mesh/TechnicianDefaultMesh.fbx
 - Assets/Items/CollectorsVision/texCollectorsVisionIcon.png
+- Assets/Survivors/Technician/Projectiles/Mesh/TechnicianTurretRocketMesh.fbx
 - Assets/Items/Chakram/texChakram.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionSymbol.png
 - Assets/Items/HermitsShawl/HermitShawlMesh.prefab
+- Assets/Survivors/Technician/Allies/Mesh/TechnicianRobotMesh.fbx
 - Assets/Survivors/Technician/Icons/texTechnicianPowerpulseIcon.png
 - Assets/Placeholder/Item/texBuffTemporalCube.png
 - Assets/Items/CauterizingGreave/CauterizingGreaveDisplayMesh.prefab
@@ -156,6 +160,7 @@ Assets:
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackBaseFlare.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeNormal.png
 - Assets/Items/LeadersPennon/texLeadersPennonIcon.png
+- Assets/Survivors/Technician/Projectiles/TechnicianFloatingGrenade.prefab
 - Assets/Survivors/Technician/Icons/texTurretRoboticShotgunIcon.png
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
 - Assets/Survivors/Technician/Icons/texTechnicianConduitDeployIcon.png
@@ -203,6 +208,7 @@ Assets:
 - Assets/Survivors/Technician/Icons/texTechnicianPowervoltIcon.png
 - Assets/Items/CollectorsVision/texCollectorsVisionEmission.png
 - Assets/Placeholder/Item/texTemporalCube.png
+- Assets/Survivors/Technician/Projectiles/TechnicianPointlink.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianJackhammerIcon.png
 - Assets/Items/TargetingMatrix/texTargetingMatrix.png
 - Assets/Survivors/Technician/Materials/texTechnicianDefault.mat
@@ -219,6 +225,7 @@ Assets:
 - Assets/Items/Chakram/ChakramProjectileMesh.prefab
 - Assets/Items/HasteningGreave/texHasteningGreaveNormal.png
 - Assets/Survivors/Technician/Icons/texTechnicianElectroblastIcon.png
+- Assets/Survivors/Technician/Allies/mdlTechnicianTurret.prefab
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackEmission.png
 - Assets/Items/CopperGear/texCopperGear.png
 - Assets/Items/CollectorsVision/texBuffInspiredBoost.png
@@ -227,6 +234,7 @@ Assets:
 - Assets/Items/MeltingWarbler/texMeltingWarblerIcon.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveIcon.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.prefab
+- Assets/Survivors/Technician/Projectiles/Mesh/TechnicianFloatingGrenadeMesh.fbx
 - Assets/Survivors/Technician/Icons/texTechnicianTurretIcon.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackHoloEmission.png
 - Assets/Items/CollectorsVision/CollectorsVisionDisplayMesh.prefab
@@ -238,6 +246,7 @@ Assets:
 - Assets/Items/TargetingMatrix/texIndicatorMatrixMask.png
 - Assets/Survivors/Technician/Textures/texTechnicianPrime.png
 - Assets/Items/Chakram/texChakramNormal.png
+- Assets/Survivors/Technician/Projectiles/TechnicianTurretRocket.prefab
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
 - Assets/Survivors/Technician/Textures/texTechnicianDefault.png
 - Assets/Survivors/Technician/Textures/texTechnicianEmission.png
@@ -259,5 +268,6 @@ Assets:
 - Assets/Items/CopperGear/CopperGearMesh.prefab
 - Assets/Items/LongshotGeode/texLongshotGeodeRock.png
 - Assets/Skills/Railgunner/RailgunnerCoinMesh.prefab
+- Assets/Survivors/Technician/Allies/mdlTechnicianRobot.prefab
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystal.png
 Dependencies: []
