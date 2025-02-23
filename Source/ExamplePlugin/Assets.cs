@@ -4,7 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using R2API;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+using RoR2.ExpansionManagement;
 
 namespace Faithful
 {
@@ -15,13 +15,7 @@ namespace Faithful
 
         // Asset bundle
         public static AssetBundle assetBundle;
-
-        // If assets are ready
-        private static bool m_ready = false;
-
-        // Amount of asynchronously fetched assets needed before ready
-        private static int m_asyncAssetsNeeded = 0;
-
+        
         // Store needed RoR2 resources
         public static Material mageJetMaterial;
         public static Wave[] mageJetWaves;
@@ -43,6 +37,10 @@ namespace Faithful
 
         // Interactable symbol materials
         public static Material chanceShrineSymbolMaterial;
+
+        // Expansion definitions
+        public static ExpansionDef sotvDef;
+        public static ExpansionDef sotsDef;
 
         // Default assets
         private const string defaultModel = "temporalcubemesh";
@@ -143,144 +141,28 @@ namespace Faithful
             radiusIndicatorPrefab.AddComponent<FaithfulRadiusIndicatorBehaviour>();
 
             // Fetch ego scarf asset
-            Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/LunarSun/DisplaySunHeadNeck.prefab").Completed += OnScarfLoaded;
-            m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
+            scarfDynamicBone = Utils.FindChildByName(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/LunarSun/DisplaySunHeadNeck.prefab").WaitForCompletion().transform, "Bandage1").GetComponent<DynamicBone>();
 
             // Fetch ping icons
-            Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texDroneIconOutlined.png").Completed += OnDronePingIconLoaded;
-            m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
-            Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texInventoryIconOutlined.png").Completed += OnInventoryPingIconLoaded;
-            m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
-            Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texLootIconOutlined.png").Completed += OnLootPingIconLoaded;
-            m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
-            Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texShrineIconOutlined.png").Completed += OnShrinePingIconLoaded;
-            m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
-            Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texTeleporterIconOutlined.png").Completed += OnTeleporterPingIconLoaded;
-            m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
-            Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").Completed += OnMysteryPingIconLoaded;
-            m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
+            dronePingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texDroneIconOutlined.png").WaitForCompletion();
+            inventoryPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texInventoryIconOutlined.png").WaitForCompletion();
+            lootPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texLootIconOutlined.png").WaitForCompletion();
+            shrinePingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texShrineIconOutlined.png").WaitForCompletion();
+            teleporterPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texTeleporterIconOutlined.png").WaitForCompletion();
+            mysteryPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion();
 
             // Fetch interactable symbol materials
-            Addressables.LoadAssetAsync<Material>("RoR2/Base/ShrineChance/matShrineChanceSymbol.mat").Completed += OnChanceShrineSymbolMaterialLoaded;
-            m_asyncAssetsNeeded++;  // ALWAYS INCREMENT ASYNC ASSETS NEEDED WHEN REQUESTING AN ASYNC ASSET
+            chanceShrineSymbolMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/ShrineChance/matShrineChanceSymbol.mat").WaitForCompletion();
+
+            // Get expansion definitions
+            sotvDef = Addressables.LoadAssetAsync<ExpansionDef>("RoR2/DLC1/Common/DLC1.asset").WaitForCompletion();
+            sotsDef = Addressables.LoadAssetAsync<ExpansionDef>("RoR2/DLC2/Common/DLC2.asset").WaitForCompletion();
 
             // Check if debug mode
             if (Utils.debugMode)
             {
                 // Log confirmation
                 Log.Debug("[ASSETS] - Fetched all needed resources from RoR2 assets.");
-            }
-        }
-
-        private static void OnScarfLoaded(AsyncOperationHandle<GameObject> _handle)
-        {
-            if (_handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                // Get scarf dynamic bone
-                scarfDynamicBone = Utils.FindChildByName(_handle.Result.transform, "Bandage1").GetComponent<DynamicBone>();
-            }
-
-            // Async asset has been loaded
-            AsyncAssetLoaded();
-        }
-
-        private static void OnDronePingIconLoaded(AsyncOperationHandle<Sprite> _handle)
-        {
-            if (_handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                // Store
-                dronePingIcon = _handle.Result;
-            }
-
-            // Async asset has been loaded
-            AsyncAssetLoaded();
-        }
-
-        private static void OnInventoryPingIconLoaded(AsyncOperationHandle<Sprite> _handle)
-        {
-            if (_handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                // Store
-                inventoryPingIcon = _handle.Result;
-            }
-
-            // Async asset has been loaded
-            AsyncAssetLoaded();
-        }
-
-        private static void OnLootPingIconLoaded(AsyncOperationHandle<Sprite> _handle)
-        {
-            if (_handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                // Store
-                lootPingIcon = _handle.Result;
-            }
-
-            // Async asset has been loaded
-            AsyncAssetLoaded();
-        }
-
-        private static void OnShrinePingIconLoaded(AsyncOperationHandle<Sprite> _handle)
-        {
-            if (_handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                // Store
-                shrinePingIcon = _handle.Result;
-            }
-
-            // Async asset has been loaded
-            AsyncAssetLoaded();
-        }
-
-        private static void OnTeleporterPingIconLoaded(AsyncOperationHandle<Sprite> _handle)
-        {
-            if (_handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                // Store
-                teleporterPingIcon = _handle.Result;
-            }
-
-            // Async asset has been loaded
-            AsyncAssetLoaded();
-        }
-
-        private static void OnMysteryPingIconLoaded(AsyncOperationHandle<Sprite> _handle)
-        {
-            if (_handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                // Store
-                mysteryPingIcon = _handle.Result;
-            }
-
-            // Async asset has been loaded
-            AsyncAssetLoaded();
-        }
-
-        private static void OnChanceShrineSymbolMaterialLoaded(AsyncOperationHandle<Material> _handle)
-        {
-            if (_handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                // Store
-                chanceShrineSymbolMaterial = _handle.Result;
-            }
-
-            // Async asset has been loaded
-            AsyncAssetLoaded();
-        }
-
-        private static void AsyncAssetLoaded()
-        {
-            // Deduct from needed asynchronously loaded assets
-            m_asyncAssetsNeeded--;
-
-            // Check if all async assets have been loaded
-            if (m_asyncAssetsNeeded == 0)
-            {
-                // Set as ready
-                m_ready = true;
-
-                // Prewarm interactables
-                Interactables.Prewarm();
             }
         }
 
@@ -481,8 +363,5 @@ namespace Faithful
             // Return cloned material
             return clonedMaterial;
         }
-
-        // Accessors
-        public static bool ready { get { return m_ready; } }
     }
 }

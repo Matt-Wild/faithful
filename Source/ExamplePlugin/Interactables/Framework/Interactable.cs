@@ -6,10 +6,7 @@ using UnityEngine.Networking;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-
-// TODO:
-// - EXPANSION REQUIREMENTS
-// - CUSTOM COST TYPE DEF CUSTOMISATION
+using RoR2.ExpansionManagement;
 
 namespace Faithful
 {
@@ -48,6 +45,14 @@ namespace Faithful
         Custom
     }
 
+    // Used for determining what expansion the interactable should be dependent on
+    internal enum InteractableRequiredExpansion
+    {
+        None,
+        SurvivorsOfTheVoid,
+        SeekersOfTheStorm
+    }
+
     internal class Interactable
     {
         // Token of the interactable used for finding and identifying it
@@ -76,6 +81,8 @@ namespace Faithful
         // Custom cost type definition customisation
         private string m_customCostString;
         private ColorCatalog.ColorIndex m_customCostColour;
+        private bool m_saturateWorldStyledCustomCost;
+        private bool m_darkenWorldStyledCustomCost;
 
         // Whether the cost hologram is able to rotate
         private bool m_disableHologramRotation;
@@ -89,12 +96,16 @@ namespace Faithful
         // The definition for this interactables custom cost type
         private CostTypeDef m_customCostType;
 
+        // The expansion that this interactable depends on
+        private InteractableRequiredExpansion m_requiredExpansion;
+
         // Dictionary of stages in which this interactables of set spawns (as well as spawn info such as position and rotation)
         private Dictionary<string, List<SetSpawnInfo>> m_setSpawns = new Dictionary<string, List<SetSpawnInfo>>();
 
         public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", string _symbolName = "", Color? _symbolColour = null,
                          InteractableCostType _costType = InteractableCostType.Money, int _cost = 1, bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true, 
-                         bool _disableHologramRotation = true, string _customCostString = null, ColorCatalog.ColorIndex _customCostColour = ColorCatalog.ColorIndex.None)
+                         bool _disableHologramRotation = true, string _customCostString = null, ColorCatalog.ColorIndex _customCostColour = ColorCatalog.ColorIndex.None, bool _saturateWorldStyledCustomCost = false,
+                         bool _darkenWorldStyledCustomCost = false, InteractableRequiredExpansion _requiredExpansion = InteractableRequiredExpansion.None)
         {
             // Assign token
             m_token = _token;
@@ -124,15 +135,20 @@ namespace Faithful
             // Assign custom cost type definition customisation
             m_customCostString = _customCostString;
             m_customCostColour = _customCostColour;
+            m_saturateWorldStyledCustomCost = _saturateWorldStyledCustomCost;
+            m_darkenWorldStyledCustomCost = _darkenWorldStyledCustomCost;
 
             // Assign whether the hologram of this interactable can rotate
             m_disableHologramRotation = _disableHologramRotation;
 
+            // Assign required expansion
+            m_requiredExpansion = _requiredExpansion;
+
             // Register with interactables
             Interactables.RegisterInteractable(this);
 
-            // Check if assets already loaded (don't immediately prewarm interactables with custom cost types)
-            if (Assets.ready && _costType != InteractableCostType.Custom)
+            // Don't immediately prewarm interactables with custom cost types
+            if (_costType != InteractableCostType.Custom)
             {
                 // Prewarm interactable
                 Prewarm();
@@ -164,8 +180,8 @@ namespace Faithful
             m_customCostType.isAffordable = new CostTypeDef.IsAffordableDelegate(CustomIsAffordable);
             m_customCostType.payCost = new CostTypeDef.PayCostDelegate(CustomPayCost);
             m_customCostType.colorIndex = m_customCostColour;
-            m_customCostType.saturateWorldStyledCostString = true;
-            m_customCostType.darkenWorldStyledCostString = false;
+            m_customCostType.saturateWorldStyledCostString = m_saturateWorldStyledCustomCost;
+            m_customCostType.darkenWorldStyledCostString = m_darkenWorldStyledCustomCost;
             m_costType = (CostTypeIndex)(CostTypeCatalog.costTypeDefs.Length + _list.Count);
 
             // Add custom cost formatting to language API
@@ -174,12 +190,8 @@ namespace Faithful
             // Add custom cost type definition to the list of additional cost type definitions
             _list.Add(m_customCostType);
 
-            // Check if assets already loaded
-            if (Assets.ready)
-            {
-                // Prewarm interactable
-                Prewarm();
-            }
+            // Prewarm interactable
+            Prewarm();
         }
 
         public void Prewarm()
@@ -212,6 +224,16 @@ namespace Faithful
 
             // Create prefab from clone of model
             m_prefab = model.InstantiateClone(name);
+
+            // Check if requires an expansion
+            if (m_requiredExpansion != InteractableRequiredExpansion.None)
+            {
+                // Add required expansion component
+                ExpansionRequirementComponent expansionRequirementComponent = m_prefab.AddComponent<ExpansionRequirementComponent>();
+
+                // Set required expansion
+                expansionRequirementComponent.requiredExpansion = m_requiredExpansion == InteractableRequiredExpansion.SurvivorsOfTheVoid ? Assets.sotvDef : Assets.sotsDef;
+            }
 
             // Add interactable behaviour
             FaithfulInteractableBehaviour interactableBehaviour = m_prefab.AddComponent<FaithfulInteractableBehaviour>();
@@ -381,6 +403,9 @@ namespace Faithful
 
         public void DoSetSpawn()
         {
+            // Ignore if not enabled
+            if (!enabled) return;
+
             // Get current stage name
             string stageName = SceneManager.GetActiveScene().name;
 
@@ -464,6 +489,17 @@ namespace Faithful
         public string nameToken { get { return $"FAITHFUL_INTERACTABLE_{token}_NAME"; } }
         public string name { get { return Utils.GetLanguageString(nameToken); } }
         public string contextToken { get { return $"FAITHFUL_INTERACTABLE_{token}_CONTEXT"; } }
+        public bool enabled
+        {
+            get
+            {
+                // Check for required expansion
+                if (m_requiredExpansion == InteractableRequiredExpansion.None) return true;
+
+                // Return if required expansion is enabled
+                return m_requiredExpansion == InteractableRequiredExpansion.SurvivorsOfTheVoid ? Run.instance.IsExpansionEnabled(Assets.sotvDef) : Run.instance.IsExpansionEnabled(Assets.sotsDef);
+            }
+        }
         public GameObject model
         {
             get
