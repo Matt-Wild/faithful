@@ -34,6 +34,7 @@ namespace Faithful
     internal delegate void OnPurchaseInteractionBeginCallback(PurchaseInteraction _shop, CharacterMaster _activator);
     internal delegate bool OnPurchaseCanBeAffordedCallback(PurchaseInteraction _shop, CharacterMaster _activator);
     internal delegate void InteractorCallback(Interactor _interactor);
+    internal delegate void FaithfulInteractorCallback(FaithfulInteractableBehaviour _behaviour, Interactor _interactor);
 
     internal delegate void OnProcessJumpCallback(GenericCharacterMain _character);
 
@@ -45,6 +46,7 @@ namespace Faithful
     internal delegate void GenericCharacterCallback(GenericCharacterMain _character);
 
     internal delegate void SceneDirectorCallback(SceneDirector _director);
+    internal delegate void SceneExitControllerCallback(SceneExitController _exitController);
 
     internal static class Behaviour
     {
@@ -117,6 +119,7 @@ namespace Faithful
 
         // Scene callbacks
         private static List<SceneDirectorCallback> onPrePopulateSceneCallbacks = new List<SceneDirectorCallback>();
+        private static List<SceneExitControllerCallback> onPreSceneExitCallbacks = new List<SceneExitControllerCallback>();
 
         public static void Init()
         {
@@ -159,6 +162,7 @@ namespace Faithful
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
             On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump;
             On.EntityStates.GenericCharacterMain.FixedUpdate += HookGenericCharacterFixedUpdate;
+            On.RoR2.SceneExitController.SetState += HookSceneExitControllerSetState;
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
@@ -606,6 +610,13 @@ namespace Faithful
             DebugLog("Added On Pre-Populate Scene behaviour");
         }
 
+        public static void AddOnPreSceneExitCallback(SceneExitControllerCallback _callback)
+        {
+            onPreSceneExitCallbacks.Add(_callback);
+
+            DebugLog("Added On Pre-Scene Exit behaviour");
+        }
+
         // Fixed update for checking player to player interactions
         private static void PlayerOnPlayerFixedUpdate()
         {
@@ -979,6 +990,22 @@ namespace Faithful
                 // Call
                 callback(self);
             }
+        }
+
+        private static void HookSceneExitControllerSetState(On.RoR2.SceneExitController.orig_SetState orig, SceneExitController self, SceneExitController.ExitState newState)
+        {
+            // Check if state is finished (ready to change scenes)
+            if (newState == SceneExitController.ExitState.TeleportOut)
+            {
+                // Cycle through on scene exit callbacks
+                foreach (SceneExitControllerCallback callback in onPreSceneExitCallbacks)
+                {
+                    // Call
+                    callback(self);
+                }
+            }
+
+            orig(self, newState); // Run normal processes
         }
 
         private static void HookOnDamageDealt(DamageReport _report)

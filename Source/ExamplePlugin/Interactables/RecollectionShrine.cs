@@ -12,14 +12,6 @@ namespace Faithful
                  _symbolColour: new Color(1.0f, 0.23525f, 0.49f), _customCostColour: ColorCatalog.ColorIndex.VoidItem, _requiredExpansion: InteractableRequiredExpansion.SurvivorsOfTheVoid);
 
             // Add set spawns
-            AddSetSpawn("blackbeach", new Vector3(31, -211, -122), new Vector3(0, 0, 0));
-            AddSetSpawn("blackbeach2", new Vector3(-153, 11, -31), new Vector3(0, 0, 0));
-            AddSetSpawn("snowyforest", new Vector3(-138, 5, 8), new Vector3(0, 0, 0));
-            AddSetSpawn("village", new Vector3(134, 14, -149), new Vector3(0, 0, 0));
-            AddSetSpawn("golemplains", new Vector3(-120, -139, -160), new Vector3(0, 0, 0));
-            AddSetSpawn("golemplains2", new Vector3(-20, 10, -11), new Vector3(0, 0, 0));
-            AddSetSpawn("lakes", new Vector3(-69, 1, -145), new Vector3(0, 0, 0));
-
             AddSetSpawn("moon2", new Vector3(1038F, -284.05F, 1154F), new Vector3(0, 65, 0));
             AddSetSpawn("limbo", new Vector3(-47.825F, -11.1F, -35F), new Vector3(0, 180, 0));
             AddSetSpawn("voidraid", new Vector3(-21F, 28F, -170F), new Vector3(0, 140, 0));
@@ -49,27 +41,85 @@ namespace Faithful
             Behaviour.AddOnPrePopulateSceneCallback(OnPrePopulateScene);
         }
 
-        public override void OnPurchase(Interactor _interactor)
+        public override void OnPurchase(FaithfulInteractableBehaviour _behaviour, Interactor _interactor)
         {
-            Debug.Log("SHRINE USED");
+            // Get character body
+            CharacterBody body = _interactor.GetComponent<CharacterBody>();
+            if (body == null) return;
+
+            // Get player master controller
+            PlayerCharacterMasterController player = body.master?.playerCharacterMasterController;
+            if (player == null) return;
+
+            // Get lookup string for this player
+            string lookupString = $"{player.networkUser.id} IC";
+
+            // Get carryover inspiration amount
+            int carryoverInspiration = LookupTable.GetInt(lookupString);
+            if (carryoverInspiration == 0) return;
+
+            // Do the shrine use effect
+            _behaviour.DoShrineUseEffect();
+
+            // Get inspiration buff definition
+            BuffDef inspirationBuff = Buffs.GetBuff("INSPIRATION").buffDef;
+
+            // Cycle through carried over inspiration
+            for (int i = 0; i < carryoverInspiration; i++)
+            {
+                // Add stack of buff
+                body.AddBuff(inspirationBuff);
+            }
+
+            // Reset carryover inspiration (this can be thought of as the cost)
+            LookupTable.SetInt(lookupString, 0);
+
+            // Check if nobody has carried over inspiration anymore
+            if (GetTotalCachedInspiration() == 0)
+            {
+                // Deactivate shrine
+                _behaviour.SetUnavailable();
+            }
         }
 
         public override bool CustomIsAffordable(CostTypeDef _costTypeDef, CostTypeDef.IsAffordableContext _context)
         {
-            Debug.Log("IS AFFORDABLE");
+            // Get player master controller
+            PlayerCharacterMasterController player = _context.activator.GetComponent<CharacterBody>()?.master?.playerCharacterMasterController;
+            if (player == null) return false;
 
-            return true;
+            // This shrine is interactable if this player has "cached" or carryover inspiration
+            return LookupTable.GetInt($"{player.networkUser.id} IC") > 0;
         }
 
         public override void CustomPayCost(CostTypeDef _costTypeDef, CostTypeDef.PayCostContext _context)
         {
-            Debug.Log("PAY COST");
+            // Cost needs to happen after shrine is purchased (so do cost in on purchase method)
         }
 
         private void OnPrePopulateScene(SceneDirector _director)
         {
+            // Check if any players have "cached" or carried over inspiration
+            if (GetTotalCachedInspiration() == 0) return;
+
             // This shrine has set spawns on various stages
             DoSetSpawn();
+        }
+
+        private int GetTotalCachedInspiration()
+        {
+            // Total of carried over inspiration
+            int total = 0;
+
+            // Cycle through players
+            foreach (PlayerCharacterMasterController player in Utils.GetPlayers())
+            {
+                // Use lookup value to get carried over inspiration for this player and add to total
+                total += LookupTable.GetInt($"{player.networkUser.id} IC");
+            }
+
+            // Return total
+            return total;
         }
     }
 }

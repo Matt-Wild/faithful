@@ -462,7 +462,7 @@ namespace Faithful
             }
         }
 
-        public virtual void OnPurchase(Interactor _interactor)
+        public virtual void OnPurchase(FaithfulInteractableBehaviour _behaviour, Interactor _interactor)
         {
             // Warn that interactable doesn't have on purchase behaviour
             Log.Warning($"[Interactable] | Interactable '{name}' does not have any purchase behaviour.");
@@ -548,7 +548,7 @@ namespace Faithful
         public CostTypeIndex costType;
 
         // Callback for purchase interaction
-        public event InteractorCallback onPurchase;
+        public event FaithfulInteractorCallback onPurchase;
 
         private void Start()
         {
@@ -559,7 +559,7 @@ namespace Faithful
                 if (startAvailable)
                 {
                     // Set as available
-                    purchaseInteraction.SetAvailableTrue();
+                    SetAvailable();
                 }
                 
             }
@@ -591,7 +591,31 @@ namespace Faithful
             if (!Utils.hosting) return;
 
             // Call on purchase callback
-            onPurchase.Invoke(_interactor);
+            onPurchase.Invoke(this, _interactor);
+        }
+
+        public void DoShrineUseEffect()
+        {
+            // Use effect manager to play the shrine use effect
+            EffectManager.SimpleImpactEffect(Assets.shrineUseEffectPrefab, transform.position, new Vector3(0, 0, 0), true);
+        }
+
+        public void SetAvailable()
+        {
+            // Set as available
+            purchaseInteraction.SetAvailableTrue();
+
+            // Make symbol active
+            symbolTransform.gameObject.SetActive(true);
+        }
+
+        public void SetUnavailable()
+        {
+            // Set as unavailable
+            purchaseInteraction.SetAvailable(false);
+
+            // Make symbol inactive
+            symbolTransform.gameObject.SetActive(false);
         }
     }
 

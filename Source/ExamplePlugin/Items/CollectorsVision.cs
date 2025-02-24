@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using System;
 using UnityEngine;
 
 namespace Faithful
@@ -50,6 +51,9 @@ namespace Faithful
 
             // Link On Give Item behaviour
             Behaviour.AddServerOnGiveItemCallback(OnGiveItem);
+
+            // Add on scene exit behaviour
+            Behaviour.AddOnPreSceneExitCallback(OnSceneExit);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -162,6 +166,40 @@ namespace Faithful
                 for (int i = 0; i < inspirationGain + inspirationGainStacking * (count - 1); i++)
                 {
                     body.AddBuff(inspirationBuff.buffDef);
+                }
+            }
+        }
+
+        private void OnSceneExit(SceneExitController _exitController)
+        {
+            // Cycle through players
+            foreach (PlayerCharacterMasterController player in Utils.GetPlayers())
+            {
+                // Try get character body
+                CharacterBody body = player.body;
+                if (body == null) continue;
+
+                // Get buff count
+                int buffCount = body.GetBuffCount(inspirationBuff.buffDef);
+                
+                // Check if has buff
+                if (buffCount > 0)
+                {
+                    // Create lookup string
+                    string lookupString = $"{player.networkUser.id} IC";
+
+                    // Calculate carryover for stage
+                    int newCarryover = (buffCount + 1) / 2;
+
+                    // Get already existing carryover for this player
+                    int currentCarryover = LookupTable.GetInt(lookupString);
+
+                    // Check if new carryover is greater than the current carryover
+                    if (newCarryover > currentCarryover)
+                    {
+                        // Use lookup table to cache new carryover stacks of inspiration
+                        LookupTable.SetInt(lookupString, newCarryover);
+                    }
                 }
             }
         }

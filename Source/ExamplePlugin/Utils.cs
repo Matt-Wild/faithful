@@ -382,7 +382,7 @@ namespace Faithful
         public static void TeleportToNextStage()
         {
             // Teleport out of current scene
-            Object.FindObjectOfType<SceneExitController>()?.Begin();
+            Stage.instance.BeginAdvanceStage(Run.instance.nextStageScene);
         }
 
         public static void KillAllEnemies()

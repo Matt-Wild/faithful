@@ -23,6 +23,7 @@ namespace Faithful
         public static GameObject radiusIndicatorPrefab;
         public static GameObject pennonEffectPrefab;
         public static GameObject matrixEffectPrefab;
+        public static GameObject shrineUseEffectPrefab;
 
         // Store useful lookup assets
         public static DynamicBone scarfDynamicBone;
@@ -139,6 +140,9 @@ namespace Faithful
             radiusIndicatorPrefab.transform.eulerAngles = Vector3.zero;
             radiusIndicatorPrefab.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             radiusIndicatorPrefab.AddComponent<FaithfulRadiusIndicatorBehaviour>();
+
+            // Get shrine use effect prefab
+            shrineUseEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/ShrineUseEffect.prefab").WaitForCompletion();
 
             // Fetch ego scarf asset
             scarfDynamicBone = Utils.FindChildByName(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/LunarSun/DisplaySunHeadNeck.prefab").WaitForCompletion().transform, "Bandage1").GetComponent<DynamicBone>();
