@@ -7,7 +7,7 @@
 	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_CONTEXT" : "Pray to Shrine of Recollection",
 	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_MESSAGE_2P" : "<style=cShrine>You pray to the shrine. Your mind aches as you regain {1} inspriation.</color>",
 	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_MESSAGE" : "<style=cShrine>{0} prayed to the shrine, and has regained {1} inspiration.</color>",
-	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_DESCRIPTION" : "When activated by a survivor the Shrine of Recollection will restore a portion of the survivor's highest amount of inspiration since last using a Shrine of Recollection. It is summoned by the Collector's Vision.",
+	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_DESCRIPTION" : "When activated by a survivor the Shrine of Recollection will restore a portion of the survivor's highest amount of inspiration since last using a Shrine of Recollection. Only spawns when a survivor holds the void item \u201CCollector's Vision\u201C.",
   
 	"FAITHFUL_DEBUG_MODE_BUFF": "GOD MODE",
 	
