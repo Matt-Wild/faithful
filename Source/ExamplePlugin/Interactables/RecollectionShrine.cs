@@ -80,6 +80,9 @@ namespace Faithful
                 // Deactivate shrine
                 _behaviour.SetUnavailable();
             }
+
+            // Send interaction message
+            SendInteractionMessage(body);
         }
 
         public override bool CustomIsAffordable(CostTypeDef _costTypeDef, CostTypeDef.IsAffordableContext _context)

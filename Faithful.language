@@ -5,6 +5,8 @@
 	
 	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_NAME" : "Shrine of Recollection",
 	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_CONTEXT" : "Pray to Shrine of Recollection",
+	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_MESSAGE_2P" : "<style=cShrine>A memory solidifies, revealing lost strength...</color>",
+	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_MESSAGE" : "<style=cShrine>{0} grasped at a memory and reclaimed lost strength!</color>",
   
 	"FAITHFUL_DEBUG_MODE_BUFF": "GOD MODE",
 	

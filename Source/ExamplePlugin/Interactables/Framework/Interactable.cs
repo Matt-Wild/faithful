@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using RoR2.ExpansionManagement;
+using System.ComponentModel;
 
 namespace Faithful
 {
@@ -103,7 +104,7 @@ namespace Faithful
         private Dictionary<string, List<SetSpawnInfo>> m_setSpawns = new Dictionary<string, List<SetSpawnInfo>>();
 
         public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", string _symbolName = "", Color? _symbolColour = null,
-                         InteractableCostType _costType = InteractableCostType.Money, int _cost = 1, bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true, 
+                         InteractableCostType _costType = InteractableCostType.Money, int _cost = 1, bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true,
                          bool _disableHologramRotation = true, string _customCostString = null, ColorCatalog.ColorIndex _customCostColour = ColorCatalog.ColorIndex.None, bool _saturateWorldStyledCustomCost = false,
                          bool _darkenWorldStyledCustomCost = false, InteractableRequiredExpansion _requiredExpansion = InteractableRequiredExpansion.None)
         {
@@ -129,7 +130,7 @@ namespace Faithful
             // Assign purchase interaction customisation
             m_cost = _cost;
             m_startAvailable = _startAvailable;
-            m_setUnavailableOnTeleporterActivated= _setUnavailableOnTeleporterActivated;
+            m_setUnavailableOnTeleporterActivated = _setUnavailableOnTeleporterActivated;
             m_isShrine = _isShrine;
 
             // Assign custom cost type definition customisation
@@ -399,6 +400,16 @@ namespace Faithful
                 // No fireworks emitter - warn
                 Log.Warning($"[INTERACTABLE] | No firework emitter found on interactable '{name}'.");
             }
+        }
+
+        public void SendInteractionMessage(CharacterBody _interactor)
+        {
+            // Send broadcast message
+            Chat.SendBroadcastChat(new Chat.SubjectFormatChatMessage
+            {
+                subjectAsCharacterBody = _interactor,
+                baseToken = $"FAITHFUL_INTERACTABLE_{token}_MESSAGE"
+            });
         }
 
         public void DoSetSpawn()
