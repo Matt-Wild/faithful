@@ -132,7 +132,7 @@ namespace Faithful
             foreach (PlayerCharacterMasterController player in Utils.GetPlayers())
             {
                 // Check for cached inspiration
-                if (LookupTable.GetInt($"{player.networkUser.id} IC") <= 0) continue;
+                if (LookupTable.GetInt($"{player.networkUser.id} IC") > 0) return true;
             }
 
             // No valid player found
