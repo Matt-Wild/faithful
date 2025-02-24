@@ -633,6 +633,9 @@ namespace Faithful
 
             // Randomise item stats and refresh items
             RandomiseAndRefresh();
+
+            // Reset lookups
+            LookupTable.Reset();
         }
 
         public static void ApplyFonts(Transform parent)

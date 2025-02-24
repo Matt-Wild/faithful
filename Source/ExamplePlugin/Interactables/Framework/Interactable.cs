@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using RoR2.ExpansionManagement;
 using System.ComponentModel;
+using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
@@ -402,14 +403,30 @@ namespace Faithful
             }
         }
 
-        public void SendInteractionMessage(CharacterBody _interactor)
+        public void SendInteractionMessage(CharacterBody _interactor, string[] _paramTokens = null)
         {
-            // Send broadcast message
-            Chat.SendBroadcastChat(new Chat.SubjectFormatChatMessage
+            // Check for message params
+            if (_paramTokens != null)
             {
-                subjectAsCharacterBody = _interactor,
-                baseToken = $"FAITHFUL_INTERACTABLE_{token}_MESSAGE"
-            });
+                // Send broadcast message
+                Chat.SendBroadcastChat(new Chat.SubjectFormatChatMessage
+                {
+                    subjectAsCharacterBody = _interactor,
+                    baseToken = $"FAITHFUL_INTERACTABLE_{token}_MESSAGE",
+                    paramTokens = _paramTokens
+                });
+            }
+
+            // No params
+            else
+            {
+                // Send broadcast message
+                Chat.SendBroadcastChat(new Chat.SubjectFormatChatMessage
+                {
+                    subjectAsCharacterBody = _interactor,
+                    baseToken = $"FAITHFUL_INTERACTABLE_{token}_MESSAGE"
+                });
+            }
         }
 
         public void DoSetSpawn()

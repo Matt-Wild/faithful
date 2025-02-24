@@ -7,6 +7,12 @@ namespace Faithful
         // Dictionary for the int lookup table
         private static Dictionary<string, int> m_intLookup = new Dictionary<string, int>();
 
+        public static void Reset()
+        {
+            // Reset all lookups
+            m_intLookup.Clear();
+        }
+
         public static int GetInt(string _lookup, int _fallback = 0)
         {
             // Check for lookup

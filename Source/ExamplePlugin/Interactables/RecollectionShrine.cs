@@ -5,6 +5,9 @@ namespace Faithful
 {
     internal class RecollectionShrine : Interactable
     {
+        // Remember reference to collectors vision item
+        private ItemDef m_cvItem;
+
         public RecollectionShrine()
         {
             // Initialise interactable
@@ -74,21 +77,35 @@ namespace Faithful
             // Reset carryover inspiration (this can be thought of as the cost)
             LookupTable.SetInt(lookupString, 0);
 
-            // Check if nobody has carried over inspiration anymore
-            if (GetTotalCachedInspiration() == 0)
+            // Check if nobody can use the shrine anymore
+            if (!CanBeUsed())
             {
                 // Deactivate shrine
                 _behaviour.SetUnavailable();
             }
 
+            // Create params for message
+            string[] messageParams = [carryoverInspiration.ToString()];
+
             // Send interaction message
-            SendInteractionMessage(body);
+            SendInteractionMessage(body, messageParams);
         }
 
         public override bool CustomIsAffordable(CostTypeDef _costTypeDef, CostTypeDef.IsAffordableContext _context)
         {
+            // Get player character body
+            CharacterBody body = _context.activator.GetComponent<CharacterBody>();
+            if (body == null) return false;
+
+            // Get player inventory
+            Inventory inv = body.inventory;
+            if (inv == null) return false;
+
+            // Check for item
+            if (inv.GetItemCount(cvItem) <= 0) return false;
+
             // Get player master controller
-            PlayerCharacterMasterController player = _context.activator.GetComponent<CharacterBody>()?.master?.playerCharacterMasterController;
+            PlayerCharacterMasterController player = body.master?.playerCharacterMasterController;
             if (player == null) return false;
 
             // This shrine is interactable if this player has "cached" or carryover inspiration
@@ -102,27 +119,47 @@ namespace Faithful
 
         private void OnPrePopulateScene(SceneDirector _director)
         {
-            // Check if any players have "cached" or carried over inspiration
-            if (GetTotalCachedInspiration() == 0) return;
+            // Check if any players are able to use the shrine
+            if (!CanBeUsed()) return;
 
             // This shrine has set spawns on various stages
             DoSetSpawn();
         }
 
-        private int GetTotalCachedInspiration()
+        private bool CanBeUsed()
         {
-            // Total of carried over inspiration
-            int total = 0;
-
             // Cycle through players
             foreach (PlayerCharacterMasterController player in Utils.GetPlayers())
             {
-                // Use lookup value to get carried over inspiration for this player and add to total
-                total += LookupTable.GetInt($"{player.networkUser.id} IC");
+                // Try get player inventory
+                Inventory inv = player.body?.inventory;
+                if (inv == null) continue;
+
+                // Check for item
+                if (inv.GetItemCount(cvItem) <= 0) continue;
+
+                // Check for cached inspiration
+                if (LookupTable.GetInt($"{player.networkUser.id} IC") <= 0) continue;
             }
 
-            // Return total
-            return total;
+            // No valid player found
+            return false;
+        }
+
+        private ItemDef cvItem
+        {
+            get
+            {
+                // Check for cached reference
+                if (m_cvItem == null)
+                {
+                    // Get item reference
+                    m_cvItem = Items.GetItem("COLLECTORS_VISION").itemDef;
+                }
+
+                // Return item reference
+                return m_cvItem;
+            }
         }
     }
 }
