@@ -131,13 +131,6 @@ namespace Faithful
             // Cycle through players
             foreach (PlayerCharacterMasterController player in Utils.GetPlayers())
             {
-                // Try get player inventory
-                Inventory inv = player.body?.inventory;
-                if (inv == null) continue;
-
-                // Check for item
-                if (inv.GetItemCount(cvItem) <= 0) continue;
-
                 // Check for cached inspiration
                 if (LookupTable.GetInt($"{player.networkUser.id} IC") <= 0) continue;
             }
