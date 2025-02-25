@@ -130,6 +130,9 @@ namespace Faithful
         // Dictionary of stages in which this interactables of set spawns (as well as spawn info such as position and rotation)
         private Dictionary<string, List<SetSpawnInfo>> m_setSpawns = new Dictionary<string, List<SetSpawnInfo>>();
 
+        // Default settings for interactable
+        private Setting<bool> m_disableSetting;
+
         public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", string _symbolName = "", Color? _symbolColour = null,
                          InteractableCostType _costType = InteractableCostType.Money, int _cost = 1, bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true,
                          bool _disableHologramRotation = true, string _customCostString = null, ColorCatalog.ColorIndex _customCostColour = ColorCatalog.ColorIndex.None, bool _saturateWorldStyledCustomCost = false,
@@ -181,6 +184,9 @@ namespace Faithful
 
             // Assign if this interactable allows you to inspect it
             m_allowInspect = _allowInspect;
+
+            // Create default settings that every interactable has
+            CreateDefaultSettings();
 
             // Register with interactables
             Interactables.RegisterInteractable(this);
@@ -505,6 +511,18 @@ namespace Faithful
             }
         }
 
+        private void CreateDefaultSettings()
+        {
+            // Create the settings which every interactable should have
+            m_disableSetting = CreateSetting("DISABLE", "Disable Interactable?", false, "Should this interactable be disabled and avoid spawning during runs?");
+        }
+
+        public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _restartRequired = false, string _valueFormatting = "{0:0}")
+        {
+            // Return new setting
+            return Config.CreateSetting($"INTERACTABLE_{token}_{_tokenAddition}", $"Interactable: {name.Replace("'", "")}", _key, _defaultValue, _description, _restartRequired: _restartRequired, _valueFormatting: _valueFormatting);
+        }
+
         public void SendInteractionMessage(CharacterBody _interactor, string[] _paramTokens = null)
         {
             // Check for message params
@@ -623,6 +641,9 @@ namespace Faithful
         {
             get
             {
+                // Check if enabled in config
+                if (m_disableSetting.Value) return false;
+
                 // Check for required expansion
                 if (m_requiredExpansion == InteractableRequiredExpansion.None) return true;
 
