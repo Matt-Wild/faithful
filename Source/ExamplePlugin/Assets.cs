@@ -36,6 +36,19 @@ namespace Faithful
         public static Sprite teleporterPingIcon;
         public static Sprite mysteryPingIcon;
 
+        // Inspect icons
+        public static Sprite chestInspectIcon;
+        public static Sprite droneInspectIcon;
+        public static Sprite lunarInspectIcon;
+        public static Sprite pillarInspectIcon;
+        public static Sprite printerInspectIcon;
+        public static Sprite radioScannerInspectIcon;
+        public static Sprite scapperInspectIcon;
+        public static Sprite shrineInspectIcon;
+        public static Sprite meridianInspectIcon;
+        public static Sprite voidInspectIcon;
+        public static Sprite mysteryInspectIcon;
+
         // Interactable symbol materials
         public static Material chanceShrineSymbolMaterial;
 
@@ -154,6 +167,19 @@ namespace Faithful
             shrinePingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texShrineIconOutlined.png").WaitForCompletion();
             teleporterPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texTeleporterIconOutlined.png").WaitForCompletion();
             mysteryPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion();
+
+            // Fetch inspect icons
+            chestInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/ChestIcon_1.png").WaitForCompletion();
+            droneInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texDroneIconOutlined.png").WaitForCompletion();
+            lunarInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/LunarIcon_1.png").WaitForCompletion();
+            pillarInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/PillarIcon.png").WaitForCompletion();
+            printerInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/PrinterIcon_1.png").WaitForCompletion();
+            radioScannerInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/RadioScannerIcon_2.png").WaitForCompletion();
+            scapperInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/ScrapperIcon.png").WaitForCompletion();
+            shrineInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/ShrineIcon.png").WaitForCompletion();
+            meridianInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC2/texColossusExpansionIcon.png").WaitForCompletion();
+            voidInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/VoidIcon_2.png").WaitForCompletion();
+            mysteryInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion();
 
             // Fetch interactable symbol materials
             chanceShrineSymbolMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/ShrineChance/matShrineChanceSymbol.mat").WaitForCompletion();

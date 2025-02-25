@@ -12,7 +12,8 @@ namespace Faithful
         {
             // Initialise interactable
             Init("RECOLLECTION_SHRINE", "RecollectionShrineMesh", PingIconType.Shrine, _costType: InteractableCostType.Custom, _symbolName: "texShrineRecollectionSymbol", 
-                 _symbolColour: new Color(1.0f, 0.23525f, 0.49f), _customCostColour: ColorCatalog.ColorIndex.VoidItem, _requiredExpansion: InteractableRequiredExpansion.SurvivorsOfTheVoid);
+                 _symbolColour: new Color(1.0f, 0.23525f, 0.49f), _customCostColour: ColorCatalog.ColorIndex.VoidItem, _requiredExpansion: InteractableRequiredExpansion.SurvivorsOfTheVoid,
+                 _inspectIconType: InspectIconType.Void);
 
             // Add set spawns
             AddSetSpawn("moon2", new Vector3(1038F, -284.05F, 1154F), new Vector3(0, 65, 0));

@@ -7,8 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using RoR2.ExpansionManagement;
-using System.ComponentModel;
-using static Facepunch.Steamworks.Inventory.Item;
+using RoR2.UI;
 
 namespace Faithful
 {
@@ -20,6 +19,23 @@ namespace Faithful
         Loot,
         Shrine,
         Teleporter,
+        Mystery,
+        Custom
+    }
+
+    // Used for determining and fetching the inspect icon
+    internal enum InspectIconType
+    {
+        Chest,
+        Drone,
+        Lunar,
+        Pillar,
+        Printer,
+        RadioScanner,
+        Scrapper,
+        Shrine,
+        Meridian,
+        Void,
         Mystery,
         Custom
     }
@@ -66,8 +82,14 @@ namespace Faithful
         // The type of ping icon this interactable has
         private PingIconType m_pingIconType;
 
+        // The type of inspection icon this interactable has
+        private InspectIconType m_inspectIconType;
+
         // The asset name for custom ping icon
         private string m_customPingIconAssetName;
+
+        // The asset name for custom inspect icon
+        private string m_customInspectIconAssetName;
 
         // The asset name and colour for the interactable symbol
         private string m_symbolAssetName;
@@ -101,13 +123,18 @@ namespace Faithful
         // The expansion that this interactable depends on
         private InteractableRequiredExpansion m_requiredExpansion;
 
+        // Inspection related references
+        private bool m_allowInspect;
+        private InspectDef m_inspectDef;
+
         // Dictionary of stages in which this interactables of set spawns (as well as spawn info such as position and rotation)
         private Dictionary<string, List<SetSpawnInfo>> m_setSpawns = new Dictionary<string, List<SetSpawnInfo>>();
 
         public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", string _symbolName = "", Color? _symbolColour = null,
                          InteractableCostType _costType = InteractableCostType.Money, int _cost = 1, bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true,
                          bool _disableHologramRotation = true, string _customCostString = null, ColorCatalog.ColorIndex _customCostColour = ColorCatalog.ColorIndex.None, bool _saturateWorldStyledCustomCost = false,
-                         bool _darkenWorldStyledCustomCost = false, InteractableRequiredExpansion _requiredExpansion = InteractableRequiredExpansion.None)
+                         bool _darkenWorldStyledCustomCost = false, InteractableRequiredExpansion _requiredExpansion = InteractableRequiredExpansion.None, bool _allowInspect = true,
+                         InspectIconType _inspectIconType = InspectIconType.Mystery, string _customInspectIconAssetName = "")
         {
             // Assign token
             m_token = _token;
@@ -118,8 +145,14 @@ namespace Faithful
             // Assign ping icon type
             m_pingIconType = _pingIconType;
 
+            // Assign inspect icon type
+            m_inspectIconType = _inspectIconType;
+
             // Assign custom ping icon asset name
             m_customPingIconAssetName = _customPingIconAssetName;
+
+            // Assign custom inspect icon asset name
+            m_customInspectIconAssetName = _customInspectIconAssetName;
 
             // Assign symbol asset name and colour
             m_symbolAssetName = _symbolName;
@@ -145,6 +178,9 @@ namespace Faithful
 
             // Assign required expansion
             m_requiredExpansion = _requiredExpansion;
+
+            // Assign if this interactable allows you to inspect it
+            m_allowInspect = _allowInspect;
 
             // Register with interactables
             Interactables.RegisterInteractable(this);
@@ -400,6 +436,72 @@ namespace Faithful
             {
                 // No fireworks emitter - warn
                 Log.Warning($"[INTERACTABLE] | No firework emitter found on interactable '{name}'.");
+            }
+
+            // Check if this interactable allows the player to inspect it
+            if (m_allowInspect)
+            {
+                // Get icon for inspect info
+                Sprite inspectIcon = Assets.mysteryInspectIcon;
+                switch (m_inspectIconType)
+                {
+                    case InspectIconType.Chest:
+                        inspectIcon = Assets.chestInspectIcon;
+                        break;
+                    case InspectIconType.Drone:
+                        inspectIcon = Assets.droneInspectIcon;
+                        break;
+                    case InspectIconType.Lunar:
+                        inspectIcon = Assets.lunarInspectIcon;
+                        break;
+                    case InspectIconType.Pillar:
+                        inspectIcon = Assets.pillarInspectIcon;
+                        break;
+                    case InspectIconType.Printer:
+                        inspectIcon = Assets.printerInspectIcon;
+                        break;
+                    case InspectIconType.RadioScanner:
+                        inspectIcon = Assets.radioScannerInspectIcon;
+                        break;
+                    case InspectIconType.Scrapper:
+                        inspectIcon = Assets.scapperInspectIcon;
+                        break;
+                    case InspectIconType.Shrine:
+                        inspectIcon = Assets.shrineInspectIcon;
+                        break;
+                    case InspectIconType.Meridian:
+                        inspectIcon = Assets.meridianInspectIcon;
+                        break;
+                    case InspectIconType.Void:
+                        inspectIcon = Assets.voidInspectIcon;
+                        break;
+                    case InspectIconType.Mystery:
+                        inspectIcon = Assets.mysteryPingIcon;
+                        break;
+                    case InspectIconType.Custom:
+                        inspectIcon = Assets.GetIcon(m_customInspectIconAssetName);
+                        break;
+                }
+
+                // Create inspect info
+                InspectInfo inspectInfo = new InspectInfo
+                {
+                    Visual = inspectIcon,
+                    TitleToken = $"FAITHFUL_INTERACTABLE_{token}_NAME",
+                    DescriptionToken = $"FAITHFUL_INTERACTABLE_{token}_DESCRIPTION"
+                };
+
+                // Create inspection definition
+                m_inspectDef = new InspectDef
+                {
+                    name = $"{token}_INSPECT_DEF",
+                    hideFlags = HideFlags.None,
+                    Info = inspectInfo
+                };
+
+                // Add generic inspect info provider
+                GenericInspectInfoProvider genericInspectInfoProvider = m_prefab.AddComponent<GenericInspectInfoProvider>();
+                genericInspectInfoProvider.InspectInfo = m_inspectDef;
             }
         }
 
