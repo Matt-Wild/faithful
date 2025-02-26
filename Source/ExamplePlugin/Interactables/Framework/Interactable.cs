@@ -96,7 +96,7 @@ namespace Faithful
         private Color m_symbolAssetColour;
 
         // Purchase interaction customisation
-        private CostTypeIndex m_costType;
+        private int m_costTypeIndex;
         private int m_cost;
         private bool m_startAvailable;
         private bool m_setUnavailableOnTeleporterActivated;
@@ -191,12 +191,8 @@ namespace Faithful
             // Register with interactables
             Interactables.RegisterInteractable(this);
 
-            // Don't immediately prewarm interactables with custom cost types
-            if (_costType != InteractableCostType.Custom)
-            {
-                // Prewarm interactable
-                Prewarm();
-            }
+            // Create prefab
+            CreatePrefab();
         }
 
         private void AssignCostType(InteractableCostType _costType)
@@ -212,7 +208,7 @@ namespace Faithful
             else
             {
                 // Assign cost type
-                m_costType = (CostTypeIndex)_costType;
+                m_costTypeIndex = (int)_costType;
             }
         }
 
@@ -226,26 +222,13 @@ namespace Faithful
             m_customCostType.colorIndex = m_customCostColour;
             m_customCostType.saturateWorldStyledCostString = m_saturateWorldStyledCustomCost;
             m_customCostType.darkenWorldStyledCostString = m_darkenWorldStyledCustomCost;
-            m_costType = (CostTypeIndex)(CostTypeCatalog.costTypeDefs.Length + _list.Count);
+            m_costTypeIndex = CostTypeCatalog.costTypeDefs.Length + _list.Count;
 
             // Add custom cost formatting to language API
             LanguageAPI.Add($"FAITHFUL_COST_{token}_FORMAT", m_customCostString == null ? "?" : m_customCostString);
 
             // Add custom cost type definition to the list of additional cost type definitions
             _list.Add(m_customCostType);
-
-            // Prewarm interactable
-            Prewarm();
-        }
-
-        public void Prewarm()
-        {
-            // Check for prefab
-            if (prefab == null)
-            {
-                // Warn
-                Log.Warning($"[Interactable] | Interactable '{name}' was unable to construct it's prefab.");
-            }
         }
 
         private void CreatePrefab()
@@ -267,7 +250,10 @@ namespace Faithful
             }
 
             // Create prefab from clone of model
-            m_prefab = model.InstantiateClone(name);
+            m_prefab = model;
+
+            // Add network identity
+            m_prefab.AddComponent<NetworkIdentity>();
 
             // Check if requires an expansion
             if (m_requiredExpansion != InteractableRequiredExpansion.None)
@@ -283,13 +269,13 @@ namespace Faithful
             FaithfulInteractableBehaviour interactableBehaviour = m_prefab.AddComponent<FaithfulInteractableBehaviour>();
             interactableBehaviour.token = token;
             interactableBehaviour.startAvailable = m_startAvailable;
-            interactableBehaviour.costType = m_costType;
+            interactableBehaviour.costType = (CostTypeIndex)m_costTypeIndex;
 
             // Add purchase interaction
             PurchaseInteraction purchaseInteraction = m_prefab.AddComponent<PurchaseInteraction>();
             purchaseInteraction.displayNameToken = nameToken;
             purchaseInteraction.contextToken = contextToken;
-            purchaseInteraction.costType = m_costType;
+            purchaseInteraction.costType = (CostTypeIndex)m_costTypeIndex;
             purchaseInteraction.cost = m_cost;
             purchaseInteraction.available = m_startAvailable;
             purchaseInteraction.setUnavailableOnTeleporterActivated = m_setUnavailableOnTeleporterActivated;
@@ -405,7 +391,7 @@ namespace Faithful
 
             // Add hologram projector
             HologramProjector hologramProjector = m_prefab.AddComponent<HologramProjector>();
-            hologramProjector.displayDistance = (m_costType == CostTypeIndex.None || (m_customCostType != null && m_customCostString == null)) ? 0 : 10;
+            hologramProjector.displayDistance = ((CostTypeIndex)m_costTypeIndex == CostTypeIndex.None || (m_customCostType != null && m_customCostString == null)) ? 0 : 10;
             hologramProjector.disableHologramRotation = m_disableHologramRotation;
 
             // Attempt to find hologram pivot
@@ -509,6 +495,11 @@ namespace Faithful
                 GenericInspectInfoProvider genericInspectInfoProvider = m_prefab.AddComponent<GenericInspectInfoProvider>();
                 genericInspectInfoProvider.InspectInfo = m_inspectDef;
             }
+
+            Debug.Log("REGISTERING");
+
+            // Register to network server
+            PrefabAPI.RegisterNetworkPrefab(m_prefab);
         }
 
         private void CreateDefaultSettings()
@@ -567,7 +558,11 @@ namespace Faithful
                 SetSpawnInfo spawnInfo = possibleSpawns[Random.Range(0, possibleSpawns.Count)];
 
                 // Spawn interactable at position and rotation
-                GameObject interactableInstance = Object.Instantiate(prefab, spawnInfo.position, spawnInfo.rotation);
+                GameObject interactableInstance = Object.Instantiate(m_prefab, spawnInfo.position, spawnInfo.rotation);
+
+                Log.Debug($"[NGI] SPAWNING ON NETWORK SERVER");
+                Log.Debug($"[NGI] NETWORK SERVER ACTIVE: {NetworkServer.active}");
+                Log.Debug($"[NGI] NETWORK IDENTITY FOUND: {interactableInstance.GetComponent<NetworkIdentity>() != null}");
                 NetworkServer.Spawn(interactableInstance);
             }
         }
@@ -597,9 +592,6 @@ namespace Faithful
 
             // Fetch model from asset bundle
             m_model = Assets.GetModel(modelName);
-
-            // Add network identity
-            m_model.AddComponent<NetworkIdentity>();
 
             // Check for model
             if (m_model == null)
@@ -666,21 +658,6 @@ namespace Faithful
                 return m_model;
             }
         }
-        public GameObject prefab
-        {
-            get
-            {
-                // Check for prefab
-                if (m_prefab == null)
-                {
-                    // Attempt to create prefab
-                    CreatePrefab();
-                }
-
-                // Return prefab
-                return m_prefab;
-            }
-        }
         public Dictionary<string, List<SetSpawnInfo>> setSpawns { get { return m_setSpawns; } }
     }
 
@@ -703,6 +680,8 @@ namespace Faithful
 
         private void Start()
         {
+            Debug.Log($"[Client] {gameObject.name} spawned with netId: {GetComponent<NetworkIdentity>().netId}");
+
             // Check if hosting and run is valid
             if (Utils.hosting && Run.instance)
             {

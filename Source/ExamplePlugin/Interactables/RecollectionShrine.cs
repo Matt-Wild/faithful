@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Faithful
@@ -118,13 +119,14 @@ namespace Faithful
             // Cost needs to happen after shrine is purchased (so do cost in on purchase method)
         }
 
-        private void OnPrePopulateScene(SceneDirector _director)
+        private async void OnPrePopulateScene(SceneDirector _director)
         {
             // Check if any players are able to use the shrine
             if (!CanBeUsed()) return;
 
-            // This shrine has set spawns on various stages
-            DoSetSpawn();
+            await Task.Delay(20000); // Waits for 20 seconds (20000ms)
+
+            DoSetSpawn(); // Execute the function after the delay
         }
 
         private bool CanBeUsed()

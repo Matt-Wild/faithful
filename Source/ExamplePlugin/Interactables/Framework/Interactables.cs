@@ -13,19 +13,6 @@ namespace Faithful
             m_interactables.Add(_interactable);
         }
 
-        public static void Prewarm()
-        {
-            // Cycle through interactables
-            foreach (Interactable interactable in m_interactables)
-            {
-                // Check for interactable
-                if (interactable == null) continue;
-
-                // Prewarm interactable
-                interactable.Prewarm();
-            }
-        }
-
         public static Interactable FetchInteractable(string _token)
         {
             // Cycle through interactables
