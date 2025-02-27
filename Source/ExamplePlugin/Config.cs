@@ -134,11 +134,23 @@ namespace Faithful
                 languageString = languageString.Replace(settingToken, setting.Value.ValueObject.ToString());
             }
 
-            // Check for corrupted item name
-            if (_corruptedItemName != "")
+            // Check for CORRUPTED_ITEM token
+            if (languageString.Contains("[CORRUPTED_ITEM]"))
             {
-                // Replace unique CORRUPTED_ITEM token
-                languageString = languageString.Replace("[CORRUPTED_ITEM]", Utils.Pluralize(_corruptedItemName));
+                // Check for corrupted item name
+                if (!string.IsNullOrWhiteSpace(_corruptedItemName))
+                {
+                    // Replace unique CORRUPTED_ITEM token
+                    languageString = languageString.Replace("[CORRUPTED_ITEM]", Utils.Pluralize(_corruptedItemName));
+                }
+
+                // No corrupted item name provided
+                else
+                {
+                    // Error and remove corrupted items sentence
+                    Log.Error($"[CONFIG] - Was unable to process corrupted item token for language token '{_token}' as no corrupted item name was provided.");
+                    languageString = languageString.Replace(" <style=cIsVoid>Corrupts all [CORRUPTED_ITEM]</style>.", "");
+                }
             }
 
             // Return formatted language string

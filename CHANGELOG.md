@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.1 Corrupted Item String Fixes
+- Made the code for finding item corruptions more robust.
+
 ### v1.3.0 Shrine of Recollection
 - Added special Collector's Vision interactable 'Shrine of Recollection'.
 
@@ -51,10 +54,10 @@
 - Vengeance buff from Vengeful Toaster is no longer removed by DoTs.
 - Please note that balance changes require a config reset to apply (or manual config adjustment).
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.2 Hermit's Shawl No Longer Debug Only
 - Fixed Hermit's Shawl being left as debug only - oops.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.1 All Item Configs
 - Added override configs for all items - Allows disabling all items, disabling all item displays and enabling extended pickup descriptions for all items with one simple config change.

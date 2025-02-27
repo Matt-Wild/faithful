@@ -72,11 +72,11 @@ namespace Faithful
             // Create item def
             itemDef = ScriptableObject.CreateInstance<ItemDef>();
 
-            // Update item texts
-            UpdateItemTexts();
-
             // Fetch item settings
             FetchSettings();
+
+            // Update item texts
+            UpdateItemTexts();
 
             // Set item expansion
             itemDef.requiredExpansion = Utils.expansionDef;
@@ -221,9 +221,16 @@ namespace Faithful
                 nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_{token}_NAME", Utils.GetLanguageString($"FAITHFUL_{token}_NAME"));
             }
 
+            // Check if void item
+            if (isVoid)
+            {
+                // Update corrupted name just in case
+                UpdateCorruptedName();
+            }
+
             // Use 3 parameter version to add language override for specific language
-            LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}", corruptedName));
-            LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}", corruptedName));
+            LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}", corruptedNameSafe));
+            LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}", corruptedNameSafe));
 
             // Update item texts
             itemDef.name = Utils.GetXMLLanguageString($"FAITHFUL_{token}_NAME");
@@ -242,20 +249,24 @@ namespace Faithful
         private void UpdateCorruptedName()
         {
             // Check if void item
-            if (tier == ItemTier.VoidTier1 || tier == ItemTier.VoidTier2 || tier == ItemTier.VoidTier3 || tier == ItemTier.VoidBoss)
+            if (isVoid)
             {
                 // Check for corrupted item override
                 if (corruptedOverrideSetting != null)
                 {
                     // Try and find item
                     ItemDef corruptedItem = Utils.GetItem(corruptedOverrideSetting.Value);
-                    if (corruptedItem != null && !corruptedItem.hidden)
+                    if (corruptedItem != null && !corruptedItem.hidden && !string.IsNullOrWhiteSpace(corruptedItem.nameToken))
                     {
                         // Set corrupted item name
-                        corruptedName = Utils.GetString(corruptedItem.nameToken);
+                        corruptedName = Language.GetString(corruptedItem.nameToken);
 
-                        // Done
-                        return;
+                        // Check if corrupted name was found
+                        if (corruptedName != corruptedItem.nameToken)
+                        {
+                            // Done
+                            return;
+                        }
                     }
                 }
 
@@ -278,7 +289,7 @@ namespace Faithful
             nameOverrideSetting = CreateSetting("NAME_OVERRIDE", "Override Item Name", "", "Should this item be called something different?", false, _canRandomise: false);
 
             // Check if void item
-            if (tier == ItemTier.VoidTier1 || tier == ItemTier.VoidTier2 || tier == ItemTier.VoidTier3 || tier == ItemTier.VoidBoss)
+            if (isVoid)
             {
                 // Create corrupt override setting
                 corruptedOverrideSetting = CreateSetting("CORRUPTED_OVERRIDE", "Override Corrupted Item", "", "Should this item corrupt something else instead of it's default item?", false, _canRandomise: false, _restartRequired: true);
@@ -317,6 +328,48 @@ namespace Faithful
 
             // Fetch setting from config
             return Config.FetchSetting<T>($"ITEM_{token}_{_tokenAddition}");
+        }
+
+        public string corruptedNameSafe
+        {
+            get
+            {
+                // Check for corrupted name
+                if (!string.IsNullOrWhiteSpace(corruptedName))
+                {
+                    // Return corrupted name
+                    return corruptedName;
+                }
+
+                // Check for default corrupted name
+                if (!string.IsNullOrWhiteSpace(defaultCorruptedToken))
+                {
+                    // Get language string
+                    string languageString = Language.GetString(defaultCorruptedToken);
+
+                    // Check if language string is valid
+                    if (languageString != defaultCorruptedToken)
+                    {
+                        // Return language string
+                        return languageString;
+                    }
+                }
+
+                // Return empty string as fallback
+                return "";
+            }
+        }
+
+        public bool isVoid
+        {
+            get
+            {
+                // Check if void item tier
+                if (tier == ItemTier.VoidTier1 || tier == ItemTier.VoidTier2 || tier == ItemTier.VoidTier3 || tier == ItemTier.VoidBoss) return true;
+
+                // Not void item tier
+                return false;
+            }
         }
     }
 
