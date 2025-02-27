@@ -1,14 +1,8 @@
-﻿using BepInEx;
-using HarmonyLib;
-using R2API;
-using RoR2;
-using RoR2.Navigation;
+﻿using RoR2;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using static ProBuilder.MeshOperations.pb_MeshImporter;
 
 namespace Faithful
 {
@@ -140,6 +134,27 @@ namespace Faithful
         {
             // Sync setting on client
             Config.FetchSetting(_setting.token).SetSyncedValue(_setting);
+        }
+
+        [Command]
+        public void CmdSetLookupInt(string _key, int _value)
+        {
+            // Call on all clients
+            RpcSetLookupInt(_key, _value);
+        }
+
+        [ClientRpc]
+        public void RpcSetLookupInt(string _key, int _value)
+        {
+            // Set value in lookup table
+            LookupTable.SetInt(_key, _value);
+
+            // Check if debug mode is on
+            if (Utils.debugMode)
+            {
+                // Log that value was set
+                Log.Debug($"[NET UTILS] - Set integer in lookup table | Key: {_key} | Value: {_value}.");
+            }
         }
 
         /*[Command]

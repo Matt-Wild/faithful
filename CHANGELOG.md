@@ -1,5 +1,8 @@
 # Changelog
 
+### v1.3.0 Shrine of Recollection
+- Added special Collector's Vision interactable 'Shrine of Recollection'.
+
 #### v1.2.15 Debug UI Refinements
 - Debug UI transformed to fit better with the rest of the game.
 
@@ -51,13 +54,13 @@
 #### v1.2.2 Hermit's Shawl No Longer Debug Only
 - Fixed Hermit's Shawl being left as debug only - oops.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.1 All Item Configs
 - Added override configs for all items - Allows disabling all items, disabling all item displays and enabling extended pickup descriptions for all items with one simple config change.
 
 ### v1.2.0 Hermit's Shawl
 - Added the Hermit's Shawl item.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.1.6 Fixed Rogue Config Entries
 - Fixed rogue config entries for debug items (delete old config to clean).

@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
@@ -57,7 +58,7 @@ namespace Faithful
             if (player == null) return;
 
             // Get lookup string for this player
-            string lookupString = $"{player.networkUser.id} IC";
+            string lookupString = $"{player.GetComponent<NetworkIdentity>().netId} IC";
 
             // Get carryover inspiration amount
             int carryoverInspiration = LookupTable.GetInt(lookupString);
@@ -77,13 +78,14 @@ namespace Faithful
             }
 
             // Reset carryover inspiration (this can be thought of as the cost)
+            Utils.netUtils.CmdSetLookupInt(lookupString, 0);
             LookupTable.SetInt(lookupString, 0);
 
             // Check if nobody can use the shrine anymore
             if (!CanBeUsed())
             {
                 // Deactivate shrine
-                _behaviour.SetUnavailable();
+                _behaviour.CmdSetUnavailable();
             }
 
             // Create params for message
@@ -111,7 +113,7 @@ namespace Faithful
             if (player == null) return false;
 
             // This shrine is interactable if this player has "cached" or carryover inspiration
-            return LookupTable.GetInt($"{player.networkUser.id} IC") > 0;
+            return LookupTable.GetInt($"{player.GetComponent<NetworkIdentity>().netId} IC") > 0;
         }
 
         public override void CustomPayCost(CostTypeDef _costTypeDef, CostTypeDef.PayCostContext _context)
@@ -119,14 +121,13 @@ namespace Faithful
             // Cost needs to happen after shrine is purchased (so do cost in on purchase method)
         }
 
-        private async void OnPrePopulateScene(SceneDirector _director)
+        private void OnPrePopulateScene(SceneDirector _director)
         {
             // Check if any players are able to use the shrine
             if (!CanBeUsed()) return;
 
-            await Task.Delay(20000); // Waits for 20 seconds (20000ms)
-
-            DoSetSpawn(); // Execute the function after the delay
+            // Spawn the shrine in it's set positions (automatically checks if the stage has set spawns)
+            DoSetSpawn();
         }
 
         private bool CanBeUsed()
@@ -135,7 +136,7 @@ namespace Faithful
             foreach (PlayerCharacterMasterController player in Utils.GetPlayers())
             {
                 // Check for cached inspiration
-                if (LookupTable.GetInt($"{player.networkUser.id} IC") > 0) return true;
+                if (LookupTable.GetInt($"{player.GetComponent<NetworkIdentity>().netId} IC") > 0) return true;
             }
 
             // No valid player found

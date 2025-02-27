@@ -252,7 +252,7 @@ namespace Faithful
                     if (corruptedItem != null && !corruptedItem.hidden)
                     {
                         // Set corrupted item name
-                        corruptedName = Language.GetString(corruptedItem.nameToken);
+                        corruptedName = Utils.GetString(corruptedItem.nameToken);
 
                         // Done
                         return;

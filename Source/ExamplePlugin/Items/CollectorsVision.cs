@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using System;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
@@ -180,17 +181,17 @@ namespace Faithful
             foreach (PlayerCharacterMasterController player in Utils.GetPlayers())
             {
                 // Try get character body
-                CharacterBody body = player.body;
+                CharacterBody body = player.master?.GetBody();
                 if (body == null) continue;
 
                 // Get buff count
                 int buffCount = body.GetBuffCount(inspirationBuff.buffDef);
-                
+
                 // Check if has buff
                 if (buffCount > 0)
                 {
                     // Create lookup string
-                    string lookupString = $"{player.networkUser.id} IC";
+                    string lookupString = $"{player.GetComponent<NetworkIdentity>().netId} IC";
 
                     // Calculate carryover for stage
                     int newCarryover = Mathf.CeilToInt(buffCount * inspirationReturnPerc);
@@ -201,8 +202,8 @@ namespace Faithful
                     // Check if new carryover is greater than the current carryover
                     if (newCarryover > currentCarryover)
                     {
-                        // Use lookup table to cache new carryover stacks of inspiration
-                        LookupTable.SetInt(lookupString, newCarryover);
+                        // Use lookup table to cache new carryover stacks of inspiration (sync with all clients)
+                        Utils.netUtils.CmdSetLookupInt(lookupString, newCarryover);
                     }
                 }
             }

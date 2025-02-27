@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using RoR2.ExpansionManagement;
 using RoR2.UI;
+using UnityEngine.EventSystems;
 
 namespace Faithful
 {
@@ -127,6 +128,9 @@ namespace Faithful
         private bool m_allowInspect;
         private InspectDef m_inspectDef;
 
+        // Custom interactable behaviour attached to all Faithful interactables
+        private FaithfulInteractableBehaviour m_behaviour;
+
         // Dictionary of stages in which this interactables of set spawns (as well as spawn info such as position and rotation)
         private Dictionary<string, List<SetSpawnInfo>> m_setSpawns = new Dictionary<string, List<SetSpawnInfo>>();
 
@@ -224,6 +228,13 @@ namespace Faithful
             m_customCostType.darkenWorldStyledCostString = m_darkenWorldStyledCustomCost;
             m_costTypeIndex = CostTypeCatalog.costTypeDefs.Length + _list.Count;
 
+            // Check for behaviour
+            if (m_behaviour != null)
+            {
+                // Update cost type in behaviour
+                m_behaviour.costType = (CostTypeIndex)m_costTypeIndex;
+            }
+
             // Add custom cost formatting to language API
             LanguageAPI.Add($"FAITHFUL_COST_{token}_FORMAT", m_customCostString == null ? "?" : m_customCostString);
 
@@ -266,10 +277,10 @@ namespace Faithful
             }
 
             // Add interactable behaviour
-            FaithfulInteractableBehaviour interactableBehaviour = m_prefab.AddComponent<FaithfulInteractableBehaviour>();
-            interactableBehaviour.token = token;
-            interactableBehaviour.startAvailable = m_startAvailable;
-            interactableBehaviour.costType = (CostTypeIndex)m_costTypeIndex;
+            m_behaviour = m_prefab.AddComponent<FaithfulInteractableBehaviour>();
+            m_behaviour.token = token;
+            m_behaviour.startAvailable = m_startAvailable;
+            m_behaviour.costType = (CostTypeIndex)m_costTypeIndex;
 
             // Add purchase interaction
             PurchaseInteraction purchaseInteraction = m_prefab.AddComponent<PurchaseInteraction>();
@@ -283,7 +294,7 @@ namespace Faithful
             purchaseInteraction.isGoldShrine = false;
 
             // Add purchase interaction to interactable behaviour
-            interactableBehaviour.purchaseInteraction = purchaseInteraction;
+            m_behaviour.purchaseInteraction = purchaseInteraction;
 
             // Add ping info provider
             PingInfoProvider pingInfoProvider = m_prefab.AddComponent<PingInfoProvider>();
@@ -335,7 +346,7 @@ namespace Faithful
                     renderer.sharedMaterial = Assets.GetShrineSymbolMaterial(Assets.GetTexture(m_symbolAssetName), m_symbolAssetColour);
 
                     // Add symbol transform reference to interactable behaviour
-                    interactableBehaviour.symbolTransform = symbolTransform;
+                    m_behaviour.symbolTransform = symbolTransform;
                 }
                 else
                 {
@@ -496,8 +507,6 @@ namespace Faithful
                 genericInspectInfoProvider.InspectInfo = m_inspectDef;
             }
 
-            Debug.Log("REGISTERING");
-
             // Register to network server
             PrefabAPI.RegisterNetworkPrefab(m_prefab);
         }
@@ -559,10 +568,6 @@ namespace Faithful
 
                 // Spawn interactable at position and rotation
                 GameObject interactableInstance = Object.Instantiate(m_prefab, spawnInfo.position, spawnInfo.rotation);
-
-                Log.Debug($"[NGI] SPAWNING ON NETWORK SERVER");
-                Log.Debug($"[NGI] NETWORK SERVER ACTIVE: {NetworkServer.active}");
-                Log.Debug($"[NGI] NETWORK IDENTITY FOUND: {interactableInstance.GetComponent<NetworkIdentity>() != null}");
                 NetworkServer.Spawn(interactableInstance);
             }
         }
@@ -680,8 +685,6 @@ namespace Faithful
 
         private void Start()
         {
-            Debug.Log($"[Client] {gameObject.name} spawned with netId: {GetComponent<NetworkIdentity>().netId}");
-
             // Check if hosting and run is valid
             if (Utils.hosting && Run.instance)
             {
@@ -689,7 +692,7 @@ namespace Faithful
                 if (startAvailable)
                 {
                     // Set as available
-                    SetAvailable();
+                    CmdSetAvailable();
                 }
                 
             }
@@ -730,7 +733,15 @@ namespace Faithful
             EffectManager.SimpleImpactEffect(Assets.shrineUseEffectPrefab, transform.position, new Vector3(0, 0, 0), true);
         }
 
-        public void SetAvailable()
+        [Command]
+        public void CmdSetAvailable()
+        {
+            // Call on clients
+            RpcSetAvailable();
+        }
+
+        [ClientRpc]
+        private void RpcSetAvailable()
         {
             // Set as available
             purchaseInteraction.SetAvailableTrue();
@@ -739,7 +750,15 @@ namespace Faithful
             symbolTransform.gameObject.SetActive(true);
         }
 
-        public void SetUnavailable()
+        [Command]
+        public void CmdSetUnavailable()
+        {
+            // Call on clients
+            RpcSetUnavailable();
+        }
+
+        [ClientRpc]
+        private void RpcSetUnavailable()
         {
             // Set as unavailable
             purchaseInteraction.SetAvailable(false);
