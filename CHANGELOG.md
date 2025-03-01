@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.2 More Jetpack Adjustments
+- Small 4-T0N Jetpack buff - also adding pickup spawning tools to debug UI.
+
 #### v1.3.1 Corrupted Item String Fixes
 - Made the code for finding item corruptions more robust.
 
@@ -47,14 +50,14 @@
 #### v1.2.4 Noxious Slimes Blight
 - Noxious Slimes now has a small chance to blight enemies on hit.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.3 Balance Changes
 - Decreased Longshot Geode's range condition from 50m -> 40m.
 - Increased Leader's Pennon radius stacking from 5m -> 7.5m.
 - Increased Melting Warbler's jump height bonus from 1m -> 2m.
 - Vengeance buff from Vengeful Toaster is no longer removed by DoTs.
 - Please note that balance changes require a config reset to apply (or manual config adjustment).
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.2 Hermit's Shawl No Longer Debug Only
 - Fixed Hermit's Shawl being left as debug only - oops.

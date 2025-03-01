@@ -28,9 +28,9 @@ namespace Faithful
         //protected float deactivatedTime;
 
         // Jetpack stats
-        protected float baseMaxVelocity = 38.0f;
+        protected float baseMaxVelocity = 42.0f;
         protected float baseRisingAcceleration = 36.0f;
-        protected float fallingAcceleration = 120.0f;
+        protected float fallingAcceleration = 320.0f;
         protected float baseFuel = 4.0f;
         protected float fuelPerStack = 2.0f;
         protected float baseRefuelDuration = 12.0f;
@@ -586,8 +586,8 @@ namespace Faithful
             // Get current y velocity
             float yVel = character.characterMotor.velocity.y;
 
-            // Calculate force (give an extra boost until 25% of the max velocity is reached)
-            float force = (risingAcceleration + Mathf.Clamp01((-yVel + maxVelocity / 4.0f) / 40.0f) * dynamicAccelerationDifference) * jumpPowerModifier * accelerationMultiplier;
+            // Calculate force (give an extra boost until 30% of the max velocity is reached)
+            float force = (risingAcceleration + Mathf.Clamp01((-yVel + maxVelocity * 0.3f) / 80.0f) * dynamicAccelerationDifference) * jumpPowerModifier * accelerationMultiplier;
 
             // Apply jet force to character
             character.characterMotor.velocity = new Vector3(character.characterMotor.velocity.x, Mathf.MoveTowards(yVel, maxVelocity, force * Time.fixedDeltaTime), character.characterMotor.velocity.z);
