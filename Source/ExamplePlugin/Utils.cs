@@ -470,6 +470,22 @@ namespace Faithful
             }
         }
 
+        public static void SpawnPickup(PickupDef _pickup, Vector3 _position, Vector3? _velocity = null, int _amount = 1)
+        {
+            // Check for velocity
+            Vector3 velocity = _velocity ?? Vector3.zero;
+
+            // Get pickup index
+            PickupIndex index = _pickup.pickupIndex;
+
+            // Cycle for amount
+            for (int i = 0; i < _amount; i++)
+            {
+                // Spawn pickup
+                PickupDropletController.CreatePickupDroplet(index, _position, velocity);
+            }
+        }
+
         public static void MakeElite(CharacterBody _character, Inventory _inventory, EliteDef _eliteDef)
         {
             // Make elite

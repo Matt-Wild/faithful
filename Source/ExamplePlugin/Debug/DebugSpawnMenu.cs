@@ -21,6 +21,9 @@ namespace Faithful
             { "Void", TeamIndex.Void }
         };
 
+        // Dictionary of display strings for pickups and their related pickup definitions
+        protected Dictionary<string, PickupDef> pickupLookup = new Dictionary<string, PickupDef>();
+
         // Store dictionary of string and elite def relationships
         protected Dictionary<string, EliteDef> m_eliteLookup = null;
 
@@ -113,11 +116,125 @@ namespace Faithful
             TMP_Dropdown characterSelectionDropdown = transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>();
             selectionDropdowns.Add(new SelectionDropdown(characterSelectionDropdown, "Character", Utils.characterCardNames));
 
+            // Create list of pickup name tokens
+            List<string> pickupNames = new List<string>();
+
+            // Cycle through pickup definitions
+            foreach (PickupDef pickup in PickupCatalog.allPickups)
+            {
+                // Get processed internal name
+                string internalName = ProcessPickupInternalName(pickup);
+
+                // Add name token to list
+                pickupNames.Add(internalName);
+
+                // Cache in pickup lookup
+                pickupLookup[internalName] = pickup;
+            }
+
+            // Sort pickups alphabetically (list is so long this is needed in order to effectively navigate it)
+            pickupNames.Sort();
+
+            // Register pickup selection dropdown
+            TMP_Dropdown pickupSelectionDropdown = transform.Find("PickupSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>();
+            selectionDropdowns.Add(new SelectionDropdown(pickupSelectionDropdown, "Pickup", pickupNames));
+
             // Register team selection dropdown
             selectionDropdowns.Add(new SelectionDropdown(teamDropdown, "Character"));
 
             // Register elite selection dropdown
             selectionDropdowns.Add(new SelectionDropdown(eliteDropdown, "Character"));
+        }
+
+        private string ProcessPickupInternalName(PickupDef _pickup)
+        {
+            // Get internal name
+            string internalName = _pickup.internalName;
+
+            // Check if pickup is item
+            if (_pickup.itemIndex != ItemIndex.None)
+            {
+                // Get item definition
+                ItemDef item = ItemCatalog.GetItemDef(_pickup.itemIndex);
+
+                // Get item name
+                string itemName = Language.GetString(item.nameToken);
+
+                // Check if name not found
+                if (itemName == item.nameToken)
+                {
+                    // Switch to using internal name
+                    itemName = item.name;
+                }
+
+                // Check if valid item name
+                if (!string.IsNullOrWhiteSpace(itemName) && itemName != "???")
+                {
+                    // Override internal name
+                    internalName = itemName;
+                }
+            }
+
+            // Check if pickup is equipment
+            else if (_pickup.equipmentIndex != EquipmentIndex.None)
+            {
+                // Get equipment definition
+                EquipmentDef equipment = EquipmentCatalog.GetEquipmentDef(_pickup.equipmentIndex);
+
+                // Get equipment name
+                string equipmentName = Language.GetString(equipment.nameToken);
+
+                // Check if name not found
+                if (equipmentName == equipment.nameToken)
+                {
+                    // Switch to using internal name
+                    equipmentName = equipment.name;
+                }
+
+                // Check if valid equipment name
+                if (!string.IsNullOrWhiteSpace(equipmentName) && equipmentName != "???")
+                {
+                    // Override internal name
+                    internalName = equipmentName;
+                }
+            }
+
+            // Check if pickup is artifact
+            else if (_pickup.artifactIndex != ArtifactIndex.None)
+            {
+                // Get artifact definition
+                ArtifactDef artifact = ArtifactCatalog.GetArtifactDef(_pickup.artifactIndex);
+
+                // Get artifact name
+                string artifactName = Language.GetString(artifact.nameToken);
+
+                // Check if name not found
+                if (artifactName == artifact.nameToken)
+                {
+                    // Switch to using internal name
+                    artifactName = artifact.cachedName;
+                }
+
+                // Check if valid artifact name
+                if (!string.IsNullOrWhiteSpace(artifactName) && artifactName != "???")
+                {
+                    // Override internal name
+                    internalName = artifactName;
+                }
+            }
+
+            // Filter string
+            internalName = internalName.Replace("ItemTier.", "");
+            internalName = internalName.Replace("ItemIndex.", "");
+            internalName = internalName.Replace("EquipmentIndex.", "");
+            internalName = internalName.Replace("MiscPickupIndex.", "");
+            internalName = internalName.Replace("ArtifactIndex.", "");
+
+            // Add pickup index to ensure unique identifier
+            internalName += $" [{_pickup.pickupIndex.value}]";
+
+            // Return processed internal name
+            return internalName;
         }
 
         protected void OnSpawn()
@@ -132,6 +249,10 @@ namespace Faithful
                 case "Character":
                     // Spawn character
                     SpawnCharacter();
+                    break;
+                case "Pickup":
+                    // Spawn pickup
+                    SpawnPickup();
                     break;
                 default:
                     break;
@@ -215,6 +336,34 @@ namespace Faithful
 
             // Request spawn from utils
             Utils.SpawnCharacterCard(localBody.transform, selection, spawnAmount, teamLookup[teamDropdown.options[teamDropdown.value].text], CharacterCardSpawned);
+        }
+
+        protected void SpawnPickup()
+        {
+            // Get local player body
+            CharacterBody localBody = Utils.localPlayerBody;
+
+            // Skip if no local player body
+            if (localBody == null)
+            {
+                return;
+            }
+
+            // Check for cached pickup definition
+            if (!pickupLookup.ContainsKey(selection))
+            {
+                // Warn and return
+                Log.Warning($"[SPAWN MENU] - Was unable for find cached pickup definition for pickup '{selection}'.");
+                return;
+            }
+
+            // Get pickup definition
+            PickupDef pickup = pickupLookup[selection];
+
+            Log.Debug($"Spawning {spawnAmount} pickup(s) at target {localBody.transform.position}");
+
+            // Spawn pickup droplet from utils
+            Utils.SpawnPickup(pickup, localBody.transform.position, _amount: spawnAmount);
         }
 
         protected void CharacterCardSpawned(SpawnCard.SpawnResult result)
