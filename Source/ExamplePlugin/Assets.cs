@@ -308,6 +308,23 @@ namespace Faithful
             return assetBundle.LoadAsset<Sprite>(asset);
         }
 
+        public static GameObject GetCrosshair(string _crosshairName)
+        {
+            // Attempt to fetch crosshair
+            GameObject loadedCrosshair = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/" + _crosshairName + "Crosshair");
+
+            // Check for crosshair
+            if (loadedCrosshair == null)
+            {
+                // Warn and return default crosshair
+                Log.Error($"Crosshair '{_crosshairName}' could not be found - defaulting to standard crosshair.");
+                return RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/StandardCrosshair");
+            }
+
+            // Return crosshair
+            return loadedCrosshair;
+        }
+
         public static GameObject GetObject(string _name, string _default = null)
         {
             // Add file extension

@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using RoR2.ExpansionManagement;
 using RoR2.UI;
-using UnityEngine.EventSystems;
 
 namespace Faithful
 {
