@@ -1,8 +1,6 @@
 ﻿using R2API;
 using RoR2;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace Faithful
@@ -62,8 +60,14 @@ namespace Faithful
         // RoR2 Camera Params class
         private CharacterCameraParams m_cameraParams;
 
-        // A cloned character body from the main game that's been emptied of all it's bits and bobs
-        private GameObject m_emptyClonePrefab;
+        // A cloned character body from the main game with it's bits and bobs replaced with custom stuff
+        private GameObject m_bodyPrefab;
+
+        // The character body for the cloned and adjusted prefab
+        private CharacterBody m_characterBody;
+
+        // The character model component for the body prefab
+        private CharacterModel m_characterModel;
 
         public void Init(string _token, string _modelName, string _portraitName, Color? _bodyColor = null, int _sortPosition = 100, string _crosshairName = "Standard", float _maxHealth = 110.0f,
                          float _healthRegen = 1.0f, float _armour = 0.0f, float _shield = 0.0f, int _jumpCount = 1, float _damage = 12.0f, float _attackSpeed = 1.0f, float _crit = 1.0f,
@@ -112,6 +116,335 @@ namespace Faithful
             m_cameraDepth = _cameraDepth;
         }
 
+        private void CreateBodyPrefab()
+        {
+            // Check if body prefab already exists
+            if (m_bodyPrefab != null)
+            {
+                // Already done
+                return;
+            }
+
+            // Check for model
+            if (modelPrefab == null)
+            {
+                // Error and return - unsuccessful
+                Log.Error($"Could not create '{name}' survivor! Model: {modelPrefab}");
+                return;
+            }
+
+            // Create clone body to built off of
+            CreateCloneBody();
+
+            // Setup the clone body
+            SetupCloneBody();
+
+            // Setup character model
+            SetupCharacterModel();
+        }
+
+        private void CreateCloneBody()
+        {
+            // Clone Commando (safest character)
+            GameObject clonedBody = LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommmandoBody");
+
+            // Check for valid clone
+            if (clonedBody == null)
+            {
+                // Error and return null - unsuccessful
+                Log.Error("Was unable to clone Commando character body to create an empty clone!");
+            }
+
+            // Use Prefab API to clone the Commando body and treat as prefab
+            GameObject newBodyPrefab = PrefabAPI.InstantiateClone(clonedBody, bodyName);
+
+            // Cycle through children of character body
+            for (int i = newBodyPrefab.transform.childCount - 1; i >= 0; i--)
+            {
+                // Delete child
+                UnityEngine.Object.DestroyImmediate(newBodyPrefab.transform.GetChild(i).gameObject);
+            }
+
+            // Assign clones body as this survivor's body prefab
+            m_bodyPrefab = newBodyPrefab;
+        }
+
+        private void SetupCloneBody()
+        {
+            // Transfer new information to character body
+            ConfigureCharacterBody();
+
+            // Load the model into the cloned character body and set it up
+            IntegrateCharacterModel();
+
+            // Setup camera for cloned character body
+            SetupCamera();
+
+            // Setup collider for this character
+            SetupCollider();
+        }
+
+        private void ConfigureCharacterBody()
+        {
+            // Set character body identity
+            m_characterBody.baseNameToken = nameToken;
+            m_characterBody.subtitleNameToken = subtitleToken;
+            m_characterBody.portraitIcon = portrait;
+            m_characterBody.bodyColor = bodyColour;
+
+            // Set crosshair and drop pod prefab
+            m_characterBody._defaultCrosshairPrefab = crosshair;
+            m_characterBody.hideCrosshair = false;
+            m_characterBody.preferredPodPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod");
+
+            // Set survivor stats
+            m_characterBody.baseMaxHealth = maxHealth;
+            m_characterBody.baseRegen = healthRegen;
+            m_characterBody.baseArmor = armour;
+            m_characterBody.baseMaxShield = shield;
+
+            m_characterBody.baseDamage = damage;
+            m_characterBody.baseAttackSpeed = attackSpeed;
+            m_characterBody.baseCrit = crit;
+
+            m_characterBody.baseMoveSpeed = moveSpeed;
+            m_characterBody.baseJumpPower = jumpPower;
+            m_characterBody.baseAcceleration = acceleration;
+            m_characterBody.baseJumpCount = jumpCount;
+            m_characterBody.sprintingSpeedMultiplier = 1.45f;
+
+            // Setup levelling
+            m_characterBody.autoCalculateLevelStats = autoCalculateLevelStats;
+
+            if (m_characterBody.autoCalculateLevelStats)
+            {
+                m_characterBody.levelMaxHealth = Mathf.Round(m_characterBody.baseMaxHealth * 0.3f);
+                m_characterBody.levelMaxShield = Mathf.Round(m_characterBody.baseMaxShield * 0.3f);
+                m_characterBody.levelRegen = m_characterBody.baseRegen * 0.2f;
+
+                m_characterBody.levelMoveSpeed = 0f;
+                m_characterBody.levelJumpPower = 0f;
+
+                m_characterBody.levelDamage = m_characterBody.baseDamage * 0.2f;
+                m_characterBody.levelAttackSpeed = 0f;
+                m_characterBody.levelCrit = 0f;
+
+                m_characterBody.levelArmor = 0f;
+            }
+            else
+            {
+                m_characterBody.levelMaxHealth = healthGrowth;
+                m_characterBody.levelMaxShield = shieldGrowth;
+                m_characterBody.levelRegen = regenGrowth;
+
+                m_characterBody.levelMoveSpeed = moveSpeedGrowth;
+                m_characterBody.levelJumpPower = jumpPowerGrowth;
+
+                m_characterBody.levelDamage = damageGrowth;
+                m_characterBody.levelAttackSpeed = attackSpeedGrowth;
+                m_characterBody.levelCrit = critGrowth;
+
+                m_characterBody.levelArmor = armourGrowth;
+            }
+
+            // Misc character body settings
+            m_characterBody.bodyFlags = CharacterBody.BodyFlags.ImmuneToExecutes;
+            m_characterBody.rootMotionInMainState = false;
+            m_characterBody.hullClassification = HullClassification.Human;
+            m_characterBody.isChampion = false;
+        }
+
+        private void IntegrateCharacterModel()
+        {
+            // Get model base
+            Transform modelBase = bodyPrefab.transform.Find("ModelBase");
+
+            // Check for model base
+            if (modelBase == null)
+            {
+                // Create model base if one is not found
+                modelBase = new GameObject("ModelBase").transform;
+                modelBase.parent = bodyPrefab.transform;
+                modelBase.localPosition = modelBasePosition;
+                modelBase.localRotation = Quaternion.identity;
+            }
+
+            // Integrate model into clone
+            modelPrefab.transform.parent = modelBase;
+            modelPrefab.transform.localPosition = Vector3.zero;
+            modelPrefab.transform.localRotation = Quaternion.identity;
+
+            // Get camera pivot point
+            Transform cameraPivot = bodyPrefab.transform.Find("CameraPivot");
+
+            // Check for camera pivot point
+            if (cameraPivot == null)
+            {
+                // Create camera pivot point if one is not found
+                cameraPivot = new GameObject("CameraPivot").transform;
+                cameraPivot.parent = bodyPrefab.transform;
+                cameraPivot.localPosition = cameraPivotPosition;
+                cameraPivot.localRotation = Quaternion.identity;
+            }
+
+            // Get character aim origin
+            Transform aimOrigin = bodyPrefab.transform.Find("AimOrigin");
+
+            // Check for character aim origin
+            if (aimOrigin == null)
+            {
+                // Create character aim origin if one is not found
+                aimOrigin = new GameObject("AimOrigin").transform;
+                aimOrigin.parent = bodyPrefab.transform;
+                aimOrigin.localPosition = aimOriginPosition;
+                aimOrigin.localRotation = Quaternion.identity;
+            }
+
+            // Pass reference to aim origin into character body
+            m_characterBody.aimOriginTransform = aimOrigin;
+
+            // Setup model locator
+            ModelLocator modelLocator = bodyPrefab.GetComponent<ModelLocator>();
+            modelLocator.modelTransform = modelPrefab.transform;
+            modelLocator.modelBaseTransform = modelBase;
+
+            // Get character direction component
+            CharacterDirection characterDirection = bodyPrefab.GetComponent<CharacterDirection>();
+
+            // Check for character direction component
+            if (characterDirection != null)
+            {
+                // Setup character direction component
+                characterDirection.targetTransform = modelBase;
+                characterDirection.overrideAnimatorForwardTransform = null;
+                characterDirection.rootMotionAccumulator = null;
+                characterDirection.modelAnimator = modelPrefab.GetComponent<Animator>();
+                characterDirection.driveFromRootRotation = false;
+                characterDirection.turnSpeed = 720f;
+            }
+        }
+
+        private void SetupCamera()
+        {
+            // Get camera target component and pass in new camera parameters and reference to new camera pivot
+            CameraTargetParams cameraTargetParams = bodyPrefab.GetComponent<CameraTargetParams>();
+            cameraTargetParams.cameraParams = cameraParams;
+            cameraTargetParams.cameraPivotTransform = bodyPrefab.transform.Find("CameraPivot");
+        }
+
+        private void SetupCollider()
+        {
+            // Character collider must be as Commando's
+            CapsuleCollider capsuleCollider = bodyPrefab.GetComponent<CapsuleCollider>();
+            capsuleCollider.center = new Vector3(0f, 0f, 0f);
+            capsuleCollider.radius = 0.5f;
+            capsuleCollider.height = 1.82f;
+            capsuleCollider.direction = 1;
+        }
+
+        private void SetupCharacterModel()
+        {
+            // Try get character model
+            m_characterModel = bodyPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<CharacterModel>();
+
+            // Check if character model was pre-attached
+            bool preAttached = m_characterModel != null;
+            if (!preAttached)
+            {
+                // Create new character model
+                m_characterModel = bodyPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.AddComponent<CharacterModel>();
+            }
+                
+            // Pass character body reference to character model
+            m_characterModel.body = m_characterBody;
+
+            // Setup some misc properties
+            m_characterModel.autoPopulateLightInfos = true;
+            m_characterModel.invisibilityCount = 0;
+            m_characterModel.temporaryOverlays = new List<TemporaryOverlayInstance>();
+
+            // Setup renderer infos depending on if an existing character model was found
+            if (!preAttached)
+            {
+                SetupCustomRendererInfos();
+            }
+            else
+            {
+                SetupPreAttachedRendererInfos();
+            }
+        }
+
+        private void SetupCustomRendererInfos()
+        {
+            // Get child locator
+            ChildLocator childLocator = m_characterModel.GetComponent<ChildLocator>();
+
+            // Check for child locator
+            if (childLocator == null)
+            {
+                // Error and return - unsuccessful
+                Log.Error($"Was unable to setup custom renderer infos for survivor '{name}' - Child locator could not be found!");
+                return;
+            }
+
+            // Store a list of linked renderers from the child locator
+            List<CharacterModel.RendererInfo> rendererInfos = [];
+
+            // Cycle through children in child locator
+            for (int i = 0; i < childLocator.Count; i++)
+            {
+                // Get child game object
+                GameObject child = childLocator.FindChildGameObject(i);
+
+                // Get renderer from child
+                Renderer renderer = child.GetComponent<Renderer>();
+
+                // Check for renderer
+                if (renderer == null) continue;
+
+                // Get material from renderer (convert to HG shader)
+                Material material = renderer.sharedMaterial.ConvertDefaultShaderToHopoo();
+
+                // Add to renderer infos
+                rendererInfos.Add(new CharacterModel.RendererInfo
+                {
+                    renderer = renderer,
+                    defaultMaterial = material,
+                    ignoreOverlays = false,
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On
+                });
+            }
+
+            // Pass renderer infos to character model
+            m_characterModel.baseRendererInfos = rendererInfos.ToArray();
+        }
+
+        private void SetupPreAttachedRendererInfos()
+        {
+            // Cycle through existing renderer infos
+            for (int i = 0; i < m_characterModel.baseRendererInfos.Length; i++)
+            {
+                // Check for default material
+                if (m_characterModel.baseRendererInfos[i].defaultMaterial == null)
+                {
+                    // Set default material as current material
+                    m_characterModel.baseRendererInfos[i].defaultMaterial = m_characterModel.baseRendererInfos[i].renderer.sharedMaterial;
+                }
+
+                // Check again for default material
+                if (m_characterModel.baseRendererInfos[i].defaultMaterial == null)
+                {
+                    // Error - No material found for renderer info
+                    Log.Error($"No material found for renderer info on renderer '{m_characterModel.baseRendererInfos[i].renderer.gameObject.name}'!");
+                }
+                else
+                {
+                    // Convert material to HG shader
+                    m_characterModel.baseRendererInfos[i].defaultMaterial.ConvertDefaultShaderToHopoo();
+                }
+            }
+        }
+
         // Accessors
         public GameObject modelPrefab
         {
@@ -128,40 +461,19 @@ namespace Faithful
                 return m_modelPrefab;
             }
         }
-        public GameObject emptyClonePrefab
+        public GameObject bodyPrefab
         {
             get
             {
-                // Check for empty clone prefab
-                if (m_emptyClonePrefab == null)
+                // Check for body prefab
+                if (m_bodyPrefab == null)
                 {
-                    // Clone Commando (safest character)
-                    GameObject clonedBody = LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommmandoBody");
-
-                    // Check for valid clone
-                    if (clonedBody == null)
-                    {
-                        // Error and return null - unsuccessful
-                        Log.Error("Was unable to clone Commando character body to create an empty clone!");
-                        return null;
-                    }
-
-                    // Use Prefab API to clone the Commando body and treat as prefab
-                    GameObject newBodyPrefab = PrefabAPI.InstantiateClone(clonedBody, bodyName);
-
-                    // Cycle through children of character body
-                    for (int i = newBodyPrefab.transform.childCount - 1; i >= 0; i--)
-                    {
-                        // Delete child
-                        UnityEngine.Object.DestroyImmediate(newBodyPrefab.transform.GetChild(i).gameObject);
-                    }
-
-                    // Assign new emptied clone prefab
-                    m_emptyClonePrefab = newBodyPrefab;
+                    // Create body prefab
+                    CreateBodyPrefab();
                 }
 
-                // Return empty clone prefab
-                return m_emptyClonePrefab;
+                // Return body prefab
+                return m_bodyPrefab;
             }
         }
         public GameObject crosshair

@@ -1,5 +1,4 @@
 ﻿using BepInEx;
-using EntityStates.VoidRaidCrab.Leg;
 using HarmonyLib;
 using Newtonsoft.Json;
 using R2API;
@@ -117,6 +116,9 @@ namespace Faithful
 
         // HG shader
         static private Shader HGShader;
+
+        // Cached list of shaders converted to Hopoo Games shader
+        private static List<Material> HGCachedMaterials = new List<Material>();
 
         // Store language dictionary for early lookups
         static private Dictionary<string, string> languageDictionary;
@@ -853,7 +855,7 @@ namespace Faithful
                 {
                     defaultMaterial = material,
                     renderer = renderers[i],
-                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    defaultShadowCastingMode = ShadowCastingMode.On,
                     ignoreOverlays = _ignoreOverlays    // Should this model ignore effect overlays
                 };
             }
@@ -988,6 +990,80 @@ namespace Faithful
 
             // Log
             Debug.Log($"[UTILS] - {message}");
+        }
+
+        // Mostly yoinked this function from the Henry mod
+        public static Material ConvertDefaultShaderToHopoo(this Material tempMat)
+        {
+            // Check if material has already been converted
+            if (HGCachedMaterials.Contains(tempMat))
+            {
+                // Done
+                return tempMat;
+            }
+
+            // Check if possible to convert
+            string name = tempMat.shader.name.ToLowerInvariant();
+            if (!name.StartsWith("standard") && !name.StartsWith("autodesk"))
+            {
+                // Log warning if in debug mode
+                if (debugMode)
+                {
+                    Log.Warning($"[UTILS] | '{tempMat.name}' is not unity standard shader - Cannot convert to a HG shader.");
+                }
+                
+                // Abort conversion
+                return tempMat;
+            }
+
+            float? bumpScale = null;
+            Color? emissionColor = null;
+
+            // Grab values before the shader changes
+            if (tempMat.IsKeywordEnabled("_NORMALMAP"))
+            {
+                bumpScale = tempMat.GetFloat("_BumpScale");
+            }
+            if (tempMat.IsKeywordEnabled("_EMISSION"))
+            {
+                emissionColor = tempMat.GetColor("_EmissionColor");
+            }
+
+            // Set shader
+            tempMat.shader = HGShader;
+
+            // Apply values after shader is set
+            tempMat.SetTexture("_EmTex", tempMat.GetTexture("_EmissionMap"));
+            tempMat.EnableKeyword("DITHER");
+
+            if (bumpScale != null)
+            {
+                tempMat.SetFloat("_NormalStrength", (float)bumpScale);
+                tempMat.SetTexture("_NormalTex", tempMat.GetTexture("_BumpMap"));
+            }
+            if (emissionColor != null)
+            {
+                tempMat.SetColor("_EmColor", (Color)emissionColor);
+                tempMat.SetFloat("_EmPower", 1);
+            }
+
+            // Set this keyword in unity if you want your model to show backfaces
+            // In unity, right click the inspector tab and choose Debug
+            if (tempMat.IsKeywordEnabled("NOCULL"))
+            {
+                tempMat.SetInt("_Cull", 0);
+            }
+            // Set this keyword in unity if you've set up your model for limb removal item displays (eg. goat hoof) by setting your model's vertex colors
+            if (tempMat.IsKeywordEnabled("LIMBREMOVAL"))
+            {
+                tempMat.SetInt("_LimbRemovalOn", 1);
+            }
+
+            // Cache this material to show that it's already been converted
+            HGCachedMaterials.Add(tempMat);
+
+            // Return newly converted material
+            return tempMat;
         }
 
         public static string Pluralize(string _phrase)
