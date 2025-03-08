@@ -24,6 +24,7 @@ namespace Faithful
         public static GameObject pennonEffectPrefab;
         public static GameObject matrixEffectPrefab;
         public static GameObject shrineUseEffectPrefab;
+        public static PhysicMaterial ragdollMaterial;
 
         // Store useful lookup assets
         public static DynamicBone scarfDynamicBone;
@@ -156,6 +157,9 @@ namespace Faithful
 
             // Get shrine use effect prefab
             shrineUseEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/ShrineUseEffect.prefab").WaitForCompletion();
+
+            // Get physics material for ragdoll bodies
+            ragdollMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<RoR2.RagdollController>().bones[1].GetComponent<Collider>().material;
 
             // Fetch ego scarf asset
             scarfDynamicBone = Utils.FindChildByName(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/LunarSun/DisplaySunHeadNeck.prefab").WaitForCompletion().transform, "Bandage1").GetComponent<DynamicBone>();

@@ -1066,6 +1066,18 @@ namespace Faithful
             return tempMat;
         }
 
+        public static string FindChildNameInsensitive(this ChildLocator _childLocator, string _child)
+        {
+            // Return child matching name ignoring case
+            return _childLocator.transformPairs.Where((pair) => pair.name.ToLowerInvariant() == _child.ToLowerInvariant()).FirstOrDefault().name;
+        }
+
+        public static GameObject FindChildGameObjectInsensitive(this ChildLocator _childLocator, string _child)
+        {
+            // Return game object of child found using case insensitive search
+            return _childLocator.FindChildGameObject(_childLocator.FindChildNameInsensitive(_child));
+        }
+
         public static string Pluralize(string _phrase)
         {
             // Check for phrase
@@ -1965,7 +1977,7 @@ namespace Faithful
                     Log.Warning($"[UTILS] | Failed to assign override for corrupted item '{corruptedOverride}' for void item '{corrupter.name}' reverting to default item.");
                 }
             }
-
+            
             // Get item to corrupt
             ItemDef corrupted = ItemCatalog.allItemDefs.Where(x => x.nameToken == localCorruptedToken).FirstOrDefault();
 

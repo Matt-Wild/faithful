@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal class Survivor
+    internal class Survivor : IPrintable
     {
         // Token used to identify survivor and find language strings
         private string m_token;
@@ -129,7 +129,7 @@ namespace Faithful
             if (modelPrefab == null)
             {
                 // Error and return - unsuccessful
-                Log.Error($"Could not create '{name}' survivor! Model: {modelPrefab}");
+                Print.Error(this, $"Could not create '{name}' survivor! Model: {modelPrefab}");
                 return;
             }
 
@@ -152,7 +152,7 @@ namespace Faithful
             if (clonedBody == null)
             {
                 // Error and return null - unsuccessful
-                Log.Error("Was unable to clone Commando character body to create an empty clone!");
+                Print.Error(this, "Was unable to clone Commando character body to create an empty clone");
             }
 
             // Use Prefab API to clone the Commando body and treat as prefab
@@ -162,7 +162,7 @@ namespace Faithful
             for (int i = newBodyPrefab.transform.childCount - 1; i >= 0; i--)
             {
                 // Delete child
-                UnityEngine.Object.DestroyImmediate(newBodyPrefab.transform.GetChild(i).gameObject);
+                Object.DestroyImmediate(newBodyPrefab.transform.GetChild(i).gameObject);
             }
 
             // Assign clones body as this survivor's body prefab
@@ -372,6 +372,18 @@ namespace Faithful
             {
                 SetupPreAttachedRendererInfos();
             }
+
+            // Set up the hurt boxes
+            SetupHurtBoxGroup();
+
+            // Setup aim animator
+            SetupAimAnimator();
+
+            // Setup footstep controller
+            SetupFootstepController();
+
+            // Setup ragdoll
+            SetupRagdoll();
         }
 
         private void SetupCustomRendererInfos()
@@ -383,7 +395,7 @@ namespace Faithful
             if (childLocator == null)
             {
                 // Error and return - unsuccessful
-                Log.Error($"Was unable to setup custom renderer infos for survivor '{name}' - Child locator could not be found!");
+                Print.Error(this, $"Was unable to setup custom renderer infos for survivor '{name}' - Child locator could not be found");
                 return;
             }
 
@@ -435,12 +447,167 @@ namespace Faithful
                 if (m_characterModel.baseRendererInfos[i].defaultMaterial == null)
                 {
                     // Error - No material found for renderer info
-                    Log.Error($"No material found for renderer info on renderer '{m_characterModel.baseRendererInfos[i].renderer.gameObject.name}'!");
+                    Print.Error(this, $"No material found for renderer info on renderer '{m_characterModel.baseRendererInfos[i].renderer.gameObject.name}'");
                 }
                 else
                 {
                     // Convert material to HG shader
                     m_characterModel.baseRendererInfos[i].defaultMaterial.ConvertDefaultShaderToHopoo();
+                }
+            }
+        }
+
+        private void SetupHurtBoxGroup()
+        {
+            // Check for already existing hurt box group
+            if (bodyPrefab.GetComponent<HurtBoxGroup>() != null)
+            {
+                Print.Debug(this, $"Hurt Box Group already exists on model prefab - No need to set up Hurt Boxes");
+                return;
+            }
+
+            // Fetch child locator
+            ChildLocator childLocator = m_characterModel.gameObject.GetComponent<ChildLocator>();
+
+            // Check for main hurtbox
+            if (string.IsNullOrEmpty(childLocator.FindChildNameInsensitive("MainHurtbox")))
+            {
+                // Error and return - unsuccessful
+                Print.Error(this, "Could not set up main hurtbox - Missing transform pair in ChildLocator called 'MainHurtbox'");
+                return;
+            }
+
+            // Create hurt box group
+            HurtBoxGroup hurtBoxGroup = m_characterModel.gameObject.AddComponent<HurtBoxGroup>();
+
+            // Attempt to fetch head hurtbox
+            HurtBox headHurtbox = null;
+            GameObject headHurtboxObject = childLocator.FindChildGameObjectInsensitive("HeadHurtbox");
+            if (headHurtboxObject)
+            {
+                // Head hurtbox found - Setup
+                Print.Debug(this, "HeadHurtboxFound - Setting up");
+                headHurtbox = headHurtboxObject.AddComponent<HurtBox>();
+                headHurtbox.gameObject.layer = LayerIndex.entityPrecise.intVal;
+                headHurtbox.healthComponent = bodyPrefab.GetComponent<HealthComponent>();
+                headHurtbox.isBullseye = false;
+                headHurtbox.isSniperTarget = true;
+                headHurtbox.damageModifier = HurtBox.DamageModifier.Normal;
+                headHurtbox.hurtBoxGroup = hurtBoxGroup;
+                headHurtbox.indexInGroup = 1;
+            }
+
+            // Setup main hurtbox
+            HurtBox mainHurtbox = childLocator.FindChildGameObjectInsensitive("MainHurtbox").AddComponent<HurtBox>();
+            mainHurtbox.gameObject.layer = LayerIndex.entityPrecise.intVal;
+            mainHurtbox.healthComponent = bodyPrefab.GetComponent<HealthComponent>();
+            mainHurtbox.isBullseye = true;
+            mainHurtbox.isSniperTarget = headHurtbox == null;
+            mainHurtbox.damageModifier = HurtBox.DamageModifier.Normal;
+            mainHurtbox.hurtBoxGroup = hurtBoxGroup;
+            mainHurtbox.indexInGroup = 0;
+
+            // Check if head hurtbox exists
+            if (headHurtbox)
+            {
+                // Setup hurt box group
+                hurtBoxGroup.hurtBoxes =
+                [
+                    mainHurtbox,
+                    headHurtbox
+                ];
+            }
+
+            // No head hurtbox
+            else
+            {
+                // Setup hurt box group
+                hurtBoxGroup.hurtBoxes =
+                [
+                    mainHurtbox,
+                ];
+            }
+
+            // Assign hurt box group
+            hurtBoxGroup.mainHurtBox = mainHurtbox;
+            hurtBoxGroup.bullseyeCount = 1;
+
+            // Get health component
+            HealthComponent healthComponent = bodyPrefab.GetComponent<HealthComponent>();
+
+            // Cycle through all hurt box groups in survivor body
+            foreach (HurtBoxGroup currentHurtBoxGroup in bodyPrefab.GetComponentsInChildren<HurtBoxGroup>())
+            {
+                // Assign health component for hurt box group main hurt box
+                currentHurtBoxGroup.mainHurtBox.healthComponent = healthComponent;
+
+                // Cycle through hurt boxes in hurt box group
+                for (int i = 0; i < currentHurtBoxGroup.hurtBoxes.Length; i++)
+                {
+                    // Assign health component to each individual hurt box
+                    currentHurtBoxGroup.hurtBoxes[i].healthComponent = healthComponent;
+                }
+            }
+        }
+
+        private void SetupAimAnimator()
+        {
+            // Set up aim animator
+            AimAnimator aimAnimator = m_characterModel.gameObject.AddComponent<AimAnimator>();
+            aimAnimator.directionComponent = bodyPrefab.GetComponent<CharacterDirection>();
+            aimAnimator.pitchRangeMax = 60f;
+            aimAnimator.pitchRangeMin = -60f;
+            aimAnimator.yawRangeMin = -80f;
+            aimAnimator.yawRangeMax = 80f;
+            aimAnimator.pitchGiveupRange = 30f;
+            aimAnimator.yawGiveupRange = 10f;
+            aimAnimator.giveupDuration = 3f;
+            aimAnimator.inputBank = bodyPrefab.GetComponent<InputBankTest>();
+        }
+
+        private void SetupFootstepController()
+        {
+            // Setup footstep controller
+            FootstepHandler footstepHandler = m_characterModel.gameObject.AddComponent<FootstepHandler>();
+            footstepHandler.baseFootstepString = "Play_player_footstep";
+            footstepHandler.sprintFootstepOverrideString = "";
+            footstepHandler.enableFootstepDust = true;
+            footstepHandler.footstepDustPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/GenericFootstepDust");
+        }
+
+        private void SetupRagdoll()
+        {
+            // Fetch ragdoll controller
+            RagdollController ragdollController = m_characterModel.gameObject.GetComponent<RagdollController>();
+
+            // Skip if no ragdoll controller found
+            if (ragdollController == null) return;
+
+            // Cycle through bone transforms in ragdoll controller
+            foreach (Transform boneTransform in ragdollController.bones)
+            {
+                // Check for bone transform
+                if (boneTransform != null)
+                {
+                    // Set bone transform layer
+                    boneTransform.gameObject.layer = LayerIndex.ragdoll.intVal;
+
+                    // Fetch bone collider
+                    Collider boneCollider = boneTransform.GetComponent<Collider>();
+
+                    // Check for bone collider
+                    if (boneCollider)
+                    {
+                        // Set bone physics material
+                        boneCollider.sharedMaterial = Assets.ragdollMaterial;
+                    }
+
+                    // No bone collider found
+                    else
+                    {
+                        // Log error
+                        Print.Error(this, $"Ragdoll bone '{boneTransform.gameObject.name}' doesn't have a collider - Ragdoll will break");
+                    }
                 }
             }
         }
@@ -563,5 +730,8 @@ namespace Faithful
         public Vector3 cameraPivotPosition => m_cameraPivotPosition;
         public float cameraVerticalOffset => m_cameraVerticalOffset;
         public float cameraDepth => m_cameraDepth;
+
+        // Interface requirements
+        public string printIdentifier => name;
     }
 }
