@@ -1066,6 +1066,27 @@ namespace Faithful
             return tempMat;
         }
 
+        public static void ConvertAllRenderersToHopooShader(GameObject _objectToConvert)
+        {
+            // Check for object
+            if (!_objectToConvert) return;
+
+            // Cycle through renderers
+            foreach (Renderer renderer in _objectToConvert.GetComponentsInChildren<Renderer>())
+            {
+                // Check for renderer
+                if (renderer)
+                {
+                    // Check for material
+                    if (renderer.sharedMaterial)
+                    {
+                        // Convert material to Hopoo Games shader
+                        renderer.sharedMaterial.ConvertDefaultShaderToHopoo();
+                    }
+                }
+            }
+        }
+
         public static string FindChildNameInsensitive(this ChildLocator _childLocator, string _child)
         {
             // Return child matching name ignoring case

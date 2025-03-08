@@ -1,15 +1,38 @@
 ﻿using R2API;
 using RoR2;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace Faithful
 {
+    internal enum AIType
+    {
+        Custom,
+        Acrid,
+        Artificer,
+        Bandit,
+        Captain,
+        Chef,
+        Commando,
+        Engineer,
+        FalseSon,
+        Heretic,
+        Huntress,
+        Loader,
+        Mercenary,
+        Mult,
+        Railgunner,
+        Rex,
+        Seeker,
+        VoidFiend
+    }
+
     internal class Survivor : IPrintable
     {
         // Token used to identify survivor and find language strings
         private string m_token;
-
+        
         // Name of the survivor model prefab
         private string m_modelName;
 
@@ -27,6 +50,9 @@ namespace Faithful
 
         // Body colour of survivor
         private Color m_bodyColour;
+
+        // AI master for this survivor (used for dopplegangers etc)
+        private AIType m_aiType;
 
         // Sort position of survivor
         private int m_sortPosition;
@@ -63,16 +89,26 @@ namespace Faithful
         // A cloned character body from the main game with it's bits and bobs replaced with custom stuff
         private GameObject m_bodyPrefab;
 
+        // Display prefab for this survivor
+        private GameObject m_displayPrefab;
+
+        // The master prefab for this survivor (used for dopplegangers etc)
+        private GameObject m_masterPrefab;
+
         // The character body for the cloned and adjusted prefab
         private CharacterBody m_characterBody;
 
         // The character model component for the body prefab
         private CharacterModel m_characterModel;
 
+        // The survivor definition for this survivor
+        private SurvivorDef m_survivorDef;
+
         public void Init(string _token, string _modelName, string _portraitName, Color? _bodyColor = null, int _sortPosition = 100, string _crosshairName = "Standard", float _maxHealth = 110.0f,
                          float _healthRegen = 1.0f, float _armour = 0.0f, float _shield = 0.0f, int _jumpCount = 1, float _damage = 12.0f, float _attackSpeed = 1.0f, float _crit = 1.0f,
                          float _moveSpeed = 7.0f, float _acceleration = 80.0f, float _jumpPower = 15.0f, bool _autoCalculateLevelStats = true, Vector3? _aimOriginPosition = null,
-                         Vector3? _modelBasePosition = null, Vector3? _cameraPivotPosition = null, float _cameraVerticalOffset = 1.37f, float _cameraDepth = -10.0f)
+                         Vector3? _modelBasePosition = null, Vector3? _cameraPivotPosition = null, float _cameraVerticalOffset = 1.37f, float _cameraDepth = -10.0f,
+                         AIType _aiType = AIType.Commando)
         {
             // Assign token
             m_token = _token;
@@ -91,6 +127,9 @@ namespace Faithful
 
             // Assign crosshair name
             m_crosshairName = _crosshairName;
+
+            // Assign AI type
+            m_aiType = _aiType;
 
             // Assign survivor stats
             m_maxHealth = _maxHealth;
@@ -141,6 +180,18 @@ namespace Faithful
 
             // Setup character model
             SetupCharacterModel();
+
+            // Setup character item displays
+            SetupItemDisplays();
+
+            // Setup display prefab
+            SetupDisplayPrefab();
+
+            // Setup survivor definition
+            SetupSurvivorDefinition();
+
+            // Setup AI master for character
+            SetupMaster();
         }
 
         private void CreateCloneBody()
@@ -182,6 +233,9 @@ namespace Faithful
 
             // Setup collider for this character
             SetupCollider();
+
+            // Add to body prefab content pack
+            ContentAddition.AddBody(bodyPrefab);
         }
 
         private void ConfigureCharacterBody()
@@ -612,6 +666,147 @@ namespace Faithful
             }
         }
 
+        private void SetupItemDisplays()
+        {
+            // Create item display rule set
+            ItemDisplayRuleSet itemDisplayRuleSet = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
+            itemDisplayRuleSet.name = "idrs" + bodyName;
+
+            // Assign rule set into character model
+            m_characterModel.itemDisplayRuleSet = itemDisplayRuleSet;
+
+            /*if (itemDisplays != null)
+            {
+                Modules.ItemDisplays.queuedDisplays++;
+                RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetItemDisplays;
+            }*/
+        }
+
+        private void SetupDisplayPrefab()
+        {
+            // Attempt to fetch display object
+            m_displayPrefab = Assets.GetObject(displayPrefabName);
+            if (m_displayPrefab == null)
+            {
+                // Could not find display object - error and return
+                Print.Error(this, $"Could not find display prefab '{displayPrefabName}'");
+            }
+
+            // Apply base render infos to character model
+            m_characterModel.baseRendererInfos = bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
+
+            // Convert all materials in all renderers for this game object to HG shader
+            Utils.ConvertAllRenderersToHopooShader(m_displayPrefab);
+        }
+
+        private void SetupSurvivorDefinition()
+        {
+            // Create survivor definition
+            m_survivorDef = ScriptableObject.CreateInstance<SurvivorDef>();
+            m_survivorDef.bodyPrefab = bodyPrefab;
+            m_survivorDef.displayPrefab = m_displayPrefab;
+            m_survivorDef.primaryColor = bodyColour;
+
+            // Setup language tokens
+            m_survivorDef.cachedName = bodyPrefab.name.Replace("Body", "");
+            m_survivorDef.displayNameToken = nameToken;
+            m_survivorDef.descriptionToken = descriptionToken;
+            m_survivorDef.outroFlavorToken = outroFlavourToken;
+            m_survivorDef.mainEndingEscapeFailureFlavorToken = outroFailureToken;
+
+            // Add sort position for survivor
+            m_survivorDef.desiredSortPosition = sortPosition;
+
+            // TODO
+            //survivorDef.unlockableDef = unlockableDef;
+
+            // Add to content pack
+            ContentAddition.AddSurvivorDef(m_survivorDef);
+        }
+
+        private void SetupMaster()
+        {
+            // Check for custom AI
+            if (aiType == AIType.Custom)
+            {
+                // Setup custom AI master
+                SetupCustomMaster();
+
+                // Done
+                return;
+            }
+
+            // Check AI type
+            string masterString = "Merc";
+            switch (aiType)
+            {
+                case AIType.Acrid:
+                    masterString = "Croco";
+                    break;
+                case AIType.Artificer:
+                    masterString = "Mage";
+                    break;
+                case AIType.Bandit:
+                    masterString = "Bandit2";
+                    break;
+                case AIType.Captain:
+                    masterString = "Captain";
+                    break;
+                case AIType.Chef:
+                    masterString = "Chef";
+                    break;
+                case AIType.Commando:
+                    masterString = "Commando";
+                    break;
+                case AIType.Engineer:
+                    masterString = "Engi";
+                    break;
+                case AIType.FalseSon:
+                    masterString = "FalseSon";
+                    break;
+                case AIType.Heretic:
+                    masterString = "Heretic";
+                    break;
+                case AIType.Huntress:
+                    masterString = "Huntress";
+                    break;
+                case AIType.Loader:
+                    masterString = "Loader";
+                    break;
+                case AIType.Mercenary:
+                    masterString = "Merc";
+                    break;
+                case AIType.Mult:
+                    masterString = "Toolbot";
+                    break;
+                case AIType.Railgunner:
+                    masterString = "Railgunner";
+                    break;
+                case AIType.Rex:
+                    masterString = "Treebot";
+                    break;
+                case AIType.Seeker:
+                    masterString = "Seeker";
+                    break;
+                case AIType.VoidFiend:
+                    masterString = "VoidSurvivor";
+                    break;
+            }
+
+            // Get cloned master
+            m_masterPrefab = Assets.GetClonedDopplegangerMaster(bodyPrefab, masterName, masterString);
+        }
+
+        protected virtual void SetupCustomMaster()
+        {
+            // Check not overriden but AI type is custom
+            if (aiType == AIType.Custom)
+            {
+                // Error
+                Print.Error(this, "AI type is set to custom but no custom master behaviour is provided");
+            }
+        }
+
         // Accessors
         public GameObject modelPrefab
         {
@@ -674,9 +869,15 @@ namespace Faithful
             }
         }
         public Color bodyColour => m_bodyColour;
+        public AIType aiType => m_aiType;
         public string name { get { return Utils.GetLanguageString(nameToken); } }
         public string bodyName { get { return $"{name}Body"; } }
+        public string masterName { get { return $"{name}MonsterMaster"; } }
+        public string displayPrefabName { get { return $"{name}Display"; } }
         public string nameToken { get { return $"FAITHFUL_SURVIVOR_{token}_NAME"; } }
+        public string descriptionToken { get { return $"FAITHFUL_SURVIVOR_{token}_DESCRIPTION"; } }
+        public string outroFlavourToken { get { return $"FAITHFUL_SURVIVOR_{token}_OUTRO_FLAVOR"; } }
+        public string outroFailureToken { get { return $"FAITHFUL_SURVIVOR_{token}_OUTRO_FAILURE"; } }
         public string subtitleToken { get { return $"FAITHFUL_SURVIVOR_{token}_SUBTITLE"; } }
         public string token => m_token;
         public int sortPosition => m_sortPosition;

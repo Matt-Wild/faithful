@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using R2API;
 using UnityEngine.AddressableAssets;
 using RoR2.ExpansionManagement;
+using System.Reflection;
 
 namespace Faithful
 {
@@ -413,6 +414,19 @@ namespace Faithful
 
             // Return cloned material
             return clonedMaterial;
+        }
+
+        public static GameObject GetClonedDopplegangerMaster(GameObject _bodyPrefab, string _masterName, string _masterToCopy)
+        {
+            // Create new cloned doppleganger master and assign body prefab
+            GameObject newMaster = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterMasters/" + _masterToCopy + "MonsterMaster"), _masterName, true);
+            newMaster.GetComponent<RoR2.CharacterMaster>().bodyPrefab = _bodyPrefab;
+
+            // Add to content pack
+            ContentAddition.AddMaster(newMaster);
+
+            // Return cloned master
+            return newMaster;
         }
     }
 }
