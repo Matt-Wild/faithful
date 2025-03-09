@@ -1,7 +1,7 @@
 ﻿using R2API;
 using RoR2;
+using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
 namespace Faithful
@@ -153,9 +153,25 @@ namespace Faithful
             m_cameraPivotPosition = _cameraPivotPosition ?? new Vector3(0f, 0.8f, 0f);
             m_cameraVerticalOffset = _cameraVerticalOffset;
             m_cameraDepth = _cameraDepth;
+
+            try
+            {
+                // Create survivor
+                CreateSurvivor();
+
+                // Log that interactable has been created
+                Print.Debug(this, "Survivor created");
+            }
+
+            // Unsuccessful
+            catch (Exception e)
+            {
+                // Log reason
+                Print.Error(this, $"Survivor creation failed: {e.Message}\n{e.StackTrace}");
+            }
         }
 
-        private void CreateBodyPrefab()
+        private void CreateSurvivor()
         {
             // Check if body prefab already exists
             if (m_bodyPrefab != null)
@@ -197,7 +213,7 @@ namespace Faithful
         private void CreateCloneBody()
         {
             // Clone Commando (safest character)
-            GameObject clonedBody = LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommmandoBody");
+            GameObject clonedBody = LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody");
 
             // Check for valid clone
             if (clonedBody == null)
@@ -213,7 +229,7 @@ namespace Faithful
             for (int i = newBodyPrefab.transform.childCount - 1; i >= 0; i--)
             {
                 // Delete child
-                Object.DestroyImmediate(newBodyPrefab.transform.GetChild(i).gameObject);
+                UnityEngine.Object.DestroyImmediate(newBodyPrefab.transform.GetChild(i).gameObject);
             }
 
             // Assign clones body as this survivor's body prefab
@@ -240,6 +256,9 @@ namespace Faithful
 
         private void ConfigureCharacterBody()
         {
+            // Fetch character body if not already found
+            m_characterBody ??= bodyPrefab.GetComponent<CharacterBody>();
+
             // Set character body identity
             m_characterBody.baseNameToken = nameToken;
             m_characterBody.subtitleNameToken = subtitleToken;
@@ -830,8 +849,8 @@ namespace Faithful
                 // Check for body prefab
                 if (m_bodyPrefab == null)
                 {
-                    // Create body prefab
-                    CreateBodyPrefab();
+                    // Create survivor
+                    CreateSurvivor();
                 }
 
                 // Return body prefab
@@ -876,9 +895,9 @@ namespace Faithful
         public string displayPrefabName { get { return $"{name}Display"; } }
         public string nameToken { get { return $"FAITHFUL_SURVIVOR_{token}_NAME"; } }
         public string descriptionToken { get { return $"FAITHFUL_SURVIVOR_{token}_DESCRIPTION"; } }
+        public string subtitleToken { get { return $"FAITHFUL_SURVIVOR_{token}_SUBTITLE"; } }
         public string outroFlavourToken { get { return $"FAITHFUL_SURVIVOR_{token}_OUTRO_FLAVOR"; } }
         public string outroFailureToken { get { return $"FAITHFUL_SURVIVOR_{token}_OUTRO_FAILURE"; } }
-        public string subtitleToken { get { return $"FAITHFUL_SURVIVOR_{token}_SUBTITLE"; } }
         public string token => m_token;
         public int sortPosition => m_sortPosition;
         public bool autoCalculateLevelStats => m_autoCalculateLevelStats;

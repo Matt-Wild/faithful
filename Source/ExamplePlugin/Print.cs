@@ -33,7 +33,7 @@
         private static string FormatMessage(IPrintable _source, string _message, bool _isError = false)
         {
             // Construct the prefix using the class name and print identifier
-            string formattedMessage = $"[{_source.GetType().Name} | {_source.printIdentifier}] | {_message}";
+            string formattedMessage = $"[{(string.IsNullOrWhiteSpace(_source.printIdentifier) ? _source.GetType().Name : _source.printIdentifier)}] {_message}";
 
             // Ensure proper punctuation at the end
             char lastChar = formattedMessage[^1];

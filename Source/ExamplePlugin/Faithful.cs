@@ -76,6 +76,9 @@ namespace Faithful
         private static TJetpack tJetpack;
         private static DebugItem debugItem;
 
+        // Survivors
+        private static Technician technician;
+
         // Interactables
         private static Interactable recollectionShrine;
 
@@ -139,6 +142,9 @@ namespace Faithful
 
             // Create interactables
             recollectionShrine = new RecollectionShrine();
+
+            // Create survivors
+            technician = new Technician();
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing our mod!");

@@ -71,7 +71,7 @@ namespace Faithful
         SeekersOfTheStorm
     }
 
-    internal class Interactable
+    internal class Interactable : IPrintable
     {
         // Token of the interactable used for finding and identifying it
         private string m_token;
@@ -196,6 +196,9 @@ namespace Faithful
 
             // Create prefab
             CreatePrefab();
+
+            // Log that interactable has been created
+            Print.Debug(this, "Interactable created");
         }
 
         private void AssignCostType(InteractableCostType _costType)
@@ -663,6 +666,9 @@ namespace Faithful
             }
         }
         public Dictionary<string, List<SetSpawnInfo>> setSpawns { get { return m_setSpawns; } }
+
+        // Interface requirements
+        public string printIdentifier => name;
     }
 
     internal class FaithfulInteractableBehaviour : NetworkBehaviour
