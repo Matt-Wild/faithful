@@ -211,7 +211,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Impact
     m_StateMachine: {fileID: 1107451939762505348}
-    m_Mask: {fileID: 31900000, guid: 296c9905b13ae3a4a93cb8d1be70d937, type: 2}
+    m_Mask: {fileID: 31900000, guid: 44c118ac43fe47e4c8c9db518ac745dd, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 1
@@ -223,7 +223,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Gesture, Override
     m_StateMachine: {fileID: 1107117215636118238}
-    m_Mask: {fileID: 31900000, guid: ed8d6254f0c26bb4a92815e851b204b1, type: 2}
+    m_Mask: {fileID: 0}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 0
@@ -235,7 +235,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: LeftArm, Override
     m_StateMachine: {fileID: 1107136308405967890}
-    m_Mask: {fileID: 31900000, guid: ef372ff6fb771d1448b7b85b0f91f53c, type: 2}
+    m_Mask: {fileID: 0}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 0
@@ -259,7 +259,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: AimPitch
     m_StateMachine: {fileID: 1107239154905128930}
-    m_Mask: {fileID: 31900000, guid: 23c4c0480a63a2d4ea22473bb3148794, type: 2}
+    m_Mask: {fileID: 31900000, guid: c3cb3fd821842154b9e53767548b24d7, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 1
@@ -271,7 +271,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: AimYaw
     m_StateMachine: {fileID: 1107717964553556870}
-    m_Mask: {fileID: 31900000, guid: 46723a1277a920f44970ad6fe3f36349, type: 2}
+    m_Mask: {fileID: 31900000, guid: dbdf3fe54335026469f62534fd2a9eda, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 1
@@ -295,7 +295,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Idle, Additive
     m_StateMachine: {fileID: 1107183632269307924}
-    m_Mask: {fileID: 31900000, guid: 4679b6cdec58c914da532acbd9431777, type: 2}
+    m_Mask: {fileID: 0}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 1
@@ -463,7 +463,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -309155023585945280, guid: 477a43233feefa542b29936ca35efee9,
+    m_Motion: {fileID: -571948694946530233, guid: 477a43233feefa542b29936ca35efee9,
       type: 3}
     m_Threshold: -48
     m_Position: {x: 0, y: 0}
@@ -3155,7 +3155,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 1
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 5ededd6ba59f180408bfdb755dfabcb1, type: 2}
+  m_Motion: {fileID: -2100450958045243245, guid: 477a43233feefa542b29936ca35efee9,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -3328,7 +3329,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 1
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: cd3e06d868f11484a8deb9ef031788fb, type: 2}
+  m_Motion: {fileID: -5033186329292390103, guid: 477a43233feefa542b29936ca35efee9,
+    type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -3765,7 +3767,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102330667463977304}
-    m_Position: {x: 240, y: 216, z: 0}
+    m_Position: {x: 240, y: 210, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102820025783584186}
     m_Position: {x: 492, y: 216, z: 0}
@@ -3827,7 +3829,7 @@ AnimatorStateMachine:
     m_Position: {x: 156, y: 180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102103191756785734}
-    m_Position: {x: 384, y: 180, z: 0}
+    m_Position: {x: 380, y: 180, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -3889,10 +3891,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102661692653376206}
-    m_Position: {x: 192, y: 216, z: 0}
+    m_Position: {x: 190, y: 210, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102269471771523294}
-    m_Position: {x: 432, y: 216, z: 0}
+    m_Position: {x: 430, y: 210, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

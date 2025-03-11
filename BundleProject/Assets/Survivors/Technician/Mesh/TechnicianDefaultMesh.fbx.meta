@@ -13,6 +13,12 @@ ModelImporter:
       74: -5720216946369298710
     second: Technician_Armature|FloatingGrenade_LockedOn
   - first:
+      74: -2100450958045243245
+    second: Technician_Armature|Technician_Aim_Pitch
+  - first:
+      74: -5033186329292390103
+    second: Technician_Armature|Technician_Aim_Yaw
+  - first:
       74: 1439977512868839205
     second: Technician_Armature|Technician_Ascend
   - first:
@@ -22,8 +28,14 @@ ModelImporter:
       74: -309155023585945280
     second: Technician_Armature|Technician_Descend
   - first:
+      74: -571948694946530233
+    second: Technician_Armature|Technician_DescendFast
+  - first:
       74: 1946599162334228168
     second: Technician_Armature|Technician_Idle
+  - first:
+      74: -8389469230262562136
+    second: Technician_Armature|Technician_IdleAdditive
   - first:
       74: 4234572694410061101
     second: Technician_Armature|Technician_IdleIn
@@ -105,126 +117,6 @@ ModelImporter:
   - first:
       74: -7794456888421135351
     second: Technician_Armature|Technician_WalkR
-  - first:
-      74: -2835075703534744930
-    second: Pointlink_Armature|FloatingGrenade_DefaultPose
-  - first:
-      74: -5907990491137786362
-    second: Pointlink_Armature|FloatingGrenade_Idle
-  - first:
-      74: -4703703416891527430
-    second: Pointlink_Armature|FloatingGrenade_LockedOn
-  - first:
-      74: 6912790382191063198
-    second: Pointlink_Armature|Pointlink_Aerial
-  - first:
-      74: 5847813507567408714
-    second: Pointlink_Armature|Pointlink_DefaultPose
-  - first:
-      74: 8136478157288227225
-    second: Pointlink_Armature|Pointlink_Idle
-  - first:
-      74: -2230644158977860958
-    second: Pointlink_Armature|Pointlink_Landing
-  - first:
-      74: 8184277611020175051
-    second: Pointlink_Armature|Technician_Pri_ArmForward_old
-  - first:
-      74: 4510114031147702393
-    second: TurretRocket_Armature|FloatingGrenade_DefaultPose
-  - first:
-      74: 2770733155347112051
-    second: TurretRocket_Armature|FloatingGrenade_Idle
-  - first:
-      74: 7577617487499439254
-    second: TurretRocket_Armature|FloatingGrenade_LockedOn
-  - first:
-      74: -3898487850063101452
-    second: TurretRocket_Armature|RocketDrill_DefaultPose
-  - first:
-      74: 6721575754032412212
-    second: TurretRocket_Armature|RocketDrill_Idle
-  - first:
-      74: -298425600076594801
-    second: TurretRocket_Armature|Technician_Pri_ArmForward_old
-  - first:
-      74: -1633798964448147087
-    second: FloatingGrenade_Armature|FloatingGrenade_DefaultPose
-  - first:
-      74: -2059902032781623959
-    second: FloatingGrenade_Armature|FloatingGrenade_Idle
-  - first:
-      74: -5554843624349119028
-    second: FloatingGrenade_Armature|FloatingGrenade_LockedOn
-  - first:
-      74: -8106978454098150560
-    second: FloatingGrenade_Armature|Technician_Pri_ArmForward_old
-  - first:
-      74: 3009763859892448860
-    second: ShotgunTurret_Armature|FloatingGrenade_DefaultPose
-  - first:
-      74: 7520910491418198420
-    second: ShotgunTurret_Armature|FloatingGrenade_Idle
-  - first:
-      74: -7379344930349161851
-    second: ShotgunTurret_Armature|FloatingGrenade_LockedOn
-  - first:
-      74: -2103013187263915583
-    second: ShotgunTurret_Armature|RocketDrill_DefaultPose
-  - first:
-      74: -2539956067092660765
-    second: ShotgunTurret_Armature|RocketDrill_Idle
-  - first:
-      74: 2458147132584340516
-    second: ShotgunTurret_Armature|ShotgunTurret_DefaultPose
-  - first:
-      74: -2264920203494350642
-    second: ShotgunTurret_Armature|ShotgunTurret_Deployed
-  - first:
-      74: -2547634553168917324
-    second: ShotgunTurret_Armature|ShotgunTurret_Destroyed
-  - first:
-      74: -5727063520521250691
-    second: ShotgunTurret_Armature|ShotgunTurret_Idle
-  - first:
-      74: -662884828470064458
-    second: ShotgunTurret_Armature|ShotgunTurret_SelfDestruct
-  - first:
-      74: 6043777935621296779
-    second: ShotgunTurret_Armature|ShotgunTurret_Shoot
-  - first:
-      74: -2311733862305515963
-    second: ShotgunTurret_Armature|Technician_Pri_ArmForward_old
-  - first:
-      74: -4066390544416391425
-    second: RobotTesla_Armature|FloatingGrenade_DefaultPose
-  - first:
-      74: 7092839885382167998
-    second: RobotTesla_Armature|FloatingGrenade_Idle
-  - first:
-      74: 2965518783115727786
-    second: RobotTesla_Armature|FloatingGrenade_LockedOn
-  - first:
-      74: -7245018226646695951
-    second: RobotTesla_Armature|Technician_Pri_ArmForward_old
-  - first:
-      74: 8877497211915155343
-    second: RobotTesla_Armature|TeslaRobot_DefaultPose
-  - first:
-      74: 3166219001794968296
-    second: RobotTesla_Armature|TeslaRobot_Deployed
-  - first:
-      74: -8213272616357245941
-    second: RobotTesla_Armature|TeslaRobot_Destroyed
-  - first:
-      74: 3686860732938989279
-    second: RobotTesla_Armature|TeslaRobot_Idle
-  - first:
-      74: 3601466796494020102
-    second: RobotTesla_Armature|TeslaRobot_TeleportEnd
-  - first:
-      74: -2064275636642848006
-    second: RobotTesla_Armature|TeslaRobot_TeleportStart
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -341,6 +233,64 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
+      name: Technician_Armature|Technician_Aim_Pitch
+      takeName: Technician_Armature|Technician_Aim_Pitch
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 50
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 1
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 25
+    - serializedVersion: 16
+      name: Technician_Armature|Technician_Aim_Yaw
+      takeName: Technician_Armature|Technician_Aim_Yaw
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 50
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 1
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 25
+    - serializedVersion: 16
       name: Technician_Armature|Technician_Ascend
       takeName: Technician_Armature|Technician_Ascend
       internalID: 0
@@ -352,7 +302,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -410,7 +360,36 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Technician_Armature|Technician_DescendFast
+      takeName: Technician_Armature|Technician_DescendFast
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -430,6 +409,35 @@ ModelImporter:
     - serializedVersion: 16
       name: Technician_Armature|Technician_Idle
       takeName: Technician_Armature|Technician_Idle
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Technician_Armature|Technician_IdleAdditive
+      takeName: Technician_Armature|Technician_IdleAdditive
       internalID: 0
       firstFrame: 0
       lastFrame: 80
@@ -525,7 +533,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 0
+      hasAdditiveReferencePose: 1
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -1289,7 +1297,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.01
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
@@ -1298,7 +1306,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
