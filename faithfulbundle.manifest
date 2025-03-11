@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2975415938
+CRC: 2754775084
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3eb30b34b73e455da9578819ac0f63e1
+    Hash: cd0358d8fd9ffde50eb7fad15a012215
   TypeTreeHash:
     serializedVersion: 2
     Hash: b0da3797eb263d2a0137e17d5baef4e9
@@ -252,6 +252,7 @@ Assets:
 - Assets/Survivors/Technician/Textures/texTechnicianEmission.png
 - Assets/Items/HermitsShawl/texBuffHermitShawl.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeEmission.png
+- Assets/Survivors/Technician/Materials/texTechnicianEmission.mat
 - Assets/Items/SecondHand/texSecondHand.png
 - Assets/Items/Chakram/ChakramDisplayMesh.prefab
 - Assets/Placeholder/Item/texTemporalCubeNormal.png
