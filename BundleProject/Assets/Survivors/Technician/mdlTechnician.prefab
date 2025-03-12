@@ -551,6 +551,7 @@ GameObject:
   - component: {fileID: 8851503837946202755}
   - component: {fileID: 213469309601286930}
   - component: {fileID: 7281840837805383255}
+  - component: {fileID: 5534589238803893002}
   m_Layer: 0
   m_Name: mdlTechnician
   m_TagString: Untagged
@@ -626,6 +627,12 @@ MonoBehaviour:
     transform: {fileID: 4139203422785713006}
   - name: TechnicianTurretLights
     transform: {fileID: 5092121843137288160}
+  - name: Chest
+    transform: {fileID: 5983491100723932746}
+  - name: Shin.L
+    transform: {fileID: 5065520508555831070}
+  - name: Shin.R
+    transform: {fileID: 452868238000770499}
 --- !u!114 &7281840837805383255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,6 +663,22 @@ MonoBehaviour:
   - {fileID: 452868238000770499}
   - {fileID: 8922572827349615677}
   componentsToDisableOnRagdoll: []
+--- !u!114 &5534589238803893002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109418360105265380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f614a7e494406347a5ab8313eadbc6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseFootstepString: Play
+  sprintFootstepOverrideString: 
+  enableFootstepDust: 1
+  footstepDustPrefab: {fileID: 0}
 --- !u!1 &2902867810053949214
 GameObject:
   m_ObjectHideFlags: 0
