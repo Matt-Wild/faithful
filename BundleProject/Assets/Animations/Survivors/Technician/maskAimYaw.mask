@@ -21,6 +21,10 @@ AvatarMask:
     m_Weight: 1
   - m_Path: Technician_Armature/Base/Hip/Spine/Chest
     m_Weight: 1
+  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Backpack
+    m_Weight: 0
+  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Backpack/Roboteye
+    m_Weight: 1
   - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L
     m_Weight: 1
   - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L

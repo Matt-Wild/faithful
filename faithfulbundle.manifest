@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 523943908
+CRC: 2793199871
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a924d94dc00dc1e04b13c782afb151bd
+    Hash: 5677d0f1667e1077bffbd2896d4eb6d5
   TypeTreeHash:
     serializedVersion: 2
     Hash: beb33ca57a83e0c2b3826c74e0d7b197
@@ -105,6 +105,7 @@ Assets:
 - Assets/Items/HermitsShawl/HermitShawlDisplayMesh.prefab
 - Assets/Items/NoxiousSlimes/NoxiousSlimeMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
+- Assets/Survivors/Technician/Textures/texTechnicianMasteryNormal.png
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDeployMesh.prefab
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDisplayMesh.prefab
 - Assets/Placeholder/Model/Cube_TemporaryAsset.prefab
@@ -181,6 +182,7 @@ Assets:
 - Assets/Survivors/Technician/TechnicianDisplay.prefab
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
 - Assets/UI/texCustomExpansionIcon.png
+- Assets/Survivors/Technician/Textures/texTechnicianDefaultNormal.png
 - Assets/Items/4-T0NJetpack/4T0NJetpackMesh.prefab
 - Assets/Items/NoxiousSlimes/NoxiousSlimeDisplayMesh.prefab
 - Assets/Items/CopperGear/texCopperGearIcon.png
