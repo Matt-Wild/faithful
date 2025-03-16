@@ -39,6 +39,9 @@ namespace Faithful
         // Name of the portrait asset for this survivor
         private string m_portraitName;
 
+        // Name of the sprite asset for the default skin
+        private string m_defaultSkinName;
+
         // Survivor model prefab
         private GameObject m_modelPrefab;
 
@@ -101,14 +104,20 @@ namespace Faithful
         // The character model component for the body prefab
         private CharacterModel m_characterModel;
 
+        // The skins controller lets you add additional skins to characters
+        private ModelSkinController m_skinController;
+
+        // List of skins used by this survivor
+        private List<SkinDef> m_skins = new List<SkinDef>();
+
         // The survivor definition for this survivor
         private SurvivorDef m_survivorDef;
 
-        public void Init(string _token, string _modelName, string _portraitName, Color? _bodyColor = null, int _sortPosition = 100, string _crosshairName = "Standard", float _maxHealth = 110.0f,
-                         float _healthRegen = 1.0f, float _armour = 0.0f, float _shield = 0.0f, int _jumpCount = 1, float _damage = 12.0f, float _attackSpeed = 1.0f, float _crit = 1.0f,
-                         float _moveSpeed = 7.0f, float _acceleration = 80.0f, float _jumpPower = 15.0f, bool _autoCalculateLevelStats = true, Vector3? _aimOriginPosition = null,
-                         Vector3? _modelBasePosition = null, Vector3? _cameraPivotPosition = null, float _cameraVerticalOffset = 1.37f, float _cameraDepth = -10.0f,
-                         AIType _aiType = AIType.Commando)
+        public void Init(string _token, string _modelName, string _portraitName, string _defaultSkinName, Color? _bodyColor = null, int _sortPosition = 100, string _crosshairName = "Standard",
+                         float _maxHealth = 110.0f, float _healthRegen = 1.0f, float _armour = 0.0f, float _shield = 0.0f, int _jumpCount = 1, float _damage = 12.0f, float _attackSpeed = 1.0f,
+                         float _crit = 1.0f, float _moveSpeed = 7.0f, float _acceleration = 80.0f, float _jumpPower = 15.0f, bool _autoCalculateLevelStats = true, 
+                         Vector3? _aimOriginPosition = null, Vector3? _modelBasePosition = null, Vector3? _cameraPivotPosition = null, float _cameraVerticalOffset = 1.37f,
+                         float _cameraDepth = -10.0f, AIType _aiType = AIType.Commando)
         {
             // Assign token
             m_token = _token;
@@ -118,6 +127,9 @@ namespace Faithful
 
             // Assign portrait name
             m_portraitName = _portraitName;
+
+            // Assign default skin name
+            m_defaultSkinName = _defaultSkinName;
 
             // Assign body colour
             m_bodyColour = _bodyColor ?? Color.white;
@@ -205,6 +217,9 @@ namespace Faithful
 
             // Setup survivor definition
             SetupSurvivorDefinition();
+
+            // Setup skins (and allows more skins to be added)
+            SetupSkins();
 
             // Setup AI master for character
             SetupMaster();
@@ -475,11 +490,14 @@ namespace Faithful
             // Store a list of linked renderers from the child locator
             List<CharacterModel.RendererInfo> rendererInfos = [];
 
-            // Cycle through children in child locator
+            // Cycle through children in child locator - DO NOT MODIFY UNLESS ALSO MODIFYING SKINS SCRIPT - ORDER OF RENDERER INFO CREATION IS VITAL
             for (int i = 0; i < childLocator.Count; i++)
             {
                 // Get child game object
                 GameObject child = childLocator.FindChildGameObject(i);
+
+                // Check for child
+                if (child == null) continue;
 
                 // Get renderer from child
                 Renderer renderer = child.GetComponent<Renderer>();
@@ -743,6 +761,15 @@ namespace Faithful
             ContentAddition.AddSurvivorDef(m_survivorDef);
         }
 
+        private void SetupSkins()
+        {
+            // Add skins controller
+            m_skinController = m_characterModel.gameObject.AddComponent<ModelSkinController>();
+
+            // Add default skin
+            AddSkin("DEFAULT", Assets.GetSprite(m_defaultSkinName));
+        }
+
         private void SetupMaster()
         {
             // Check for custom AI
@@ -826,6 +853,18 @@ namespace Faithful
             }
         }
 
+        protected void AddSkin(string _skinToken, Sprite _skinIcon, UnlockableDef _unlockableDef = null, Skins.SkinReplacement[] _skinReplacements = null)
+        {
+            // Create skin definition
+            SkinDef newSkin = Skins.CreateSkinDef($"FAITHFUL_SURVIVOR_{token}_{_skinToken}_SKIN", _skinIcon, this, _unlockableDef, _skinReplacements);
+
+            // Add to skins list
+            m_skins.Add(newSkin);
+
+            // Update skin controller
+            m_skinController.skins = m_skins.ToArray();
+        }
+
         // Accessors
         public GameObject modelPrefab
         {
@@ -887,6 +926,7 @@ namespace Faithful
                 return m_portrait;
             }
         }
+        public CharacterModel characterModel => m_characterModel;
         public Color bodyColour => m_bodyColour;
         public AIType aiType => m_aiType;
         public string name { get { return Utils.GetLanguageString(nameToken); } }

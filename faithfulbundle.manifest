@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1327607085
+CRC: 1318169036
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e92a92e3fd2813970ac34a8b8783b8d0
+    Hash: c6530fb78faacad486944e1d7765a64f
   TypeTreeHash:
     serializedVersion: 2
     Hash: beb33ca57a83e0c2b3826c74e0d7b197
@@ -163,7 +163,6 @@ Assets:
 - Assets/Survivors/Technician/Icons/texTechnicianIcon.png
 - Assets/Items/MeltingWarbler/MeltingWarblerMesh.prefab
 - Assets/Items/VengefulToaster/texVengefulToaster.png
-- Assets/Survivors/Technician/Mesh/TechnicianMasterySkin.prefab
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
 - Assets/Items/HermitsShawl/texHermitShawlIcon.png
 - Assets/Survivors/Technician/Icons/texTechnicianPrimeIcon.png
@@ -211,7 +210,6 @@ Assets:
 - Assets/Survivors/Technician/Icons/texTechnicianConduitIcon.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveEmission.png
 - Assets/Items/BrassScrews/texBrassScrews.png
-- Assets/Survivors/Technician/Mesh/TechnicianPrimeSkin.prefab
 - Assets/Debug/UI/DebugComponentAnalysisEntry.prefab
 - Assets/Equipment/Divider/DividerMesh.prefab
 - Assets/Items/HasteningGreave/HasteningGreaveMesh.prefab

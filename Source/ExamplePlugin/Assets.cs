@@ -361,6 +361,57 @@ namespace Faithful
             return assetBundle.LoadAsset<GameObject>(asset);
         }
 
+        public static Mesh GetMesh(string _name, string _default = null)
+        {
+            // Add file extension
+            string fullName = _name + ".prefab";
+
+            // Attempt to find asset
+            string asset = FindAsset(fullName);
+
+            // Initialise prefab
+            GameObject prefab = null;
+
+            // Check for asset
+            if (asset == null)
+            {
+                if (Utils.debugMode)
+                {
+                    Log.Error($"Requested asset '{fullName}' could not be found.");
+                }
+
+                // Check for default asset
+                if (_default != null)
+                {
+                    // Get default asset
+                    prefab = assetBundle.LoadAsset<GameObject>(_default);
+                }
+            }
+            else
+            {
+                // Load asset
+                prefab = assetBundle.LoadAsset<GameObject>(asset);
+            }
+            
+
+            // Check for asset
+            if (prefab == null) return null;
+
+            // Get mesh filter from asset
+            MeshFilter filter = prefab.GetComponent<MeshFilter>();
+
+            // Check for mesh filter
+            if (filter == null)
+            {
+                // Error and return - Unsuccessful
+                Log.Error($"[ASSETS] | Unable to get mesh for asset '{fullName}' - Mesh filter component not found!");
+                return null;
+            }
+
+            // Return mesh from mesh filter
+            return filter.sharedMesh;
+        }
+
         public static GameObject GetModel(string _name)
         {
             // Load object and return with default model as fallback
@@ -384,6 +435,44 @@ namespace Faithful
 
             // Return asset
             return assetBundle.LoadAsset<Texture>(asset);
+        }
+
+        public static Sprite GetSprite(string _name)
+        {
+            // Add file extension
+            string fullName = _name + ".png";
+
+            // Attempt to find asset
+            string asset = FindAsset(fullName);
+
+            // Check for asset
+            if (asset == null)
+            {
+                Log.Error($"Requested asset '{fullName}' could not be found.");
+                return null;
+            }
+
+            // Return asset
+            return assetBundle.LoadAsset<Sprite>(asset);
+        }
+
+        public static Material GetMaterial(string _name)
+        {
+            // Add file extension
+            string fullName = _name + ".mat";
+
+            // Attempt to find asset
+            string asset = FindAsset(fullName);
+
+            // Check for asset
+            if (asset == null)
+            {
+                Log.Error($"Requested asset '{fullName}' could not be found.");
+                return null;
+            }
+
+            // Return asset
+            return assetBundle.LoadAsset<Material>(asset);
         }
 
         public static Shader GetShader(string _name)
