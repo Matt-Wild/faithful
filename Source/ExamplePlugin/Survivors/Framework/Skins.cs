@@ -92,8 +92,8 @@ namespace Faithful
                             // Check for replacement material
                             if (skinReplacement.replacementMaterial != null)
                             {
-                                // Override material for corresponding render info
-                                skinDef.rendererInfos[rendererInfosIndex].defaultMaterial = Assets.GetMaterial(skinReplacement.replacementMaterial);
+                                // Override material for corresponding render info (convert to HG shader)
+                                skinDef.rendererInfos[rendererInfosIndex].defaultMaterial = Assets.GetMaterial(skinReplacement.replacementMaterial).ConvertDefaultShaderToHopoo();
                             }
                         }
                     }
