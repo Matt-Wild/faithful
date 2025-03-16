@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3914559030
+CRC: 1327607085
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 343bfa73fe2a3ac5566a4b92f4e8d19b
+    Hash: e92a92e3fd2813970ac34a8b8783b8d0
   TypeTreeHash:
     serializedVersion: 2
     Hash: beb33ca57a83e0c2b3826c74e0d7b197
@@ -107,6 +107,7 @@ Assets:
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
 - Assets/Survivors/Technician/Textures/texTechnicianMasteryNormal.png
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDeployMesh.prefab
+- Assets/Survivors/Technician/Mesh/TechnicianMasterySkinRobot.prefab
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDisplayMesh.prefab
 - Assets/Placeholder/Model/Cube_TemporaryAsset.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianProximitySeekerIcon.png
@@ -137,6 +138,7 @@ Assets:
 - Assets/Survivors/Technician/Projectiles/Mesh/TechnicianTurretRocketMesh.fbx
 - Assets/Items/Chakram/texChakram.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionSymbol.png
+- Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinTechnician.prefab
 - Assets/Items/HermitsShawl/HermitShawlMesh.prefab
 - Assets/Survivors/Technician/Allies/Mesh/TechnicianRobotMesh.fbx
 - Assets/Survivors/Technician/Icons/texTechnicianPowerpulseIcon.png
@@ -149,11 +151,14 @@ Assets:
 - Assets/Debug/UI/DebugAudioInstanceCanvas.prefab
 - Assets/Equipment/Divider/texDividerIcon.png
 - Assets/Items/HasteningGreave/texHasteningGreaveIcon.png
+- Assets/Survivors/Technician/Mesh/TechnicianMasterySkinRobotLights.prefab
 - Assets/Items/LeadersPennon/LeadersPennonDisplayMesh.prefab
 - Assets/Items/LongshotGeode/LongshotGeodeDisplayMesh.prefab
+- Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinRobot.prefab
 - Assets/Items/CauterizingGreave/texCauterizingGreave.png
 - Assets/Items/CollectorsVision/texCollectorsVisionNormal.png
 - Assets/Items/TargetingMatrix/TargetingMatrixDisplayMesh.prefab
+- Assets/Survivors/Technician/Mesh/TechnicianMasterySkinTechnicianLights.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianAchievement.png
 - Assets/Survivors/Technician/Icons/texTechnicianIcon.png
 - Assets/Items/MeltingWarbler/MeltingWarblerMesh.prefab
@@ -174,6 +179,7 @@ Assets:
 - Assets/Survivors/Technician/Icons/texTurretRoboticShotgunIcon.png
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
 - Assets/Survivors/Technician/Icons/texTechnicianConduitDeployIcon.png
+- Assets/Survivors/Technician/Mesh/TechnicianMasterySkinTurretLights.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageNormal.png
 - Assets/Items/TargetingMatrix/texTargetingMatrixIcon.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeIcon.png
@@ -230,8 +236,10 @@ Assets:
 - Assets/Survivors/Technician/Icons/texTechnicianPointlinkIcon.png
 - Assets/Items/SecondHand/SecondHandDisplayMesh.prefab
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollection.png
+- Assets/Survivors/Technician/Mesh/TechnicianMasterySkinTurret.prefab
 - Assets/Items/Chakram/texChakramIcon.png
 - Assets/Survivors/Technician/Materials/texTechnicianPrime.mat
+- Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinRobotLights.prefab
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrella.png
 - Assets/Items/Chakram/texBuffPrimarySkillChakram.png
 - Assets/Items/Chakram/ChakramProjectileMesh.prefab
@@ -249,6 +257,8 @@ Assets:
 - Assets/Survivors/Technician/Projectiles/Mesh/TechnicianFloatingGrenadeMesh.fbx
 - Assets/Survivors/Technician/Icons/texTechnicianTurretIcon.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackHoloEmission.png
+- Assets/Survivors/Technician/Mesh/TechnicianMasterySkinTechnician.prefab
+- Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinTechnicianLights.prefab
 - Assets/Items/CollectorsVision/CollectorsVisionDisplayMesh.prefab
 - Assets/Items/CollectorsVision/Shrine/RecollectionShrineMesh.prefab
 - Assets/Items/4-T0NJetpack/tex4T0NJetpack.png
@@ -256,10 +266,12 @@ Assets:
 - Assets/Survivors/Technician/Icons/texBuffElectroHeal.png
 - Assets/Survivors/Technician/Icons/texTechnicianLinkUpIcon.png
 - Assets/Items/TargetingMatrix/texIndicatorMatrixMask.png
+- Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinTurretLights.prefab
 - Assets/Survivors/Technician/Textures/texTechnicianPrime.png
 - Assets/Items/Chakram/texChakramNormal.png
 - Assets/Survivors/Technician/Projectiles/TechnicianTurretRocket.prefab
 - Assets/Items/CopperGear/CopperGearDisplayMesh.prefab
+- Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinTurret.prefab
 - Assets/Survivors/Technician/Textures/texTechnicianDefault.png
 - Assets/Survivors/Technician/Textures/texTechnicianEmission.png
 - Assets/Items/HermitsShawl/texBuffHermitShawl.png
