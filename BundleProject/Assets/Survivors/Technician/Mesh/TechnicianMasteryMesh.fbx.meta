@@ -4,14 +4,11 @@ ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
-      74: -4046155777665151541
-    second: Technician_Armature|FloatingGrenade_DefaultPose
+      74: -2100450958045243245
+    second: Technician_Armature|Technician_Aim_Pitch
   - first:
-      74: -2171979353956087840
-    second: Technician_Armature|FloatingGrenade_Idle
-  - first:
-      74: -5720216946369298710
-    second: Technician_Armature|FloatingGrenade_LockedOn
+      74: -5033186329292390103
+    second: Technician_Armature|Technician_Aim_Yaw
   - first:
       74: 1439977512868839205
     second: Technician_Armature|Technician_Ascend
@@ -22,8 +19,14 @@ ModelImporter:
       74: -309155023585945280
     second: Technician_Armature|Technician_Descend
   - first:
+      74: -571948694946530233
+    second: Technician_Armature|Technician_DescendFast
+  - first:
       74: 1946599162334228168
     second: Technician_Armature|Technician_Idle
+  - first:
+      74: -8389469230262562136
+    second: Technician_Armature|Technician_IdleAdditive
   - first:
       74: 4234572694410061101
     second: Technician_Armature|Technician_IdleIn
@@ -91,8 +94,8 @@ ModelImporter:
       74: 8410576446547472568
     second: Technician_Armature|Technician_SprintF
   - first:
-      74: 7340607874623508929
-    second: Technician_Armature|Technician_Uti_0_Frisbee
+      74: 8112401819166251508
+    second: Technician_Armature|Technician_Uti_1_Frisbee
   - first:
       74: -6271624445453444886
     second: Technician_Armature|Technician_WalkB

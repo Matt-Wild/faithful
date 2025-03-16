@@ -664,7 +664,7 @@ GameObject:
   - component: {fileID: 724177577894975600}
   - component: {fileID: 8288432845168336119}
   m_Layer: 0
-  m_Name: Backpack
+  m_Name: Robotroot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1066,7 +1066,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4185318172617464919}
   m_Layer: 0
-  m_Name: Base
+  m_Name: ROOT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

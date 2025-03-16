@@ -13,101 +13,101 @@ AvatarMask:
     m_Weight: 1
   - m_Path: Technician_Armature
     m_Weight: 0
-  - m_Path: Technician_Armature/Base
+  - m_Path: Technician_Armature/ROOT
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip
+  - m_Path: Technician_Armature/ROOT/Hip
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine
+  - m_Path: Technician_Armature/ROOT/Hip/Spine
     m_Weight: 1
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest
     m_Weight: 1
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Backpack
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Backpack/Roboteye
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L
     m_Weight: 1
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L
     m_Weight: 1
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Index.L.001
     m_Weight: 1
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Index.L.001/Index.L.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Index.L.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Index.L.001/Index.L.002/Index.L.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Index.L.001/Index.L.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Middle.L.001
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Index.L.001/Index.L.002/Index.L.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Middle.L.001/Middle.L.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Middle.L.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Middle.L.001/Middle.L.002/Middle.L.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Middle.L.001/Middle.L.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Pinky.L.001
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Middle.L.001/Middle.L.002/Middle.L.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Pinky.L.001/Pinky.L.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Pinky.L.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Pinky.L.001/Pinky.L.002/Pinky.L.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Pinky.L.001/Pinky.L.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Ring.L.001
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Pinky.L.001/Pinky.L.002/Pinky.L.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Ring.L.001/Ring.L.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Ring.L.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Ring.L.001/Ring.L.002/Ring.L.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Ring.L.001/Ring.L.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Thumb.L.001
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Ring.L.001/Ring.L.002/Ring.L.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Thumb.L.001/Thumb.L.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Thumb.L.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Thumb.L.001/Thumb.L.002/Thumb.L.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Thumb.L.001/Thumb.L.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Thumb.L.001/Thumb.L.002/Thumb.L.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R
     m_Weight: 1
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Index.R.001
     m_Weight: 1
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Index.R.001/Index.R.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Index.R.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Index.R.001/Index.R.002/Index.R.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Index.R.001/Index.R.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Middle.R.001
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Index.R.001/Index.R.002/Index.R.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Middle.R.001/Middle.R.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Middle.R.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Middle.R.001/Middle.R.002/Middle.R.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Middle.R.001/Middle.R.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Pinky.R.001
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Middle.R.001/Middle.R.002/Middle.R.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Pinky.R.001/Pinky.R.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Pinky.R.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Pinky.R.001/Pinky.R.002/Pinky.R.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Pinky.R.001/Pinky.R.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Ring.R.001
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Pinky.R.001/Pinky.R.002/Pinky.R.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Ring.R.001/Ring.R.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Ring.R.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Ring.R.001/Ring.R.002/Ring.R.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Ring.R.001/Ring.R.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Thumb.R.001
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Ring.R.001/Ring.R.002/Ring.R.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Thumb.R.001/Thumb.R.002
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Thumb.R.001
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Thumb.R.001/Thumb.R.002/Thumb.R.003
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Thumb.R.001/Thumb.R.002
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Neck
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Thumb.R.001/Thumb.R.002/Thumb.R.003
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Neck/Head
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Neck
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Robotroot
     m_Weight: 1
-  - m_Path: Technician_Armature/Base/Hip/Spine/Chest/Neck/Head
+  - m_Path: Technician_Armature/ROOT/Hip/Spine/Chest/Robotroot/Roboteye
     m_Weight: 1
-  - m_Path: Technician_Armature/Base/Hip/Thigh.L
+  - m_Path: Technician_Armature/ROOT/Hip/Thigh.L
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Thigh.L/Shin.L
+  - m_Path: Technician_Armature/ROOT/Hip/Thigh.L/Shin.L
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Thigh.R
+  - m_Path: Technician_Armature/ROOT/Hip/Thigh.R
     m_Weight: 0
-  - m_Path: Technician_Armature/Base/Hip/Thigh.R/Shin.R
+  - m_Path: Technician_Armature/ROOT/Hip/Thigh.R/Shin.R
     m_Weight: 0
   - m_Path: TechnicianDefaultMesh
     m_Weight: 0
