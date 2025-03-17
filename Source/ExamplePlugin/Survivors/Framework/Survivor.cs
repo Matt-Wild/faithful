@@ -3,7 +3,6 @@ using RoR2;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static Rewired.UI.ControlMapper.ControlMapper;
 
 namespace Faithful
 {
@@ -777,7 +776,12 @@ namespace Faithful
 
             // Add default skin
             AddSkin("DEFAULT", Assets.GetSprite(m_defaultSkinName));
+
+            // Add additional skins
+            SetupAdditionalSkins();
         }
+
+        protected virtual void SetupAdditionalSkins() { }
 
         private void SetupMaster()
         {
