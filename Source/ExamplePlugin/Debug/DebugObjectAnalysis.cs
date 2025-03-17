@@ -925,6 +925,9 @@ namespace Faithful
             // Cycle through components
             foreach (Component component in components)
             {
+                // Check for component
+                if (component == null) continue;
+
                 // Create scroll entry
                 DebugObjectAnalysisScrollEntry entry = CreateScrollEntry(component);
 

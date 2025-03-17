@@ -3,6 +3,7 @@ using RoR2;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Rewired.UI.ControlMapper.ControlMapper;
 
 namespace Faithful
 {
@@ -729,8 +730,16 @@ namespace Faithful
                 Print.Error(this, $"Could not find display prefab '{displayPrefabName}'");
             }
 
-            // Apply base render infos to character model
-            m_characterModel.baseRendererInfos = bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
+            // Check for character model
+            CharacterModel characterModel = m_displayPrefab.GetComponent<CharacterModel>();
+            if (!characterModel)
+            {
+                // Add character model if component not found
+                characterModel = m_displayPrefab.AddComponent<CharacterModel>();
+            }
+
+            // Update base renderer infos for display prefab character model
+            characterModel.baseRendererInfos = m_characterModel.baseRendererInfos;
 
             // Convert all materials in all renderers for this game object to HG shader
             Utils.ConvertAllRenderersToHopooShader(m_displayPrefab);
