@@ -20,7 +20,7 @@ namespace Faithful.Skills.Temp
 
             // Set state values
             damageCoefficient = 5.0f;
-            force = 6.0f;
+            force = 12.0f;
             minSpread = 10.0f;
             maxSpread = -10.0f;
             baseDuration = 0.4f;

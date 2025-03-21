@@ -807,7 +807,7 @@ namespace Faithful
             AddSkill("TEMP", "texDefaultSecondaryIcon", SkillSlot.Secondary, new SerializableEntityStateType(typeof(Skills.Temp.TempSecondary)), _baseRechargeInterval: 2.0f,
                      _interruptPriority: InterruptPriority.Skill, _mustKeyPress: true);
             AddSkill("TEMP", "texDefaultUtilityIcon", SkillSlot.Utility, new SerializableEntityStateType(typeof(Skills.Temp.TempUtility)), _baseMaxStock: 3, _baseRechargeInterval: 6.0f,
-                     _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true);
+                     _cancelSprintingOnActivation: false, _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true);
             AddSkill("TEMP", "texDefaultSpecialIcon", SkillSlot.Special, new SerializableEntityStateType(typeof(Skills.Temp.TempSpecial)), _baseRechargeInterval: 12.0f,
                      _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true);
         }
