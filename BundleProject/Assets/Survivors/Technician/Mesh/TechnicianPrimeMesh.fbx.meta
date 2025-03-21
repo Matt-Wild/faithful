@@ -108,6 +108,21 @@ ModelImporter:
   - first:
       74: -7794456888421135351
     second: Technician_Armature|Technician_WalkR
+  - first:
+      74: -3839307089875957954
+    second: Technician_Armature|Technician_Flinch_0
+  - first:
+      74: 5465110364596771359
+    second: Technician_Armature|Technician_Flinch_1
+  - first:
+      74: -3338483936640480025
+    second: Technician_Armature|Technician_Flinch_2
+  - first:
+      74: -3715684048104583699
+    second: Technician_Armature|Technician_Landing
+  - first:
+      74: -2743004504185312170
+    second: Technician_Armature|Technician_Uti_0_Bounce
   externalObjects: {}
   materials:
     materialImportMode: 1
