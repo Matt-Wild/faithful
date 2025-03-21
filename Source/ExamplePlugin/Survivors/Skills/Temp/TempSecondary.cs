@@ -3,7 +3,7 @@ using EntityStates.Commando.CommandoWeapon;
 using RoR2;
 using UnityEngine;
 
-namespace Faithful.Skills
+namespace Faithful.Skills.Temp
 {
     public class TempSecondary : BaseSkillState
     {
@@ -92,7 +92,7 @@ namespace Faithful.Skills
         // Returns the priority needed to interrupt the skill while active
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.Skill;
+            return InterruptPriority.PrioritySkill;
         }
     }
 }

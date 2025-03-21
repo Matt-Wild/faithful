@@ -1,10 +1,9 @@
 ﻿using EntityStates;
-using EntityStates.Commando.CommandoWeapon;
 using EntityStates.Huntress;
 using RoR2;
 using UnityEngine;
 
-namespace Faithful.Skills
+namespace Faithful.Skills.Temp
 {
     public class TempUtility : BaseState
     {
@@ -161,7 +160,7 @@ namespace Faithful.Skills
         public float duration = 0.2f;
 
         [SerializeField]
-        public float speedCoefficient = 30f;
+        public float speedCoefficient = 25f;
 
         private CharacterModel characterModel;
 

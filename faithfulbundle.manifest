@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2914062079
+CRC: 1557176864
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: eca64b9c3030baa32bdda69d12ccb1e7
+    Hash: 218144f417b7ec24d765d8b5dd94e236
   TypeTreeHash:
     serializedVersion: 2
     Hash: beb33ca57a83e0c2b3826c74e0d7b197
@@ -119,6 +119,7 @@ Assets:
 - Assets/Items/4-T0NJetpack/Materials/tex4T0NJetpackBaseFlare.mat
 - Assets/Items/HasteningGreave/texHasteningGreaveEmission.png
 - Assets/Survivors/Technician/Icons/texTechnicianRepairIcon.png
+- Assets/Textures/Skills/Default/texDefaultSpecialIcon.png
 - Assets/Skills/Railgunner/texRailgunnerCoin.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackHolo.png
 - Assets/Items/LongshotGeode/LongshotGeodeMesh.prefab
@@ -135,10 +136,12 @@ Assets:
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionEmission.png
 - Assets/Survivors/Technician/Mesh/TechnicianDefaultMesh.fbx
 - Assets/Items/CollectorsVision/texCollectorsVisionIcon.png
+- Assets/Textures/Skills/Default/texDefaultPrimaryIcon.png
 - Assets/Survivors/Technician/Projectiles/Mesh/TechnicianTurretRocketMesh.fbx
 - Assets/Items/Chakram/texChakram.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionSymbol.png
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinTechnician.prefab
+- Assets/Textures/Skills/Default/texDefaultUtilityIcon.png
 - Assets/Items/HermitsShawl/HermitShawlMesh.prefab
 - Assets/Survivors/Technician/Allies/Mesh/TechnicianRobotMesh.fbx
 - Assets/Survivors/Technician/Icons/texTechnicianPowerpulseIcon.png
@@ -248,6 +251,7 @@ Assets:
 - Assets/Items/CopperGear/texCopperGear.png
 - Assets/Items/CollectorsVision/texBuffInspiredBoost.png
 - Assets/Items/VengefulToaster/texVengefulToasterIcon.png
+- Assets/Textures/Skills/Default/texDefaultSecondaryIcon.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaIcon.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerIcon.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveIcon.png

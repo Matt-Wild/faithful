@@ -3,7 +3,7 @@ using EntityStates.Commando.CommandoWeapon;
 using RoR2;
 using UnityEngine;
 
-namespace Faithful.Skills
+namespace Faithful.Skills.Temp
 {
     public class TempPrimary : BaseSkillState
     {
