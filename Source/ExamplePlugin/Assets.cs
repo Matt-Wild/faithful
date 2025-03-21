@@ -157,7 +157,7 @@ namespace Faithful
             radiusIndicatorPrefab.AddComponent<FaithfulRadiusIndicatorBehaviour>();
 
             // Get shrine use effect prefab
-            shrineUseEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/ShrineUseEffect.prefab").WaitForCompletion();
+            shrineUseEffectPrefab = FetchAsset<GameObject>("RoR2/Base/Common/VFX/ShrineUseEffect.prefab");
 
             // Get physics material for ragdoll bodies
             ragdollMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<RoR2.RagdollController>().bones[1].GetComponent<Collider>().material;
@@ -166,32 +166,32 @@ namespace Faithful
             scarfDynamicBone = Utils.FindChildByName(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/LunarSun/DisplaySunHeadNeck.prefab").WaitForCompletion().transform, "Bandage1").GetComponent<DynamicBone>();
 
             // Fetch ping icons
-            dronePingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texDroneIconOutlined.png").WaitForCompletion();
-            inventoryPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texInventoryIconOutlined.png").WaitForCompletion();
-            lootPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texLootIconOutlined.png").WaitForCompletion();
-            shrinePingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texShrineIconOutlined.png").WaitForCompletion();
-            teleporterPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texTeleporterIconOutlined.png").WaitForCompletion();
-            mysteryPingIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion();
+            dronePingIcon = FetchAsset<Sprite>("RoR2/Base/Common/MiscIcons/texDroneIconOutlined.png");
+            inventoryPingIcon = FetchAsset<Sprite>("RoR2/Base/Common/MiscIcons/texInventoryIconOutlined.png");
+            lootPingIcon = FetchAsset<Sprite>("RoR2/Base/Common/MiscIcons/texLootIconOutlined.png");
+            shrinePingIcon = FetchAsset<Sprite>("RoR2/Base/Common/MiscIcons/texShrineIconOutlined.png");
+            teleporterPingIcon = FetchAsset<Sprite>("RoR2/Base/Common/MiscIcons/texTeleporterIconOutlined.png");
+            mysteryPingIcon = FetchAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png");
 
             // Fetch inspect icons
-            chestInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/ChestIcon_1.png").WaitForCompletion();
-            droneInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texDroneIconOutlined.png").WaitForCompletion();
-            lunarInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/LunarIcon_1.png").WaitForCompletion();
-            pillarInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/PillarIcon.png").WaitForCompletion();
-            printerInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/PrinterIcon_1.png").WaitForCompletion();
-            radioScannerInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/RadioScannerIcon_2.png").WaitForCompletion();
-            scapperInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/ScrapperIcon.png").WaitForCompletion();
-            shrineInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/ShrineIcon.png").WaitForCompletion();
-            meridianInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC2/texColossusExpansionIcon.png").WaitForCompletion();
-            voidInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/VoidIcon_2.png").WaitForCompletion();
-            mysteryInspectIcon = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion();
+            chestInspectIcon = FetchAsset<Sprite>("RoR2/Base/ChestIcon_1.png");
+            droneInspectIcon = FetchAsset<Sprite>("RoR2/Base/Common/MiscIcons/texDroneIconOutlined.png");
+            lunarInspectIcon = FetchAsset<Sprite>("RoR2/Base/LunarIcon_1.png");
+            pillarInspectIcon = FetchAsset<Sprite>("RoR2/Base/PillarIcon.png");
+            printerInspectIcon = FetchAsset<Sprite>("RoR2/Base/PrinterIcon_1.png");
+            radioScannerInspectIcon = FetchAsset<Sprite>("RoR2/Base/RadioScannerIcon_2.png");
+            scapperInspectIcon = FetchAsset<Sprite>("RoR2/Base/ScrapperIcon.png");
+            shrineInspectIcon = FetchAsset<Sprite>("RoR2/Base/ShrineIcon.png");
+            meridianInspectIcon = FetchAsset<Sprite>("RoR2/DLC2/texColossusExpansionIcon.png");
+            voidInspectIcon = FetchAsset<Sprite>("RoR2/Base/VoidIcon_2.png");
+            mysteryInspectIcon = FetchAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png");
 
             // Fetch interactable symbol materials
-            chanceShrineSymbolMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/ShrineChance/matShrineChanceSymbol.mat").WaitForCompletion();
+            chanceShrineSymbolMaterial = FetchAsset<Material>("RoR2/Base/ShrineChance/matShrineChanceSymbol.mat");
 
             // Get expansion definitions
-            sotvDef = Addressables.LoadAssetAsync<ExpansionDef>("RoR2/DLC1/Common/DLC1.asset").WaitForCompletion();
-            sotsDef = Addressables.LoadAssetAsync<ExpansionDef>("RoR2/DLC2/Common/DLC2.asset").WaitForCompletion();
+            sotvDef = FetchAsset<ExpansionDef>("RoR2/DLC1/Common/DLC1.asset");
+            sotsDef = FetchAsset<ExpansionDef>("RoR2/DLC2/Common/DLC2.asset");
 
             // Check if debug mode
             if (Utils.debugMode)
@@ -284,6 +284,12 @@ namespace Faithful
 
             // Log message string
             Log.Info(message);
+        }
+
+        public static T FetchAsset<T>(string _path)
+        {
+            // Fetch asset from addressables
+            return Addressables.LoadAssetAsync<T>(_path).WaitForCompletion();
         }
 
         public static Sprite GetIcon(string _name)

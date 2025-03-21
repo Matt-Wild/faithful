@@ -1,5 +1,7 @@
-﻿using R2API;
+﻿using EntityStates;
+using R2API;
 using RoR2;
+using RoR2.Skills;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -110,6 +112,9 @@ namespace Faithful
         // List of skins used by this survivor
         private List<SkinDef> m_skins = new List<SkinDef>();
 
+        // List of skill families this survivor has
+        private List<SkillSlot> m_skillFamilies = new List<SkillSlot>();
+
         // The survivor definition for this survivor
         private SurvivorDef m_survivorDef;
 
@@ -217,6 +222,12 @@ namespace Faithful
 
             // Setup survivor definition
             SetupSurvivorDefinition();
+
+            // Wipe generic skills from character
+            ClearGenericSkills();
+
+            // Setup skills
+            SetupSkills();
 
             // Setup skins (and allows more skins to be added)
             SetupSkins();
@@ -767,6 +778,190 @@ namespace Faithful
 
             // Add to content pack
             ContentAddition.AddSurvivorDef(m_survivorDef);
+        }
+
+        protected virtual void SetupSkills()
+        {
+            // Warn that no skills have been granted to survivor
+            Print.Warning(this, $"No skills have been granted to this survivor");
+        }
+
+        /// <summary>
+        /// Adds generic skills to a survivor.
+        /// </summary>
+        protected void SetupTempSkills()
+        {
+            // Setup language strings
+            LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_PRIMARY_TEMP_NAME", "Primary");
+            LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_PRIMARY_TEMP_DESCRIPTION", "This is a temporary primary skill.");
+            LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_SECONDARY_TEMP_NAME", "Secondary");
+            LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_SECONDARY_TEMP_DESCRIPTION", "This is a temporary secondary skill.");
+            LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_UTILITY_TEMP_NAME", "Utility");
+            LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_UTILITY_TEMP_DESCRIPTION", "This is a temporary utility skill.");
+            LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_SPECIAL_TEMP_NAME", "Special");
+            LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_SPECIAL_TEMP_DESCRIPTION", "This is a temporary special skill.");
+
+
+            // Add temporary skills
+            AddSkill("TEMP", "texTemporalCubeIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.TempPrimary)));
+            AddSkill("TEMP", "texTemporalCubeIcon", SkillSlot.Secondary, new SerializableEntityStateType(typeof(Skills.TempSecondary)), _baseRechargeInterval: 2.0f,
+                     _interruptPriority: InterruptPriority.Skill);
+            AddSkill("TEMP", "texTemporalCubeIcon", SkillSlot.Utility, new SerializableEntityStateType(typeof(Skills.TempUtility)), _baseMaxStock: 2, _baseRechargeInterval: 6.0f,
+                     _interruptPriority: InterruptPriority.Skill);
+            AddSkill("TEMP", "texTemporalCubeIcon", SkillSlot.Special, new SerializableEntityStateType(typeof(Skills.TempPrimary)));
+        }
+
+        private void ClearGenericSkills()
+        {
+            // Cycle through generic skills in body
+            foreach (GenericSkill obj in m_bodyPrefab.GetComponentsInChildren<GenericSkill>())
+            {
+                // Delete skill
+                UnityEngine.Object.DestroyImmediate(obj);
+            }
+        }
+
+        protected void AddSkill(string _token, string _iconName, SkillSlot _family, SerializableEntityStateType _activationState, int _baseMaxStock = 1, float _baseRechargeInterval = 0.0f,
+                                int _stockPerRecharge = 1, int _requiredStock = 1, int _consumedStock = 1, bool _beginSkillCooldownOnSkillEnd = true, bool _canceledFromSprinting = false,
+                                bool _cancelSprintingOnActivation = true, bool _fullRestockOnAssign = true, InterruptPriority _interruptPriority = InterruptPriority.Any, bool _isCombatSkill = true,
+                                bool _mustKeyPress = false)
+        {
+            // Check if survivor doesn't have a skill family for this skill yet
+            if (!m_skillFamilies.Contains(_family))
+            {
+                // Create skill family
+                CreateGenericSkillWithSkillFamily(_family);
+
+                // Register to skill families list
+                m_skillFamilies.Add(_family);
+            }
+
+            // Create token prefix
+            string tokenPrefix = $"FAITHFUL_SURVIVOR_{token}";
+            switch (_family)
+            {
+                case SkillSlot.Primary:
+                    tokenPrefix += "_PRIMARY";
+                    break;
+                case SkillSlot.Secondary:
+                    tokenPrefix += "_SECONDARY";
+                    break;
+                case SkillSlot.Utility:
+                    tokenPrefix += "_UTILITY";
+                    break;
+                case SkillSlot.Special:
+                    tokenPrefix += "_SPECIAL";
+                    break;
+                case SkillSlot.None:
+                    tokenPrefix += "_SKILL";
+                    break;
+            }
+
+            // Create skill def
+            SkillDef mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
+
+            // Setup skill def
+            mySkillDef.activationState = _activationState;
+            mySkillDef.activationStateMachineName = "Weapon";
+            mySkillDef.baseMaxStock = _baseMaxStock;
+            mySkillDef.baseRechargeInterval = _baseRechargeInterval;
+            mySkillDef.rechargeStock = _stockPerRecharge;
+            mySkillDef.requiredStock = _requiredStock;
+            mySkillDef.stockToConsume = _consumedStock;
+            mySkillDef.beginSkillCooldownOnSkillEnd = _beginSkillCooldownOnSkillEnd;
+            mySkillDef.canceledFromSprinting = _canceledFromSprinting;
+            mySkillDef.cancelSprintingOnActivation = _cancelSprintingOnActivation;
+            mySkillDef.fullRestockOnAssign = _fullRestockOnAssign;
+            mySkillDef.interruptPriority = _interruptPriority;
+            mySkillDef.isCombatSkill = _isCombatSkill;
+            mySkillDef.mustKeyPress = _mustKeyPress;
+            mySkillDef.icon = Assets.GetSprite(_iconName);
+            mySkillDef.skillDescriptionToken = $"{tokenPrefix}_{_token}_DESCRIPTION";
+            mySkillDef.skillName = $"{tokenPrefix}_{_token}_NAME";
+            mySkillDef.skillNameToken = $"{tokenPrefix}_{_token}_NAME";
+
+            // Add skill def to content pack
+            ContentAddition.AddSkillDef(mySkillDef);
+
+            // Get skill locator
+            SkillLocator skillLocator = m_bodyPrefab.GetComponent<SkillLocator>();
+
+            // Find skill family
+            SkillFamily skillFamily = null;
+            switch (_family)
+            {
+                case SkillSlot.Primary:
+                    skillFamily = skillLocator.primary.skillFamily;
+                    break;
+                case SkillSlot.Secondary:
+                    skillFamily = skillLocator.secondary.skillFamily;
+                    break;
+                case SkillSlot.Utility:
+                    skillFamily = skillLocator.utility.skillFamily;
+                    break;
+                case SkillSlot.Special:
+                    skillFamily = skillLocator.special.skillFamily;
+                    break;
+            }
+
+            // Add as skill variant if alternate skill
+            Array.Resize(ref skillFamily.variants, skillFamily.variants.Length + 1);
+            skillFamily.variants[skillFamily.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = mySkillDef,
+                unlockableDef = null,
+                viewableNode = new ViewablesCatalog.Node(mySkillDef.skillNameToken, false, null)
+            };
+        }
+
+        // Yoinked from Henry mod
+        private GenericSkill CreateGenericSkillWithSkillFamily(SkillSlot _skillSlot, bool _hidden = false)
+        {
+            // Get skill locator
+            SkillLocator skillLocator = m_bodyPrefab.GetComponent<SkillLocator>();
+
+            // Add skill family for the given skill slot
+            switch (_skillSlot)
+            {
+                case SkillSlot.Primary:
+                    return skillLocator.primary = CreateGenericSkillWithSkillFamily("Primary", _hidden);
+                case SkillSlot.Secondary:
+                    return skillLocator.secondary = CreateGenericSkillWithSkillFamily("Secondary", _hidden);
+                case SkillSlot.Utility:
+                    return skillLocator.utility = CreateGenericSkillWithSkillFamily("Utility", _hidden);
+                case SkillSlot.Special:
+                    return skillLocator.special = CreateGenericSkillWithSkillFamily("Special", _hidden);
+                case SkillSlot.None:
+                    Log.Error("Failed to create GenericSkill with skillslot None. If making a GenericSkill outside of the main 4, specify a familyName, and optionally a genericSkillName");
+                    return null;
+            }
+
+            // Unknown skill type
+            return null;
+        }
+
+        // Yoinked from Henry mod
+        private GenericSkill CreateGenericSkillWithSkillFamily(string _familyName, bool _hidden = false) => CreateGenericSkillWithSkillFamily(_familyName, _familyName, _hidden);
+        private GenericSkill CreateGenericSkillWithSkillFamily(string _genericSkillName, string _familyName, bool _hidden = false)
+        {
+            // Create generic skill for skill family
+            GenericSkill skill = m_bodyPrefab.AddComponent<GenericSkill>();
+            skill.skillName = _genericSkillName;
+            skill.hideInCharacterSelect = _hidden;
+
+            // Create skill family
+            SkillFamily newFamily = ScriptableObject.CreateInstance<SkillFamily>();
+            (newFamily as ScriptableObject).name = m_bodyPrefab.name + _familyName + "Family";
+            newFamily.variants = new SkillFamily.Variant[0];
+
+            // Apply skill family to generic skill
+            skill._skillFamily = newFamily;
+
+            // Add skill family to content pack
+            ContentAddition.AddSkillFamily(newFamily);
+
+            // Return generic skill for skill family
+            return skill;
         }
 
         private void SetupSkins()

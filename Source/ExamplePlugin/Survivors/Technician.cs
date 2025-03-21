@@ -88,5 +88,11 @@ namespace Faithful
                 }
             ]);
         }
+
+        protected override void SetupSkills()
+        {
+            // No skills made yet
+            SetupTempSkills();
+        }
     }
 }
