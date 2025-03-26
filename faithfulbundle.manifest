@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2976158218
+CRC: 2123273288
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4c49f257a75808516d09c7026550f4c4
+    Hash: c7ac799a0a7001ba652bfbf1830fd8cd
   TypeTreeHash:
     serializedVersion: 2
-    Hash: beb33ca57a83e0c2b3826c74e0d7b197
+    Hash: d31201e96c5637b73a6786db700e36d5
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -26,6 +26,8 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 54
+  Script: {instanceID: 0}
+- Class: 65
   Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
@@ -102,10 +104,12 @@ Assets:
 - Assets/Survivors/Technician/Projectiles/Mesh/TechnicianPointlinkMesh.fbx
 - Assets/Items/LeadersPennon/texLeadersPennonNormal.png
 - Assets/Items/Chakram/ChakramMesh.prefab
+- Assets/Monsters/MechaSpider/Mesh/MechanicalSpiderMesh.fbx
 - Assets/Items/HermitsShawl/HermitShawlDisplayMesh.prefab
 - Assets/Items/NoxiousSlimes/NoxiousSlimeMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
 - Assets/Survivors/Technician/Textures/texTechnicianMasteryNormal.png
+- Assets/Monsters/MechaSpider/Icons/texMechanicalSpiderIconAlly.png
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDeployMesh.prefab
 - Assets/Survivors/Technician/Mesh/TechnicianMasterySkinRobot.prefab
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDisplayMesh.prefab
@@ -131,6 +135,7 @@ Assets:
 - Assets/Items/SecondHand/texSecondHandIcon.png
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeRockNormal.png
+- Assets/Monsters/MechaSpider/Textures/texMechanicalSpiderAlly.png
 - Assets/Items/LeadersPennon/LeadersPennonMesh.prefab
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeMesh.fbx
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionEmission.png
@@ -159,6 +164,7 @@ Assets:
 - Assets/Items/LongshotGeode/LongshotGeodeDisplayMesh.prefab
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinRobot.prefab
 - Assets/Items/CauterizingGreave/texCauterizingGreave.png
+- Assets/Monsters/MechaSpider/Icons/texMechanicalSpiderIcon.png
 - Assets/Items/CollectorsVision/texCollectorsVisionNormal.png
 - Assets/Items/TargetingMatrix/TargetingMatrixDisplayMesh.prefab
 - Assets/Survivors/Technician/Mesh/TechnicianMasterySkinTechnicianLights.prefab
@@ -190,6 +196,7 @@ Assets:
 - Assets/Items/HasteningGreave/texHasteningGreave.png
 - Assets/Survivors/Technician/TechnicianDisplay.prefab
 - Assets/Placeholder/Item/texTemporalCubeIcon.png
+- Assets/Monsters/MechaSpider/mdlMechaSpider.prefab
 - Assets/UI/texCustomExpansionIcon.png
 - Assets/Survivors/Technician/Textures/texTechnicianDefaultNormal.png
 - Assets/Items/4-T0NJetpack/4T0NJetpackMesh.prefab
@@ -216,10 +223,12 @@ Assets:
 - Assets/Debug/UI/DebugComponentAnalysisEntry.prefab
 - Assets/Equipment/Divider/DividerMesh.prefab
 - Assets/Items/HasteningGreave/HasteningGreaveMesh.prefab
+- Assets/Monsters/MechaSpider/Materials/texMechanicalSpider.mat
 - Assets/Survivors/Technician/mdlTechnician.prefab
 - Assets/Items/TargetingMatrix/TargetingMatrixMesh.prefab
 - Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
 - Assets/Equipment/ChargefieldPylon/texChargefieldPylonIcon.png
+- Assets/Monsters/MechaSpider/Textures/texMechanicalSpiderEmissionAlly.png
 - Assets/Items/VengefulToaster/VengefulToasterMesh.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianMainIcon.png
 - Assets/Skills/Railgunner/texRailgunnerCoinNormal.png
@@ -228,6 +237,7 @@ Assets:
 - Assets/Items/CollectorsVision/texCollectorsVisionEmission.png
 - Assets/Placeholder/Item/texTemporalCube.png
 - Assets/Survivors/Technician/Projectiles/TechnicianPointlink.prefab
+- Assets/Monsters/MechaSpider/Textures/texMechanicalSpider.png
 - Assets/Survivors/Technician/Icons/texTechnicianJackhammerIcon.png
 - Assets/Items/TargetingMatrix/texTargetingMatrix.png
 - Assets/Survivors/Technician/Materials/texTechnicianDefault.mat
@@ -266,6 +276,7 @@ Assets:
 - Assets/Items/4-T0NJetpack/tex4T0NJetpack.png
 - Assets/Items/4-T0NJetpack/4T0NJetpackDisplayMesh.prefab
 - Assets/Survivors/Technician/Icons/texBuffElectroHeal.png
+- Assets/Monsters/MechaSpider/Materials/texMechanicalSpiderAlly.mat
 - Assets/Survivors/Technician/Icons/texTechnicianLinkUpIcon.png
 - Assets/Items/TargetingMatrix/texIndicatorMatrixMask.png
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinTurretLights.prefab
@@ -292,6 +303,7 @@ Assets:
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonMesh.prefab
 - Assets/Debug/UI/DebugObjectAnalysisEntry.prefab
 - Assets/Items/CopperGear/texCopperGearNormal.png
+- Assets/Monsters/MechaSpider/Textures/texMechanicalSpiderEmission.png
 - Assets/Items/CopperGear/CopperGearMesh.prefab
 - Assets/Items/LongshotGeode/texLongshotGeodeRock.png
 - Assets/Skills/Railgunner/RailgunnerCoinMesh.prefab
