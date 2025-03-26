@@ -118,6 +118,12 @@ namespace Faithful
         // The survivor definition for this survivor
         private SurvivorDef m_survivorDef;
 
+        // List of item display rules used to add the initial item display information for default items onto character models
+        private List<ItemDisplayRuleSet.KeyAssetRuleGroup> m_itemDisplayRules;
+
+        // If it's currently possible to add item display rule information
+        private bool m_addingItemDisplays = false;
+
         public void Init(string _token, string _modelName, string _portraitName, string _defaultSkinName, Color? _bodyColor = null, int _sortPosition = 100, string _crosshairName = "Standard",
                          float _maxHealth = 110.0f, float _healthRegen = 1.0f, float _armour = 0.0f, float _shield = 0.0f, int _jumpCount = 1, float _damage = 12.0f, float _attackSpeed = 1.0f,
                          float _crit = 1.0f, float _moveSpeed = 7.0f, float _acceleration = 80.0f, float _jumpPower = 15.0f, bool _autoCalculateLevelStats = true, 
@@ -723,11 +729,53 @@ namespace Faithful
             // Assign rule set into character model
             m_characterModel.itemDisplayRuleSet = itemDisplayRuleSet;
 
-            /*if (itemDisplays != null)
+            // Add
+            ItemDisplays.queuedDisplays++;
+            RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetupItemDisplaysOnContentPacksAssigned;
+        }
+
+        private void SetupItemDisplaysOnContentPacksAssigned(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> _obj)
+        {
+            // Create new item display rules list
+            m_itemDisplayRules = new List<ItemDisplayRuleSet.KeyAssetRuleGroup>();
+
+            // Prepare item displays helper
+            ItemDisplays.LazyInit();
+
+            // Can now start adding item display information
+            m_addingItemDisplays = true;
+
+            // Get instructions for item display placement
+            SetupDefaultItemDisplays();
+
+            // Assign new item display rules to character model
+            characterModel.itemDisplayRuleSet.keyAssetRuleGroups = m_itemDisplayRules.ToArray();
+
+            // Can no longer add item display information
+            m_addingItemDisplays = false;
+
+            // Clean up
+            ItemDisplays.DisposeWhenDone();
+        }
+
+        protected virtual void SetupDefaultItemDisplays()
+        {
+            // Warn as no default item displays have been provided
+            Print.Warning(this, "No default item display information provided");
+        }
+
+        protected void AddDefaultItemDisplay(string _keyAsset, params ItemDisplayRule[] _rules)
+        {
+            // Check if called inappropriately
+            if (!m_addingItemDisplays)
             {
-                Modules.ItemDisplays.queuedDisplays++;
-                RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetItemDisplays;
-            }*/
+                // Error and return - Operation not possible
+                Print.Error(this, $"Requested to add default item display for key asset '{_keyAsset}' outside the process of setting up item displays");
+                return;
+            }
+
+            // Add to item display rules
+            m_itemDisplayRules.Add(ItemDisplays.CreateDisplayRuleGroupWithRules(ItemDisplays.keyAssets[_keyAsset], _rules));
         }
 
         private void SetupDisplayPrefab()
@@ -800,7 +848,6 @@ namespace Faithful
             LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_UTILITY_TEMP_DESCRIPTION", "This is a temporary utility skill.");
             LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_SPECIAL_TEMP_NAME", "Special");
             LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_SPECIAL_TEMP_DESCRIPTION", "This is a temporary special skill.");
-
 
             // Add temporary skills
             AddSkill("TEMP", "texDefaultPrimaryIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.Temp.TempPrimary)));
