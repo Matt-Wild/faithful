@@ -4,7 +4,6 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
 using HarmonyLib;
-using System;
 
 namespace Faithful
 {
