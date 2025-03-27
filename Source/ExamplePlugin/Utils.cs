@@ -84,7 +84,8 @@ namespace Faithful
             { "scavenger", "mdlScav" },
             { "seeker", "mdlSeeker" },
             { "false son", "mdlFalseSon" },
-            { "chef", "mdlChef" }
+            { "chef", "mdlChef" },
+            { "technician", "mdlTechnician" }
         };
 
         // Common irregular words dictionary - used for pluralization
