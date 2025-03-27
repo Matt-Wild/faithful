@@ -102,74 +102,74 @@ namespace Faithful
 
             AddDefaultItemDisplay("AlienHead",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayAlienHead"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "Pelvis",
+                new Vector3(-0.14F, 0.0645F, -0.1175F),
+                new Vector3(270F, 225F, 0F),
+                new Vector3(0.75F, 0.75F, 0.75F)
                 )
                 );
             AddDefaultItemDisplay("ArmorPlate",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayRepulsionArmorPlate"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "Shin.L",
+                new Vector3(-0.0225F, 0.165F, -0.0455F),
+                new Vector3(85F, 180F, 180F),
+                new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
             AddDefaultItemDisplay("ArmorReductionOnHit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayWarhammer"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "HandL",
+                new Vector3(0.04F, 0.3795F, -0.367F),
+                new Vector3(326F, 179.25F, 106F),
+                new Vector3(0.175F, 0.175F, 0.175F)
                 )
                 );
             AddDefaultItemDisplay("AttackSpeedAndMoveSpeed",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayCoffee"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "Pelvis",
+                new Vector3(0.155F, 0.09675F, -0.1185F),
+                new Vector3(0F, 0F, 346.75F),
+                new Vector3(0.15F, 0.15F, 0.15F)
                 )
                 );
             AddDefaultItemDisplay("AttackSpeedOnCrit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayWolfPelt"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "Head",
+                new Vector3(0F, 0.15F, 0.0975F),
+                new Vector3(345F, 0F, 0F),
+                new Vector3(0.7F, 0.7F, 0.7F)
                 )
                 );
             AddDefaultItemDisplay("AutoCastEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayFossil"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "Pelvis",
+                new Vector3(0.13525F, 0.1135F, -0.17625F),
+                new Vector3(0F, 0F, 0F),
+                new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
             AddDefaultItemDisplay("Bandolier",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBandolier"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "Pelvis",
+                new Vector3(0.0175F, 0.075F, 0F),
+                new Vector3(272.5F, 270F, 90F),
+                new Vector3(0.4F, 0.45F, 0.45F)
                 )
                 );
             AddDefaultItemDisplay("BarrierOnKill",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBrooch"),
                 "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                new Vector3(-0.0745F, 0.06625F, 0.135F),
+                new Vector3(84.5F, 213F, 228F),
+                new Vector3(0.35F, 0.35F, 0.35F)
                 )
                 );
             AddDefaultItemDisplay("BarrierOnOverHeal",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayAegis"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "LowerArmR",
+                new Vector3(0.08F, 0.0575F, 0F),
+                new Vector3(85.00005F, 270F, 0F),
+                new Vector3(0.2F, 0.15F, 0.165F)
                 )
                 );
             AddDefaultItemDisplay("Bear",
@@ -342,10 +342,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("ElementalRingVoid",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayVoidRing"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "FingerR",
+                new Vector3(0f, 0.025f, 0f),
+                new Vector3(90f, 105f, 0f),
+                new Vector3(0.25f, 0.25f, 0.25f)
                 )
                 );
             AddDefaultItemDisplay("EmpowerAlways",
@@ -459,10 +459,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("FireRing",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayFireRing"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "FingerL",
+                new Vector3(0f, 0.025f, 0f),
+                new Vector3(90f, 0f, 0f),
+                new Vector3(0.25f, 0.25f, 0.25f)
                 )
                 );
             AddDefaultItemDisplay("Firework",
@@ -588,10 +588,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("IceRing",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayIceRing"),
-                "Chest",
-                new Vector3(2, 2, 2),
-                new Vector3(0, 0, 0),
-                new Vector3(1, 1, 1)
+                "FingerR",
+                new Vector3(0f, 0.025f, 0f),
+                new Vector3(90f, 0f, 0f),
+                new Vector3(0.25f, 0.25f, 0.25f)
                 )
                 );
             AddDefaultItemDisplay("Icicle",
