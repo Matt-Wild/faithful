@@ -620,6 +620,38 @@ MonoBehaviour:
     transform: {fileID: 132383893908134413}
   - name: Shin.R
     transform: {fileID: 4739415876617211420}
+  - name: ThighL
+    transform: {fileID: 1636058606257328504}
+  - name: ThighR
+    transform: {fileID: 3299517651158676430}
+  - name: Base
+    transform: {fileID: 7571960932522510189}
+  - name: Pelvis
+    transform: {fileID: 3563003882867112781}
+  - name: Stomach
+    transform: {fileID: 887201954486559805}
+  - name: UpperArmL
+    transform: {fileID: 8806558400436692727}
+  - name: LowerArmL
+    transform: {fileID: 1289131238566764547}
+  - name: HandL
+    transform: {fileID: 2597257604205892495}
+  - name: UpperArmR
+    transform: {fileID: 6933433340933825165}
+  - name: LowerArmR
+    transform: {fileID: 5268463707661616335}
+  - name: HandR
+    transform: {fileID: 4868713955033704717}
+  - name: Neck
+    transform: {fileID: 993337169967372509}
+  - name: Head
+    transform: {fileID: 5755740219406129448}
+  - name: Backpack
+    transform: {fileID: 3140296230989073228}
+  - name: FingerL
+    transform: {fileID: 73513919934150964}
+  - name: FingerR
+    transform: {fileID: 2422676495505826992}
 --- !u!114 &7281840837805383255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3074,9 +3106,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7122669191383115291}
-  m_LocalRotation: {x: 0.05144817, y: 0.1939765, z: -0.17545334, w: 0.9638166}
-  m_LocalPosition: {x: 0.0031455886, y: 0.17326862, z: 0.049321134}
-  m_LocalScale: {x: 0.99999994, y: 0.9999999, z: 0.9999999}
+  m_LocalRotation: {x: 0.05144821, y: 0.19397652, z: -0.1754533, w: 0.9638166}
+  m_LocalPosition: {x: 0.0031455746, y: 0.17326908, z: 0.049321193}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6125287319894017418}
   m_Father: {fileID: 2597257604205892495}
