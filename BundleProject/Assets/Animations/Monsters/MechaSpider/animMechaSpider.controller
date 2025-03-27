@@ -1041,7 +1041,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Flinch
     m_StateMachine: {fileID: 1107354114850630496}
-    m_Mask: {fileID: 0}
+    m_Mask: {fileID: 31900000, guid: d505448af9ce5bf4099d744dce15d544, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 1
@@ -1833,9 +1833,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.33134985
+  m_TransitionDuration: 0.4159708
   m_TransitionOffset: 0
-  m_ExitTime: 0.16924173
+  m_ExitTime: 0
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -2024,9 +2024,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.3320052
-  m_TransitionOffset: 0
-  m_ExitTime: 0.16924089
+  m_TransitionDuration: 0.27736005
+  m_TransitionOffset: 0.00000028610216
+  m_ExitTime: 0.16711226
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -2259,9 +2259,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.33342302
-  m_TransitionOffset: 0
-  m_ExitTime: 0.16731475
+  m_TransitionDuration: 0.41708046
+  m_TransitionOffset: 0.00000014050367
+  m_ExitTime: 0
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -3633,7 +3633,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Flinch3
-  m_Speed: 0.5
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101013769681509762}
@@ -3661,7 +3661,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Run
-  m_Speed: 0.375
+  m_Speed: 0.275
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101790878318897906}
@@ -3743,7 +3743,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Flinch1
-  m_Speed: 0.5
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101770149687926516}
@@ -3771,7 +3771,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Flinch2
-  m_Speed: 0.5
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101278473734094572}
@@ -4491,7 +4491,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Sprint
-  m_Speed: 0.25
+  m_Speed: 0.275
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101563946055309242}
