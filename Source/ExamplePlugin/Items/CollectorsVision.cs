@@ -94,8 +94,8 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(-0.399F, 0.2925F, 0.1575F), new Vector3(0F, 0F, 165F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Chef", "Cleaver", new Vector3(0.08025F, 0.5105F, 0F), new Vector3(270F, 270F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
             displaySettings.AddCharacterDisplay("Chef", "PizzaCutter", new Vector3(-0.18175F, 0.4075F, -0.00025F), new Vector3(270F, 90F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Technician", "Chest", new Vector3(-0.18175F, 0.4075F, -0.00025F), new Vector3(270F, 90F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Technician", "Chest", new Vector3(-0.18175F, 100.4075F, -0.00025F), new Vector3(270F, 90F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
+            displaySettings.AddCharacterDisplay("Technician", "HandL", new Vector3(-0.094F, 0.11F, -0.0165F), new Vector3(270F, 90F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
+            displaySettings.AddCharacterDisplay("Technician", "HandR", new Vector3(0.094F, 0.11F, -0.0165F), new Vector3(270F, 270F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
         }
 
         protected override void CreateSettings()
