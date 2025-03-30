@@ -1708,6 +1708,22 @@ namespace Faithful
                 new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
+            AddDefaultItemDisplay("EliteAurelioniteEquipment",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteAurelioniteEquipment"),
+                "Head",
+                new Vector3(0F, 0.28F, 0.1295F),
+                new Vector3(0F, 0F, 0F),
+                new Vector3(0.25F, 0.25F, 0.25F)
+                )
+                );
+            AddDefaultItemDisplay("EliteBeadEquipment",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteBeadSpike"),
+                "Head",
+                new Vector3(-0.0975F, 0.235F, -0.0645F),
+                new Vector3(343.25F, 344.5F, 45F),
+                new Vector3(0.0175F, 0.015F, 0.0175F)
+                )
+                );
         }
     }
 }
