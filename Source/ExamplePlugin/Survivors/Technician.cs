@@ -1456,7 +1456,7 @@ namespace Faithful
                 )
                 );
             AddDefaultItemDisplay("Lightning",
-            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayLightningArmRight"),
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("displaylightningarmcustom"),
                 "LightningJoint1",
                 new Vector3(0F, 0F, 0F),
                 new Vector3(0F, 0F, 0F),
