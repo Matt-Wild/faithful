@@ -1118,7 +1118,7 @@ namespace Faithful
                 "Chest",
                 new Vector3(0F, 0.2825F, 0.065F),
                 new Vector3(0F, 0F, 0F),
-                new Vector3(1F, 1F, 1F)
+                new Vector3(0.25F, 0.25F, 0.25F)
                 ),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayToothMeshLarge"),
                 "Chest",
