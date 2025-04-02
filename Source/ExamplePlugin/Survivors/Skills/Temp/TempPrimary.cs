@@ -64,7 +64,8 @@ namespace Faithful.Skills.Temp
                     HitEffectNormal = false,
                     stopperMask = LayerIndex.world.mask,
                     smartCollision = true,
-                    maxDistance = 300f
+                    maxDistance = 300f,
+                    damageType = DamageTypeCombo.GenericPrimary
                 }.Fire();
             }
         }
