@@ -115,6 +115,14 @@
 	"FAITHFUL_SURVIVOR_TECHNICIAN_LORE": "<style=cMono>\r[ NOTICE ]</style>\r\nYOU ARE ATTEMPTING TO ACCESS INFORMATION OF A UNITED ENTERPRISE SHIPPING VESSEL OUTSIDE OF YOUR AUTHORITY.\r\nCONTINUING TO DO SO WILL ACTIVATE LOCAL SECURITY PROTOCOLS.\r\nCONTINUE? <style=cMono>Y/N</style>\r\n<style=cMono>\r></style>\r\nERROR: PROTOCOLS FAILED TO INITIALIZE.\r\nERROR: PROTOCOLS FAILED TO INITIALIZE.\r\nERROR: PROTOCOLS FAILED TO INITIALIZE.\r\n<style=cMono>\r></style>\r\nWARNING: INFLUX DETECTED. TRACED TO UES EMPLOYEE DESIGNATION: <style=cMono>T-F1C232</style>\r\n<style=cMono>\r></style>\r\nERROR: TRANSCRIPTIONS FAILED TO COMPILE.\r\nERROR: RECORDS FAILED TO COMPILE.\r\nERROR: DATA FAILED TO COMPILE.\r\n<style=cMono>\r></style>\r\nINITIATE DEFRAGMENTATION? <style=cMono>Y/N</style>\r\n<style=cMono>\r></style>\r\nPROCESS: ...6%\r\nPROCESS: ...38%\r\nPROCESS: ...76%\r\nPROCESS: ...100%\r\nDEFRAGMENTATION COMPLETE!\r\n<style=cMono>\r></style>\r\nINITIATE DATA RECOVERY? <style=cMono>Y/N</style>\r\n<style=cMono>\r></style>\r\nPROCESS: ...4%\r\nPROCESS: ...11%\r\nWARNING: IRREPARABLE DATA CORRUPTION ENCOUNTERED. ABORTING RECOVERY PROCESS.\r\n<style=cMono>\r></style>\r\nCONNECTION ESTABLISHED WITH EXTERNAL ELECTRONIC STORAGE MEDIUM.\r\nEJECT RAW DATA? <style=cMono>Y/N</style>\r\n<style=cMono>\r></style>\r\nPROCESS: ...25%\r\nPROCESS: ...50%\r\nPROCESS: ...75%\r\nPROCESS: ...100%\r\nEJECTION COMPLETE!\r\n",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_DEFAULT_SKIN": "Default",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_MASTERY_SKIN": "Thunder",
-	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIME_SKIN": "Crystal"
+	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIME_SKIN": "Crystal",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIMARY_ARC_NAME": "Arc",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIMARY_ARC_DESCRIPTION": "Tether an enemy with an electrical arc, dealing <style=cIsDamage>400% damage per second</style> and <style=cIsUtility>slowing</style> them.",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_SECONDARY_POWERVOLT_NAME": "Powervolt",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_SECONDARY_POWERVOLT_DESCRIPTION": "<style=cIsDamage>Shocking</style>. Throw an electric bolt that deals <style=cIsDamage>420% damage</style>. Creates a blast of electricity instead while tethered to an enemy.",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_UTILITY_CHARGE_FLOW_NAME": "Charge Flow",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_UTILITY_CHARGE_FLOW_DESCRIPTION": "<style=cIsUtility>Agile</style>. <style=cIsDamage>Shocking</style>. <style=cIsUtility>Teleport</style> toward a targeted enemy, dealing <style=cIsDamage>340% damage</style> on contact and launching yourself into the air.",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_SPECIAL_CONDUIT_NAME": "LR52 Conduit",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_SPECIAL_CONDUIT_DESCRIPTION": "Place or direct a robotic tesla coil that <style=cIsUtility>inherits all your items</style>. Attacks nearby enemies, electrocuting them for <style=cIsDamage>200% damage per second</style>."
   }
 }

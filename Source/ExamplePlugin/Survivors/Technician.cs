@@ -1,5 +1,6 @@
 ﻿using RoR2;
 using UnityEngine;
+using EntityStates;
 
 namespace Faithful
 {
@@ -94,6 +95,15 @@ namespace Faithful
         {
             // No skills made yet
             SetupTempSkills();
+
+            // Add technician skills
+            AddSkill("ARC", "texTechnicianArcIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.Technician.ArcPrimary)));
+            AddSkill("POWERVOLT", "texTechnicianPowervoltIcon", SkillSlot.Secondary, new SerializableEntityStateType(typeof(Skills.Temp.TempSecondary)), _baseRechargeInterval: 4.0f,
+                     _interruptPriority: InterruptPriority.Skill, _mustKeyPress: true);
+            AddSkill("CHARGE_FLOW", "texTechnicianChargeFlowIcon", SkillSlot.Utility, new SerializableEntityStateType(typeof(Skills.Temp.TempUtility)), _baseRechargeInterval: 5.0f,
+                     _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true);
+            AddSkill("CONDUIT", "texTechnicianConduitIcon", SkillSlot.Special, new SerializableEntityStateType(typeof(Skills.Temp.TempSpecial)), _baseRechargeInterval: 20.0f,
+                     _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true);
         }
 
         protected override void SetupDefaultItemDisplays()
@@ -1442,9 +1452,9 @@ namespace Faithful
             AddDefaultItemDisplay("Jetpack",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBugWings"),
                 "Chest",
-                new Vector3(0F, 0.0035F, -0.14F),
+                new Vector3(0F, 0.125F, -0.14F),
                 new Vector3(0F, 0F, 0F),
-                new Vector3(0.25F, 0.25F, 0.25F)
+                new Vector3(0.15F, 0.15F, 0.15F)
                 )
                 );
             AddDefaultItemDisplay("LifestealOnHit",

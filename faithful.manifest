@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 723245394
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: faithfulbundle
+      Dependencies: {}
