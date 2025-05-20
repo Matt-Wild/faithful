@@ -11,7 +11,7 @@ namespace Faithful
             // Initialise survivor
             Init("TECHNICIAN", "mdlTechnician", "texTechnicianIcon", "texTechnicianMainIcon", _bodyColor: new Color(0.9414f, 0.7578f, 0.1953f), _sortPosition: 25, _maxHealth: 120.0f,
                  _healthRegen: 1.0f, _armour: 0.0f, _shield: 0.0f, _jumpCount: 1, _damage: 12, _attackSpeed: 1.0f, _crit: 1.0f, _moveSpeed: 7.0f, _acceleration: 80.0f, _jumpPower: 15.0f,
-                 _aiType: AIType.Commando);
+                 _aiType: AIType.Commando, _onCharacterBodyConfigured: OnCharacterBodyConfigured);
         }
 
         protected override void SetupAdditionalSkins()
@@ -97,7 +97,7 @@ namespace Faithful
             SetupTempSkills();
 
             // Add technician skills
-            AddSkill("ARC", "texTechnicianArcIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.Technician.ArcPrimary)));
+            AddSkill("ARC", "texTechnicianArcIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.Technician.ArcPrimary)), _baseRechargeInterval: 1.5f);
             AddSkill("POWERVOLT", "texTechnicianPowervoltIcon", SkillSlot.Secondary, new SerializableEntityStateType(typeof(Skills.Temp.TempSecondary)), _baseRechargeInterval: 4.0f,
                      _interruptPriority: InterruptPriority.Skill, _mustKeyPress: true);
             AddSkill("CHARGE_FLOW", "texTechnicianChargeFlowIcon", SkillSlot.Utility, new SerializableEntityStateType(typeof(Skills.Temp.TempUtility)), _baseRechargeInterval: 5.0f,
@@ -1734,6 +1734,12 @@ namespace Faithful
                 new Vector3(0.0175F, 0.015F, 0.0175F)
                 )
                 );
+        }
+
+        private void OnCharacterBodyConfigured(CharacterBody _characterBody)
+        {
+            // Add technician tracker behaviour
+            _characterBody.gameObject.AddComponent<TechnicianTracker>();
         }
     }
 }

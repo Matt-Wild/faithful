@@ -124,11 +124,14 @@ namespace Faithful
         // If it's currently possible to add item display rule information
         private bool m_addingItemDisplays = false;
 
+        // Additional behaviour callbacks
+        private CharacterBodyCallback m_onCharacterBodyConfigured;
+
         public void Init(string _token, string _modelName, string _portraitName, string _defaultSkinName, Color? _bodyColor = null, int _sortPosition = 100, string _crosshairName = "Standard",
                          float _maxHealth = 110.0f, float _healthRegen = 1.0f, float _armour = 0.0f, float _shield = 0.0f, int _jumpCount = 1, float _damage = 12.0f, float _attackSpeed = 1.0f,
                          float _crit = 1.0f, float _moveSpeed = 7.0f, float _acceleration = 80.0f, float _jumpPower = 15.0f, bool _autoCalculateLevelStats = true, 
                          Vector3? _aimOriginPosition = null, Vector3? _modelBasePosition = null, Vector3? _cameraPivotPosition = null, float _cameraVerticalOffset = 1.37f,
-                         float _cameraDepth = -10.0f, AIType _aiType = AIType.Commando)
+                         float _cameraDepth = -10.0f, AIType _aiType = AIType.Commando, CharacterBodyCallback _onCharacterBodyConfigured = null)
         {
             // Assign token
             m_token = _token;
@@ -176,6 +179,9 @@ namespace Faithful
             m_cameraPivotPosition = _cameraPivotPosition ?? new Vector3(0f, 0.8f, 0f);
             m_cameraVerticalOffset = _cameraVerticalOffset;
             m_cameraDepth = _cameraDepth;
+
+            // Assign additional behaviour callbacks
+            m_onCharacterBodyConfigured = _onCharacterBodyConfigured;
 
             try
             {
@@ -357,6 +363,9 @@ namespace Faithful
             m_characterBody.rootMotionInMainState = false;
             m_characterBody.hullClassification = HullClassification.Human;
             m_characterBody.isChampion = false;
+
+            // Call additional behaviour if provided
+            m_onCharacterBodyConfigured?.Invoke(m_characterBody);
         }
 
         private void IntegrateCharacterModel()
