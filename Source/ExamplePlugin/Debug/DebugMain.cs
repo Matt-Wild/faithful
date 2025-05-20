@@ -22,13 +22,17 @@
             DebugPanelToggle toggle3 = transform.Find("StageControlsToggle").gameObject.AddComponent<DebugPanelToggle>();
             toggle3.Init(debugController.debugStageControls);
 
+            // Add game controls toggle
+            DebugPanelToggle toggle4 = transform.Find("GameControlsToggle").gameObject.AddComponent<DebugPanelToggle>();
+            toggle4.Init(debugController.debugGameControls);
+
             // Add object analysis toggle
-            DebugPanelToggle toggle4 = transform.Find("ObjectAnalysisToggle").gameObject.AddComponent<DebugPanelToggle>();
-            toggle4.Init(debugController.debugObjectAnalysis);
+            DebugPanelToggle toggle5 = transform.Find("ObjectAnalysisToggle").gameObject.AddComponent<DebugPanelToggle>();
+            toggle5.Init(debugController.debugObjectAnalysis);
 
             // Add audio analysis toggle
-            DebugPanelToggle toggle5 = transform.Find("AudioAnalysisToggle").gameObject.AddComponent<DebugPanelToggle>();
-            toggle5.Init(debugController.debugAudioAnalysis);
+            DebugPanelToggle toggle6 = transform.Find("AudioAnalysisToggle").gameObject.AddComponent<DebugPanelToggle>();
+            toggle6.Init(debugController.debugAudioAnalysis);
         }
     }
 }

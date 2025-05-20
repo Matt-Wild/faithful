@@ -205,6 +205,24 @@ namespace Faithful
                     Log.Debug("God Mode enabled!");
                 }
             }
+
+            // Check if F pressed - Fly toggle
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                // Ignore if doesn't have god mode
+                if (body.GetBuffCount(godModeBuff.buffDef) > 0)
+                {
+                    // Get character motor
+                    CharacterMotor motor = body.GetComponent<CharacterMotor>();
+
+                    // Check for character motor
+                    if (motor != null)
+                    {
+                        // Invert flying
+                        motor.isFlying = !motor.isFlying;
+                    }
+                }
+            }
         }
 
         string OnGetUsername(On.RoR2.CharacterBody.orig_GetUserName orig, CharacterBody self)
