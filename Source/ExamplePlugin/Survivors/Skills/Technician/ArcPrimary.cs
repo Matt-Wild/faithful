@@ -14,8 +14,6 @@ namespace Faithful.Skills.Technician
 
         float baseFlamethrowerDuration = 2f;
 
-        float totalDamageCoefficient = 1.2f;
-
         float procCoefficientPerTick = 0.625f;
 
         float tickFrequency = 8.0f;
@@ -66,7 +64,6 @@ namespace Faithful.Skills.Technician
                 childLocator = modelTransform.GetComponent<ChildLocator>();
             }
             int num = Mathf.CeilToInt(flamethrowerDuration * tickFrequency);
-            tickDamageCoefficient = totalDamageCoefficient / (float)num;
             PlayAnimation("Gesture, Additive", PrepFlamethrowerStateHash, FlamethrowerParamHash, entryDuration);
         }
 
