@@ -12,8 +12,6 @@ namespace Faithful.Skills.Technician
 
         float baseEntryDuration = 0.8f;
 
-        float baseFlamethrowerDuration = 2f;
-
         float procCoefficientPerTick = 0.625f;
 
         float tickFrequency = 8.0f;
@@ -30,8 +28,6 @@ namespace Faithful.Skills.Technician
 
         float entryDuration = 0.8f;
 
-        float flamethrowerDuration;
-
         bool hasBegunFlamethrower;
 
         ChildLocator childLocator;
@@ -40,7 +36,7 @@ namespace Faithful.Skills.Technician
 
         Transform rightFlamethrowerTransform;
 
-        static int PrepFlamethrowerStateHash = Animator.StringToHash("PrepFlamethrower");
+        int PrepFlamethrowerStateHash = Animator.StringToHash("PrepFlamethrower");
 
         int ExitFlamethrowerStateHash = Animator.StringToHash("ExitFlamethrower");
 
@@ -53,17 +49,15 @@ namespace Faithful.Skills.Technician
             base.OnEnter();
             stopwatch = 0f;
             entryDuration = baseEntryDuration / attackSpeedStat;
-            flamethrowerDuration = baseFlamethrowerDuration;
             Transform modelTransform = GetModelTransform();
-            if (characterBody)
+            /*if (characterBody)
             {
                 characterBody.SetAimTimer(entryDuration + flamethrowerDuration + 1f);
-            }
+            }*/
             if (modelTransform)
             {
                 childLocator = modelTransform.GetComponent<ChildLocator>();
             }
-            int num = Mathf.CeilToInt(flamethrowerDuration * tickFrequency);
             PlayAnimation("Gesture, Additive", PrepFlamethrowerStateHash, FlamethrowerParamHash, entryDuration);
         }
 
@@ -104,7 +98,7 @@ namespace Faithful.Skills.Technician
                 bulletAttack.procCoefficient = procCoefficientPerTick;
                 bulletAttack.maxDistance = maxDistance;
                 bulletAttack.smartCollision = true;
-                bulletAttack.damageType = DamageType.Generic;
+                bulletAttack.damageType = DamageType.SlowOnHit;
                 bulletAttack.allowTrajectoryAimAssist = false;
                 bulletAttack.damageType.damageSource = DamageSource.Primary;
                 bulletAttack.Fire();
@@ -119,7 +113,7 @@ namespace Faithful.Skills.Technician
             {
                 hasBegunFlamethrower = true;
                 Util.PlaySound(startAttackSoundString, gameObject);
-                PlayAnimation("Gesture, Additive", FlamethrowerStateHash, FlamethrowerParamHash, flamethrowerDuration);
+                PlayAnimation("Gesture, Additive", FlamethrowerStateHash, FlamethrowerParamHash, 10.0f);
                 if (childLocator)
                 {
                     Transform transform = childLocator.FindChild("HandL");
@@ -134,11 +128,11 @@ namespace Faithful.Skills.Technician
                     }
                     if (leftFlamethrowerTransform)
                     {
-                        leftFlamethrowerTransform.GetComponent<ScaleParticleSystemDuration>().newDuration = flamethrowerDuration;
+                        leftFlamethrowerTransform.GetComponent<ScaleParticleSystemDuration>().newDuration = 10.0f;
                     }
                     if (rightFlamethrowerTransform)
                     {
-                        rightFlamethrowerTransform.GetComponent<ScaleParticleSystemDuration>().newDuration = flamethrowerDuration;
+                        rightFlamethrowerTransform.GetComponent<ScaleParticleSystemDuration>().newDuration = 10.0f;
                     }
                 }
                 FireGauntlet("MuzzleCenter");
@@ -154,7 +148,7 @@ namespace Faithful.Skills.Technician
                 }
                 UpdateFlamethrowerEffect();
             }
-            if (stopwatch >= flamethrowerDuration + entryDuration && isAuthority)
+            if (isAuthority && (!IsKeyDownAuthority() || characterBody.isSprinting || characterBody.allSkillsDisabled))
             {
                 outer.SetNextStateToMain();
                 return;
