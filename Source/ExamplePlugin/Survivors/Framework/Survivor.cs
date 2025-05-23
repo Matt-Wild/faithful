@@ -859,12 +859,12 @@ namespace Faithful
             LanguageAPI.Add($"FAITHFUL_SURVIVOR_{token}_SPECIAL_TEMP_DESCRIPTION", "This is a temporary special skill.");
 
             // Add temporary skills
-            AddSkill("TEMP", "texDefaultPrimaryIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.Temp.TempPrimary)));
-            AddSkill("TEMP", "texDefaultSecondaryIcon", SkillSlot.Secondary, new SerializableEntityStateType(typeof(Skills.Temp.TempSecondary)), _baseRechargeInterval: 2.0f,
+            AddSkill<SkillDef>("TEMP", "texDefaultPrimaryIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.Temp.TempPrimary)));
+            AddSkill<SkillDef>("TEMP", "texDefaultSecondaryIcon", SkillSlot.Secondary, new SerializableEntityStateType(typeof(Skills.Temp.TempSecondary)), _baseRechargeInterval: 2.0f,
                      _interruptPriority: InterruptPriority.Skill, _mustKeyPress: true);
-            AddSkill("TEMP", "texDefaultUtilityIcon", SkillSlot.Utility, new SerializableEntityStateType(typeof(Skills.Temp.TempUtility)), _baseMaxStock: 3, _baseRechargeInterval: 6.0f,
+            AddSkill<SkillDef>("TEMP", "texDefaultUtilityIcon", SkillSlot.Utility, new SerializableEntityStateType(typeof(Skills.Temp.TempUtility)), _baseMaxStock: 3, _baseRechargeInterval: 6.0f,
                      _cancelSprintingOnActivation: false, _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true, _isCombatSkill: false);
-            AddSkill("TEMP", "texDefaultSpecialIcon", SkillSlot.Special, new SerializableEntityStateType(typeof(Skills.Temp.TempSpecial)), _baseRechargeInterval: 12.0f,
+            AddSkill<SkillDef>("TEMP", "texDefaultSpecialIcon", SkillSlot.Special, new SerializableEntityStateType(typeof(Skills.Temp.TempSpecial)), _baseRechargeInterval: 12.0f,
                      _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true);
         }
 
@@ -878,10 +878,10 @@ namespace Faithful
             }
         }
 
-        protected void AddSkill(string _token, string _iconName, SkillSlot _family, SerializableEntityStateType _activationState, int _baseMaxStock = 1, float _baseRechargeInterval = 0.0f,
+        protected void AddSkill<T>(string _token, string _iconName, SkillSlot _family, SerializableEntityStateType _activationState, int _baseMaxStock = 1, float _baseRechargeInterval = 0.0f,
                                 int _stockPerRecharge = 1, int _requiredStock = 1, int _consumedStock = 1, bool _beginSkillCooldownOnSkillEnd = true, bool _canceledFromSprinting = false,
                                 bool _cancelSprintingOnActivation = true, bool _fullRestockOnAssign = true, InterruptPriority _interruptPriority = InterruptPriority.Any, bool _isCombatSkill = true,
-                                bool _mustKeyPress = false)
+                                bool _mustKeyPress = false) where T : SkillDef
         {
             // Check if survivor doesn't have a skill family for this skill yet
             if (!m_skillFamilies.Contains(_family))
@@ -915,7 +915,7 @@ namespace Faithful
             }
 
             // Create skill def
-            SkillDef mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
+            T mySkillDef = ScriptableObject.CreateInstance<T>();
 
             // Setup skill def
             mySkillDef.activationState = _activationState;

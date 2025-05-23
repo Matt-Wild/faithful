@@ -36,6 +36,8 @@ namespace Faithful.Skills.Technician
 
         Transform rightFlamethrowerTransform;
 
+        TechnicianTracker tracker;
+
         int PrepFlamethrowerStateHash = Animator.StringToHash("PrepFlamethrower");
 
         int ExitFlamethrowerStateHash = Animator.StringToHash("ExitFlamethrower");
@@ -50,10 +52,13 @@ namespace Faithful.Skills.Technician
             stopwatch = 0f;
             entryDuration = baseEntryDuration / attackSpeedStat;
             Transform modelTransform = GetModelTransform();
-            /*if (characterBody)
+            if (characterBody)
             {
-                characterBody.SetAimTimer(entryDuration + flamethrowerDuration + 1f);
-            }*/
+                // Fetch tracker
+                tracker = characterBody.GetComponent<TechnicianTracker>();
+
+                //characterBody.SetAimTimer(entryDuration + flamethrowerDuration + 1f);
+            }
             if (modelTransform)
             {
                 childLocator = modelTransform.GetComponent<ChildLocator>();
@@ -148,7 +153,7 @@ namespace Faithful.Skills.Technician
                 }
                 UpdateFlamethrowerEffect();
             }
-            if (isAuthority && (!IsKeyDownAuthority() || characterBody.isSprinting || characterBody.allSkillsDisabled))
+            if (isAuthority && (!IsKeyDownAuthority() || characterBody.isSprinting || characterBody.allSkillsDisabled || tracker == null || tracker.GetTrackingTarget() == null))
             {
                 outer.SetNextStateToMain();
                 return;

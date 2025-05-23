@@ -7,7 +7,7 @@ namespace Faithful
     [RequireComponent(typeof(InputBankTest))]
     [RequireComponent(typeof(TeamComponent))]
     [RequireComponent(typeof(CharacterBody))]
-    internal class TechnicianTracker : MonoBehaviour
+    public class TechnicianTracker : MonoBehaviour
     {
         // Target references
         GameObject trackingPrefab;
