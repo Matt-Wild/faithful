@@ -53,6 +53,9 @@ namespace Faithful
         private GameObject m_clockwiseLens;
         private GameObject m_antiClockwiseLens;
 
+        // Store reference to model transform
+        private Transform m_modelTransform;
+
         // Lens initial scales
         private Vector3 clockwiseLensScale;
         private Vector3 antiClockwiseLensScale;
@@ -89,9 +92,13 @@ namespace Faithful
             // Fetch item settings
             FetchSettings();
 
-            // Setup display model behaviour relay
-            DisplayModelBehaviourRelay relay = character.modelLocator.modelTransform.gameObject.AddComponent<DisplayModelBehaviourRelay>();
-            relay.Init(this);
+            // Check for model transform
+            if (modelTransform != null)
+            {
+                // Setup display model behaviour relay
+                DisplayModelBehaviourRelay relay = modelTransform.gameObject.AddComponent<DisplayModelBehaviourRelay>();
+                relay.Init(this);
+            }
 
             // Attempt to update display model
             UpdateDisplayObject();
@@ -506,11 +513,14 @@ namespace Faithful
         {
             get
             {
+                // Return null if no model transform
+                if (modelTransform == null) return null;
+
                 // Check for display mesh
                 if (m_displayMesh == null)
                 {
                     // Attempt to find display mesh
-                    m_displayMesh = Utils.FindChildByName(character.modelLocator.modelTransform, "TargetingMatrixDisplayMesh(Clone)");
+                    m_displayMesh = Utils.FindChildByName(modelTransform, "TargetingMatrixDisplayMesh(Clone)");
                 }
 
                  // Return display mesh
@@ -583,6 +593,22 @@ namespace Faithful
 
                 // Return lens
                 return m_antiClockwiseLens;
+            }
+        }
+
+        Transform modelTransform
+        {
+            get
+            {
+                // Check for model transform
+                if (m_modelTransform == null)
+                {
+                    // Get model transform
+                    m_modelTransform = character?.modelLocator?.modelTransform;
+                }
+
+                // Return model transform
+                return m_modelTransform;
             }
         }
 

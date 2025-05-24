@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.3 Targeting Matrix Fix
+- Fixed error with Targeting Matrix on modded characters with no model locator.
+
 #### v1.3.2 More Jetpack Adjustments
 - Small 4-T0N Jetpack buff - also adding pickup spawning tools to debug UI.
 
