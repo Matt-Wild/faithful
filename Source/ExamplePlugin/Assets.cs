@@ -17,7 +17,7 @@ namespace Faithful
         // Asset bundle
         public static AssetBundle assetBundle;
         
-        // Store needed RoR2 resources
+        // Store needed RoR2 resources / modified resources
         public static Material mageJetMaterial;
         public static Wave[] mageJetWaves;
         public static GameObject mageJetAkEventsPrefab;
@@ -25,6 +25,7 @@ namespace Faithful
         public static GameObject pennonEffectPrefab;
         public static GameObject matrixEffectPrefab;
         public static GameObject shrineUseEffectPrefab;
+        public static GameObject technicianArcPrefab;
         public static PhysicMaterial ragdollMaterial;
 
         // Store useful lookup assets
@@ -158,6 +159,14 @@ namespace Faithful
 
             // Get shrine use effect prefab
             shrineUseEffectPrefab = FetchAsset<GameObject>("RoR2/Base/Common/VFX/ShrineUseEffect.prefab");
+
+            // Get and modify engi turret laser prefab to become Technician's Arc
+            GameObject turretLaser = FetchAsset<GameObject>("RoR2/Base/Engi/LaserEngiTurret.prefab");
+            technicianArcPrefab = turretLaser.InstantiateClone("faithfulTechnicianArc");
+            Object.DestroyImmediate(turretLaser);
+            technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().widthMultiplier = 4.0f;
+            technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetColor("_TintColor", new Color(1.0f, 1.0f, 0.804f));
+            //technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampPennonBuff"));
 
             // Get physics material for ragdoll bodies
             ragdollMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<RoR2.RagdollController>().bones[1].GetComponent<Collider>().material;

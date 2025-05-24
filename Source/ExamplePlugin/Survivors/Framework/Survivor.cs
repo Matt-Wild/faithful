@@ -217,7 +217,7 @@ namespace Faithful
                 return;
             }
 
-            // Create clone body to built off of
+            // Create clone body to build off of
             CreateCloneBody();
 
             // Setup the clone body

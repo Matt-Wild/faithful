@@ -6,7 +6,7 @@ namespace Faithful.Skills.Technician
 {
     public class ArcPrimary : BaseSkillState
     {
-        GameObject flamethrowerEffectPrefab = Assets.FetchAsset<GameObject>("RoR2/Base/Mage/MageFlamethrowerEffect.prefab");
+        GameObject arcEffectPrefab = Assets.technicianArcPrefab;
 
         float maxDistance = 45.0f;
 
@@ -38,14 +38,6 @@ namespace Faithful.Skills.Technician
 
         TechnicianTracker tracker;
 
-        int PrepFlamethrowerStateHash = Animator.StringToHash("PrepFlamethrower");
-
-        int ExitFlamethrowerStateHash = Animator.StringToHash("ExitFlamethrower");
-
-        int FlamethrowerParamHash = Animator.StringToHash("playbackRate");
-
-        int FlamethrowerStateHash = Animator.StringToHash("Flamethrower");
-
         public override void OnEnter()
         {
             base.OnEnter();
@@ -57,19 +49,19 @@ namespace Faithful.Skills.Technician
                 // Fetch tracker
                 tracker = characterBody.GetComponent<TechnicianTracker>();
 
-                //characterBody.SetAimTimer(entryDuration + flamethrowerDuration + 1f);
+                characterBody.SetAimTimer(1f);
             }
             if (modelTransform)
             {
                 childLocator = modelTransform.GetComponent<ChildLocator>();
             }
-            PlayAnimation("Gesture, Additive", PrepFlamethrowerStateHash, FlamethrowerParamHash, entryDuration);
+            PlayAnimation("BothArms, Override", "ArcStart", "ArcStart.playbackRate", entryDuration);
         }
 
         public override void OnExit()
         {
             Util.PlaySound(endAttackSoundString, gameObject);
-            PlayCrossfade("Gesture, Additive", ExitFlamethrowerStateHash, 0.1f);
+            PlayCrossfade("BothArms, Override", "ArcEnd", 1.2f / attackSpeedStat);
             if (leftFlamethrowerTransform)
             {
                 Destroy(leftFlamethrowerTransform.gameObject);
@@ -108,6 +100,11 @@ namespace Faithful.Skills.Technician
                 bulletAttack.damageType.damageSource = DamageSource.Primary;
                 bulletAttack.Fire();
             }
+
+            if (characterBody)
+            {
+                characterBody.SetAimTimer(1f);
+            }
         }
 
         public override void FixedUpdate()
@@ -118,26 +115,18 @@ namespace Faithful.Skills.Technician
             {
                 hasBegunFlamethrower = true;
                 Util.PlaySound(startAttackSoundString, gameObject);
-                PlayAnimation("Gesture, Additive", FlamethrowerStateHash, FlamethrowerParamHash, 10.0f);
+                PlayAnimation("BothArms, Override", "ArcLoop", "ArcLoop.playbackRate", 10.0f);
                 if (childLocator)
                 {
                     Transform transform = childLocator.FindChild("HandL");
                     Transform transform2 = childLocator.FindChild("HandR");
                     if (transform)
                     {
-                        leftFlamethrowerTransform = Object.Instantiate(flamethrowerEffectPrefab, transform).transform;
+                        leftFlamethrowerTransform = Object.Instantiate(arcEffectPrefab, transform).transform;
                     }
                     if (transform2)
                     {
-                        rightFlamethrowerTransform = Object.Instantiate(flamethrowerEffectPrefab, transform2).transform;
-                    }
-                    if (leftFlamethrowerTransform)
-                    {
-                        leftFlamethrowerTransform.GetComponent<ScaleParticleSystemDuration>().newDuration = 10.0f;
-                    }
-                    if (rightFlamethrowerTransform)
-                    {
-                        rightFlamethrowerTransform.GetComponent<ScaleParticleSystemDuration>().newDuration = 10.0f;
+                        rightFlamethrowerTransform = Object.Instantiate(arcEffectPrefab, transform2).transform;
                     }
                 }
                 FireGauntlet("MuzzleCenter");
