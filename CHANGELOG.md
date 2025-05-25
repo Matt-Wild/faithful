@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.4 Hermit's Shawl Fix
+- Fixed minor error with Hermit's Shawl when some modded characters are destroyed.
+
 #### v1.3.3 Targeting Matrix Fix
 - Fixed error with Targeting Matrix on modded characters with no model locator.
 
@@ -43,6 +46,8 @@
 #### v1.2.6 Hermit's Shawl Config
 - Added separate config value for Hermit's Shawl max buff stacking.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.5 Jetpack Changes
 - Made 4-T0N Jetpack stronger over a shorter duration.
 - Decreased fuel time from 4s -> 3s.
@@ -52,8 +57,6 @@
 
 #### v1.2.4 Noxious Slimes Blight
 - Noxious Slimes now has a small chance to blight enemies on hit.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.3 Balance Changes
 - Decreased Longshot Geode's range condition from 50m -> 40m.

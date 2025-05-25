@@ -12,7 +12,7 @@ namespace Faithful
         public CharacterBody character;
 
         // Hermit shawl item
-        Item hermitShawlItem;
+        Item m_hermitsShawlItem;
 
         // Patience buff
         Buff patienceBuff;
@@ -45,9 +45,6 @@ namespace Faithful
             // Assign character
             character = _character;
 
-            // Get hermit shawl item
-            hermitShawlItem = Items.GetItem("HERMITS_SHAWL");
-
             // Get patience buff
             patienceBuff = Buffs.GetBuff("PATIENCE");
 
@@ -59,11 +56,11 @@ namespace Faithful
             if (inventory != null)
             {
                 // Update item count with current item amount
-                UpdateItemCount(inventory.GetItemCount(hermitShawlItem.itemDef));
+                UpdateItemCount(inventory.GetItemCount(hermitsShawlItem.itemDef));
             }
 
             // Hook behaviour
-            Behaviour.AddOnItemAddedCallback(hermitShawlItem.itemDef, OnItemAdded);
+            Behaviour.AddOnItemAddedCallback(hermitsShawlItem.itemDef, OnItemAdded);
 
             // Update temporary visual effects
             character.UpdateAllTemporaryVisualEffects();
@@ -72,12 +69,12 @@ namespace Faithful
         public void FetchSettings()
         {
             // Check for null item
-            if (hermitShawlItem == null) return;
+            if (hermitsShawlItem == null) return;
 
             // Update stats
-            maxBuffsStacking = hermitShawlItem.FetchSetting<int>("MAX_BUFFS_STACKING").Value;
-            maxBuffs = hermitShawlItem.FetchSetting<int>("MAX_BUFFS").Value;
-            buffCooldown = hermitShawlItem.FetchSetting<float>("BUFF_RECHARGE").Value;
+            maxBuffsStacking = hermitsShawlItem.FetchSetting<int>("MAX_BUFFS_STACKING").Value;
+            maxBuffs = hermitsShawlItem.FetchSetting<int>("MAX_BUFFS").Value;
+            buffCooldown = hermitsShawlItem.FetchSetting<float>("BUFF_RECHARGE").Value;
         }
 
         private void OnDestroy()
@@ -86,7 +83,7 @@ namespace Faithful
             Utils.UnregisterCharacterBehaviour(this);
 
             // Unhook behaviour
-            Behaviour.RemoveOnItemAddedCallback(hermitShawlItem.itemDef, OnItemAdded);  // This is an additional hook
+            Behaviour.RemoveOnItemAddedCallback(hermitsShawlItem.itemDef, OnItemAdded);  // This is an additional hook
             UnhookBehaviour();
         }
 
@@ -103,7 +100,7 @@ namespace Faithful
             if (characterBody != character) return;
 
             // Get item count
-            int itemCount = _inventory.GetItemCount(hermitShawlItem.itemDef);
+            int itemCount = _inventory.GetItemCount(hermitsShawlItem.itemDef);
 
             // Update item count
             UpdateItemCount(itemCount);
@@ -148,7 +145,7 @@ namespace Faithful
             if (body != character) return;
 
             // Get new item count
-            int newCount = _inventory.GetItemCount(hermitShawlItem.itemDef);
+            int newCount = _inventory.GetItemCount(hermitsShawlItem.itemDef);
 
             // Update item count
             UpdateItemCount(newCount);
@@ -249,6 +246,22 @@ namespace Faithful
             {
                 // Hook behaviour
                 HookBehaviour();
+            }
+        }
+
+        Item hermitsShawlItem
+        {
+            get
+            {
+                // Check for Hermit's Shawl
+                if (m_hermitsShawlItem == null)
+                {
+                    // Fetch hermit shawl item
+                    m_hermitsShawlItem = Items.GetItem("HERMITS_SHAWL");
+                }
+
+                // Return Hermit's Shawl
+                return m_hermitsShawlItem;
             }
         }
 

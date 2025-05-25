@@ -523,8 +523,8 @@ namespace Faithful
                     m_displayMesh = Utils.FindChildByName(modelTransform, "TargetingMatrixDisplayMesh(Clone)");
                 }
 
-                 // Return display mesh
-                 return m_displayMesh;
+                // Return display mesh
+                return m_displayMesh;
             }
         }
 
