@@ -366,7 +366,7 @@ namespace Faithful
                 new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
-            AddDefaultItemDisplay("EmpowerAlways",
+            AddDefaultItemDisplay("LunarSun",
             ItemDisplays.CreateLimbMaskDisplayRule(LimbFlags.Head),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplaySunHeadNeck"),
                 "Chest",
@@ -598,10 +598,11 @@ namespace Faithful
             AddDefaultItemDisplay("Hoof",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayHoof"),
                 "Shin.R",
-                new Vector3(0F, 0.55F, -0.0575F),
-                new Vector3(67.5F, 0F, 0F),
-                new Vector3(0.085F, 0.09F, 0.05F)
-                )
+                new Vector3(0F, 0.4825F, -0.0525F),
+                new Vector3(80F, 0F, 0F),
+                new Vector3(0.09F, 0.09F, 0.075F)
+                ),
+            ItemDisplays.CreateLimbMaskDisplayRule(LimbFlags.RightCalf)
                 );
             AddDefaultItemDisplay("IceRing",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayIceRing"),
@@ -857,9 +858,9 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("OutOfCombatArmor",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayOddlyShapedOpal"),
-                "Chest",
-                new Vector3(0.07665F, 0.0589F, 0.13175F),
-                new Vector3(6.25F, 12.5F, 344.5F),
+                "ThighR",
+                new Vector3(0.048F, 0.0565F, -0.11775F),
+                new Vector3(1F, 152.5F, 180F),
                 new Vector3(0.2F, 0.2F, 0.2F)
                 )
                 );
@@ -980,13 +981,13 @@ namespace Faithful
                 "Head",
                 new Vector3(-0.085F, 0.25925F, 0.09725F),
                 new Vector3(0F, 270F, 0F),
-                new Vector3(0.125F, 0.125F, -0.125F)
+                new Vector3(0.25F, 0.25F, -0.25F)
                 ),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayShieldBug"),
                 "Head",
                 new Vector3(0.085F, 0.25925F, 0.09725F),
                 new Vector3(0F, 270F, 0F),
-                new Vector3(0.125F, 0.125F, 0.125F)
+                new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
             AddDefaultItemDisplay("ShinyPearl",
@@ -999,10 +1000,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("ShockNearby",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayTeslaCoil"),
-                "Chest",
-                new Vector3(0F, 0.475F, -0.168F),
-                new Vector3(280F, 0F, 0F),
-                new Vector3(0.25F, 0.25F, 0.25F)
+                "Backpack",
+                new Vector3(0F, 0.0669F, 0F),
+                new Vector3(0F, 0F, 0F),
+                new Vector3(0.3F, 0.3F, 0.3F)
                 )
                 );
             AddDefaultItemDisplay("SiphonOnLowHealth",
@@ -1072,9 +1073,9 @@ namespace Faithful
             AddDefaultItemDisplay("StickyBomb",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayStickyBomb"),
                 "Shin.L",
-                new Vector3(-0.04525F, 0.1665F, 0.0835F),
+                new Vector3(-0.06F, 0.19F, 0.075F),
                 new Vector3(7.5F, 330F, 0F),
-                new Vector3(0.125F, 0.125F, 0.125F)
+                new Vector3(0.15F, 0.15F, 0.15F)
                 )
                 );
             AddDefaultItemDisplay("StrengthenBurn",
@@ -1090,7 +1091,7 @@ namespace Faithful
                 "ThighL",
                 new Vector3(-0.0845F, 0.0395F, -0.0775F),
                 new Vector3(75F, 144F, 80F),
-                new Vector3(0.5F, 0.5F, 0.5F)
+                new Vector3(0.75F, 0.75F, 0.75F)
                 )
                 );
             AddDefaultItemDisplay("Syringe",
@@ -1250,9 +1251,9 @@ namespace Faithful
                 ),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBlunderbuss"),
                 "Base",
-                new Vector3(-0.445F, 1.845F, -0.25F),
+                new Vector3(-1F, 2.25F, -0.5F),
                 new Vector3(90F, 0F, 0F),
-                new Vector3(0.5F, 0.5F, 0.5F)
+                new Vector3(1F, 1F, 1F)
                 )
                 );
             AddDefaultItemDisplay("BossHunterConsumed",
@@ -1308,7 +1309,7 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.1925F, 0.0725F, -0.09975F),
                 new Vector3(0F, 130F, 0F),
-                new Vector3(0.05F, 0.05F, 0.05F)
+                new Vector3(0.075F, 0.075F, 0.075F)
                 )
                 );
             AddDefaultItemDisplay("DroneBackup",
@@ -1316,7 +1317,7 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.17625F, 0.083F, -0.0665F),
                 new Vector3(342.5F, 120F, 30F),
-                new Vector3(0.375F, 0.375F, 0.375F)
+                new Vector3(0.5F, 0.5F, 0.5F)
                 )
                 );
             AddDefaultItemDisplay("EliteEarthEquipment",
@@ -1400,7 +1401,7 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.205F, 0.0725F, -0.056F),
                 new Vector3(295F, 295.75F, 80F),
-                new Vector3(0.125F, 0.125F, 0.125F)
+                new Vector3(0.15F, 0.15F, 0.15F)
                 )
                 );
             AddDefaultItemDisplay("Fruit",
@@ -1497,7 +1498,7 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.165F, 0.025F, -0.1075F),
                 new Vector3(5F, 315F, 330F),
-                new Vector3(0.15F, 0.15F, 0.15F)
+                new Vector3(0.2F, 0.2F, 0.2F)
                 )
                 );
             AddDefaultItemDisplay("MultiShopCard",
@@ -1561,7 +1562,7 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.155F, 0.0925F, -0.06F),
                 new Vector3(347.5F, 128F, 17.5F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                new Vector3(0.15F, 0.15F, 0.15F)
                 )
                 );
             AddDefaultItemDisplay("KnockBackHitEnemies",
@@ -1604,10 +1605,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("DelayedDamage",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayDelayedDamage"),
-                "Chest",
-                new Vector3(0F, 0.04325F, 0.1425F),
-                new Vector3(7F, 0F, 0F),
-                new Vector3(0.2F, 0.2F, 0.2F)
+                "ThighL",
+                new Vector3(-0.048F, 0.0565F, -0.11775F),
+                new Vector3(1F, 207.5F, 210F),
+                new Vector3(0.2F, 0.2F, 0.25F)
                 )
                 );
             AddDefaultItemDisplay("TriggerEnemyDebuffs",
