@@ -118,8 +118,8 @@ namespace Faithful.Skills.Technician
                 PlayAnimation("BothArms, Override", "ArcLoop", "ArcLoop.playbackRate", 10.0f);
                 if (childLocator)
                 {
-                    Transform transform = childLocator.FindChild("HandL");
-                    Transform transform2 = childLocator.FindChild("HandR");
+                    Transform transform = childLocator.FindChild("ArcLeft");
+                    Transform transform2 = childLocator.FindChild("ArcRight");
                     if (transform)
                     {
                         leftFlamethrowerTransform = Object.Instantiate(arcEffectPrefab, transform).transform;

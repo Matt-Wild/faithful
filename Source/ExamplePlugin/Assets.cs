@@ -161,12 +161,13 @@ namespace Faithful
             shrineUseEffectPrefab = FetchAsset<GameObject>("RoR2/Base/Common/VFX/ShrineUseEffect.prefab");
 
             // Get and modify engi turret laser prefab to become Technician's Arc
-            GameObject turretLaser = FetchAsset<GameObject>("RoR2/Base/Engi/LaserEngiTurret.prefab");
+            GameObject turretLaser = Object.Instantiate(FetchAsset<GameObject>("RoR2/Base/Engi/LaserEngiTurret.prefab"));
             technicianArcPrefab = turretLaser.InstantiateClone("faithfulTechnicianArc");
             Object.DestroyImmediate(turretLaser);
             technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().widthMultiplier = 4.0f;
-            technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetColor("_TintColor", new Color(1.0f, 1.0f, 0.804f));
-            //technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampPennonBuff"));
+            technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetColor("_TintColor", new Color(0.9725f, 1.0f, 0.5373f));
+            technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampTechnician"));
+            technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetTexture("_Cloud2Tex", GetTexture("texLightningTechnician"));
 
             // Get physics material for ragdoll bodies
             ragdollMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<RoR2.RagdollController>().bones[1].GetComponent<Collider>().material;

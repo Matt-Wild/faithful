@@ -128,7 +128,6 @@ namespace Faithful
 
         IEnumerator OnStageStart(On.RoR2.Stage.orig_Start orig, Stage self)
         {
-
             // Create UI
             CreateUI();
 

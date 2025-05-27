@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1117204862
+CRC: 3750804362
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: be5d8fdde79aa24c1a250153f19a9cb8
+    Hash: eb69392fe2cfd8a11ad4faebf32160ea
   TypeTreeHash:
     serializedVersion: 2
     Hash: ecf36ed839582ff66d6521977f8e4c47
@@ -185,6 +185,7 @@ Assets:
 - Assets/Items/LeadersPennon/texLeadersPennonIcon.png
 - Assets/Survivors/Technician/Projectiles/TechnicianFloatingGrenade.prefab
 - Assets/Survivors/Technician/Icons/texTurretRoboticShotgunIcon.png
+- Assets/Textures/Technician/texRampTechnician.png
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
 - Assets/Survivors/Technician/Icons/texTechnicianConduitDeployIcon.png
 - Assets/Survivors/Technician/Mesh/TechnicianMasterySkinTurretLights.prefab
