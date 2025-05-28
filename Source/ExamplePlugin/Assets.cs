@@ -164,10 +164,24 @@ namespace Faithful
             GameObject turretLaser = Object.Instantiate(FetchAsset<GameObject>("RoR2/Base/Engi/LaserEngiTurret.prefab"));
             technicianArcPrefab = turretLaser.InstantiateClone("faithfulTechnicianArc");
             Object.DestroyImmediate(turretLaser);
-            technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().widthMultiplier = 4.0f;
+            technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().widthMultiplier = 3.0f;
+            technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetColor("_Color", new Color(0.9725f, 1.0f, 0.5373f));
             technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetColor("_TintColor", new Color(0.9725f, 1.0f, 0.5373f));
             technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampTechnician"));
             technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetTexture("_Cloud2Tex", GetTexture("texLightningTechnician"));
+            technicianArcPrefab.transform.Find("LaserStart").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(0.9725f, 1.0f, 0.5373f));
+            technicianArcPrefab.transform.Find("LaserStart").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(0.9725f, 1.0f, 0.5373f));
+            technicianArcPrefab.transform.Find("LaserStart").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetTexture("_MainTex", GetTexture("texTechnicianFlare"));
+            technicianArcPrefab.transform.Find("LaserStart").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampTechnician"));
+            technicianArcPrefab.transform.Find("LaserStart").Find("HitFlash").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(0.9725f, 1.0f, 0.5373f));
+            technicianArcPrefab.transform.Find("LaserStart").Find("HitFlash").GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampTechnician"));
+            technicianArcPrefab.transform.Find("LaserStart").Find("Ring, Bright").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(0.9725f, 1.0f, 0.5373f));
+            technicianArcPrefab.transform.Find("LaserStart").Find("Ring, Bright").GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampTechnician"));
+            technicianArcPrefab.transform.Find("LaserStart").Find("Point light").GetComponent<Light>().color = new Color(0.9725f, 1.0f, 0.5373f);
+            technicianArcPrefab.transform.Find("LaserEnd").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(0.9725f, 1.0f, 0.5373f));
+            technicianArcPrefab.transform.Find("LaserEnd").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(0.9725f, 1.0f, 0.5373f));
+            technicianArcPrefab.transform.Find("LaserEnd").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetTexture("_MainTex", GetTexture("texTechnicianFlare"));
+            technicianArcPrefab.transform.Find("LaserEnd").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampTechnician"));
 
             // Get physics material for ragdoll bodies
             ragdollMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<RoR2.RagdollController>().bones[1].GetComponent<Collider>().material;

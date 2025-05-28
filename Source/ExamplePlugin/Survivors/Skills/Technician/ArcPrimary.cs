@@ -26,7 +26,7 @@ namespace Faithful.Skills.Technician
 
         float stopwatch;
 
-        float entryDuration = 0.8f;
+        float entryDuration = 0.6f;
 
         bool hasBegunFlamethrower;
 
@@ -61,7 +61,7 @@ namespace Faithful.Skills.Technician
         public override void OnExit()
         {
             Util.PlaySound(endAttackSoundString, gameObject);
-            PlayCrossfade("BothArms, Override", "ArcEnd", 1.2f / attackSpeedStat);
+            PlayAnimation("BothArms, Override", "ArcEnd", "ArcEnd.playbackRate", 0.4f / attackSpeedStat);
             if (leftFlamethrowerTransform)
             {
                 Destroy(leftFlamethrowerTransform.gameObject);
@@ -133,6 +133,7 @@ namespace Faithful.Skills.Technician
             }
             if (hasBegunFlamethrower)
             {
+                PlayAnimation("BothArms, Override", "ArcLoop", "ArcLoop.playbackRate", 10.0f);
                 flamethrowerStopwatch += Time.deltaTime;
                 float num = 1f / tickFrequency / attackSpeedStat;
                 if (flamethrowerStopwatch > num)

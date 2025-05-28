@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3867042008
+CRC: 2085276768
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6e88ea86e4f0b830217d24907341c0e4
+    Hash: 1e6ce7442577e3f8921bff3a509d620f
   TypeTreeHash:
     serializedVersion: 2
     Hash: ecf36ed839582ff66d6521977f8e4c47
@@ -106,6 +106,7 @@ Assets:
 - Assets/Items/Chakram/ChakramMesh.prefab
 - Assets/Monsters/MechaSpider/Mesh/MechanicalSpiderMesh.fbx
 - Assets/Items/HermitsShawl/HermitShawlDisplayMesh.prefab
+- Assets/Textures/Technician/texTechnicianFlare.png
 - Assets/Items/NoxiousSlimes/NoxiousSlimeMesh.prefab
 - Assets/Items/DrownedVisage/texDrownedVisageIcon.png
 - Assets/Survivors/Technician/Textures/texTechnicianMasteryNormal.png
