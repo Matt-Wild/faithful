@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3750804362
+CRC: 3867042008
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: eb69392fe2cfd8a11ad4faebf32160ea
+    Hash: 6e88ea86e4f0b830217d24907341c0e4
   TypeTreeHash:
     serializedVersion: 2
     Hash: ecf36ed839582ff66d6521977f8e4c47
@@ -301,6 +301,7 @@ Assets:
 - Assets/Items/SecondHand/texBuffSecondHand.png
 - Assets/Survivors/Technician/Icons/texTechnicianArcIcon.png
 - Assets/Items/DrownedVisage/DrownedVisageMesh.prefab
+- Assets/Textures/Technician/texLightningTechnician.png
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonMesh.prefab
 - Assets/Debug/UI/DebugObjectAnalysisEntry.prefab
 - Assets/Items/CopperGear/texCopperGearNormal.png
