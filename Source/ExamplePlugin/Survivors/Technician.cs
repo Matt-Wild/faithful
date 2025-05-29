@@ -99,11 +99,11 @@ namespace Faithful
 
             // Add technician skills
             AddSkill<TechnicianTrackerSkillDef>("ARC", "texTechnicianArcIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.Technician.ArcPrimary)), 
-                _baseRechargeInterval: 1.5f);
+                _baseRechargeInterval: 1.5f, _attackSpeedBuffsRestockSpeed: true);
             AddSkill<SkillDef>("POWERVOLT", "texTechnicianPowervoltIcon", SkillSlot.Secondary, new SerializableEntityStateType(typeof(Skills.Temp.TempSecondary)), 
                 _baseRechargeInterval: 4.0f, _interruptPriority: InterruptPriority.Skill, _mustKeyPress: true);
-            AddSkill<TechnicianTrackerSkillDef>("CHARGE_FLOW", "texTechnicianChargeFlowIcon", SkillSlot.Utility, new SerializableEntityStateType(typeof(Skills.Temp.TempUtility)), 
-                _baseRechargeInterval: 5.0f, _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true);
+            AddSkill<TechnicianTrackerSkillDef>("CHARGE_FLOW", "texTechnicianChargeFlowIcon", SkillSlot.Utility, new SerializableEntityStateType(typeof(Skills.Temp.TempUtility)),
+                _baseMaxStock: 2, _baseRechargeInterval: 5.0f, _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true);
             AddSkill<SkillDef>("CONDUIT", "texTechnicianConduitIcon", SkillSlot.Special, new SerializableEntityStateType(typeof(Skills.Temp.TempSpecial)), 
                 _baseRechargeInterval: 20.0f, _interruptPriority: InterruptPriority.PrioritySkill, _mustKeyPress: true);
         }

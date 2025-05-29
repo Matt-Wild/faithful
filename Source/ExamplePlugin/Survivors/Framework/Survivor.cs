@@ -881,7 +881,7 @@ namespace Faithful
         protected void AddSkill<T>(string _token, string _iconName, SkillSlot _family, SerializableEntityStateType _activationState, int _baseMaxStock = 1, float _baseRechargeInterval = 0.0f,
                                 int _stockPerRecharge = 1, int _requiredStock = 1, int _consumedStock = 1, bool _beginSkillCooldownOnSkillEnd = true, bool _canceledFromSprinting = false,
                                 bool _cancelSprintingOnActivation = true, bool _fullRestockOnAssign = true, InterruptPriority _interruptPriority = InterruptPriority.Any, bool _isCombatSkill = true,
-                                bool _mustKeyPress = false) where T : SkillDef
+                                bool _mustKeyPress = false, bool _attackSpeedBuffsRestockSpeed = false) where T : SkillDef
         {
             // Check if survivor doesn't have a skill family for this skill yet
             if (!m_skillFamilies.Contains(_family))
@@ -932,6 +932,7 @@ namespace Faithful
             mySkillDef.interruptPriority = _interruptPriority;
             mySkillDef.isCombatSkill = _isCombatSkill;
             mySkillDef.mustKeyPress = _mustKeyPress;
+            mySkillDef.attackSpeedBuffsRestockSpeed = _attackSpeedBuffsRestockSpeed;
             mySkillDef.icon = Assets.GetSprite(_iconName);
             mySkillDef.skillDescriptionToken = $"{tokenPrefix}_{_token}_DESCRIPTION";
             mySkillDef.skillName = $"{tokenPrefix}_{_token}_NAME";

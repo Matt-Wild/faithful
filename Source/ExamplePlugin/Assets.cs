@@ -182,6 +182,9 @@ namespace Faithful
             technicianArcPrefab.transform.Find("LaserEnd").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(0.9725f, 1.0f, 0.5373f));
             technicianArcPrefab.transform.Find("LaserEnd").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetTexture("_MainTex", GetTexture("texTechnicianFlare"));
             technicianArcPrefab.transform.Find("LaserEnd").Find("Flare").GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampTechnician"));
+            ParticleSystem arcFlareParticle = technicianArcPrefab.transform.Find("LaserEnd").Find("Flare").GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule arcFlareMainModule = arcFlareParticle.main;
+            arcFlareMainModule.startSize = 4.0f;
 
             // Get physics material for ragdoll bodies
             ragdollMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<RoR2.RagdollController>().bones[1].GetComponent<Collider>().material;

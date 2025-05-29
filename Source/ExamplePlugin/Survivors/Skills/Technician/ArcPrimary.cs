@@ -32,9 +32,13 @@ namespace Faithful.Skills.Technician
 
         ChildLocator childLocator;
 
-        Transform leftFlamethrowerTransform;
+        Transform leftArcTransform;
 
-        Transform rightFlamethrowerTransform;
+        Transform rightArcTransform;
+
+        Transform leftArcEndTransform;
+
+        Transform rightArcEndTransform;
 
         TechnicianTracker tracker;
 
@@ -62,13 +66,13 @@ namespace Faithful.Skills.Technician
         {
             Util.PlaySound(endAttackSoundString, gameObject);
             PlayAnimation("BothArms, Override", "ArcEnd", "ArcEnd.playbackRate", 0.4f / attackSpeedStat);
-            if (leftFlamethrowerTransform)
+            if (leftArcTransform)
             {
-                Destroy(leftFlamethrowerTransform.gameObject);
+                Destroy(leftArcTransform.gameObject);
             }
-            if (rightFlamethrowerTransform)
+            if (rightArcTransform)
             {
-                Destroy(rightFlamethrowerTransform.gameObject);
+                Destroy(rightArcTransform.gameObject);
             }
             base.OnExit();
         }
@@ -110,6 +114,12 @@ namespace Faithful.Skills.Technician
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            if (isAuthority && (!IsKeyDownAuthority() || characterBody.isSprinting || characterBody.allSkillsDisabled || tracker == null || tracker.GetTrackingTarget() == null))
+            {
+                outer.SetNextStateToMain();
+                return;
+            }
+
             stopwatch += GetDeltaTime();
             if (stopwatch >= entryDuration && !hasBegunFlamethrower)
             {
@@ -122,11 +132,13 @@ namespace Faithful.Skills.Technician
                     Transform transform2 = childLocator.FindChild("ArcRight");
                     if (transform)
                     {
-                        leftFlamethrowerTransform = Object.Instantiate(arcEffectPrefab, transform).transform;
+                        leftArcTransform = Object.Instantiate(arcEffectPrefab, transform).transform;
+                        leftArcEndTransform = leftArcTransform.Find("LaserEnd");
                     }
                     if (transform2)
                     {
-                        rightFlamethrowerTransform = Object.Instantiate(arcEffectPrefab, transform2).transform;
+                        rightArcTransform = Object.Instantiate(arcEffectPrefab, transform2).transform;
+                        rightArcEndTransform = rightArcTransform.Find("LaserEnd");
                     }
                 }
                 FireGauntlet("MuzzleCenter");
@@ -142,11 +154,15 @@ namespace Faithful.Skills.Technician
                     FireGauntlet("MuzzleCenter");
                 }
                 UpdateFlamethrowerEffect();
-            }
-            if (isAuthority && (!IsKeyDownAuthority() || characterBody.isSprinting || characterBody.allSkillsDisabled || tracker == null || tracker.GetTrackingTarget() == null))
-            {
-                outer.SetNextStateToMain();
-                return;
+
+                // Check for target
+                Transform target = tracker?.GetTrackingTarget()?.transform;
+                if (target != null)
+                {
+                    // Update arc end points
+                    if (leftArcEndTransform != null) leftArcEndTransform.position = target.position;
+                    if (rightArcEndTransform != null) rightArcEndTransform.position = target.position;
+                }
             }
         }
 
@@ -155,13 +171,13 @@ namespace Faithful.Skills.Technician
             Ray aimRay = GetAimRay();
             Vector3 direction = aimRay.direction;
             Vector3 direction2 = aimRay.direction;
-            if (leftFlamethrowerTransform)
+            if (leftArcTransform)
             {
-                leftFlamethrowerTransform.forward = direction;
+                leftArcTransform.forward = direction;
             }
-            if (rightFlamethrowerTransform)
+            if (rightArcTransform)
             {
-                rightFlamethrowerTransform.forward = direction2;
+                rightArcTransform.forward = direction2;
             }
         }
 
