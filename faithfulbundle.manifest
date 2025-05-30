@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2085276768
+CRC: 852938705
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1e6ce7442577e3f8921bff3a509d620f
+    Hash: e45b6d00da59a588980e0acd9f73e7c9
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ecf36ed839582ff66d6521977f8e4c47
+    Hash: 55e85f585a176dd1053ddfa10d5a7c08
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -87,6 +87,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 144
   Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
 - Class: 222
@@ -150,6 +152,7 @@ Assets:
 - Assets/Textures/Skills/Default/texDefaultUtilityIcon.png
 - Assets/Items/HermitsShawl/HermitShawlMesh.prefab
 - Assets/Survivors/Technician/Allies/Mesh/TechnicianRobotMesh.fbx
+- Assets/Survivors/Technician/Icons/texCrosshairTrackerCore.png
 - Assets/Survivors/Technician/Icons/texTechnicianPowerpulseIcon.png
 - Assets/Placeholder/Item/texBuffTemporalCube.png
 - Assets/Items/CauterizingGreave/CauterizingGreaveDisplayMesh.prefab
@@ -265,6 +268,7 @@ Assets:
 - Assets/Items/VengefulToaster/texVengefulToasterIcon.png
 - Assets/Textures/Skills/Default/texDefaultSecondaryIcon.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaIcon.png
+- Assets/Survivors/Technician/VFX/TechnicianTrackingIndicator.prefab
 - Assets/Items/MeltingWarbler/texMeltingWarblerIcon.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveIcon.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.prefab
@@ -302,12 +306,14 @@ Assets:
 - Assets/Items/SecondHand/texBuffSecondHand.png
 - Assets/Survivors/Technician/Icons/texTechnicianArcIcon.png
 - Assets/Items/DrownedVisage/DrownedVisageMesh.prefab
+- Assets/Survivors/Technician/Icons/texCrosshairTrackerDark.png
 - Assets/Textures/Technician/texLightningTechnician.png
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonMesh.prefab
 - Assets/Debug/UI/DebugObjectAnalysisEntry.prefab
 - Assets/Items/CopperGear/texCopperGearNormal.png
 - Assets/Monsters/MechaSpider/Textures/texMechanicalSpiderEmission.png
 - Assets/Items/CopperGear/CopperGearMesh.prefab
+- Assets/Survivors/Technician/Icons/texCrosshairTrackerBracket.png
 - Assets/Items/LongshotGeode/texLongshotGeodeRock.png
 - Assets/Skills/Railgunner/RailgunnerCoinMesh.prefab
 - Assets/Survivors/Technician/Allies/mdlTechnicianRobot.prefab
