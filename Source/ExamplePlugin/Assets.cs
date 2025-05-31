@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using R2API;
 using UnityEngine.AddressableAssets;
 using RoR2.ExpansionManagement;
-using System.Reflection;
 
 namespace Faithful
 {
@@ -26,6 +25,7 @@ namespace Faithful
         public static GameObject matrixEffectPrefab;
         public static GameObject shrineUseEffectPrefab;
         public static GameObject technicianArcPrefab;
+        public static GameObject technicianTrackingIndicatorPrefab;
         public static PhysicMaterial ragdollMaterial;
 
         // Store useful lookup assets
@@ -185,6 +185,29 @@ namespace Faithful
             ParticleSystem arcFlareParticle = technicianArcPrefab.transform.Find("LaserEnd").Find("Flare").GetComponent<ParticleSystem>();
             ParticleSystem.MainModule arcFlareMainModule = arcFlareParticle.main;
             arcFlareMainModule.startSize = 4.0f;
+
+            // Get and modify Huntress' tracking indicator to create Technician's tracking indicator
+            GameObject huntressTracker = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/HuntressTrackingIndicator"));
+            technicianTrackingIndicatorPrefab = huntressTracker.InstantiateClone("faithfulTechnicianTracker");
+            Object.DestroyImmediate(huntressTracker);
+            technicianTrackingIndicatorPrefab.transform.Find("Core Pip").GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 0.375f, 0.286f);
+            technicianTrackingIndicatorPrefab.transform.Find("Core, Dark").GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.25f, 0.953f);
+            technicianTrackingIndicatorPrefab.transform.Find("Holder").localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            Object.DestroyImmediate(technicianTrackingIndicatorPrefab.transform.Find("Holder").GetComponent<RoR2.ObjectScaleCurve>());
+            GameObject[] technicianTrackerNibHolders = Utils.FindChildrenWithTerm(technicianTrackingIndicatorPrefab.transform.Find("Holder"), "Nib Holder");
+            technicianTrackerNibHolders[0].transform.localEulerAngles = Vector3.zero;
+            technicianTrackerNibHolders[1].transform.localEulerAngles = Vector3.zero;
+            technicianTrackerNibHolders[0].transform.Find("Nib").transform.localPosition = new Vector3(0.22f, 0.0f, 0.0f);
+            technicianTrackerNibHolders[1].transform.Find("Nib").transform.localPosition = new Vector3(-0.22f, 0.0f, 0.0f);
+            technicianTrackerNibHolders[0].transform.Find("Nib").transform.localEulerAngles = new Vector3(0.0f, 0.0f, 90.0f);
+            technicianTrackerNibHolders[1].transform.Find("Nib").transform.localEulerAngles = new Vector3(0.0f, 0.0f, 270.0f);
+            technicianTrackerNibHolders[0].transform.Find("Nib").transform.localScale = new Vector3(0.15f, 0.15f, 1.0f);
+            technicianTrackerNibHolders[1].transform.Find("Nib").transform.localScale = new Vector3(0.15f, 0.15f, 1.0f);
+            technicianTrackerNibHolders[0].transform.Find("Nib").GetComponent<SpriteRenderer>().sprite = GetSprite("texCrosshairTrackerBracket");
+            technicianTrackerNibHolders[1].transform.Find("Nib").GetComponent<SpriteRenderer>().sprite = GetSprite("texCrosshairTrackerBracket");
+            technicianTrackerNibHolders[0].transform.Find("Nib").GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 0.375f, 0.286f);
+            technicianTrackerNibHolders[1].transform.Find("Nib").GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 0.375f, 0.286f);
+            Object.DestroyImmediate(technicianTrackerNibHolders[2]);
 
             // Get physics material for ragdoll bodies
             ragdollMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<RoR2.RagdollController>().bones[1].GetComponent<Collider>().material;

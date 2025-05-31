@@ -31,7 +31,7 @@ namespace Faithful
         void Awake()
         {
             // Create tracking indicator
-            trackingPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/HuntressTrackingIndicator");
+            trackingPrefab = Assets.technicianTrackingIndicatorPrefab;
             indicator = new Indicator(gameObject, trackingPrefab);
         }
 

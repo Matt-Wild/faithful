@@ -1402,6 +1402,26 @@ namespace Faithful
             return null;
         }
 
+        public static GameObject[] FindChildrenWithTerm(Transform _parent, string _searchTerm)
+        {
+            // List of children with term in name
+            List<GameObject> matching = new List<GameObject>();
+
+            // Cycle through children
+            foreach (Transform child in _parent)
+            {
+                // Check child name
+                if (child.name.Contains(_searchTerm))
+                {
+                    // Add child to list
+                    matching.Add(child.gameObject);
+                }
+            }
+
+            // Return found children
+            return matching.ToArray();
+        }
+
         public static bool HasLanguageString(string _token)
         {
             // Return if language file has string
