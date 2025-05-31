@@ -258,10 +258,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("BounceNearby",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayHook"),
-                "Pelvis",
-                new Vector3(-0.085F, 0.119F, -0.17625F),
+                "Backpack",
                 new Vector3(0F, 0F, 0F),
-                new Vector3(0.225F, 0.225F, 0.225F)
+                new Vector3(0F, 0F, 0F),
+                new Vector3(0.5F, 0.5F, 0.5F)
                 )
                 );
             AddDefaultItemDisplay("ChainLightning",
@@ -321,7 +321,7 @@ namespace Faithful
             AddDefaultItemDisplay("CritGlasses",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayGlasses"),
                 "Head",
-                new Vector3(0F, 0.1575F, 0.145F),
+                new Vector3(0F, 0.1575F, 0.15875F),
                 new Vector3(0F, 0F, 0F),
                 new Vector3(0.275F, 0.25F, 0.25F)
                 )
@@ -434,7 +434,7 @@ namespace Faithful
                 "Chest",
                 new Vector3(0F, 0.4425F, -0.2025F),
                 new Vector3(350F, 180F, 0F),
-                new Vector3(0.125F, 0.125F, 0.125F)
+                new Vector3(0.225F, 0.225F, 0.225F)
                 )
                 );
             AddDefaultItemDisplay("ExtraLifeVoid",
@@ -442,7 +442,7 @@ namespace Faithful
                 "Chest",
                 new Vector3(0F, 0.425F, -0.2025F),
                 new Vector3(350F, 180F, 0F),
-                new Vector3(0.125F, 0.125F, 0.125F)
+                new Vector3(0.2F, 0.2F, 0.2F)
                 )
                 );
             AddDefaultItemDisplay("FallBoots",
@@ -1638,9 +1638,9 @@ namespace Faithful
             AddDefaultItemDisplay("IncreasePrimaryDamage",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayIncreasePrimaryDamage"),
                 "UpperArmR",
-                new Vector3(0.0995F, 0.1335F, 0.1175F),
-                new Vector3(0F, 40F, 0F),
-                new Vector3(0.75F, 0.75F, 0.75F)
+				new Vector3(0.0995F, 0.1335F, 0.1175F),
+				new Vector3(0F, 40F, 180F),
+				new Vector3(0.75F, 0.75F, 0.75F)
                 )
                 );
             AddDefaultItemDisplay("ExtraStatsOnLevelUp",
