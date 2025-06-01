@@ -8,8 +8,6 @@ namespace Faithful.Skills.Technician
     {
         GameObject arcEffectPrefab = Assets.technicianArcPrefab;
 
-        float maxDistance = 45.0f;
-
         float baseEntryDuration = 0.8f;
 
         float procCoefficientPerTick = 0.625f;
@@ -54,6 +52,9 @@ namespace Faithful.Skills.Technician
                 tracker = characterBody.GetComponent<TechnicianTracker>();
 
                 characterBody.SetAimTimer(1f);
+
+                // Set tracker lock
+                if (tracker != null) tracker.SetLock(SkillSlot.Primary, true);
             }
             if (modelTransform)
             {
@@ -75,11 +76,24 @@ namespace Faithful.Skills.Technician
                 Destroy(rightArcTransform.gameObject);
             }
             base.OnExit();
+
+            // Set tracker lock
+            if (tracker != null) tracker.SetLock(SkillSlot.Primary, false);
         }
 
         private void FireGauntlet(string muzzleString)
         {
-            Ray aimRay = GetAimRay();
+            // Check for target
+            Transform target = tracker?.GetTrackingTarget()?.transform;
+            if (target == null) return;
+
+            // Get arc source
+            Vector3 arcSource = (leftArcTransform.position + rightArcTransform.position) / 2.0f;
+
+            // Get arc direction
+            Vector3 arcDir = target.position - arcSource;
+
+            Ray aimRay = new Ray(arcSource, arcDir.normalized);
             if (isAuthority)
             {
                 BulletAttack bulletAttack = new BulletAttack();
@@ -91,13 +105,12 @@ namespace Faithful.Skills.Technician
                 bulletAttack.damage = tickDamageCoefficient * damageStat;
                 bulletAttack.force = 0.0f;
                 bulletAttack.muzzleName = muzzleString;
-                //bulletAttack.hitEffectPrefab = impactEffectPrefab;
                 bulletAttack.isCrit = Util.CheckRoll(critStat, characterBody.master);
                 bulletAttack.radius = 1.0f;
                 bulletAttack.falloffModel = BulletAttack.FalloffModel.None;
                 bulletAttack.stopperMask = LayerIndex.world.mask;
                 bulletAttack.procCoefficient = procCoefficientPerTick;
-                bulletAttack.maxDistance = maxDistance;
+                bulletAttack.maxDistance = arcDir.magnitude;
                 bulletAttack.smartCollision = true;
                 bulletAttack.damageType = DamageType.SlowOnHit;
                 bulletAttack.allowTrajectoryAimAssist = false;

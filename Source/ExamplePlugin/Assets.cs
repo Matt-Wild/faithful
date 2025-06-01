@@ -191,6 +191,7 @@ namespace Faithful
             technicianTrackingIndicatorPrefab = huntressTracker.InstantiateClone("faithfulTechnicianTracker");
             Object.DestroyImmediate(huntressTracker);
             technicianTrackingIndicatorPrefab.transform.Find("Core Pip").GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 0.375f, 0.286f);
+            technicianTrackingIndicatorPrefab.transform.Find("Core Pip").GetComponent<SpriteRenderer>().sortingOrder = 1;
             technicianTrackingIndicatorPrefab.transform.Find("Core, Dark").GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.25f, 0.953f);
             technicianTrackingIndicatorPrefab.transform.Find("Holder").localScale = new Vector3(1.0f, 1.0f, 1.0f);
             Object.DestroyImmediate(technicianTrackingIndicatorPrefab.transform.Find("Holder").GetComponent<RoR2.ObjectScaleCurve>());

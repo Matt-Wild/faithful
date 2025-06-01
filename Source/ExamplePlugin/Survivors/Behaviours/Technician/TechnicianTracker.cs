@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -9,6 +10,15 @@ namespace Faithful
     [RequireComponent(typeof(CharacterBody))]
     public class TechnicianTracker : MonoBehaviour
     {
+        // Skill states that lock the tracker
+        Dictionary<SkillSlot, bool> locks = new Dictionary<SkillSlot, bool>()
+        {
+            { SkillSlot.Primary, false },
+            { SkillSlot.Secondary, false },
+            { SkillSlot.Utility, false },
+            { SkillSlot.Special, false }
+        };
+
         // Target references
         GameObject trackingPrefab;
         HurtBox trackingTarget;
@@ -61,9 +71,9 @@ namespace Faithful
 
         void FixedUpdate()
         {
-            // Increment stopwatch and check if tracking update is required
+            // Increment stopwatch and check if tracking update is required (do not change target if target is locked)
             trackerUpdateStopwatch += Time.fixedDeltaTime;
-            if (trackerUpdateStopwatch >= 1f / trackerUpdateFrequency)
+            if (trackerUpdateStopwatch >= 1f / trackerUpdateFrequency && !IsLocked())
             {
                 // Reset stopwatch
                 trackerUpdateStopwatch -= 1f / trackerUpdateFrequency;
@@ -89,6 +99,18 @@ namespace Faithful
             search.RefreshCandidates();
             search.FilterOutGameObject(gameObject);
             trackingTarget = search.GetResults().FirstOrDefault();
+        }
+
+        bool IsLocked()
+        {
+            // Return if target is locked by any skill
+            return locks[SkillSlot.Primary] || locks[SkillSlot.Secondary] || locks[SkillSlot.Utility] || locks[SkillSlot.Special];
+        }
+
+        public void SetLock(SkillSlot _skill, bool _lock)
+        {
+            // Set lock in dictionary
+            locks[_skill] = _lock;
         }
     }
 }
