@@ -95,7 +95,7 @@ namespace Faithful
         protected override void SetupSkills()
         {
             // No skills made yet
-            SetupTempSkills();
+            //SetupTempSkills();
 
             // Add technician skills
             AddSkill<TechnicianTrackerSkillDef>("ARC", "texTechnicianArcIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.Technician.ArcPrimary)), 
