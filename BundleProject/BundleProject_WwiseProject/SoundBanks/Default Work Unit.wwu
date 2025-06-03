@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{4C446677-B566-4ECF-86CF-BDAFDEBC2886}" SchemaVersion="119">
+	<SoundBanks>
+		<WorkUnit Name="Default Work Unit" ID="{4C446677-B566-4ECF-86CF-BDAFDEBC2886}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="Faithful_char_Technician" ID="{DE7F40EA-3F99-4EB3-8C64-F54A7C04138E}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_char_Surveyor" ID="{C21C03A1-0220-4CA9-A19D-2797BA540681}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_char_Operator" ID="{DB4F7D42-6341-404A-8199-6B7FBC5BF234}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_char_Salvager" ID="{EE74347B-6DDF-48A6-851D-F8862EA4755F}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_char_Caster" ID="{8152D477-E938-4E30-9040-41A2E6F7FF25}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_char_Huntsman" ID="{30E98367-7699-4FCD-B8EF-1005085AFE46}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_char_Gyro" ID="{D9F5026B-B81D-4E02-8009-F383EC2FF507}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_char_Proxy" ID="{FA15923E-6F08-41EB-8BA9-C0922AD84734}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_char_VoidAgent" ID="{C1FB0EA4-ADE5-408D-97F0-2AE9DBBE1EA3}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_item_Global" ID="{BB6E0495-1B87-471F-87AF-798A43329DA2}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_zone_Global" ID="{CCFA2E66-F21F-46AA-A5B7-866D496ACA0F}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_obj_Global" ID="{19B22CB0-1C88-4054-9120-647DF54063C0}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_mob_Global" ID="{89D01EA9-C514-432F-85FF-8E757E632525}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Faithful_other_Global" ID="{A6AF763B-0680-4D39-B100-AC948CD0EF39}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>
