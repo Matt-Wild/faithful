@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}" SchemaVersion="119">
 	<AudioObjects>
-		<WorkUnit Name="Default Work Unit" ID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="Items" ID="{BBEF246F-C39E-4991-A60B-0E5DBBD38192}" ShortID="587216824">
+					<ChildrenList>
+						<Sound Name="targeting_matrix_lock-on" ID="{D9E28B44-0D46-433A-B56F-C283D4B0C5F6}" ShortID="366138395">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="targeting_matrix_lock-on" ID="{94744A3C-1355-4B2E-95A0-90FDDD3B4F69}">
+									<Language>SFX</Language>
+									<AudioFile>Items\targeting_matrix_lock-on.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="34415598"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="targeting_matrix_lock-on" ID="{94744A3C-1355-4B2E-95A0-90FDDD3B4F69}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
 	</AudioObjects>
 </WwiseDocument>

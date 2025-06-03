@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo>
+	<Project Name="BundleProject_WwiseProject" GUID="{929AE242-1495-4EB0-9606-314093D88C00}" Generator="2023.1.4.8496"/>
+	<CacheRoot>../../../../BundleProject_WwiseProject/.cache</CacheRoot>
+	<Platforms>
+		<Platform Name="Mac" GUID="{E0A39C84-897A-4153-84DA-59415F3F1359}" BasePlatform="Mac" BasePlatformGUID="{9C6217D5-DD11-4795-87C1-6CE02853C540}" Path="../../../../BundleProject_WwiseProject/GeneratedSoundBanks/Mac"/>
+		<Platform Name="Windows" GUID="{E97FFDE9-96F6-4FC5-8EF6-C33EB73A41AA}" BasePlatform="Windows" BasePlatformGUID="{6E0CB257-C6C8-4C5C-8366-2740DFC441EB}" Path="../../../../BundleProject_WwiseProject/GeneratedSoundBanks/Windows"/>
+	</Platforms>
+	<Languages>
+		<Language Name="English(US)" Id="684519430" GUID="{FBFA6458-242E-44F2-B1EE-F452FC745DF4}" Default="true" UseAsStandIn="true"/>
+	</Languages>
+	<FileHash>{7AC9D42E-555E-7BA6-8082-785DF83617C5}</FileHash>
+</ProjectInfo>

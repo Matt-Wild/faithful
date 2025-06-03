@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{CDB005B0-A80B-42A8-9B1E-08DF9EF5EF8E}" SchemaVersion="119">
 	<Events>
-		<WorkUnit Name="Default Work Unit" ID="{CDB005B0-A80B-42A8-9B1E-08DF9EF5EF8E}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{CDB005B0-A80B-42A8-9B1E-08DF9EF5EF8E}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="SFX" ID="{65AF2F17-FD7B-448C-ADAC-A3D9DB9E8AA6}" ShortID="198853979">
+					<ChildrenList>
+						<Folder Name="Items" ID="{82B41770-A1EB-44F2-9D91-5C14BB6C3FF2}" ShortID="770361893">
+							<ChildrenList>
+								<Event Name="TargetingMatrixLockOn" ID="{76F0F265-CA8C-4F26-B985-9805AE910AC1}">
+									<ChildrenList>
+										<Action Name="" ID="{C3708E06-CA26-443C-92BF-E5055B2ADDB5}" ShortID="922849938">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="targeting_matrix_lock-on" ID="{D9E28B44-0D46-433A-B56F-C283D4B0C5F6}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
 	</Events>
 </WwiseDocument>

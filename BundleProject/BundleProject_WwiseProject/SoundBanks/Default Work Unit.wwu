@@ -49,7 +49,9 @@
 					<GameSyncExclusionList/>
 				</SoundBank>
 				<SoundBank Name="Faithful_item_Global" ID="{BB6E0495-1B87-471F-87AF-798A43329DA2}">
-					<ObjectInclusionList/>
+					<ObjectInclusionList>
+						<ObjectRef Name="Items" ID="{82B41770-A1EB-44F2-9D91-5C14BB6C3FF2}" WorkUnitID="{CDB005B0-A80B-42A8-9B1E-08DF9EF5EF8E}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>

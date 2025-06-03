@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	3182601471	TargetingMatrixLockOn			\Default Work Unit\SFX\Items\TargetingMatrixLockOn	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	34415598	targeting_matrix_lock-on	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Windows\SFX\Items\targeting_matrix_lock-on_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Items\targeting_matrix_lock-on		48100
+

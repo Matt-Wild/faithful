@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="16" SoundBankVersion="150">
+	<RootPaths>
+		<ProjectRoot>../..</ProjectRoot>
+		<SourceFilesRoot>../../.cache/Windows</SourceFilesRoot>
+		<SoundBanksRoot>.</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>.</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<SoundBanks>
+		<SoundBank Id="388688204" Type="User" Language="SFX" Hash="{1B763077-7932-6AC8-53D0-4AC50BBFAA7A}">
+			<ShortName>Faithful_item_Global</ShortName>
+			<Path>Faithful_item_Global.bnk</Path>
+			<Media>
+				<File Id="34415598" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Items\targeting_matrix_lock-on.wav</ShortName>
+					<CachePath>SFX/Items/targeting_matrix_lock-on_818F3B66.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="3182601471" Name="TargetingMatrixLockOn" DurationType="OneShot" DurationMin="0.25002083" DurationMax="0.25002083">
+					<MediaRefs>
+						<MediaRef Id="34415598"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="463116895" Type="User" Language="SFX" Hash="{C7258463-7619-9D09-6A08-B5B9486C7153}">
+			<ShortName>Faithful_char_Gyro</ShortName>
+			<Path>Faithful_char_Gyro.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="1066124047" Type="User" Language="SFX" Hash="{7000FB7E-7D5B-032A-E08C-8BB8314BF3C2}">
+			<ShortName>Faithful_mob_Global</ShortName>
+			<Path>Faithful_mob_Global.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="1082257441" Type="User" Language="SFX" Hash="{8A6EFD0E-42E3-A79E-1A0A-0B8F54A9A0F4}">
+			<ShortName>Faithful_zone_Global</ShortName>
+			<Path>Faithful_zone_Global.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{B6CBD692-12EC-CDBA-0932-48F63C40C91F}">
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+			<Plugins>
+				<AudioDevices>
+					<Plugin Id="2317455096" Name="No_Output" LibName="No Output" LibId="11862023"/>
+					<Plugin Id="3859886410" Name="System" LibName="System" LibId="11403271"/>
+				</AudioDevices>
+			</Plugins>
+			<Busses>
+				<Bus Id="3803692087" Name="Master Audio Bus"/>
+			</Busses>
+		</SoundBank>
+		<SoundBank Id="1703840500" Type="User" Language="SFX" Hash="{3189B19F-9C35-8DD3-8AEA-B181C17C7B20}">
+			<ShortName>Faithful_char_Huntsman</ShortName>
+			<Path>Faithful_char_Huntsman.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="2165282721" Type="User" Language="SFX" Hash="{CFFB2890-06E7-6179-AD32-B5C06664935B}">
+			<ShortName>Faithful_char_Salvager</ShortName>
+			<Path>Faithful_char_Salvager.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="2287558135" Type="User" Language="SFX" Hash="{5C7B686D-FF82-32F1-00B5-E33C0E96E46B}">
+			<ShortName>Faithful_char_VoidAgent</ShortName>
+			<Path>Faithful_char_VoidAgent.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="2608188423" Type="User" Language="SFX" Hash="{27FCD313-FDE8-A1BD-C4C7-2CFC4369664E}">
+			<ShortName>Faithful_other_Global</ShortName>
+			<Path>Faithful_other_Global.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="2620265520" Type="User" Language="SFX" Hash="{07C8A08B-4EC6-33A6-4186-4B6E926106E4}">
+			<ShortName>Faithful_obj_Global</ShortName>
+			<Path>Faithful_obj_Global.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="2921305306" Type="User" Language="SFX" Hash="{11E7E03C-6DC3-DF10-D75D-D71F9DD57233}">
+			<ShortName>Faithful_char_Proxy</ShortName>
+			<Path>Faithful_char_Proxy.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="3251809208" Type="User" Language="SFX" Hash="{08BC5BF2-C0D6-1E06-223C-3CA12BA81C91}">
+			<ShortName>Faithful_char_Technician</ShortName>
+			<Path>Faithful_char_Technician.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="3550526995" Type="User" Language="SFX" Hash="{DF2D477F-501C-458F-FD1A-048E9CBCD5B7}">
+			<ShortName>Faithful_char_Surveyor</ShortName>
+			<Path>Faithful_char_Surveyor.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="3952637814" Type="User" Language="SFX" Hash="{C8EC3AF6-C001-1D18-0637-1B661CE228B5}">
+			<ShortName>Faithful_char_Operator</ShortName>
+			<Path>Faithful_char_Operator.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="4281578430" Type="User" Language="SFX" Hash="{86A79F90-A12A-C4FD-65AC-A15E0261AC36}">
+			<ShortName>Faithful_char_Caster</ShortName>
+			<Path>Faithful_char_Caster.bnk</Path>
+		</SoundBank>
+	</SoundBanks>
+	<FileHash>{FE92499C-D718-6733-957B-390F7BC94128}</FileHash>
+</SoundBanksInfo>
