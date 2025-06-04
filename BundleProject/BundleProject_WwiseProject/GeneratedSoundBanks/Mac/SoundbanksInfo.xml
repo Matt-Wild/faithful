@@ -9,19 +9,55 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="388688204" Type="User" Language="SFX" Hash="{1B763077-7932-6AC8-53D0-4AC50BBFAA7A}">
+		<SoundBank Id="388688204" Type="User" Language="SFX" Hash="{206D8FF3-0825-F4EA-BFAD-BCA7B8D73851}">
 			<ShortName>Faithful_item_Global</ShortName>
 			<Path>Faithful_item_Global.bnk</Path>
 			<Media>
+				<File Id="18579768" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Items\hermits_shawl_buff_consumed.wav</ShortName>
+					<CachePath>SFX/Items/hermits_shawl_buff_consumed_818F3B66.wem</CachePath>
+				</File>
 				<File Id="34415598" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Items\targeting_matrix_lock-on.wav</ShortName>
 					<CachePath>SFX/Items/targeting_matrix_lock-on_818F3B66.wem</CachePath>
 				</File>
+				<File Id="603936567" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Items\drowned_visage_charge.wav</ShortName>
+					<CachePath>SFX/Items/drowned_visage_charge_818F3B66.wem</CachePath>
+				</File>
+				<File Id="829119064" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Items\collectors_vision_pickup.wav</ShortName>
+					<CachePath>SFX/Items/collectors_vision_pickup_818F3B66.wem</CachePath>
+				</File>
+				<File Id="870620122" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Items\vengeful_toaster_buff_consumed.wav</ShortName>
+					<CachePath>SFX/Items/vengeful_toaster_buff_consumed_818F3B66.wem</CachePath>
+				</File>
 			</Media>
 			<Events>
+				<Event Id="1487394405" Name="CollectorsVisionPickup" DurationType="OneShot" DurationMin="0.595" DurationMax="0.595">
+					<MediaRefs>
+						<MediaRef Id="829119064"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4223938829" Name="DrownedVisageCharge" DurationType="OneShot" DurationMin="2.5000226" DurationMax="2.5000226">
+					<MediaRefs>
+						<MediaRef Id="603936567"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2710992615" Name="HermitsShawlBuffConsumed" DurationType="OneShot" DurationMin="0.58498865" DurationMax="0.58498865">
+					<MediaRefs>
+						<MediaRef Id="18579768"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="3182601471" Name="TargetingMatrixLockOn" DurationType="OneShot" DurationMin="0.25002083" DurationMax="0.25002083">
 					<MediaRefs>
 						<MediaRef Id="34415598"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="879890618" Name="VengefulToasterBuffConsumed" DurationType="OneShot" DurationMin="0.8000208" DurationMax="0.8000208">
+					<MediaRefs>
+						<MediaRef Id="870620122"/>
 					</MediaRefs>
 				</Event>
 			</Events>
@@ -92,5 +128,5 @@
 			<Path>Faithful_char_Caster.bnk</Path>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{3EDACDEA-B6AF-3E12-A4D6-B6A40DA8887F}</FileHash>
+	<FileHash>{E3C78A09-C4E8-A0CC-BC85-2A67D533BEB1}</FileHash>
 </SoundBanksInfo>

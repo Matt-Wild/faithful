@@ -13,7 +13,11 @@ namespace AK
 {
     namespace EVENTS
     {
+        static const AkUniqueID COLLECTORSVISIONPICKUP = 1487394405U;
+        static const AkUniqueID DROWNEDVISAGECHARGE = 4223938829U;
+        static const AkUniqueID HERMITSSHAWLBUFFCONSUMED = 2710992615U;
         static const AkUniqueID TARGETINGMATRIXLOCKON = 3182601471U;
+        static const AkUniqueID VENGEFULTOASTERBUFFCONSUMED = 879890618U;
     } // namespace EVENTS
 
     namespace BANKS

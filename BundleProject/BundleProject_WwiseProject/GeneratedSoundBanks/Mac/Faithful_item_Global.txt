@@ -1,6 +1,14 @@
 Event	ID	Name			Wwise Object Path	Notes
+	879890618	VengefulToasterBuffConsumed			\Default Work Unit\SFX\Items\VengefulToasterBuffConsumed	
+	1487394405	CollectorsVisionPickup			\Default Work Unit\SFX\Items\CollectorsVisionPickup	
+	2710992615	HermitsShawlBuffConsumed			\Default Work Unit\SFX\Items\HermitsShawlBuffConsumed	
 	3182601471	TargetingMatrixLockOn			\Default Work Unit\SFX\Items\TargetingMatrixLockOn	
+	4223938829	DrownedVisageCharge			\Default Work Unit\SFX\Items\DrownedVisageCharge	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	18579768	hermits_shawl_buff_consumed	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Items\hermits_shawl_buff_consumed_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Items\hermits_shawl_buff_consumed		103288
 	34415598	targeting_matrix_lock-on	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Items\targeting_matrix_lock-on_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Items\targeting_matrix_lock-on		48100
+	603936567	drowned_visage_charge	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Items\drowned_visage_charge_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Items\drowned_visage_charge		220598
+	829119064	collectors_vision_pickup	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Items\collectors_vision_pickup_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Items\collectors_vision_pickup		114336
+	870620122	vengeful_toaster_buff_consumed	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Items\vengeful_toaster_buff_consumed_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Items\vengeful_toaster_buff_consumed		153700
 
