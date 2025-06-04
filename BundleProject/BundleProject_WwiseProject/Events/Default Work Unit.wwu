@@ -12,7 +12,198 @@
 										<Action Name="" ID="{C3708E06-CA26-443C-92BF-E5055B2ADDB5}" ShortID="922849938">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="targeting_matrix_lock-on" ID="{D9E28B44-0D46-433A-B56F-C283D4B0C5F6}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+													<ObjectRef Name="targeting_matrix_lock-on" ID="{97D81410-8A9E-4DED-B01B-C028D7983476}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="HermitsShawlBuffConsumed" ID="{204E80FC-0FE3-47A1-9817-D8C932045948}">
+									<ChildrenList>
+										<Action Name="" ID="{DC42D51B-38BD-4388-8EE8-502805D25186}" ShortID="528845802">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="hermits_shawl_buff_consumed" ID="{91B57071-78C5-40B7-8A61-20390732DDC2}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="DrownedVisageCharge" ID="{47C870A7-B7FE-4AB3-B93A-ACB0BACDE177}">
+									<ChildrenList>
+										<Action Name="" ID="{1B9D7DD0-5A18-4FE5-A02D-CA07D298C096}" ShortID="158574225">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="drowned_visage_charge" ID="{BC71A917-447D-4C38-8636-0758AE5DA430}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="VengefulToasterBuffConsumed" ID="{8643C09D-A1C4-4B23-8847-9F0ED843AFB0}">
+									<ChildrenList>
+										<Action Name="" ID="{F681D122-3374-4B35-9947-94218EF04B62}" ShortID="772645247">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vengeful_toaster_buff_consumed" ID="{F5DB88D3-8166-4BD0-974B-FA8D093E7B89}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="CollectorsVisionPickup" ID="{C9837BAF-C963-4E5F-928C-502C74FE3243}">
+									<ChildrenList>
+										<Action Name="" ID="{AB5EFC33-87DB-423C-8AAC-DA5796B46A92}" ShortID="971474177">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="collectors_vision_pickup" ID="{EF40C906-121E-479D-AB42-7E1B24289A84}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="Technician" ID="{5FE49589-6550-4010-8856-D992D6A3284D}" ShortID="270960177">
+							<ChildrenList>
+								<Event Name="TechnicianArcCharge" ID="{264EE275-D14F-4F39-BC6C-3A1C36B6B40E}">
+									<ChildrenList>
+										<Action Name="" ID="{7228EC94-DCF5-4C87-87AB-CB35AFCD2865}" ShortID="624724914">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_arc_charge" ID="{F61A2919-E398-4298-8345-7B0E406B660B}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianConduitActivate" ID="{90061941-E0DA-47DF-8E70-B1EB7F4B21D4}">
+									<ChildrenList>
+										<Action Name="" ID="{086AE362-5252-464D-AB1B-B527277DCE8E}" ShortID="313437249">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_conduit_activate" ID="{E484059B-18BE-4177-B2A1-4D2497C501DD}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianConduitDirect" ID="{17549404-228E-469E-BCE4-14DF125DEEEB}">
+									<ChildrenList>
+										<Action Name="" ID="{A535EE72-81A0-4E27-9D96-67E85D454A34}" ShortID="101257472">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_conduit_direct" ID="{9594551C-B510-4F53-AFE6-7EBAE5A750F9}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianConduitLoop" ID="{03B68653-9C47-487A-B71E-4B377C5FD3F3}">
+									<ChildrenList>
+										<Action Name="" ID="{3291499E-9E11-48D4-BF3A-FCB7FA6F48A2}" ShortID="672293269">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_conduit_loop" ID="{4EFFBBBB-0222-4439-A1D7-2880D969B257}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianDeviceThrow" ID="{6C07CE34-C20B-48DB-B0D5-EA87D1112E17}">
+									<ChildrenList>
+										<Action Name="" ID="{BF2740A9-64C8-4F1B-9F3F-24D9E5F965E0}" ShortID="694995890">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_device_throw" ID="{4F765660-C38F-4389-930C-2AFD7DC0D87E}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianGrenadeActive" ID="{7F7F454F-24BC-4D73-9C12-3D02CFB8C04A}">
+									<ChildrenList>
+										<Action Name="" ID="{5209B08B-F53E-410B-B873-6EDC1E0A3090}" ShortID="539511534">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_grenade_active" ID="{2BB50173-56D3-4757-9630-103ADD1A96F1}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianGrenadeAttack" ID="{8212C1A4-C0EC-4BD2-9B14-A813EC18B96D}">
+									<ChildrenList>
+										<Action Name="" ID="{40E19AF0-4FA5-4087-9ABA-1B357A896A16}" ShortID="965348158">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_grenade_attack" ID="{C4D71809-890A-4E49-8985-D66C9C99A8A9}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianLinkActive" ID="{067E1223-FC29-4FFD-A776-CA9EC93E0EEA}">
+									<ChildrenList>
+										<Action Name="" ID="{380FC134-5ADA-4A20-90C0-B6F2915D4FAD}" ShortID="44738733">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_link_active" ID="{D7661BB7-FB9F-42AA-97B2-7885DDB4F64F}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianTeleport" ID="{F3AEA5CE-9AD1-4E21-855C-6DFA16569E6A}">
+									<ChildrenList>
+										<Action Name="" ID="{E757F4BC-E032-49B7-8D95-8FDCE04CFBAB}" ShortID="698902611">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_teleport" ID="{81D23DC8-1BD2-45C9-92FE-12D2E9D395E4}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianTurretDeath" ID="{7A6ECB12-E81D-46CA-9943-5E3F5B5C7F4F}">
+									<ChildrenList>
+										<Action Name="" ID="{249489FD-8CE4-4975-9FD4-A0EB9D97E24C}" ShortID="251132886">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_turret_death" ID="{30EC9315-3905-482C-A886-B475555F0BAF}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianTurretDeploy" ID="{70BC0DC3-0DBE-4D22-9C94-22C53EA12E88}">
+									<ChildrenList>
+										<Action Name="" ID="{F7FE007A-4C34-4CC0-82DF-CEF97E0A6E2C}" ShortID="537521153">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_turret_deploy" ID="{51F5D99B-E27F-4747-9168-BF56DDA84EA2}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianTurretElectric" ID="{D1334C71-322B-4378-8B91-F4E9F68289A1}">
+									<ChildrenList>
+										<Action Name="" ID="{FDF92501-80E7-4E55-A6A0-3733D6883965}" ShortID="964845258">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_turret_electric" ID="{90C446D4-EC80-4104-BECD-F339C0BA64B3}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="TechnicianVoltCharge" ID="{A0D0C17B-F1CD-40DC-99BE-8D8F1902048B}">
+									<ChildrenList>
+										<Action Name="" ID="{C7589402-E9E4-489D-B054-7B10F41FC0F9}" ShortID="924203786">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="technician_volt_charge" ID="{759139B5-0A2C-4102-84A4-4392BC4EA7BC}" WorkUnitID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>

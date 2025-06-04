@@ -1,0 +1,30 @@
+Event	ID	Name			Wwise Object Path	Notes
+	223919836	TechnicianTurretDeploy			\Default Work Unit\SFX\Technician\TechnicianTurretDeploy	
+	267301764	TechnicianTurretElectric			\Default Work Unit\SFX\Technician\TechnicianTurretElectric	
+	527378225	TechnicianLinkActive			\Default Work Unit\SFX\Technician\TechnicianLinkActive	
+	986763980	TechnicianConduitDirect			\Default Work Unit\SFX\Technician\TechnicianConduitDirect	
+	1236452693	TechnicianGrenadeActive			\Default Work Unit\SFX\Technician\TechnicianGrenadeActive	
+	1333390408	TechnicianConduitActivate			\Default Work Unit\SFX\Technician\TechnicianConduitActivate	
+	1361100559	TechnicianGrenadeAttack			\Default Work Unit\SFX\Technician\TechnicianGrenadeAttack	
+	1364125009	TechnicianArcCharge			\Default Work Unit\SFX\Technician\TechnicianArcCharge	
+	1432494081	TechnicianConduitLoop			\Default Work Unit\SFX\Technician\TechnicianConduitLoop	
+	3678546018	TechnicianTeleport			\Default Work Unit\SFX\Technician\TechnicianTeleport	
+	3760050038	TechnicianVoltCharge			\Default Work Unit\SFX\Technician\TechnicianVoltCharge	
+	3802899871	TechnicianDeviceThrow			\Default Work Unit\SFX\Technician\TechnicianDeviceThrow	
+	3938866225	TechnicianTurretDeath			\Default Work Unit\SFX\Technician\TechnicianTurretDeath	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	129549700	technician_link_active	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_link_active_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_link_active		127108
+	270816250	technician_volt_charge	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_volt_charge_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_volt_charge		184480
+	309996574	technician_arc_charge	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_arc_charge_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_arc_charge		57658
+	417714631	technician_teleport	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_teleport_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_teleport		72424
+	438612904	technician_conduit_activate	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_conduit_activate_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_conduit_activate		220592
+	440261866	technician_device_throw	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_device_throw_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_device_throw		11122
+	678507436	technician_turret_deploy	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_turret_deploy_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_turret_deploy		193860
+	681366594	technician_conduit_direct	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_conduit_direct_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_conduit_direct		78956
+	831766270	technician_turret_death	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_turret_death_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_turret_death		264700
+	890700349	technician_turret_electric	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_turret_electric_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_turret_electric		4224100
+	1021050184	technician_grenade_attack	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_grenade_attack_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_grenade_attack		8894
+	1042413541	technician_grenade_active	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_grenade_active_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_grenade_active		72424
+	1047177477	technician_conduit_loop	F:\SpilledSoupProjects\Unofficial Stuff\Modding\RoR2\Unity Project\Project Repo\BundleProject\BundleProject_WwiseProject\.cache\Mac\SFX\Technician\technician_conduit_loop_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Technician\technician_conduit_loop		1058676
+

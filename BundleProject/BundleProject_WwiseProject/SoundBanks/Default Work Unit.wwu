@@ -4,7 +4,9 @@
 		<WorkUnit Name="Default Work Unit" ID="{4C446677-B566-4ECF-86CF-BDAFDEBC2886}" PersistMode="Standalone">
 			<ChildrenList>
 				<SoundBank Name="Faithful_char_Technician" ID="{DE7F40EA-3F99-4EB3-8C64-F54A7C04138E}">
-					<ObjectInclusionList/>
+					<ObjectInclusionList>
+						<ObjectRef Name="Technician" ID="{5FE49589-6550-4010-8856-D992D6A3284D}" WorkUnitID="{CDB005B0-A80B-42A8-9B1E-08DF9EF5EF8E}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>

@@ -3,9 +3,9 @@
 	<AudioObjects>
 		<WorkUnit Name="Default Work Unit" ID="{8C11B691-0536-4EE2-80CA-67A21DCAD950}" PersistMode="Standalone">
 			<ChildrenList>
-				<Folder Name="Items" ID="{BBEF246F-C39E-4991-A60B-0E5DBBD38192}" ShortID="587216824">
+				<Folder Name="Items" ID="{FDAAEA36-81B5-4FBC-9C8C-F180C20DDD90}" ShortID="8373560">
 					<ChildrenList>
-						<Sound Name="targeting_matrix_lock-on" ID="{D9E28B44-0D46-433A-B56F-C283D4B0C5F6}" ShortID="366138395">
+						<Sound Name="collectors_vision_pickup" ID="{EF40C906-121E-479D-AB42-7E1B24289A84}" ShortID="110847047">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
@@ -15,7 +15,73 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="targeting_matrix_lock-on" ID="{94744A3C-1355-4B2E-95A0-90FDDD3B4F69}">
+								<AudioFileSource Name="collectors_vision_pickup" ID="{DF0DA527-46FB-4C2C-8D7C-EA0C8F731A17}">
+									<Language>SFX</Language>
+									<AudioFile>Items\collectors_vision_pickup.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="829119064"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="collectors_vision_pickup" ID="{DF0DA527-46FB-4C2C-8D7C-EA0C8F731A17}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="drowned_visage_charge" ID="{BC71A917-447D-4C38-8636-0758AE5DA430}" ShortID="31240470">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="drowned_visage_charge" ID="{521FB035-DE58-4FAA-A912-A54CCC209E7A}">
+									<Language>SFX</Language>
+									<AudioFile>Items\drowned_visage_charge.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="603936567"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="drowned_visage_charge" ID="{521FB035-DE58-4FAA-A912-A54CCC209E7A}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="hermits_shawl_buff_consumed" ID="{91B57071-78C5-40B7-8A61-20390732DDC2}" ShortID="253873425">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="hermits_shawl_buff_consumed" ID="{28A716B4-809B-4972-9394-40A9EB8F4F8B}">
+									<Language>SFX</Language>
+									<AudioFile>Items\hermits_shawl_buff_consumed.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="18579768"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="hermits_shawl_buff_consumed" ID="{28A716B4-809B-4972-9394-40A9EB8F4F8B}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="targeting_matrix_lock-on" ID="{97D81410-8A9E-4DED-B01B-C028D7983476}" ShortID="712570475">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="targeting_matrix_lock-on" ID="{763FDF1D-7EE8-4A96-A05D-8616CEA64FCA}">
 									<Language>SFX</Language>
 									<AudioFile>Items\targeting_matrix_lock-on.wav</AudioFile>
 									<MediaIDList>
@@ -24,7 +90,319 @@
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="targeting_matrix_lock-on" ID="{94744A3C-1355-4B2E-95A0-90FDDD3B4F69}" Platform="Linked"/>
+								<ActiveSource Name="targeting_matrix_lock-on" ID="{763FDF1D-7EE8-4A96-A05D-8616CEA64FCA}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="vengeful_toaster_buff_consumed" ID="{F5DB88D3-8166-4BD0-974B-FA8D093E7B89}" ShortID="180293447">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="vengeful_toaster_buff_consumed" ID="{19307F0F-D1E7-4AC2-BDEC-DEDB5085BB8F}">
+									<Language>SFX</Language>
+									<AudioFile>Items\vengeful_toaster_buff_consumed.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="870620122"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="vengeful_toaster_buff_consumed" ID="{19307F0F-D1E7-4AC2-BDEC-DEDB5085BB8F}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="Technician" ID="{E73D9ED8-BB5C-4290-AE6B-8DAF83C8644E}" ShortID="661942297">
+					<ChildrenList>
+						<Sound Name="technician_arc_charge" ID="{F61A2919-E398-4298-8345-7B0E406B660B}" ShortID="661753949">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_arc_charge" ID="{EFAABCD0-D6D7-41F3-A791-50439159E379}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_arc_charge.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="309996574"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_arc_charge" ID="{EFAABCD0-D6D7-41F3-A791-50439159E379}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_conduit_activate" ID="{E484059B-18BE-4177-B2A1-4D2497C501DD}" ShortID="235589556">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_conduit_activate" ID="{1F25677B-CB15-45CD-99F4-5EF646CBD12B}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_conduit_activate.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="438612904"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_conduit_activate" ID="{1F25677B-CB15-45CD-99F4-5EF646CBD12B}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_conduit_direct" ID="{9594551C-B510-4F53-AFE6-7EBAE5A750F9}" ShortID="846985864">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_conduit_direct" ID="{3767526D-1CF6-4C76-A198-BB7D5288F62A}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_conduit_direct.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="681366594"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_conduit_direct" ID="{3767526D-1CF6-4C76-A198-BB7D5288F62A}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_conduit_loop" ID="{4EFFBBBB-0222-4439-A1D7-2880D969B257}" ShortID="642750171">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_conduit_loop" ID="{8C96A509-7CBE-4228-BB81-856DAEB1759E}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_conduit_loop.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1047177477"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_conduit_loop" ID="{8C96A509-7CBE-4228-BB81-856DAEB1759E}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_device_throw" ID="{4F765660-C38F-4389-930C-2AFD7DC0D87E}" ShortID="247607348">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_device_throw" ID="{B3E4A6CB-484A-4ED2-8C05-746C4F9CE3E8}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_device_throw.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="440261866"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_device_throw" ID="{B3E4A6CB-484A-4ED2-8C05-746C4F9CE3E8}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_grenade_active" ID="{2BB50173-56D3-4757-9630-103ADD1A96F1}" ShortID="962643942">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_grenade_active" ID="{73DD118B-9868-470C-923B-2CF64553B53C}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_grenade_active.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1042413541"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_grenade_active" ID="{73DD118B-9868-470C-923B-2CF64553B53C}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_grenade_attack" ID="{C4D71809-890A-4E49-8985-D66C9C99A8A9}" ShortID="491433414">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_grenade_attack" ID="{E16F7820-858C-4C6A-B63F-483D0DA4DBFD}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_grenade_attack.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1021050184"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_grenade_attack" ID="{E16F7820-858C-4C6A-B63F-483D0DA4DBFD}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_link_active" ID="{D7661BB7-FB9F-42AA-97B2-7885DDB4F64F}" ShortID="635353131">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_link_active" ID="{00A8F1BE-E9FC-4EBE-8B29-5E044BDF31B8}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_link_active.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="129549700"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_link_active" ID="{00A8F1BE-E9FC-4EBE-8B29-5E044BDF31B8}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_teleport" ID="{81D23DC8-1BD2-45C9-92FE-12D2E9D395E4}" ShortID="655155561">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_teleport" ID="{BC822C6F-F2C8-4C01-8C5B-26E9398990DA}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_teleport.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="417714631"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_teleport" ID="{BC822C6F-F2C8-4C01-8C5B-26E9398990DA}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_turret_death" ID="{30EC9315-3905-482C-A886-B475555F0BAF}" ShortID="1035517493">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_turret_death" ID="{8B8E3D26-C987-4FED-B453-CF957EF6B810}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_turret_death.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="831766270"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_turret_death" ID="{8B8E3D26-C987-4FED-B453-CF957EF6B810}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_turret_deploy" ID="{51F5D99B-E27F-4747-9168-BF56DDA84EA2}" ShortID="608532284">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_turret_deploy" ID="{6B5EF38B-6438-4911-A23B-CB0AED609ABA}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_turret_deploy.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="678507436"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_turret_deploy" ID="{6B5EF38B-6438-4911-A23B-CB0AED609ABA}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_turret_electric" ID="{90C446D4-EC80-4104-BECD-F339C0BA64B3}" ShortID="8802251">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_turret_electric" ID="{343CF0D9-D131-4B1B-8F25-A80BEE91FD82}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_turret_electric.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="890700349"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_turret_electric" ID="{343CF0D9-D131-4B1B-8F25-A80BEE91FD82}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="technician_volt_charge" ID="{759139B5-0A2C-4102-84A4-4392BC4EA7BC}" ShortID="107457917">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{18EC1743-A404-44FB-9BB2-1E98118157FC}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{9B087D82-1F00-4678-8D33-BC59F553B2A1}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="technician_volt_charge" ID="{007169DE-4990-497A-8154-C24A1E36AFD0}">
+									<Language>SFX</Language>
+									<AudioFile>Technician\technician_volt_charge.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="270816250"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="technician_volt_charge" ID="{007169DE-4990-497A-8154-C24A1E36AFD0}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

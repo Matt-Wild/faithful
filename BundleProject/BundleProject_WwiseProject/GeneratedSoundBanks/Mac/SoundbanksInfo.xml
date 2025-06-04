@@ -111,9 +111,130 @@
 			<ShortName>Faithful_char_Proxy</ShortName>
 			<Path>Faithful_char_Proxy.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="3251809208" Type="User" Language="SFX" Hash="{08BC5BF2-C0D6-1E06-223C-3CA12BA81C91}">
+		<SoundBank Id="3251809208" Type="User" Language="SFX" Hash="{345E8C7B-68CB-81E3-1E46-5997405FF306}">
 			<ShortName>Faithful_char_Technician</ShortName>
 			<Path>Faithful_char_Technician.bnk</Path>
+			<Media>
+				<File Id="129549700" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_link_active.wav</ShortName>
+					<CachePath>SFX/Technician/technician_link_active_818F3B66.wem</CachePath>
+				</File>
+				<File Id="270816250" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_volt_charge.wav</ShortName>
+					<CachePath>SFX/Technician/technician_volt_charge_818F3B66.wem</CachePath>
+				</File>
+				<File Id="309996574" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_arc_charge.wav</ShortName>
+					<CachePath>SFX/Technician/technician_arc_charge_818F3B66.wem</CachePath>
+				</File>
+				<File Id="417714631" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_teleport.wav</ShortName>
+					<CachePath>SFX/Technician/technician_teleport_818F3B66.wem</CachePath>
+				</File>
+				<File Id="438612904" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_conduit_activate.wav</ShortName>
+					<CachePath>SFX/Technician/technician_conduit_activate_818F3B66.wem</CachePath>
+				</File>
+				<File Id="440261866" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_device_throw.wav</ShortName>
+					<CachePath>SFX/Technician/technician_device_throw_818F3B66.wem</CachePath>
+				</File>
+				<File Id="678507436" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_turret_deploy.wav</ShortName>
+					<CachePath>SFX/Technician/technician_turret_deploy_818F3B66.wem</CachePath>
+				</File>
+				<File Id="681366594" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_conduit_direct.wav</ShortName>
+					<CachePath>SFX/Technician/technician_conduit_direct_818F3B66.wem</CachePath>
+				</File>
+				<File Id="831766270" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_turret_death.wav</ShortName>
+					<CachePath>SFX/Technician/technician_turret_death_818F3B66.wem</CachePath>
+				</File>
+				<File Id="890700349" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_turret_electric.wav</ShortName>
+					<CachePath>SFX/Technician/technician_turret_electric_818F3B66.wem</CachePath>
+				</File>
+				<File Id="1021050184" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_grenade_attack.wav</ShortName>
+					<CachePath>SFX/Technician/technician_grenade_attack_818F3B66.wem</CachePath>
+				</File>
+				<File Id="1042413541" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_grenade_active.wav</ShortName>
+					<CachePath>SFX/Technician/technician_grenade_active_818F3B66.wem</CachePath>
+				</File>
+				<File Id="1047177477" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Technician\technician_conduit_loop.wav</ShortName>
+					<CachePath>SFX/Technician/technician_conduit_loop_818F3B66.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="1364125009" Name="TechnicianArcCharge" DurationType="OneShot" DurationMin="1.1992084" DurationMax="1.1992084">
+					<MediaRefs>
+						<MediaRef Id="309996574"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1333390408" Name="TechnicianConduitActivate" DurationType="OneShot" DurationMin="1.2499774" DurationMax="1.2499774">
+					<MediaRefs>
+						<MediaRef Id="438612904"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="986763980" Name="TechnicianConduitDirect" DurationType="OneShot" DurationMin="0.41072917" DurationMax="0.41072917">
+					<MediaRefs>
+						<MediaRef Id="681366594"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1432494081" Name="TechnicianConduitLoop" DurationType="OneShot" DurationMin="6.0010204" DurationMax="6.0010204">
+					<MediaRefs>
+						<MediaRef Id="1047177477"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3802899871" Name="TechnicianDeviceThrow" DurationType="OneShot" DurationMin="0.12501134" DurationMax="0.12501134">
+					<MediaRefs>
+						<MediaRef Id="440261866"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1236452693" Name="TechnicianGrenadeActive" DurationType="OneShot" DurationMin="0.41002268" DurationMax="0.41002268">
+					<MediaRefs>
+						<MediaRef Id="1042413541"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1361100559" Name="TechnicianGrenadeAttack" DurationType="OneShot" DurationMin="0.09975056" DurationMax="0.09975056">
+					<MediaRefs>
+						<MediaRef Id="1021050184"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="527378225" Name="TechnicianLinkActive" DurationType="OneShot" DurationMin="0.7200227" DurationMax="0.7200227">
+					<MediaRefs>
+						<MediaRef Id="129549700"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3678546018" Name="TechnicianTeleport" DurationType="OneShot" DurationMin="0.41002268" DurationMax="0.41002268">
+					<MediaRefs>
+						<MediaRef Id="417714631"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3938866225" Name="TechnicianTurretDeath" DurationType="OneShot" DurationMin="1.5000226" DurationMax="1.5000226">
+					<MediaRefs>
+						<MediaRef Id="831766270"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="223919836" Name="TechnicianTurretDeploy" DurationType="OneShot" DurationMin="1.0984354" DurationMax="1.0984354">
+					<MediaRefs>
+						<MediaRef Id="678507436"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="267301764" Name="TechnicianTurretElectric" DurationType="OneShot" DurationMin="22.000021" DurationMax="22.000021">
+					<MediaRefs>
+						<MediaRef Id="890700349"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3760050038" Name="TechnicianVoltCharge" DurationType="OneShot" DurationMin="1.9206667" DurationMax="1.9206667">
+					<MediaRefs>
+						<MediaRef Id="270816250"/>
+					</MediaRefs>
+				</Event>
+			</Events>
 		</SoundBank>
 		<SoundBank Id="3550526995" Type="User" Language="SFX" Hash="{DF2D477F-501C-458F-FD1A-048E9CBCD5B7}">
 			<ShortName>Faithful_char_Surveyor</ShortName>
@@ -128,5 +249,5 @@
 			<Path>Faithful_char_Caster.bnk</Path>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{E3C78A09-C4E8-A0CC-BC85-2A67D533BEB1}</FileHash>
+	<FileHash>{5CC0BC59-2B69-972B-D2DA-15B2BA9AD5A9}</FileHash>
 </SoundBanksInfo>
