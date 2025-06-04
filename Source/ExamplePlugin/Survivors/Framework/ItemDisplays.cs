@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Faithful
 {
@@ -158,6 +159,7 @@ namespace Faithful
                 ruleType = ItemDisplayRuleType.ParentedPrefab,
                 childName = _childName,
                 followerPrefab = _itemPrefab,
+                followerPrefabAddress = new AssetReferenceGameObject(""),
                 limbMask = LimbFlags.None,
                 localPos = _position,
                 localAngles = _rotation,
@@ -173,7 +175,8 @@ namespace Faithful
                 ruleType = ItemDisplayRuleType.LimbMask,
                 limbMask = _limb,
                 childName = "",
-                followerPrefab = null
+                followerPrefab = null,
+                followerPrefabAddress = new AssetReferenceGameObject("")
             };
         }
 

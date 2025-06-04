@@ -2086,6 +2086,7 @@ namespace Faithful
                     {
                         ruleType = ItemDisplayRuleType.ParentedPrefab,
                         followerPrefab = model,
+                        followerPrefabAddress = new AssetReferenceGameObject(""),
                         childName = _childName,
                         localPos = _position,
                         localAngles = _angle,
@@ -2106,6 +2107,7 @@ namespace Faithful
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = model,
+                    followerPrefabAddress = new AssetReferenceGameObject(""),
                     childName = _childName,
                     localPos = _position,
                     localAngles = _angle,
