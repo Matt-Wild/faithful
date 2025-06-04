@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using R2API;
 using UnityEngine.AddressableAssets;
 using RoR2.ExpansionManagement;
+using RoR2.ContentManagement;
+using static Rewired.UI.ControlMapper.ControlMapper;
+using static UnityEngine.ResourceManagement.ResourceProviders.AssetBundleResource;
 
 namespace Faithful
 {
@@ -90,13 +93,13 @@ namespace Faithful
         private static void FetchNeededRoR2Resources()
         {
             // Fetch all needed resources
-            mageJetMaterial = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("Jets, Right").GetComponent<MeshRenderer>().material);
+            mageJetMaterial = Object.Instantiate(Addressables.LoadAssetAsync<Material>("aa5dbb90045bc694bb20ffb706507091").WaitForCompletion());
             mageJetMaterial.SetTexture("_RemapTex", GetTexture("texRamp4T0NFire"));
 
-            mageJetWaves = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("JetsOn").Find("Point Light").GetComponent<RoR2.FlickerLight>().sinWaves;
+            mageJetWaves = Addressables.LoadAssetAsync<GameObject>("92199783eae803f4095bc93685a5ee70").WaitForCompletion().GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("JetsOn").Find("Point Light").GetComponent<RoR2.FlickerLight>().sinWaves;
 
             // Create mage jet ak events prefab
-            GameObject mageJetOn = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MageBody").transform.Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("JetsOn").gameObject);
+            GameObject mageJetOn = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("92199783eae803f4095bc93685a5ee70").WaitForCompletion().transform.Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("JetsOn").gameObject);
             mageJetAkEventsPrefab = mageJetOn.InstantiateClone("faithfulMageJetAkEvents");
             Object.DestroyImmediate(mageJetOn);
             Object.DestroyImmediate(mageJetAkEventsPrefab.transform.Find("Fire").gameObject);
@@ -111,7 +114,7 @@ namespace Faithful
             Object.DestroyImmediate(mageJetAkEventsPrefab.GetComponent<Rigidbody>());
 
             // Create Leader's Pennon effect
-            GameObject tempLPEffect = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/TemporaryVisualEffects/WarbannerBuffEffect"));
+            GameObject tempLPEffect = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("6b314230ed88f3c4b8d55cc64846854b").WaitForCompletion());
             pennonEffectPrefab = tempLPEffect.InstantiateClone("faithfulLeadersPennonEffect");
             Object.DestroyImmediate(tempLPEffect);
             pennonEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(0.58039215f, 0.22745098f, 0.71764705f));
@@ -127,7 +130,7 @@ namespace Faithful
             pennonEffectPrefab.transform.Find("Visual").Find("SoftGlow").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(0.58039215f, 0.22745098f, 1.0f));
 
             // Create Targeting Matrix effect
-            GameObject tempTMEffect = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/TemporaryVisualEffects/WarbannerBuffEffect"));
+            GameObject tempTMEffect = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("6b314230ed88f3c4b8d55cc64846854b").WaitForCompletion());
             matrixEffectPrefab = tempTMEffect.InstantiateClone("faithfulTargetingMatrixEffect");
             Object.DestroyImmediate(tempTMEffect);
             matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
@@ -143,7 +146,7 @@ namespace Faithful
             matrixEffectPrefab.transform.Find("Visual").Find("SoftGlow").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
 
             // Create radius indicator prefab
-            GameObject radiusIndicator = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/NearbyDamageBonusIndicator"));
+            GameObject radiusIndicator = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("5ba295c0a3919a544939e6efe1ff17b3").WaitForCompletion());
             radiusIndicatorPrefab = radiusIndicator.InstantiateClone("faithfulRadiusIndicator");
             Object.DestroyImmediate(radiusIndicator);
             Object.DestroyImmediate(radiusIndicatorPrefab.GetComponent<RoR2.NetworkedBodyAttachment>());
@@ -187,7 +190,7 @@ namespace Faithful
             arcFlareMainModule.startSize = 4.0f;
 
             // Get and modify Huntress' tracking indicator to create Technician's tracking indicator
-            GameObject huntressTracker = Object.Instantiate(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/HuntressTrackingIndicator"));
+            GameObject huntressTracker = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("2c791c24593eab442b64bb8c822a4f01").WaitForCompletion());
             technicianTrackingIndicatorPrefab = huntressTracker.InstantiateClone("faithfulTechnicianTracker");
             Object.DestroyImmediate(huntressTracker);
             technicianTrackingIndicatorPrefab.transform.Find("Core Pip").GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 0.375f, 0.286f);
@@ -211,7 +214,7 @@ namespace Faithful
             Object.DestroyImmediate(technicianTrackerNibHolders[2]);
 
             // Get physics material for ragdoll bodies
-            ragdollMaterial = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<RoR2.RagdollController>().bones[1].GetComponent<Collider>().material;
+            ragdollMaterial = Addressables.LoadAssetAsync<GameObject>("64ee0a4463fdfdc41ac7a06c8f5f2f0f").WaitForCompletion().GetComponentInChildren<RoR2.RagdollController>().bones[1].GetComponent<Collider>().material;
 
             // Fetch ego scarf asset
             scarfDynamicBone = Utils.FindChildByName(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/LunarSun/DisplaySunHeadNeck.prefab").WaitForCompletion().transform, "Bandage1").GetComponent<DynamicBone>();

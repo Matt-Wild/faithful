@@ -1,5 +1,9 @@
 # Changelog
 
+#### v1.3.7 Jetpack Material Fix
+- Fixed broken Jetpack material.
+- Switched some asset fetch operations to use GUIDs.
+
 #### v1.3.6 Memory Optimisation Update Fix
 - Updated Faithful to work with the new "Memory Optimisation Update".
 
@@ -43,10 +47,10 @@
 #### v1.2.9 LookingGlass Compatibility
 - LookingGlass now overrides the extended item descriptions config.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.8 Risk Of Options Compatibility
 - Added compatibility for Risk Of Options.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.7 Turret Item Displays
 - Added all missing item displays for Engineer's turrets.
