@@ -66,8 +66,204 @@ MonoBehaviour:
     ParentPath: SoundBanks\Default Work Unit
     guid: 7766444c66b5cf4e86cfbdafdebc2886
     GuidInternal: 
-    m_lastTime: -8584527021503066151
-    List: []
+    m_lastTime: -8584525373319543018
+    List:
+    - name: Faithful_char_Caster
+      guid: 77d4528138e9304e904041a2e6f7ff25
+      id: 4281578430
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_char_Caster
+        ObjectType: 7
+        guid: 77d4528138e9304e904041a2e6f7ff25
+      Path: SoundBanks\Default Work Unit\Faithful_char_Caster
+    - name: Faithful_char_Gyro
+      guid: 6b02f5d91db8024e8009f383ec2ff507
+      id: 463116895
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_char_Gyro
+        ObjectType: 7
+        guid: 6b02f5d91db8024e8009f383ec2ff507
+      Path: SoundBanks\Default Work Unit\Faithful_char_Gyro
+    - name: Faithful_char_Huntsman
+      guid: 6783e9309976cd4fb8ef1005085afe46
+      id: 1703840500
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_char_Huntsman
+        ObjectType: 7
+        guid: 6783e9309976cd4fb8ef1005085afe46
+      Path: SoundBanks\Default Work Unit\Faithful_char_Huntsman
+    - name: Faithful_char_Operator
+      guid: 427d4fdb41634a4081996b7fbc5bf234
+      id: 3952637814
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_char_Operator
+        ObjectType: 7
+        guid: 427d4fdb41634a4081996b7fbc5bf234
+      Path: SoundBanks\Default Work Unit\Faithful_char_Operator
+    - name: Faithful_char_Proxy
+      guid: 3e9215fa086feb418ba9c0922ad84734
+      id: 2921305306
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_char_Proxy
+        ObjectType: 7
+        guid: 3e9215fa086feb418ba9c0922ad84734
+      Path: SoundBanks\Default Work Unit\Faithful_char_Proxy
+    - name: Faithful_char_Salvager
+      guid: 7b3474eedf6da648851df8862ea4755f
+      id: 2165282721
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_char_Salvager
+        ObjectType: 7
+        guid: 7b3474eedf6da648851df8862ea4755f
+      Path: SoundBanks\Default Work Unit\Faithful_char_Salvager
+    - name: Faithful_char_Surveyor
+      guid: a1031cc22002a94ca19d2797ba540681
+      id: 3550526995
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_char_Surveyor
+        ObjectType: 7
+        guid: a1031cc22002a94ca19d2797ba540681
+      Path: SoundBanks\Default Work Unit\Faithful_char_Surveyor
+    - name: Faithful_char_Technician
+      guid: ea407fde993fb34e8c64f54a7c04138e
+      id: 3251809208
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_char_Technician
+        ObjectType: 7
+        guid: ea407fde993fb34e8c64f54a7c04138e
+      Path: SoundBanks\Default Work Unit\Faithful_char_Technician
+    - name: Faithful_char_VoidAgent
+      guid: a40efbc1e5ad8d4097f02ae9dbbe1ea3
+      id: 2287558135
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_char_VoidAgent
+        ObjectType: 7
+        guid: a40efbc1e5ad8d4097f02ae9dbbe1ea3
+      Path: SoundBanks\Default Work Unit\Faithful_char_VoidAgent
+    - name: Faithful_item_Global
+      guid: 95046ebb871b1f4787af798a43329da2
+      id: 388688204
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_item_Global
+        ObjectType: 7
+        guid: 95046ebb871b1f4787af798a43329da2
+      Path: SoundBanks\Default Work Unit\Faithful_item_Global
+    - name: Faithful_mob_Global
+      guid: a91ed08914c52f4385ff8e757e632525
+      id: 1066124047
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_mob_Global
+        ObjectType: 7
+        guid: a91ed08914c52f4385ff8e757e632525
+      Path: SoundBanks\Default Work Unit\Faithful_mob_Global
+    - name: Faithful_obj_Global
+      guid: b02cb219881c54409120647df54063c0
+      id: 2620265520
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_obj_Global
+        ObjectType: 7
+        guid: b02cb219881c54409120647df54063c0
+      Path: SoundBanks\Default Work Unit\Faithful_obj_Global
+    - name: Faithful_other_Global
+      guid: 3b76afa68006394db100ac948cd0ef39
+      id: 2608188423
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_other_Global
+        ObjectType: 7
+        guid: 3b76afa68006394db100ac948cd0ef39
+      Path: SoundBanks\Default Work Unit\Faithful_other_Global
+    - name: Faithful_zone_Global
+      guid: 662efacc1ff2aa46a5b7866d496aca0f
+      id: 1082257441
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 7766444c66b5cf4e86cfbdafdebc2886
+      - ElementName: Faithful_zone_Global
+        ObjectType: 7
+        guid: 662efacc1ff2aa46a5b7866d496aca0f
+      Path: SoundBanks\Default Work Unit\Faithful_zone_Global
   EventWwu:
   - PhysicalPath: Events\Default Work Unit.wwu
     PathAndIcons:
@@ -80,8 +276,479 @@ MonoBehaviour:
     ParentPath: Events\Default Work Unit
     guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
     GuidInternal: 
-    m_lastTime: -8584527021495653787
-    List: []
+    m_lastTime: -8584525373319712570
+    List:
+    - name: CollectorsVisionPickup
+      guid: af7b83c963c95f4e928c502c74fe3243
+      id: 1487394405
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Items
+        ObjectType: 4
+        guid: 7017b482eba1f2449d915c14bb6c3ff2
+      - ElementName: CollectorsVisionPickup
+        ObjectType: 3
+        guid: af7b83c963c95f4e928c502c74fe3243
+      Path: Events\Default Work Unit\SFX\Items\CollectorsVisionPickup
+      maxAttenuation: 0
+      maxDuration: 0.595
+      minDuration: 0.595
+    - name: DrownedVisageCharge
+      guid: a770c847feb7b34ab93aacb0bacde177
+      id: 4223938829
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Items
+        ObjectType: 4
+        guid: 7017b482eba1f2449d915c14bb6c3ff2
+      - ElementName: DrownedVisageCharge
+        ObjectType: 3
+        guid: a770c847feb7b34ab93aacb0bacde177
+      Path: Events\Default Work Unit\SFX\Items\DrownedVisageCharge
+      maxAttenuation: 0
+      maxDuration: 2.5000226
+      minDuration: 2.5000226
+    - name: HermitsShawlBuffConsumed
+      guid: fc804e20e30fa1479817d8c932045948
+      id: 2710992615
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Items
+        ObjectType: 4
+        guid: 7017b482eba1f2449d915c14bb6c3ff2
+      - ElementName: HermitsShawlBuffConsumed
+        ObjectType: 3
+        guid: fc804e20e30fa1479817d8c932045948
+      Path: Events\Default Work Unit\SFX\Items\HermitsShawlBuffConsumed
+      maxAttenuation: 0
+      maxDuration: 0.58498865
+      minDuration: 0.58498865
+    - name: Items
+      guid: 7017b482eba1f2449d915c14bb6c3ff2
+      id: 2151963051
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Items
+        ObjectType: 4
+        guid: 7017b482eba1f2449d915c14bb6c3ff2
+      Path: Events\Default Work Unit\SFX\Items
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: SFX
+      guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      id: 393239870
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      Path: Events\Default Work Unit\SFX
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: TargetingMatrixLockOn
+      guid: 65f2f0768cca264fb9859805ae910ac1
+      id: 3182601471
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Items
+        ObjectType: 4
+        guid: 7017b482eba1f2449d915c14bb6c3ff2
+      - ElementName: TargetingMatrixLockOn
+        ObjectType: 3
+        guid: 65f2f0768cca264fb9859805ae910ac1
+      Path: Events\Default Work Unit\SFX\Items\TargetingMatrixLockOn
+      maxAttenuation: 0
+      maxDuration: 0.25002083
+      minDuration: 0.25002083
+    - name: Technician
+      guid: 8995e45f506510408856d992d6a3284d
+      id: 1323735807
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      Path: Events\Default Work Unit\SFX\Technician
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: TechnicianArcCharge
+      guid: 75e24e264fd1394fbc6c3a1c36b6b40e
+      id: 1364125009
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianArcCharge
+        ObjectType: 3
+        guid: 75e24e264fd1394fbc6c3a1c36b6b40e
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianArcCharge
+      maxAttenuation: 0
+      maxDuration: 1.1992084
+      minDuration: 1.1992084
+    - name: TechnicianConduitActivate
+      guid: 41190690dae0df478e70b1eb7f4b21d4
+      id: 1333390408
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianConduitActivate
+        ObjectType: 3
+        guid: 41190690dae0df478e70b1eb7f4b21d4
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianConduitActivate
+      maxAttenuation: 0
+      maxDuration: 1.2499774
+      minDuration: 1.2499774
+    - name: TechnicianConduitDirect
+      guid: 049454178e229e46bce414df125deeeb
+      id: 986763980
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianConduitDirect
+        ObjectType: 3
+        guid: 049454178e229e46bce414df125deeeb
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianConduitDirect
+      maxAttenuation: 0
+      maxDuration: 0.41072917
+      minDuration: 0.41072917
+    - name: TechnicianConduitLoop
+      guid: 5386b603479c7a48b71e4b377c5fd3f3
+      id: 1432494081
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianConduitLoop
+        ObjectType: 3
+        guid: 5386b603479c7a48b71e4b377c5fd3f3
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianConduitLoop
+      maxAttenuation: 0
+      maxDuration: 6.0010204
+      minDuration: 6.0010204
+    - name: TechnicianDeviceThrow
+      guid: 34ce076c0bc2db48b0d5ea87d1112e17
+      id: 3802899871
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianDeviceThrow
+        ObjectType: 3
+        guid: 34ce076c0bc2db48b0d5ea87d1112e17
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianDeviceThrow
+      maxAttenuation: 0
+      maxDuration: 0.12501134
+      minDuration: 0.12501134
+    - name: TechnicianGrenadeActive
+      guid: 4f457f7fbc24734d9c123d02cfb8c04a
+      id: 1236452693
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianGrenadeActive
+        ObjectType: 3
+        guid: 4f457f7fbc24734d9c123d02cfb8c04a
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianGrenadeActive
+      maxAttenuation: 0
+      maxDuration: 0.41002268
+      minDuration: 0.41002268
+    - name: TechnicianGrenadeAttack
+      guid: a4c11282ecc0d24b9b14a813ec18b96d
+      id: 1361100559
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianGrenadeAttack
+        ObjectType: 3
+        guid: a4c11282ecc0d24b9b14a813ec18b96d
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianGrenadeAttack
+      maxAttenuation: 0
+      maxDuration: 0.09975056
+      minDuration: 0.09975056
+    - name: TechnicianLinkActive
+      guid: 23127e0629fcfd4fa776ca9ec93e0eea
+      id: 527378225
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianLinkActive
+        ObjectType: 3
+        guid: 23127e0629fcfd4fa776ca9ec93e0eea
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianLinkActive
+      maxAttenuation: 0
+      maxDuration: 0.7200227
+      minDuration: 0.7200227
+    - name: TechnicianTeleport
+      guid: cea5aef3d19a214e855c6dfa16569e6a
+      id: 3678546018
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianTeleport
+        ObjectType: 3
+        guid: cea5aef3d19a214e855c6dfa16569e6a
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianTeleport
+      maxAttenuation: 0
+      maxDuration: 0.41002268
+      minDuration: 0.41002268
+    - name: TechnicianTurretDeath
+      guid: 12cb6e7a1de8ca4699435e3f5b5c7f4f
+      id: 3938866225
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianTurretDeath
+        ObjectType: 3
+        guid: 12cb6e7a1de8ca4699435e3f5b5c7f4f
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianTurretDeath
+      maxAttenuation: 0
+      maxDuration: 1.5000226
+      minDuration: 1.5000226
+    - name: TechnicianTurretDeploy
+      guid: c30dbc70be0d224d9c9422c53ea12e88
+      id: 223919836
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianTurretDeploy
+        ObjectType: 3
+        guid: c30dbc70be0d224d9c9422c53ea12e88
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianTurretDeploy
+      maxAttenuation: 0
+      maxDuration: 1.0984354
+      minDuration: 1.0984354
+    - name: TechnicianTurretElectric
+      guid: 714c33d12b3278438b91f4e9f68289a1
+      id: 267301764
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianTurretElectric
+        ObjectType: 3
+        guid: 714c33d12b3278438b91f4e9f68289a1
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianTurretElectric
+      maxAttenuation: 0
+      maxDuration: 22.000021
+      minDuration: 22.000021
+    - name: TechnicianVoltCharge
+      guid: 7bc1d0a0cdf1dc4099be8d8f1902048b
+      id: 3760050038
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Technician
+        ObjectType: 4
+        guid: 8995e45f506510408856d992d6a3284d
+      - ElementName: TechnicianVoltCharge
+        ObjectType: 3
+        guid: 7bc1d0a0cdf1dc4099be8d8f1902048b
+      Path: Events\Default Work Unit\SFX\Technician\TechnicianVoltCharge
+      maxAttenuation: 0
+      maxDuration: 1.9206667
+      minDuration: 1.9206667
+    - name: VengefulToasterBuffConsumed
+      guid: 9dc04386c4a1234b88479f0ed843afb0
+      id: 879890618
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: b005b0cd0ba8a8429b1e08df9ef5ef8e
+      - ElementName: SFX
+        ObjectType: 4
+        guid: 172faf657bfd8c44adaca3d9db9e8aa6
+      - ElementName: Items
+        ObjectType: 4
+        guid: 7017b482eba1f2449d915c14bb6c3ff2
+      - ElementName: VengefulToasterBuffConsumed
+        ObjectType: 3
+        guid: 9dc04386c4a1234b88479f0ed843afb0
+      Path: Events\Default Work Unit\SFX\Items\VengefulToasterBuffConsumed
+      maxAttenuation: 0
+      maxDuration: 0.8000208
+      minDuration: 0.8000208
   RtpcWwu:
   - PhysicalPath: Game Parameters\Default Work Unit.wwu
     PathAndIcons:
