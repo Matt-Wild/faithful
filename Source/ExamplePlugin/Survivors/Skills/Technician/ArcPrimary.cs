@@ -20,13 +20,13 @@ namespace Faithful.Skills.Technician
 
         float tickDamageCoefficient = 0.5f;
 
-        float flamethrowerStopwatch;
+        float arcStopwatch;
 
         float stopwatch;
 
         float entryDuration = 0.6f;
 
-        bool hasBegunFlamethrower;
+        bool hasBegunArc;
 
         ChildLocator childLocator;
 
@@ -43,8 +43,12 @@ namespace Faithful.Skills.Technician
         public override void OnEnter()
         {
             base.OnEnter();
+
+            // Get how long the "build up" for this skill is
             stopwatch = 0f;
             entryDuration = baseEntryDuration / attackSpeedStat;
+
+            // Check for model transfor
             Transform modelTransform = GetModelTransform();
             if (characterBody)
             {
@@ -58,30 +62,32 @@ namespace Faithful.Skills.Technician
             }
             if (modelTransform)
             {
+                // Fetch child locator
                 childLocator = modelTransform.GetComponent<ChildLocator>();
             }
+
+            // Play arc start animation based on entry duration
             PlayAnimation("BothArms, Override", "ArcStart", "ArcStart.playbackRate", entryDuration);
         }
 
         public override void OnExit()
         {
             Util.PlaySound(endAttackSoundString, gameObject);
+
+            // Play exit duration
             PlayAnimation("BothArms, Override", "ArcEnd", "ArcEnd.playbackRate", 0.4f / attackSpeedStat);
-            if (leftArcTransform)
-            {
-                Destroy(leftArcTransform.gameObject);
-            }
-            if (rightArcTransform)
-            {
-                Destroy(rightArcTransform.gameObject);
-            }
+
+            // Destroy arc effects
+            if (leftArcTransform) Destroy(leftArcTransform.gameObject);
+            if (rightArcTransform) Destroy(rightArcTransform.gameObject);
+
             base.OnExit();
 
             // Set tracker lock
             if (tracker != null) tracker.SetLock(SkillSlot.Primary, false);
         }
 
-        private void FireGauntlet(string muzzleString)
+        private void FireArc(string muzzleString, float _damageMult = 1.0f)
         {
             // Check for target
             Transform target = tracker?.GetTrackingTarget()?.transform;
@@ -93,6 +99,7 @@ namespace Faithful.Skills.Technician
             // Get arc direction
             Vector3 arcDir = target.position - arcSource;
 
+            // Calculate aim ray and do bullet attack if server/host
             Ray aimRay = new Ray(arcSource, arcDir.normalized);
             if (isAuthority)
             {
@@ -102,7 +109,7 @@ namespace Faithful.Skills.Technician
                 bulletAttack.origin = aimRay.origin;
                 bulletAttack.aimVector = aimRay.direction;
                 bulletAttack.minSpread = 0.0f;
-                bulletAttack.damage = tickDamageCoefficient * damageStat;
+                bulletAttack.damage = tickDamageCoefficient * damageStat * _damageMult;
                 bulletAttack.force = 0.0f;
                 bulletAttack.muzzleName = muzzleString;
                 bulletAttack.isCrit = Util.CheckRoll(critStat, characterBody.master);
@@ -127,18 +134,40 @@ namespace Faithful.Skills.Technician
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (isAuthority && (!IsKeyDownAuthority() || characterBody.isSprinting || characterBody.allSkillsDisabled || tracker == null || tracker.GetTrackingTarget() == null))
+
+            // Check if should end Arc
+            if (isAuthority && (!IsKeyDownAuthority() || characterBody.isSprinting || characterBody.allSkillsDisabled))
             {
                 outer.SetNextStateToMain();
                 return;
             }
 
-            stopwatch += GetDeltaTime();
-            if (stopwatch >= entryDuration && !hasBegunFlamethrower)
+            // Check if target not found (probably killed)
+            if (isAuthority && tracker != null && tracker.GetTrackingTarget() == null)
             {
-                hasBegunFlamethrower = true;
+                // Attempt to get new target
+                tracker.SearchForTarget();
+
+                // Check if target still not found
+                if (tracker.GetTrackingTarget() == null)
+                {
+                    outer.SetNextStateToMain();
+                    return;
+                }
+            }
+
+            // Has entry duration been exceeded
+            stopwatch += GetDeltaTime();
+            if (stopwatch >= entryDuration && !hasBegunArc)
+            {
+                // Has started actually attacking
+                hasBegunArc = true;
                 Util.PlaySound(startAttackSoundString, gameObject);
+
+                // Play loop aniation
                 PlayAnimation("BothArms, Override", "ArcLoop", "ArcLoop.playbackRate", 10.0f);
+
+                // Create Arc effects if child locator exists
                 if (childLocator)
                 {
                     Transform transform = childLocator.FindChild("ArcLeft");
@@ -154,19 +183,26 @@ namespace Faithful.Skills.Technician
                         rightArcEndTransform = rightArcTransform.Find("LaserEnd");
                     }
                 }
-                FireGauntlet("MuzzleCenter");
+
+                // Do initial Arc attack (initial tick is 5x damage)
+                FireArc("MuzzleCenter", 5.0f);
             }
-            if (hasBegunFlamethrower)
+
+            // Continuation of attack
+            if (hasBegunArc)
             {
+                // Constantly play loop
                 PlayAnimation("BothArms, Override", "ArcLoop", "ArcLoop.playbackRate", 10.0f);
-                flamethrowerStopwatch += Time.deltaTime;
+
+                // Stopwatch determines damage frequency
+                arcStopwatch += Time.deltaTime;
                 float num = 1f / tickFrequency / attackSpeedStat;
-                if (flamethrowerStopwatch > num)
+                if (arcStopwatch > num)
                 {
-                    flamethrowerStopwatch -= num;
-                    FireGauntlet("MuzzleCenter");
+                    // Reset stopwatch and do attack
+                    arcStopwatch -= num;
+                    FireArc("MuzzleCenter");
                 }
-                UpdateFlamethrowerEffect();
 
                 // Check for target
                 Transform target = tracker?.GetTrackingTarget()?.transform;
@@ -176,21 +212,6 @@ namespace Faithful.Skills.Technician
                     if (leftArcEndTransform != null) leftArcEndTransform.position = target.position;
                     if (rightArcEndTransform != null) rightArcEndTransform.position = target.position;
                 }
-            }
-        }
-
-        private void UpdateFlamethrowerEffect()
-        {
-            Ray aimRay = GetAimRay();
-            Vector3 direction = aimRay.direction;
-            Vector3 direction2 = aimRay.direction;
-            if (leftArcTransform)
-            {
-                leftArcTransform.forward = direction;
-            }
-            if (rightArcTransform)
-            {
-                rightArcTransform.forward = direction2;
             }
         }
 

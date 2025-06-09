@@ -8,6 +8,7 @@ using RoR2.ExpansionManagement;
 using RoR2.ContentManagement;
 using static Rewired.UI.ControlMapper.ControlMapper;
 using static UnityEngine.ResourceManagement.ResourceProviders.AssetBundleResource;
+using Rewired.ComponentControls.Effects;
 
 namespace Faithful
 {
@@ -197,6 +198,7 @@ namespace Faithful
             technicianTrackingIndicatorPrefab.transform.Find("Core Pip").GetComponent<SpriteRenderer>().sortingOrder = 1;
             technicianTrackingIndicatorPrefab.transform.Find("Core, Dark").GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.25f, 0.953f);
             technicianTrackingIndicatorPrefab.transform.Find("Holder").localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            technicianTrackingIndicatorPrefab.transform.Find("Holder").GetComponent<RotateAroundAxis>().reverse = true;
             Object.DestroyImmediate(technicianTrackingIndicatorPrefab.transform.Find("Holder").GetComponent<RoR2.ObjectScaleCurve>());
             GameObject[] technicianTrackerNibHolders = Utils.FindChildrenWithTerm(technicianTrackingIndicatorPrefab.transform.Find("Holder"), "Nib Holder");
             technicianTrackerNibHolders[0].transform.localEulerAngles = Vector3.zero;
