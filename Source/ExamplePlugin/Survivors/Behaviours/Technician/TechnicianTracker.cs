@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿using Rewired.ComponentControls.Effects;
+using RoR2;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -44,6 +45,9 @@ namespace Faithful
 
         // Target searching logic for locking onto a new target after kill
         readonly float maxTrackingAngleContinued = 25.0f;
+
+        // Whether the player is focusing mechanical ally targets
+        bool allyFocus = false;
 
         void Awake()
         {
@@ -96,37 +100,49 @@ namespace Faithful
             // Get aim ray for target search
             Ray aimRay = new(inputBank.aimOrigin, inputBank.aimDirection);
 
-            // Check if target is locket
-            if (trackingTarget != null && IsLocked())
+            // Check if target is locked
+            if (IsLocked())
             {
-                // Search for target
-                search.teamMaskFilter = TeamMask.all;
-                search.teamMaskFilter.RemoveTeam(teamComponent.teamIndex);
-                search.filterByLoS = true;
-                search.searchOrigin = aimRay.origin;
-                search.searchDirection = aimRay.direction;
-                search.sortMode = BullseyeSearch.SortMode.Angle;
-                search.maxDistanceFilter = maxTrackingDistanceLocked;
-                search.maxAngleFilter = maxTrackingAngleLocked;
-                search.RefreshCandidates();
-                search.FilterOutGameObject(gameObject);
-
-                // Check if search does not contain current target
-                if (!search.GetResults().Contains(trackingTarget))
+                // Check if target still exists
+                if (trackingTarget != null)
                 {
-                    // Get new target
+                    // Search for potential targets
                     search.teamMaskFilter = TeamMask.all;
-                    search.teamMaskFilter.RemoveTeam(teamComponent.teamIndex);
                     search.filterByLoS = true;
                     search.searchOrigin = aimRay.origin;
                     search.searchDirection = aimRay.direction;
                     search.sortMode = BullseyeSearch.SortMode.Angle;
-                    search.maxDistanceFilter = maxTrackingDistance;
-                    search.maxAngleFilter = maxTrackingAngleContinued;
+                    search.maxDistanceFilter = maxTrackingDistanceLocked;
+                    search.maxAngleFilter = maxTrackingAngleLocked;
                     search.RefreshCandidates();
                     search.FilterOutGameObject(gameObject);
-                    trackingTarget = search.GetResults().FirstOrDefault();
+
+                    // Don't acquire new target if current target is still in search
+                    if (search.GetResults().Contains(trackingTarget)) return;
                 }
+
+                // Get new target
+                if (allyFocus)
+                {
+                    search.teamMaskFilter = TeamMask.none;
+                    search.teamMaskFilter.AddTeam(teamComponent.teamIndex);
+                }
+                else
+                {
+                    search.teamMaskFilter = TeamMask.all;
+                    search.teamMaskFilter.RemoveTeam(teamComponent.teamIndex);
+                }
+                search.filterByLoS = true;
+                search.searchOrigin = aimRay.origin;
+                search.searchDirection = aimRay.direction;
+                search.sortMode = BullseyeSearch.SortMode.Angle;
+                search.maxDistanceFilter = maxTrackingDistance;
+                search.maxAngleFilter = maxTrackingAngleContinued;
+                search.RefreshCandidates();
+                search.FilterOutGameObject(gameObject);
+                trackingTarget = search.GetResults().FirstOrDefault();
+
+                
             }
 
             // Target not locked
@@ -134,7 +150,6 @@ namespace Faithful
             {
                 // Search for target
                 search.teamMaskFilter = TeamMask.all;
-                search.teamMaskFilter.RemoveTeam(teamComponent.teamIndex);
                 search.filterByLoS = true;
                 search.searchOrigin = aimRay.origin;
                 search.searchDirection = aimRay.direction;
@@ -143,8 +158,50 @@ namespace Faithful
                 search.maxAngleFilter = maxTrackingAngle;
                 search.RefreshCandidates();
                 search.FilterOutGameObject(gameObject);
+
+                // Filter out non-mechanical allies
+                search.candidatesEnumerable.RemoveAll(delegate (BullseyeSearch.CandidateInfo _candidateInfo)
+                {
+                    // Get character body and team index
+                    CharacterBody body = _candidateInfo.hurtBox.healthComponent.body;
+                    TeamIndex teamIndex = _candidateInfo.hurtBox.teamIndex;
+
+                    // Filter out if no character body or non-mechanical ally
+                    return body == null || (teamIndex == teamComponent.teamIndex && !body.bodyFlags.HasFlag(CharacterBody.BodyFlags.Mechanical));
+                });
+
                 trackingTarget = search.GetResults().FirstOrDefault();
             }
+        }
+
+        void UpdateIndicator()
+        {
+            // Skip if no visualiser instance
+            if (indicator?.visualizerInstance == null) return;
+
+            // Get indicator components
+            RotateAroundAxis rotator = indicator.visualizerInstance.transform.Find("Holder").GetComponent<RotateAroundAxis>();
+            GameObject[] technicianTrackerNibHolders = Utils.FindChildrenWithTerm(indicator.visualizerInstance.transform.Find("Holder"), "Nib Holder");
+            Transform nib1 = technicianTrackerNibHolders[0].transform.Find("Nib");
+            Transform nib2 = technicianTrackerNibHolders[1].transform.Find("Nib");
+
+            // Check if locked
+            if (IsLocked())
+            {
+                // Set as locked visual effect
+                rotator.SetSpeed(RotateAroundAxis.Speed.Slow);
+                nib1.localPosition = new Vector3(0.16f, 0.0f, 0.0f);
+                nib2.localPosition = new Vector3(-0.16f, 0.0f, 0.0f);
+
+                return;
+            }
+
+            // Not locked
+
+            // Set as locked visual effect
+            rotator.SetSpeed(RotateAroundAxis.Speed.Fast);
+            nib1.localPosition = new Vector3(0.22f, 0.0f, 0.0f);
+            nib2.localPosition = new Vector3(-0.22f, 0.0f, 0.0f);
         }
 
         bool IsLocked()
@@ -155,8 +212,25 @@ namespace Faithful
 
         public void SetLock(SkillSlot _skill, bool _lock)
         {
+            // Get if target is previously considered locked
+            bool prevLocked = IsLocked();
+
             // Set lock in dictionary
             locks[_skill] = _lock;
+
+            // Does skill want to lock target and target exists
+            if (_lock && trackingTarget != null)
+            {
+                // Update player intent (whether player is trying to lock allies)
+                allyFocus = trackingTarget.teamIndex == teamComponent.teamIndex;
+            }
+
+            // Check if locked condition has changed
+            if (IsLocked() != prevLocked)
+            {
+                // Update tracker visuals
+                UpdateIndicator();
+            }
         }
     }
 }

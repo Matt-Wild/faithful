@@ -199,6 +199,8 @@ namespace Faithful
             technicianTrackingIndicatorPrefab.transform.Find("Core, Dark").GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.25f, 0.953f);
             technicianTrackingIndicatorPrefab.transform.Find("Holder").localScale = new Vector3(1.0f, 1.0f, 1.0f);
             technicianTrackingIndicatorPrefab.transform.Find("Holder").GetComponent<RotateAroundAxis>().reverse = true;
+            technicianTrackingIndicatorPrefab.transform.Find("Holder").GetComponent<RotateAroundAxis>().fastRotationSpeed = 60.0f;
+            technicianTrackingIndicatorPrefab.transform.Find("Holder").GetComponent<RotateAroundAxis>().slowRotationSpeed = 30.0f;
             Object.DestroyImmediate(technicianTrackingIndicatorPrefab.transform.Find("Holder").GetComponent<RoR2.ObjectScaleCurve>());
             GameObject[] technicianTrackerNibHolders = Utils.FindChildrenWithTerm(technicianTrackingIndicatorPrefab.transform.Find("Holder"), "Nib Holder");
             technicianTrackerNibHolders[0].transform.localEulerAngles = Vector3.zero;

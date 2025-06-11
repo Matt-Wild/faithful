@@ -1,6 +1,8 @@
 ﻿using EntityStates;
 using RoR2;
+using RoR2.Networking;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful.Skills.Technician
 {
@@ -40,9 +42,14 @@ namespace Faithful.Skills.Technician
 
         TechnicianTracker tracker;
 
+        BuffIndex overclockedBuffIndex;
+
         public override void OnEnter()
         {
             base.OnEnter();
+
+            // Fetch buff indexes
+            overclockedBuffIndex = Buffs.GetBuff("OVERCLOCKED").buffDef.buffIndex;
 
             // Get how long the "build up" for this skill is
             stopwatch = 0f;
@@ -122,6 +129,7 @@ namespace Faithful.Skills.Technician
                 bulletAttack.damageType = DamageType.SlowOnHit;
                 bulletAttack.allowTrajectoryAimAssist = false;
                 bulletAttack.damageType.damageSource = DamageSource.Primary;
+                bulletAttack.hitCallback = ArcHitCallback;
                 bulletAttack.Fire();
             }
 
@@ -131,6 +139,96 @@ namespace Faithful.Skills.Technician
             }
         }
 
+        // This is a modified method from RoR2.BulletAttack - UPDATE IF ISSUES ARISE
+        private bool ArcHitCallback(BulletAttack bulletAttack, ref BulletAttack.BulletHit hitInfo)
+        {
+            bool result = false;
+            if (hitInfo.collider)
+            {
+                result = ((1 << hitInfo.collider.gameObject.layer & bulletAttack.stopperMask) == 0);
+            }
+            BulletAttack.PlayHitEffect(bulletAttack, ref hitInfo);
+            GameObject entityObject = hitInfo.entityObject;
+            if (entityObject)
+            {
+                float num = BulletAttack.CalcFalloffFactor(bulletAttack.falloffModel, hitInfo.distance);
+                DamageInfo damageInfo = new DamageInfo();
+                damageInfo.damage = bulletAttack.damage * num;
+                damageInfo.crit = bulletAttack.isCrit;
+                damageInfo.attacker = bulletAttack.owner;
+                damageInfo.inflictor = bulletAttack.weapon;
+                damageInfo.position = hitInfo.point;
+                damageInfo.force = hitInfo.direction * (bulletAttack.force * num);
+                damageInfo.procChainMask = bulletAttack.procChainMask;
+                damageInfo.procCoefficient = bulletAttack.procCoefficient;
+                damageInfo.damageType = bulletAttack.damageType;
+                damageInfo.damageColorIndex = bulletAttack.damageColorIndex;
+                damageInfo.ModifyDamageInfo(hitInfo.damageModifier);
+                if (hitInfo.isSniperHit)
+                {
+                    damageInfo.crit = true;
+                    damageInfo.damageColorIndex = DamageColorIndex.Sniper;
+                }
+                BulletAttack.ModifyOutgoingDamageCallback modifyOutgoingDamageCallback = bulletAttack.modifyOutgoingDamageCallback;
+                if (modifyOutgoingDamageCallback != null)
+                {
+                    modifyOutgoingDamageCallback(bulletAttack, ref hitInfo, damageInfo);
+                }
+                TeamIndex attackerTeamIndex = TeamIndex.None;
+                if (bulletAttack.owner)
+                {
+                    TeamComponent component = bulletAttack.owner.GetComponent<TeamComponent>();
+                    if (component)
+                    {
+                        attackerTeamIndex = component.teamIndex;
+                    }
+                }
+                HealthComponent healthComponent = null;
+                if (hitInfo.hitHurtBox)
+                {
+                    healthComponent = hitInfo.hitHurtBox.healthComponent;
+                }
+                bool flag = healthComponent && FriendlyFireManager.ShouldDirectHitProceed(healthComponent, attackerTeamIndex);
+                if (NetworkServer.active)
+                {
+                    if (flag)
+                    {
+                        healthComponent.TakeDamage(damageInfo);
+                        GlobalEventManager.instance.OnHitEnemy(damageInfo, hitInfo.entityObject);
+                    }
+                    // INJECTED
+                    else
+                    {
+                        // Fetch character body
+                        CharacterBody body = healthComponent?.body;
+
+                        // Check for mechanical flag
+                        if (body != null && body.bodyFlags.HasFlag(CharacterBody.BodyFlags.Mechanical))
+                        {
+                            // Add times overclocked buff
+                            body.AddTimedBuff(overclockedBuffIndex, 1.0f);
+                        }
+                    }
+                    // END INJECTED
+                    GlobalEventManager.instance.OnHitAll(damageInfo, hitInfo.entityObject);
+                }
+                else if (ClientScene.ready)
+                {
+                    GameObject networkedGameObject = BulletAttack.GetNetworkedGameObject(entityObject);
+                    BulletAttack.messageWriter.StartMessage(53);
+                    int currentLogLevel = LogFilter.currentLogLevel;
+                    LogFilter.currentLogLevel = 4;
+                    BulletAttack.messageWriter.Write(networkedGameObject);
+                    LogFilter.currentLogLevel = currentLogLevel;
+                    BulletAttack.messageWriter.Write(damageInfo);
+                    BulletAttack.messageWriter.Write(flag);
+                    BulletAttack.messageWriter.FinishMessage();
+                    ClientScene.readyConnection.SendWriter(BulletAttack.messageWriter, QosChannelIndex.defaultReliable.intVal);
+                }
+            }
+            return result;
+        }
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();
@@ -138,6 +236,9 @@ namespace Faithful.Skills.Technician
             // Check if should end Arc
             if (isAuthority && (!IsKeyDownAuthority() || characterBody.isSprinting || characterBody.allSkillsDisabled))
             {
+                // Give stock back if arc hasn't even begun
+                if (!hasBegunArc) skillLocator.primary.AddOneStock();
+
                 outer.SetNextStateToMain();
                 return;
             }
@@ -151,6 +252,9 @@ namespace Faithful.Skills.Technician
                 // Check if target still not found
                 if (tracker.GetTrackingTarget() == null)
                 {
+                    // Give stock back if arc hasn't even begun
+                    if (!hasBegunArc) skillLocator.primary.AddOneStock();
+
                     outer.SetNextStateToMain();
                     return;
                 }

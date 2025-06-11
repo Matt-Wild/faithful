@@ -55,6 +55,7 @@ namespace Faithful
         private static Vengeance vengeance;
         private static Patience patience;
         private static Inspiration inspiration;
+        private static Overclocked overclocked;
 
         // Items
         private static CopperGear copperGear;
@@ -119,6 +120,7 @@ namespace Faithful
             vengeance = new Vengeance(toolbox);
             patience = new Patience(toolbox);
             inspiration = new Inspiration(toolbox);
+            overclocked = new Overclocked();
 
             // Create items
             copperGear = new CopperGear(toolbox);
