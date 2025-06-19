@@ -112,8 +112,8 @@ namespace Faithful
         // List of skins used by this survivor
         private List<SkinDef> m_skins = new List<SkinDef>();
 
-        // List of skill families this survivor has
-        private List<SkillSlot> m_skillFamilies = new List<SkillSlot>();
+        // Dictionary of skill families this survivor has
+        private Dictionary<SkillSlot, SkillFamily> m_skillFamilies = new Dictionary<SkillSlot, SkillFamily>();
 
         // The survivor definition for this survivor
         private SurvivorDef m_survivorDef;
@@ -881,16 +881,25 @@ namespace Faithful
         protected void AddSkill<T>(string _token, string _iconName, SkillSlot _family, SerializableEntityStateType _activationState, int _baseMaxStock = 1, float _baseRechargeInterval = 0.0f,
                                 int _stockPerRecharge = 1, int _requiredStock = 1, int _consumedStock = 1, bool _beginSkillCooldownOnSkillEnd = true, bool _canceledFromSprinting = false,
                                 bool _cancelSprintingOnActivation = true, bool _fullRestockOnAssign = true, InterruptPriority _interruptPriority = InterruptPriority.Any, bool _isCombatSkill = true,
-                                bool _mustKeyPress = false, bool _attackSpeedBuffsRestockSpeed = false) where T : SkillDef
+                                bool _mustKeyPress = false, bool _attackSpeedBuffsRestockSpeed = false, string[] _keywordTokens = null) where T : SkillDef
         {
+
+            // Initialise skill family (fetched later)
+            SkillFamily skillFamily = null;
+
             // Check if survivor doesn't have a skill family for this skill yet
-            if (!m_skillFamilies.Contains(_family))
+            if (!m_skillFamilies.ContainsKey(_family))
             {
                 // Create skill family
-                CreateGenericSkillWithSkillFamily(_family);
+                skillFamily = CreateGenericSkillWithSkillFamily(_family).skillFamily;
 
                 // Register to skill families list
-                m_skillFamilies.Add(_family);
+                m_skillFamilies.Add(_family, skillFamily);
+            }
+            else
+            {
+                // Fetch skill family
+                skillFamily = m_skillFamilies[_family];
             }
 
             // Create token prefix
@@ -910,7 +919,7 @@ namespace Faithful
                     tokenPrefix += "_SPECIAL";
                     break;
                 case SkillSlot.None:
-                    tokenPrefix += "_SKILL";
+                    tokenPrefix += "_PASSIVE";
                     break;
             }
 
@@ -918,48 +927,33 @@ namespace Faithful
             T mySkillDef = ScriptableObject.CreateInstance<T>();
 
             // Setup skill def
-            mySkillDef.activationState = _activationState;
-            mySkillDef.activationStateMachineName = "Weapon";
-            mySkillDef.baseMaxStock = _baseMaxStock;
-            mySkillDef.baseRechargeInterval = _baseRechargeInterval;
-            mySkillDef.rechargeStock = _stockPerRecharge;
-            mySkillDef.requiredStock = _requiredStock;
-            mySkillDef.stockToConsume = _consumedStock;
-            mySkillDef.beginSkillCooldownOnSkillEnd = _beginSkillCooldownOnSkillEnd;
-            mySkillDef.canceledFromSprinting = _canceledFromSprinting;
-            mySkillDef.cancelSprintingOnActivation = _cancelSprintingOnActivation;
-            mySkillDef.fullRestockOnAssign = _fullRestockOnAssign;
-            mySkillDef.interruptPriority = _interruptPriority;
-            mySkillDef.isCombatSkill = _isCombatSkill;
-            mySkillDef.mustKeyPress = _mustKeyPress;
-            mySkillDef.attackSpeedBuffsRestockSpeed = _attackSpeedBuffsRestockSpeed;
-            mySkillDef.icon = Assets.GetSprite(_iconName);
-            mySkillDef.skillDescriptionToken = $"{tokenPrefix}_{_token}_DESCRIPTION";
             mySkillDef.skillName = $"{tokenPrefix}_{_token}_NAME";
             mySkillDef.skillNameToken = $"{tokenPrefix}_{_token}_NAME";
+            mySkillDef.skillDescriptionToken = $"{tokenPrefix}_{_token}_DESCRIPTION";
+            mySkillDef.icon = Assets.GetSprite(_iconName);
+            mySkillDef.keywordTokens = _keywordTokens ?? [];
 
-            // Add skill def to content pack
-            ContentAddition.AddSkillDef(mySkillDef);
-
-            // Get skill locator
-            SkillLocator skillLocator = m_bodyPrefab.GetComponent<SkillLocator>();
-
-            // Find skill family
-            SkillFamily skillFamily = null;
-            switch (_family)
+            // Not applicable for passives
+            if (_family != SkillSlot.None)
             {
-                case SkillSlot.Primary:
-                    skillFamily = skillLocator.primary.skillFamily;
-                    break;
-                case SkillSlot.Secondary:
-                    skillFamily = skillLocator.secondary.skillFamily;
-                    break;
-                case SkillSlot.Utility:
-                    skillFamily = skillLocator.utility.skillFamily;
-                    break;
-                case SkillSlot.Special:
-                    skillFamily = skillLocator.special.skillFamily;
-                    break;
+                mySkillDef.activationState = _activationState;
+                mySkillDef.activationStateMachineName = "Weapon";
+                mySkillDef.baseMaxStock = _baseMaxStock;
+                mySkillDef.baseRechargeInterval = _baseRechargeInterval;
+                mySkillDef.rechargeStock = _stockPerRecharge;
+                mySkillDef.requiredStock = _requiredStock;
+                mySkillDef.stockToConsume = _consumedStock;
+                mySkillDef.beginSkillCooldownOnSkillEnd = _beginSkillCooldownOnSkillEnd;
+                mySkillDef.canceledFromSprinting = _canceledFromSprinting;
+                mySkillDef.cancelSprintingOnActivation = _cancelSprintingOnActivation;
+                mySkillDef.fullRestockOnAssign = _fullRestockOnAssign;
+                mySkillDef.interruptPriority = _interruptPriority;
+                mySkillDef.isCombatSkill = _isCombatSkill;
+                mySkillDef.mustKeyPress = _mustKeyPress;
+                mySkillDef.attackSpeedBuffsRestockSpeed = _attackSpeedBuffsRestockSpeed;
+
+                // Add skill def to content pack
+                ContentAddition.AddSkillDef(mySkillDef);
             }
 
             // Add as skill variant if alternate skill
@@ -990,8 +984,7 @@ namespace Faithful
                 case SkillSlot.Special:
                     return skillLocator.special = CreateGenericSkillWithSkillFamily("Special", _hidden);
                 case SkillSlot.None:
-                    Log.Error("Failed to create GenericSkill with skillslot None. If making a GenericSkill outside of the main 4, specify a familyName, and optionally a genericSkillName");
-                    return null;
+                    return CreateGenericSkillWithSkillFamily("Passive", _hidden);
             }
 
             // Unknown skill type

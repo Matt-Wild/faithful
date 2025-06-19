@@ -124,6 +124,10 @@
 	"FAITHFUL_SURVIVOR_TECHNICIAN_UTILITY_CHARGE_FLOW_NAME": "Charge Flow",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_UTILITY_CHARGE_FLOW_DESCRIPTION": "<style=cIsUtility>Agile</style>. <style=cIsDamage>Shocking</style>. <style=cIsUtility>Teleport</style> toward a targeted enemy, dealing <style=cIsDamage>340% damage</style> on contact and launching yourself into the air.",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_SPECIAL_CONDUIT_NAME": "LR52 Conduit",
-	"FAITHFUL_SURVIVOR_TECHNICIAN_SPECIAL_CONDUIT_DESCRIPTION": "Place or direct a robotic tesla coil that <style=cIsUtility>inherits all your items</style>. Attacks nearby enemies, electrocuting them for <style=cIsDamage>200% damage per second</style>."
+	"FAITHFUL_SURVIVOR_TECHNICIAN_SPECIAL_CONDUIT_DESCRIPTION": "Place or direct a robotic tesla coil that <style=cIsUtility>inherits all your items</style>. Attacks nearby enemies, electrocuting them for <style=cIsDamage>200% damage per second</style>.",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_PASSIVE_OVERCLOCK_NAME": "Overclock",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_PASSIVE_OVERCLOCK_DESCRIPTION": "Using <style=cIsDamage>Arc</style> on mechanical allies <style=cIsUtility>overclocks</style> them, increasing <style=cIsDamage>attack</style> and <style=cIsUtility>movement speed</style>.",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_PASSIVE_REPAIR_NAME": "Repair",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_PASSIVE_REPAIR_DESCRIPTION": "Using <style=cIsDamage>Arc</style> on mechanical allies <style=cIsHealing>repairs</style> them, <style=cIsHealing>healing</style> them over time."
   }
 }

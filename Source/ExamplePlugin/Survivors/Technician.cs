@@ -98,6 +98,8 @@ namespace Faithful
             //SetupTempSkills();
 
             // Add technician skills
+            AddSkill<SkillDef>("OVERCLOCK", "texTechnicianOverclockIcon", SkillSlot.None, new SerializableEntityStateType(typeof(Skills.Temp.TempPassive)));
+            AddSkill<SkillDef>("REPAIR", "texTechnicianRepairIcon", SkillSlot.None, new SerializableEntityStateType(typeof(Skills.Temp.TempPassive)));
             AddSkill<TechnicianTrackerSkillDef>("ARC", "texTechnicianArcIcon", SkillSlot.Primary, new SerializableEntityStateType(typeof(Skills.Technician.ArcPrimary)), 
                 _baseRechargeInterval: 1.5f, _attackSpeedBuffsRestockSpeed: true);
             AddSkill<SkillDef>("POWERVOLT", "texTechnicianPowervoltIcon", SkillSlot.Secondary, new SerializableEntityStateType(typeof(Skills.Temp.TempSecondary)), 
