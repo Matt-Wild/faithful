@@ -97,6 +97,7 @@ namespace Faithful
         private static List<CharacterBodyCallback> onRecalculateStatsCallbacks = new List<CharacterBodyCallback>();
         private static List<CharacterBodyCallback> onUpdateVisualEffectsCallbacks = new List<CharacterBodyCallback>();
         private static List<CharacterBodyCallback> onCharacterBodyFixedUpdateCallbacks = new List<CharacterBodyCallback>();
+        private static Dictionary<float, CharacterBodyCallback> onCharacterBodyTickCallbacks = new Dictionary<float, CharacterBodyCallback>();
 
         // Interactable callbacks
         private static List<OnPurchaseInteractionBeginCallback> onPurchaseInteractionBeginCallbacks = new List<OnPurchaseInteractionBeginCallback>();
@@ -571,6 +572,13 @@ namespace Faithful
             DebugLog("Removed On Character Body Fixed Update behaviour");
         }
 
+        public static void AddOnCharacterBodyTickCallback(float _tickRate, CharacterBodyCallback _callback)
+        {
+            onCharacterBodyTickCallbacks.Add(_tickRate, _callback);
+
+            DebugLog("Added On Character Body Tick behaviour");
+        }
+
         // Add On Purchase Interaction Begin callback
         public static void AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBeginCallback _callback)
         {
@@ -753,8 +761,14 @@ namespace Faithful
                 // Spawn object for clients
                 NetworkServer.Spawn(characterBodyBehaviourObj);
 
+                // Get character body behaviour
+                FaithfulCharacterBodyBehaviour characterBodyBehaviour = characterBodyBehaviourObj.GetComponent<FaithfulCharacterBodyBehaviour>();
+
                 // Link the character body ID
-                characterBodyBehaviourObj.GetComponent<FaithfulCharacterBodyBehaviour>().characterID = self.GetComponent<NetworkIdentity>().netId;
+                characterBodyBehaviour.characterID = self.GetComponent<NetworkIdentity>().netId;
+
+                // Setup on tick callbacks
+                foreach (KeyValuePair<float, CharacterBodyCallback> entry in onCharacterBodyTickCallbacks) characterBodyBehaviour.AddTickBehaviour(entry.Value, entry.Key);
             }
 
             orig(self); // Run normal processes

@@ -56,6 +56,7 @@ namespace Faithful
         private static Patience patience;
         private static Inspiration inspiration;
         private static Overclocked overclocked;
+        private static Repair repair;
 
         // Items
         private static CopperGear copperGear;
@@ -121,6 +122,7 @@ namespace Faithful
             patience = new Patience(toolbox);
             inspiration = new Inspiration(toolbox);
             overclocked = new Overclocked();
+            repair = new Repair();
 
             // Create items
             copperGear = new CopperGear(toolbox);

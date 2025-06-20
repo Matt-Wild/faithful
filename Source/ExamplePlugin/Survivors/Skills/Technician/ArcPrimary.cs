@@ -1,6 +1,7 @@
 ﻿using EntityStates;
 using RoR2;
 using RoR2.Networking;
+using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -42,14 +43,14 @@ namespace Faithful.Skills.Technician
 
         TechnicianTracker tracker;
 
-        BuffIndex overclockedBuffIndex;
+        BuffIndex mechanicalAllyBuffIndex;
 
         public override void OnEnter()
         {
             base.OnEnter();
 
-            // Fetch buff indexes
-            overclockedBuffIndex = Buffs.GetBuff("OVERCLOCKED").buffDef.buffIndex;
+            // Fetch mechanical ally buff index (default to overclocked)
+            mechanicalAllyBuffIndex = Buffs.GetBuff("OVERCLOCKED").buffDef.buffIndex;
 
             // Get how long the "build up" for this skill is
             stopwatch = 0f;
@@ -61,6 +62,16 @@ namespace Faithful.Skills.Technician
             {
                 // Fetch tracker
                 tracker = characterBody.GetComponent<TechnicianTracker>();
+
+                // Try get passive skill name
+                string passiveName = characterBody.GetComponent<SkillLocator>()?.FindSkill("Passive")?.skillDef?.skillName;
+
+                // Check if using repair
+                if (passiveName != null && passiveName.Contains("REPAIR"))
+                {
+                    // Change mechanical ally buff to be repair
+                    mechanicalAllyBuffIndex = Buffs.GetBuff("REPAIR").buffDef.buffIndex;
+                }
 
                 characterBody.SetAimTimer(1f);
 
@@ -205,8 +216,8 @@ namespace Faithful.Skills.Technician
                         // Check for mechanical flag
                         if (body != null && body.bodyFlags.HasFlag(CharacterBody.BodyFlags.Mechanical))
                         {
-                            // Add times overclocked buff
-                            body.AddTimedBuff(overclockedBuffIndex, 1.0f);
+                            // Add timed mechanical ally buff
+                            body.AddTimedBuff(mechanicalAllyBuffIndex, 1.0f);
                         }
                     }
                     // END INJECTED

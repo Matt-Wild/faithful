@@ -94,9 +94,6 @@ namespace Faithful
 
         protected override void SetupSkills()
         {
-            // No skills made yet
-            //SetupTempSkills();
-
             // Add technician skills
             AddSkill<SkillDef>("OVERCLOCK", "texTechnicianOverclockIcon", SkillSlot.None, new SerializableEntityStateType(typeof(Skills.Temp.TempPassive)));
             AddSkill<SkillDef>("REPAIR", "texTechnicianRepairIcon", SkillSlot.None, new SerializableEntityStateType(typeof(Skills.Temp.TempPassive)));

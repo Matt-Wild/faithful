@@ -15,6 +15,7 @@
 	"FAITHFUL_PATIENCE_BUFF": "Patience",
 	"FAITHFUL_INSPIRATION_BUFF": "Inspiration",
 	"FAITHFUL_OVERCLOCKED_BUFF": "Overclocked",
+	"FAITHFUL_REPAIR_BUFF": "Arc Healing",
 	
 	"FAITHFUL_DEBUG_ITEM_NAME": "Debug Item",
 	"FAITHFUL_DEBUG_ITEM_PICKUP": "Debug Item Pickup",

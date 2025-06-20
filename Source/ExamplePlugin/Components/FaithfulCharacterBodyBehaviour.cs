@@ -3,6 +3,7 @@ using Mono.CompilerServices.SymbolWriter;
 using RoR2;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.TextCore.Text;
@@ -32,6 +33,21 @@ namespace Faithful
 
         // Store if searching for character body
         private bool searchingForCharacterBody = false;
+
+        // List of custom tick behaviour
+        private List<CharacterBodyTickBehaviour> m_tickBehaviours = new List<CharacterBodyTickBehaviour>();
+
+        void FixedUpdate()
+        {
+            // Update tick behaviours
+            foreach (CharacterBodyTickBehaviour tickBehaviour in m_tickBehaviours) tickBehaviour.FixedUpdate();
+        }
+
+        public void AddTickBehaviour(CharacterBodyCallback _callback, float _tickRate)
+        {
+            // Add tick behaviour
+            m_tickBehaviours.Add(new CharacterBodyTickBehaviour(_callback, _tickRate));
+        }
 
         private void CharacterIDChanged(NetworkInstanceId _newValue)
         {
@@ -99,6 +115,9 @@ namespace Faithful
                 // Set as character body found
                 characterBodyFound = true;
 
+                // Cycle through tick behaviours and provide character body
+                foreach (CharacterBodyTickBehaviour tickBehaviour in m_tickBehaviours) tickBehaviour.UpdateCharacterBody(character);
+
                 // Register behaviour with utils
                 Utils.RegisterFaithfulCharacterBodyBehaviour(character, this);
 
@@ -151,5 +170,48 @@ namespace Faithful
     internal interface ICharacterBehaviour
     {
         public void FetchSettings();
+    }
+
+    internal class CharacterBodyTickBehaviour
+    {
+        // Associated character body
+        CharacterBody m_body;
+
+        // Logic for tick behaviour
+        private CharacterBodyCallback m_callback;
+
+        // Ticks per second (tick rate)
+        private float m_tickRate;
+        private float m_timer = 0.0f;
+
+        public CharacterBodyTickBehaviour(CharacterBodyCallback _callback, float _tickRate)
+        {
+            m_callback = _callback;
+            m_tickRate = _tickRate;
+
+            // Set timer
+            m_timer = 1.0f / m_tickRate;
+        }
+
+        public void UpdateCharacterBody(CharacterBody _body)
+        {
+            m_body = _body;
+        }
+
+        public void FixedUpdate()
+        {
+            // Do tick rate
+            m_timer -= Time.fixedDeltaTime;
+            if (m_timer <= 0f)
+            {
+                m_timer = 1.0f / m_tickRate;
+
+                // Callback if character body exists
+                if (m_body != null)
+                {
+                    m_callback(m_body);
+                }
+            }
+        }
     }
 }

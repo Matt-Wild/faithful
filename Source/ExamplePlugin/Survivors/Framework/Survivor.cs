@@ -883,7 +883,6 @@ namespace Faithful
                                 bool _cancelSprintingOnActivation = true, bool _fullRestockOnAssign = true, InterruptPriority _interruptPriority = InterruptPriority.Any, bool _isCombatSkill = true,
                                 bool _mustKeyPress = false, bool _attackSpeedBuffsRestockSpeed = false, string[] _keywordTokens = null) where T : SkillDef
         {
-
             // Initialise skill family (fetched later)
             SkillFamily skillFamily = null;
 
@@ -967,7 +966,7 @@ namespace Faithful
         }
 
         // Yoinked from Henry mod
-        private GenericSkill CreateGenericSkillWithSkillFamily(SkillSlot _skillSlot, bool _hidden = false)
+        private GenericSkill CreateGenericSkillWithSkillFamily(SkillSlot _skillSlot, string _skillName = "", bool _hidden = false)
         {
             // Get skill locator
             SkillLocator skillLocator = m_bodyPrefab.GetComponent<SkillLocator>();
@@ -976,15 +975,15 @@ namespace Faithful
             switch (_skillSlot)
             {
                 case SkillSlot.Primary:
-                    return skillLocator.primary = CreateGenericSkillWithSkillFamily("Primary", _hidden);
+                    return skillLocator.primary = _skillName == "" ? CreateGenericSkillWithSkillFamily("Primary", _hidden) : CreateGenericSkillWithSkillFamily(_skillName, "Primary", _hidden);
                 case SkillSlot.Secondary:
-                    return skillLocator.secondary = CreateGenericSkillWithSkillFamily("Secondary", _hidden);
+                    return skillLocator.secondary = _skillName == "" ? CreateGenericSkillWithSkillFamily("Secondary", _hidden) : CreateGenericSkillWithSkillFamily(_skillName, "Secondary", _hidden);
                 case SkillSlot.Utility:
-                    return skillLocator.utility = CreateGenericSkillWithSkillFamily("Utility", _hidden);
+                    return skillLocator.utility = _skillName == "" ? CreateGenericSkillWithSkillFamily("Utility", _hidden) : CreateGenericSkillWithSkillFamily(_skillName, "Utility", _hidden);
                 case SkillSlot.Special:
-                    return skillLocator.special = CreateGenericSkillWithSkillFamily("Special", _hidden);
+                    return skillLocator.special = _skillName == "" ? CreateGenericSkillWithSkillFamily("Special", _hidden) : CreateGenericSkillWithSkillFamily(_skillName, "Special", _hidden);
                 case SkillSlot.None:
-                    return CreateGenericSkillWithSkillFamily("Passive", _hidden);
+                    return _skillName == "" ? CreateGenericSkillWithSkillFamily("Passive", _hidden) : CreateGenericSkillWithSkillFamily(_skillName, "Passive", _hidden);
             }
 
             // Unknown skill type
