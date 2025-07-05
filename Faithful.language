@@ -56,9 +56,10 @@
 	
 	"FAITHFUL_LEADERS_PENNON_NAME": "Leader's Pennon",
 	"FAITHFUL_LEADERS_PENNON_PICKUP": "Carry a flag that creates a ward around yourself. Grants other nearby allies attack speed and regeneration. <style=cIsVoid>Corrupts all [CORRUPTED_ITEM]</style>.",
-	"FAITHFUL_LEADERS_PENNON_DESC": "Create a ward around yourself that strengthens all allies other than yourself within <style=cIsUtility>[RADIUS]m</style> <style=cStack>(+[RADIUS_STACKING]m per stack)</style>. Raise <style=cIsDamage>attack speed</style> by <style=cIsDamage>[ATTACK_SPEED]%</style> and <style=cIsHealing>passive health regeneration</style> by <style=cIsHealing>+[REGEN]hp/s</style>. <style=cIsVoid>Corrupts all [CORRUPTED_ITEM]</style>.",
+	"FAITHFUL_LEADERS_PENNON_DESC": "Create a ward around yourself that strengthens all allies other than yourself within <style=cIsUtility>[RADIUS]m</style> <style=cStack>(+[RADIUS_STACKING]m per stack)</style>. Raise <style=cIsDamage>attack speed</style> by <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(+[ATTACK_SPEED_STACKING]% per stack)</style> and <style=cIsHealing>passive health regeneration</style> by <style=cIsHealing>+[REGEN]hp/s</style> <style=cStack>(+[REGEN_STACKING]hp/s per stack)</style>. <style=cIsVoid>Corrupts all [CORRUPTED_ITEM]</style>.",
 	"FAITHFUL_LEADERS_PENNON_LORE": "We knew we'd never win. This planet was as hellish as it was relentless.\n\nMany died as soon as the blast doors opened. Lizard people, giant jellyfish, constructs made of the very ground beneath our very feet. They all conspired somehow - someway - to massacre us all. We never stood a chance.\n\nAnd our squad leader, that damn idiot... What was left of him was marked with the flag that led us to our demise.",
 	"FAITHFUL_LEADERS_PENNON_BUFF": "Leader's Pennon",
+	"FAITHFUL_LEADERS_PENNON_VISUAL_BUFF": "Leader's Pennon",
 	
 	"FAITHFUL_SECOND_HAND_NAME": "Second Hand",
 	"FAITHFUL_SECOND_HAND_PICKUP": "Increase attack speed and movement speed while grounded.",

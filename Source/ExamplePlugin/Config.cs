@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Faithful
 {
@@ -134,6 +135,9 @@ namespace Faithful
                 languageString = languageString.Replace(settingToken, setting.Value.ValueObject.ToString());
             }
 
+            // Remove empty stacking strings from language string
+            languageString = RemoveZeroStackingTags(languageString);
+
             // Check for CORRUPTED_ITEM token
             if (languageString.Contains("[CORRUPTED_ITEM]"))
             {
@@ -155,6 +159,29 @@ namespace Faithful
 
             // Return formatted language string
             return languageString;
+        }
+
+        private static string RemoveZeroStackingTags(string _languageString)
+        {
+            // Regex: match (optional space)(<style=cStack> ... </style>)
+            string pattern = @"( ?)<style=cStack>(.*?)<\/style>";
+
+            return Regex.Replace(_languageString, pattern, match =>
+            {
+                string tagContent = match.Groups[2].Value;
+
+                // Find all digits
+                var digits = Regex.Matches(tagContent, @"\d");
+                bool onlyZero = digits.Count > 0 && digits.Cast<Match>().All(d => d.Value == "0");
+                bool hasNonZero = digits.Cast<Match>().Any(d => d.Value != "0");
+
+                // Remove the tag if all digits are zero and there is at least one digit,
+                // or if there are no digits at all (to be safe, you can choose to keep/remove in that case).
+                if (digits.Count > 0 && !hasNonZero)
+                    return ""; // Remove the tag (and space, if present)
+                else
+                    return match.Value; // Keep the original tag
+            });
         }
 
         public static void DeleteSetting(string _token)

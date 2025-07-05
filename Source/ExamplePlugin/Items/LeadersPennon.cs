@@ -9,6 +9,7 @@ namespace Faithful
     {
         // Store item and buff
         Buff leadersPennonBuff;
+        Buff leadersPennonVisualBuff;
         Item leadersPennonItem;
 
         // Store display settings
@@ -20,7 +21,9 @@ namespace Faithful
         Setting<float> radiusSetting;
         Setting<float> radiusStackingSetting;
         Setting<float> attackSpeedSetting;
+        Setting<float> attackSpeedStackingSetting;
         Setting<float> regenSetting;
+        Setting<float> regenStackingSetting;
         Setting<float> regenPerLevelSetting;
         Setting<float> regenMultSetting;
         Setting<float> buffDurationSetting;
@@ -31,7 +34,9 @@ namespace Faithful
         float baseRadius;
         float radiusStacking;
         float attackSpeed;
+        float attackSpeedStacking;
         float regen;
+        float regenStacking;
         float regenPerLevel;
         float regenMult;
         float buffDuration;
@@ -43,7 +48,8 @@ namespace Faithful
             CreateDisplaySettings("leaderspennondisplaymesh");
 
             // Create Leader's Pennon item and buff
-            leadersPennonBuff = Buffs.AddBuff("LEADERS_PENNON", "texbuffleaderarea", Color.white, false);
+            leadersPennonBuff = Buffs.AddBuff("LEADERS_PENNON", "texbuffleaderarea", Color.white, true, _isHidden: true);
+            leadersPennonVisualBuff = Buffs.AddBuff("LEADERS_PENNON_VISUAL", "texbuffleaderarea", Color.white, false);
             leadersPennonItem = Items.AddItem("LEADERS_PENNON", [ItemTag.Utility, ItemTag.AIBlacklist], "texleaderspennonicon", "leaderspennonmesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME", _displaySettings: displaySettings);
 
             // Create item settings
@@ -102,7 +108,9 @@ namespace Faithful
             radiusSetting = leadersPennonItem.CreateSetting("RADIUS", "Radius", 15.0f, "How big should the base radius be of this item's effect? (15.0 = 15 meters)", _valueFormatting: "{0:0.0}m");
             radiusStackingSetting = leadersPennonItem.CreateSetting("RADIUS_STACKING", "Radius Stacking", 7.5f, "How much should the radius of this item's effect increase per stack? (7.5 = 7.5 meters)", _valueFormatting: "{0:0.00}m");
             attackSpeedSetting = leadersPennonItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 30.0f, "How much should this item increase ally's attack speed? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            attackSpeedStackingSetting = leadersPennonItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 0.0f, "How much should additional stacks of this item increase ally's attack speed? (10.0 = 10% increase)", _valueFormatting: "{0:0.0}%");
             regenSetting = leadersPennonItem.CreateSetting("REGEN", "Regen", 5.0f, "How much should this item increase ally's base regen? (5.0 = 5 hp/s)", _valueFormatting: "{0:0.00}hp/s");
+            regenStackingSetting = leadersPennonItem.CreateSetting("REGEN_STACKING", "Regen Stacking", 0.0f, "How much should additional stacks of this item increase ally's base regen? (10.0 = 10 hp/s)", _valueFormatting: "{0:0.00}hp/s");
             regenPerLevelSetting = leadersPennonItem.CreateSetting("REGEN_PER_LEVEL", "Regen Per Level", 1.0f, "How much should this item increase ally's regen per level? (1.0 = 1 hp/s)", _valueFormatting: "{0:0.00}hp/s");
             regenMultSetting = leadersPennonItem.CreateSetting("REGEN_MULT", "Regen Multiplier", 30.0f, "How much should this item increase ally's regen multiplicatively? (30.0 = 30% increase)", _canRandomise: false, _valueFormatting: "{0:0.0}%");
             buffDurationSetting = leadersPennonItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the radius of this item's effect? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
@@ -116,7 +124,9 @@ namespace Faithful
             baseRadius = radiusSetting.Value;
             radiusStacking = radiusStackingSetting.Value;
             attackSpeed = attackSpeedSetting.Value / 100.0f;
+            attackSpeedStacking = attackSpeedStackingSetting.Value / 100.0f;
             regen = regenSetting.Value;
+            regenStacking = regenStackingSetting.Value;
             regenPerLevel = regenPerLevelSetting.Value;
             regenMult = regenMultSetting.Value / 100.0f;
             buffDuration = buffDurationSetting.Value;
@@ -128,10 +138,10 @@ namespace Faithful
         void LeadersPennonStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify attack speed
-            _stats.attackSpeedMultAdd += attackSpeed;
+            _stats.attackSpeedMultAdd += attackSpeed + attackSpeedStacking * (_count - 1);
 
             // Modify regen speed
-            _stats.baseRegenAdd += regen;
+            _stats.baseRegenAdd += regen + regenStacking * (_count - 1);
             _stats.levelRegenAdd += regenPerLevel;
             _stats.regenMultAdd += regenMult;
         }
@@ -148,15 +158,40 @@ namespace Faithful
                 CharacterBody body = _other.GetBody();
 
                 // If other ally doesn't have buff already
-                if (body.GetBuffCount(leadersPennonBuff.buffDef) == 0)
+                if (body.GetBuffCount(leadersPennonVisualBuff.buffDef) == 0)
                 {
                     // Grant buff
-                    body.AddTimedBuff(leadersPennonBuff.buffDef, buffDuration);
+                    body.AddTimedBuff(leadersPennonVisualBuff.buffDef, buffDuration);
+
+                    // Check for holder inventory
+                    Inventory holderInv = _holder.inventory;
+                    if (holderInv != null)
+                    {
+                        // Get needed amount of buffs
+                        int needed = holderInv.GetItemCount(leadersPennonItem.itemDef) - body.GetBuffCount(leadersPennonBuff.buffDef);
+
+                        // Catch up buff count
+                        for (int i = 0; i < needed; i++) body.AddTimedBuff(leadersPennonBuff.buffDef, buffDuration);
+                    }
                 }
                 else
                 {
                     // Refresh Leader's Pennon buffs on other ally
-                    Utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, buffDuration);
+                    Utils.RefreshTimedBuffs(body, leadersPennonVisualBuff.buffDef, buffDuration);
+
+                    // Check for holder inventory
+                    Inventory holderInv = _holder.inventory;
+                    if (holderInv != null)
+                    {
+                        // Get needed amount of buffs
+                        int needed = holderInv.GetItemCount(leadersPennonItem.itemDef);
+
+                        // Refresh needed amount of pennon buffs
+                        Utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, buffDuration, needed);
+
+                        // Add additional buffs if needed
+                        for (int i = 0; i < needed - body.GetBuffCount(leadersPennonBuff.buffDef); i++) body.AddTimedBuff(leadersPennonBuff.buffDef, buffDuration);
+                    }
                 }
             }
         }

@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.8 Leader's Pennon Attack Speed And Regen Stacking
+- Added additional configs for Leader's Pennon to support attack speed and regen stacking
+
 #### v1.3.7 Jetpack Material Fix
 - Fixed broken Jetpack material.
 - Switched some asset fetch operations to use GUIDs.
@@ -44,10 +47,10 @@
 #### v1.2.10 LookingGlass Compatibility Fix
 - LookingGlass now only overrides the extended item descriptions config if full pickup descriptions has been enabled.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.9 LookingGlass Compatibility
 - LookingGlass now overrides the extended item descriptions config.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.8 Risk Of Options Compatibility
 - Added compatibility for Risk Of Options.

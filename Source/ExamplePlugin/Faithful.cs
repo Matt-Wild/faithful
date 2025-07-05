@@ -42,7 +42,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.3.7";
+        public const string PluginVersion = "1.3.8";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -147,7 +147,7 @@ namespace Faithful
             recollectionShrine = new RecollectionShrine();
 
             // Create survivors
-            technician = new Technician();
+            //technician = new Technician();
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing our mod!");

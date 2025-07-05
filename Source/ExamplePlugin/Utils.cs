@@ -289,21 +289,30 @@ namespace Faithful
         }
 
         // Refresh chosen buff on chosen character
-        public static void RefreshTimedBuffs(CharacterBody body, BuffDef buffDef, float duration)
+        public static void RefreshTimedBuffs(CharacterBody body, BuffDef buffDef, float duration, int amount = int.MaxValue)
         {
             if (!body || body.GetBuffCount(buffDef) <= 0)
             {
                 return; // Body not valid
             }
 
+            // Count how many buffs have been refreshed
+            int counter = 0;
+
             // Cycle through buffs
             foreach (CharacterBody.TimedBuff buff in body.timedBuffs)
             {
+                // Check if reached limit to refresh
+                if (counter >= amount) return;
+
                 // Check if correct buff
                 if (buffDef.buffIndex == buff.buffIndex)
                 {
                     // Refresh buff
                     buff.timer = duration;
+
+                    // Increment counter
+                    counter++;
                 }
             }
         }
