@@ -13,11 +13,13 @@ namespace Faithful
         ItemDisplaySettings displaySettings;
 
         // Store additional item settings
+        Setting<bool> enableRadiusIndicatorSetting;
         Setting<float> damageSetting;
         Setting<float> damageStackingSetting;
         Setting<float> distanceSetting;
 
         // Store item stats
+        bool enableRadiusIndicator;
         float damage;
         float damageStacking;
         float distanceThreshold;
@@ -79,6 +81,7 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
+            enableRadiusIndicatorSetting = longshotGeodeItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", false, "Should this item have a radius indicator visual effect?", false, true);
             damageSetting = longshotGeodeItem.CreateSetting("DAMAGE", "Damage", 15.0f, "How much should this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
             damageStackingSetting = longshotGeodeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 15.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
             distanceSetting = longshotGeodeItem.CreateSetting("DISTANCE", "Distance", 40.0f, "How far should the target need to be for the damage bonus to be applied? (40.0 = 40 meters)", _valueFormatting: "{0:0.0}m");
@@ -87,6 +90,7 @@ namespace Faithful
         public override void FetchSettings()
         {
             // Get item settings
+            enableRadiusIndicator = enableRadiusIndicatorSetting.Value;
             damage = damageSetting.Value / 100.0f;
             damageStacking = damageStackingSetting.Value / 100.0f;
             distanceThreshold = distanceSetting.Value;

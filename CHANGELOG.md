@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.9 Longshot Geode Indicator
+- Added optional radius indicator for Longshot Geode (default off)
+
 #### v1.3.8 Leader's Pennon Attack Speed And Regen Stacking
 - Added additional configs for Leader's Pennon to support attack speed and regen stacking
 
@@ -44,10 +47,10 @@
 #### v1.2.11 Language Token Fix
 - Fixed various issues by switching to use of overlay language tokens from the Language API.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.10 LookingGlass Compatibility Fix
 - LookingGlass now only overrides the extended item descriptions config if full pickup descriptions has been enabled.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.9 LookingGlass Compatibility
 - LookingGlass now overrides the extended item descriptions config.

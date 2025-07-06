@@ -1,12 +1,8 @@
-﻿using EntityStates;
-using Mono.CompilerServices.SymbolWriter;
-using RoR2;
-using System;
+﻿using RoR2;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.TextCore.Text;
 
 namespace Faithful
 {
@@ -28,6 +24,7 @@ namespace Faithful
         // Store reference to behaviours
         public FaithfulTJetpackBehaviour tJetpack;
         public FaithfulLeadersPennonBehaviour leadersPennon;
+        public FaithfulLongshotGeodeBehaviour longshotGeode;
         public FaithfulTargetingMatrixBehaviour targetingMatrix;
         public FaithfulHermitsShawlBehaviour hermitsShawl;
 
@@ -132,6 +129,12 @@ namespace Faithful
 
                 // Initialise leaders pennon behaviour
                 leadersPennon.Init(character);
+
+                // Fetch longshot geode behaviour
+                longshotGeode = GetComponent<FaithfulLongshotGeodeBehaviour>();
+
+                // Initialise longshot geode behaviour
+                longshotGeode.Init(character);
 
                 // Fetch targeting matrix behaviour
                 targetingMatrix = GetComponent<FaithfulTargetingMatrixBehaviour>();

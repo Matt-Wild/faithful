@@ -224,6 +224,7 @@ namespace Faithful
             characterBodyHelperPrefab.AddComponent<FaithfulCharacterBodyBehaviour>();
             characterBodyHelperPrefab.AddComponent<FaithfulTJetpackBehaviour>();
             characterBodyHelperPrefab.AddComponent<FaithfulLeadersPennonBehaviour>();
+            characterBodyHelperPrefab.AddComponent<FaithfulLongshotGeodeBehaviour>();
             characterBodyHelperPrefab.AddComponent<FaithfulTargetingMatrixBehaviour>();
             characterBodyHelperPrefab.AddComponent<FaithfulHermitsShawlBehaviour>();
         }

@@ -48,7 +48,7 @@ namespace Faithful
             CreateDisplaySettings("leaderspennondisplaymesh");
 
             // Create Leader's Pennon item and buff
-            leadersPennonBuff = Buffs.AddBuff("LEADERS_PENNON", "texbuffleaderarea", Color.white, true, _isHidden: true);
+            leadersPennonBuff = Buffs.AddBuff("LEADERS_PENNON", "texbuffleaderarea", Color.white, true, _isHidden: true, _hasConfig: false);
             leadersPennonVisualBuff = Buffs.AddBuff("LEADERS_PENNON_VISUAL", "texbuffleaderarea", Color.white, false);
             leadersPennonItem = Items.AddItem("LEADERS_PENNON", [ItemTag.Utility, ItemTag.AIBlacklist], "texleaderspennonicon", "leaderspennonmesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME", _displaySettings: displaySettings);
 

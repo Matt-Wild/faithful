@@ -25,7 +25,7 @@ namespace Faithful
             // Assign name
             name = Utils.GetLanguageString($"FAITHFUL_{_token}_BUFF");
 
-            // Check is has config
+            // Check if has config
             if (_hasConfig)
             {
                 // Create default settings (MUST HAPPEN AFTER TOKEN AND NAME IS ASSIGNED)
