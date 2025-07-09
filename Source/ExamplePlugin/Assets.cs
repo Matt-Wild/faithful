@@ -75,7 +75,7 @@ namespace Faithful
             assetBundle = AssetBundle.LoadFromFile(AssetBundlePath);
 
             // DEBUG display loading assets
-            if (Utils.debugMode)
+            if (Utils.verboseConsole)
             {
                 string[] loaded = assetBundle.GetAllAssetNames();
                 foreach (string current in loaded)
@@ -101,7 +101,7 @@ namespace Faithful
 
             // Create mage jet ak events prefab
             GameObject mageJetOn = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("92199783eae803f4095bc93685a5ee70").WaitForCompletion().transform.Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("JetsOn").gameObject);
-            mageJetAkEventsPrefab = mageJetOn.InstantiateClone("faithfulMageJetAkEvents");
+            mageJetAkEventsPrefab = mageJetOn.InstantiateClone("faithfulMageJetAkEvents", false);
             Object.DestroyImmediate(mageJetOn);
             Object.DestroyImmediate(mageJetAkEventsPrefab.transform.Find("Fire").gameObject);
             Object.DestroyImmediate(mageJetAkEventsPrefab.transform.Find("Point Light").gameObject);
@@ -116,7 +116,7 @@ namespace Faithful
 
             // Create Leader's Pennon effect
             GameObject tempLPEffect = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("6b314230ed88f3c4b8d55cc64846854b").WaitForCompletion());
-            pennonEffectPrefab = tempLPEffect.InstantiateClone("faithfulLeadersPennonEffect");
+            pennonEffectPrefab = tempLPEffect.InstantiateClone("faithfulLeadersPennonEffect", false);
             Object.DestroyImmediate(tempLPEffect);
             pennonEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(0.58039215f, 0.22745098f, 0.71764705f));
             pennonEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(0.58039215f, 0.22745098f, 0.71764705f));
@@ -132,7 +132,7 @@ namespace Faithful
 
             // Create Targeting Matrix effect
             GameObject tempTMEffect = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("6b314230ed88f3c4b8d55cc64846854b").WaitForCompletion());
-            matrixEffectPrefab = tempTMEffect.InstantiateClone("faithfulTargetingMatrixEffect");
+            matrixEffectPrefab = tempTMEffect.InstantiateClone("faithfulTargetingMatrixEffect", false);
             Object.DestroyImmediate(tempTMEffect);
             matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
             matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
@@ -148,7 +148,7 @@ namespace Faithful
 
             // Create radius indicator prefab
             GameObject radiusIndicator = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("5ba295c0a3919a544939e6efe1ff17b3").WaitForCompletion());
-            radiusIndicatorPrefab = radiusIndicator.InstantiateClone("faithfulRadiusIndicator");
+            radiusIndicatorPrefab = radiusIndicator.InstantiateClone("faithfulRadiusIndicator", false);
             Object.DestroyImmediate(radiusIndicator);
             Object.DestroyImmediate(radiusIndicatorPrefab.GetComponent<RoR2.NetworkedBodyAttachment>());
             Object.DestroyImmediate(radiusIndicatorPrefab.GetComponent<NetworkIdentity>());
@@ -166,7 +166,7 @@ namespace Faithful
 
             // Get and modify engi turret laser prefab to become Technician's Arc
             GameObject turretLaser = Object.Instantiate(FetchAsset<GameObject>("RoR2/Base/Engi/LaserEngiTurret.prefab"));
-            technicianArcPrefab = turretLaser.InstantiateClone("faithfulTechnicianArc");
+            technicianArcPrefab = turretLaser.InstantiateClone("faithfulTechnicianArc", false);
             Object.DestroyImmediate(turretLaser);
             technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().widthMultiplier = 3.0f;
             technicianArcPrefab.transform.Find("LaserStart").GetComponent<LineRenderer>().material.SetColor("_Color", new Color(0.9725f, 1.0f, 0.5373f));
@@ -192,7 +192,7 @@ namespace Faithful
 
             // Get and modify Huntress' tracking indicator to create Technician's tracking indicator
             GameObject huntressTracker = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("2c791c24593eab442b64bb8c822a4f01").WaitForCompletion());
-            technicianTrackingIndicatorPrefab = huntressTracker.InstantiateClone("faithfulTechnicianTracker");
+            technicianTrackingIndicatorPrefab = huntressTracker.InstantiateClone("faithfulTechnicianTracker", false);
             Object.DestroyImmediate(huntressTracker);
             technicianTrackingIndicatorPrefab.transform.Find("Core Pip").GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 0.375f, 0.286f);
             technicianTrackingIndicatorPrefab.transform.Find("Core Pip").GetComponent<SpriteRenderer>().sortingOrder = 1;
@@ -251,8 +251,8 @@ namespace Faithful
             sotvDef = FetchAsset<ExpansionDef>("RoR2/DLC1/Common/DLC1.asset");
             sotsDef = FetchAsset<ExpansionDef>("RoR2/DLC2/Common/DLC2.asset");
 
-            // Check if debug mode
-            if (Utils.debugMode)
+            // Check if detailed loggin
+            if (Utils.verboseConsole)
             {
                 // Log confirmation
                 Log.Debug("[ASSETS] - Fetched all needed resources from RoR2 assets.");
@@ -361,7 +361,7 @@ namespace Faithful
             // Check for asset
             if (asset == null)
             {
-                if (Utils.debugMode)
+                if (Utils.verboseConsole)
                 {
                     Log.Error($"Requested asset '{fullName}' could not be found.");
                 }
@@ -405,7 +405,7 @@ namespace Faithful
             // Check for asset
             if (asset == null)
             {
-                if (Utils.debugMode)
+                if (Utils.verboseConsole)
                 {
                     Log.Error($"Requested asset '{fullName}' could not be found.");
                 }
@@ -439,7 +439,7 @@ namespace Faithful
             // Check for asset
             if (asset == null)
             {
-                if (Utils.debugMode)
+                if (Utils.verboseConsole)
                 {
                     Log.Error($"Requested asset '{fullName}' could not be found.");
                 }

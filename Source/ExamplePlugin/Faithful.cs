@@ -42,7 +42,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.3.9";
+        public const string PluginVersion = "1.3.10";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -115,7 +115,7 @@ namespace Faithful
             Harmony harmony = new Harmony("com.faithful.patcher");
             AkSoundEngineDynamicPatcher.Init();
             AkSoundEngineDynamicPatcher.PatchAll(harmony);
-            Log.Info("Patched all additional methods for faithful.");
+            if (Utils.verboseConsole) Log.Info("Patched all additional methods for faithful.");
 
             // Create buffs
             vengeance = new Vengeance(toolbox);

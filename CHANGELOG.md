@@ -1,5 +1,9 @@
 # Changelog
 
+#### v1.3.10 Verbose Console Setting
+- Separated verbose console output into it's own setting
+- Fixed some assets needlessly trying to become networked by the Prefab API
+
 #### v1.3.9 Longshot Geode Indicator
 - Added optional radius indicator for Longshot Geode (default off)
 
@@ -44,10 +48,10 @@
 #### v1.2.12 Corruption Overrides
 - Added configs for overriding the corrupted items for void items.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.11 Language Token Fix
 - Fixed various issues by switching to use of overlay language tokens from the Language API.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.10 LookingGlass Compatibility Fix
 - LookingGlass now only overrides the extended item descriptions config if full pickup descriptions has been enabled.

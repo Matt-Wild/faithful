@@ -22,8 +22,8 @@ namespace Faithful
 
         protected virtual void CreateSettings()
         {
-            // Check if debug mode
-            if (Utils.debugMode)
+            // Check if verbose console
+            if (Utils.verboseConsole)
             {
                 // Log warning
                 Log.Warning($"[ITEM] - Item missing 'CreateSettings' method.");
@@ -32,8 +32,8 @@ namespace Faithful
 
         public virtual void FetchSettings()
         {
-            // Check if debug mode
-            if (Utils.debugMode)
+            // Check if verbose console
+            if (Utils.verboseConsole)
             {
                 // Log warning
                 Log.Warning($"[ITEM] - Item missing 'FetchSettings' method.");

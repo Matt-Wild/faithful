@@ -1065,8 +1065,8 @@ namespace Faithful
 
         public static void DebugLog(string _message)
         {
-            // Only log behaviour on debug
-            if (Utils.debugMode)
+            // Only log behaviour on verbose console
+            if (Utils.verboseConsole)
             {
                 // Log message
                 Log.Debug($"[BEHAVIOUR] - {_message}");

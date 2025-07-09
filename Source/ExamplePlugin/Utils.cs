@@ -39,6 +39,9 @@ namespace Faithful
         // Store debug mode
         static private bool _debugMode = false;
 
+        // Store verbose console
+        static private bool _verboseConsole = false;
+
         // Store randomiser mode
         static private bool _randomiserMode = false;
 
@@ -60,6 +63,9 @@ namespace Faithful
 
         // Create debug mode config
         static private Setting<bool> debugModeSetting;
+
+        // Create verbose console config
+        static private Setting<bool> verboseConsoleSetting;
 
         // Create randomiser mode config
         static private Setting<bool> randomiserModeSetting;
@@ -141,11 +147,17 @@ namespace Faithful
             // Create debug mode setting
             debugModeSetting = Config.CreateSetting("DEBUG_MODE", "Debug Tools", "Debug Mode", false, "Do you want to enable this mod's debug mode?", false, true, _restartRequired: true);
 
+            // Create debug mode setting
+            verboseConsoleSetting = Config.CreateSetting("VERBOSE_CONSOLE", "Debug Tools", "Verbose Console", false, "Do you want more detailed console logging for this mod?", false, true, _restartRequired: true);
+
             // Create randomiser mode setting
             randomiserModeSetting = Config.CreateSetting("RANDOMISER_MODE", "Extras", "Randomizer Mode", false, "Do you want to randomize the stats of items introduced by the Faithful mod?\n[WARNING] - This setting is likely to dramatically alter the balance of items introduced by the Faithful mod.", false, true);
 
             // Update debug mode from config
             _debugMode = debugModeSetting.Value;
+
+            // Update verbose console from config
+            _verboseConsole = verboseConsoleSetting.Value;
 
             // Update randomiser mode from config
             _randomiserMode = randomiserModeSetting.Value;
@@ -182,7 +194,7 @@ namespace Faithful
             // Load language file
             LoadLanguageFile();
 
-            Log.Debug("Utils initialised");
+            if (_verboseConsole) Log.Debug("Utils initialised");
         }
 
         public static void Start()
@@ -216,8 +228,8 @@ namespace Faithful
                 // Store fonts in dictionary for quick lookup
                 fontCache[tmpFont.name] = tmpFont;
 
-                // Log font if in debug mode
-                if (debugMode) Log.Debug($"[UTILS] | Cached font '{tmpFont.name}'.");
+                // Log font if in verbose mode
+                if (verboseConsole) Log.Debug($"[UTILS] | Cached font '{tmpFont.name}'.");
             }
         }
 
@@ -556,16 +568,16 @@ namespace Faithful
                 // Add to character spawn cards
                 characterSpawnCards.Add(_spawnCard);
 
-                // Debug only message
-                if (debugMode)
+                // Verbose only message
+                if (verboseConsole)
                 {
                     Log.Debug($"[UTILS] - New character spawn card found for '{_spawnCard.prefab.name}'");
                 }
             }
             catch
             {
-                // Debug only message
-                if (debugMode)
+                // Verbose only message
+                if (verboseConsole)
                 {
                     Log.Warning($"[UTILS] - Could not add character spawn card to spawn list.");
                 }
@@ -587,7 +599,7 @@ namespace Faithful
             // Append corruption pairs to contagious items pair array
             ItemCatalog.itemRelationships[DLC1Content.ItemRelationshipTypes.ContagiousItem] = ItemCatalog.itemRelationships[DLC1Content.ItemRelationshipTypes.ContagiousItem].AddRangeToArray(itemPairs.ToArray());
 
-            Log.Debug("Added item corruptions");
+            if (_verboseConsole) Log.Debug("Added item corruptions");
 
             orig(); // Run normal processes
         }
@@ -722,8 +734,8 @@ namespace Faithful
                 // Refresh item settings
                 RefreshItemSettings();
 
-                // Check if debug mode is enabled
-                if (debugMode)
+                // Check if verbose mode is enabled
+                if (verboseConsole)
                 {
                     Log.Debug($"[UTILS] - Randomised item stats.");
                 }
@@ -803,8 +815,8 @@ namespace Faithful
 
         public static ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _useHopooShader = true, bool _ignoreOverlays = false, bool _dithering = true)
         {
-            // In debug mode?
-            if (debugMode)
+            // In verbose mode?
+            if (verboseConsole)
             {
                 Log.Debug($"Creating item display for '{_modelFile}'");
             }
@@ -925,8 +937,8 @@ namespace Faithful
                 return characterBodyLookup[_characterBody];
             }
 
-            // Check if debug mode
-            if (debugMode)
+            // Check if verbose mode
+            if (verboseConsole)
             {
                 // Warn and return null
                 Log.Warning($"[UTILS] - Could not find faithful character body behaviour for character '{_characterBody.name}' with net ID {_characterBody.GetComponent<NetworkIdentity>().netId}.");
@@ -1016,8 +1028,8 @@ namespace Faithful
             string name = tempMat.shader.name.ToLowerInvariant();
             if (!name.StartsWith("standard") && !name.StartsWith("autodesk"))
             {
-                // Log warning if in debug mode
-                if (debugMode)
+                // Log warning if in verbose mode
+                if (verboseConsole)
                 {
                     Log.Warning($"[UTILS] | '{tempMat.name}' is not unity standard shader - Cannot convert to a HG shader.");
                 }
@@ -1855,6 +1867,11 @@ namespace Faithful
         public static bool debugMode
         {
             get { return _debugMode; }
+        }
+
+        public static bool verboseConsole
+        {
+            get { return _verboseConsole; }
         }
 
         public static bool randomiserMode

@@ -63,9 +63,9 @@ namespace Faithful
             // Add buff
             ContentAddition.AddBuffDef(buffDef);
 
-            Log.Debug($"Created buff '{_token}'");
+            if (Utils.verboseConsole) Log.Debug($"Created buff '{_token}'");
 
-            if (forceHide)
+            if (forceHide && Utils.verboseConsole)
             {
                 if (_hasConfig && hiddenSetting.Value)
                 {

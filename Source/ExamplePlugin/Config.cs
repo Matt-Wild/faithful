@@ -260,7 +260,7 @@ namespace Faithful
                     // Get methods
                     GetMethods();
 
-                    Log.Info("Risk Of Options wrapper created successfully.");
+                    if (Utils.verboseConsole) Log.Info("Risk Of Options wrapper created successfully.");
                 }
             }
         }

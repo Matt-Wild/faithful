@@ -53,8 +53,8 @@ namespace Faithful
                     StartCoroutine(SyncSettingsWithHost());
                 }
 
-                // Check if debug mode
-                if (Utils.debugMode)
+                // Check if verbose console
+                if (Utils.verboseConsole)
                 {
                     // Log that local player net utils has been created and linked
                     Debug.Log($"[NET UTILS] - Net Utils created for local player.");
@@ -149,8 +149,8 @@ namespace Faithful
             // Set value in lookup table
             LookupTable.SetInt(_key, _value);
 
-            // Check if debug mode is on
-            if (Utils.debugMode)
+            // Check if verbose console is on
+            if (Utils.verboseConsole)
             {
                 // Log that value was set
                 Log.Debug($"[NET UTILS] - Set integer in lookup table | Key: {_key} | Value: {_value}.");

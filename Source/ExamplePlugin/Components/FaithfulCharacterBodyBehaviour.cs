@@ -69,7 +69,7 @@ namespace Faithful
         private void CheckForCharacterBody()
         {
             // Check if debug mode, not the server and no character body
-            if (!characterBodyFound && !NetworkServer.active && Utils.debugMode)
+            if (!characterBodyFound && !NetworkServer.active && Utils.verboseConsole)
             {
                 // Send warning
                 Log.Warning($"Faithful Character Body behaviour not linked for net ID {characterID}.");
@@ -156,7 +156,7 @@ namespace Faithful
                 }
 
                 // Check if debug mode
-                if (Utils.debugMode)
+                if (Utils.verboseConsole)
                 {
                     // Get string for if client or server
                     string messageSource = NetworkServer.active ? "SERVER" : "CLIENT";

@@ -10,8 +10,8 @@
 
         public static void Debug(IPrintable _source, string _message)
         {
-            // Check if in debug mode
-            if (Utils.debugMode)
+            // Check if in verbose console mode
+            if (Utils.verboseConsole)
             {
                 // Log formatting message
                 Log.Debug(FormatMessage(_source, _message));

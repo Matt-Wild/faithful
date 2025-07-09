@@ -179,16 +179,13 @@ namespace Faithful
                 ItemAPI.Add(new CustomItem(itemDef, new ItemDisplayRuleDict(null)));
             }
 
-            Log.Debug($"Created item '{name}'");
+            if (Utils.verboseConsole) Log.Debug($"Created item '{name}'");
 
-            if (forceHide)
+            if (forceHide && Utils.verboseConsole)
             {
                 if (_hidden)
                 {
-                    if (Utils.debugMode)
-                    {
-                        Log.Debug($"Hiding item '{name}'");
-                    }
+                    Log.Debug($"Hiding item '{name}'");
                 }
                 else if (!enabledSetting.Value || Items.allItemsDisabled)
                 {

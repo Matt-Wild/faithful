@@ -308,7 +308,7 @@ namespace Faithful
                     break;
             }
 
-            Log.Debug($"Spawning {spawnAmount} item(s) at coordinates {localBody.transform.position}");
+            if (Utils.verboseConsole) Log.Debug($"Spawning {spawnAmount} item(s) at coordinates {localBody.transform.position}");
 
             // Spawn requested amount
             for (int i = 0; i < spawnAmount; i++)
@@ -332,7 +332,7 @@ namespace Faithful
                 return;
             }
 
-            Log.Debug($"Spawning {spawnAmount} character(s) at target {localBody.transform.position}");
+            if (Utils.verboseConsole) Log.Debug($"Spawning {spawnAmount} character(s) at target {localBody.transform.position}");
 
             // Request spawn from utils
             Utils.SpawnCharacterCard(localBody.transform, selection, spawnAmount, teamLookup[teamDropdown.options[teamDropdown.value].text], CharacterCardSpawned);
@@ -360,7 +360,7 @@ namespace Faithful
             // Get pickup definition
             PickupDef pickup = pickupLookup[selection];
 
-            Log.Debug($"Spawning {spawnAmount} pickup(s) at target {localBody.transform.position}");
+            if (Utils.verboseConsole) Log.Debug($"Spawning {spawnAmount} pickup(s) at target {localBody.transform.position}");
 
             // Spawn pickup droplet from utils
             Utils.SpawnPickup(pickup, localBody.transform.position, _amount: spawnAmount);

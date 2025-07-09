@@ -192,7 +192,7 @@ namespace Faithful
                     // REMOVED UNTIL TESTING
                     //body.name = body.name.Replace("[GODMODE] ", "");   // Remove God Mode name
 
-                    Log.Debug("God Mode disabled");
+                    if (Utils.verboseConsole) Log.Debug("God Mode disabled");
                 }
                 else
                 {
@@ -202,7 +202,7 @@ namespace Faithful
                     // REMOVED UNTIL TESTING
                     //body.name = "[GODMODE] " + body.name;   // Set God Mode name
 
-                    Log.Debug("God Mode enabled!");
+                    if (Utils.verboseConsole) Log.Debug("God Mode enabled!");
                 }
             }
 

@@ -31,7 +31,7 @@ namespace Faithful
             // Create expansion definition
             Utils.CreateExpansionDef();
 
-            Log.Debug("Toolbox built");
+            if (Utils.verboseConsole) Log.Debug("Toolbox built");
         }
 
         public void Start()
