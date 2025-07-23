@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.11 Toaster/Shawl Buff Deletion Fix
+- Vengeful Toaster and Hermit's Shawl no longer waste their associated buffs on damage events that do no actual damage
+
 #### v1.3.10 Verbose Console Setting
 - Separated verbose console output into it's own setting
 - Fixed some assets needlessly trying to become networked by the Prefab API
@@ -45,10 +48,10 @@
 #### v1.2.13 Survivors Of The Void Requirement Fix
 - The Faithful expansion no longer requires Survivors of the Void to be enabled.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.12 Corruption Overrides
 - Added configs for overriding the corrupted items for void items.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.11 Language Token Fix
 - Fixed various issues by switching to use of overlay language tokens from the Language API.

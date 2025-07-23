@@ -113,6 +113,9 @@ namespace Faithful
         {
             // Ignore DoTs
             if (_report.dotType != DotController.DotIndex.None) return;
+
+            // Ignore if damage dealt is 0
+            if (_report.damageDealt == 0.0f) return;
             
             // Check for attacker body
             CharacterBody attacker = _report.attackerBody;
