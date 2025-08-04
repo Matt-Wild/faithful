@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.12 Locales Framework
+- Changed item buff internal names to be more robust for the future implementation of additional locales and to avoid future mod conflicts
+
 #### v1.3.11 Toaster/Shawl Buff Deletion Fix
 - Vengeful Toaster and Hermit's Shawl no longer waste their associated buffs on damage events that do no actual damage
 
