@@ -76,6 +76,9 @@ namespace Faithful
         // Token of the interactable used for finding and identifying it
         private string m_token;
 
+        // Safe name used for settings etc (this shouldn't ever be changed)
+        private string m_safeName;
+
         // Name of the model used to find the interatable in the asset bund
         private string m_modelName;
 
@@ -136,7 +139,7 @@ namespace Faithful
         // Default settings for interactable
         private Setting<bool> m_disableSetting;
 
-        public void Init(string _token, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", string _symbolName = "", Color? _symbolColour = null,
+        public void Init(string _token, string _safeName, string _modelName, PingIconType _pingIconType, string _customPingIconAssetName = "", string _symbolName = "", Color? _symbolColour = null,
                          InteractableCostType _costType = InteractableCostType.Money, int _cost = 1, bool _startAvailable = true, bool _setUnavailableOnTeleporterActivated = false, bool _isShrine = true,
                          bool _disableHologramRotation = true, string _customCostString = null, ColorCatalog.ColorIndex _customCostColour = ColorCatalog.ColorIndex.None, bool _saturateWorldStyledCustomCost = false,
                          bool _darkenWorldStyledCustomCost = false, InteractableRequiredExpansion _requiredExpansion = InteractableRequiredExpansion.None, bool _allowInspect = true,
@@ -144,6 +147,9 @@ namespace Faithful
         {
             // Assign token
             m_token = _token;
+
+            // Assign safe name
+            m_safeName = _safeName;
 
             // Assign model name
             m_modelName = _modelName;
@@ -522,7 +528,7 @@ namespace Faithful
         public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _restartRequired = false, string _valueFormatting = "{0:0}")
         {
             // Return new setting
-            return Config.CreateSetting($"INTERACTABLE_{token}_{_tokenAddition}", $"Interactable: {name.Replace("'", "")}", _key, _defaultValue, _description, _restartRequired: _restartRequired, _valueFormatting: _valueFormatting);
+            return Config.CreateSetting($"INTERACTABLE_{token}_{_tokenAddition}", $"Interactable: {m_safeName}", _key, _defaultValue, _description, _restartRequired: _restartRequired, _valueFormatting: _valueFormatting);
         }
 
         public void SendInteractionMessage(CharacterBody _interactor, string[] _paramTokens = null)

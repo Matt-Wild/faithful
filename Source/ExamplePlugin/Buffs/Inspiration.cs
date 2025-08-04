@@ -21,7 +21,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create Inspiration buff
-            inspirationBuff = Buffs.AddBuff("INSPIRATION", "texbuffinspiredboost", Color.white);
+            inspirationBuff = Buffs.AddBuff("INSPIRATION", "Inspiration", "texbuffinspiredboost", Color.white);
 
             // Add stats modification
             Behaviour.AddStatsMod(inspirationBuff, InspirationStatsMod);

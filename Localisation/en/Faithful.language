@@ -1,5 +1,7 @@
 {
   "strings": {
+	"FAITHFUL_LANGUAGE": "English",
+  
 	"FAITHFUL_EXPANSION_NAME": "Faithful Recollectors",
 	"FAITHFUL_EXPANSION_DESC": "Adds content from the 'Faithful' mod to the game.",
 	

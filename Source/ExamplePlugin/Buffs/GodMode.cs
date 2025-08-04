@@ -19,7 +19,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create God Mode buff
-            godModeBuff = Buffs.AddBuff("DEBUG_MODE", "texbuffdevmode", Color.white, _canStack: false, _hasConfig: false, _isHidden: !Utils.debugMode);
+            godModeBuff = Buffs.AddBuff("DEBUG_MODE", "Debug Mode", "texbuffdevmode", Color.white, _canStack: false, _hasConfig: false, _isHidden: !Utils.debugMode);
 
             // Link Holdout Zone behaviour
             Behaviour.AddInHoldoutZoneCallback(InHoldoutZone);

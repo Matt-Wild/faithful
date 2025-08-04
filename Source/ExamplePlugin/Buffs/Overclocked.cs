@@ -15,7 +15,7 @@ namespace Faithful
         public Overclocked()
         {
             // Create buff
-            buff = Buffs.AddBuff("OVERCLOCKED", "texBuffElectroSpeed", Color.white, false);
+            buff = Buffs.AddBuff("OVERCLOCKED", "Overclocked", "texBuffElectroSpeed", Color.white, false);
 
             // Add stats modification
             Behaviour.AddStatsMod(buff, OverclockedStatsMod);

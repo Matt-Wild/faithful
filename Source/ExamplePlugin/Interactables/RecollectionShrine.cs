@@ -12,7 +12,7 @@ namespace Faithful
         public RecollectionShrine()
         {
             // Initialise interactable
-            Init("RECOLLECTION_SHRINE", "RecollectionShrineMesh", PingIconType.Shrine, _costType: InteractableCostType.Custom, _symbolName: "texShrineRecollectionSymbol", 
+            Init("RECOLLECTION_SHRINE", "Shrine of Recollection", "RecollectionShrineMesh", PingIconType.Shrine, _costType: InteractableCostType.Custom, _symbolName: "texShrineRecollectionSymbol", 
                  _symbolColour: new Color(1.0f, 0.23525f, 0.49f), _customCostColour: ColorCatalog.ColorIndex.VoidItem, _requiredExpansion: InteractableRequiredExpansion.SurvivorsOfTheVoid,
                  _inspectIconType: InspectIconType.Void);
 

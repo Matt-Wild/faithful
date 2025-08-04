@@ -2,7 +2,6 @@
 using R2API;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Faithful
 {
@@ -26,6 +25,7 @@ namespace Faithful
         // Item token, name and tier
         public string token;
         public string name;
+        public string safeName;
         public ItemTier tier;
 
         // Is this item hidden
@@ -36,7 +36,7 @@ namespace Faithful
         public string corruptedName = "";
 
         // Constructor
-        public Item(string _token, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _debugOnly = false)
+        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _debugOnly = false)
         {
             // Assign token
             token = _token;
@@ -46,6 +46,7 @@ namespace Faithful
 
             // Assign name
             name = Utils.GetLanguageString($"FAITHFUL_{token}_NAME");
+            safeName = _safeName;
 
             // Assign tier
             tier = _tier;
@@ -230,7 +231,7 @@ namespace Faithful
             LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}", corruptedNameSafe));
 
             // Update item texts
-            itemDef.name = Utils.GetXMLLanguageString($"FAITHFUL_{token}_NAME");
+            itemDef.name = $"{Utils.GetXMLSafeString(safeName)}_FAITHFUL_{token}_ITEM";
             itemDef.nameToken = $"FAITHFUL_{token}_NAME";
             itemDef.pickupToken = Items.extendAllPickupDescriptions ? $"FAITHFUL_{token}_DESC" : extendedPickupDescSetting == null ? $"FAITHFUL_{token}_PICKUP" : extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP";
             itemDef.descriptionToken = $"FAITHFUL_{token}_DESC";
@@ -310,7 +311,7 @@ namespace Faithful
             }
 
             // Return new setting
-            return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {name.Replace("'", "")}", _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
+            return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {safeName}", _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
         }
 
         public Setting<T> FetchSetting<T>(string _tokenAddition)

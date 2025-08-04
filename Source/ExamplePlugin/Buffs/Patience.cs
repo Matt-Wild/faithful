@@ -21,7 +21,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create buff
-            buff = Buffs.AddBuff("PATIENCE", "texBuffHermitShawl", Color.white);
+            buff = Buffs.AddBuff("PATIENCE", "Patience", "texBuffHermitShawl", Color.white);
 
             // Add stats modification
             Behaviour.AddStatsMod(buff, PatienceStatsMod);

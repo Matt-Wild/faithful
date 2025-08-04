@@ -33,8 +33,8 @@ namespace Faithful
             CreateDisplaySettings("secondhanddisplaymesh");
 
             // Create Second Hand item and buff
-            secondHandItem = Items.AddItem("SECOND_HAND", [ItemTag.Damage, ItemTag.Utility], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
-            secondHandBuff = Buffs.AddBuff("SECOND_HAND", "texbuffsecondhand", Color.white);
+            secondHandItem = Items.AddItem("SECOND_HAND", "Second Hand", [ItemTag.Damage, ItemTag.Utility], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
+            secondHandBuff = Buffs.AddBuff("SECOND_HAND", "Second Hand", "texbuffsecondhand", Color.white);
 
             // Create item settings
             CreateSettings();

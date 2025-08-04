@@ -145,7 +145,7 @@ namespace Faithful
                 if (!string.IsNullOrWhiteSpace(_corruptedItemName))
                 {
                     // Replace unique CORRUPTED_ITEM token
-                    languageString = languageString.Replace("[CORRUPTED_ITEM]", Utils.Pluralize(_corruptedItemName));
+                    languageString = languageString.Replace("[CORRUPTED_ITEM]", Utils.GetLanguageString("FAITHFUL_LANGUAGE") == "English" ? Utils.Pluralize(_corruptedItemName) : _corruptedItemName);
                 }
 
                 // No corrupted item name provided

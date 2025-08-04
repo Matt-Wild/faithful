@@ -1622,16 +1622,16 @@ namespace Faithful
         public static ItemDef GetItem(string _identifier)
         {
             // Attempt to get item def normally
-            ItemDef corruptedItem = ItemCatalog.GetItemDef(ItemCatalog.FindItemIndex(_identifier));
+            ItemDef item = ItemCatalog.GetItemDef(ItemCatalog.FindItemIndex(_identifier));
 
             // Check for item def
-            if (corruptedItem == null)
+            if (item == null)
             {
                 // This can error if Item Catalog isn't ready
                 try
                 {
                     // Attempt to fetch item with proper name
-                    corruptedItem = ItemCatalog.allItemDefs.Where(x => Language.GetString(x.nameToken) == _identifier).FirstOrDefault();
+                    item = ItemCatalog.allItemDefs.Where(x => Language.GetString(x.nameToken) == _identifier).FirstOrDefault();
                 }
                 catch
                 {
@@ -1641,7 +1641,7 @@ namespace Faithful
             }
 
             // Return result
-            return corruptedItem;
+            return item;
         }
 
         public static CharacterMaster GetLastAttacker(CharacterBody _victim)
@@ -1787,17 +1787,8 @@ namespace Faithful
                 // Get string
                 string languageString = languageDictionary[_token];
 
-                // Remove invalid characters for XML
-                languageString = Regex.Replace(languageString, @"[^a-zA-Z0-9_]", "_");
-
-                // Ensure the name starts with a letter or underscore
-                if (char.IsDigit(languageString[0]))
-                {
-                    languageString = $"_{languageString}";
-                }
-
-                // Return processes string
-                return languageString;
+                // Return XML safe language string
+                return GetXMLSafeString(languageString);
             }
 
             // Token not found
@@ -1806,6 +1797,20 @@ namespace Faithful
                 Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
                 return _token; // Return original token
             }
+        }
+
+        public static string GetXMLSafeString(string _unsafe)
+        {
+            // Remove invalid characters for XML
+            string safe = Regex.Replace(_unsafe, @"[^a-zA-Z0-9_]", "_");
+
+            // Ensure the name starts with a letter or underscore
+            if (char.IsDigit(safe[0]))
+            {
+                safe = $"_{safe}";
+            }
+
+            return safe;
         }
 
         public static List<T> GetComponentsInParentsWithInterface<T>(Transform _transform)

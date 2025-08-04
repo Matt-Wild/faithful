@@ -15,15 +15,17 @@ namespace Faithful
         // Buff token and name
         public string token;
         public string name;
+        public string safeName;
 
         // Constructor
-        public Buff(string _token, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true)
+        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true)
         {
             // Assign token
             token = _token;
 
             // Assign name
             name = Utils.GetLanguageString($"FAITHFUL_{_token}_BUFF");
+            safeName = _safeName;
 
             // Check if has config
             if (_hasConfig)
@@ -45,7 +47,7 @@ namespace Faithful
             buffDef = ScriptableObject.CreateInstance<BuffDef>();
 
             // Set buff name
-            buffDef.name = Utils.GetLanguageString($"FAITHFUL_{_token}_BUFF");
+            buffDef.name = $"{safeName}_FAITHFUL_{token}_BUFF";
 
             // Set buff colour
             buffDef.buffColor = _colour;
@@ -91,7 +93,7 @@ namespace Faithful
         public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _restartRequired = false, string _valueFormatting = "{0:0}")
         {
             // Return new setting
-            return Config.CreateSetting($"BUFF_{token}_{_tokenAddition}", $"Buff: {name.Replace("'", "")}", _key, _defaultValue, _description, _restartRequired: _restartRequired, _valueFormatting: _valueFormatting);
+            return Config.CreateSetting($"BUFF_{token}_{_tokenAddition}", $"Buff: {safeName}", _key, _defaultValue, _description, _restartRequired: _restartRequired, _valueFormatting: _valueFormatting);
         }
     }
 }

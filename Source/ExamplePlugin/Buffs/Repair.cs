@@ -19,7 +19,7 @@ namespace Faithful
         public Repair()
         {
             // Create buff
-            buff = Buffs.AddBuff("REPAIR", "texBuffElectroHeal", Color.white, false);
+            buff = Buffs.AddBuff("REPAIR", "Arc Healing", "texBuffElectroHeal", Color.white, false);
 
             // Register on tick behaviour
             Behaviour.AddOnCharacterBodyTickCallback(m_tickRate, OnTick);
