@@ -18,6 +18,16 @@ We genuinely love hearing feedback about our mod! If you'd like to give your tho
 
 [![Discord](https://img.shields.io/discord/1019915684353933392?label=Discord&logo=discord)](https://discord.com/invite/CCSauYkpzP)
 
+# Support Us!
+
+This mod is still currently in-development and lacks a lot of the content we have planned.
+
+We've got plans for more items, survivors, enemies and stages. And maybe even some other things.
+
+You can support us in making this mod (or in our other work) through the link below:
+
+[![Patreon](https://img.shields.io/badge/Support%20Us%20on-Patreon-orange?logo=patreon)](https://www.patreon.com/c/spilledsoupprojects)
+
 # New Items
 All items can be disabled individually in this mod's config.
 <table>
@@ -230,14 +240,6 @@ Holding F1 as you press one of the listed keys will spawn the corrosponding tier
   - Audio Analysis shows you what audio events are firing and where from.
 
 - 'F4' | Spawn from Debug Menu Hotkey
-
-# Addendum
-
-This mod is still currently in-development and lacks a lot of the content we have planned.
-
-We've got plans for more items, survivors, enemies and stages. And maybe even some other things.
-
-You can support us in making this mod (or in our other work) through the link below:<br>https://www.patreon.com/c/spilledsoupprojects
 
 # Special Thanks
 

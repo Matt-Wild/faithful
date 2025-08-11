@@ -1,7 +1,10 @@
 # Changelog
 
+#### v1.3.13 Spacious Umbrella Buff
+- Spacious Umbrella has been buffed with reduced stacking falloff
+
 #### v1.3.12 Locales Framework
-- Changed item buff internal names to be more robust for the future implementation of additional locales and to avoid future mod conflicts
+- Changed item and buff internal names to be more robust for the future implementation of additional locales and to avoid future mod conflicts
 
 #### v1.3.11 Toaster/Shawl Buff Deletion Fix
 - Vengeful Toaster and Hermit's Shawl no longer waste their associated buffs on damage events that do no actual damage
@@ -48,10 +51,10 @@
 - Added configs for overriding the name of items.
 - Changed description and details of the Leader's Pennon to make it's use more clear.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.13 Survivors Of The Void Requirement Fix
 - The Faithful expansion no longer requires Survivors of the Void to be enabled.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.12 Corruption Overrides
 - Added configs for overriding the corrupted items for void items.

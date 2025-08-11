@@ -104,7 +104,7 @@ namespace Faithful
             else if (count > 1)
             {
                 // Add onto radius
-                _radius += (size + Mathf.Log(count + 1, Mathf.Pow(2.0f, 1.0f / sizeStacking)) - sizeStacking) * _zone.baseRadius;
+                _radius += (size + (count * sizeStacking + Mathf.Log(count + 1, Mathf.Pow(2.0f, 1.0f / sizeStacking)) * (count / 4.0f)) / ((count / 4.0f) + 1) - sizeStacking) * _zone.baseRadius;
             }
         }
     }
