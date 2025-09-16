@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4213263157
+CRC: 1462436844
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5de6cf287f36aa960162022e8829d650
+    Hash: be9dbd16d1302d7151607eee30193d38
   TypeTreeHash:
     serializedVersion: 2
     Hash: 64a3d2b3c7b69ac5698aad152d4786a1
@@ -452,6 +452,7 @@ Assets:
 - Assets/Items/LongshotGeode/LongshotGeodeDisplayMesh.prefab
 - Assets/Debug/UI/DebugCanvas.prefab
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveBossIcon.png
+- Assets/UI/texCustomExpansionWhiteIcon.png
 - Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.obj
 - Assets/Equipment/Divider/texDividerArrow.png
 - Assets/Items/NoxiousSlimes/NoxiousSlimeGlassMesh.obj
