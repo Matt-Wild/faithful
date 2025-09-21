@@ -122,7 +122,7 @@
 	"FAITHFUL_SURVIVOR_TECHNICIAN_MASTERY_SKIN": "Thunder",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIME_SKIN": "Crystal",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIMARY_ARC_NAME": "Arc",
-	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIMARY_ARC_DESCRIPTION": "Tether an enemy with an electrical arc, dealing <style=cIsDamage>400% damage per second</style> and <style=cIsUtility>slowing</style> them.",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIMARY_ARC_DESCRIPTION": "Tether an enemy with a <style=cIsDamage>piercing</style> electrical arc, dealing <style=cIsDamage>400% per second</style> and <style=cIsUtility>slowing</style> them. The arc can be <style=cIsUtility>transferred between enemies</style>.",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_SECONDARY_POWERVOLT_NAME": "Powervolt",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_SECONDARY_POWERVOLT_DESCRIPTION": "<style=cIsDamage>Shocking</style>. Throw an electric bolt that deals <style=cIsDamage>420% damage</style>. Creates a blast of electricity instead while tethered to an enemy.",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_UTILITY_CHARGE_FLOW_NAME": "Charge Flow",
