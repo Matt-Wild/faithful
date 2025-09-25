@@ -1,131 +1,11 @@
 fileFormatVersion: 2
 guid: d5fef6506cec16746b8e397b6f6d7f34
 ModelImporter:
-  serializedVersion: 19301
-  internalIDToNameTable:
-  - first:
-      74: -2100450958045243245
-    second: Technician_Armature|Technician_Aim_Pitch
-  - first:
-      74: -5033186329292390103
-    second: Technician_Armature|Technician_Aim_Yaw
-  - first:
-      74: 1439977512868839205
-    second: Technician_Armature|Technician_Ascend
-  - first:
-      74: -1102163422073845870
-    second: Technician_Armature|Technician_DefaultPose
-  - first:
-      74: -309155023585945280
-    second: Technician_Armature|Technician_Descend
-  - first:
-      74: -571948694946530233
-    second: Technician_Armature|Technician_DescendFast
-  - first:
-      74: 1946599162334228168
-    second: Technician_Armature|Technician_Idle
-  - first:
-      74: -8389469230262562136
-    second: Technician_Armature|Technician_IdleAdditive
-  - first:
-      74: 4234572694410061101
-    second: Technician_Armature|Technician_IdleIn
-  - first:
-      74: 8015289514022315659
-    second: Technician_Armature|Technician_Jump
-  - first:
-      74: -12652374302814057
-    second: Technician_Armature|Technician_LightImpact
-  - first:
-      74: -4346489717793472526
-    second: Technician_Armature|Technician_Lobby_Arc
-  - first:
-      74: -2056312218976157654
-    second: Technician_Armature|Technician_Lobby_Entrance
-  - first:
-      74: 8603205579194744342
-    second: Technician_Armature|Technician_Lobby_Idle
-  - first:
-      74: -8193822218036511246
-    second: Technician_Armature|Technician_Pri_ArmForward
-  - first:
-      74: -6091924732327418738
-    second: Technician_Armature|Technician_Pri_ArmForward_old
-  - first:
-      74: -5291802628459341726
-    second: Technician_Armature|Technician_Pri_ArmHold
-  - first:
-      74: -3513982438796177196
-    second: Technician_Armature|Technician_Pri_ArmRecoil
-  - first:
-      74: 2687310317292113812
-    second: Technician_Armature|Technician_Sec_0_Pulse
-  - first:
-      74: 2075175503257303819
-    second: Technician_Armature|Technician_Sec_0_Toss
-  - first:
-      74: 7107586513834934479
-    second: Technician_Armature|Technician_Sec_1_Frisbee
-  - first:
-      74: -2945179068384922929
-    second: Technician_Armature|Technician_Sec_2_ChargeHold
-  - first:
-      74: 1280697009766787875
-    second: Technician_Armature|Technician_Sec_2_ChargeRelease
-  - first:
-      74: -3361813315732549776
-    second: Technician_Armature|Technician_Sec_2_ChargeUp
-  - first:
-      74: 2762633043190805164
-    second: Technician_Armature|Technician_Spe_0_ArmUp
-  - first:
-      74: -6869223898498653410
-    second: Technician_Armature|Technician_Spe_0_Contemplate
-  - first:
-      74: -3476961198428084472
-    second: Technician_Armature|Technician_Spe_0_Direct
-  - first:
-      74: -5508515808484454062
-    second: Technician_Armature|Technician_Spe_0_Place
-  - first:
-      74: -7802102530841684960
-    second: Technician_Armature|Technician_Spe_1_Overhead
-  - first:
-      74: 8410576446547472568
-    second: Technician_Armature|Technician_SprintF
-  - first:
-      74: 8112401819166251508
-    second: Technician_Armature|Technician_Uti_1_Frisbee
-  - first:
-      74: -6271624445453444886
-    second: Technician_Armature|Technician_WalkB
-  - first:
-      74: -4937113850781366931
-    second: Technician_Armature|Technician_WalkF
-  - first:
-      74: -7515597803675520398
-    second: Technician_Armature|Technician_WalkL
-  - first:
-      74: -7794456888421135351
-    second: Technician_Armature|Technician_WalkR
-  - first:
-      74: -3839307089875957954
-    second: Technician_Armature|Technician_Flinch_0
-  - first:
-      74: 5465110364596771359
-    second: Technician_Armature|Technician_Flinch_1
-  - first:
-      74: -3338483936640480025
-    second: Technician_Armature|Technician_Flinch_2
-  - first:
-      74: -3715684048104583699
-    second: Technician_Armature|Technician_Landing
-  - first:
-      74: -2743004504185312170
-    second: Technician_Armature|Technician_Uti_0_Bounce
+  serializedVersion: 21300
+  internalIDToNameTable: []
   externalObjects: {}
   materials:
-    materialImportMode: 1
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -134,6 +14,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -163,21 +44,27 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
-    weldVertices: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
-    meshOptimizationFlags: 0
+    optimizeBones: 1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
@@ -189,7 +76,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 0
+  importAnimation: 1
   humanDescription:
     serializedVersion: 3
     human: []
@@ -211,6 +98,8 @@ ModelImporter:
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
