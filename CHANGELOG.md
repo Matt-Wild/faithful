@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.14 Vengeful Toaster Concussion Device Bug
+- Railgunner's Concussion Device no longer grants vengeance
+
 #### v1.3.13 Spacious Umbrella Buff
 - Spacious Umbrella has been buffed with reduced stacking falloff
 
@@ -47,11 +50,11 @@
 #### v1.2.15 Debug UI Refinements
 - Debug UI transformed to fit better with the rest of the game.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.14 Item Name Configs
 - Added configs for overriding the name of items.
 - Changed description and details of the Leader's Pennon to make it's use more clear.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.13 Survivors Of The Void Requirement Fix
 - The Faithful expansion no longer requires Survivors of the Void to be enabled.

@@ -105,6 +105,9 @@ namespace Faithful
 
         void OnDamageDealt(DamageReport _report)
         {
+            // Ignore if damage dealt is 0
+            if (_report.damageDealt == 0.0f) return;
+
             // Check for inventory of victim
             Inventory inventory = _report.victimBody.inventory;
             if (inventory)

@@ -140,7 +140,7 @@ namespace Faithful
             jetLeft = Utils.FindChildByName(jetpack.transform, "Jet_Left");
             jetRight = Utils.FindChildByName(jetpack.transform, "Jet_Right");
 
-            // Add jet flate behaviour
+            // Add jet flare behaviour
             jetpack.GetComponent<Transform>().Find("4-T0N_Jetpack_Jetflare_Display").gameObject.AddComponent<TJetpackJetFlare>();
 
             // Get jet lights objects
