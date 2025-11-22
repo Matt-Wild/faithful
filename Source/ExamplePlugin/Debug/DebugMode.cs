@@ -107,7 +107,10 @@ namespace Faithful
 
                     if (Utils.verboseConsole) Log.Debug($"Spawning item at coordinates {transform.position}");
                     GameObject essence = Object.Instantiate(LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/CommandCube"), transform.position, transform.rotation);
-                    essence.GetComponent<PickupIndexNetworker>().NetworkpickupIndex = index;
+                    PickupIndexNetworker networker = essence.GetComponent<PickupIndexNetworker>();
+                    UniquePickup pickup = networker.NetworkpickupState;
+                    pickup.pickupIndex = index;
+                    networker.NetworkpickupState = pickup;
                     essence.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(index);
                     NetworkServer.Spawn(essence);
                 }

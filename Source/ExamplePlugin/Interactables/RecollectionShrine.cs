@@ -115,7 +115,7 @@ namespace Faithful
             return LookupTable.GetInt($"{player.GetComponent<NetworkIdentity>().netId} IC") > 0;
         }
 
-        public override void CustomPayCost(CostTypeDef _costTypeDef, CostTypeDef.PayCostContext _context)
+        public override void CustomPayCost(CostTypeDef.PayCostContext _context, CostTypeDef.PayCostResults _result)
         {
             // Cost needs to happen after shrine is purchased (so do cost in on purchase method)
         }

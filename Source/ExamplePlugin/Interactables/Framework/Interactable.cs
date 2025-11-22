@@ -630,7 +630,13 @@ namespace Faithful
             return true;
         }
 
-        public virtual void CustomPayCost(CostTypeDef _costTypeDef, CostTypeDef.PayCostContext _context)
+        public virtual void CustomPayCost(CostTypeDef.PayCostContext _context, CostTypeDef.PayCostResults _result)
+        {
+            // Warn that interactable doesn't have custom pay cost behaviour
+            Log.Warning($"[Interactable] | Interactable '{name}' has a custom cost type but does not have any custom pay cost behaviour.");
+        }
+
+        private void CustomPayCost(CostTypeDef _costTypeDef, CostTypeDef.PayCostContext _context)
         {
             // Warn that interactable doesn't have custom pay cost behaviour
             Log.Warning($"[Interactable] | Interactable '{name}' has a custom cost type but does not have any custom pay cost behaviour.");

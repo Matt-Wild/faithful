@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.15 Alloyed Collective Update
+- Faithful now functional with alloyed collective
+
 #### v1.3.14 Vengeful Toaster Concussion Device Bug
 - Railgunner's Concussion Device no longer grants vengeance
 
@@ -47,10 +50,10 @@
 ### v1.3.0 Shrine of Recollection
 - Added special Collector's Vision interactable 'Shrine of Recollection'.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.2.15 Debug UI Refinements
 - Debug UI transformed to fit better with the rest of the game.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.14 Item Name Configs
 - Added configs for overriding the name of items.

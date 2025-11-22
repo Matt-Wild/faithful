@@ -315,7 +315,10 @@ namespace Faithful
             {
                 // Create essence object
                 GameObject essence = Instantiate(LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/CommandCube"), localBody.transform.position, localBody.transform.rotation);
-                essence.GetComponent<PickupIndexNetworker>().NetworkpickupIndex = index;
+                PickupIndexNetworker networker = essence.GetComponent<PickupIndexNetworker>();
+                UniquePickup pickup = networker.NetworkpickupState;
+                pickup.pickupIndex = index;
+                networker.NetworkpickupState = pickup;
                 essence.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(index);
                 NetworkServer.Spawn(essence);
             }

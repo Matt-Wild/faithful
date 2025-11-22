@@ -164,7 +164,7 @@ namespace Faithful
             if (Util.CheckRoll(blightChance * _report.damageInfo.procCoefficient, attacker))
             {
                 // Inflict blight
-                DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, DotController.DotIndex.Blight, 5.0f);
+                DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, victimBody.mainHurtBox, DotController.DotIndex.Blight, 5.0f);
             }
         }
     }
