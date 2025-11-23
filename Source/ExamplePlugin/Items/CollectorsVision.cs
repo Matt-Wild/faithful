@@ -52,8 +52,9 @@ namespace Faithful
             // Fetch item settings
             FetchSettings();
 
-            // Link On Give Item behaviour
-            Behaviour.AddServerOnGiveItemCallback(OnGiveItem);
+            // Link On Give Item behaviours
+            Behaviour.AddServerOnGiveItemPermanentCallback(OnGiveItemPermanent);
+            Behaviour.AddServerOnGiveItemTemporaryCallback(OnGiveItem);
 
             // Add on scene exit behaviour
             Behaviour.AddOnPreSceneExitCallback(OnSceneExit);
@@ -125,11 +126,21 @@ namespace Faithful
             collectorsVisionItem.UpdateItemTexts();
         }
 
-        void OnGiveItem(Inventory _inventory, ItemIndex _index, int _count)
+        void OnGiveItemPermanent(Inventory _inventory, ItemIndex _index, int _count)
         {
+            // Run float version of OnGiveItem
+            OnGiveItem(_inventory, _index, _count);
+        }
+
+        void OnGiveItem(Inventory _inventory, ItemIndex _index, float _count)
+        {
+            Debug.Log("PING 1");
+
             // Check for valid call
-            if (_inventory == null || _index == ItemIndex.None || _count <= 0)
+            if (_inventory == null || _index == ItemIndex.None || _count <= 0.0f)
             {
+                Debug.Log("PING 2");
+
                 return;
             }
 
@@ -137,6 +148,8 @@ namespace Faithful
             CharacterBody body = Utils.GetInventoryBody(_inventory);
             if (body == null)
             {
+                Debug.Log("PING 3");
+
                 return;
             }
 
@@ -144,13 +157,17 @@ namespace Faithful
             FaithfulCharacterBodyBehaviour helper = Utils.FindCharacterBodyHelper(body);
             if (helper == null)
             {
+                Debug.Log("PING 4");
+
                 return;
             }
 
             // Get item count
             int count = _inventory.GetItemCount(collectorsVisionItem.itemDef);
-            if (count > 0)
+            if (count > 0.0f)
             {
+                Debug.Log("PING 5");
+
                 // Get Collector's Vision index
                 ItemIndex collectorsIndex = ItemCatalog.FindItemIndex("FAITHFUL_COLLECTORS_VISION_NAME");
 
@@ -170,7 +187,7 @@ namespace Faithful
                 helper.stageFlags.Set($"CS_{_index}_FFS");
 
                 // Grant buffs
-                for (int i = 0; i < inspirationGain + inspirationGainStacking * (count - 1); i++)
+                for (int i = 0; i < inspirationGain + inspirationGainStacking * (count - 1.0f); i++)
                 {
                     body.AddBuff(inspirationBuff.buffDef);
                 }

@@ -1,7 +1,7 @@
 # Changelog
 
 #### v1.3.15 Alloyed Collective Update
-- Faithful now functional with alloyed collective
+- Faithful now functional with Alloyed Collective
 
 #### v1.3.14 Vengeful Toaster Concussion Device Bug
 - Railgunner's Concussion Device no longer grants vengeance

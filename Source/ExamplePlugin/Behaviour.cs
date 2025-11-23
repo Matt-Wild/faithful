@@ -4,7 +4,6 @@ using R2API;
 using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 
 namespace Faithful
 {
@@ -25,6 +24,7 @@ namespace Faithful
     internal delegate void OnInflictDamageOverTimeRefCallback(ref InflictDotInfo _inflictDotInfo);
 
     internal delegate void OnTransferItemCallback(Inventory _inventory, ItemIndex _index, int _count);
+    internal delegate void OnTransferItemFloatCallback(Inventory _inventory, ItemIndex _index, float _count);
     internal delegate void OnInventoryCallback(Inventory _inventory);
 
     internal delegate void OnHealCallback(HealthComponent _healthComponent, ref float _amount, ref ProcChainMask _procChainMask, ref bool _nonRegen);
@@ -83,7 +83,8 @@ namespace Faithful
         private static List<OnInflictDamageOverTimeRefCallback> onInflictDamageOverTimeRefCallbacks = new List<OnInflictDamageOverTimeRefCallback>();
 
         // Item interaction callbacks
-        private static List<OnTransferItemCallback> onGiveItemCallbacks = new List<OnTransferItemCallback>();
+        private static List<OnTransferItemCallback> onGiveItemPermanentCallbacks = new List<OnTransferItemCallback>();
+        private static List<OnTransferItemFloatCallback> onGiveItemTemporaryCallbacks = new List<OnTransferItemFloatCallback>();
         private static List<OnTransferItemCallback> onRemoveItemCallbacks = new List<OnTransferItemCallback>();
         private static List<OnInventoryCallback> onInventoryChangedCallbacks = new List<OnInventoryCallback>();
         private static Dictionary<ItemDef, List<OnInventoryCallback>> onItemAddedCallbacks = new Dictionary<ItemDef, List<OnInventoryCallback>>();
@@ -148,7 +149,8 @@ namespace Faithful
             On.RoR2.CharacterBody.Start += HookCharacterBodyStart;
             On.RoR2.CharacterBody.AddBuff_BuffIndex += HookAddBuffIndex;
             On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += HookAddTimedBuffDef;
-            On.RoR2.Inventory.GiveItem_ItemIndex_int += HookServerGiveItem;
+            On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int += HookServerGiveItemPermanent;
+            On.RoR2.Inventory.GiveItemTemp += HookServerGiveItemTemporary;
             On.RoR2.Inventory.RemoveItem_ItemIndex_int += HookServerRemoveItem;
             On.RoR2.Inventory.HandleInventoryChanged += HookInventoryChanged;
             On.RoR2.Inventory.RpcItemAdded += HookItemAdded;
@@ -185,7 +187,7 @@ namespace Faithful
             On.RoR2.CharacterBody.Start -= HookCharacterBodyStart;
             On.RoR2.CharacterBody.AddBuff_BuffIndex -= HookAddBuffIndex;
             On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float -= HookAddTimedBuffDef;
-            On.RoR2.Inventory.GiveItem_ItemIndex_int -= HookServerGiveItem;
+            On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int -= HookServerGiveItemPermanent;
             On.RoR2.Inventory.RemoveItem_ItemIndex_int -= HookServerRemoveItem;
             On.RoR2.Inventory.HandleInventoryChanged -= HookInventoryChanged;
             On.RoR2.Inventory.RpcItemAdded -= HookItemAdded;
@@ -447,12 +449,20 @@ namespace Faithful
             DebugLog("Added On Inflict Damage Over Time Ref behaviour");
         }
 
-        // Add On Give Item callback (SERVER ONLY)
-        public static void AddServerOnGiveItemCallback(OnTransferItemCallback _callback)
+        // Add On Give Item Permanent callback (SERVER ONLY)
+        public static void AddServerOnGiveItemPermanentCallback(OnTransferItemCallback _callback)
         {
-            onGiveItemCallbacks.Add(_callback);
+            onGiveItemPermanentCallbacks.Add(_callback);
 
-            DebugLog("Added On Give Item behaviour");
+            DebugLog("Added On Give Item Permanent behaviour");
+        }
+
+        // Add On Give Item Temporary callback (SERVER ONLY)
+        public static void AddServerOnGiveItemTemporaryCallback(OnTransferItemFloatCallback _callback)
+        {
+            onGiveItemTemporaryCallbacks.Add(_callback);
+
+            DebugLog("Added On Give Item Temporary behaviour");
         }
 
         // Add On Remove Item callback (SERVER ONLY)
@@ -830,16 +840,28 @@ namespace Faithful
             orig(ref inflictDotInfo); // Run normal processes
         }
 
-        private static void HookServerGiveItem(On.RoR2.Inventory.orig_GiveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
+        private static void HookServerGiveItemPermanent(On.RoR2.Inventory.orig_GiveItemPermanent_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int countToAdd)
         {
             // Cycle through On Give Item callbacks
-            foreach (OnTransferItemCallback callback in onGiveItemCallbacks)
+            foreach (OnTransferItemCallback callback in onGiveItemPermanentCallbacks)
             {
                 // Call
-                callback(self, itemIndex, count);
+                callback(self, itemIndex, countToAdd);
             }
 
-            orig(self, itemIndex, count); // Run normal processes
+            orig(self, itemIndex, countToAdd); // Run normal processes
+        }
+
+        private static void HookServerGiveItemTemporary(On.RoR2.Inventory.orig_GiveItemTemp orig, Inventory self, ItemIndex itemIndex, float countToAdd)
+        {
+            // Cycle through On Give Item callbacks
+            foreach (OnTransferItemFloatCallback callback in onGiveItemTemporaryCallbacks)
+            {
+                // Call
+                callback(self, itemIndex, countToAdd);
+            }
+
+            orig(self, itemIndex, countToAdd); // Run normal processes
         }
 
         private static void HookServerRemoveItem(On.RoR2.Inventory.orig_RemoveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)

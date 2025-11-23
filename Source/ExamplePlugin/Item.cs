@@ -2,6 +2,7 @@
 using R2API;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Faithful
 {
@@ -36,7 +37,7 @@ namespace Faithful
         public string corruptedName = "";
 
         // Constructor
-        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _debugOnly = false)
+        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false)
         {
             // Assign token
             token = _token;
@@ -70,6 +71,9 @@ namespace Faithful
                 forceHide = _hidden || (!enabledSetting.Value || Items.allItemsDisabled);
             }
 
+            // Update tier
+            _tier = forceHide ? ItemTier.NoTier : _tier;
+
             // Create item def
             itemDef = ScriptableObject.CreateInstance<ItemDef>();
 
@@ -82,11 +86,31 @@ namespace Faithful
             // Set item expansion
             itemDef.requiredExpansion = Utils.expansionDef;
 
-            // Set item tags
-            itemDef.tags = _tags;
-
             // Set item tier (force untiered if forced to be hidden)
             itemDef.deprecatedTier = forceHide ? ItemTier.NoTier : _tier;
+
+            // Automatically review temporary item tag
+            if ((_tier == ItemTier.Tier1 || _tier == ItemTier.Tier2 || _tier == ItemTier.Tier3 || _tier == ItemTier.Boss) && !_canNeverBeTemporary)
+            {
+                // Check for tag
+                if (!_tags.Contains(ItemTag.CanBeTemporary))
+                {
+                    // Add tag
+                    _tags = [.. _tags, ItemTag.CanBeTemporary];
+                }
+            }
+            else
+            {
+                // Check for tag
+                if (_tags.Contains(ItemTag.CanBeTemporary))
+                {
+                    // Remove tag
+                    _tags = [.. _tags.Where(tag => tag != ItemTag.CanBeTemporary)];
+                }
+            }
+
+            // Set item tags
+            itemDef.tags = _tags;
 
             // Banned from Simulacrum?
             if (_simulacrumBanned)
