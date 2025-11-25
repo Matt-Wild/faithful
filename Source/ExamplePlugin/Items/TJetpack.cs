@@ -70,6 +70,8 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(0.00375F, 0F, -0.46F), new Vector3(22.5F, 180.25F, 0.25F), new Vector3(0.5F, 0.5F, 0.5F));
             displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.0375F, -0.3F, 0F), new Vector3(65F, 270F, 0F), new Vector3(0.375F, 0.375F, 0.375F));
             displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(0F, 0.00175F, -0.025F), new Vector3(2.5F, 180F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
+            displaySettings.AddCharacterDisplay("Operator", "Backpack", new Vector3(0F, -0.075F, -0.265F), new Vector3(0F, 180F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
+            displaySettings.AddCharacterDisplay("Drifter", "Stomach", new Vector3(-0.2F, -0.3375F, 0F), new Vector3(72.5F, 270F, 0F), new Vector3(0.4F, 0.4F, 0.4F));
         }
 
         protected override void CreateSettings()

@@ -243,6 +243,8 @@ Holding F1 as you press one of the listed keys will spawn the corrosponding tier
 
 # Special Thanks
 
+- Thank you to Coldeiб for his Russian translation of our mod! (find it on our Discord)
+
 - Thank you to all the people who helped turn ideas into reality on the Risk of Rain 2 Modding Discord server!
   - .score
   - Chinchi
@@ -263,7 +265,7 @@ Holding F1 as you press one of the listed keys will spawn the corrosponding tier
   - KingEnderBrine
   - Mystical Chicken
 
-- ... and thank you to our Discord members who helped to refine Faithful through suggestions, bug reports and more!
+- And thank you to our Discord members who helped to refine Faithful through suggestions, bug reports and more!
   - Expakun
   - MiztarPi314
   - gaylesbean

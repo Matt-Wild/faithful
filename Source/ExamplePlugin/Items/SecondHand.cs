@@ -33,7 +33,7 @@ namespace Faithful
             CreateDisplaySettings("secondhanddisplaymesh");
 
             // Create Second Hand item and buff
-            secondHandItem = Items.AddItem("SECOND_HAND", "Second Hand", [ItemTag.Damage, ItemTag.Utility], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
+            secondHandItem = Items.AddItem("SECOND_HAND", "Second Hand", [ItemTag.Damage, ItemTag.Utility, ItemTag.MobilityRelated], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
             secondHandBuff = Buffs.AddBuff("SECOND_HAND", "Second Hand", "texbuffsecondhand", Color.white);
 
             // Create item settings
@@ -80,6 +80,9 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("False Son", "HandL", new Vector3(0.74F, 0.41825F, 0.0625F), new Vector3(293.75F, 264.85F, 184.95F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Chef", "Cleaver", new Vector3(-0.01425F, 0.445F, -0.00125F), new Vector3(0F, 0F, 0F), new Vector3(0.15F, 0.15F, 1F));
             displaySettings.AddCharacterDisplay("Technician", "Head", new Vector3(0F, 0.27825F, 0.1175F), new Vector3(327.5F, 0F, 180F), new Vector3(0.15F, 0.15F, 0.15F));
+            displaySettings.AddCharacterDisplay("Operator", "Backpack", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
+            displaySettings.AddCharacterDisplay("Drifter", "Chest", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
+            displaySettings.AddCharacterDisplay("Best Buddy", "Body", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
         }
 
         protected override void CreateSettings()

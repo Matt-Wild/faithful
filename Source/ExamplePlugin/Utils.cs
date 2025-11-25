@@ -91,6 +91,9 @@ namespace Faithful
             { "seeker", "mdlSeeker" },
             { "false son", "mdlFalseSon" },
             { "chef", "mdlChef" },
+            { "operator", "mdlDroneTech" },
+            { "drifter", "mdlDrifter" },
+            { "best buddy", "mdlDefectiveUnit (1)" },
             { "technician", "mdlTechnician" }
         };
 

@@ -27,7 +27,7 @@ namespace Faithful
             CreateDisplaySettings("meltingwarblerdisplaymesh");
 
             // Create Melting Warbler item
-            meltingWarblerItem = Items.AddItem("MELTING_WARBLER", "Melting Warbler", [ItemTag.Utility], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _displaySettings: displaySettings);
+            meltingWarblerItem = Items.AddItem("MELTING_WARBLER", "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -71,6 +71,9 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("False Son", "Head", new Vector3(-0.3925F, 0.45F, -0.0675F), new Vector3(1.25F, 262.25F, 0.5F), new Vector3(0.125F, 0.125F, 0.125F));
             displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.8325F, -0.2225F, 0.20175F), new Vector3(35F, 40F, 135F), new Vector3(0.15F, 0.15F, 0.15F));
             displaySettings.AddCharacterDisplay("Technician", "Head", new Vector3(0F, 0.3385F, 0.03625F), new Vector3(0F, 0F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
+            displaySettings.AddCharacterDisplay("Operator", "Backpack", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
+            displaySettings.AddCharacterDisplay("Drifter", "Chest", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
+            displaySettings.AddCharacterDisplay("Best Buddy", "Body", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
         }
 
         protected override void CreateSettings()
