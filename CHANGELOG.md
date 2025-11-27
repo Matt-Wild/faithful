@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.16 Alloyed Collective Item Displays
+- Added missing item displays for Alloyed Collective
+
 #### v1.3.15 Alloyed Collective Update
 - Faithful now functional with Alloyed Collective
 
@@ -47,10 +50,10 @@
 #### v1.3.1 Corrupted Item String Fixes
 - Made the code for finding item corruptions more robust.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.3.0 Shrine of Recollection
 - Added special Collector's Vision interactable 'Shrine of Recollection'.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.2.15 Debug UI Refinements
 - Debug UI transformed to fit better with the rest of the game.

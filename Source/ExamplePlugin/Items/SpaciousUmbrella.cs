@@ -69,8 +69,8 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("False Son", "LowerArmR", new Vector3(-0.05125F, 0.3195F, 0.1375F), new Vector3(3.5F, 180.5F, 188.5F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(0.0355F, 0.22875F, 0.11475F), new Vector3(0F, 270F, 315F), new Vector3(0.35F, 0.35F, 0.35F));
             displaySettings.AddCharacterDisplay("Technician", "Chest", new Vector3(0.1375F, 0.125F, -0.1335F), new Vector3(0F, 90F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
-            displaySettings.AddCharacterDisplay("Operator", "Backpack", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
-            displaySettings.AddCharacterDisplay("Drifter", "Chest", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
+            displaySettings.AddCharacterDisplay("Operator", "Backpack", new Vector3(-0.15F, 0.1475F, -0.155F), new Vector3(0F, 180F, 270F), new Vector3(0.2F, 0.2F, 0.2F));
+            displaySettings.AddCharacterDisplay("Drifter", "BagPocketL", new Vector3(-0.025F, 0.105F, 0.145F), new Vector3(10F, 90F, 50F), new Vector3(0.375F, 0.375F, 0.375F));
         }
 
         protected override void CreateSettings()

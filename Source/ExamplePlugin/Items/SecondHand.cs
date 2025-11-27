@@ -80,9 +80,9 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("False Son", "HandL", new Vector3(0.74F, 0.41825F, 0.0625F), new Vector3(293.75F, 264.85F, 184.95F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Chef", "Cleaver", new Vector3(-0.01425F, 0.445F, -0.00125F), new Vector3(0F, 0F, 0F), new Vector3(0.15F, 0.15F, 1F));
             displaySettings.AddCharacterDisplay("Technician", "Head", new Vector3(0F, 0.27825F, 0.1175F), new Vector3(327.5F, 0F, 180F), new Vector3(0.15F, 0.15F, 0.15F));
-            displaySettings.AddCharacterDisplay("Operator", "Backpack", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
-            displaySettings.AddCharacterDisplay("Drifter", "Chest", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
-            displaySettings.AddCharacterDisplay("Best Buddy", "Body", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
+            displaySettings.AddCharacterDisplay("Operator", "Backpack", new Vector3(-0.00125F, 0.27125F, -0.225F), new Vector3(0F, 0F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Drifter", "LowerArmL", new Vector3(0.2405F, 0.0375F, -0.02375F), new Vector3(57.5F, 318F, 52.5F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("Best Buddy", "CableM", new Vector3(0.005F, -0.12F, 0.0025F), new Vector3(35.5F, 0F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
         }
 
         protected override void CreateSettings()
