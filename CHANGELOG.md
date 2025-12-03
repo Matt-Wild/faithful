@@ -1,32 +1,35 @@
 # Changelog
 
+#### v1.3.17 Removed Debugging Log
+- Removed annoying "PING" logs that were left in after debugging, whoops.
+
 #### v1.3.16 Alloyed Collective Item Displays
-- Added missing item displays for Alloyed Collective
+- Added missing item displays for Alloyed Collective.
 
 #### v1.3.15 Alloyed Collective Update
-- Faithful now functional with Alloyed Collective
+- Faithful now functional with Alloyed Collective.
 
 #### v1.3.14 Vengeful Toaster Concussion Device Bug
-- Railgunner's Concussion Device no longer grants vengeance
+- Railgunner's Concussion Device no longer grants vengeance.
 
 #### v1.3.13 Spacious Umbrella Buff
-- Spacious Umbrella has been buffed with reduced stacking falloff
+- Spacious Umbrella has been buffed with reduced stacking falloff.
 
 #### v1.3.12 Locales Framework
-- Changed item and buff internal names to be more robust for the future implementation of additional locales and to avoid future mod conflicts
+- Changed item and buff internal names to be more robust for the future implementation of additional locales and to avoid future mod conflicts.
 
 #### v1.3.11 Toaster/Shawl Buff Deletion Fix
-- Vengeful Toaster and Hermit's Shawl no longer waste their associated buffs on damage events that do no actual damage
+- Vengeful Toaster and Hermit's Shawl no longer waste their associated buffs on damage events that do no actual damage.
 
 #### v1.3.10 Verbose Console Setting
-- Separated verbose console output into it's own setting
-- Fixed some assets needlessly trying to become networked by the Prefab API
+- Separated verbose console output into it's own setting.
+- Fixed some assets needlessly trying to become networked by the Prefab API.
 
 #### v1.3.9 Longshot Geode Indicator
-- Added optional radius indicator for Longshot Geode (default off)
+- Added optional radius indicator for Longshot Geode (default off).
 
 #### v1.3.8 Leader's Pennon Attack Speed And Regen Stacking
-- Added additional configs for Leader's Pennon to support attack speed and regen stacking
+- Added additional configs for Leader's Pennon to support attack speed and regen stacking.
 
 #### v1.3.7 Jetpack Material Fix
 - Fixed broken Jetpack material.
@@ -44,13 +47,13 @@
 #### v1.3.3 Targeting Matrix Fix
 - Fixed error with Targeting Matrix on modded characters with no model locator.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.2 More Jetpack Adjustments
 - Small 4-T0N Jetpack buff - also adding pickup spawning tools to debug UI.
 
 #### v1.3.1 Corrupted Item String Fixes
 - Made the code for finding item corruptions more robust.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.3.0 Shrine of Recollection
 - Added special Collector's Vision interactable 'Shrine of Recollection'.

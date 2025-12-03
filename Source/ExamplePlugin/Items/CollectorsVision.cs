@@ -136,13 +136,9 @@ namespace Faithful
 
         void OnGiveItem(Inventory _inventory, ItemIndex _index, float _count)
         {
-            Debug.Log("PING 1");
-
             // Check for valid call
             if (_inventory == null || _index == ItemIndex.None || _count <= 0.0f)
             {
-                Debug.Log("PING 2");
-
                 return;
             }
 
@@ -150,8 +146,6 @@ namespace Faithful
             CharacterBody body = Utils.GetInventoryBody(_inventory);
             if (body == null)
             {
-                Debug.Log("PING 3");
-
                 return;
             }
 
@@ -159,8 +153,6 @@ namespace Faithful
             FaithfulCharacterBodyBehaviour helper = Utils.FindCharacterBodyHelper(body);
             if (helper == null)
             {
-                Debug.Log("PING 4");
-
                 return;
             }
 
@@ -168,8 +160,6 @@ namespace Faithful
             int count = _inventory.GetItemCount(collectorsVisionItem.itemDef);
             if (count > 0.0f)
             {
-                Debug.Log("PING 5");
-
                 // Get Collector's Vision index
                 ItemIndex collectorsIndex = ItemCatalog.FindItemIndex("FAITHFUL_COLLECTORS_VISION_NAME");
 
