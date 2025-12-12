@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6b3f1dcf298bb8d4491bbcce4d04f43d
+guid: 9ef156d077f342f44974b2d22f69d5f7
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -14,7 +14,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
-    removeConstantScaleCurves: 1
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -76,7 +76,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 0
+  importAnimation: 1
   humanDescription:
     serializedVersion: 3
     human: []
