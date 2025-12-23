@@ -90,6 +90,44 @@ namespace Faithful
                     replacementMesh = "TechnicianPrimeSkinTurretLights"
                 }
             ]);
+
+            // Add alloy skin
+            AddSkin("ALLOY", Assets.GetSprite("texTechnicianAlloyIcon"), _skinReplacements: [
+                new Skins.SkinReplacement
+                {
+                    childName = "TechnicianBody",
+                    replacementMesh = "TechnicianAlloySkinTechnician",
+                    replacementMaterial = "texTechnicianAlloy"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "TechnicianBodyLights",
+                    replacementMesh = "TechnicianAlloySkinTechnicianGlass",
+                    replacementMaterial = "texTechnicianGlass"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "TechnicianRobot",
+                    replacementMesh = "TechnicianAlloySkinRobot",
+                    replacementMaterial = "texTechnicianAlloy"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "TechnicianRobotLights",
+                    replacementMesh = "TechnicianAlloySkinRobotLights"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "TechnicianTurret",
+                    replacementMesh = "TechnicianAlloySkinTurret",
+                    replacementMaterial = "texTechnicianAlloy"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "TechnicianTurretLights",
+                    replacementMesh = "TechnicianAlloySkinTurretLights"
+                }
+            ]);
         }
 
         protected override void SetupSkills()
@@ -1734,6 +1772,200 @@ namespace Faithful
                 new Vector3(-0.0975F, 0.235F, -0.0645F),
                 new Vector3(343.25F, 344.5F, 45F),
                 new Vector3(0.0175F, 0.015F, 0.0175F)
+                )
+                );
+            AddDefaultItemDisplay("BarrierOnCooldown",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBarrierOnCooldown"),
+                "Chest",
+                new Vector3(-0.18525F, 0.10375F, 0.08525F),
+                new Vector3(0F, 335F, 356.25F),
+                new Vector3(0.1F, 0.1F, 0.1F)
+                )
+                );
+            AddDefaultItemDisplay("BonusHealthBoost",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayQuickFix"),
+                "ThighL",
+                new Vector3(-0.07F, 0.04275F, -0.065F),
+                new Vector3(0F, 330F, 92.5F),
+                new Vector3(0.15F, 0.15F, 0.15F)
+                )
+                );
+            AddDefaultItemDisplay("CookedSteak",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayCookedSteakFlat"),
+                "Chest",
+                new Vector3(0.049F, 0.22F, -0.1675F),
+                new Vector3(5F, 180F, 280F),
+                new Vector3(0.125F, 0.125F, 0.125F)
+                )
+                );
+            AddDefaultItemDisplay("CritAtLowerElevation",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("CritAtLowerElevationDisplay"),
+                "Pelvis",
+                new Vector3(0F, 0.14F, -0.1375F),
+                new Vector3(347.5F, 180F, 0F),
+                new Vector3(0.2F, 0.2F, 0.2F)
+                )
+                );
+            AddDefaultItemDisplay("DronesDropDynamite",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DronesDropDynamiteDisplay"),
+                "Chest",
+                new Vector3(0F, 0.25F, -0.225F),
+                new Vector3(0F, 0F, 0F),
+                new Vector3(0.175F, 0.175F, 0.175F)
+                )
+                );
+            AddDefaultItemDisplay("Duplicator",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayDuplicator"),
+                "Shin.R",
+                new Vector3(0.112F, 0.47375F, 0F),
+                new Vector3(25F, 270F, 180F),
+                new Vector3(0.155F, 0.155F, 0.155F)
+                )
+                );
+            AddDefaultItemDisplay("ExtraEquipment",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayExtraEquipment"),
+                "Pelvis",
+                new Vector3(0.1265F, 0.03975F, -0.11375F),
+                new Vector3(353.75F, 148.75F, 0.75F),
+                new Vector3(0.125F, 0.125F, 0.125F)
+                )
+                );
+            AddDefaultItemDisplay("JumpDamageStrike",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayJumpDamageStrike"),
+                "Shin.L",
+                new Vector3(0.004F, 0.56125F, 0.04625F),
+                new Vector3(270F, 180F, 0F),
+                new Vector3(0.5F, 0.5F, 0.5F)
+                ),
+                ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayJumpDamageStrike"),
+                "Shin.R",
+                new Vector3(-0.004F, 0.56125F, 0.04625F),
+                new Vector3(270F, 180F, 0F),
+                new Vector3(0.5F, 0.5F, 0.5F)
+                )
+                );
+            AddDefaultItemDisplay("MasterBattery",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayPowerOrbSphere"),
+                "Base",
+                new Vector3(0.4F, 1.8F, -0.25F),
+                new Vector3(0F, 0F, 0F),
+                new Vector3(0.5F, 0.5F, 0.5F)
+                )
+                );
+            AddDefaultItemDisplay("PhysicsProjectile",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("PhysicsProjectileDisplay"),
+                "BackpackEye",
+                new Vector3(0F, 0F, 0F),
+                new Vector3(290F, 180F, 0F),
+                new Vector3(0.08F, 0.08F, 0.08F)
+                )
+                );
+            AddDefaultItemDisplay("PowerCube",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayPowerCube"),
+                "Base",
+                new Vector3(-0.8F, 2F, -0.6F),
+                new Vector3(0F, 0F, 0F),
+                new Vector3(1F, 1F, 1F)
+                )
+                );
+            AddDefaultItemDisplay("PowerPyramid",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayPowerPyramid"),
+                "Base",
+                new Vector3(0.8F, 2F, -0.6F),
+                new Vector3(0F, 0F, 0F),
+                new Vector3(0.5F, 0.5F, 0.5F)
+                )
+                );
+            AddDefaultItemDisplay("SharedSuffering",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("SharedSufferingDisplay"),
+                "Backpack",
+                new Vector3(0F, 0.063F, -0.096F),
+                new Vector3(270F, 0F, 0F),
+                new Vector3(0.175F, 0.175F, 0.175F)
+                )
+                );
+            AddDefaultItemDisplay("ShieldBooster",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayShieldBooster"),
+                "LowerArmL",
+                new Vector3(-0.05F, 0.075F, 0.00025F),
+                new Vector3(277.5F, 207.5F, 242.5F),
+                new Vector3(0.2F, 0.2F, 0.2F)
+                )
+                );
+            AddDefaultItemDisplay("ShockDamageAura",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("ShockDamageAuraDisplay"),
+                "BackpackAntenna",
+                new Vector3(0F, 0.04F, 0F),
+                new Vector3(0F, 0F, 0F),
+                new Vector3(0.075F, 0.075F, 0.075F)
+                )
+                );
+            AddDefaultItemDisplay("SpeedOnPickup",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("SpeedOnPickupDisplay"),
+                "Pelvis",
+                new Vector3(-0.1725F, 0.105F, -0.055F),
+                new Vector3(0F, 255F, 0F),
+                new Vector3(0.175F, 0.175F, 0.175F)
+                )
+                );
+            AddDefaultItemDisplay("Stew",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("StewDisplay"),
+                "ThighR",
+                new Vector3(0.0675F, 0.0705F, 0F),
+                new Vector3(0F, 0F, 268.75F),
+                new Vector3(0.125F, 0.08F, 0.125F)
+                )
+                );
+            AddDefaultItemDisplay("UltimateMeal",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("UltimateMealDisplay"),
+                "Base",
+                new Vector3(-0.4F, 1.975F, -0.375F),
+                new Vector3(0F, 0F, 0F),
+                new Vector3(1F, 1F, 1F)
+                )
+                );
+            AddDefaultItemDisplay("WyrmOnHit",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayWyrmOnHit"),
+                "Backpack",
+                new Vector3(0F, 0.0825F, -0.0175F),
+                new Vector3(5F, 0F, 0F),
+                new Vector3(0.09F, 0.09F, 0.09F)
+                )
+                );
+            AddDefaultItemDisplay("EliteCollectiveEquipment",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteCollectiveHorn"),
+                "Head",
+                new Vector3(-0.00625F, 0F, 0F),
+                new Vector3(0F, 180F, 0F),
+                new Vector3(0.175F, 0.175F, 0.175F)
+                ),
+                ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteCollectiveHorn"),
+                "Head",
+                new Vector3(0.00625F, 0F, 0F),
+                new Vector3(0F, 180F, 0F),
+                new Vector3(-0.175F, 0.175F, 0.175F)
+                ),
+                ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteCollectiveRing"),
+                "Head",
+                new Vector3(0F, 0.15F, 0.075F),
+                new Vector3(347.5F, 0F, 0F),
+                new Vector3(0.175F, 0.175F, 0.175F)
+                )
+                );
+            AddDefaultItemDisplay("GroundEnemies",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayGroundEnemies"),
+                "ChestEye",
+                new Vector3(0F, 0F, 0F),
+                new Vector3(90F, 0F, 0F),
+                new Vector3(0.105F, 0.105F, 0.105F)
+                )
+                );
+            AddDefaultItemDisplay("Parry",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("ParryDisplay"),
+                "Backpack",
+                new Vector3(0F, -0.0385F, -0.0995F),
+                new Vector3(355F, 180F, 180F),
+                new Vector3(1F, 1F, 1F)
                 )
                 );
         }
