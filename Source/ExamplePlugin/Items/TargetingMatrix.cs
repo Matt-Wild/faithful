@@ -88,7 +88,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Seeker", "Head", new Vector3(-0.056F, 0.08975F, 0.112F), new Vector3(0F, 353.25F, 0F), new Vector3(0.065F, 0.065F, 0.055F));
             displaySettings.AddCharacterDisplay("False Son", "Head", new Vector3(0F, 0.2175F, 0.13F), new Vector3(0F, 0F, 270F), new Vector3(0.15F, 0.15F, 0.15F));
             displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.206F, 0.1105F, 0.09725F), new Vector3(270F, 90F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Technician", "Head", new Vector3(-0.0795F, 0.1625F, 0.1045F), new Vector3(0F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Technician", "Head", new Vector3(-0.0795F, 0.153F, 0.10375F), new Vector3(350F, 0F, 0F), new Vector3(0.09F, 0.09F, 0.1F));
             displaySettings.AddCharacterDisplay("Operator", "Head", new Vector3(-0.1224F, -0.109F, -0.141F), new Vector3(70F, 223.75F, 312.5F), new Vector3(0.075F, 0.075F, 0.075F));
             displaySettings.AddCharacterDisplay("Drifter", "Head", new Vector3(-0.1286F, 0.1905F, 0.076F), new Vector3(270F, 90F, 0F), new Vector3(0.0825F, 0.0825F, 0.0825F));
         }

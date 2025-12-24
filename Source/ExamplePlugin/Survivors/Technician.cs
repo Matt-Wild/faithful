@@ -178,15 +178,15 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.155F, 0.09675F, -0.1185F),
                 new Vector3(0F, 0F, 346.75F),
-                new Vector3(0.15F, 0.15F, 0.15F)
+                new Vector3(0.175F, 0.175F, 0.175F)
                 )
                 );
             AddDefaultItemDisplay("AttackSpeedOnCrit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayWolfPelt"),
                 "Head",
-                new Vector3(0F, 0.15F, 0.0975F),
+                new Vector3(0F, 0.125F, 0.07375F),
                 new Vector3(345F, 0F, 0F),
-                new Vector3(0.7F, 0.7F, 0.7F)
+                new Vector3(0.675F, 0.675F, 0.675F)
                 )
                 );
             AddDefaultItemDisplay("AutoCastEquipment",
@@ -224,16 +224,16 @@ namespace Faithful
             AddDefaultItemDisplay("Bear",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBear"),
                 "Head",
-                new Vector3(0F, 0.1625F, -0.1825F),
-                new Vector3(0F, 180F, 0F),
+                new Vector3(0F, 0.16F, -0.17F),
+                new Vector3(358.75F, 180F, 0F),
                 new Vector3(0.2F, 0.2F, 0.2F)
                 )
                 );
             AddDefaultItemDisplay("BearVoid",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBearVoid"),
                 "Head",
-                new Vector3(0F, 0.1625F, -0.1825F),
-                new Vector3(0F, 180F, 0F),
+                new Vector3(0F, 0.16F, -0.16F),
+                new Vector3(358.75F, 180F, 0F),
                 new Vector3(0.2F, 0.2F, 0.2F)
                 )
                 );
@@ -242,7 +242,7 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.145F, 0.0365F, -0.1275F),
                 new Vector3(0F, 0F, 0F),
-                new Vector3(0.05F, 0.05F, 0.05F)
+                new Vector3(0.06F, 0.06F, 0.06F)
                 )
                 );
             AddDefaultItemDisplay("Behemoth",
@@ -256,9 +256,9 @@ namespace Faithful
             AddDefaultItemDisplay("BleedOnHit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayTriTip"),
                 "UpperArmL",
-                new Vector3(-0.0825F, 0.0175F, 0.15125F),
+                new Vector3(-0.09F, 0.0125F, 0.1625F),
                 new Vector3(350F, 150F, 0F),
-                new Vector3(0.2F, 0.2F, 0.2F)
+                new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
             AddDefaultItemDisplay("BleedOnHitAndExplode",
@@ -272,9 +272,9 @@ namespace Faithful
             AddDefaultItemDisplay("BleedOnHitVoid",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayTriTipVoid"),
                 "UpperArmL",
-                new Vector3(-0.0825F, 0.0125F, 0.15125F),
+                new Vector3(-0.1F, 0.005F, 0.175F),
                 new Vector3(347.5F, 150F, 310F),
-                new Vector3(0.15F, 0.15F, 0.15F)
+                new Vector3(0.2F, 0.2F, 0.2F)
                 )
                 );
             AddDefaultItemDisplay("BonusGoldPackOnKill",
@@ -290,7 +290,7 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(-0.1075F, 0.0775F, 0.1205F),
                 new Vector3(280.5F, 125F, 196.75F),
-                new Vector3(0.325F, 0.325F, 0.325F)
+                new Vector3(0.375F, 0.375F, 0.375F)
                 )
                 );
             AddDefaultItemDisplay("BounceNearby",
@@ -306,7 +306,7 @@ namespace Faithful
                 "Chest",
                 new Vector3(0F, -0.00715F, -0.1775F),
                 new Vector3(350F, 180F, 270F),
-                new Vector3(0.375F, 0.375F, 0.375F)
+                new Vector3(0.4F, 0.4F, 0.4F)
                 )
                 );
             AddDefaultItemDisplay("ChainLightningVoid",
@@ -314,29 +314,29 @@ namespace Faithful
                 "Chest",
                 new Vector3(0F, -0.00715F, -0.1775F),
                 new Vector3(350F, 180F, 270F),
-                new Vector3(0.375F, 0.375F, 0.375F)
+                new Vector3(0.4F, 0.4F, 0.4F)
                 )
                 );
             AddDefaultItemDisplay("Clover",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayClover"),
                 "Head",
-                new Vector3(-0.0875F, 0.255F, 0.0775F),
+                new Vector3(-0.08F, 0.2375F, 0.0725F),
                 new Vector3(30F, 300F, 0F),
-                new Vector3(0.375F, 0.375F, 0.375F)
+                new Vector3(0.325F, 0.325F, 0.325F)
                 )
                 );
             AddDefaultItemDisplay("CloverVoid",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayCloverVoid"),
                 "Head",
-                new Vector3(-0.0875F, 0.255F, 0.0775F),
-                new Vector3(30F, 300F, 0F),
-                new Vector3(0.375F, 0.375F, 0.375F)
+                new Vector3(-0.096F, 0.2375F, 0.0825F),
+                new Vector3(32.5F, 300F, 350F),
+                new Vector3(0.325F, 0.325F, 0.325F)
                 )
                 );
             AddDefaultItemDisplay("CooldownOnCrit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplaySkull"),
                 "Chest",
-                new Vector3(-0.0025F, 0.225F, 0.125F),
+                new Vector3(-0.0025F, 0.225F, 0.1325F),
                 new Vector3(270F, 0F, 0F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
@@ -358,17 +358,17 @@ namespace Faithful
             AddDefaultItemDisplay("CritGlasses",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayGlasses"),
                 "Head",
-                new Vector3(0F, 0.1575F, 0.15875F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.275F, 0.25F, 0.25F)
+                new Vector3(0F, 0.15625F, 0.14875F),
+                new Vector3(355F, 0F, 0F),
+                new Vector3(0.2625F, 0.25F, 0.25F)
                 )
                 );
             AddDefaultItemDisplay("CritGlassesVoid",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayGlassesVoid"),
                 "Head",
-                new Vector3(0F, 0.159F, 0.1395F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.3125F, 0.325F, 0.325F)
+                new Vector3(0F, 0.16625F, 0.13625F),
+                new Vector3(355F, 0F, 0F),
+                new Vector3(0.2775F, 0.325F, 0.325F)
                 )
                 );
             AddDefaultItemDisplay("Crowbar",
@@ -381,9 +381,9 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("Dagger",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayDagger"),
-                "Chest",
-                new Vector3(0.00375F, 0.25F, -0.0625F),
-                new Vector3(0F, 30F, 5F),
+                "Backpack",
+                new Vector3(0F, 0.1125F, 0.1175F),
+                new Vector3(0F, 30F, 10F),
                 new Vector3(0.825F, 0.825F, 0.825F)
                 )
                 );
@@ -413,7 +413,7 @@ namespace Faithful
                 ),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplaySunHead"),
                 "Head",
-                new Vector3(0F, 0.1385F, 0F),
+                new Vector3(0F, 0.125F, 0F),
                 new Vector3(0F, 0F, 0F),
                 new Vector3(0.975F, 0.975F, 0.975F)
                 )
@@ -447,7 +447,7 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.00125F, 0.0725F, -0.1775F),
                 new Vector3(275F, 0F, 0F),
-                new Vector3(0.125F, 0.125F, 0.125F)
+                new Vector3(0.1625F, 0.15F, 0.125F)
                 )
                 );
             AddDefaultItemDisplay("ExplodeOnDeath",
@@ -499,9 +499,9 @@ namespace Faithful
             AddDefaultItemDisplay("Feather",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayFeather"),
                 "UpperArmR",
-                new Vector3(0.055F, 0.1625F, 0.0825F),
-                new Vector3(75F, 80F, 40F),
-                new Vector3(0.015F, 0.015F, 0.015F)
+                new Vector3(0.03175F, 0.18375F, 0.0895F),
+                new Vector3(75F, 80F, 55F),
+                new Vector3(0.02F, 0.02F, 0.02F)
                 )
                 );
             AddDefaultItemDisplay("FireballsOnHit",
@@ -530,10 +530,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("FlatHealth",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplaySteakCurved"),
-                "Chest",
-                new Vector3(0.0075F, 0.32F, 0.04625F),
-                new Vector3(290F, 0F, 0F),
-                new Vector3(0.125F, 0.125F, 0.125F)
+                "Stomach",
+                new Vector3(-0.0825F, 0.065F, 0.128F),
+                new Vector3(1.25F, 323.75F, 88.75F),
+                new Vector3(0.08F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("FocusConvergence",
@@ -555,24 +555,24 @@ namespace Faithful
             AddDefaultItemDisplay("FreeChest",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayShippingRequestForm"),
                 "Pelvis",
-                new Vector3(-0.2015F, -0.00435F, 0.0335F),
-                new Vector3(75F, 277.5F, 349F),
-                new Vector3(0.3F, 0.3F, 0.3F)
+                new Vector3(-0.21F, -0.0355F, 0.035F),
+                new Vector3(75.00003F, 277.5F, 349F),
+                new Vector3(0.375F, 0.375F, 0.375F)
                 )
                 );
             AddDefaultItemDisplay("GhostOnKill",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMask"),
                 "Head",
-                new Vector3(0F, 0.1525F, 0.095F),
+                new Vector3(0F, 0.15F, 0.0985F),
                 new Vector3(350F, 0F, 0F),
-                new Vector3(0.75F, 0.625F, 0.75F)
+                new Vector3(0.75F, 0.625F, 0.625F)
                 )
                 );
             AddDefaultItemDisplay("GoldOnHit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBoneCrown"),
                 "Head",
-                new Vector3(0F, 0.1975F, 0F),
-                new Vector3(0F, 0F, 0F),
+                new Vector3(0F, 0.17F, -0.0125F),
+                new Vector3(345F, 0F, 0F),
                 new Vector3(1F, 1F, 1F)
                 )
                 );
@@ -610,10 +610,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("HealingPotion",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayHealingPotion"),
-                "Pelvis",
-                new Vector3(0.14425F, 0.075F, 0.1005F),
-                new Vector3(350F, 0F, 20F),
-                new Vector3(0.025F, 0.025F, 0.025F)
+                "Chest",
+                new Vector3(0.17152F, 0.21109F, -0.15252F),
+                new Vector3(15.75F, 359.75F, 9F),
+                new Vector3(0.05F, 0.05F, 0.05F)
                 )
                 );
             AddDefaultItemDisplay("HealOnCrit",
@@ -667,7 +667,7 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("ImmuneToDebuff",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayRainCoatBelt"),
-                "Pelvis",
+                "Stomach",
                 new Vector3(0F, 0.05F, 0.015F),
                 new Vector3(2.6F, 0F, 0F),
                 new Vector3(1F, 1F, 0.95F)
@@ -676,14 +676,14 @@ namespace Faithful
             AddDefaultItemDisplay("IncreaseHealing",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayAntler"),
                 "Head",
-                new Vector3(-0.1275F, 0.1725F, -0.02875F),
-                new Vector3(0F, 267.5F, 0F),
+                new Vector3(-0.12025F, 0.1725F, -0.00525F),
+                new Vector3(1.25F, 267.5F, 0F),
                 new Vector3(-0.25F, 0.25F, 0.25F)
                 ),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayAntler"),
                 "Head",
-                new Vector3(0.1275F, 0.1725F, -0.02875F),
-                new Vector3(0F, 92.5F, 0F),
+                new Vector3(0.12025F, 0.1725F, -0.00525F),
+                new Vector3(1.25F, 92.50001F, 0F),
                 new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
@@ -700,15 +700,15 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.131F, 0.07375F, 0.1055F),
                 new Vector3(353F, 36.5F, 1.25F),
-                new Vector3(0.325F, 0.325F, 0.325F)
+                new Vector3(0.375F, 0.375F, 0.375F)
                 )
                 );
             AddDefaultItemDisplay("JumpBoost",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayWaxBird"),
                 "Head",
-                new Vector3(0F, 0F, -0.03F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.5F, 0.5F, 0.5F)
+                new Vector3(0F, -0.095F, 0F),
+                new Vector3(355F, 0F, 0F),
+                new Vector3(0.625F, 0.625F, 0.625F)
                 )
                 );
             AddDefaultItemDisplay("KillEliteFrenzy",
@@ -722,8 +722,8 @@ namespace Faithful
             AddDefaultItemDisplay("Knurl",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayKnurl"),
                 "Chest",
-                new Vector3(0F, 0.2175F, 0.13575F),
-                new Vector3(282.5F, 90F, 270F),
+                new Vector3(0F, 0.2125F, 0.1225F),
+                new Vector3(283.75F, 120F, 245F),
                 new Vector3(0.05F, 0.025F, 0.05F)
                 )
                 );
@@ -753,10 +753,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("LunarPrimaryReplacement",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBirdEye"),
-                "Head",
-                new Vector3(0F, 0.1375F, 0.145F),
-                new Vector3(280F, 180F, 180F),
-                new Vector3(0.25F, 0.25F, 0.25F)
+                "ChestEye",
+                new Vector3(0F, 0F, 0F),
+                new Vector3(0F, 180F, 180F),
+                new Vector3(0.15F, 0.1425F, 0.15F)
                 )
                 );
             AddDefaultItemDisplay("LunarSecondaryReplacement",
@@ -793,10 +793,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("Medkit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMedkit"),
-                "Pelvis",
-                new Vector3(0F, 0.03F, -0.1815F),
-                new Vector3(270F, 180F, 0F),
-                new Vector3(0.375F, 0.375F, 0.375F)
+                "Chest",
+                new Vector3(0F, 0.0625F, 0.1025F),
+                new Vector3(276.75F, 0F, 0F),
+                new Vector3(0.475F, 0.5F, 0.475F)
                 )
                 );
             AddDefaultItemDisplay("MinorConstructOnKill",
@@ -810,17 +810,17 @@ namespace Faithful
             AddDefaultItemDisplay("Missile",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMissileLauncher"),
                 "Chest",
-                new Vector3(-0.37F, 0.42825F, -0.024F),
-                new Vector3(15F, 0F, 50F),
-                new Vector3(0.075F, 0.075F, 0.075F)
+                new Vector3(-0.3925F, 0.52625F, -0.0425F),
+                new Vector3(5F, 0F, 40F),
+                new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("MissileVoid",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMissileLauncherVoid"),
                 "Chest",
-                new Vector3(-0.37F, 0.42825F, -0.024F),
-                new Vector3(15F, 0F, 50F),
-                new Vector3(0.075F, 0.075F, 0.075F)
+                new Vector3(-0.3925F, 0.52625F, -0.0425F),
+                new Vector3(5F, 0F, 40F),
+                new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("MonstersOnShrineUse",
@@ -849,17 +849,17 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("Mushroom",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMushroom"),
-                "Chest",
-                new Vector3(-0.152F, 0.29825F, -0.0875F),
-                new Vector3(310F, 0F, 45F),
+                "Backpack",
+                new Vector3(-0.1025F, 0.1025F, 0.1F),
+                new Vector3(15F, 300F, 0F),
                 new Vector3(0.0375F, 0.0375F, 0.0375F)
                 )
                 );
             AddDefaultItemDisplay("MushroomVoid",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMushroomVoid"),
-                "Chest",
-                new Vector3(-0.152F, 0.29825F, -0.0875F),
-                new Vector3(310F, 0F, 45F),
+                "Backpack",
+                new Vector3(-0.1025F, 0.1025F, 0.1F),
+                new Vector3(30F, 285F, 0F),
                 new Vector3(0.0375F, 0.0375F, 0.0375F)
                 )
                 );
@@ -874,13 +874,13 @@ namespace Faithful
             AddDefaultItemDisplay("NovaOnHeal",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayDevilHorns"),
                 "Head",
-                new Vector3(-0.1075F, 0.13375F, 0.07375F),
+                new Vector3(-0.1075F, 0.125F, 0.0725F),
                 new Vector3(15F, 0F, 0F),
                 new Vector3(-0.375F, 0.375F, 0.375F)
                 ),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayDevilHorns"),
                 "Head",
-                new Vector3(0.1075F, 0.13375F, 0.07375F),
+                new Vector3(0.1075F, 0.125F, 0.0725F),
                 new Vector3(15F, 0F, 0F),
                 new Vector3(0.375F, 0.375F, 0.375F)
                 )
@@ -898,7 +898,7 @@ namespace Faithful
                 "ThighR",
                 new Vector3(0.048F, 0.0565F, -0.11775F),
                 new Vector3(1F, 152.5F, 180F),
-                new Vector3(0.2F, 0.2F, 0.2F)
+                new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
             AddDefaultItemDisplay("ParentEgg",
@@ -928,8 +928,8 @@ namespace Faithful
             AddDefaultItemDisplay("PersonalShield",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayShieldGenerator"),
                 "Chest",
-                new Vector3(0F, 0.1905F, 0.12575F),
-                new Vector3(80F, 0F, 180F),
+                new Vector3(0F, 0.13625F, 0.133F),
+                new Vector3(88.75F, 180F, 0F),
                 new Vector3(0.125F, 0.125F, 0.125F)
                 )
                 );
@@ -960,17 +960,17 @@ namespace Faithful
             AddDefaultItemDisplay("RandomDamageZone",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayRandomDamageZone"),
                 "Head",
-                new Vector3(0F, 0.23575F, -0.135F),
-                new Vector3(15F, 0F, 0F),
+                new Vector3(0F, 0.225F, -0.12F),
+                new Vector3(20F, 0F, 0F),
                 new Vector3(0.05F, 0.05F, 0.05F)
                 )
                 );
             AddDefaultItemDisplay("RandomEquipmentTrigger",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBottledChaos"),
-                "Pelvis",
-                new Vector3(-0.2F, 0.04F, -0.032F),
-                new Vector3(10F, 90F, 15F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "ThighR",
+                new Vector3(0.04985F, 0.14F, 0.10625F),
+                new Vector3(357.5F, 36.25F, 185F),
+                new Vector3(0.125F, 0.125F, 0.125F)
                 )
                 );
             AddDefaultItemDisplay("RandomlyLunar",
@@ -992,8 +992,8 @@ namespace Faithful
             AddDefaultItemDisplay("RepeatHeal",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayCorpseflower"),
                 "Chest",
-                new Vector3(0.1285F, 0.16525F, 0.1515F),
-                new Vector3(90F, 15F, 0F),
+                new Vector3(-0.078F, 0.2025F, 0.14125F),
+                new Vector3(80.00003F, 355F, 0F),
                 new Vector3(0.125F, 0.125F, 0.125F)
                 )
                 );
@@ -1016,14 +1016,14 @@ namespace Faithful
             AddDefaultItemDisplay("ShieldOnly",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayShieldBug"),
                 "Head",
-                new Vector3(-0.085F, 0.25925F, 0.09725F),
-                new Vector3(0F, 270F, 0F),
+                new Vector3(-0.0925F, 0.255F, 0.0825F),
+                new Vector3(15.25F, 270F, 0F),
                 new Vector3(0.25F, 0.25F, -0.25F)
                 ),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayShieldBug"),
                 "Head",
-                new Vector3(0.085F, 0.25925F, 0.09725F),
-                new Vector3(0F, 270F, 0F),
+                new Vector3(0.0925F, 0.255F, 0.0825F),
+                new Vector3(344.75F, 270F, 0F),
                 new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
@@ -1072,7 +1072,7 @@ namespace Faithful
                 "LowerArmR",
                 new Vector3(0.076F, 0.076F, 0F),
                 new Vector3(1.25F, 90F, 93.75F),
-                new Vector3(0.175F, 0.175F, 0.175F)
+                new Vector3(0.2F, 0.2F, 0.175F)
                 )
                 );
             AddDefaultItemDisplay("SprintBonus",
@@ -1086,8 +1086,8 @@ namespace Faithful
             AddDefaultItemDisplay("SprintOutOfCombat",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayWhip"),
                 "Pelvis",
-                new Vector3(0.21F, -0.017F, -0.019F),
-                new Vector3(0F, 0F, 12.5F),
+                new Vector3(-0.21F, -0.017F, -0.019F),
+                new Vector3(0F, 0F, 347.5F),
                 new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
@@ -1615,7 +1615,7 @@ namespace Faithful
                 "Pelvis",
                 new Vector3(0.1545F, 0.08375F, 0.0675F),
                 new Vector3(13.5F, 315.5F, 20F),
-                new Vector3(0.75F, 0.75F, 0.75F)
+                new Vector3(0.825F, 0.825F, 0.825F)
                 )
                 );
             AddDefaultItemDisplay("SpeedBoostPickup",
@@ -1635,8 +1635,8 @@ namespace Faithful
             AddDefaultItemDisplay("IncreaseDamageOnMultiKill",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayIncreaseDamageOnMultiKill"),
                 "Pelvis",
-                new Vector3(0.137F, 0.0055F, -0.1265F),
-                new Vector3(285F, 330F, 172.5F),
+                new Vector3(-0.1245F, -0.03125F, -0.13F),
+                new Vector3(287.5F, 26.75F, 173.75F),
                 new Vector3(0.125F, 0.125F, 0.125F)
                 )
                 );
@@ -1651,9 +1651,9 @@ namespace Faithful
             AddDefaultItemDisplay("TriggerEnemyDebuffs",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayNoxiousThorn"),
                 "Chest",
-                new Vector3(0.1675F, 0.2215F, -0.12875F),
+                new Vector3(0.1665F, 0.2365F, -0.1225F),
                 new Vector3(10F, 55F, 290F),
-                new Vector3(0.2F, 0.2F, 0.2F)
+                new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
             AddDefaultItemDisplay("LowerPricedChests",
@@ -1699,7 +1699,7 @@ namespace Faithful
             AddDefaultItemDisplay("ItemDropChanceOnKill",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplaySonorousEcho"),
                 "Head",
-                new Vector3(0.1925F, 0.12F, -0.00275F),
+                new Vector3(0.18F, 0.12F, -0.00275F),
                 new Vector3(9F, 248.5F, 22F),
                 new Vector3(0.75F, 0.75F, 0.75F)
                 )
@@ -1707,7 +1707,7 @@ namespace Faithful
             AddDefaultItemDisplay("BoostAllStats",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayGrowthNectar"),
                 "Head",
-                new Vector3(0F, 0.275F, 0F),
+                new Vector3(0F, 0.2625F, 0F),
                 new Vector3(0F, 0F, 0F),
                 new Vector3(0.5F, 0.5F, 0.5F)
                 )
@@ -1716,15 +1716,15 @@ namespace Faithful
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayElectricBoomerang"),
                 "LowerArmL",
                 new Vector3(-0.08F, 0.0325F, 0F),
-                new Vector3(15F, 0F, 85F),
+                new Vector3(15F, 0F, 88.5F),
                 new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
             AddDefaultItemDisplay("MeteorAttackOnHighDamage",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMeteorAttackOnHighDamage"),
                 "Chest",
-                new Vector3(0F, 0.4925F, -0.115F),
-                new Vector3(345F, 0F, 20F),
+                new Vector3(-0.1285F, 0.1285F, -0.14875F),
+                new Vector3(8.75F, 190F, 0F),
                 new Vector3(0.75F, 0.75F, 0.75F)
                 )
                 );
