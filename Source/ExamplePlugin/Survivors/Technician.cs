@@ -1282,7 +1282,7 @@ namespace Faithful
             AddDefaultItemDisplay("BossHunter",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayTricornGhost"),
                 "Head",
-                new Vector3(0F, 0.29275F, -0.09F),
+                new Vector3(0F, 0.26F, -0.08F),
                 new Vector3(0F, 0F, 0F),
                 new Vector3(1F, 1F, 1F)
                 ),
@@ -1296,7 +1296,7 @@ namespace Faithful
             AddDefaultItemDisplay("BossHunterConsumed",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayTricornUsed"),
                 "Head",
-                new Vector3(0F, 0.29275F, -0.09F),
+                new Vector3(0F, 0.275F, -0.08F),
                 new Vector3(0F, 0F, 0F),
                 new Vector3(1F, 1F, 1F)
                 )
@@ -1320,9 +1320,9 @@ namespace Faithful
             AddDefaultItemDisplay("CommandMissile",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMissileRack"),
                 "Pelvis",
-                new Vector3(0F, 0.11F, -0.22F),
-                new Vector3(80F, 0F, 180F),
-                new Vector3(0.3F, 0.3F, 0.3F)
+                new Vector3(0F, 0.111F, -0.24F),
+                new Vector3(85.00005F, 0F, 180F),
+                new Vector3(0.3275F, 0.3275F, 0.3275F)
                 )
                 );
             AddDefaultItemDisplay("CrippleWard",
@@ -1336,8 +1336,8 @@ namespace Faithful
             AddDefaultItemDisplay("CritOnUse",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayNeuralImplant"),
                 "Head",
-                new Vector3(0F, 0.15675F, 0.265F),
-                new Vector3(350F, 0F, 0F),
+                new Vector3(0F, 0.185F, 0.2425F),
+                new Vector3(346.25F, 0F, 0F),
                 new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
@@ -1360,7 +1360,7 @@ namespace Faithful
             AddDefaultItemDisplay("EliteEarthEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteMendingAntlers"),
                 "Head",
-                new Vector3(0F, 0.23875F, 0.0775F),
+                new Vector3(0F, 0.23125F, 0.06525F),
                 new Vector3(0F, 0F, 0F),
                 new Vector3(0.625F, 0.625F, 0.625F)
                 )
@@ -1370,66 +1370,66 @@ namespace Faithful
                 "Head",
                 new Vector3(-0.0745F, 0.20625F, 0.07825F),
                 new Vector3(0F, 0F, 0F),
-                new Vector3(-0.1F, 0.1F, 0.1F)
+                new Vector3(-0.09F, 0.09F, 0.09F)
                 ),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteHorn"),
                 "Head",
                 new Vector3(0.0745F, 0.20625F, 0.07825F),
                 new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                new Vector3(0.09F, 0.09F, 0.09F)
                 )
                 );
             AddDefaultItemDisplay("EliteHauntedEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteStealthCrown"),
                 "Head",
-                new Vector3(0F, 0.1985F, -0.0205F),
-                new Vector3(290F, 180F, 180F),
+                new Vector3(0F, 0.195F, -0.0355F),
+                new Vector3(295F, 180F, 180F),
                 new Vector3(0.0625F, 0.0625F, 0.0625F)
                 )
                 );
             AddDefaultItemDisplay("EliteIceEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteIceCrown"),
                 "Head",
-                new Vector3(0F, 0.3175F, -0.035F),
+                new Vector3(0F, 0.3125F, -0.05375F),
                 new Vector3(285F, 180F, 180F),
-                new Vector3(0.025F, 0.025F, 0.025F)
+                new Vector3(0.03F, 0.03F, 0.03F)
                 )
                 );
             AddDefaultItemDisplay("EliteLightningEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteRhinoHorn"),
                 "Head",
                 new Vector3(0F, 0.25F, 0.145F),
-                new Vector3(310F, 0F, 0F),
+                new Vector3(300F, 0F, 0F),
                 new Vector3(0.2F, 0.2F, 0.2F)
                 ),
                 ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteRhinoHorn"),
                 "Head",
-                new Vector3(0F, 0.29625F, 0.091F),
-                new Vector3(290F, 0F, 0F),
+                new Vector3(0F, 0.287F, 0.09025F),
+                new Vector3(280F, 0F, 0F),
                 new Vector3(0.125F, 0.125F, 0.125F)
                 )
                 );
             AddDefaultItemDisplay("EliteLunarEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteLunar,Eye"),
                 "Head",
-                new Vector3(0F, 0.15F, 0.2F),
-                new Vector3(350F, 0F, 0F),
+                new Vector3(0F, 0.175F, 0.2F),
+                new Vector3(347.5F, 0F, 0F),
                 new Vector3(0.175F, 0.175F, 0.175F)
                 )
                 );
             AddDefaultItemDisplay("ElitePoisonEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteUrchinCrown"),
                 "Head",
-                new Vector3(0F, 0.25F, 0F),
-                new Vector3(270F, 0F, 0F),
-                new Vector3(0.05F, 0.05F, 0.05F)
+                new Vector3(0F, 0.2225F, -0.03875F),
+                new Vector3(290F, 180F, 180F),
+                new Vector3(0.0475F, 0.0475F, 0.0475F)
                 )
                 );
             AddDefaultItemDisplay("EliteVoidEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayAffixVoid"),
                 "Head",
-                new Vector3(0F, 0.121F, 0.13525F),
-                new Vector3(80F, 0F, 0F),
+                new Vector3(0F, 0.1375F, 0.125F),
+                new Vector3(70F, 0F, 0F),
                 new Vector3(0.15F, 0.15F, 0.15F)
                 )
                 );
@@ -1459,10 +1459,10 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("Gateway",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayVase"),
-                "Head",
-                new Vector3(0F, 0.22425F, -0.115F),
-                new Vector3(332.5F, 283.75F, 61.25F),
-                new Vector3(0.2F, 0.2F, 0.2F)
+                "Backpack",
+                new Vector3(0F, 0.005F, -0.125F),
+                new Vector3(25F, 95F, 280F),
+                new Vector3(0.1625F, 0.1625F, 0.1625F)
                 )
                 );
             AddDefaultItemDisplay("GoldGat",
@@ -1484,8 +1484,8 @@ namespace Faithful
             AddDefaultItemDisplay("IrradiatingLaser",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayIrradiatingLaser"),
                 "Head",
-                new Vector3(0.17F, 0.13F, -0.015F),
-                new Vector3(350F, 350F, 276.25F),
+                new Vector3(0.1625F, 0.125F, -0.015F),
+                new Vector3(350F, 350F, 274F),
                 new Vector3(0.05F, 0.05F, 0.05F)
                 )
                 );
@@ -1500,7 +1500,7 @@ namespace Faithful
             AddDefaultItemDisplay("LifestealOnHit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayLifestealOnHit"),
                 "Head",
-                new Vector3(-0.144F, 0.2775F, -0.133F),
+                new Vector3(-0.14125F, 0.27125F, -0.13F),
                 new Vector3(20F, 45F, 300F),
                 new Vector3(0.05F, 0.05F, 0.05F)
                 )
@@ -1590,8 +1590,8 @@ namespace Faithful
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayTonic"),
                 "Pelvis",
                 new Vector3(0.174F, 0.07825F, -0.069F),
-                new Vector3(20F, 307.5F, 325F),
-                new Vector3(0.125F, 0.125F, 0.125F)
+                new Vector3(20.00001F, 307.5F, 325F),
+                new Vector3(0.15F, 0.15F, 0.15F)
                 )
                 );
             AddDefaultItemDisplay("VendingMachine",
@@ -1761,7 +1761,7 @@ namespace Faithful
             AddDefaultItemDisplay("EliteAurelioniteEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteAurelioniteEquipment"),
                 "Head",
-                new Vector3(0F, 0.28F, 0.1295F),
+                new Vector3(0F, 0.2625F, 0.1295F),
                 new Vector3(0F, 0F, 0F),
                 new Vector3(0.25F, 0.25F, 0.25F)
                 )
@@ -1769,7 +1769,7 @@ namespace Faithful
             AddDefaultItemDisplay("EliteBeadEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteBeadSpike"),
                 "Head",
-                new Vector3(-0.0975F, 0.235F, -0.0645F),
+                new Vector3(-0.0925F, 0.2125F, -0.06F),
                 new Vector3(343.25F, 344.5F, 45F),
                 new Vector3(0.0175F, 0.015F, 0.0175F)
                 )
@@ -1963,8 +1963,8 @@ namespace Faithful
             AddDefaultItemDisplay("Parry",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("ParryDisplay"),
                 "Backpack",
-                new Vector3(0F, -0.0385F, -0.0995F),
-                new Vector3(355F, 180F, 180F),
+                new Vector3(0F, -0.09875F, -0.12275F),
+                new Vector3(5F, 180F, 0F),
                 new Vector3(1F, 1F, 1F)
                 )
                 );
