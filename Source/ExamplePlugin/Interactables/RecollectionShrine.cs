@@ -41,6 +41,9 @@ namespace Faithful
             AddSetSpawn("artifactworld03", new Vector3(-56.325F, 27.5F, -103.5F), new Vector3(0, 0, 0));
             AddSetSpawn("artifactworld03", new Vector3(59.5F, 13.125F, 75F), new Vector3(0, 180, 0));
             AddSetSpawn("artifactworld03", new Vector3(-28.375F, 29.25F, 17.5F), new Vector3(0, 180, 0));
+            AddSetSpawn("solutionalhaunt", new Vector3(227.5F, -16.45F, -34F), new Vector3(0, 0, 0));
+            AddSetSpawn("solusweb", new Vector3(264F, -363.75F, -293F), new Vector3(0, 90, 0));
+            AddSetSpawn("solusweb", new Vector3(293F, -363.75F, -264F), new Vector3(0, 180, 0));
 
             // Add behaviour
             Behaviour.AddOnPrePopulateSceneCallback(OnPrePopulateScene);
