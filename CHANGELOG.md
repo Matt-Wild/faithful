@@ -1,6 +1,7 @@
 # Changelog
 
-#### v1.3.18 Disabled Void Items No Longer Corrupt
+#### v1.3.18 New Shrine of Recollection Locations
+- The Shrine of Recollection now had additional spawn positions for new Alloyed Collective stages.
 - Disabled void items are no longer given a corruption pair.
 
 #### v1.3.17 Removed Debugging Log
