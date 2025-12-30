@@ -68,7 +68,7 @@ namespace Faithful
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = _hidden || (!enabledSetting.Value || Items.allItemsDisabled);
+                forceHide = _hidden || (!isEnabled || Items.allItemsDisabled);
             }
 
             // Update tier
@@ -125,9 +125,11 @@ namespace Faithful
             // Is item hidden (Also hide if using temporary assets when not in debug mode)
             itemDef.hidden = _hidden || forceHide;
 
-            // Corrupts item?
-            if (_corruptToken != null)
+            // Corrupts item? - Avoid pairing disabled items
+            if (_corruptToken != null && isEnabled)
             {
+                if (Utils.verboseConsole) Log.Debug($"Adding corruption pair for item '{name}'. Item to corrupt token: '{_corruptToken}' with override '{corruptedOverrideSetting.Value}'");
+
                 // Add corruption pair
                 Utils.AddCorruptionPair(itemDef, _corruptToken, corruptedOverrideSetting != null ? corruptedOverrideSetting.Value : "");
             }
@@ -212,7 +214,7 @@ namespace Faithful
                 {
                     Log.Debug($"Hiding item '{name}'");
                 }
-                else if (!enabledSetting.Value || Items.allItemsDisabled)
+                else if (!isEnabled || Items.allItemsDisabled)
                 {
                     Log.Debug($"Hiding item '{name}' due to user preference");
                 }
@@ -393,6 +395,8 @@ namespace Faithful
                 return false;
             }
         }
+
+        public bool isEnabled => enabledSetting.Value;
     }
 
     internal class ItemDisplayModel : MonoBehaviour

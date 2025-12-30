@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.18 Disabled Void Items No Longer Corrupt
+- Disabled void items are no longer given a corruption pair.
+
 #### v1.3.17 Removed Debugging Log
 - Removed annoying "PING" logs that were left in after debugging, whoops.
 
@@ -44,10 +47,10 @@
 #### v1.3.4 Hermit's Shawl Fix
 - Fixed minor error with Hermit's Shawl when some modded characters are destroyed.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.3 Targeting Matrix Fix
 - Fixed error with Targeting Matrix on modded characters with no model locator.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.2 More Jetpack Adjustments
 - Small 4-T0N Jetpack buff - also adding pickup spawning tools to debug UI.
