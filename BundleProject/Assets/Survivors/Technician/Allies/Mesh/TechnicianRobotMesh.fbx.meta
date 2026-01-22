@@ -1,47 +1,11 @@
 fileFormatVersion: 2
-guid: 179cf1048831d0344be8f6dd89d51f35
+guid: f015b3d9fc2137048b4d29f4eb65f0c3
 ModelImporter:
-  serializedVersion: 19301
-  internalIDToNameTable:
-  - first:
-      74: -4066390544416391425
-    second: RobotTesla_Armature|FloatingGrenade_DefaultPose
-  - first:
-      74: 7092839885382167998
-    second: RobotTesla_Armature|FloatingGrenade_Idle
-  - first:
-      74: 2965518783115727786
-    second: RobotTesla_Armature|FloatingGrenade_LockedOn
-  - first:
-      74: -7245018226646695951
-    second: RobotTesla_Armature|Technician_Pri_ArmForward_old
-  - first:
-      74: 8877497211915155343
-    second: RobotTesla_Armature|TeslaRobot_DefaultPose
-  - first:
-      74: 3166219001794968296
-    second: RobotTesla_Armature|TeslaRobot_Deployed
-  - first:
-      74: -8213272616357245941
-    second: RobotTesla_Armature|TeslaRobot_Destroyed
-  - first:
-      74: 3686860732938989279
-    second: RobotTesla_Armature|TeslaRobot_Idle
-  - first:
-      74: 3601466796494020102
-    second: RobotTesla_Armature|TeslaRobot_TeleportEnd
-  - first:
-      74: -2064275636642848006
-    second: RobotTesla_Armature|TeslaRobot_TeleportStart
-  - first:
-      74: 7011838244799911672
-    second: RobotTesla_Armature|TeslaRobot_Aim_Pitch
-  - first:
-      74: -6965372368401139364
-    second: RobotTesla_Armature|TeslaRobot_Aim_Yaw
+  serializedVersion: 21300
+  internalIDToNameTable: []
   externalObjects: {}
   materials:
-    materialImportMode: 1
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -50,6 +14,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -68,96 +33,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: RobotTesla_Armature|FloatingGrenade_DefaultPose
-      takeName: RobotTesla_Armature|FloatingGrenade_DefaultPose
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 1
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: RobotTesla_Armature|FloatingGrenade_Idle
-      takeName: RobotTesla_Armature|FloatingGrenade_Idle
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 30
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: RobotTesla_Armature|FloatingGrenade_LockedOn
-      takeName: RobotTesla_Armature|FloatingGrenade_LockedOn
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 20
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
       name: RobotTesla_Armature|Technician_Pri_ArmForward_old
       takeName: RobotTesla_Armature|Technician_Pri_ArmForward_old
-      internalID: 0
+      internalID: -7245018226646695951
       firstFrame: 0
       lastFrame: 1
       wrapMode: 0
@@ -186,7 +64,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RobotTesla_Armature|TeslaRobot_Aim_Pitch
       takeName: RobotTesla_Armature|TeslaRobot_Aim_Pitch
-      internalID: 0
+      internalID: 7011838244799911672
       firstFrame: 0
       lastFrame: 50
       wrapMode: 0
@@ -215,7 +93,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RobotTesla_Armature|TeslaRobot_Aim_Yaw
       takeName: RobotTesla_Armature|TeslaRobot_Aim_Yaw
-      internalID: 0
+      internalID: -6965372368401139364
       firstFrame: 0
       lastFrame: 50
       wrapMode: 0
@@ -225,7 +103,7 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 1
       loopTime: 1
-      loopBlend: 1
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -244,7 +122,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RobotTesla_Armature|TeslaRobot_DefaultPose
       takeName: RobotTesla_Armature|TeslaRobot_DefaultPose
-      internalID: 0
+      internalID: 8877497211915155343
       firstFrame: 0
       lastFrame: 1
       wrapMode: 0
@@ -273,7 +151,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RobotTesla_Armature|TeslaRobot_Deployed
       takeName: RobotTesla_Armature|TeslaRobot_Deployed
-      internalID: 0
+      internalID: 3166219001794968296
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -302,7 +180,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RobotTesla_Armature|TeslaRobot_Destroyed
       takeName: RobotTesla_Armature|TeslaRobot_Destroyed
-      internalID: 0
+      internalID: -8213272616357245941
       firstFrame: 0
       lastFrame: 25
       wrapMode: 0
@@ -331,7 +209,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RobotTesla_Armature|TeslaRobot_Idle
       takeName: RobotTesla_Armature|TeslaRobot_Idle
-      internalID: 0
+      internalID: 3686860732938989279
       firstFrame: 0
       lastFrame: 1
       wrapMode: 0
@@ -358,9 +236,67 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
+      name: RobotTesla_Armature|TeslaRobot_Lobby_Entrance
+      takeName: RobotTesla_Armature|TeslaRobot_Lobby_Entrance
+      internalID: 4216478148021591488
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: RobotTesla_Armature|TeslaRobot_Lobby_Idle
+      takeName: RobotTesla_Armature|TeslaRobot_Lobby_Idle
+      internalID: 8247877259513325119
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
       name: RobotTesla_Armature|TeslaRobot_TeleportEnd
       takeName: RobotTesla_Armature|TeslaRobot_TeleportEnd
-      internalID: 0
+      internalID: 3601466796494020102
       firstFrame: 0
       lastFrame: 10
       wrapMode: 0
@@ -389,7 +325,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RobotTesla_Armature|TeslaRobot_TeleportStart
       takeName: RobotTesla_Armature|TeslaRobot_TeleportStart
-      internalID: 0
+      internalID: -2064275636642848006
       firstFrame: 0
       lastFrame: 5
       wrapMode: 0
@@ -427,21 +363,27 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
@@ -475,6 +417,8 @@ ModelImporter:
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
