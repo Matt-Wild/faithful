@@ -18,6 +18,7 @@ namespace Faithful
         ItemDisplaySettings displaySettings;
 
         // Store additional item settings
+        Setting<bool> countTemporarySetting;
         Setting<int> inspirationGainSetting;
         Setting<int> inspirationGainStackingSetting;
         Setting<float> critChanceSetting;
@@ -25,6 +26,7 @@ namespace Faithful
         Setting<float> inspirationReturnSetting;
 
         // Store item stats
+        bool countTemporary;
         int inspirationGain;
         int inspirationGainStacking;
         float critChance;
@@ -54,7 +56,7 @@ namespace Faithful
 
             // Link On Give Item behaviours
             Behaviour.AddServerOnGiveItemPermanentCallback(OnGiveItemPermanent);
-            Behaviour.AddServerOnGiveItemTemporaryCallback(OnGiveItem);
+            Behaviour.AddServerOnGiveItemTemporaryCallback(OnGiveItemTemporary);
 
             // Add on scene exit behaviour
             Behaviour.AddOnPreSceneExitCallback(OnSceneExit);
@@ -104,6 +106,7 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
+            countTemporarySetting = collectorsVisionItem.CreateSetting("COUNT_TEMPORARY", "Count Temporary Items?", true, "Should this item count temporary items when providing inspiration?", false);
             inspirationGainSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How many inspiration buffs should this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)", _minValue: 1);
             inspirationGainStackingSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How many inspiration buffs should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)", _minValue: 1);
             critChanceSetting = collectorsVisionItem.CreateSetting("CRIT_CHANCE", "Crit Chance", 1.0f, "How much should the inspiration buff increase the chance of the player getting a crit? (1.0 = 1% increase)", _valueFormatting: "{0:0.00}%");
@@ -114,6 +117,7 @@ namespace Faithful
         public override void FetchSettings()
         {
             // Get item settings
+            countTemporary = countTemporarySetting.Value;
             inspirationGain = inspirationGainSetting.Value;
             inspirationGainStacking = inspirationGainStackingSetting.Value;
             critChance = critChanceSetting.Value;
@@ -130,7 +134,16 @@ namespace Faithful
 
         void OnGiveItemPermanent(Inventory _inventory, ItemIndex _index, int _count)
         {
-            // Run float version of OnGiveItem
+            // Call OnGiveItem
+            OnGiveItem(_inventory, _index, _count);
+        }
+
+        void OnGiveItemTemporary(Inventory _inventory, ItemIndex _index, float _count)
+        {
+            // Ignore if not counting temporary items
+            if (!countTemporary) return;
+
+            // Call OnGiveItem
             OnGiveItem(_inventory, _index, _count);
         }
 

@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.19 Collector's Vision Temporary Item Config
+- Added config option for Collector's Vision for counting temporary items (default on).
+
 #### v1.3.18 New Shrine of Recollection Locations
 - The Shrine of Recollection now had additional spawn positions for new Alloyed Collective stages.
 - Disabled void items are no longer given a corruption pair.
@@ -45,10 +48,10 @@
 #### v1.3.5 Carbonizer Laser Fix
 - Fixed issue with Carbonizer laser sometimes disappearing - oops.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.4 Hermit's Shawl Fix
 - Fixed minor error with Hermit's Shawl when some modded characters are destroyed.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.3 Targeting Matrix Fix
 - Fixed error with Targeting Matrix on modded characters with no model locator.
