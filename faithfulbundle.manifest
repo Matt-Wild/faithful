@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3596851845
+CRC: 213198609
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3155c1d647348b9d2d0041c50b057b84
+    Hash: 44025eb41a0eb87e663e415f3e96c68c
   TypeTreeHash:
     serializedVersion: 2
     Hash: 64a3d2b3c7b69ac5698aad152d4786a1
@@ -298,9 +298,10 @@ Assets:
 - Assets/Items/MeltingWarbler/Materials/texMeltingWarbler.mat
 - Assets/Items/CollectorsVision/AltIcons/texCollectorsVisionTier2Icon.png
 - Assets/Survivors/Technician/Projectiles/Mesh/TechnicianTurretRocketMesh.fbx
-- Assets/Survivors/Technician/Icons/texTurretElectricFieldIcon.png
+- Assets/Survivors/Technician/Allies/Mesh/TechnicianTurretMesh.fbx
 - Assets/Survivors/Technician/Icons/texTechnicianIcon.png
 - Assets/Survivors/Technician/Icons/texTechnicianPowervoltIcon.png
+- Assets/Survivors/Technician/Icons/texTurretElectricFieldIcon.png
 - Assets/Items/HasteningGreave/HasteningGreaveDisplayMesh.prefab
 - Assets/Items/BrassScrews/texBuffTeleporterScrew.png
 - Assets/Items/HermitsShawl/texHermitShawlDisplayNormal.png
@@ -475,7 +476,6 @@ Assets:
 - Assets/Monsters/MechaSpider/Icons/texMechanicalSpiderIcon.png
 - Assets/Items/TargetingMatrix/Materials/texTargetingMatrix.mat
 - Assets/Items/Chakram/texChakram.png
-- Assets/Survivors/Technician/Allies/Mesh/TechnicianTurretMesh.fbx
 - Assets/Placeholder/Item/texTemporalCubeNormal.png
 - Assets/Items/HasteningGreave/AltIcons/texHasteningGreaveBossIcon.png
 - Assets/Equipment/ChargefieldPylon/texChargefieldPylonEmission.png
@@ -514,6 +514,7 @@ Assets:
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
 - Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeBossIcon.png
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageUniqueIcon.png
+- Assets/Survivors/Technician/Allies/Mesh/TechnicianRobotMesh.fbx
 - Assets/Items/Chakram/AltIcons/texChakramTier3Icon.png
 - Assets/Items/CopperGear/texCopperGear.png
 - Assets/Items/Chakram/AltIcons/texChakramBossIcon.png
@@ -601,7 +602,6 @@ Assets:
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Survivors/Technician/VFX/TechnicianTrackingIndicator.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianRobotIcon.png
-- Assets/Survivors/Technician/Allies/Mesh/TechnicianRobotMesh.fbx
 - Assets/Items/CollectorsVision/AltIcons/texCollectorsVisionUniqueIcon.png
 - Assets/Items/CopperGear/CopperGearMesh.prefab
 - Assets/Items/BrassScrews/BrassScrewsDisplayMesh.prefab
