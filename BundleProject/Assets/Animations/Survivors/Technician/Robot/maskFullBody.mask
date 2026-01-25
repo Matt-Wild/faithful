@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: maskFullBody
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature
+    m_Weight: 0
+  - m_Path: RobotTesla_Armature/ROOT
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/BackLeg.L.001
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/BackLeg.L.001/BackLeg.L.002
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/BackLeg.L.001/BackLeg.L.002/BackLeg.L.003
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/BackLeg.L.001/BackLeg.L.002/BackLeg.L.003/BackLeg.L.004
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/BackLeg.R.001
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/BackLeg.R.001/BackLeg.R.002
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/BackLeg.R.001/BackLeg.R.002/BackLeg.R.003
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/BackLeg.R.001/BackLeg.R.002/BackLeg.R.003/BackLeg.R.004
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/Bodyroot
+    m_Weight: 0
+  - m_Path: RobotTesla_Armature/ROOT/Bodyroot/Teslaroot.L.001
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/Bodyroot/Teslaroot.L.001/Teslaroot.L.002
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/Bodyroot/Teslaroot.R.001
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/Bodyroot/Teslaroot.R.001/Teslaroot.R.002
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/FrontLeg.L.001
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/FrontLeg.L.001/FrontLeg.L.002
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/FrontLeg.L.001/FrontLeg.L.002/FrontLeg.L.003
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/FrontLeg.L.001/FrontLeg.L.002/FrontLeg.L.003/FrontLeg.L.004
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/FrontLeg.R.001
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/FrontLeg.R.001/FrontLeg.R.002
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/FrontLeg.R.001/FrontLeg.R.002/FrontLeg.R.003
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/FrontLeg.R.001/FrontLeg.R.002/FrontLeg.R.003/FrontLeg.R.004
+    m_Weight: 1
+  - m_Path: RobotTesla_Armature/ROOT/Lens
+    m_Weight: 0
+  - m_Path: TechnicianRobotTeslaMesh
+    m_Weight: 0
+  - m_Path: TechnicianRobotTeslaWhiteMesh
+    m_Weight: 0

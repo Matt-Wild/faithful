@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2779336071
+CRC: 878222986
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4b320a6fcaeb8888da74a5fb924c7076
+    Hash: c0ba0a91f42da745acc023628863df87
   TypeTreeHash:
     serializedVersion: 2
     Hash: 64a3d2b3c7b69ac5698aad152d4786a1
@@ -437,6 +437,7 @@ Assets:
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDeployMesh.prefab
 - Assets/Survivors/Technician/Mesh/TechnicianMasterySkinRobotLights.prefab
 - Assets/Items/SecondHand/texSecondHandIcon.png
+- Assets/Survivors/Technician/Allies/Mesh/TechnicianRobotMesh.fbx
 - Assets/Survivors/Technician/Icons/texTechnicianPointlinkIcon.png
 - Assets/Monsters/MechaSpider/Textures/texMechanicalSpiderEmissionAlly.png
 - Assets/Items/HasteningGreave/Materials/texHasteningGreave.mat
@@ -514,7 +515,6 @@ Assets:
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
 - Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeBossIcon.png
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageUniqueIcon.png
-- Assets/Survivors/Technician/Allies/Mesh/TechnicianRobotMesh.fbx
 - Assets/Items/Chakram/AltIcons/texChakramTier3Icon.png
 - Assets/Items/CopperGear/texCopperGear.png
 - Assets/Items/Chakram/AltIcons/texChakramBossIcon.png
