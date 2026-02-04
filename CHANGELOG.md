@@ -1,5 +1,9 @@
 # Changelog
 
+#### v1.3.20 Redesigning The Targeting Matrix
+- Targeting Matrix has been redesigned as a green item by popular request.
+- Fixed Operator's alt secondary not being affected by Targeting Matrix.
+
 #### v1.3.19 Collector's Vision Temporary Item Config
 - Added config option for Collector's Vision for counting temporary items (default on).
 
@@ -45,10 +49,10 @@
 #### v1.3.6 Memory Optimisation Update Fix
 - Updated Faithful to work with the new "Memory Optimisation Update".
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.5 Carbonizer Laser Fix
 - Fixed issue with Carbonizer laser sometimes disappearing - oops.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.4 Hermit's Shawl Fix
 - Fixed minor error with Hermit's Shawl when some modded characters are destroyed.
