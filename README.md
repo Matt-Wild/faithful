@@ -48,13 +48,6 @@ All items can be disabled individually in this mod's config.
 				Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be adjusted</b>!
 			</td>
 		</tr>
-		<tr>
-			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texTargetingMatrixIcon.png?raw=true" width=128></td>
-			<td>
-				<b>Targeting Matrix</b><br>
-				Target a random enemy on kill. Damage dealt to the target is increased by <b>0% (</b>+25% per stack<b>)</b> and has a <b>100%</b> chance to 'Critically Strike'. <b>This item can be adjusted</b>!
-			</td>
-		</tr>
     <tr>
 			<td colspan="2" align="center"><h3>Uncommon / Tier 2 Items</h3></td>
 		</tr>
@@ -84,6 +77,13 @@ All items can be disabled individually in this mod's config.
 			<td>
 				<b>Second Hand</b><br>
 				Increase attack speed by <b>20% (</b>+20% per stack<b>)</b> and movement speed by <b>30% (</b>+30% per stack<b>)</b> while touching the ground. <b>This item can be adjusted</b>!
+			</td>
+		</tr>
+		<tr>
+			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texTargetingMatrixIcon.png?raw=true" width=128></td>
+			<td>
+				<b>Targeting Matrix</b><br>
+				<b>Target</b> a random enemy on kill. Damage dealt to the <b>target</b> has a <b>+100%</b> chance to '<b>Critically Strike</b>' and killing the <b>target</b> increases <b>Critical Strike</b> damage by <b>+10% (</b>+5% per stack<b>)</b>, up to <b>3 (</b>+1 per stack<b>)</b>. <b>This item can be adjusted</b>!
 			</td>
 		</tr>
     <tr>
