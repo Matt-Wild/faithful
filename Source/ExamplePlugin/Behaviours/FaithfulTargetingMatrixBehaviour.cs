@@ -1,10 +1,11 @@
-﻿using RoR2;
-using UnityEngine;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using UnityEngine.Networking;
+﻿using Newtonsoft.Json.Utilities;
+using RoR2;
 using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
@@ -67,8 +68,6 @@ namespace Faithful
         // Store targeting matrix stats
         bool enableTargetEffect;
         float maxDistance;
-        float closeDistance;
-        float preferredDistance;
         float outOfRangeTime;
 
         // Blacklisted characters for targeting
@@ -128,8 +127,6 @@ namespace Faithful
             // Update stats
             enableTargetEffect = item.FetchSetting<bool>("ENABLE_TARGET_EFFECT").Value;
             maxDistance = item.FetchSetting<float>("MAX_DISTANCE").Value;
-            closeDistance = item.FetchSetting<float>("CLOSE_DISTANCE").Value;
-            preferredDistance = item.FetchSetting<float>("PREFERRED_DISTANCE").Value;
             outOfRangeTime = item.FetchSetting<float>("OUT_OF_RANGE_TIME").Value;
         }
 
@@ -192,8 +189,8 @@ namespace Faithful
                 // Remove target
                 RemoveTarget();
 
-                // Sync target with clients
-                CmdSyncTarget();
+                // Attempt to find new target
+                SearchForTarget();
             }
         }
 
@@ -283,9 +280,6 @@ namespace Faithful
                 // Initialise filtered list of character bodies
                 List<CharacterBody> filteredCharacterBodies = new List<CharacterBody>();
 
-                // Initialise list of "close" character bodies
-                List<CharacterBody> closeCharacterBodies = new List<CharacterBody>();
-
                 // Get targeter position
                 Vector3 targeterPos = character.corePosition;
 
@@ -315,82 +309,47 @@ namespace Faithful
 
                     // Valid target
                     filteredCharacterBodies.Add(characterBody);
-
-                    // Check if target is "close" to target
-                    if (targetDistance <= closeDistance) closeCharacterBodies.Add(characterBody);
                 }
 
-                // Check if close targets were found
-                if (closeCharacterBodies.Count > 0)
+                // Cycle until no filtered character bodies remaining or a target is set
+                bool targetSet = false;
+                while (filteredCharacterBodies.Count > 0 && !targetSet)
                 {
-                    // Use only close characters
-                    filteredCharacterBodies = closeCharacterBodies;
-                }
+                    // Get chosen target character body
+                    CharacterBody chosenTarget = filteredCharacterBodies[Random.Range(0, filteredCharacterBodies.Count)];
 
-                // Otherwise check for valid character bodies
-                else if (filteredCharacterBodies.Count == 0) return;
-
-                // Select random character body weighted on distance so closer character bodies are more likely to be chosen
-
-                // Total weight and weight array
-                float totalWeight = 0f;
-                float[] weights = new float[filteredCharacterBodies.Count];
-
-                // Cycle through character bodies
-                for (int i = 0; i < filteredCharacterBodies.Count; i++)
-                {
-                    // Get character body and distance to previous target or targeter
-                    CharacterBody body = filteredCharacterBodies[i];
-                    float distance = targetPos == Vector3.zero ? Vector3.Distance(body.corePosition, targeterPos) : Vector3.Distance(body.corePosition, targetPos);
-
-                    // Avoid division by zero, assign a very high weight to objects at the exact position
-                    // Assign more favourable weights to character bodies within a small distance
-                    float weight = distance > 0.0f ? (distance > preferredDistance ? 1.0f / distance : 2.0f / distance) : float.MaxValue;
-
-                    // Add to total weight and weights array
-                    totalWeight += weight;
-                    weights[i] = weight;
-                }
-
-                // Select a random value
-                float randomValue = Random.Range(0f, totalWeight);
-
-                // Cycle through character bodies and accumulate weights until random value is reached
-                float cumulativeWeight = 0f;
-                for (int i = 0; i < filteredCharacterBodies.Count; i++)
-                {
-                    // Accumulate weight
-                    cumulativeWeight += weights[i];
-
-                    // Check if random value has been reached
-                    if (randomValue <= cumulativeWeight)
+                    // Get faithful behaviour for chosen target
+                    FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(chosenTarget);
+                    if (targetCharacterBehaviour == null)
                     {
-                        // Get chosen target character body
-                        CharacterBody chosenTarget = filteredCharacterBodies[i];
-
-                        // Get faithful behaviour for chosen target
-                        FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(chosenTarget);
-                        if (targetCharacterBehaviour == null) continue;
-
-                        // Get targeting matrix behaviour for chosen target
-                        FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
-                        if (targetTargetingMatrixBehaviour == null) continue;
-
-                        // Set target
-                        targetTargetingMatrixBehaviour.SetTargeted(character);
-                        target = chosenTarget;
-
-                        // Sync target with clients
-                        CmdSyncTarget();
-
-                        // Done
-                        return;
+                        // Remove from filtered list
+                        filteredCharacterBodies.Remove(chosenTarget);
+                        continue;
                     }
+
+                    // Get targeting matrix behaviour for chosen target
+                    FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
+                    if (targetTargetingMatrixBehaviour == null)
+                    {
+                        // Remove from filtered list
+                        filteredCharacterBodies.Remove(chosenTarget);
+                        continue;
+                    }
+
+                    // Successful
+                    targetSet = true;
+
+                    // Set target
+                    targetTargetingMatrixBehaviour.SetTargeted(character);
+                    target = chosenTarget;
+
+                    // Sync target with clients
+                    CmdSyncTarget();
                 }
             }
         }
 
-        void RemoveTarget()
+        public void RemoveTarget(bool _sync = true)
         {
             // Check for target
             if (target == null) return;
@@ -408,6 +367,9 @@ namespace Faithful
 
             // Remove target
             target = null;
+
+            // Sync if hosting
+            if (_sync && Utils.hosting) CmdSyncTarget();
         }
 
         public void SetTargeted(CharacterBody _targeter)
@@ -500,7 +462,7 @@ namespace Faithful
             if (Utils.hosting) return;
 
             // Remove target
-            RemoveTarget();
+            RemoveTarget(false);
         }
 
         public void OnDisplayModelCreated()

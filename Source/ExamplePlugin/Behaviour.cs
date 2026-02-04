@@ -123,6 +123,9 @@ namespace Faithful
         private static List<SceneDirectorCallback> onPrePopulateSceneCallbacks = new List<SceneDirectorCallback>();
         private static List<SceneExitControllerCallback> onPreSceneExitCallbacks = new List<SceneExitControllerCallback>();
 
+        // Crit overrides (character body and come many crits to return true)
+        private static Dictionary<CharacterBody, int> critOverrideCounts = new Dictionary<CharacterBody, int>();
+
         public static void Init()
         {
             // Create prefabs
@@ -161,6 +164,7 @@ namespace Faithful
             On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats;
             On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects += HookUpdateVisualEffects;
             On.RoR2.CharacterBody.FixedUpdate += HookCharacterBodyFixedUpdate;
+            On.RoR2.CharacterBody.RollCrit += HookCharacterBodyRollCrit;
             On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin;
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
             On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump;
@@ -277,6 +281,21 @@ namespace Faithful
 
             // Ally on ally behaviour
             AllyOnAllyFixedUpdate();
+        }
+
+        public static void OverrideCritCheck(CharacterBody _body, int _count = 1)
+        {
+            // Check for existing entry
+            if (critOverrideCounts.ContainsKey(_body))
+            {
+                // Increase count
+                critOverrideCounts[_body] += _count;
+            }
+            else
+            {
+                // Add new entry
+                critOverrideCounts.Add(_body, _count);
+            }
         }
 
         // Add update callback
@@ -965,6 +984,29 @@ namespace Faithful
                 // Call
                 callback(self);
             }
+        }
+
+        private static bool HookCharacterBodyRollCrit(On.RoR2.CharacterBody.orig_RollCrit orig, CharacterBody self)
+        {
+            // Check for override
+            if (critOverrideCounts.ContainsKey(self))
+            {
+                // Get override count
+                int overrideCount = critOverrideCounts[self];
+
+                // Check for available overrides
+                if (overrideCount > 0)
+                {
+                    // Decrease override count
+                    critOverrideCounts[self] = overrideCount - 1;
+
+                    // Return true for crit
+                    return true;
+                }
+            }
+
+            // Return normal roll crit result
+            return orig(self);
         }
 
         private static void HookPurchaseInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)

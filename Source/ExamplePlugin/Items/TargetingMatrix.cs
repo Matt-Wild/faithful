@@ -8,29 +8,30 @@ namespace Faithful
 {
     internal class TargetingMatrix : ItemBase
     {
-        // Store item
+        // Store item and buff
         Item targetingMatrixItem;
+        Buff targetingMatrixBuff;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
 
         // Store additional item settings
         Setting<bool> enableTargetEffectSetting;
-        Setting<float> damageSetting;
-        Setting<float> damageStackingSetting;
         Setting<float> maxDistanceSetting;
-        Setting<float> closeDistanceSetting;
-        Setting<float> preferredDistanceSetting;
         Setting<float> outOfRangeTimeSetting;
+        Setting<float> critDamageSetting;
+        Setting<float> critDamageStackingSetting;
+        Setting<int> maxBuffsSetting;
+        Setting<int> maxBuffsStackingSetting;
 
         // Store item stats
         bool enableTargetEffect;
-        float damage;
-        float damageStacking;
         float maxDistance;
-        float closeDistance;
-        float preferredDistance;
         float outOfRangeTime;
+        float critDamage;
+        float critDamageStacking;
+        int maxBuffs;
+        int maxBuffsStacking;
 
         // Constructor
         public TargetingMatrix(Toolbox _toolbox) : base(_toolbox)
@@ -38,8 +39,9 @@ namespace Faithful
             // Create display settings
             CreateDisplaySettings("targetingmatrixdisplaymesh");
 
-            // Create Copper Gear item and buff
-            targetingMatrixItem = Items.AddItem("TARGETING_MATRIX", "Targeting Matrix", [ItemTag.Damage, ItemTag.OnKillEffect, ItemTag.AIBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            // Create Targeting Matrix item and buff
+            targetingMatrixItem = Items.AddItem("TARGETING_MATRIX", "Targeting Matrix", [ItemTag.Damage, ItemTag.OnKillEffect, ItemTag.AIBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            targetingMatrixBuff = Buffs.AddBuff("TARGETING_MATRIX", "Targeting Matrix", "texTargetingMatrixBuff", Color.white);
 
             // Create item settings
             CreateSettings();
@@ -53,8 +55,14 @@ namespace Faithful
             // Add On Incoming Damage behaviour
             Behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
 
+            // Add On Inventory Changed behaviour
+            Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
+
             // Add fix for Huntress Flurry (modifies Seeking Arrow)
             On.EntityStates.Huntress.HuntressWeapon.FireSeekingArrow.OnEnter += OnHuntressSeekingArrayEnter;
+
+            // Add fix for CMD_SWARM
+            On.EntityStates.Drone.Command.Headbutt.OnEnter += OnOperatorCMDSwarmEnter;
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -97,24 +105,24 @@ namespace Faithful
         {
             // Create settings specific to this item
             enableTargetEffectSetting = targetingMatrixItem.CreateSetting("ENABLE_TARGET_EFFECT", "Enable Target Visual Effect?", true, "Should the target have a visual effect?", false, true);
-            damageSetting = targetingMatrixItem.CreateSetting("DAMAGE", "Damage", 0.0f, "How much should the first stack of this item increase damage dealt to target? (0.0 = 0% increase)", _maxValue: 100.0f, _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.00}%");
-            damageStackingSetting = targetingMatrixItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 25.0f, "How much should further stacks of this item increase damage dealt to target? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
             maxDistanceSetting = targetingMatrixItem.CreateSetting("MAX_DISTANCE", "Max Targeting Distance", 300.0f, "How far away does the target need to be to be considered out of range? (300.0 = 300 meters)", false, _minValue: 100.0f, _valueFormatting: "{0:0}m");
-            closeDistanceSetting = targetingMatrixItem.CreateSetting("CLOSE_DISTANCE", "Close Targeting Distance", 120.0f, "How close does the target need to be to be prioritised by target selection? (120.0 = 120 meters)", false, _minValue: 0.0f, _valueFormatting: "{0:0}m");
-            preferredDistanceSetting = targetingMatrixItem.CreateSetting("PREFERRED_DISTANCE", "Preferred Targeting Distance", 30.0f, "How close does the target need to be to the previous target to be preferred by target selection? (30.0 = 30 meters)", false, _minValue: 0.0f, _valueFormatting: "{0:0.0}m");
             outOfRangeTimeSetting = targetingMatrixItem.CreateSetting("OUT_OF_RANGE_TIME", "Out Of Range Time", 15.0f, "How long does a target need to be out of range until it is removed from being a target? (15.0 = 15 seconds)", false, _minValue: 0.0f, _valueFormatting: "{0:0.0}s");
+            critDamageSetting = targetingMatrixItem.CreateSetting("CRIT_DAMAGE", "Crit Damage", 10.0f, "How much critical damage should be provided by each stack of this item's buff with a single stack of this item? (10.0 = 10% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.0}%");
+            critDamageStackingSetting = targetingMatrixItem.CreateSetting("CRIT_DAMAGE_STACKING", "Crit Damage Stacking", 5.0f, "How much should the critical damage of an individual stack of this item's buff be increased by per stack of this item? (5.0 = 5% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.0}%");
+            maxBuffsSetting = targetingMatrixItem.CreateSetting("MAX_BUFFS", "Max Buffs", 3, "What's the maximum stack of this item's buff that the player should be able to receive with a single stack of this item? (3 = 3 stacks)", _minValue: 0, _randomiserMin: 0, _randomiserMax: 5);
+            maxBuffsStackingSetting = targetingMatrixItem.CreateSetting("MAX_BUFFS_STACKING", "Max Buffs Stacking", 1, "How many extra stacks of this item's buff should the player be able to receive per stack? (1 = 1 stack)", _minValue: 0, _randomiserMin: 0, _randomiserMax: 3);
         }
 
         public override void FetchSettings()
         {
             // Get item settings
             enableTargetEffect = enableTargetEffectSetting.Value;
-            damage = damageSetting.Value / 100.0f;
-            damageStacking = damageStackingSetting.Value / 100.0f;
             maxDistance = maxDistanceSetting.Value;
-            closeDistance = closeDistanceSetting.Value;
-            preferredDistance = preferredDistanceSetting.Value;
             outOfRangeTime = outOfRangeTimeSetting.Value;
+            critDamage = critDamageSetting.Value / 100.0f;
+            critDamageStacking = critDamageStackingSetting.Value / 100.0f;
+            maxBuffs = maxBuffsSetting.Value;
+            maxBuffsStacking = maxBuffsStackingSetting.Value;
 
             // Update item texts with new settings
             targetingMatrixItem.UpdateItemTexts();
@@ -153,18 +161,38 @@ namespace Faithful
             if (inventory == null) return;
 
             // Get count for item
-            int count = inventory.GetItemCount(targetingMatrixItem.itemDef);
+            int count = inventory.GetItemCountEffective(targetingMatrixItem.itemDef);
 
             // Check for item
             if (count == 0) return;
 
+            // Get attacker character body
+            CharacterBody attackerBody = character.GetBody();
+
             // Get faithful behaviour for attacker
-            FaithfulCharacterBodyBehaviour characterBehaviour = Utils.FindCharacterBodyHelper(character.GetBody());
+            FaithfulCharacterBodyBehaviour characterBehaviour = Utils.FindCharacterBodyHelper(attackerBody);
             if (characterBehaviour == null) return;
 
             // Get targeting matrix behaviour
             FaithfulTargetingMatrixBehaviour targetingMatrixBehaviour = characterBehaviour.targetingMatrix;
             if (targetingMatrixBehaviour == null) return;
+
+            // Check if victim is attacker target
+            if (targetingMatrixBehaviour.target == _report.victimBody)
+            {
+                // Calculate max buff stack for targeting matrix
+                int maxBuffStack = maxBuffs + (maxBuffsStacking * (count - 1));
+
+                // Get current buff count
+                int currentBuffCount = attackerBody.GetBuffCount(targetingMatrixBuff.buffDef);
+
+                // Check if can add buff
+                if (currentBuffCount < maxBuffStack)
+                {
+                    // Add buff
+                    attackerBody.AddBuff(targetingMatrixBuff.buffDef);
+                }
+            }
 
             // Do on kill behaviour
             targetingMatrixBehaviour.OnKill(_report.victimBody);
@@ -173,16 +201,32 @@ namespace Faithful
         void OnIncomingDamage(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim)
         {
             // Check for attacker and victim
-            if (_attacker == null || _victim == null) return;
+            if (_attacker == null || _attacker.inventory == null || _victim == null) return;
 
             // Get attacker character body
             CharacterBody attacker = _attacker.GetBody();
 
-            // Check if targeting matrix should be activated
-            if (!GetMatrixActivated(_report, attacker, _victim.GetBody())) return;
+            // Get attacker item count
+            int attackerItemCount = _attacker.inventory.GetItemCountEffective(targetingMatrixItem.itemDef);
 
-            // Get item count
-            int count = _attacker.inventory.GetItemCount(targetingMatrixItem.itemDef);
+            // Get attacker buff count
+            int attackerBuffCount = attacker.GetBuffCount(targetingMatrixBuff.buffDef);
+
+            // Calculate crit damage increase from buffs
+            float critDamageIncrease = attackerBuffCount == 0 ? 0.0f : (critDamage + critDamageStacking * Mathf.Max(attackerItemCount - 1, 0)) * attackerBuffCount;
+
+            // Check if targeting matrix should be activated
+            if (!GetMatrixActivated(_report, attacker, _victim.GetBody()))
+            {
+                // If crit and attacker has buff, increase crit damage
+                if (_report.crit && attackerBuffCount > 0)
+                {
+                    // Increase crit damage
+                    _report.damage *= (attacker.critMultiplier + critDamageIncrease) / attacker.critMultiplier;
+                }
+
+                return;
+            }
 
             // Check if railgunner
             if (attacker?.modelLocator?.modelTransform != null && attacker.modelLocator.modelTransform && attacker.modelLocator.modelTransform.name == "mdlRailGunner")
@@ -190,8 +234,8 @@ namespace Faithful
                 // Check if crit
                 if (_report.crit)
                 {
-                    // Increase damage
-                    _report.damage *= (attacker.critMultiplier + 1.0f) / attacker.critMultiplier;
+                    // Increase non-crit damage (+1 for 100% crit chance)
+                    _report.damage *= (attacker.critMultiplier + 1.0f + critDamageIncrease) / attacker.critMultiplier;
                 }
             }
 
@@ -200,10 +244,48 @@ namespace Faithful
             {
                 // Always crit target
                 _report.crit = true;
+
+                // Increase crit damage
+                _report.damage *= (attacker.critMultiplier + critDamageIncrease) / attacker.critMultiplier;
+            }
+        }
+
+        void OnInventoryChanged(Inventory _inventory)
+        {
+            if (_inventory == null) return;
+
+            // Get character body for inventory
+            CharacterBody characterBody = Utils.GetInventoryBody(_inventory);
+            if (characterBody == null) return;
+
+            // Get item and buff count
+            int itemCount = _inventory.GetItemCountEffective(targetingMatrixItem.itemDef);
+            int buffCount = characterBody.GetBuffCount(targetingMatrixBuff.buffDef);
+
+            // Calculate max buff stack for targeting matrix
+            int maxBuffStack = itemCount == 0 ? 0 : maxBuffs + (maxBuffsStacking * (itemCount - 1));
+
+            // Check if buff count exceeds max buff stack
+            if (buffCount > maxBuffStack)
+            {
+                // Remove excess buffs
+                characterBody.SetBuffCount(targetingMatrixBuff.buffDef.buffIndex, maxBuffStack);
             }
 
-            // Increase damage
-            _report.damage *= 1.0f + damage + (damageStacking * (count - 1));
+            // Check if item count is zero
+            if (itemCount == 0)
+            {
+                // Attempt to get faithful behaviour for character body
+                FaithfulCharacterBodyBehaviour characterBehaviour = Utils.FindCharacterBodyHelper(characterBody);
+                if (characterBehaviour == null) return;
+
+                // Attempt to get targeting matrix behaviour
+                FaithfulTargetingMatrixBehaviour targetingMatrixBehaviour = characterBehaviour.targetingMatrix;
+                if (targetingMatrixBehaviour == null) return;
+
+                // Remove target
+                targetingMatrixBehaviour.RemoveTarget();
+            }
         }
 
         void OnHuntressSeekingArrayEnter(On.EntityStates.Huntress.HuntressWeapon.FireSeekingArrow.orig_OnEnter orig, EntityStates.Huntress.HuntressWeapon.FireSeekingArrow self)
@@ -232,6 +314,35 @@ namespace Faithful
             self.isCrit = true;
         }
 
+        private void OnOperatorCMDSwarmEnter(On.EntityStates.Drone.Command.Headbutt.orig_OnEnter orig, EntityStates.Drone.Command.Headbutt self)
+        {
+            // Get victim and attacker
+            CharacterBody victim = self.target?.healthComponent?.body;
+            CharacterBody attacker = GetSwarmDroneLeaderBody(self);
+
+            // Check if matrix should activate
+            if (victim != null && attacker != null && GetMatrixActivated(null, attacker, victim))
+            {
+                // Override crit
+                Behaviour.OverrideCritCheck(attacker);
+            }
+
+            // Run original process
+            orig(self);
+        }
+
+        CharacterBody GetSwarmDroneLeaderBody(EntityStates.Drone.Command.Headbutt _drone)
+        {
+            // Attempt to fetch via command receiver
+            CharacterBody leader = _drone.commandReceiver?.leaderBody;
+            if (leader) return leader;
+
+            // Attempt to fetch via minion ownership
+            CharacterMaster droneMaster = _drone.characterBody?.master;
+            CharacterMaster ownerMaster = droneMaster?.minionOwnership?.ownerMaster;
+            return ownerMaster ? ownerMaster.GetBody() : null;
+        }
+
         bool GetMatrixActivated(DamageInfo _report, CharacterBody _attacker, CharacterBody _victim)
         {
             // REPORT CAN BE NULL
@@ -246,7 +357,7 @@ namespace Faithful
             if (!_attacker.inventory) return false;
 
             // Get item count
-            int count = _attacker.inventory.GetItemCount(targetingMatrixItem.itemDef);
+            int count = _attacker.inventory.GetItemCountEffective(targetingMatrixItem.itemDef);
 
             // Check for item
             if (count == 0) return false;

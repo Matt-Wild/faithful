@@ -39,9 +39,11 @@ namespace Faithful
                 return;
             }
 
-            // Is F1 key down - Item spawning
-            if (Input.GetKey(KeyCode.F1))
+            // Is F1 key down - Item spawning (F5 for temp items)
+            if (Input.GetKey(KeyCode.F1) || Input.GetKey(KeyCode.F5))
             {
+                bool temp = Input.GetKey(KeyCode.F5);
+
                 bool spawn = false;
                 PickupIndex index = PickupCatalog.FindPickupIndex(ItemTier.Tier1);
 
@@ -110,8 +112,9 @@ namespace Faithful
                     PickupIndexNetworker networker = essence.GetComponent<PickupIndexNetworker>();
                     UniquePickup pickup = networker.NetworkpickupState;
                     pickup.pickupIndex = index;
+                    pickup.decayValue = temp ? 1.0f : 0.0f;
                     networker.NetworkpickupState = pickup;
-                    essence.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(index);
+                    essence.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(pickup);
                     NetworkServer.Spawn(essence);
                 }
             }
