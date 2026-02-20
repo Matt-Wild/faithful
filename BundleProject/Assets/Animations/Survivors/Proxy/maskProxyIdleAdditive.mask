@@ -8,4 +8,228 @@ AvatarMask:
   m_PrefabAsset: {fileID: 0}
   m_Name: maskProxyIdleAdditive
   m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-  m_Elements: []
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: ProxyArmature
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/PocketROOT
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/DrawerROOT
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001/ExtendBPArmROOT.L.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001/ExtendBPArmROOT.L.002/ExtendBPArmROOT.L.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001/ExtendBPArmROOT.L.002/ExtendBPArmROOT.L.003/ExtendBPArmROOT.L.004
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001/ExtendBPArmROOT.L.002/ExtendBPArmROOT.L.003/ExtendBPArmROOT.L.004/ExtendBPArmROOT.L.005
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001/ExtendBPArmROOT.L.002/ExtendBPArmROOT.L.003/ExtendBPArmROOT.L.004/ExtendBPArmROOT.L.005/ExtendBPArmROOT.L.006
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001/ExtendBPArmROOT.L.002/ExtendBPArmROOT.L.003/ExtendBPArmROOT.L.004/ExtendBPArmROOT.L.005/ExtendBPArmROOT.L.006/ExtendBPArmROOT.L.007
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001/ExtendBPArmROOT.L.002/ExtendBPArmROOT.L.003/ExtendBPArmROOT.L.004/ExtendBPArmROOT.L.005/ExtendBPArmROOT.L.006/ExtendBPArmROOT.L.007/ExtendBPArmROOT.L.008
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001/ExtendBPArmROOT.L.002/ExtendBPArmROOT.L.003/ExtendBPArmROOT.L.004/ExtendBPArmROOT.L.005/ExtendBPArmROOT.L.006/ExtendBPArmROOT.L.007/ExtendBPArmROOT.L.008/TerminalKeyboardROOT
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.L/ExtendBPArmROOT.L.001/ExtendBPArmROOT.L.002/ExtendBPArmROOT.L.003/ExtendBPArmROOT.L.004/ExtendBPArmROOT.L.005/ExtendBPArmROOT.L.006/ExtendBPArmROOT.L.007/ExtendBPArmROOT.L.008/TerminalKeyboardROOT/TerminalScreenROOT
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001/ExtendBPArmROOT.R.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001/ExtendBPArmROOT.R.002/ExtendBPArmROOT.R.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001/ExtendBPArmROOT.R.002/ExtendBPArmROOT.R.003/ExtendBPArmROOT.R.004
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001/ExtendBPArmROOT.R.002/ExtendBPArmROOT.R.003/ExtendBPArmROOT.R.004/ExtendBPArmROOT.R.005
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001/ExtendBPArmROOT.R.002/ExtendBPArmROOT.R.003/ExtendBPArmROOT.R.004/ExtendBPArmROOT.R.005/ExtendBPArmROOT.R.006
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001/ExtendBPArmROOT.R.002/ExtendBPArmROOT.R.003/ExtendBPArmROOT.R.004/ExtendBPArmROOT.R.005/ExtendBPArmROOT.R.006/ExtendBPArmROOT.R.007
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001/ExtendBPArmROOT.R.002/ExtendBPArmROOT.R.003/ExtendBPArmROOT.R.004/ExtendBPArmROOT.R.005/ExtendBPArmROOT.R.006/ExtendBPArmROOT.R.007/ExtendBPArmROOT.R.008
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001/ExtendBPArmROOT.R.002/ExtendBPArmROOT.R.003/ExtendBPArmROOT.R.004/ExtendBPArmROOT.R.005/ExtendBPArmROOT.R.006/ExtendBPArmROOT.R.007/ExtendBPArmROOT.R.008/JoystickBaseROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/ExtendBPABaseROOT.R/ExtendBPArmROOT.R.001/ExtendBPArmROOT.R.002/ExtendBPArmROOT.R.003/ExtendBPArmROOT.R.004/ExtendBPArmROOT.R.005/ExtendBPArmROOT.R.006/ExtendBPArmROOT.R.007/ExtendBPArmROOT.R.008/JoystickBaseROOT.R/JoystickStickROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/GunPitchROOT
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/GunPitchROOT/GunYawROOT
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/GunPitchROOT/GunYawROOT/GunLensROOT
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LooseCableROOT.L.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LooseCableROOT.L.001/LooseCableROOT.L.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LooseCableROOT.L.001/LooseCableROOT.L.002/LooseCableROOT.L.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LooseCableROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.L/LowerBPBicepROOT.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.L/LowerBPBicepROOT.L/LowerBPForearmROOT.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.L/LowerBPBicepROOT.L/LowerBPForearmROOT.L/LowerBPHandROOT.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.L/LowerBPBicepROOT.L/LowerBPForearmROOT.L/LowerBPHandROOT.L/LowerBPClawLROOT.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.L/LowerBPBicepROOT.L/LowerBPForearmROOT.L/LowerBPHandROOT.L/LowerBPClawUROOT.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.R/LowerBPBicepROOT.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.R/LowerBPBicepROOT.R/LowerBPForearmROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.R/LowerBPBicepROOT.R/LowerBPForearmROOT.R/LowerBPHandROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.R/LowerBPBicepROOT.R/LowerBPForearmROOT.R/LowerBPHandROOT.R/LowerBPClawLROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerBPPitchROOT.R/LowerBPBicepROOT.R/LowerBPForearmROOT.R/LowerBPHandROOT.R/LowerBPClawUROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerPanelROOT.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/LowerPanelROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperBPPitchROOT.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperBPPitchROOT.L/UpperBPBicepROOT.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperBPPitchROOT.L/UpperBPBicepROOT.L/UpperBPForearmROOT.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperBPPitchROOT.L/UpperBPBicepROOT.L/UpperBPForearmROOT.L/UpperBPHandROOT.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperBPPitchROOT.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperBPPitchROOT.R/UpperBPBicepROOT.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperBPPitchROOT.R/UpperBPBicepROOT.R/UpperBPForearmROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperBPPitchROOT.R/UpperBPBicepROOT.R/UpperBPForearmROOT.R/UpperBPHandROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperPanelROOT.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/BackpackROOT/UpperPanelROOT.R
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Index.L.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Index.L.001/Index.L.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Index.L.001/Index.L.002/Index.L.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Middle.L.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Middle.L.001/Middle.L.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Middle.L.001/Middle.L.002/Middle.L.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Pinky.L.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Pinky.L.001/Pinky.L.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Pinky.L.001/Pinky.L.002/Pinky.L.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Ring.L.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Ring.L.001/Ring.L.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Ring.L.001/Ring.L.002/Ring.L.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Thumb.L.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Thumb.L.001/Thumb.L.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.L/Forearm.L/Hand.L/Thumb.L.001/Thumb.L.002/Thumb.L.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Index.R.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Index.R.001/Index.R.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Index.R.001/Index.R.002/Index.R.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Middle.R.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Middle.R.001/Middle.R.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Middle.R.001/Middle.R.002/Middle.R.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Pinky.R.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Pinky.R.001/Pinky.R.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Pinky.R.001/Pinky.R.002/Pinky.R.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Ring.R.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Ring.R.001/Ring.R.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Ring.R.001/Ring.R.002/Ring.R.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Thumb.R.001
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Thumb.R.001/Thumb.R.002
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Bicep.R/Forearm.R/Hand.R/Thumb.R.001/Thumb.R.002/Thumb.R.003
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Neck
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Spine/Chest/Neck/Head
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Thigh.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Thigh.L/Shin.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Thigh.L/Shin.L/Foot.L
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Thigh.L/Shin.L/Foot.L/Toes.L
+    m_Weight: 0
+  - m_Path: ProxyArmature/ROOT/Hip/Thigh.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Thigh.R/Shin.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Thigh.R/Shin.R/Foot.R
+    m_Weight: 1
+  - m_Path: ProxyArmature/ROOT/Hip/Thigh.R/Shin.R/Foot.R/Toes.R
+    m_Weight: 0
+  - m_Path: ProxyDefaultBaseMesh
+    m_Weight: 0
+  - m_Path: ProxyDefaultHoloScrollMesh
+    m_Weight: 0
+  - m_Path: ProxyDefaultHoloStaticMesh
+    m_Weight: 0
+  - m_Path: ProxyDefaultPackMesh
+    m_Weight: 0
