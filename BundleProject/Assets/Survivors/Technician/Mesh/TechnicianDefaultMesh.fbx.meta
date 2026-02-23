@@ -12,7 +12,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleCurves: 1
+    resampleCurves: 0
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
@@ -1080,8 +1080,8 @@ ModelImporter:
       name: Technician_Armature|Technician_SprintF
       takeName: Technician_Armature|Technician_SprintF
       internalID: 8410576446547472568
-      firstFrame: 0
-      lastFrame: 40
+      firstFrame: 40
+      lastFrame: 80
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1181,8 +1181,8 @@ ModelImporter:
       name: Technician_Armature|Technician_WalkB
       takeName: Technician_Armature|Technician_WalkB
       internalID: -6271624445453444886
-      firstFrame: 0
-      lastFrame: 40
+      firstFrame: 40
+      lastFrame: 80
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1224,8 +1224,8 @@ ModelImporter:
       name: Technician_Armature|Technician_WalkF
       takeName: Technician_Armature|Technician_WalkF
       internalID: -4937113850781366931
-      firstFrame: 0
-      lastFrame: 40
+      firstFrame: 40
+      lastFrame: 80
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1267,8 +1267,8 @@ ModelImporter:
       name: Technician_Armature|Technician_WalkL
       takeName: Technician_Armature|Technician_WalkL
       internalID: -7515597803675520398
-      firstFrame: 0
-      lastFrame: 40
+      firstFrame: 40
+      lastFrame: 80
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1310,8 +1310,8 @@ ModelImporter:
       name: Technician_Armature|Technician_WalkR
       takeName: Technician_Armature|Technician_WalkR
       internalID: -7794456888421135351
-      firstFrame: 0
-      lastFrame: 40
+      firstFrame: 40
+      lastFrame: 80
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
