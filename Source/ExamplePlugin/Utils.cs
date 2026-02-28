@@ -817,7 +817,7 @@ namespace Faithful
             }
         }
 
-        public static ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _useHopooShader = true, bool _ignoreOverlays = false, bool _dithering = true)
+        public static ItemDisplaySettings CreateItemDisplaySettings(string _modelFile, bool _ignoreOverlays = false)
         {
             // In verbose mode?
             if (verboseConsole)
@@ -834,6 +834,9 @@ namespace Faithful
                 Log.Error($"Failed to setup item display for '{_modelFile}', could not find model");
                 return null;
             }
+
+            // Process renderer rules for model
+            ProcessRendererRules(model);
 
             // List of renderers
             List<Renderer> renderers =
@@ -858,23 +861,6 @@ namespace Faithful
             {
                 // Get material
                 Material material = renderers[i] is SkinnedMeshRenderer ? renderers[i].sharedMaterial : renderers[i].material;
-
-                // Apply shader
-                if (_useHopooShader && material)
-                {
-                    // Set shader
-                    material.shader = HGShader;
-
-                    // Should dither?
-                    if (_dithering)
-                    {
-                        material.EnableKeyword("DITHER");
-                    }
-                    else
-                    {
-                        material.DisableKeyword("DITHER");
-                    }
-                }
 
                 // Set render info
                 renderInfos[i] = new CharacterModel.RendererInfo
