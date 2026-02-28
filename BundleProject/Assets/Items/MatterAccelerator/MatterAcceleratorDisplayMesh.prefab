@@ -44,6 +44,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2852665918013215862}
   - component: {fileID: 6941791299354401392}
+  - component: {fileID: 6993635612264496275}
   m_Layer: 0
   m_Name: MatterAcceleratorDisplayMesh
   m_TagString: Untagged
@@ -123,6 +124,22 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000000059604645, y: 0.06249991, z: 0.00000011920929}
     m_Extent: {x: 0.649519, y: 0.5625, z: 0.40000015}
   m_DirtyAABB: 0
+--- !u!114 &6993635612264496275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3368409833381899306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 10
+  keywordRules:
+  - keyword: DITHER
+    enabled: 1
 --- !u!1 &4365552102038901712
 GameObject:
   m_ObjectHideFlags: 0

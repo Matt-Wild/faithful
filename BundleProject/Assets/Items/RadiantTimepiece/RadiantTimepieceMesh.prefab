@@ -192,6 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1724280661108553433}
   - component: {fileID: 1850267174404165746}
+  - component: {fileID: 3035602170597712078}
   m_Layer: 0
   m_Name: RadiantTimepieceMesh
   m_TagString: Untagged
@@ -239,6 +240,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3035602170597712078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064390860015086691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 0
+  keywordRules:
+  - keyword: CUTOUT
+    enabled: 1
 --- !u!1 &4464186030062819102
 GameObject:
   m_ObjectHideFlags: 0

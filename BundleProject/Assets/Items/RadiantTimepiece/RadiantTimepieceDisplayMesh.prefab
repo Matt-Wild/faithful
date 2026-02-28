@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5468940557187945411}
   - component: {fileID: 7570594940212945596}
+  - component: {fileID: 2191432668869681034}
   m_Layer: 0
   m_Name: RadiantTimepieceDisplayMesh
   m_TagString: Untagged
@@ -93,6 +94,24 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000000059604645, y: -1.1749995, z: -0.057499744}
     m_Extent: {x: 0.62499994, y: 2.1749995, z: 0.18250015}
   m_DirtyAABB: 0
+--- !u!114 &2191432668869681034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963480844230246692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 10
+  keywordRules:
+  - keyword: CUTOUT
+    enabled: 1
+  - keyword: DITHER
+    enabled: 1
 --- !u!1 &1196335301709083208
 GameObject:
   m_ObjectHideFlags: 0

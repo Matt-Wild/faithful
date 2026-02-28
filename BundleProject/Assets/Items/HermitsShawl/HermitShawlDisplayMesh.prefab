@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: -0.16946766, y: -0.010643138, z: 0.086673886, w: 0.98165935}
   m_LocalPosition: {x: -3.7252902e-11, y: 0.0021124454, z: -2.9802322e-10}
   m_LocalScale: {x: 0.99999994, y: 1, z: 0.99999994}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8987264317235335214}
   m_Father: {fileID: 573491894356973734}
@@ -57,6 +58,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4589468832273516816}
   - {fileID: 8767823406479180980}
@@ -89,6 +91,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5120155105492793519}
   m_Father: {fileID: 7647763760431481}
@@ -120,6 +123,7 @@ Transform:
   m_LocalRotation: {x: -0.057390127, y: -0.053913582, z: 0.14826337, w: 0.98580813}
   m_LocalPosition: {x: -5.2154064e-10, y: 0.003451265, z: 5.2154064e-10}
   m_LocalScale: {x: 0.9999999, y: 0.9999999, z: 0.99999994}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7856810247174266350}
   m_Father: {fileID: 8987264317235335214}
@@ -151,6 +155,7 @@ Transform:
   m_LocalRotation: {x: -0.0166401, y: -0.048944198, z: 0.111356325, w: 0.9924351}
   m_LocalPosition: {x: 5.401671e-10, y: 0.0044054496, z: 0.000000001117587}
   m_LocalScale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1759380498779847542}
   m_Father: {fileID: 5601399094759980589}
@@ -166,6 +171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8767823406479180980}
   - component: {fileID: 567087285428091335}
+  - component: {fileID: 452519189802148836}
   m_Layer: 0
   m_Name: Hermit_Shawl_Display_Mesh
   m_TagString: Untagged
@@ -183,6 +189,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7647763760431481}
   m_RootOrder: 1
@@ -198,10 +205,12 @@ SkinnedMeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -243,6 +252,24 @@ SkinnedMeshRenderer:
     m_Center: {x: 0, y: -0.0018402515, z: -0.0030861273}
     m_Extent: {x: 0.01, y: 0.00784025, z: 0.014086124}
   m_DirtyAABB: 0
+--- !u!114 &452519189802148836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5924591627423555501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 10
+  keywordRules:
+  - keyword: CUTOUT
+    enabled: 1
+  - keyword: DITHER
+    enabled: 1
 --- !u!1 &6082746670968417534
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,6 +296,7 @@ Transform:
   m_LocalRotation: {x: 0.8643487, y: -0.050991494, z: -0.050991535, w: -0.49769574}
   m_LocalPosition: {x: 0.00637715, y: 0.0032923098, z: -0.0065694097}
   m_LocalScale: {x: 0.99999994, y: 1, z: 1.0000001}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5601399094759980589}
   m_Father: {fileID: 5120155105492793519}
@@ -300,6 +328,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 573491894356973734}
   m_Father: {fileID: 4589468832273516816}
@@ -331,6 +360,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0.005301867, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1759380498779847542}
   m_RootOrder: 0
