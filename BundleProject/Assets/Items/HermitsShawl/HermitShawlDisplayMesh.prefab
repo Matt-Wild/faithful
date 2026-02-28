@@ -265,11 +265,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 10
+  textureRules: []
+  colourRules: []
+  vectorRules: []
   keywordRules:
   - keyword: CUTOUT
     enabled: 1
   - keyword: DITHER
     enabled: 1
+  floatRules: []
+  intRules: []
 --- !u!1 &6082746670968417534
 GameObject:
   m_ObjectHideFlags: 0

@@ -928,16 +928,76 @@ namespace Faithful
                             break;
                     }
 
+                    // Apply texture rules
+                    if (rules.textureRules != null)
+                    {
+                        for (int ti = 0; ti < rules.textureRules.Count; ti++)
+                        {
+                            ShaderTextureRule tr = rules.textureRules[ti];
+                            if (string.IsNullOrWhiteSpace(tr.name) || tr.texture == null) continue;
+
+                            mat.SetTexture(tr.name, tr.texture);
+                        }
+                    }
+
+                    // Apply colour rules
+                    if (rules.colourRules != null)
+                    {
+                        for (int ci = 0; ci < rules.colourRules.Count; ci++)
+                        {
+                            ShaderColourRule cr = rules.colourRules[ci];
+                            if (string.IsNullOrWhiteSpace(cr.name)) continue;
+
+                            mat.SetColor(cr.name, cr.colour);
+                        }
+                    }
+
+                    // Apply vector rules
+                    if (rules.vectorRules != null)
+                    {
+                        for (int vi = 0; vi < rules.vectorRules.Count; vi++)
+                        {
+                            ShaderVectorRule vr = rules.vectorRules[vi];
+                            if (string.IsNullOrWhiteSpace(vr.name)) continue;
+
+                            mat.SetVector(vr.name, vr.value);
+                        }
+                    }
+
                     // Apply keyword rules
                     if (rules.keywordRules != null)
                     {
                         for (int ki = 0; ki < rules.keywordRules.Count; ki++)
                         {
-                            ShaderKeywordRule kw = rules.keywordRules[ki];
-                            if (string.IsNullOrWhiteSpace(kw.keyword)) continue;
+                            ShaderKeywordRule kr = rules.keywordRules[ki];
+                            if (string.IsNullOrWhiteSpace(kr.keyword)) continue;
 
-                            if (kw.enabled) mat.EnableKeyword(kw.keyword);
-                            else mat.DisableKeyword(kw.keyword);
+                            if (kr.enabled) mat.EnableKeyword(kr.keyword);
+                            else mat.DisableKeyword(kr.keyword);
+                        }
+                    }
+
+                    // Apply float rules
+                    if (rules.floatRules != null)
+                    {
+                        for (int fi = 0; fi < rules.floatRules.Count; fi++)
+                        {
+                            ShaderFloatRule fr = rules.floatRules[fi];
+                            if (string.IsNullOrWhiteSpace(fr.name)) continue;
+
+                            mat.SetFloat(fr.name, fr.value);
+                        }
+                    }
+
+                    // Apply int rules
+                    if (rules.intRules != null)
+                    {
+                        for (int ii = 0; ii < rules.intRules.Count; ii++)
+                        {
+                            ShaderIntRule ir = rules.intRules[ii];
+                            if (string.IsNullOrWhiteSpace(ir.name)) continue;
+
+                            mat.SetInt(ir.name, ir.value);
                         }
                     }
                 }
