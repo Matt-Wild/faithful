@@ -32,7 +32,7 @@
 
 	"FAITHFUL_TARGETING_MATRIX_NAME": "瞄准矩阵",
 	"FAITHFUL_TARGETING_MATRIX_PICKUP": "击杀时标记一名随机敌人。对该目标造成的伤害将“暴击”。击杀该目标会提高你的“暴击”伤害。",
-	"FAITHFUL_TARGETING_MATRIX_DESC": "击杀时<style=cIsDamage>标记</style>一名随机敌人。对该<style=cIsDamage>目标</style>造成的伤害有<style=cIsDamage>+100%</style>几率“<style=cIsDamage>暴击</style>”，且击杀该<style=cIsDamage>目标</style>会使<style=cIsDamage>暴击</style>伤害提高<style=cIsDamage>+[CRIT_DAMAGE]%</style> <style=cStack>(每层额外+[CRIT_DAMAGE_STACKING]%)</style>，最多叠加<style=cIsUtility>[MAX_BUFFS]</style> <style=cStack>(每层额外+[MAX_BUFFS_STACKING])</style><style=cIsUtility>次</style>。"
+	"FAITHFUL_TARGETING_MATRIX_DESC": "击杀时<style=cIsDamage>标记</style>一名随机敌人。对该<style=cIsDamage>目标</style>造成的伤害有<style=cIsDamage>+100%</style>几率“<style=cIsDamage>暴击</style>”，且击杀该<style=cIsDamage>目标</style>会使<style=cIsDamage>暴击</style>伤害提高<style=cIsDamage>+[CRIT_DAMAGE]%</style> <style=cStack>(每层额外+[CRIT_DAMAGE_STACKING]%)</style>，最多叠加<style=cIsUtility>[MAX_BUFFS]</style> <style=cStack>(每层额外+[MAX_BUFFS_STACKING])</style><style=cIsUtility>次</style>。",
 	"FAITHFUL_TARGETING_MATRIX_LORE": "订单：原型瞄准系统\n追踪编号：1981******\n预计送达时间：2057年3月31日\n运输方式：优先级\n送货地址：火星，泡泡站，皇家大道\n运输详情：\n\n这是我们开发了一段时间的新玩意儿，我觉得你可能想亲自看看，所以给你寄了一个原型。\n\n注意：请不要遵循其瞄准建议。该软件仍不可靠，似乎经常随机选择目标——至少看起来是随机的。它有时会锁定非战斗人员……这有点令人担忧，但我相信我们很快就会修复这个问题。",
 	"FAITHFUL_TARGETING_MATRIX_BUFF": "瞄准矩阵",
 	
@@ -122,6 +122,7 @@
 	"FAITHFUL_SURVIVOR_TECHNICIAN_DEFAULT_SKIN": "默认",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_MASTERY_SKIN": "雷鸣",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIME_SKIN": "水晶",
+	"FAITHFUL_SURVIVOR_TECHNICIAN_ALLOY_SKIN": "光子",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIMARY_ARC_NAME": "电弧",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_PRIMARY_ARC_DESCRIPTION": "用电弧锁定一名敌人，造成 <style=cIsDamage>每秒400%</style> 伤害并对其 <style=cIsUtility>减速</style>。",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_SECONDARY_POWERVOLT_NAME": "能压",
