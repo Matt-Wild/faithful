@@ -136,7 +136,9 @@ namespace Faithful
 
             // Set icon and model
             itemDef.pickupIconSprite = Assets.GetIcon(_iconName);
-            itemDef.pickupModelPrefab = Assets.GetModel(_modelName);
+            GameObject modelPrefab = Assets.GetModel(_modelName);
+            Utils.ProcessRendererRules(modelPrefab);
+            itemDef.pickupModelPrefab = modelPrefab;
 
             // Modify pickup model prefab
             ModelPanelParameters mdlPanelParams = itemDef.pickupModelPrefab.AddComponent<ModelPanelParameters>();

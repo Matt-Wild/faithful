@@ -1,0 +1,1 @@
+When changing or creating an assembly needed by both the bundle project and the mod source code, remember to reference the new outputted dll in the csproj file, put the dll in the project libs folder, and include the dll alongside Faithful.dll in the final output (in the plugins folder for BepInEx) (it should be outputted in the netstandard folder if done correctly)

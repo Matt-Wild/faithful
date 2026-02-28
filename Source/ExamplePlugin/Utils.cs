@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
+using Faithful.Shared;
 
 namespace Faithful
 {
@@ -891,6 +892,73 @@ namespace Faithful
 
             // Return item display settings
             return new ItemDisplaySettings(model, new ItemDisplayRuleDict());
+        }
+
+        public static void ProcessRendererRules(GameObject _model)
+        {
+            // Check if model is valid
+            if (_model == null)
+            {
+                Log.Error($"Failed to process pickup prefab, prefab is null!");
+                return;
+            }
+
+            // In verbose mode?
+            if (verboseConsole)
+            {
+                Log.Debug($"Processing pickup prefab for '{_model.name}'");
+            }
+
+            // Grab only mesh/skinned renderers
+            Renderer[] renderers = _model.GetComponentsInChildren<Renderer>(true);
+
+            foreach (Renderer r in renderers)
+            {
+                if (r is not MeshRenderer && r is not SkinnedMeshRenderer) continue;
+
+                // Rules are attached to the same GO as the renderer
+                RendererRules rules = r.GetComponent<RendererRules>();
+                if (!rules) continue;
+
+                // Using r.materials gives per-renderer instances
+                Material[] mats = r.materials;
+
+                for (int mi = 0; mi < mats.Length; mi++)
+                {
+                    Material mat = mats[mi];
+                    if (!mat) continue;
+
+                    // Apply modifier
+                    switch (rules.modifier)
+                    {
+                        case RendererModifier.None:
+                            break;
+
+                        case RendererModifier.HopooShader:
+                            mat.shader = HGShader;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    // Apply keyword rules
+                    if (rules.keywordRules != null)
+                    {
+                        for (int ki = 0; ki < rules.keywordRules.Count; ki++)
+                        {
+                            ShaderKeywordRule kw = rules.keywordRules[ki];
+                            if (string.IsNullOrWhiteSpace(kw.keyword)) continue;
+
+                            if (kw.enabled) mat.EnableKeyword(kw.keyword);
+                            else mat.DisableKeyword(kw.keyword);
+                        }
+                    }
+                }
+
+                // Remove the rules component after applying (keeps runtime hierarchy clean)
+                Object.Destroy(rules);
+            }
         }
 
         // Attempt to fetch local player master

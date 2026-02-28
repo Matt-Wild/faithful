@@ -71,6 +71,10 @@
       <HintPath>libs\Zio.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="Faithful.Shared">
+      <HintPath>libs\Faithful.Shared.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
   </ItemGroup>
 
 </Project>
