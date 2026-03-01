@@ -96,8 +96,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modifier: 0
-  keywordRules: []
+  modifier: 10
+  textureRules:
+  - name: _EmTex
+    texture: {fileID: 2800000, guid: 155292a6a35e8144da826d7f8867d00e, type: 3}
+  colourRules:
+  - name: _EmColor
+    colour: {r: 1, g: 1, b: 1, a: 1}
+  vectorRules: []
+  keywordRules:
+  - keyword: FORCE_SPEC
+    enabled: 1
+  floatRules:
+  - name: _EmPower
+    value: 1
+  - name: _SpecularStrength
+    value: 0.4
+  intRules: []
 --- !u!1 &5272888934794218530
 GameObject:
   m_ObjectHideFlags: 0

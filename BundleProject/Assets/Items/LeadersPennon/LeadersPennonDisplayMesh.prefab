@@ -97,9 +97,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 10
+  textureRules:
+  - name: _NormalTex
+    texture: {fileID: 2800000, guid: fd2c1580a06a5f74f98b81afe99d6b41, type: 3}
+  colourRules: []
+  vectorRules: []
   keywordRules:
   - keyword: DITHER
     enabled: 1
+  floatRules:
+  - name: _NormalStrength
+    value: 1
+  intRules: []
 --- !u!1 &8269860795018252129
 GameObject:
   m_ObjectHideFlags: 0

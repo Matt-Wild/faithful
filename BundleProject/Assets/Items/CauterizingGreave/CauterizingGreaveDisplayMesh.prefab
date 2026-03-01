@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 312690429036653830}
   m_Father: {fileID: 4278435107123838506}
@@ -41,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2985967134641961802}
   - component: {fileID: 280727053519291701}
+  - component: {fileID: 4306281815389814122}
   m_Layer: 0
   m_Name: CauterizingGreaveDisplayMesh
   m_TagString: Untagged
@@ -58,6 +60,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8504153803340066185}
   m_RootOrder: 1
@@ -73,10 +76,12 @@ SkinnedMeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -115,6 +120,35 @@ SkinnedMeshRenderer:
     m_Center: {x: 0, y: 0, z: 0.0008370429}
     m_Extent: {x: 0.007362836, y: 0.0074999975, z: 0.0065257903}
   m_DirtyAABB: 0
+--- !u!114 &4306281815389814122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2421200793622452221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 10
+  textureRules:
+  - name: _EmTex
+    texture: {fileID: 2800000, guid: a780da981ba1cb345b06cc701a254576, type: 3}
+  colourRules:
+  - name: _EmColor
+    colour: {r: 0.3, g: 0.8, b: 1, a: 0}
+  vectorRules: []
+  keywordRules:
+  - keyword: CUTOUT
+    enabled: 1
+  - keyword: DITHER
+    enabled: 1
+  floatRules:
+  - name: _EmPower
+    value: 1
+  intRules: []
 --- !u!1 &3331699194139779014
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,6 +175,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7374455393801557468}
   m_Father: {fileID: 8504153803340066185}
@@ -172,6 +207,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: -0.005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 587487275372142438}
   m_Father: {fileID: 7374455393801557468}
@@ -203,6 +239,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0.0025, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 312690429036653830}
   m_RootOrder: 0
@@ -233,6 +270,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4278435107123838506}
   - {fileID: 2985967134641961802}

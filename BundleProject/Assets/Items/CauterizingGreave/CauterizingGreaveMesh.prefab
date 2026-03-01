@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4233461596767663936}
   m_RootOrder: 2
@@ -56,6 +57,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7771518032642525298}
   m_Father: {fileID: 2117154284406568371}
@@ -87,6 +89,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 134088769862130365}
   m_Father: {fileID: 4233461596767663936}
@@ -118,6 +121,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2117154284406568371}
   - {fileID: 6332346210558543523}
@@ -152,6 +156,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0.003750004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7771518032642525298}
   m_RootOrder: 0
@@ -182,6 +187,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4233461596767663936}
   m_RootOrder: 3
@@ -212,6 +218,7 @@ Transform:
   m_LocalRotation: {x: -0.21980734, y: -0.13664505, z: -0.13664503, w: 0.9562118}
   m_LocalPosition: {x: -0.00053947, y: -0.00401924, z: 0.00049236}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7721663296554569269}
   m_Father: {fileID: 134088769862130365}
@@ -227,6 +234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6332346210558543523}
   - component: {fileID: 5468052859654070430}
+  - component: {fileID: 5992846675070923609}
   m_Layer: 0
   m_Name: CauterizingGreaveMesh
   m_TagString: Untagged
@@ -244,6 +252,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4233461596767663936}
   m_RootOrder: 1
@@ -259,10 +268,12 @@ SkinnedMeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -301,3 +312,30 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.00019518286, y: 0.00010851491, z: -0.00054859254}
     m_Extent: {x: 0.0080115935, y: 0.007990035, z: 0.008172855}
   m_DirtyAABB: 0
+--- !u!114 &5992846675070923609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9200840220664400971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 10
+  textureRules:
+  - name: _EmTex
+    texture: {fileID: 2800000, guid: a780da981ba1cb345b06cc701a254576, type: 3}
+  colourRules:
+  - name: _EmColor
+    colour: {r: 0.3, g: 0.8, b: 1, a: 0}
+  vectorRules: []
+  keywordRules:
+  - keyword: CUTOUT
+    enabled: 1
+  floatRules:
+  - name: _EmPower
+    value: 1
+  intRules: []

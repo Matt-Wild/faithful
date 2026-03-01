@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6394455037786904653}
   - component: {fileID: 1419262486139950362}
+  - component: {fileID: 6962171998578129633}
   m_Layer: 0
   m_Name: Targeting_Matrix_Holo_Mesh
   m_TagString: Untagged
@@ -119,6 +120,33 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.002722104, y: 0.0007900982, z: 0.001118049}
     m_Extent: {x: 0.004335105, y: 0.0028805616, z: 0.0027961233}
   m_DirtyAABB: 0
+--- !u!114 &6962171998578129633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907594099590080115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 10
+  textureRules:
+  - name: _EmTex
+    texture: {fileID: 2800000, guid: c9269918742121e40a54d214b77579a9, type: 3}
+  colourRules:
+  - name: _EmColor
+    colour: {r: 1, g: 0, b: 0, a: 1}
+  vectorRules: []
+  keywordRules:
+  - keyword: CUTOUT
+    enabled: 1
+  floatRules:
+  - name: _EmPower
+    value: 1.25
+  intRules: []
 --- !u!1 &3050995885064102298
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,6 +189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8072816498129089398}
   - component: {fileID: 5751149713771120917}
+  - component: {fileID: 4079775157572851151}
   m_Layer: 0
   m_Name: Targeting_Base_Matrix_Mesh
   m_TagString: Untagged
@@ -239,6 +268,29 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000026112422, y: 0.000007054303, z: 0.00011885725}
     m_Extent: {x: 0.008322155, y: 0.004096539, z: 0.005379473}
   m_DirtyAABB: 0
+--- !u!114 &4079775157572851151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3278520760878287952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 10
+  textureRules: []
+  colourRules: []
+  vectorRules: []
+  keywordRules:
+  - keyword: FORCE_SPEC
+    enabled: 1
+  floatRules:
+  - name: _SpecularStrength
+    value: 0.1
+  intRules: []
 --- !u!1 &3284629288370927434
 GameObject:
   m_ObjectHideFlags: 0

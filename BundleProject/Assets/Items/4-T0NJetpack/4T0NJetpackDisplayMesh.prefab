@@ -1241,9 +1241,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 10
+  textureRules:
+  - name: _EmTex
+    texture: {fileID: 2800000, guid: afababda8d08946429c4ce6892596f6f, type: 3}
+  colourRules:
+  - name: _EmColor
+    colour: {r: 0, g: 1, b: 0.37333345, a: 1}
+  vectorRules: []
   keywordRules:
   - keyword: DITHER
     enabled: 1
+  - keyword: FORCE_SPEC
+    enabled: 1
+  floatRules:
+  - name: _EmPower
+    value: 1.25
+  - name: _SpecularStrength
+    value: 0.1
+  intRules: []
 --- !u!1 &8828376671106067459
 GameObject:
   m_ObjectHideFlags: 0

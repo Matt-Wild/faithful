@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 119567602
+CRC: 2048913294
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a057700fb2592d51a83a54ad52fb29ac
+    Hash: 54985a7e75d83b0a7394592adff8c15f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7cbcfed626f467b2c436918856f37912
+    Hash: e33a3bb70a719b3eb7dc8673398bd56b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -103,7 +103,13 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: ChildLocator/NameTransformPair
 - AssemblyName: Faithful.Shared
+  ClassName: Faithful.Shared.ShaderColourRule
+- AssemblyName: Faithful.Shared
+  ClassName: Faithful.Shared.ShaderFloatRule
+- AssemblyName: Faithful.Shared
   ClassName: Faithful.Shared.ShaderKeywordRule
+- AssemblyName: Faithful.Shared
+  ClassName: Faithful.Shared.ShaderTextureRule
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.FaceInfo_Legacy
 - AssemblyName: Unity.TextMeshPro

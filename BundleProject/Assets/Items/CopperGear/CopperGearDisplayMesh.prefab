@@ -129,6 +129,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 10
+  textureRules:
+  - name: _NormalTex
+    texture: {fileID: 2800000, guid: d28bf94f1088814498929c41802a2e62, type: 3}
+  colourRules: []
+  vectorRules: []
   keywordRules:
+  - keyword: FORCE_SPEC
+    enabled: 1
   - keyword: DITHER
     enabled: 1
+  floatRules:
+  - name: _NormalStrength
+    value: 1
+  - name: _SpecularStrength
+    value: 0.1
+  intRules: []

@@ -127,8 +127,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modifier: 0
-  keywordRules: []
+  modifier: 10
+  textureRules:
+  - name: _NormalTex
+    texture: {fileID: 2800000, guid: 2642050a806d63740a20ba329749fa6c, type: 3}
+  colourRules: []
+  vectorRules: []
+  keywordRules:
+  - keyword: FORCE_SPEC
+    enabled: 1
+  floatRules:
+  - name: _NormalStrength
+    value: 1
+  - name: _SpecularStrength
+    value: 0.1
+  intRules: []
 --- !u!1 &2991317057241126685
 GameObject:
   m_ObjectHideFlags: 0
