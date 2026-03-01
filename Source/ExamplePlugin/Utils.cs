@@ -1431,6 +1431,9 @@ namespace Faithful
                                 case ShaderPropertyType.Float:
                                     shaderProperties += $"Float '{propertyName}' - {material.GetFloat(propertyName)}";
                                     break;
+                                case ShaderPropertyType.Int:
+                                    shaderProperties += $"Int '{propertyName}' - {material.GetInt(propertyName)}";
+                                    break;
                                 case ShaderPropertyType.Range:
                                     shaderProperties += $"Range '{propertyName}' - {material.GetFloat(propertyName)}";
                                     break;
@@ -1440,6 +1443,19 @@ namespace Faithful
                                     shaderProperties += $"Texture '{propertyName}' - {textureValue}";
                                     break;
                             }
+                        }
+
+                        // Enabled local keywords on this material
+                        string[] kws = material.shaderKeywords;
+
+                        if (kws != null && kws.Length > 0)
+                        {
+                            shaderProperties += "\n         Enabled keywords:";
+                            foreach (string kw in kws) shaderProperties += $"\n             {kw}";
+                        }
+                        else
+                        {
+                            shaderProperties += "\n         Enabled keywords:\n             (none)";
                         }
 
                         // Add shader property details
