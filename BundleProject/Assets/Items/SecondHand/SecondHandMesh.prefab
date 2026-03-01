@@ -193,4 +193,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 10
-  keywordRules: []
+  textureRules: []
+  colourRules: []
+  vectorRules: []
+  keywordRules:
+  - keyword: FORCE_SPEC
+    enabled: 1
+  floatRules:
+  - name: _SpecularStrength
+    value: 0.05
+  intRules: []
