@@ -915,6 +915,16 @@ namespace Faithful
                     Material mat = mats[mi];
                     if (!mat) continue;
 
+                    // Try and fetch standard shader properties and keywords
+                    bool normalMap = mat.IsKeywordEnabled("_NORMALMAP");
+                    bool emission = mat.IsKeywordEnabled("_EMISSION");
+                    bool noCull = mat.IsKeywordEnabled("NOCULL");
+                    bool limbRemoval = mat.IsKeywordEnabled("LIMBREMOVAL");
+                    float? bumpScale = mat.HasProperty("_BumpScale") ? mat.GetFloat("_BumpScale") : null;
+                    Color? emissionColour = mat.HasProperty("_EmissionColor") ? mat.GetColor("_EmissionColor") : null;
+                    Texture bumpMap = mat.HasProperty("_BumpMap") ? mat.GetTexture("_BumpMap") : null;
+                    Texture emissionMap = mat.HasProperty("_EmissionMap") ? mat.GetTexture("_EmissionMap") : null;
+
                     // Apply modifier
                     switch (rules.modifier)
                     {
@@ -923,6 +933,32 @@ namespace Faithful
 
                         case RendererModifier.HopooShader:
                             mat.shader = HGShader;
+
+                            // Check if should salvage existing shader properties
+                            if (rules.salvageExistingProperties)
+                            {
+                                // Map salvaged properties to new shader
+                                if (normalMap && bumpScale != null)
+                                {
+                                    mat.SetFloat("_NormalStrength", (float)bumpScale);
+                                    mat.SetTexture("_NormalTex", bumpMap);
+                                }
+                                if (emission && emissionColour != null)
+                                {
+                                    mat.SetColor("_EmColor", (Color)emissionColour);
+                                    mat.SetFloat("_EmPower", 1);
+                                    mat.SetTexture("_EmTex", emissionMap);
+                                }
+                                if (noCull)
+                                {
+                                    mat.SetInt("_Cull", 0);
+                                }
+                                if (limbRemoval)
+                                {
+                                    mat.SetInt("_LimbRemovalOn", 1);
+                                }
+                            }
+
                             break;
 
                         case RendererModifier.InfusionGlass:

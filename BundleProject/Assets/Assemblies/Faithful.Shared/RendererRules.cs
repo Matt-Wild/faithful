@@ -23,6 +23,7 @@ namespace Faithful.Shared
     {
         [Header("General")]
         public RendererModifier modifier = RendererModifier.None;
+        public bool salvageExistingProperties = false;
 
         [Header("Shader Attributes")]
         public List<ShaderTextureRule> textureRules = new();
