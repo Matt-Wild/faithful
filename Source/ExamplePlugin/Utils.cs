@@ -1402,6 +1402,19 @@ namespace Faithful
                         // Get shader property count
                         int propertyCount = material.shader.GetPropertyCount();
 
+                        // Enabled local keywords on this material
+                        string[] kws = material.shaderKeywords;
+
+                        if (kws != null && kws.Length > 0)
+                        {
+                            shaderProperties += "         Enabled keywords:";
+                            foreach (string kw in kws) shaderProperties += $"\n             {kw}";
+                        }
+                        else
+                        {
+                            shaderProperties += "\n         Enabled keywords:\n             (none)";
+                        }
+
                         // Cycle through properties
                         for (int i = 0; i < propertyCount; i++)
                         {
@@ -1422,7 +1435,7 @@ namespace Faithful
                             {
                                 case ShaderPropertyType.Color:
                                     Color colorValue = material.GetColor(propertyName);
-                                    shaderProperties += $"Colour '{propertyName}' - ({colorValue.r}, {colorValue.g}, {colorValue.b})";
+                                    shaderProperties += $"Colour '{propertyName}' - ({colorValue.r}, {colorValue.g}, {colorValue.b}, {colorValue.a})";
                                     break;
                                 case ShaderPropertyType.Vector:
                                     Vector4 vectorValue = material.GetVector(propertyName);
@@ -1445,24 +1458,8 @@ namespace Faithful
                             }
                         }
 
-                        // Enabled local keywords on this material
-                        string[] kws = material.shaderKeywords;
-
-                        if (kws != null && kws.Length > 0)
-                        {
-                            shaderProperties += "\n         Enabled keywords:";
-                            foreach (string kw in kws) shaderProperties += $"\n             {kw}";
-                        }
-                        else
-                        {
-                            shaderProperties += "\n         Enabled keywords:\n             (none)";
-                        }
-
                         // Add shader property details
-                        materials += $"\n         {shaderProperties}";
-
-                        // Add colour details
-                        materials += $"\n     Colour: ({material.color.r}, {material.color.g}, {material.color.b})";
+                        materials += $"\n{shaderProperties}";
                     }
                 }
             }
