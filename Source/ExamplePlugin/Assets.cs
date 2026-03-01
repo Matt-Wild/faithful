@@ -5,9 +5,6 @@ using System.Collections.Generic;
 using R2API;
 using UnityEngine.AddressableAssets;
 using RoR2.ExpansionManagement;
-using RoR2.ContentManagement;
-using static Rewired.UI.ControlMapper.ControlMapper;
-using static UnityEngine.ResourceManagement.ResourceProviders.AssetBundleResource;
 using Rewired.ComponentControls.Effects;
 
 namespace Faithful

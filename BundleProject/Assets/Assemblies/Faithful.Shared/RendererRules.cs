@@ -7,7 +7,8 @@ namespace Faithful.Shared
     public enum RendererModifier : int
     {
         None = 0,
-        HopooShader = 10
+        HopooShader = 10,
+        InfusionGlass = 20
     }
 
     [Serializable] public struct ShaderTextureRule { public string name; public Texture texture; }

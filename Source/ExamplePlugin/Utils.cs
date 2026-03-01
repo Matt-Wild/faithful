@@ -908,6 +908,7 @@ namespace Faithful
 
                 // Using r.materials gives per-renderer instances
                 Material[] mats = r.materials;
+                bool changedAnyMaterial = false;
 
                 for (int mi = 0; mi < mats.Length; mi++)
                 {
@@ -922,6 +923,12 @@ namespace Faithful
 
                         case RendererModifier.HopooShader:
                             mat.shader = HGShader;
+                            break;
+
+                        case RendererModifier.InfusionGlass:
+                            mat = Object.Instantiate(Assets.infusionGlassMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
                             break;
 
                         default:
@@ -1001,6 +1008,9 @@ namespace Faithful
                         }
                     }
                 }
+
+                // Assign back materials list if any were changed
+                if (changedAnyMaterial) r.materials = mats;
 
                 // Remove the rules component after applying (keeps runtime hierarchy clean)
                 Object.Destroy(rules);
