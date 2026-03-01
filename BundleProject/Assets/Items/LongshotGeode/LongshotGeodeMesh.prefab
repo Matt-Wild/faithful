@@ -98,7 +98,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 10
+  salvageExistingProperties: 0
+  textureRules:
+  - name: _NormalTex
+    texture: {fileID: 2800000, guid: fa1d7be2d1130e0449fb8ed07ad2e1ea, type: 3}
+  colourRules: []
+  vectorRules: []
   keywordRules: []
+  floatRules:
+  - name: _NormalStrength
+    value: 0.5
+  intRules: []
 --- !u!1 &2663175188376051175
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +206,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 0
+  salvageExistingProperties: 0
+  textureRules: []
+  colourRules: []
+  vectorRules: []
   keywordRules: []
+  floatRules: []
+  intRules: []
 --- !u!1 &3942372173011815533
 GameObject:
   m_ObjectHideFlags: 0

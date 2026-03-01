@@ -96,10 +96,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modifier: 0
+  modifier: 10
+  salvageExistingProperties: 0
+  textureRules:
+  - name: _NormalTex
+    texture: {fileID: 2800000, guid: e32e7dc541d420e4da70d7b6498950f0, type: 3}
+  colourRules: []
+  vectorRules: []
   keywordRules:
   - keyword: DITHER
     enabled: 1
+  - keyword: FORCE_SPEC
+    enabled: 1
+  floatRules:
+  - name: _NormalStrength
+    value: 1
+  - name: _SpecularStrength
+    value: 0.25
+  intRules: []
 --- !u!1 &5522717542300307824
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,6 +244,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 10
+  salvageExistingProperties: 0
+  textureRules:
+  - name: _NormalTex
+    texture: {fileID: 2800000, guid: fa1d7be2d1130e0449fb8ed07ad2e1ea, type: 3}
+  colourRules: []
+  vectorRules: []
   keywordRules:
   - keyword: DITHER
     enabled: 1
+  floatRules:
+  - name: _NormalStrength
+    value: 0.5
+  intRules: []
