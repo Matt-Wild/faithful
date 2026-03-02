@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.21 Item Visual Improvements
+- Improved the visuals of many icons, pickup and display item models through better use of in-game shaders.
+
 #### v1.3.20 Redesigning The Targeting Matrix
 - Targeting Matrix has been redesigned as a green item by popular request.
 - Fixed Operator's alt secondary not being affected by Targeting Matrix.
@@ -46,10 +49,10 @@
 - Fixed broken Jetpack material.
 - Switched some asset fetch operations to use GUIDs.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.6 Memory Optimisation Update Fix
 - Updated Faithful to work with the new "Memory Optimisation Update".
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.5 Carbonizer Laser Fix
 - Fixed issue with Carbonizer laser sometimes disappearing - oops.
