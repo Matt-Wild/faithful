@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1258790050
+CRC: 3084760410
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ae11d70f6ca877fd9f127c9b5e75ed34
+    Hash: f3f08d071c0eb9de2744e9b37ad9ba40
   TypeTreeHash:
     serializedVersion: 2
     Hash: e50c578b8b723f3899bea765d83207e3
@@ -358,8 +358,9 @@ Assets:
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageVoidIcon.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionSymbol.png
 - Assets/Items/Chakram/AltIcons/texChakramTier1Icon.png
-- Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.obj
+- Assets/Items/LongshotGeode/texLongshotGeodeCrystalRamp.png
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackLunarIcon.png
+- Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.obj
 - Assets/Equipment/Divider/texDividerAchievement.png
 - Assets/Monsters/MechaSpider/Textures/texMechanicalSpiderEmission.png
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageTier1Icon.png
