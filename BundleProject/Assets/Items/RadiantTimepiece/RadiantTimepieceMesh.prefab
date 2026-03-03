@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4269261912822952611}
   - component: {fileID: 8741674219180894222}
+  - component: {fileID: 839515312992904578}
   m_Layer: 0
   m_Name: RadiantTimepieceMesh
   m_TagString: Untagged
@@ -88,6 +89,42 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0100016, y: 0.049337685, z: -0.016617477}
     m_Extent: {x: 0.82884485, y: 0.9391532, z: 0.7307885}
   m_DirtyAABB: 0
+--- !u!114 &839515312992904578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421227539973764841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 10
+  salvageExistingProperties: 0
+  textureRules:
+  - name: _EmTex
+    texture: {fileID: 2800000, guid: 32c3def72575dbc4484afaed5780ff72, type: 3}
+  - name: _NormalTex
+    texture: {fileID: 2800000, guid: 4e17fff107afdfa498de30ec31a4a9f1, type: 3}
+  colourRules:
+  - name: _EmColor
+    colour: {r: 1, g: 1, b: 1, a: 1}
+  vectorRules: []
+  keywordRules:
+  - keyword: CUTOUT
+    enabled: 1
+  - keyword: FORCE_SPEC
+    enabled: 1
+  floatRules:
+  - name: _EmPower
+    value: 0.5
+  - name: _NormalStrength
+    value: 0.5
+  - name: _SpecularStrength
+    value: 0.1
+  intRules: []
 --- !u!1 &891407626743990236
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,9 +290,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 0
+  salvageExistingProperties: 0
+  textureRules: []
+  colourRules: []
+  vectorRules: []
   keywordRules:
   - keyword: CUTOUT
     enabled: 1
+  floatRules: []
+  intRules: []
 --- !u!1 &4464186030062819102
 GameObject:
   m_ObjectHideFlags: 0

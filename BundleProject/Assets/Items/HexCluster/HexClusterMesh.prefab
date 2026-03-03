@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4883130573344525424}
   - component: {fileID: 7715636197953828154}
   - component: {fileID: 6500603148658135470}
+  - component: {fileID: 4959051108321518758}
   m_Layer: 0
   m_Name: default
   m_TagString: Untagged
@@ -83,6 +84,30 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4959051108321518758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4427726848609410891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd1760b735a4fb4291acefc90888579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifier: 10
+  salvageExistingProperties: 0
+  textureRules:
+  - name: _NormalTex
+    texture: {fileID: 2800000, guid: 790e150b4a950704995e2bf6e01b15db, type: 3}
+  colourRules: []
+  vectorRules: []
+  keywordRules: []
+  floatRules:
+  - name: _NormalStrength
+    value: 0.5
+  intRules: []
 --- !u!1 &4683666631018260370
 GameObject:
   m_ObjectHideFlags: 0
