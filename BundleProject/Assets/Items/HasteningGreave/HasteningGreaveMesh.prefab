@@ -358,6 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifier: 10
+  salvageExistingProperties: 0
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: de3ed71274d932547ad0a8d7dedc6c0d, type: 3}
@@ -365,7 +366,7 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: 60f2b9cac64f212479e1dd99e3fabf7a, type: 3}
   colourRules:
   - name: _EmColor
-    colour: {r: 0.3, g: 0.8, b: 1, a: 0}
+    colour: {r: 0.3, g: 0.8, b: 1, a: 1}
   vectorRules: []
   keywordRules:
   - keyword: CUTOUT
