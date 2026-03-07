@@ -613,6 +613,9 @@ namespace Faithful
                 Log.Error($"[Interactable] | Interactable '{name}' could not find it's model '{modelName}'!");
                 return;
             }
+
+            // Process renderer rules for model
+            Utils.ProcessRendererRules(m_model);
         }
 
         public virtual void OnPurchase(FaithfulInteractableBehaviour _behaviour, Interactor _interactor)
