@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿using Faithful.Shared;
+using RoR2;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -92,8 +93,34 @@ namespace Faithful
                             // Check for replacement material
                             if (skinReplacement.replacementMaterial != null)
                             {
-                                // Override material for corresponding render info (convert to HG shader)
-                                skinDef.rendererInfos[rendererInfosIndex].defaultMaterial = Assets.GetMaterial(skinReplacement.replacementMaterial).ConvertDefaultShaderToHopoo();
+                                // Successfully found renderer rules
+                                bool foundRendererRules = false;
+
+                                // Check for replacement renderer rules
+                                if (skinReplacement.replacementRendererRules != null)
+                                {
+                                    // Attempt to get renderer rules
+                                    GameObject rendererRulesSrc = Assets.GetObject(skinReplacement.replacementRendererRules);
+                                    if (rendererRulesSrc != null)
+                                    {
+                                        RendererRules rendererRules = rendererRulesSrc.GetComponent<RendererRules>();
+                                        if (rendererRules != null)
+                                        {
+                                            // Successfully found renderer rules
+                                            foundRendererRules = true;
+
+                                            // Process renderer rules for replacement material
+                                            Material replacementMaterial = Assets.GetMaterial(skinReplacement.replacementMaterial);
+                                            skinDef.rendererInfos[rendererInfosIndex].defaultMaterial = Utils.ProcessRendererRules(replacementMaterial, rendererRules, true);
+                                        }
+                                    }
+                                }
+
+                                // If renderer rules were not found, perform normal HG shader conversion
+                                if (!foundRendererRules)
+                                {
+                                    skinDef.rendererInfos[rendererInfosIndex].defaultMaterial = Assets.GetMaterial(skinReplacement.replacementMaterial).ConvertDefaultShaderToHopoo();
+                                }
                             }
                         }
                     }
@@ -133,6 +160,7 @@ namespace Faithful
             internal string childName;
             internal string replacementMesh;
             internal string replacementMaterial;
+            internal string replacementRendererRules;
         }
     }
 }

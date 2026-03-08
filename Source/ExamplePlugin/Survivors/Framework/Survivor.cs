@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using Faithful.Shared;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -531,8 +532,20 @@ namespace Faithful
                 // Check for renderer
                 if (renderer == null) continue;
 
-                // Get material from renderer (convert to HG shader)
-                Material material = renderer.sharedMaterial.ConvertDefaultShaderToHopoo();
+                // Check for renderer rules
+                Material material;
+                RendererRules rendererRules = child.GetComponent<RendererRules>();
+                if (rendererRules == null)
+                {
+                    // No renderer rules found - Perform normal HG shader conversion
+                    material = renderer.sharedMaterial.ConvertDefaultShaderToHopoo();
+                }
+                else
+                {
+                    // Process renderer rules for renderer
+                    Utils.ProcessRendererRules(renderer, true);
+                    material = renderer.sharedMaterial;
+                }
 
                 // Add to renderer infos
                 rendererInfos.Add(new CharacterModel.RendererInfo
@@ -568,8 +581,18 @@ namespace Faithful
                 }
                 else
                 {
-                    // Convert material to HG shader
-                    m_characterModel.baseRendererInfos[i].defaultMaterial.ConvertDefaultShaderToHopoo();
+                    // Check for renderer rules
+                    RendererRules rendererRules = m_characterModel.baseRendererInfos[i].renderer.GetComponent<RendererRules>();
+                    if (rendererRules == null)
+                    {
+                        // No renderer rules found - Perform normal HG shader conversion
+                        m_characterModel.baseRendererInfos[i].defaultMaterial.ConvertDefaultShaderToHopoo();
+                    }
+                    else
+                    {
+                        // Process renderer rules for renderer
+                        Utils.ProcessRendererRules(m_characterModel.baseRendererInfos[i].renderer);
+                    }
                 }
             }
         }

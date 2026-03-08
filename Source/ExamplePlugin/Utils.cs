@@ -8,6 +8,8 @@ using RoR2.Navigation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Globalization;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -130,6 +132,9 @@ namespace Faithful
 
         // Cached list of shaders converted to Hopoo Games shader
         private static List<Material> HGCachedMaterials = new List<Material>();
+
+        // Cached list of renderer rules applied materials
+        private static Dictionary<string, Material> rendererRulesCachedMaterials = new Dictionary<string, Material>();
 
         // Store language dictionary for early lookups
         static private Dictionary<string, string> languageDictionary;
@@ -898,423 +903,252 @@ namespace Faithful
             // Grab only mesh/skinned renderers
             Renderer[] renderers = _model.GetComponentsInChildren<Renderer>(true);
 
-            foreach (Renderer r in renderers)
+            // Process renderer rules for each renderer
+            foreach (Renderer r in renderers) ProcessRendererRules(r);
+        }
+
+        public static void ProcessRendererRules(Renderer _renderer, bool _useShared = false)
+        {
+            if (_renderer is not MeshRenderer && _renderer is not SkinnedMeshRenderer) return;
+
+            // Rules are attached to the same GO as the renderer
+            RendererRules rules = _renderer.GetComponent<RendererRules>();
+            if (!rules) return;
+
+            // Use shared or instanced materials depending on parameter
+            Material[] mats = _useShared ? _renderer.sharedMaterials : _renderer.materials;
+            bool changedAnyMaterial = false;
+
+            for (int mi = 0; mi < mats.Length; mi++)
             {
-                if (r is not MeshRenderer && r is not SkinnedMeshRenderer) continue;
+                Material sourceMat = mats[mi];
+                if (!sourceMat) continue;
 
-                // Rules are attached to the same GO as the renderer
-                RendererRules rules = r.GetComponent<RendererRules>();
-                if (!rules) continue;
+                Material processedMat = ProcessRendererRules(sourceMat, rules, _useShared);
+                if (!processedMat) continue;
 
-                // Using r.materials gives per-renderer instances
-                Material[] mats = r.materials;
-                bool changedAnyMaterial = false;
-
-                for (int mi = 0; mi < mats.Length; mi++)
+                // Only need to assign back if the material reference itself changed
+                if (!ReferenceEquals(processedMat, sourceMat))
                 {
-                    Material mat = mats[mi];
-                    if (!mat) continue;
-
-                    // Try and fetch standard shader properties and keywords
-                    bool normalMap = mat.IsKeywordEnabled("_NORMALMAP");
-                    bool emission = mat.IsKeywordEnabled("_EMISSION");
-                    bool noCull = mat.IsKeywordEnabled("NOCULL");
-                    bool limbRemoval = mat.IsKeywordEnabled("LIMBREMOVAL");
-                    float? bumpScale = mat.HasProperty("_BumpScale") ? mat.GetFloat("_BumpScale") : null;
-                    Color? emissionColour = mat.HasProperty("_EmissionColor") ? mat.GetColor("_EmissionColor") : null;
-                    Texture bumpMap = mat.HasProperty("_BumpMap") ? mat.GetTexture("_BumpMap") : null;
-                    Texture emissionMap = mat.HasProperty("_EmissionMap") ? mat.GetTexture("_EmissionMap") : null;
-
-                    // Apply modifier
-                    switch (rules.modifier)
-                    {
-                        case RendererModifier.None:
-                            break;
-
-                        case RendererModifier.HopooShader:
-                            mat.shader = HGShader;
-
-                            // Check if should salvage existing shader properties
-                            if (rules.salvageExistingProperties)
-                            {
-                                // Map salvaged properties to new shader
-                                if (normalMap && bumpScale != null)
-                                {
-                                    mat.SetFloat("_NormalStrength", (float)bumpScale);
-                                    mat.SetTexture("_NormalTex", bumpMap);
-                                }
-                                if (emission && emissionColour != null)
-                                {
-                                    mat.SetColor("_EmColor", (Color)emissionColour);
-                                    mat.SetFloat("_EmPower", 1);
-                                    mat.SetTexture("_EmTex", emissionMap);
-                                }
-                                if (noCull)
-                                {
-                                    mat.SetInt("_Cull", 0);
-                                }
-                                if (limbRemoval)
-                                {
-                                    mat.SetInt("_LimbRemovalOn", 1);
-                                }
-                            }
-
-                            break;
-
-                        case RendererModifier.InfusionGlass:
-                            mat = Object.Instantiate(Assets.infusionGlassMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.AreaIndicatorIntersectionOnly:
-                            mat = Object.Instantiate(Assets.areaIndicatorIntersectionOnlyMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.AreaIndicatorRim:
-                            mat = Object.Instantiate(Assets.areaIndicatorRimMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.Artifact:
-                            mat = Object.Instantiate(Assets.artifactMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.ArtifactShellExplosionIndicator:
-                            mat = Object.Instantiate(Assets.artifactShellExplosionIndicatorMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.BaubleTimestopSphere:
-                            mat = Object.Instantiate(Assets.baubleTimestopSphereMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.BlueprintScreen:
-                            mat = Object.Instantiate(Assets.blueprintScreenMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.BlueprintsInvalid:
-                            mat = Object.Instantiate(Assets.blueprintsInvalidMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.BlueprintsOk:
-                            mat = Object.Instantiate(Assets.blueprintsOkMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.BootShockwave:
-                            mat = Object.Instantiate(Assets.bootShockwaveMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.CaptainAirstrikeAltAreaIndicatorInner:
-                            mat = Object.Instantiate(Assets.captainAirstrikeAltAreaIndicatorInnerMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.CaptainAirstrikeAltAreaIndicatorOuter:
-                            mat = Object.Instantiate(Assets.captainAirstrikeAltAreaIndicatorOuterMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.CaptainAirstrikeAreaIndicator:
-                            mat = Object.Instantiate(Assets.captainAirstrikeAreaIndicatorMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.CaptainSupplyDropAreaIndicator2:
-                            mat = Object.Instantiate(Assets.captainSupplyDropAreaIndicator2Material);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.CaptainSupplyDropAreaIndicatorOuter:
-                            mat = Object.Instantiate(Assets.captainSupplyDropAreaIndicatorOuterMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.ChefAlwaysOnTop:
-                            mat = Object.Instantiate(Assets.chefAlwaysOnTopMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.ChildStarCore:
-                            mat = Object.Instantiate(Assets.childStarCoreMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.ChildStarGlow:
-                            mat = Object.Instantiate(Assets.childStarGlowMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.ChipProjectile:
-                            mat = Object.Instantiate(Assets.chipProjectileMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.ClayBubble:
-                            mat = Object.Instantiate(Assets.clayBubbleMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.CombinerEnergyFade:
-                            mat = Object.Instantiate(Assets.combinerEnergyFadeMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.CoreCage2:
-                            mat = Object.Instantiate(Assets.coreCage2Material);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.DefectiveUnitDenialSphereNoise:
-                            mat = Object.Instantiate(Assets.defectiveUnitDenialSphereNoiseMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.DefectiveUnitDetonateSphereEnergy:
-                            mat = Object.Instantiate(Assets.defectiveUnitDetonateSphereEnergyMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.DefectiveUnitDetonateSphereEnergyPers:
-                            mat = Object.Instantiate(Assets.defectiveUnitDetonateSphereEnergyPersMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.DefectiveUnitDetonateSphereNoise:
-                            mat = Object.Instantiate(Assets.defectiveUnitDetonateSphereNoiseMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.DefectiveUnitDetonateSpherePulse:
-                            mat = Object.Instantiate(Assets.defectiveUnitDetonateSpherePulseMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.DefectiveUnitNullifySpherePulse:
-                            mat = Object.Instantiate(Assets.defectiveUnitNullifySpherePulseMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.DroneBrokenGeneric:
-                            mat = Object.Instantiate(Assets.droneBrokenGenericMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.NullifierArmor:
-                            mat = Object.Instantiate(Assets.nullifierArmorMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.NullifierGemPortal:
-                            mat = Object.Instantiate(Assets.nullifierGemPortalMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.NullifierGemPortal3:
-                            mat = Object.Instantiate(Assets.nullifierGemPortal3Material);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.NullifierBlackholeZoneAreaIndicator:
-                            mat = Object.Instantiate(Assets.nullifierBlackholeZoneAreaIndicatorMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.NullifierExplosionAreaIndicatorHard:
-                            mat = Object.Instantiate(Assets.nullifierExplosionAreaIndicatorHardMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.RadarTowerAreaIndicator:
-                            mat = Object.Instantiate(Assets.radarTowerAreaIndicatorMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.ShockDamageAuraGlass:
-                            mat = Object.Instantiate(Assets.shockDamageAuraGlassMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.TeamAreaIndicatorFullMonster:
-                            mat = Object.Instantiate(Assets.teamAreaIndicatorFullMonsterMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.TeamAreaIndicatorFullPlayer:
-                            mat = Object.Instantiate(Assets.teamAreaIndicatorFullPlayerMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.TeamAreaIndicatorIntersectionMonster:
-                            mat = Object.Instantiate(Assets.teamAreaIndicatorIntersectionMonsterMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.TeamAreaIndicatorIntersectionPlayer:
-                            mat = Object.Instantiate(Assets.teamAreaIndicatorIntersectionPlayerMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.TimeCrystalAreaIndicator:
-                            mat = Object.Instantiate(Assets.timeCrystalAreaIndicatorMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.VoidDeathBombAreaIndicatorBack:
-                            mat = Object.Instantiate(Assets.voidDeathBombAreaIndicatorBackMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.VoidDeathBombAreaIndicatorFront:
-                            mat = Object.Instantiate(Assets.voidDeathBombAreaIndicatorFrontMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.VoidSurvivorBlasterSphereAreaIndicator:
-                            mat = Object.Instantiate(Assets.voidSurvivorBlasterSphereAreaIndicatorMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        case RendererModifier.VoidSurvivorBlasterSphereAreaIndicatorCorrupted:
-                            mat = Object.Instantiate(Assets.voidSurvivorBlasterSphereAreaIndicatorCorruptedMaterial);
-                            mats[mi] = mat;
-                            changedAnyMaterial = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                    // Apply texture rules
-                    if (rules.textureRules != null)
-                    {
-                        for (int ti = 0; ti < rules.textureRules.Count; ti++)
-                        {
-                            ShaderTextureRule tr = rules.textureRules[ti];
-                            if (string.IsNullOrWhiteSpace(tr.name) || tr.texture == null) continue;
-
-                            mat.SetTexture(tr.name, tr.texture);
-                        }
-                    }
-
-                    // Apply colour rules
-                    if (rules.colourRules != null)
-                    {
-                        for (int ci = 0; ci < rules.colourRules.Count; ci++)
-                        {
-                            ShaderColourRule cr = rules.colourRules[ci];
-                            if (string.IsNullOrWhiteSpace(cr.name)) continue;
-
-                            mat.SetColor(cr.name, cr.colour);
-                        }
-                    }
-
-                    // Apply vector rules
-                    if (rules.vectorRules != null)
-                    {
-                        for (int vi = 0; vi < rules.vectorRules.Count; vi++)
-                        {
-                            ShaderVectorRule vr = rules.vectorRules[vi];
-                            if (string.IsNullOrWhiteSpace(vr.name)) continue;
-
-                            mat.SetVector(vr.name, vr.value);
-                        }
-                    }
-
-                    // Apply keyword rules
-                    if (rules.keywordRules != null)
-                    {
-                        for (int ki = 0; ki < rules.keywordRules.Count; ki++)
-                        {
-                            ShaderKeywordRule kr = rules.keywordRules[ki];
-                            if (string.IsNullOrWhiteSpace(kr.keyword)) continue;
-
-                            if (kr.enabled) mat.EnableKeyword(kr.keyword);
-                            else mat.DisableKeyword(kr.keyword);
-                        }
-                    }
-
-                    // Apply float rules
-                    if (rules.floatRules != null)
-                    {
-                        for (int fi = 0; fi < rules.floatRules.Count; fi++)
-                        {
-                            ShaderFloatRule fr = rules.floatRules[fi];
-                            if (string.IsNullOrWhiteSpace(fr.name)) continue;
-
-                            mat.SetFloat(fr.name, fr.value);
-                        }
-                    }
-
-                    // Apply int rules
-                    if (rules.intRules != null)
-                    {
-                        for (int ii = 0; ii < rules.intRules.Count; ii++)
-                        {
-                            ShaderIntRule ir = rules.intRules[ii];
-                            if (string.IsNullOrWhiteSpace(ir.name)) continue;
-
-                            mat.SetInt(ir.name, ir.value);
-                        }
-                    }
+                    mats[mi] = processedMat;
+                    changedAnyMaterial = true;
                 }
-
-                // Assign back materials list if any were changed
-                if (changedAnyMaterial) r.materials = mats;
-
-                // Remove the rules component after applying (keeps runtime hierarchy clean)
-                Object.Destroy(rules);
             }
+
+            // Assign back materials list if any references were changed
+            if (changedAnyMaterial)
+            {
+                if (_useShared) _renderer.sharedMaterials = mats;
+                else _renderer.materials = mats;
+            }
+
+            // Remove the rules component after applying (keeps runtime hierarchy clean)
+            Object.Destroy(rules);
+        }
+
+        public static Material ProcessRendererRules(Material _material, RendererRules _rules, bool _useShared = false)
+        {
+            if (!_material || _rules == null) return _material;
+
+            // Get cache key for material
+            string cacheKey = _useShared ? BuildRendererRulesCacheKey(_material, _rules) : null;
+
+            // Check for cached material
+            if (_useShared && rendererRulesCachedMaterials.TryGetValue(cacheKey, out Material cachedMat))
+            {
+                return cachedMat;
+            }
+
+            Material mat = _material;
+
+            // Try and fetch standard shader properties and keywords
+            bool normalMap = mat.IsKeywordEnabled("_NORMALMAP");
+            bool emission = mat.IsKeywordEnabled("_EMISSION");
+            bool noCull = mat.IsKeywordEnabled("NOCULL");
+            bool limbRemoval = mat.IsKeywordEnabled("LIMBREMOVAL");
+            float? bumpScale = mat.HasProperty("_BumpScale") ? mat.GetFloat("_BumpScale") : null;
+            Color? emissionColour = mat.HasProperty("_EmissionColor") ? mat.GetColor("_EmissionColor") : null;
+            Texture bumpMap = mat.HasProperty("_BumpMap") ? mat.GetTexture("_BumpMap") : null;
+            Texture emissionMap = mat.HasProperty("_EmissionMap") ? mat.GetTexture("_EmissionMap") : null;
+
+            // Apply modifier
+            Material replacementTemplate = GetRendererRulesModifierTemplate(_rules.modifier);
+            if (replacementTemplate != null)
+            {
+                mat = Object.Instantiate(replacementTemplate);
+            }
+            else
+            {
+                switch (_rules.modifier)
+                {
+                    case RendererModifier.None:
+                        break;
+
+                    case RendererModifier.HopooShader:
+                        mat.shader = HGShader;
+
+                        // Check if should salvage existing shader properties
+                        if (_rules.salvageExistingProperties)
+                        {
+                            // Map salvaged properties to new shader
+                            if (normalMap && bumpScale != null)
+                            {
+                                mat.SetFloat("_NormalStrength", (float)bumpScale);
+                                mat.SetTexture("_NormalTex", bumpMap);
+                            }
+                            if (emission && emissionColour != null)
+                            {
+                                mat.SetColor("_EmColor", (Color)emissionColour);
+                                mat.SetFloat("_EmPower", 1);
+                                mat.SetTexture("_EmTex", emissionMap);
+                            }
+                            if (noCull)
+                            {
+                                mat.SetInt("_Cull", 0);
+                            }
+                            if (limbRemoval)
+                            {
+                                mat.SetInt("_LimbRemovalOn", 1);
+                            }
+                        }
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            // Apply texture rules
+            if (_rules.textureRules != null)
+            {
+                for (int ti = 0; ti < _rules.textureRules.Count; ti++)
+                {
+                    ShaderTextureRule tr = _rules.textureRules[ti];
+                    if (string.IsNullOrWhiteSpace(tr.name) || tr.texture == null) continue;
+
+                    mat.SetTexture(tr.name, tr.texture);
+                }
+            }
+
+            // Apply colour rules
+            if (_rules.colourRules != null)
+            {
+                for (int ci = 0; ci < _rules.colourRules.Count; ci++)
+                {
+                    ShaderColourRule cr = _rules.colourRules[ci];
+                    if (string.IsNullOrWhiteSpace(cr.name)) continue;
+
+                    mat.SetColor(cr.name, cr.colour);
+                }
+            }
+
+            // Apply vector rules
+            if (_rules.vectorRules != null)
+            {
+                for (int vi = 0; vi < _rules.vectorRules.Count; vi++)
+                {
+                    ShaderVectorRule vr = _rules.vectorRules[vi];
+                    if (string.IsNullOrWhiteSpace(vr.name)) continue;
+
+                    mat.SetVector(vr.name, vr.value);
+                }
+            }
+
+            // Apply keyword rules
+            if (_rules.keywordRules != null)
+            {
+                for (int ki = 0; ki < _rules.keywordRules.Count; ki++)
+                {
+                    ShaderKeywordRule kr = _rules.keywordRules[ki];
+                    if (string.IsNullOrWhiteSpace(kr.keyword)) continue;
+
+                    if (kr.enabled) mat.EnableKeyword(kr.keyword);
+                    else mat.DisableKeyword(kr.keyword);
+                }
+            }
+
+            // Apply float rules
+            if (_rules.floatRules != null)
+            {
+                for (int fi = 0; fi < _rules.floatRules.Count; fi++)
+                {
+                    ShaderFloatRule fr = _rules.floatRules[fi];
+                    if (string.IsNullOrWhiteSpace(fr.name)) continue;
+
+                    mat.SetFloat(fr.name, fr.value);
+                }
+            }
+
+            // Apply int rules
+            if (_rules.intRules != null)
+            {
+                for (int ii = 0; ii < _rules.intRules.Count; ii++)
+                {
+                    ShaderIntRule ir = _rules.intRules[ii];
+                    if (string.IsNullOrWhiteSpace(ir.name)) continue;
+
+                    mat.SetInt(ir.name, ir.value);
+                }
+            }
+
+            // Cache material if using shared materials to avoid unnecessary instantiations
+            if (_useShared) rendererRulesCachedMaterials[cacheKey] = mat;
+
+            return mat;
+        }
+
+        private static Material GetRendererRulesModifierTemplate(RendererModifier _modifier)
+        {
+            return _modifier switch
+            {
+                RendererModifier.InfusionGlass => Assets.infusionGlassMaterial,
+                RendererModifier.AreaIndicatorIntersectionOnly => Assets.areaIndicatorIntersectionOnlyMaterial,
+                RendererModifier.AreaIndicatorRim => Assets.areaIndicatorRimMaterial,
+                RendererModifier.Artifact => Assets.artifactMaterial,
+                RendererModifier.ArtifactShellExplosionIndicator => Assets.artifactShellExplosionIndicatorMaterial,
+                RendererModifier.BaubleTimestopSphere => Assets.baubleTimestopSphereMaterial,
+                RendererModifier.BlueprintScreen => Assets.blueprintScreenMaterial,
+                RendererModifier.BlueprintsInvalid => Assets.blueprintsInvalidMaterial,
+                RendererModifier.BlueprintsOk => Assets.blueprintsOkMaterial,
+                RendererModifier.BootShockwave => Assets.bootShockwaveMaterial,
+                RendererModifier.CaptainAirstrikeAltAreaIndicatorInner => Assets.captainAirstrikeAltAreaIndicatorInnerMaterial,
+                RendererModifier.CaptainAirstrikeAltAreaIndicatorOuter => Assets.captainAirstrikeAltAreaIndicatorOuterMaterial,
+                RendererModifier.CaptainAirstrikeAreaIndicator => Assets.captainAirstrikeAreaIndicatorMaterial,
+                RendererModifier.CaptainSupplyDropAreaIndicator2 => Assets.captainSupplyDropAreaIndicator2Material,
+                RendererModifier.CaptainSupplyDropAreaIndicatorOuter => Assets.captainSupplyDropAreaIndicatorOuterMaterial,
+                RendererModifier.ChefAlwaysOnTop => Assets.chefAlwaysOnTopMaterial,
+                RendererModifier.ChildStarCore => Assets.childStarCoreMaterial,
+                RendererModifier.ChildStarGlow => Assets.childStarGlowMaterial,
+                RendererModifier.ChipProjectile => Assets.chipProjectileMaterial,
+                RendererModifier.ClayBubble => Assets.clayBubbleMaterial,
+                RendererModifier.CombinerEnergyFade => Assets.combinerEnergyFadeMaterial,
+                RendererModifier.CoreCage2 => Assets.coreCage2Material,
+                RendererModifier.DefectiveUnitDenialSphereNoise => Assets.defectiveUnitDenialSphereNoiseMaterial,
+                RendererModifier.DefectiveUnitDetonateSphereEnergy => Assets.defectiveUnitDetonateSphereEnergyMaterial,
+                RendererModifier.DefectiveUnitDetonateSphereEnergyPers => Assets.defectiveUnitDetonateSphereEnergyPersMaterial,
+                RendererModifier.DefectiveUnitDetonateSphereNoise => Assets.defectiveUnitDetonateSphereNoiseMaterial,
+                RendererModifier.DefectiveUnitDetonateSpherePulse => Assets.defectiveUnitDetonateSpherePulseMaterial,
+                RendererModifier.DefectiveUnitNullifySpherePulse => Assets.defectiveUnitNullifySpherePulseMaterial,
+                RendererModifier.DroneBrokenGeneric => Assets.droneBrokenGenericMaterial,
+                RendererModifier.NullifierArmor => Assets.nullifierArmorMaterial,
+                RendererModifier.NullifierGemPortal => Assets.nullifierGemPortalMaterial,
+                RendererModifier.NullifierGemPortal3 => Assets.nullifierGemPortal3Material,
+                RendererModifier.NullifierBlackholeZoneAreaIndicator => Assets.nullifierBlackholeZoneAreaIndicatorMaterial,
+                RendererModifier.NullifierExplosionAreaIndicatorHard => Assets.nullifierExplosionAreaIndicatorHardMaterial,
+                RendererModifier.RadarTowerAreaIndicator => Assets.radarTowerAreaIndicatorMaterial,
+                RendererModifier.ShockDamageAuraGlass => Assets.shockDamageAuraGlassMaterial,
+                RendererModifier.TeamAreaIndicatorFullMonster => Assets.teamAreaIndicatorFullMonsterMaterial,
+                RendererModifier.TeamAreaIndicatorFullPlayer => Assets.teamAreaIndicatorFullPlayerMaterial,
+                RendererModifier.TeamAreaIndicatorIntersectionMonster => Assets.teamAreaIndicatorIntersectionMonsterMaterial,
+                RendererModifier.TeamAreaIndicatorIntersectionPlayer => Assets.teamAreaIndicatorIntersectionPlayerMaterial,
+                RendererModifier.TimeCrystalAreaIndicator => Assets.timeCrystalAreaIndicatorMaterial,
+                RendererModifier.VoidDeathBombAreaIndicatorBack => Assets.voidDeathBombAreaIndicatorBackMaterial,
+                RendererModifier.VoidDeathBombAreaIndicatorFront => Assets.voidDeathBombAreaIndicatorFrontMaterial,
+                RendererModifier.VoidSurvivorBlasterSphereAreaIndicator => Assets.voidSurvivorBlasterSphereAreaIndicatorMaterial,
+                RendererModifier.VoidSurvivorBlasterSphereAreaIndicatorCorrupted => Assets.voidSurvivorBlasterSphereAreaIndicatorCorruptedMaterial,
+                _ => null,
+            };
         }
 
         // Attempt to fetch local player master
@@ -1442,77 +1276,77 @@ namespace Faithful
         }
 
         // Mostly yoinked this function from the Henry mod
-        public static Material ConvertDefaultShaderToHopoo(this Material tempMat)
+        public static Material ConvertDefaultShaderToHopoo(this Material _mat)
         {
             // Check if material has already been converted
-            if (HGCachedMaterials.Contains(tempMat))
+            if (HGCachedMaterials.Contains(_mat))
             {
                 // Done
-                return tempMat;
+                return _mat;
             }
 
             // Check if possible to convert
-            string name = tempMat.shader.name.ToLowerInvariant();
+            string name = _mat.shader.name.ToLowerInvariant();
             if (!name.StartsWith("standard") && !name.StartsWith("autodesk"))
             {
                 // Log warning if in verbose mode
                 if (verboseConsole)
                 {
-                    Log.Warning($"[UTILS] | '{tempMat.name}' is not unity standard shader - Cannot convert to a HG shader.");
+                    Log.Warning($"[UTILS] | '{_mat.name}' is not unity standard shader - Cannot convert to a HG shader.");
                 }
                 
                 // Abort conversion
-                return tempMat;
+                return _mat;
             }
 
             float? bumpScale = null;
             Color? emissionColor = null;
 
             // Grab values before the shader changes
-            if (tempMat.IsKeywordEnabled("_NORMALMAP"))
+            if (_mat.IsKeywordEnabled("_NORMALMAP"))
             {
-                bumpScale = tempMat.GetFloat("_BumpScale");
+                bumpScale = _mat.GetFloat("_BumpScale");
             }
-            if (tempMat.IsKeywordEnabled("_EMISSION"))
+            if (_mat.IsKeywordEnabled("_EMISSION"))
             {
-                emissionColor = tempMat.GetColor("_EmissionColor");
+                emissionColor = _mat.GetColor("_EmissionColor");
             }
 
             // Set shader
-            tempMat.shader = HGShader;
+            _mat.shader = HGShader;
 
             // Apply values after shader is set
-            tempMat.SetTexture("_EmTex", tempMat.GetTexture("_EmissionMap"));
-            tempMat.EnableKeyword("DITHER");
+            _mat.SetTexture("_EmTex", _mat.GetTexture("_EmissionMap"));
+            _mat.EnableKeyword("DITHER");
 
             if (bumpScale != null)
             {
-                tempMat.SetFloat("_NormalStrength", (float)bumpScale);
-                tempMat.SetTexture("_NormalTex", tempMat.GetTexture("_BumpMap"));
+                _mat.SetFloat("_NormalStrength", (float)bumpScale);
+                _mat.SetTexture("_NormalTex", _mat.GetTexture("_BumpMap"));
             }
             if (emissionColor != null)
             {
-                tempMat.SetColor("_EmColor", (Color)emissionColor);
-                tempMat.SetFloat("_EmPower", 1);
+                _mat.SetColor("_EmColor", (Color)emissionColor);
+                _mat.SetFloat("_EmPower", 1);
             }
 
             // Set this keyword in unity if you want your model to show backfaces
             // In unity, right click the inspector tab and choose Debug
-            if (tempMat.IsKeywordEnabled("NOCULL"))
+            if (_mat.IsKeywordEnabled("NOCULL"))
             {
-                tempMat.SetInt("_Cull", 0);
+                _mat.SetInt("_Cull", 0);
             }
             // Set this keyword in unity if you've set up your model for limb removal item displays (eg. goat hoof) by setting your model's vertex colors
-            if (tempMat.IsKeywordEnabled("LIMBREMOVAL"))
+            if (_mat.IsKeywordEnabled("LIMBREMOVAL"))
             {
-                tempMat.SetInt("_LimbRemovalOn", 1);
+                _mat.SetInt("_LimbRemovalOn", 1);
             }
 
             // Cache this material to show that it's already been converted
-            HGCachedMaterials.Add(tempMat);
+            HGCachedMaterials.Add(_mat);
 
             // Return newly converted material
-            return tempMat;
+            return _mat;
         }
 
         public static void ConvertAllRenderersToHopooShader(GameObject _objectToConvert)
@@ -1534,6 +1368,124 @@ namespace Faithful
                     }
                 }
             }
+        }
+
+        private static string BuildRendererRulesCacheKey(Material _sourceMat, RendererRules _rules)
+        {
+            StringBuilder sb = new(256);
+
+            // Source material identity
+            sb.Append("src:");
+            sb.Append(_sourceMat ? _sourceMat.GetInstanceID() : 0);
+
+            // Modifier / flags
+            sb.Append("|mod:");
+            sb.Append((int)_rules.modifier);
+
+            sb.Append("|salvage:");
+            sb.Append(_rules.salvageExistingProperties ? '1' : '0');
+
+            // Texture rules
+            if (_rules.textureRules != null)
+            {
+                for (int i = 0; i < _rules.textureRules.Count; i++)
+                {
+                    ShaderTextureRule tr = _rules.textureRules[i];
+                    sb.Append("|tex:");
+                    sb.Append(tr.name ?? "");
+                    sb.Append('=');
+                    sb.Append(tr.texture ? tr.texture.GetInstanceID() : 0);
+                }
+            }
+
+            // Colour rules
+            if (_rules.colourRules != null)
+            {
+                for (int i = 0; i < _rules.colourRules.Count; i++)
+                {
+                    ShaderColourRule cr = _rules.colourRules[i];
+                    sb.Append("|col:");
+                    sb.Append(cr.name ?? "");
+                    sb.Append('=');
+                    AppendColor(sb, cr.colour);
+                }
+            }
+
+            // Vector rules
+            if (_rules.vectorRules != null)
+            {
+                for (int i = 0; i < _rules.vectorRules.Count; i++)
+                {
+                    ShaderVectorRule vr = _rules.vectorRules[i];
+                    sb.Append("|vec:");
+                    sb.Append(vr.name ?? "");
+                    sb.Append('=');
+                    AppendVector(sb, vr.value);
+                }
+            }
+
+            // Keyword rules
+            if (_rules.keywordRules != null)
+            {
+                for (int i = 0; i < _rules.keywordRules.Count; i++)
+                {
+                    ShaderKeywordRule kr = _rules.keywordRules[i];
+                    sb.Append("|key:");
+                    sb.Append(kr.keyword ?? "");
+                    sb.Append('=');
+                    sb.Append(kr.enabled ? '1' : '0');
+                }
+            }
+
+            // Float rules
+            if (_rules.floatRules != null)
+            {
+                for (int i = 0; i < _rules.floatRules.Count; i++)
+                {
+                    ShaderFloatRule fr = _rules.floatRules[i];
+                    sb.Append("|flt:");
+                    sb.Append(fr.name ?? "");
+                    sb.Append('=');
+                    sb.Append(fr.value.ToString("R", CultureInfo.InvariantCulture));
+                }
+            }
+
+            // Int rules
+            if (_rules.intRules != null)
+            {
+                for (int i = 0; i < _rules.intRules.Count; i++)
+                {
+                    ShaderIntRule ir = _rules.intRules[i];
+                    sb.Append("|int:");
+                    sb.Append(ir.name ?? "");
+                    sb.Append('=');
+                    sb.Append(ir.value);
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private static void AppendColor(StringBuilder _sb, Color _c)
+        {
+            _sb.Append(_c.r.ToString("R", CultureInfo.InvariantCulture));
+            _sb.Append(',');
+            _sb.Append(_c.g.ToString("R", CultureInfo.InvariantCulture));
+            _sb.Append(',');
+            _sb.Append(_c.b.ToString("R", CultureInfo.InvariantCulture));
+            _sb.Append(',');
+            _sb.Append(_c.a.ToString("R", CultureInfo.InvariantCulture));
+        }
+
+        private static void AppendVector(StringBuilder _sb, Vector4 _v)
+        {
+            _sb.Append(_v.x.ToString("R", CultureInfo.InvariantCulture));
+            _sb.Append(',');
+            _sb.Append(_v.y.ToString("R", CultureInfo.InvariantCulture));
+            _sb.Append(',');
+            _sb.Append(_v.z.ToString("R", CultureInfo.InvariantCulture));
+            _sb.Append(',');
+            _sb.Append(_v.w.ToString("R", CultureInfo.InvariantCulture));
         }
 
         public static string FindChildNameInsensitive(this ChildLocator _childLocator, string _child)
