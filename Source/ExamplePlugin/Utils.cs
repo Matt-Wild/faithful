@@ -967,6 +967,270 @@ namespace Faithful
                             changedAnyMaterial = true;
                             break;
 
+                        case RendererModifier.AreaIndicatorIntersectionOnly:
+                            mat = Object.Instantiate(Assets.areaIndicatorIntersectionOnlyMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.AreaIndicatorRim:
+                            mat = Object.Instantiate(Assets.areaIndicatorRimMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.Artifact:
+                            mat = Object.Instantiate(Assets.artifactMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.ArtifactShellExplosionIndicator:
+                            mat = Object.Instantiate(Assets.artifactShellExplosionIndicatorMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.BaubleTimestopSphere:
+                            mat = Object.Instantiate(Assets.baubleTimestopSphereMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.BlueprintScreen:
+                            mat = Object.Instantiate(Assets.blueprintScreenMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.BlueprintsInvalid:
+                            mat = Object.Instantiate(Assets.blueprintsInvalidMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.BlueprintsOk:
+                            mat = Object.Instantiate(Assets.blueprintsOkMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.BootShockwave:
+                            mat = Object.Instantiate(Assets.bootShockwaveMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.CaptainAirstrikeAltAreaIndicatorInner:
+                            mat = Object.Instantiate(Assets.captainAirstrikeAltAreaIndicatorInnerMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.CaptainAirstrikeAltAreaIndicatorOuter:
+                            mat = Object.Instantiate(Assets.captainAirstrikeAltAreaIndicatorOuterMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.CaptainAirstrikeAreaIndicator:
+                            mat = Object.Instantiate(Assets.captainAirstrikeAreaIndicatorMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.CaptainSupplyDropAreaIndicator2:
+                            mat = Object.Instantiate(Assets.captainSupplyDropAreaIndicator2Material);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.CaptainSupplyDropAreaIndicatorOuter:
+                            mat = Object.Instantiate(Assets.captainSupplyDropAreaIndicatorOuterMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.ChefAlwaysOnTop:
+                            mat = Object.Instantiate(Assets.chefAlwaysOnTopMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.ChildStarCore:
+                            mat = Object.Instantiate(Assets.childStarCoreMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.ChildStarGlow:
+                            mat = Object.Instantiate(Assets.childStarGlowMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.ChipProjectile:
+                            mat = Object.Instantiate(Assets.chipProjectileMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.ClayBubble:
+                            mat = Object.Instantiate(Assets.clayBubbleMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.CombinerEnergyFade:
+                            mat = Object.Instantiate(Assets.combinerEnergyFadeMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.CoreCage2:
+                            mat = Object.Instantiate(Assets.coreCage2Material);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.DefectiveUnitDenialSphereNoise:
+                            mat = Object.Instantiate(Assets.defectiveUnitDenialSphereNoiseMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.DefectiveUnitDetonateSphereEnergy:
+                            mat = Object.Instantiate(Assets.defectiveUnitDetonateSphereEnergyMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.DefectiveUnitDetonateSphereEnergyPers:
+                            mat = Object.Instantiate(Assets.defectiveUnitDetonateSphereEnergyPersMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.DefectiveUnitDetonateSphereNoise:
+                            mat = Object.Instantiate(Assets.defectiveUnitDetonateSphereNoiseMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.DefectiveUnitDetonateSpherePulse:
+                            mat = Object.Instantiate(Assets.defectiveUnitDetonateSpherePulseMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.DefectiveUnitNullifySpherePulse:
+                            mat = Object.Instantiate(Assets.defectiveUnitNullifySpherePulseMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.DroneBrokenGeneric:
+                            mat = Object.Instantiate(Assets.droneBrokenGenericMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.NullifierArmor:
+                            mat = Object.Instantiate(Assets.nullifierArmorMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.NullifierGemPortal:
+                            mat = Object.Instantiate(Assets.nullifierGemPortalMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.NullifierGemPortal3:
+                            mat = Object.Instantiate(Assets.nullifierGemPortal3Material);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.NullifierBlackholeZoneAreaIndicator:
+                            mat = Object.Instantiate(Assets.nullifierBlackholeZoneAreaIndicatorMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.NullifierExplosionAreaIndicatorHard:
+                            mat = Object.Instantiate(Assets.nullifierExplosionAreaIndicatorHardMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.RadarTowerAreaIndicator:
+                            mat = Object.Instantiate(Assets.radarTowerAreaIndicatorMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.ShockDamageAuraGlass:
+                            mat = Object.Instantiate(Assets.shockDamageAuraGlassMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.TeamAreaIndicatorFullMonster:
+                            mat = Object.Instantiate(Assets.teamAreaIndicatorFullMonsterMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.TeamAreaIndicatorFullPlayer:
+                            mat = Object.Instantiate(Assets.teamAreaIndicatorFullPlayerMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.TeamAreaIndicatorIntersectionMonster:
+                            mat = Object.Instantiate(Assets.teamAreaIndicatorIntersectionMonsterMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.TeamAreaIndicatorIntersectionPlayer:
+                            mat = Object.Instantiate(Assets.teamAreaIndicatorIntersectionPlayerMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.TimeCrystalAreaIndicator:
+                            mat = Object.Instantiate(Assets.timeCrystalAreaIndicatorMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.VoidDeathBombAreaIndicatorBack:
+                            mat = Object.Instantiate(Assets.voidDeathBombAreaIndicatorBackMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.VoidDeathBombAreaIndicatorFront:
+                            mat = Object.Instantiate(Assets.voidDeathBombAreaIndicatorFrontMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.VoidSurvivorBlasterSphereAreaIndicator:
+                            mat = Object.Instantiate(Assets.voidSurvivorBlasterSphereAreaIndicatorMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
+                        case RendererModifier.VoidSurvivorBlasterSphereAreaIndicatorCorrupted:
+                            mat = Object.Instantiate(Assets.voidSurvivorBlasterSphereAreaIndicatorCorruptedMaterial);
+                            mats[mi] = mat;
+                            changedAnyMaterial = true;
+                            break;
+
                         default:
                             break;
                     }
