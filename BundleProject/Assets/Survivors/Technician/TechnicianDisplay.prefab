@@ -1797,12 +1797,10 @@ MonoBehaviour:
     transform: {fileID: 7782489297773106191}
   - name: BackpackEye
     transform: {fileID: 5964387974793128181}
+  - name: BackpackAntenna
+    transform: {fileID: 601949828705480217}
   - name: BackpackDrill
     transform: {fileID: 601949828705480217}
-  - name: LobbyRobotAlly
-    transform: {fileID: 9013147066325103170}
-  - name: LobbyTurretAlly
-    transform: {fileID: 4385654696554391190}
 --- !u!114 &7840600021370491518
 MonoBehaviour:
   m_ObjectHideFlags: 0
