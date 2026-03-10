@@ -23,7 +23,8 @@ namespace Faithful
                 {
                     childName = "TechnicianBody",
                     replacementMesh = "TechnicianMasterySkinTechnician",
-                    replacementMaterial = "texTechnicianMastery"
+                    replacementMaterial = "texTechnicianMastery",
+                    replacementRendererRules = "TechnicianMasteryRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
@@ -34,7 +35,8 @@ namespace Faithful
                 {
                     childName = "TechnicianRobot",
                     replacementMesh = "TechnicianMasterySkinRobot",
-                    replacementMaterial = "texTechnicianMastery"
+                    replacementMaterial = "texTechnicianMastery",
+                    replacementRendererRules = "TechnicianMasteryRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
@@ -45,12 +47,27 @@ namespace Faithful
                 {
                     childName = "TechnicianTurret",
                     replacementMesh = "TechnicianMasterySkinTurret",
-                    replacementMaterial = "texTechnicianMastery"
+                    replacementMaterial = "texTechnicianMastery",
+                    replacementRendererRules = "TechnicianMasteryRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
                     childName = "TechnicianTurretLights",
                     replacementMesh = "TechnicianMasterySkinTurretLights"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "LobbyRobotAlly",
+                    replacementMesh = "TechnicianMasterySkinTurret",
+                    replacementMaterial = "texTechnicianMastery",
+                    replacementRendererRules = "TechnicianMasteryRendererBody"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "LobbyTurretAlly",
+                    replacementMesh = "TechnicianMasterySkinTurret",
+                    replacementMaterial = "texTechnicianMastery",
+                    replacementRendererRules = "TechnicianMasteryRendererBody"
                 }
             ]);
 
@@ -60,7 +77,8 @@ namespace Faithful
                 {
                     childName = "TechnicianBody",
                     replacementMesh = "TechnicianPrimeSkinTechnician",
-                    replacementMaterial = "texTechnicianPrime"
+                    replacementMaterial = "texTechnicianPrime",
+                    replacementRendererRules = "TechnicianPrimeRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
@@ -71,7 +89,8 @@ namespace Faithful
                 {
                     childName = "TechnicianRobot",
                     replacementMesh = "TechnicianPrimeSkinRobot",
-                    replacementMaterial = "texTechnicianPrime"
+                    replacementMaterial = "texTechnicianPrime",
+                    replacementRendererRules = "TechnicianPrimeRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
@@ -82,12 +101,27 @@ namespace Faithful
                 {
                     childName = "TechnicianTurret",
                     replacementMesh = "TechnicianPrimeSkinTurret",
-                    replacementMaterial = "texTechnicianPrime"
+                    replacementMaterial = "texTechnicianPrime",
+                    replacementRendererRules = "TechnicianPrimeRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
                     childName = "TechnicianTurretLights",
                     replacementMesh = "TechnicianPrimeSkinTurretLights"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "LobbyRobotAlly",
+                    replacementMesh = "TechnicianPrimeSkinTurret",
+                    replacementMaterial = "texTechnicianPrime",
+                    replacementRendererRules = "TechnicianPrimeRendererBody"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "LobbyTurretAlly",
+                    replacementMesh = "TechnicianPrimeSkinTurret",
+                    replacementMaterial = "texTechnicianPrime",
+                    replacementRendererRules = "TechnicianPrimeRendererBody"
                 }
             ]);
 
@@ -97,19 +131,22 @@ namespace Faithful
                 {
                     childName = "TechnicianBody",
                     replacementMesh = "TechnicianAlloySkinTechnician",
-                    replacementMaterial = "texTechnicianAlloy"
+                    replacementMaterial = "texTechnicianAlloy",
+                    replacementRendererRules = "TechnicianAlloyRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
                     childName = "TechnicianBodyLights",
                     replacementMesh = "TechnicianAlloySkinTechnicianGlass",
-                    replacementMaterial = "texTechnicianGlass"
+                    replacementMaterial = "texTechnicianGlass",
+                    replacementRendererRules = "TechnicianAlloyRendererGlass"
                 },
                 new Skins.SkinReplacement
                 {
                     childName = "TechnicianRobot",
                     replacementMesh = "TechnicianAlloySkinRobot",
-                    replacementMaterial = "texTechnicianAlloy"
+                    replacementMaterial = "texTechnicianAlloy",
+                    replacementRendererRules = "TechnicianAlloyRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
@@ -120,12 +157,27 @@ namespace Faithful
                 {
                     childName = "TechnicianTurret",
                     replacementMesh = "TechnicianAlloySkinTurret",
-                    replacementMaterial = "texTechnicianAlloy"
+                    replacementMaterial = "texTechnicianAlloy",
+                    replacementRendererRules = "TechnicianAlloyRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
                     childName = "TechnicianTurretLights",
                     replacementMesh = "TechnicianAlloySkinTurretLights"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "LobbyRobotAlly",
+                    replacementMesh = "TechnicianAlloySkinRobot",
+                    replacementMaterial = "texTechnicianAlloy",
+                    replacementRendererRules = "TechnicianAlloyRendererBody"
+                },
+                new Skins.SkinReplacement
+                {
+                    childName = "LobbyTurretAlly",
+                    replacementMesh = "TechnicianAlloySkinRobot",
+                    replacementMaterial = "texTechnicianAlloy",
+                    replacementRendererRules = "TechnicianAlloyRendererBody"
                 }
             ]);
         }

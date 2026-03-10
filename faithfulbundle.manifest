@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 805322015
+CRC: 2163739460
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2f05e7fdc2e49fba903c985e334e1b40
+    Hash: c1d0e745be8ff7ca8e961105b8d36462
   TypeTreeHash:
     serializedVersion: 2
     Hash: e50c578b8b723f3899bea765d83207e3
@@ -376,6 +376,7 @@ Assets:
 - Assets/Textures/Technician/texTechnicianFlare.png
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageVoidIcon.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionSymbol.png
+- Assets/Survivors/Technician/Mesh/TechnicianPrimeRendererBody.prefab
 - Assets/Items/Chakram/AltIcons/texChakramTier1Icon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystalRamp.png
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackLunarIcon.png
@@ -680,6 +681,7 @@ Assets:
 - Assets/Survivors/Technician/Icons/texTechnicianElectroblastIcon.png
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterTier3Achievement.png
 - Assets/Items/MatterAccelerator/texMatterAccelerator.png
+- Assets/Survivors/Technician/Mesh/TechnicianAlloyRendererBody.prefab
 - Assets/Items/RadiantTimepiece/Materials/texRadiantTimepiece.mat
 - Assets/Items/SecondHand/AltIcons/texSecondHandUniqueIcon.png
 - Assets/Items/4-T0NJetpack/texBuff4T0NJetpackEmpty.png
@@ -699,8 +701,10 @@ Assets:
 - Assets/Items/4-T0NJetpack/Materials/tex4T0NJetpackHolo.mat
 - Assets/Items/BrassScrews/texBrassScrewsIcon.png
 - Assets/Survivors/Technician/VFX/TechnicianTrackingIndicator.prefab
+- Assets/Survivors/Technician/Mesh/TechnicianAlloyRendererGlass.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianRobotIcon.png
 - Assets/Items/RadiantTimepiece/texRadiantTimepieceIcon.png
+- Assets/Survivors/Technician/Mesh/TechnicianMasteryRendererBody.prefab
 - Assets/Items/CollectorsVision/AltIcons/texCollectorsVisionUniqueIcon.png
 - Assets/Items/CopperGear/CopperGearMesh.prefab
 - Assets/Items/BrassScrews/BrassScrewsDisplayMesh.prefab
