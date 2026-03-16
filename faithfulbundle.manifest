@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2802385426
+CRC: 3052695467
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f80a2b9c2cfa772b1bd079740006084c
+    Hash: 57b0e53a1c0b562c3d1f74a0345ff7ea
   TypeTreeHash:
     serializedVersion: 2
     Hash: e50c578b8b723f3899bea765d83207e3
@@ -325,6 +325,7 @@ Assets:
 - Assets/Items/HermitsShawl/AltIcons/texHermitShawlBossAchievement.png
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackTier3Achievement.png
 - Assets/Equipment/ChargefieldPylon/texChargefieldPylonDeployEmission.png
+- Assets/Placeholder/Item/Materials/texTemporalCube.mat
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackVoidAchievement.png
 - Assets/Equipment/Divider/DividerDisplayMesh.prefab
 - Assets/Items/MeltingWarbler/texMeltingWarbler.png
@@ -382,6 +383,7 @@ Assets:
 - Assets/Textures/Technician/texTechnicianFlare.png
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageVoidIcon.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionSymbol.png
+- Assets/Placeholder/Model/Cube.obj
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeRendererBody.prefab
 - Assets/Items/Chakram/AltIcons/texChakramTier1Icon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystalRamp.png
@@ -408,6 +410,7 @@ Assets:
 - Assets/Items/RadiantTimepiece/texRadiantTimepieceNormal.png
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
 - Assets/Items/4-T0NJetpack/4T0NJetpackMesh.obj
+- Assets/Placeholder/Item/TemporalCubeMesh.obj
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterTier2Achievement.png
 - Assets/Items/ServiceStartupDrive/AltIcons/texServiceStartupDriveTier2Icon.png
 - Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.prefab
