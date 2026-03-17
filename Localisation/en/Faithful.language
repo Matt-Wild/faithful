@@ -23,6 +23,11 @@
 	"FAITHFUL_DEBUG_ITEM_PICKUP": "Debug Item Pickup",
 	"FAITHFUL_DEBUG_ITEM_DESC": "Debug Item Description",
 	"FAITHFUL_DEBUG_ITEM_LORE": "Debug Item Lore",
+	
+	"FAITHFUL_WIP_ITEM_NAME": "WIP Item",
+	"FAITHFUL_WIP_ITEM_PICKUP": "WIP Item Pickup",
+	"FAITHFUL_WIP_ITEM_DESC": "WIP Item Description",
+	"FAITHFUL_WIP_ITEM_LORE": "WIP Item Lore",
   
     "FAITHFUL_COPPER_GEAR_NAME": "Copper Gear",
 	"FAITHFUL_COPPER_GEAR_PICKUP": "Increase attack speed while within the Teleporter zone.",

@@ -23,6 +23,11 @@
         "FAITHFUL_DEBUG_ITEM_PICKUP": "Подобрать отладочный предмет",
         "FAITHFUL_DEBUG_ITEM_DESC": "Описание оладочного предмета",
         "FAITHFUL_DEBUG_ITEM_LORE": "Лор отладочного предмета",
+		
+		"FAITHFUL_WIP_ITEM_NAME": "Предмет в разработке",
+		"FAITHFUL_WIP_ITEM_PICKUP": "Подбор предмета в разработке",
+		"FAITHFUL_WIP_ITEM_DESC": "Описание предмета в разработке",
+		"FAITHFUL_WIP_ITEM_LORE": "История предмета в разработке",
 
         "FAITHFUL_COPPER_GEAR_NAME": "Медная шестерня",
         "FAITHFUL_COPPER_GEAR_PICKUP": "Увеличивает скорость атаки в зоне телепорта.",

@@ -31,6 +31,9 @@ namespace Faithful
             // Create expansion definition
             Utils.CreateExpansionDef();
 
+            // Pass toolbox reference to utils
+            Utils.toolbox = this;
+
             if (Utils.verboseConsole) Log.Debug("Toolbox built");
         }
 

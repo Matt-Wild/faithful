@@ -32,12 +32,21 @@ namespace Faithful
         // Is this item hidden
         public bool hidden = false;
 
+        // Is this item WIP
+        public bool WIP = false;
+
         // Corrupted item token for default corrupted item and proper name for corrupted item
         private string defaultCorruptedToken;
         public string corruptedName = "";
 
+        // Override tokens
+        private string overrideName = string.Empty;
+        private string overridePickup = string.Empty;
+        private string overrideDescription = string.Empty;
+        private string overrideLore = string.Empty;
+
         // Constructor
-        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false)
+        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null)
         {
             // Assign token
             token = _token;
@@ -45,8 +54,11 @@ namespace Faithful
             // Assign if hidden
             hidden = _hidden;
 
+            // Assign if WIP
+            WIP = _WIP;
+
             // Assign name
-            name = Utils.GetLanguageString($"FAITHFUL_{token}_NAME");
+            name = WIP ? _safeName : Utils.GetLanguageString($"FAITHFUL_{token}_NAME");
             safeName = _safeName;
 
             // Assign tier
@@ -55,8 +67,8 @@ namespace Faithful
             // Assign default corrupted token
             defaultCorruptedToken = _corruptToken;
 
-            // Don't create settings for hidden items
-            if (!_hidden)
+            // Don't create settings for hidden or WIP items
+            if (!_hidden && !_WIP)
             {
                 // Create default settings (MUST HAPPEN AFTER TOKEN AND NAME IS ASSIGNED)
                 CreateDefaultSettings();
@@ -79,6 +91,12 @@ namespace Faithful
 
             // Fetch item settings
             FetchSettings();
+
+            // Assign override tokens
+            overrideName = _overrideName;
+            overridePickup = _overridePickup;
+            overrideDescription = _overrideDescription;
+            overrideLore = _overrideLore;
 
             // Update item texts
             UpdateItemTexts();
@@ -254,13 +272,38 @@ namespace Faithful
                 UpdateCorruptedName();
             }
 
-            // Use 3 parameter version to add language override for specific language
-            LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}", corruptedNameSafe));
-            LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}", corruptedNameSafe));
+            // Create overlay tokens
+            if (string.IsNullOrEmpty(overridePickup))
+            {
+                // Use 3 parameter version to add language override for specific language
+                LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}", corruptedNameSafe));
+            }
+            else
+            {
+                // Use 3 parameter version to add language override for specific language
+                LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken(overridePickup, $"ITEM_{token}", corruptedNameSafe, true));
+            }
+            if (string.IsNullOrEmpty(overrideDescription))
+            {
+                // Use 3 parameter version to add language override for specific language
+                LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}", corruptedNameSafe));
+            }
+            else
+            {
+                // Use 3 parameter version to add language override for specific language
+                LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken(overrideDescription, $"ITEM_{token}", corruptedNameSafe, true));
+            }
+
+            // For lore overrides, overlay tokens are the only things that work
+            if (!string.IsNullOrEmpty(overrideLore))
+            {
+                // Use 3 parameter version to add language override for specific language
+                LanguageAPI.AddOverlay($"FAITHFUL_{token}_LORE", overrideLore);
+            }
 
             // Update item texts
             itemDef.name = $"{Utils.GetXMLSafeString(safeName)}_FAITHFUL_{token}_ITEM";
-            itemDef.nameToken = $"FAITHFUL_{token}_NAME";
+            itemDef.nameToken = string.IsNullOrEmpty(overrideName) ? $"FAITHFUL_{token}_NAME" : overrideName;
             itemDef.pickupToken = Items.extendAllPickupDescriptions ? $"FAITHFUL_{token}_DESC" : extendedPickupDescSetting == null ? $"FAITHFUL_{token}_PICKUP" : extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP";
             itemDef.descriptionToken = $"FAITHFUL_{token}_DESC";
             itemDef.loreToken = $"FAITHFUL_{token}_LORE";
@@ -398,7 +441,7 @@ namespace Faithful
             }
         }
 
-        public bool isEnabled => enabledSetting.Value;
+        public bool isEnabled => WIP ? Utils.debugWIPItems : enabledSetting.Value;
     }
 
     internal class ItemDisplayModel : MonoBehaviour

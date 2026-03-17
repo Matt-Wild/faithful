@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
-
-namespace Faithful
+﻿namespace Faithful
 {
     internal class ItemBase
     {

@@ -90,10 +90,10 @@ namespace Faithful
             return settings[_token];
         }
 
-        public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "")
+        public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "", bool _useRawToken = false)
         {
             // Get language string
-            string languageString = Utils.GetLanguageString(_token);
+            string languageString = _useRawToken ? _token : Utils.GetLanguageString(_token);
 
             // Get token prefix
             string tokenPrefix = _tokenPrefix;

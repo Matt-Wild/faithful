@@ -143,6 +143,9 @@ namespace Faithful
             tJetpack = new TJetpack(toolbox);
             debugItem = new DebugItem(toolbox);
 
+            // Create WIP content
+            WIP.Init();
+
             // Create interactables
             recollectionShrine = new RecollectionShrine();
 

@@ -23,6 +23,11 @@
 	"FAITHFUL_DEBUG_ITEM_PICKUP": "拾取调试物品",
 	"FAITHFUL_DEBUG_ITEM_DESC": "调试物品说明",
 	"FAITHFUL_DEBUG_ITEM_LORE": "调试物品背景",
+	
+	"FAITHFUL_WIP_ITEM_NAME": "开发中物品",
+	"FAITHFUL_WIP_ITEM_PICKUP": "开发中物品拾取",
+	"FAITHFUL_WIP_ITEM_DESC": "开发中物品描述",
+	"FAITHFUL_WIP_ITEM_LORE": "开发中物品背景",
   
     "FAITHFUL_COPPER_GEAR_NAME": "铜齿轮",
 	"FAITHFUL_COPPER_GEAR_PICKUP": "在传送器区域内提高攻击速度。",
