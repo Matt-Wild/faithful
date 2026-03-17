@@ -24,8 +24,8 @@ namespace Faithful
             ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false,
             string _pickup = null, string _description = null, string _lore = null) : base(Utils.toolbox)
         {
-            // Don't create item is WIP items are disabled
-            if (!Utils.debugWIPItems) return;
+            // Don't create item is WIP content is disabled
+            if (!Utils.debugWIPContent) return;
 
             // Assign display settings callback
             displaySettingsCallback = _displaySettingsCallback;
@@ -36,7 +36,7 @@ namespace Faithful
             // Create Copper Gear item and buff
             item = Items.AddItem(Utils.GetXMLSafeString(_name).ToUpper(), _name, _tags ?? [], _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, 
                 _hidden, _corruptToken, displaySettings, _modifyItemModelPrefabCallback, _modifyItemDisplayPrefabCallback, _canNeverBeTemporary, 
-                _debugOnly, _WIP: true, _name, _pickup, _description, _lore);
+                _debugOnly, true, _name, _pickup, _description, _lore);
 
             // Create item settings
             CreateSettings();

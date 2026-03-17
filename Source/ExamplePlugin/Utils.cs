@@ -45,8 +45,8 @@ namespace Faithful
         // Store debug mode
         static private bool _debugMode = false;
 
-        // Store WIP items debug mode
-        static private bool _debugWIPItems = false;
+        // Store WIP content debug mode
+        static private bool _debugWIPContent = false;
 
         // Store verbose console
         static private bool _verboseConsole = false;
@@ -73,8 +73,8 @@ namespace Faithful
         // Create debug mode config
         static private Setting<bool> debugModeSetting;
 
-        // Create debug WIP items config
-        static private Setting<bool> debugWIPItemsSetting;
+        // Create debug WIP content config
+        static private Setting<bool> debugWIPContentSetting;
 
         // Create verbose console config
         static private Setting<bool> verboseConsoleSetting;
@@ -165,8 +165,8 @@ namespace Faithful
             // Create debug mode setting
             debugModeSetting = Config.CreateSetting("DEBUG_MODE", "Debug Tools", "Debug Mode", false, "Do you want to enable this mod's debug mode?", false, true, _restartRequired: true);
 
-            // Create debug WIP items setting
-            debugWIPItemsSetting = Config.CreateSetting("DEBUG_WIP_ITEMS", "Debug Tools", "Debug WIP Items", false, "Do you want to enable WIP items? (likely have no behaviour)", false, false, _restartRequired: true);
+            // Create debug WIP content setting
+            debugWIPContentSetting = Config.CreateSetting("DEBUG_WIP_CONTENT", "Debug Tools", "Debug WIP Content", false, "Do you want to enable WIP content? (not recommended - expect broken/absent behaviour)", false, false, _restartRequired: true);
 
             // Create debug mode setting
             verboseConsoleSetting = Config.CreateSetting("VERBOSE_CONSOLE", "Debug Tools", "Verbose Console", false, "Do you want more detailed console logging for this mod?", false, true, _restartRequired: true);
@@ -177,8 +177,8 @@ namespace Faithful
             // Update debug mode from config
             _debugMode = debugModeSetting.Value;
 
-            // Update debug WIP items mode from config
-            _debugWIPItems = debugWIPItemsSetting.Value;
+            // Update debug WIP content mode from config
+            _debugWIPContent = debugWIPContentSetting.Value;
 
             // Update verbose console from config
             _verboseConsole = verboseConsoleSetting.Value;
@@ -2281,9 +2281,9 @@ namespace Faithful
             get { return _debugMode; }
         }
 
-        public static bool debugWIPItems
+        public static bool debugWIPContent
         {
-            get { return _debugWIPItems; }
+            get { return _debugWIPContent; }
         }
 
         public static bool verboseConsole

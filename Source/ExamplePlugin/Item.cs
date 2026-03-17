@@ -441,7 +441,7 @@ namespace Faithful
             }
         }
 
-        public bool isEnabled => WIP ? Utils.debugWIPItems : enabledSetting.Value;
+        public bool isEnabled => WIP ? Utils.debugWIPContent : enabledSetting.Value;
     }
 
     internal class ItemDisplayModel : MonoBehaviour
