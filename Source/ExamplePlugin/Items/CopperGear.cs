@@ -64,6 +64,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("MUL-T", "Head", new Vector3(0.39384F, 2.95909F, -1.01878F), new Vector3(0F, 270F, 35F), new Vector3(0.5F, 0.5F, 0.5F));
             displaySettings.AddCharacterDisplay("Engineer", "CannonHeadL", new Vector3(0.141F, 0.382F, 0.1435F), new Vector3(45F, 135F, 270F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, -0.3F, 0F), new Vector3(0F, 270F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
+            displaySettings.AddCharacterDisplay("Walker Turret", "Neck", new Vector3(0F, -0.3F, 0F), new Vector3(0F, 270F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
             displaySettings.AddCharacterDisplay("Artificer", "CalfR", new Vector3(0.00525F, 0.08556F, 0.03226F), new Vector3(10F, 0F, 355F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Mercenary", "LowerArmL", new Vector3(0.0085F, 0.152F, -0.0075F), new Vector3(0F, 18.25F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
             displaySettings.AddCharacterDisplay("REX", "FootFrontL", new Vector3(0F, -0.034F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.25F, 0.25F, 0.25F));
@@ -132,11 +133,26 @@ namespace Faithful
                     // Get needed amount of buffs
                     int needed = copperGearCount - _body.GetBuffCount(copperGearBuff.buffDef);
 
-                    // Catch up buff count
-                    for (int i = 0; i < needed; i++)
+                    // Check if there are too many buffs (can happen if the player loses items while in the zone)
+                    if (needed < 0)
                     {
-                        // Add Copper Gear buff
-                        _body.AddTimedBuff(copperGearBuff.buffDef, buffDuration);
+                        // Remove excess buffs
+                        for (int i = 0; i < -needed; i++)
+                        {
+                            // Remove Copper Gear buff
+                            _body.RemoveOldestTimedBuff(copperGearBuff.buffDef);
+                        }
+                    }
+
+                    // Either has enough buffs or needs more
+                    else
+                    {
+                        // Catch up buff count
+                        for (int i = 0; i < needed; i++)
+                        {
+                            // Add Copper Gear buff
+                            _body.AddTimedBuff(copperGearBuff.buffDef, buffDuration);
+                        }
                     }
                 }
             }

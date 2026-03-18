@@ -91,6 +91,7 @@ namespace Faithful
             { "mul-t", "mdlToolbot" },
             { "engineer", "mdlEngi" },
             { "turret", "mdlEngiTurret" },
+            { "walker turret", "mdlEngiWalkerTurret" },
             { "artificer", "mdlMage" },
             { "mercenary", "mdlMerc" },
             { "rex", "mdlTreebot" },

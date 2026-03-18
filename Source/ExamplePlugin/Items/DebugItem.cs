@@ -13,5 +13,15 @@ namespace Faithful
             // Create item
             item = Items.AddItem("DEBUG_ITEM", "Debug Item", [ItemTag.Any], "texTemporalCubeIcon", "Cube_TemporaryAsset", ItemTier.NoTier, _simulacrumBanned: true, _hidden: true, _debugOnly: true);
         }
+
+        protected override void CreateSettings()
+        {
+        }
+
+        public override void FetchSettings()
+        {
+            // Update item texts with new settings
+            item.UpdateItemTexts();
+        }
     }
 }

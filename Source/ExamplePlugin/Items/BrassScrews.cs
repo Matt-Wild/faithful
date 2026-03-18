@@ -64,6 +64,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("MUL-T", "Head", new Vector3(1.75763F, 3.26321F, 0.01843F), new Vector3(315F, 220F, 60F), new Vector3(0.45F, 0.45F, 0.45F));
             displaySettings.AddCharacterDisplay("Engineer", "CannonHeadL", new Vector3(0.11935F, 0.38362F, 0.162F), new Vector3(326.5692F, 291.2021F, 269.7665F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, -0.43863F, -0.20092F), new Vector3(290F, 0F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Walker Turret", "Neck", new Vector3(0F, -0.43863F, -0.20092F), new Vector3(290F, 0F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
             displaySettings.AddCharacterDisplay("Artificer", "CalfR", new Vector3(0.02813F, 0.05546F, 0.01644F), new Vector3(11.75F, 168.75F, 88F), new Vector3(0.06F, 0.06F, 0.06F));
             displaySettings.AddCharacterDisplay("Mercenary", "LowerArmL", new Vector3(-0.02268F, 0.12083F, -0.031F), new Vector3(338.8F, 144.5F, 267.8F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("REX", "FootFrontL", new Vector3(0.04454F, 0.20025F, -0.03737F), new Vector3(340F, 40F, 270F), new Vector3(0.15F, 0.15F, 0.15F));
@@ -117,22 +118,37 @@ namespace Faithful
             if (inventory)
             {
                 // Get Brass Screws amount
-                int copperGearCount = inventory.GetItemCount(brassScrewsItem.itemDef.itemIndex);
+                int brassScrewsCount = inventory.GetItemCount(brassScrewsItem.itemDef.itemIndex);
 
                 // Has Brass Screws?
-                if (copperGearCount > 0)
+                if (brassScrewsCount > 0)
                 {
                     // Refresh Brass Screws buffs
                     Utils.RefreshTimedBuffs(_body, brassScrewsBuff.buffDef, buffDuration);
 
                     // Get needed amount of buffs
-                    int needed = copperGearCount - _body.GetBuffCount(brassScrewsBuff.buffDef);
+                    int needed = brassScrewsCount - _body.GetBuffCount(brassScrewsBuff.buffDef);
 
-                    // Catch up buff count
-                    for (int i = 0; i < needed; i++)
+                    // Check if there are too many buffs (can happen if the player loses items while in the zone)
+                    if (needed < 0)
                     {
-                        // Add Brass Screws buff
-                        _body.AddTimedBuff(brassScrewsBuff.buffDef, buffDuration);
+                        // Remove excess buffs
+                        for (int i = 0; i < -needed; i++)
+                        {
+                            // Remove Brass Screws buff
+                            _body.RemoveOldestTimedBuff(brassScrewsBuff.buffDef);
+                        }
+                    }
+
+                    // Either has enough buffs or needs more
+                    else
+                    {
+                        // Catch up buff count
+                        for (int i = 0; i < needed; i++)
+                        {
+                            // Add Brass Screws buff
+                            _body.AddTimedBuff(brassScrewsBuff.buffDef, buffDuration);
+                        }
                     }
                 }
             }

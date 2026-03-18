@@ -150,7 +150,7 @@ namespace Faithful
             recollectionShrine = new RecollectionShrine();
 
             // Create survivors
-            technician = new Technician();
+            //technician = new Technician();
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing our mod!");

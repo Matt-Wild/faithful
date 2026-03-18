@@ -1,5 +1,11 @@
 # Changelog
 
+#### v1.3.22 Recollection Shrine Change And Gear/Screws Fixes
+- Added WIP content setting that allows WIP content from 'Faithful' to load into the game (default off).
+- Improved visuals for Shrine of Recollection.
+- Fixed buff count not updating correctly when in the teleporter zone for Copper Gear and Brass Screws.
+- Fixed item displays no longer appearing on Engineer's alternate Turrets.
+
 #### v1.3.21 Item Visual Improvements
 - Improved the visuals of many icons, pickup and display item models through better use of in-game shaders.
 
@@ -45,11 +51,11 @@
 #### v1.3.8 Leader's Pennon Attack Speed And Regen Stacking
 - Added additional configs for Leader's Pennon to support attack speed and regen stacking.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.7 Jetpack Material Fix
 - Fixed broken Jetpack material.
 - Switched some asset fetch operations to use GUIDs.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.6 Memory Optimisation Update Fix
 - Updated Faithful to work with the new "Memory Optimisation Update".
