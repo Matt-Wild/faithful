@@ -93,7 +93,7 @@ namespace Faithful
         public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "", bool _useRawToken = false)
         {
             // Get language string
-            string languageString = _useRawToken ? _token : Utils.GetLanguageString(_token);
+            string languageString = _useRawToken ? _token : Languages.GetLanguageString(_token);
 
             // Get token prefix
             string tokenPrefix = _tokenPrefix;
@@ -118,7 +118,7 @@ namespace Faithful
                     if (!settingToken.Contains(tokenPrefix)) continue;
 
                     // Check if setting is not default, is a stat and alt token exists
-                    if (!setting.Value.isDefault && setting.Value.isStat && Utils.HasLanguageString($"{_token}_ALT"))
+                    if (!setting.Value.isDefault && setting.Value.isStat && Languages.HasLanguageString($"{_token}_ALT"))
                     {
                         // Return formatted alt token instead
                         return FormatLanguageToken($"{_token}_ALT", _tokenPrefix);
@@ -145,7 +145,7 @@ namespace Faithful
                 if (!string.IsNullOrWhiteSpace(_corruptedItemName))
                 {
                     // Replace unique CORRUPTED_ITEM token
-                    languageString = languageString.Replace("[CORRUPTED_ITEM]", Utils.GetLanguageString("FAITHFUL_LANGUAGE") == "English" ? Utils.Pluralize(_corruptedItemName) : _corruptedItemName);
+                    languageString = languageString.Replace("[CORRUPTED_ITEM]", Languages.GetLanguageString("FAITHFUL_LANGUAGE") == "English" ? Utils.Pluralize(_corruptedItemName) : _corruptedItemName);
                 }
 
                 // No corrupted item name provided

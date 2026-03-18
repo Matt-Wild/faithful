@@ -99,6 +99,9 @@ namespace Faithful
             // Initialise toolbox
             toolbox = new Toolbox(this, PInfo, Config);
 
+            // Initialise languages
+            Languages.Init();
+
             // Create God Mode if in debug
             godMode = new GodMode(toolbox);
 
@@ -149,8 +152,11 @@ namespace Faithful
             // Create interactables
             recollectionShrine = new RecollectionShrine();
 
-            // Create survivors
-            //technician = new Technician();
+            // These survivors are WIP
+            if (Utils.WIPContentEnabled)
+            {
+                technician = new Technician();
+            }
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing our mod!");

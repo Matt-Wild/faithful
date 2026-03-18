@@ -58,7 +58,7 @@ namespace Faithful
             string _pickup = null, string _description = null, string _lore = null)
         {
             // Don't create item is WIP content is disabled
-            if (!Utils.debugWIPContent) return;
+            if (!Utils.WIPContentEnabled) return;
 
             // Create WIP item and add to list
             WIPItem wipItem = new(_createDisplaySettings, _name, _tags, _iconDir, _modelDir, _displayDir, _tier, _simulacrumBanned, _canRemove, _hidden,

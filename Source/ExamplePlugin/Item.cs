@@ -58,7 +58,7 @@ namespace Faithful
             WIP = _WIP;
 
             // Assign name
-            name = WIP ? _safeName : Utils.GetLanguageString($"FAITHFUL_{token}_NAME");
+            name = WIP ? _safeName : Languages.GetLanguageString($"FAITHFUL_{token}_NAME");
             safeName = _safeName;
 
             // Assign tier
@@ -262,7 +262,7 @@ namespace Faithful
             else if (nameOverlay != null)
             {
                 // Set name overlay
-                nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_{token}_NAME", Utils.GetLanguageString($"FAITHFUL_{token}_NAME"));
+                nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_{token}_NAME", Languages.GetLanguageString($"FAITHFUL_{token}_NAME"));
             }
 
             // Check if void item
@@ -441,7 +441,7 @@ namespace Faithful
             }
         }
 
-        public bool isEnabled => WIP ? Utils.debugWIPContent : enabledSetting.Value;
+        public bool isEnabled => WIP ? Utils.WIPContentEnabled : enabledSetting.Value;
     }
 
     internal class ItemDisplayModel : MonoBehaviour

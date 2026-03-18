@@ -12,7 +12,6 @@ namespace Faithful
         Buff inspirationBuff;
 
         // Store stats
-        public float critChance = 1.0f;
         public float critDamageMult = 0.20f;
 
         // Constructor
@@ -21,7 +20,7 @@ namespace Faithful
             toolbox = _toolbox;
 
             // Create Inspiration buff
-            inspirationBuff = Buffs.AddBuff("INSPIRATION", "Inspiration", "texbuffinspiredboost", Color.white);
+            inspirationBuff = Buffs.AddBuff("INSPIRATION", "Inspiration", "texbuffinspiredboost", Color.white, _usePercentageDisplay: true);
 
             // Add stats modification
             Behaviour.AddStatsMod(inspirationBuff, InspirationStatsMod);
@@ -30,7 +29,7 @@ namespace Faithful
         void InspirationStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify crit chance
-            _stats.critAdd += critChance * _count;
+            _stats.critAdd += _count;
 
             // Modify crit damage
             _stats.critDamageMultAdd += critDamageMult * _count;

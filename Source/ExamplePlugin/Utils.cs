@@ -45,8 +45,8 @@ namespace Faithful
         // Store debug mode
         static private bool _debugMode = false;
 
-        // Store WIP content debug mode
-        static private bool _debugWIPContent = false;
+        // Store if WIP content is enabled
+        static private bool _WIPContentEnabled = false;
 
         // Store verbose console
         static private bool _verboseConsole = false;
@@ -73,8 +73,8 @@ namespace Faithful
         // Create debug mode config
         static private Setting<bool> debugModeSetting;
 
-        // Create debug WIP content config
-        static private Setting<bool> debugWIPContentSetting;
+        // Create enable WIP content config
+        static private Setting<bool> enableWIPContentSetting;
 
         // Create verbose console config
         static private Setting<bool> verboseConsoleSetting;
@@ -146,8 +146,8 @@ namespace Faithful
         // Cached list of renderer rules applied materials
         private static Dictionary<string, Material> rendererRulesCachedMaterials = new Dictionary<string, Material>();
 
-        // Store language dictionary for early lookups
-        static private Dictionary<string, string> languageDictionary;
+        /*// Store language dictionary for early lookups
+        static private Dictionary<string, string> languageDictionary;*/
 
         // Store list of item behaviours
         static private List<ItemBase> itemBehaviours = new List<ItemBase>();
@@ -167,7 +167,7 @@ namespace Faithful
             debugModeSetting = Config.CreateSetting("DEBUG_MODE", "Debug Tools", "Debug Mode", false, "Do you want to enable this mod's debug mode?", false, true, _restartRequired: true);
 
             // Create debug WIP content setting
-            debugWIPContentSetting = Config.CreateSetting("DEBUG_WIP_CONTENT", "Debug Tools", "Debug WIP Content", false, "Do you want to enable WIP content? (not recommended - expect broken/absent behaviour)", false, false, _restartRequired: true);
+            enableWIPContentSetting = Config.CreateSetting("DEBUG_WIP_CONTENT", "Debug Tools", "Enable WIP Content?", false, "Do you want to enable WIP content? (not recommended - expect broken/absent behaviour)", false, false, _restartRequired: true);
 
             // Create debug mode setting
             verboseConsoleSetting = Config.CreateSetting("VERBOSE_CONSOLE", "Debug Tools", "Verbose Console", false, "Do you want more detailed console logging for this mod?", false, true, _restartRequired: true);
@@ -178,8 +178,8 @@ namespace Faithful
             // Update debug mode from config
             _debugMode = debugModeSetting.Value;
 
-            // Update debug WIP content mode from config
-            _debugWIPContent = debugWIPContentSetting.Value;
+            // Update WIP content mode from config
+            _WIPContentEnabled = enableWIPContentSetting.Value;
 
             // Update verbose console from config
             _verboseConsole = verboseConsoleSetting.Value;
@@ -216,8 +216,8 @@ namespace Faithful
             // Add behaviour to loadout panel
             On.RoR2.UI.LoadoutPanelController.OnEnable += OnLoadoutPanelEnable;
 
-            // Load language file
-            LoadLanguageFile();
+            /*// Load language file
+            LoadLanguageFile();*/
 
             if (_verboseConsole) Log.Debug("Utils initialised");
         }
@@ -258,7 +258,7 @@ namespace Faithful
             }
         }
 
-        private static void LoadLanguageFile()
+        /*private static void LoadLanguageFile()
         {
             // Get language file path
             string languageFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(pluginInfo.Location), "Faithful.language");
@@ -276,9 +276,9 @@ namespace Faithful
             // Language file doesn't exist
             else
             {
-                Log.Error("[UTILS]- Language file not found at: " + languageFilePath);
+                Log.Error("[UTILS] - Language file not found at: " + languageFilePath);
             }
-        }
+        }*/
 
         public static void CreateExpansionDef()
         {
@@ -1850,12 +1850,6 @@ namespace Faithful
             // Return found children
             return matching.ToArray();
         }
-
-        public static bool HasLanguageString(string _token)
-        {
-            // Return if language file has string
-            return languageDictionary.ContainsKey(_token);
-        }
         
         public static CharacterSpawnCard GetCharacterSpawnCard(string _name)
         {
@@ -2140,73 +2134,6 @@ namespace Faithful
             return childTree;
         }
 
-        public static string GetLanguageString(string _token, bool _prioritiseRoR2Language = false)
-        {
-            // Check if should prioritise using RoR2.Language
-            if (_prioritiseRoR2Language)
-            {
-                // First attempt to get from RoR2.Language
-                string result = Language.GetString(_token);
-                if (result != _token)
-                {
-                    // Found string
-                    return result;
-                }
-
-                // Check for token
-                if (languageDictionary.ContainsKey(_token))
-                {
-                    // Return corresponding value
-                    return languageDictionary[_token];
-                }
-
-                // Token not found
-                else
-                {
-                    Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
-                    return _token; // Return original token
-                }
-            }
-
-            else
-            {
-                // Check for token
-                if (languageDictionary.ContainsKey(_token))
-                {
-                    // Return corresponding value
-                    return languageDictionary[_token];
-                }
-
-                // Token not found
-                else
-                {
-                    Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
-
-                    return Language.GetString(_token); // Revert to RoR2.Language
-                }
-            }
-        }
-
-        public static string GetXMLLanguageString(string _token)
-        {
-            // Check for token
-            if (languageDictionary.ContainsKey(_token))
-            {
-                // Get string
-                string languageString = languageDictionary[_token];
-
-                // Return XML safe language string
-                return GetXMLSafeString(languageString);
-            }
-
-            // Token not found
-            else
-            {
-                Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
-                return _token; // Return original token
-            }
-        }
-
         public static string GetXMLSafeString(string _unsafe)
         {
             // Remove invalid characters for XML
@@ -2282,9 +2209,9 @@ namespace Faithful
             get { return _debugMode; }
         }
 
-        public static bool debugWIPContent
+        public static bool WIPContentEnabled
         {
-            get { return _debugWIPContent; }
+            get { return _WIPContentEnabled; }
         }
 
         public static bool verboseConsole
@@ -2613,11 +2540,5 @@ namespace Faithful
         }
 
         public BodyIndex bodyIndex => BodyCatalog.FindBodyIndex(characterSpecifier);
-    }
-
-    // Wrapper class for deserialization of the language file
-    public class LanguageWrapper
-    {
-        public Dictionary<string, string> strings; // The tokens and their corresponding strings
     }
 }

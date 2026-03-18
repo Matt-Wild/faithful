@@ -1,5 +1,4 @@
 ﻿using RoR2;
-using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -19,17 +18,17 @@ namespace Faithful
 
         // Store additional item settings
         Setting<bool> countTemporarySetting;
+        Setting<bool> capInspirationSetting;
         Setting<int> inspirationGainSetting;
         Setting<int> inspirationGainStackingSetting;
-        Setting<float> critChanceSetting;
         Setting<float> critDamageSetting;
         Setting<float> inspirationReturnSetting;
 
         // Store item stats
         bool countTemporary;
+        bool capInspiration;
         int inspirationGain;
         int inspirationGainStacking;
-        float critChance;
         float critDamageMult;
         float inspirationReturnPerc;
 
@@ -107,9 +106,9 @@ namespace Faithful
         {
             // Create settings specific to this item
             countTemporarySetting = collectorsVisionItem.CreateSetting("COUNT_TEMPORARY", "Count Temporary Items?", true, "Should this item count temporary items when providing inspiration?", false);
-            inspirationGainSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How many inspiration buffs should this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)", _minValue: 1);
-            inspirationGainStackingSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How many inspiration buffs should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1 inspiration)", _minValue: 1);
-            critChanceSetting = collectorsVisionItem.CreateSetting("CRIT_CHANCE", "Crit Chance", 1.0f, "How much should the inspiration buff increase the chance of the player getting a crit? (1.0 = 1% increase)", _valueFormatting: "{0:0.00}%");
+            capInspirationSetting = collectorsVisionItem.CreateSetting("CAP_INSPIRATION", "Cap Inspiration?", true, "Should inspiration granted by this item be capped at 100%?", false);
+            inspirationGainSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How many inspiration buffs should this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
+            inspirationGainStackingSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How many inspiration buffs should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
             critDamageSetting = collectorsVisionItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should the inspiration buff increase the crit damage multiplier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
             inspirationReturnSetting = collectorsVisionItem.CreateSetting("INSPIRATION_RETURN", "Inspiration Return", 50.0f, "How much inspiration acquired by the end of a stage should the shrine of recollection return? (50.0 = 50% return)", _valueFormatting: "{0:0.0}%", _maxValue: 100.0f);
         }
@@ -118,14 +117,13 @@ namespace Faithful
         {
             // Get item settings
             countTemporary = countTemporarySetting.Value;
+            capInspiration = capInspirationSetting.Value;
             inspirationGain = inspirationGainSetting.Value;
             inspirationGainStacking = inspirationGainStackingSetting.Value;
-            critChance = critChanceSetting.Value;
             critDamageMult = critDamageSetting.Value / 100.0f;
             inspirationReturnPerc = inspirationReturnSetting.Value / 100.0f;
 
             // Send values to inspiration buff
-            inspirationBehaviour.critChance = critChance;
             inspirationBehaviour.critDamageMult = critDamageMult;
 
             // Update item texts with new settings
@@ -191,10 +189,30 @@ namespace Faithful
                 // Set flag
                 helper.stageFlags.Set($"CS_{_index}_FFS");
 
-                // Grant buffs
-                for (int i = 0; i < inspirationGain + inspirationGainStacking * (count - 1.0f); i++)
+                // Check if should cap inspiration
+                if (capInspiration)
                 {
-                    body.AddBuff(inspirationBuff.buffDef);
+                    // Get current amount of buffs
+                    int currentBuffs = body.GetBuffCount(inspirationBuff.buffDef);
+
+                    // Calculate buffs to add
+                    int buffsToAdd =  Mathf.Min(inspirationGain + inspirationGainStacking * (count - 1), 100 - currentBuffs);
+
+                    // Grant buffs
+                    for (int i = 0; i < buffsToAdd; i++)
+                    {
+                        body.AddBuff(inspirationBuff.buffDef);
+                    }
+                }
+
+                // Inspiration is not capped
+                else
+                {
+                    // Grant buffs
+                    for (int i = 0; i < inspirationGain + inspirationGainStacking * (count - 1); i++)
+                    {
+                        body.AddBuff(inspirationBuff.buffDef);
+                    }
                 }
             }
         }

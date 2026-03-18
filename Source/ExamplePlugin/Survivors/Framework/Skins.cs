@@ -20,7 +20,7 @@ namespace Faithful
             if (childLocator == null)
             {
                 // Error and return - unsuccessful
-                Log.Error($"[SKINS] | Was unable to create skin definition for skin '{Utils.GetLanguageString(_skinToken)}' - Child locator not found on survivor!");
+                Log.Error($"[SKINS] | Was unable to create skin definition for skin '{Languages.GetLanguageString(_skinToken)}' - Child locator not found on survivor!");
                 return null;
             }
 
@@ -45,7 +45,7 @@ namespace Faithful
             skinDef.projectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0];
             skinDef.minionSkinReplacements = new SkinDef.MinionSkinReplacement[0];
             skinDef.nameToken = _skinToken;
-            skinDef.name = Utils.GetLanguageString(_skinToken);
+            skinDef.name = Languages.GetLanguageString(_skinToken);
 
             // Initialise mesh replacements list
             List<SkinDef.MeshReplacement> meshReplacements = new List<SkinDef.MeshReplacement>();

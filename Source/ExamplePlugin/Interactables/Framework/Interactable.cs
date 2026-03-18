@@ -649,7 +649,7 @@ namespace Faithful
         public string token { get { return m_token; } }
         public string modelName { get { return m_modelName; } }
         public string nameToken { get { return $"FAITHFUL_INTERACTABLE_{token}_NAME"; } }
-        public string name { get { return Utils.GetLanguageString(nameToken); } }
+        public string name { get { return Languages.GetLanguageString(nameToken); } }
         public string contextToken { get { return $"FAITHFUL_INTERACTABLE_{token}_CONTEXT"; } }
         public bool enabled
         {

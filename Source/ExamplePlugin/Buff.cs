@@ -18,13 +18,13 @@ namespace Faithful
         public string safeName;
 
         // Constructor
-        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true)
+        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false)
         {
             // Assign token
             token = _token;
 
             // Assign name
-            name = Utils.GetLanguageString($"FAITHFUL_{_token}_BUFF");
+            name = Languages.GetLanguageString($"FAITHFUL_{_token}_BUFF");
             safeName = _safeName;
 
             // Check if has config
@@ -61,6 +61,9 @@ namespace Faithful
 
             // Set icon
             buffDef.iconSprite = Assets.GetIcon(_iconName);
+
+            // Set stacking display method
+            buffDef.stackingDisplayMethod = _usePercentageDisplay ? BuffDef.StackingDisplayMethod.Percentage : BuffDef.StackingDisplayMethod.Default;
 
             // Add buff
             ContentAddition.AddBuffDef(buffDef);

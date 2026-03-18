@@ -28,6 +28,17 @@ You can support us in making this mod (or in our other work) through the link be
 
 [![Patreon](https://img.shields.io/badge/Support%20Us%20on-Patreon-orange?logo=patreon)](https://www.patreon.com/c/spilledsoupprojects)
 
+# Supported Languages
+
+Currently we support the following languages:
+- English
+- Russian
+- Chinese (Simplified)
+
+Thank you to Coldeiб for his Russian translation of our mod!
+
+If you would like to provide or request a translation for Faithful, please join our Discord and get in touch!
+
 # New Items
 All items can be disabled individually in this mod's config.
 <table>
@@ -242,8 +253,6 @@ Holding F1 as you press one of the listed keys will spawn the corrosponding tier
 - 'F4' | Spawn from Debug Menu Hotkey
 
 # Special Thanks
-
-- Thank you to Coldeiб for his Russian translation of our mod! (find it on our Discord)
 
 - Thank you to all the people who helped turn ideas into reality on the Risk of Rain 2 Modding Discord server!
   - .score

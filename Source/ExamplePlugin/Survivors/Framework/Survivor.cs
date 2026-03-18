@@ -1210,7 +1210,7 @@ namespace Faithful
         public CharacterModel characterModel => m_characterModel;
         public Color bodyColour => m_bodyColour;
         public AIType aiType => m_aiType;
-        public string name { get { return Utils.GetLanguageString(nameToken); } }
+        public string name { get { return Languages.GetLanguageString(nameToken); } }
         public string bodyName { get { return $"{name}Body"; } }
         public string masterName { get { return $"{name}MonsterMaster"; } }
         public string displayPrefabName { get { return $"{name}Display"; } }

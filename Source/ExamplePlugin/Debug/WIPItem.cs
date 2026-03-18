@@ -25,7 +25,7 @@ namespace Faithful
             string _pickup = null, string _description = null, string _lore = null) : base(Utils.toolbox)
         {
             // Don't create item is WIP content is disabled
-            if (!Utils.debugWIPContent) return;
+            if (!Utils.WIPContentEnabled) return;
 
             // Assign display settings callback
             displaySettingsCallback = _displaySettingsCallback;
