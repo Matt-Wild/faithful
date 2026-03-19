@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.3.24 Mod Manager Language Path Fix
+- Fixed issue with language files not being found due to installation via mod managers altering file paths.
+
 #### v1.3.23 Collector's Vision Changes And Localization
 - Added new locales for Russian and Chinese Simplified.
 - Changed Collector's Vision settings, description and buff to be percent based (tied to additional crit chance).
@@ -49,10 +52,10 @@
 - Separated verbose console output into it's own setting.
 - Fixed some assets needlessly trying to become networked by the Prefab API.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.9 Longshot Geode Indicator
 - Added optional radius indicator for Longshot Geode (default off).
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.8 Leader's Pennon Attack Speed And Regen Stacking
 - Added additional configs for Leader's Pennon to support attack speed and regen stacking.

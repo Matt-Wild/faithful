@@ -23,6 +23,9 @@ namespace Faithful
             // Get base path for languages
             string basePath = System.IO.Path.GetDirectoryName(Utils.pluginInfo.Location) + "/Languages/";
 
+            // Get the backup base path for languages
+            string backupBasePath = System.IO.Path.GetDirectoryName(Utils.pluginInfo.Location) + "/";
+
             // Cycle through all supported languages and load them
             foreach (string lang in SUPPORTED_LANGUAGES)
             {
@@ -32,8 +35,18 @@ namespace Faithful
                 // Check if file exists
                 if (!System.IO.File.Exists(langPath))
                 {
-                    Log.Error($"[LANGUAGES] - Could not find language file for language '{lang}' at path: {langPath}");
-                    continue;
+                    // Record failed path
+                    string failedPath = langPath;
+
+                    // Attempt to fetch the language file from the backup path
+                    langPath = backupBasePath + $"Faithful_{lang}.language";
+
+                    // Check if backup file exists
+                    if (!System.IO.File.Exists(langPath))
+                    {
+                        Log.Error($"[LANGUAGES] - Could not find language file for language '{lang}' at path: '{failedPath}' or '{langPath}'");
+                        continue;
+                    }
                 }
 
                 // Add to R2API
