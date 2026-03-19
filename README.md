@@ -37,7 +37,7 @@ Currently we support the following languages:
 
 Thank you to Coldeiб for his Russian translation of our mod!
 
-If you would like to provide or request a translation for Faithful, please join our Discord and get in touch!
+If you would like to provide, improve or request a translation for Faithful, please join our Discord and get in touch!
 
 # New Items
 All items can be disabled individually in this mod's config.
@@ -208,7 +208,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCollectorsVisionIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Collector's Vision</b><br>
-				Each unique item collected per stage grants <b>1 (</b>+1 per stack<b>)</b> permanent Inspiration. Each stack of Inspiration increases Critical Strike chance by <b>+1%</b> and grants an additional <b>+20%</b> Critical Strike damage. <b>This item can be adjusted</b>!
+				Each unique item collected per stage grants <b>1% (</b>+1% per stack<b>)</b> permanent Inspiration, increasing <b>Critical Strike</b> chance by <b>+1%</b> and granting an additional <b>+20% Critical Strike</b> damage. <b>This item can be adjusted</b>!
       </td>
       <td> 
 				Corrupts all <b>Laser Scopes</b>.

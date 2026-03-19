@@ -110,7 +110,7 @@
 
 	"FAITHFUL_COLLECTORS_VISION_NAME": "收集者的视野",
 	"FAITHFUL_COLLECTORS_VISION_PICKUP": "收集独特物品可提高“暴击率”和“暴击伤害”。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
-	"FAITHFUL_COLLECTORS_VISION_DESC": "每阶段收集一个独特物品可永久获得 <style=cIsDamage>[INSPIRATION_GAIN]</style> <style=cStack>(每层额外+[INSPIRATION_GAIN_STACKING])</style> 点 <style=cIsDamage>灵感</style>。每层 <style=cIsDamage>灵感</style> 提高 <style=cIsDamage>暴击率</style> <style=cIsDamage>+[CRIT_CHANCE]%</style>，并额外增加 <style=cIsDamage>+[CRIT_DAMAGE_MULT]%</style> <style=cIsDamage>暴击伤害</style>。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
+	"FAITHFUL_COLLECTORS_VISION_DESC": "每阶段收集一个独特物品可永久获得 <style=cIsDamage>[INSPIRATION_GAIN]%</style> <style=cStack>(每层额外+[INSPIRATION_GAIN_STACKING]%)</style> 点 <style=cIsDamage>灵感</style>，使<style=cIsDamage>暴击率</style>提高 <style=cIsDamage>+1%</style>，并额外提供 <style=cIsDamage>+[CRIT_DAMAGE_MULT]% 暴击伤害</style>。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
 	"FAITHFUL_COLLECTORS_VISION_LORE": "<style=cMono>\r//--来自 UES [已编辑] 的自动转录--//</style>\n\n“你有没有注意过 Bob？那家伙特别喜欢收集各种东西。铅笔、咖啡杯，甚至老板的签名海报。”\n\n“记得。有天他戴着个傻兮兮的玩意儿过来。”\n\n“‘玩意儿’？你就叫那玩意儿‘玩意儿’？我发誓它是活的。有一天，它还盯着我看……从头到脚扫了一遍。”\n\n“不管那是啥，Bob 可是护着它得很。他说是朋友 Jim 留给他的临别礼物。”\n\n“Jim？就是那个在 [已编辑] 被炒鱿鱼、还把 23-B 弄得鸡飞狗跳的家伙？”\n\n“应该不是……可能吧……总之不关我事，少知道点才轻松。话说那该死的螺丝刀在哪儿？”\n\n【Bob 从另一个房间精准地将螺丝刀扔到工作台上】\n\n“谢了哥们。”\n\n“我是认真的。这家伙吓人……比嗑了咖啡因的蜂鸟还高效。”\n\n【电钻、金属撞击和扭曲声响起】\n\n“嗯哼……”\n\n“你有在听吗？……我听说了 23-B 的事，我不想我们这也出事。”\n\n【工作间的声音持续，背景中不断传来被快速拆解与组装的声音】\n\n“啊？……哦。好吧。”\n\n“我真不明白你怎么能无动于衷。连队长都被吓到了……还以为他嗑药了。”\n\n【刺耳电流声响起，紧接着是应急灯启动的声音，然后一片寂静】\n\n<style=cMono>\r//--信号中断--//</style>",
 
 	"FAITHFUL_4T0N_JETPACK_NAME": "4-T0N 喷气背包",
