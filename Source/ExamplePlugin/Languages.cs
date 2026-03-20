@@ -21,10 +21,11 @@ namespace Faithful
         public static void Init()
         {
             // Get base path for languages
-            string basePath = System.IO.Path.GetDirectoryName(Utils.pluginInfo.Location) + "/Languages/";
+            string basePath = System.IO.Path.GetDirectoryName(Utils.pluginInfo.Location) + "/plugins/Languages/";
 
-            // Get the backup base path for languages
-            string backupBasePath = System.IO.Path.GetDirectoryName(Utils.pluginInfo.Location) + "/";
+            // Get the backup base paths for languages
+            string backupBasePath1 = System.IO.Path.GetDirectoryName(Utils.pluginInfo.Location) + "/Languages/";
+            string backupBasePath2 = System.IO.Path.GetDirectoryName(Utils.pluginInfo.Location) + "/";
 
             // Cycle through all supported languages and load them
             foreach (string lang in SUPPORTED_LANGUAGES)
@@ -36,16 +37,26 @@ namespace Faithful
                 if (!System.IO.File.Exists(langPath))
                 {
                     // Record failed path
-                    string failedPath = langPath;
+                    string failedPath1 = langPath;
 
-                    // Attempt to fetch the language file from the backup path
-                    langPath = backupBasePath + $"Faithful_{lang}.language";
+                    // Attempt to fetch the language file from the first backup path
+                    langPath = backupBasePath1 + $"{lang}/Faithful_{lang}.language";
 
                     // Check if backup file exists
                     if (!System.IO.File.Exists(langPath))
                     {
-                        Log.Error($"[LANGUAGES] - Could not find language file for language '{lang}' at path: '{failedPath}' or '{langPath}'");
-                        continue;
+                        // Record failed path
+                        string failedPath2 = langPath;
+
+                        // Attempt to fetch the language file from the second backup path
+                        langPath = backupBasePath2 + $"Faithful_{lang}.language";
+
+                        // Check if backup file exists
+                        if (!System.IO.File.Exists(langPath))
+                        {
+                            Log.Error($"[LANGUAGES] - Could not find language file for language '{lang}' at path: '{failedPath1}' or '{failedPath2}' or '{langPath}'");
+                            continue;
+                        }
                     }
                 }
 

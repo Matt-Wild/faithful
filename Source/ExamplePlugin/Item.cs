@@ -15,6 +15,8 @@ namespace Faithful
         public Setting<bool> extendedPickupDescSetting;
         public Setting<bool> enableItemDisplaysSetting;
         public Setting<string> nameOverrideSetting;
+        public Setting<string> pickupOverrideSetting;
+        public Setting<string> descriptionOverrideSetting;
         public Setting<string> corruptedOverrideSetting;
 
         // Language overlays
@@ -265,6 +267,18 @@ namespace Faithful
                 nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_{token}_NAME", Languages.GetLanguageString($"FAITHFUL_{token}_NAME"));
             }
 
+            // Check for pickup override
+            if (pickupOverrideSetting != null && !string.IsNullOrWhiteSpace(pickupOverrideSetting.Value))
+            {
+                overridePickup = pickupOverrideSetting.Value;
+            }
+
+            // Check for description override
+            if (descriptionOverrideSetting != null && !string.IsNullOrWhiteSpace(descriptionOverrideSetting.Value))
+            {
+                overrideDescription = descriptionOverrideSetting.Value;
+            }
+
             // Check if void item
             if (isVoid)
             {
@@ -356,6 +370,8 @@ namespace Faithful
             enableItemDisplaysSetting = CreateSetting("ENABLE_ITEM_DISPLAYS", "Enable Item Displays?", true, "Should this item have item displays on the compatible character models?", false, true, _restartRequired: true);
             extendedPickupDescSetting = CreateSetting("EXTENDED_PICKUP_DESC", "Extended Pickup Description", false, "Should this item have the logbook description appear when picking it up during runs?", false, true);
             nameOverrideSetting = CreateSetting("NAME_OVERRIDE", "Override Item Name", "", "Should this item be called something different?", false, _canRandomise: false);
+            pickupOverrideSetting = CreateSetting("PICKUP_OVERRIDE", "Override Item Pickup", "", "Should this item have a different pickup?\n\nFor styling and dynamic stat tags, open the .language file for examples.", false, _canRandomise: false);
+            descriptionOverrideSetting = CreateSetting("DESCRIPTION_OVERRIDE", "Override Item Description", "", "Should this item have a different description?\n\nFor styling and dynamic stat tags, open the .language file for examples.", false, _canRandomise: false);
 
             // Check if void item
             if (isVoid)
