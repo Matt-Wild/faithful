@@ -166,6 +166,43 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Drifter", "BagBottom", new Vector3(-0.192F, 0.0175F, 0.23F), new Vector3(295F, 35.5F, 75.5F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Technician", "UpperArmL", new Vector3(0F, 0.23825F, 0.1F), new Vector3(275F, 148.5F, 32F), new Vector3(0.09F, 0.09F, 0.09F));
                 });
+
+            CreateItem(_name: "Chakrams",
+                _pickup: "Activating your Primary skill also throws a piercing chakram that returns to you. <style=cIsVoid>Corrupts all Shurikens</style>.",
+                _description: "Activating your <style=cIsUtility>Primary skill</style> also throws a <style=cIsDamage>piercing chakram</style> that deals <style=cIsDamage>400%</style> <style=cStack>(+100% per stack)</style> base damage and returns to you. You can hold up to <style=cIsUtility>3</style> <style=cStack>(+1 per stack)</style> <style=cIsDamage>chakrams</style>. <style=cIsVoid>Corrupts all Shurikens</style>.",
+                _lore: "Order: Golden Steel Chakrams\r\nTracking Number: 78*******\r\nEstimated Delivery: 06/16/2060\r\nShipping Method: Priority\r\nShipping Address: \u201CSecret Hideout\u201C, Earth\r\nShipping Details:\r\n\r\nShouldn't soar off to one side like the others did. Lemme know if there's anything else you want, we've got a new stock of some classics coming in next month by the time you read this. Nunchucks, nagamaki, kunai, all that classic stuff.\r\n\r\nAlso, please change your address. It looks stupid every time I see it.\r\n",
+                _tier: ItemTier.VoidTier2,
+                _tags: [ItemTag.Damage],
+                _iconDir: "texchakramicon",
+                _modelDir: "chakrammesh",
+                _displayDir: "chakramdisplaymesh",
+                _displaySettingsCallback: _displaySettings =>
+                {
+                    // Add character display settings
+                    _displaySettings.AddCharacterDisplay("Commando", "HandR", new Vector3(-0.0045F, 0.07375F, 0.0425F), new Vector3(50.5F, 262.5F, 268F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Huntress", "BowHinge2L", new Vector3(-0.042F, 0.37125F, 0.0075F), new Vector3(90F, 90F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Huntress", "BowHinge2R", new Vector3(-0.042F, 0.37125F, -0.0075F), new Vector3(90F, 90F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Bandit", "FootL", new Vector3(-0.034F, 0.0005F, 0.0003F), new Vector3(345.75F, 181F, 83.75F), new Vector3(0.0625F, 0.0625F, 0.0625F));
+                    _displaySettings.AddCharacterDisplay("Bandit", "FootR", new Vector3(0.034F, 0.0005F, 0.0003F), new Vector3(14.25F, 359F, 263.25F), new Vector3(0.0625F, 0.0625F, 0.0625F));
+                    _displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(-2.507F, 1.905F, 0F), new Vector3(30F, 0F, 90F), new Vector3(1F, 1F, 1F));
+                    _displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(2.507F, 1.905F, 0F), new Vector3(30F, 0F, 90F), new Vector3(1F, 1F, 1F));
+                    _displaySettings.AddCharacterDisplay("Engineer", "CannonHeadR", new Vector3(-0.1393F, 0.384F, 0.1444F), new Vector3(60F, 225F, 270F), new Vector3(0.125F, 0.125F, 0.125F));
+                    _displaySettings.AddCharacterDisplay("Artificer", "LowerArmL", new Vector3(0.02F, 0.317F, 0.014F), new Vector3(0F, 335F, 180F), new Vector3(0.2F, 0.2F, 0.2F));
+                    _displaySettings.AddCharacterDisplay("Artificer", "LowerArmR", new Vector3(0.02F, 0.317F, -0.014F), new Vector3(0F, 205F, 0F), new Vector3(0.2F, 0.2F, 0.2F));
+                    _displaySettings.AddCharacterDisplay("Mercenary", "Chest", new Vector3(0F, 0.169F, -0.221F), new Vector3(45F, 257F, 252F), new Vector3(0.3F, 0.3F, 0.3F));
+                    _displaySettings.AddCharacterDisplay("REX", "AimOriginSyringe", new Vector3(0F, -0.104F, -0.97F), new Vector3(90F, 0F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
+                    _displaySettings.AddCharacterDisplay("Loader", "MechUpperArmL", new Vector3(0.09F, 0.07625F, -0.0035F), new Vector3(318.75F, 0F, 90F), new Vector3(0.175F, 0.175F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("Acrid", "LowerArmR", new Vector3(0.0875F, 2.65F, -0.1F), new Vector3(0F, 45F, 4.25F), new Vector3(1.75F, 1.75F, 1.75F));
+                    _displaySettings.AddCharacterDisplay("Captain", "LowerArmL", new Vector3(0.00875F, 0.2F, 0F), new Vector3(350F, 75F, 182.5F), new Vector3(0.15F, 0.15F, 0.15F));
+                    _displaySettings.AddCharacterDisplay("Railgunner", "CalfR", new Vector3(-0.014F, 0.138F, -0.1115F), new Vector3(310F, 87F, 281.75F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Void Fiend", "ForeArmR", new Vector3(0.29F, 0.1525F, 0.06F), new Vector3(77.5F, 190F, 216.25F), new Vector3(0.11F, 0.11F, 0.11F));
+                    _displaySettings.AddCharacterDisplay("Seeker", "HandR", new Vector3(-0.005F, 0.09F, 0.045F), new Vector3(334F, 72F, 95F), new Vector3(0.0625F, 0.0625F, 0.0625F));
+                    _displaySettings.AddCharacterDisplay("False Son", "HandR", new Vector3(0.0033F, 0.09F, 0.0525F), new Vector3(338.75F, 82.5F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Chef", "HandR", new Vector3(-0.09775F, -0.01385F, 0.0575F), new Vector3(60F, 107.5F, 110F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Operator", "HandR", new Vector3(0.0635F, 0F, 0F), new Vector3(270F, 88.75F, 0F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("Drifter", "HandR", new Vector3(-0.0845F, -0.01505F, -0.09925F), new Vector3(342F, 11.65F, 109.5F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(0.08325F, 0.1225F, 0F), new Vector3(296.75F, 187.5F, 261.5F), new Vector3(0.055F, 0.055F, 0.055F));
+                });
         }
 
         public static void CreateItem(bool _createDisplaySettings = true, string _name = "WIP ITEM", ItemTag[] _tags = default, 
