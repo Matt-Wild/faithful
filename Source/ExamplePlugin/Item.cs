@@ -148,7 +148,11 @@ namespace Faithful
             // Corrupts item? - Avoid pairing disabled items
             if (_corruptToken != null && isEnabled)
             {
-                if (Utils.verboseConsole) Log.Debug($"Adding corruption pair for item '{name}'. Item to corrupt token: '{_corruptToken}' with override '{corruptedOverrideSetting.Value}'");
+                if (Utils.verboseConsole)
+                {
+                    if (corruptedOverrideSetting == null) Log.Debug($"Adding corruption pair for item '{name}'. Item to corrupt token: '{_corruptToken}'");
+                    else Log.Debug($"Adding corruption pair for item '{name}'. Item to corrupt token: '{_corruptToken}' with override '{corruptedOverrideSetting.Value}'");
+                }
 
                 // Add corruption pair
                 Utils.AddCorruptionPair(itemDef, _corruptToken, corruptedOverrideSetting != null ? corruptedOverrideSetting.Value : "");
