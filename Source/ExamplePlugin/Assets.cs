@@ -221,15 +221,17 @@ namespace Faithful
             GameObject tempTMEffect = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("6b314230ed88f3c4b8d55cc64846854b").WaitForCompletion());
             matrixEffectPrefab = tempTMEffect.InstantiateClone("faithfulTargetingMatrixEffect", false);
             Object.DestroyImmediate(tempTMEffect);
-            matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
-            matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
-            matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", GetTexture("texRampPennonBuff"));
-            matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.SetTexture("_MainTex", GetTexture("texIndicatorMatrixMask"));
-            matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material.mainTexture = GetTexture("texIndicatorMatrixMask");
+            Material TMEffectMat = matrixEffectPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material;
+            TMEffectMat.name = "matTargetingMatrixEffect";
+            TMEffectMat.SetFloat("_InvFade", 0.0f);
+            TMEffectMat.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
+            TMEffectMat.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
+            TMEffectMat.SetTexture("_RemapTex", GetTexture("texRampPennonBuff"));
+            TMEffectMat.SetTexture("_MainTex", GetTexture("texIndicatorMatrixMask"));
+            TMEffectMat.mainTexture = GetTexture("texIndicatorMatrixMask");
             matrixEffectPrefab.transform.Find("Visual").Find("ColoredLightShafts (1)").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
             matrixEffectPrefab.transform.Find("Visual").Find("ColoredLightShafts (1)").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
-            matrixEffectPrefab.transform.Find("Visual").Find("FlarePerst_Ps (1)").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
-            matrixEffectPrefab.transform.Find("Visual").Find("FlarePerst_Ps (1)").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
+            Object.DestroyImmediate(matrixEffectPrefab.transform.Find("Visual").Find("FlarePerst_Ps (1)").gameObject);
             matrixEffectPrefab.transform.Find("Visual").Find("SoftGlow").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
             matrixEffectPrefab.transform.Find("Visual").Find("SoftGlow").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
 
