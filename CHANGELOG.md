@@ -1,5 +1,9 @@
 # Changelog
 
+#### v1.3.26 Item Tag And Lore Update
+- Updated items to include newly introduced item tags.
+- Replaced current quotes in item lore with quotes more faithful to the base game.
+
 #### v1.3.25 Custom Pickups And Descriptions
 - Added config options for changing pickups and descriptions for items.
 - Fixed mod managers flattening Faithful's folder structure.
@@ -49,10 +53,10 @@
 #### v1.3.12 Locales Framework
 - Changed item and buff internal names to be more robust for the future implementation of additional locales and to avoid future mod conflicts.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.11 Toaster/Shawl Buff Deletion Fix
 - Vengeful Toaster and Hermit's Shawl no longer waste their associated buffs on damage events that do no actual damage.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.10 Verbose Console Setting
 - Separated verbose console output into it's own setting.
