@@ -69,6 +69,7 @@ namespace Faithful
         public static GameObject radiusIndicatorPrefab;
         public static GameObject pennonEffectPrefab;
         public static GameObject matrixEffectPrefab;
+        public static GameObject matrixEffectLocalPrefab;
         public static GameObject shrineUseEffectPrefab;
         public static GameObject technicianArcPrefab;
         public static GameObject technicianTrackingIndicatorPrefab;
@@ -234,6 +235,23 @@ namespace Faithful
             Object.DestroyImmediate(matrixEffectPrefab.transform.Find("Visual").Find("FlarePerst_Ps (1)").gameObject);
             matrixEffectPrefab.transform.Find("Visual").Find("SoftGlow").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
             matrixEffectPrefab.transform.Find("Visual").Find("SoftGlow").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
+
+            // Create Targeting Matrix Local effect
+            GameObject tempTMEffectLocal = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("6b314230ed88f3c4b8d55cc64846854b").WaitForCompletion());
+            matrixEffectLocalPrefab = tempTMEffectLocal.InstantiateClone("faithfulTargetingMatrixEffect", false);
+            Object.DestroyImmediate(tempTMEffectLocal);
+            Material TMEffectLocalMat = matrixEffectLocalPrefab.transform.Find("Visual").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material;
+            TMEffectLocalMat.name = "matTargetingMatrixLocalEffect";
+            TMEffectLocalMat.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
+            TMEffectLocalMat.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
+            TMEffectLocalMat.SetTexture("_RemapTex", GetTexture("texRampPennonBuff"));
+            TMEffectLocalMat.SetTexture("_MainTex", GetTexture("texIndicatorMatrixMask"));
+            TMEffectLocalMat.mainTexture = GetTexture("texIndicatorMatrixMask");
+            matrixEffectLocalPrefab.transform.Find("Visual").Find("ColoredLightShafts (1)").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
+            matrixEffectLocalPrefab.transform.Find("Visual").Find("ColoredLightShafts (1)").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
+            Object.DestroyImmediate(matrixEffectLocalPrefab.transform.Find("Visual").Find("FlarePerst_Ps (1)").gameObject);
+            matrixEffectLocalPrefab.transform.Find("Visual").Find("SoftGlow").GetComponent<ParticleSystemRenderer>().material.SetColor("_Color", new Color(1.0f, 0.0f, 0.0f));
+            matrixEffectLocalPrefab.transform.Find("Visual").Find("SoftGlow").GetComponent<ParticleSystemRenderer>().material.SetColor("_TintColor", new Color(1.0f, 0.0f, 0.0f));
 
             // Create radius indicator prefab
             GameObject radiusIndicator = Object.Instantiate(Addressables.LoadAssetAsync<GameObject>("5ba295c0a3919a544939e6efe1ff17b3").WaitForCompletion());

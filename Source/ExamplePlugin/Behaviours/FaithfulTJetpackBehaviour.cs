@@ -10,6 +10,14 @@ namespace Faithful
         // Store reference to Character Body
         public CharacterBody character;
 
+        // Store buffs for fuel amount
+        protected Buff emptyFuelBuff;
+        protected Buff lowFuelBuff;
+        protected Buff highFuelBuff;
+
+        // Current displayed fuel buff
+        protected Buff currentFuelBuff;
+
         // Store if active
         protected bool active = false;
 
@@ -91,6 +99,11 @@ namespace Faithful
 
             // Fetch jetpack settings
             FetchSettings();
+
+            // Fetch buffs
+            emptyFuelBuff = Buffs.GetBuff("4T0N_JETPACK_EMPTY");
+            lowFuelBuff = Buffs.GetBuff("4T0N_JETPACK_LOW");
+            highFuelBuff = Buffs.GetBuff("4T0N_JETPACK_HIGH");
 
             // Get character model
             Transform characterModel = _characterBody.modelLocator.modelTransform;
@@ -294,6 +307,9 @@ namespace Faithful
             // Update visuals
             UpdateVisuals();
 
+            // Update display buff
+            UpdateDisplayBuff();
+
             // Sync jetpack
             SyncJetpack();
 
@@ -413,6 +429,31 @@ namespace Faithful
             {
                 // Update jet effects
                 jetsOn.SetActive(jetActivated);
+            }
+        }
+
+        protected void UpdateDisplayBuff()
+        {
+            if (!Utils.hosting) return;
+
+            // Fetch fuel percentage
+            float fuelPerc = fuelRemainingPerc;
+
+            // Get needed buff to be displayed
+            Buff desiredDisplayBuff;
+            if (fuelPerc < 0.01f) desiredDisplayBuff = emptyFuelBuff;
+            else if (fuelPerc < 0.25f) desiredDisplayBuff = lowFuelBuff;
+            else desiredDisplayBuff = highFuelBuff;
+
+            // Check if display buff needs to be activated
+            if (desiredDisplayBuff != null && desiredDisplayBuff != currentFuelBuff)
+            {
+                // Remove current fuel buff
+                if (currentFuelBuff != null) character.RemoveBuff(currentFuelBuff.buffDef);
+
+                // Update current fuel buff
+                currentFuelBuff = desiredDisplayBuff;
+                character.AddBuff(currentFuelBuff.buffDef);
             }
         }
 

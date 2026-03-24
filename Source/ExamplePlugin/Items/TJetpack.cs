@@ -8,6 +8,11 @@ namespace Faithful
         // Store item
         Item item;
 
+        // Buffs for amount of fuel remaining
+        Buff emptyFuelBuff;
+        Buff lowFuelBuff;
+        Buff highFuelBuff;
+
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -27,6 +32,11 @@ namespace Faithful
 
             // Create item
             item = Items.AddItem("4T0N_JETPACK", "4-T0N Jetpack", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
+
+            // Create buffs
+            emptyFuelBuff = Buffs.AddBuff("4T0N_JETPACK_EMPTY", "No Fuel", "texBuff4T0NJetpackEmpty", Color.white, false, _hasConfig: false);
+            lowFuelBuff = Buffs.AddBuff("4T0N_JETPACK_LOW", "Low Fuel", "texBuff4T0NJetpackLow", Color.white, false, _hasConfig: false);
+            highFuelBuff = Buffs.AddBuff("4T0N_JETPACK_HIGH", "High Fuel", "texBuff4T0NJetpackHigh", Color.white, false, _hasConfig: false);
 
             // Create item settings
             CreateSettings();

@@ -67,6 +67,7 @@ namespace Faithful
 
         // Store targeting matrix stats
         bool enableTargetEffect;
+        bool targetEffectGlobal;
         float maxDistance;
         float outOfRangeTime;
 
@@ -126,6 +127,7 @@ namespace Faithful
 
             // Update stats
             enableTargetEffect = item.FetchSetting<bool>("ENABLE_TARGET_EFFECT").Value;
+            targetEffectGlobal = item.FetchSetting<bool>("TARGET_EFFECT_GLOBAL").Value;
             maxDistance = item.FetchSetting<float>("MAX_DISTANCE").Value;
             outOfRangeTime = item.FetchSetting<float>("OUT_OF_RANGE_TIME").Value;
         }
@@ -384,7 +386,7 @@ namespace Faithful
             if (enableTargetEffect)
             {
                 // Create visual effect
-                GameObject gameObject = Instantiate(Assets.matrixEffectPrefab, character.corePosition, Quaternion.identity);
+                GameObject gameObject = Instantiate(targetEffectGlobal ? Assets.matrixEffectPrefab : Assets.matrixEffectLocalPrefab, character.corePosition, Quaternion.identity);
                 visualEffect = gameObject.GetComponent<TemporaryVisualEffect>();
                 visualEffect.parentTransform = character.coreTransform;
                 visualEffect.visualState = TemporaryVisualEffect.VisualState.Enter;
