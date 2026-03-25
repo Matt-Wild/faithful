@@ -18,6 +18,7 @@ namespace Faithful
 
         // Store additional item settings
         Setting<bool> showBuffSetting;
+        Setting<bool> disableFallDamageSetting;
         Setting<float> fuelTimeSetting;
         Setting<float> fuelTimeStackingSetting;
         Setting<float> rechargeTimeSetting;
@@ -92,6 +93,7 @@ namespace Faithful
         {
             // Create settings specific to this item
             showBuffSetting = item.CreateSetting("SHOW_BUFF", "Enable Fuel Buff?", true, "Should the fuel remaining be shown as a buff?", false, true, _restartRequired: true);
+            disableFallDamageSetting = item.CreateSetting("DISABLE_FALL_DAMAGE", "Disable Fall Damage?", true, "When using the jetpack, should fall damage be mitigated?", false);
             fuelTimeSetting = item.CreateSetting("FUEL_TIME", "Fuel Time", 3.0f, "How much fuel should the jetpack have? (3.0 = 3 seconds)", _valueFormatting: "{0:0.00}s");
             fuelTimeStackingSetting = item.CreateSetting("FUEL_TIME_STACKING", "Fuel Time Stacking", 1.5f, "How much additional fuel should the jetpack get per stack? (1.5 = 1.5 seconds)", _valueFormatting: "{0:0.00}s");
             rechargeTimeSetting = item.CreateSetting("RECHARGE_TIME", "Recharge Time", 8.0f, "How long should it take for the jetpack to refuel after touching the ground? (8.0 = 8 seconds)", _valueFormatting: "{0:0.00}s");

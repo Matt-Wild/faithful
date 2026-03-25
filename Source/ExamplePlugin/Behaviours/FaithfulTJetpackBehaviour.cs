@@ -65,6 +65,9 @@ namespace Faithful
         // Store if this jetpack has a display
         protected bool hasDisplay = false;
 
+        // If fall damage is ignored when jetting
+        protected bool ignoreFallDamage = false;
+
         // Store reference to 4-T0N Jetpack game objects
         protected GameObject jetpack;
         protected GameObject additionalBoosters;
@@ -220,6 +223,7 @@ namespace Faithful
             Item jetpackItem = Items.GetItem("4T0N_JETPACK");
 
             // Update stats
+            ignoreFallDamage = jetpackItem.FetchSetting<bool>("DISABLE_FALL_DAMAGE").Value;
             baseFuel = jetpackItem.FetchSetting<float>("FUEL_TIME").Value;
             fuelPerStack = jetpackItem.FetchSetting<float>("FUEL_TIME_STACKING").Value;
             baseRefuelDuration = jetpackItem.FetchSetting<float>("RECHARGE_TIME").Value;
@@ -379,8 +383,8 @@ namespace Faithful
 
         private bool OnIsImmuneToFallDamage(On.RoR2.GlobalEventManager.orig_IsImmuneToFallDamage orig, GlobalEventManager self, CharacterBody body)
         {
-            // Check if valid and correct character
-            if (self == null || body != character)
+            // Check if valid and correct character (and fall damage is ignored)
+            if (self == null || body != character || !ignoreFallDamage)
             {
                 // Otherwise return normal result
                 return orig(self, body);
