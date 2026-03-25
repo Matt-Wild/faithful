@@ -135,7 +135,7 @@ namespace Faithful
             CreateItem(_name: "Reserve Battery",
                 _pickup: "Killing an enemy adds a temporary extra charge of a random skill.",
                 _description: "Killing an enemy adds <style=cIsUtility>+1 temporary</style> charge of either your <style=cIsUtility>Secondary</style>, <style=cIsUtility>Utility</style> or <style=cIsUtility>Special skill</style>, up to a maximum of <style=cIsUtility>+1</style> <style=cStack>(+1 per stack)</style> for each skill.",
-                _lore: "> PRIMARY POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>1</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>2</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>3</style>] POWER STATUS : <style=cMono>97%</style>\r\n\r\n> COMMAND : <style=cMono>RECHARGE RESERVE [3]</style>\r\n\r\n> DAILY REMINDER : <style=cMono>\u0022A prepper is a fool every day but doomsday.\u0022</style>",
+                _lore: "> PRIMARY POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>1</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>2</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>3</style>] POWER STATUS : <style=cMono>097%</style>\r\n\r\n> COMMAND : <style=cMono>RECHARGE RESERVE [3]</style>\r\n\r\n> DAILY REMINDER : <style=cMono>\u0022A prepper is a fool every day but doomsday.\u0022</style>",
                 _tier: ItemTier.Tier1,
                 _tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist],
                 _iconDir: "texreservebatteryicon",
