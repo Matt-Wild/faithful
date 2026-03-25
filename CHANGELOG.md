@@ -1,5 +1,10 @@
 # Changelog
 
+#### v1.3.27 Jetpack And Targeting Matrix Changes
+- Targeting Matrix effect now shows through terrain to make finding the target easier (can be disabled via config).
+- Jetpack now has a buff indicating fuel remaining (can be disabled via config).
+- Jetpack now mitigates fall damage while in use (can be disabled via config).
+
 #### v1.3.26 Item Tag And Lore Update
 - Updated items to include newly introduced item tags.
 - Replaced current quotes in item lore with quotes more faithful to the base game.
@@ -50,10 +55,10 @@
 #### v1.3.13 Spacious Umbrella Buff
 - Spacious Umbrella has been buffed with reduced stacking falloff.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.12 Locales Framework
 - Changed item and buff internal names to be more robust for the future implementation of additional locales and to avoid future mod conflicts.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.11 Toaster/Shawl Buff Deletion Fix
 - Vengeful Toaster and Hermit's Shawl no longer waste their associated buffs on damage events that do no actual damage.

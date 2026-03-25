@@ -217,41 +217,6 @@ All items can be disabled individually in this mod's config.
 	</tbody>
 </table>
 
-# Debugging Tools
-
-While disabled by default in the config file, we've added some optional debug features that can be used to help other mod creators.
-
-In multiplayer, only the host can access these debugging tools.
-
-- 'F1' | Hold to spawn a Command Essence:
-  - '1'	| Common
-  - '2'	| Uncommon
-  - '3'	| Legendary
-  - '4'	| Planet
-  - '5'	| Lunar
-  - '6'	| Tier 1 Void
-  - '7'	| Tier 2 Void
-  - '8'	| Tier 3 Void
-  - '9'	| Equipment
-  - '-'	| Lunar Equipment
-
-Holding F1 as you press one of the listed keys will spawn the corrosponding tier of Command Essence.
-
-- 'F2' | Toggle Godmode
-  - Increased movement speed, attack speed and jump height.
-  - All damage dealt will instantly kill anything.
-  - All incoming damage is ignored as well as (most) instant kill abilities.
-  - Forced teleportation (such as falling out of bounds) will be ignored.
-
-- 'F3' | Toggle Debug Menu
-  - The Stats Monitor shows the base and current stats of the host.
-  - The Spawn Menu let's the host spawn enemies, allies and Command Essences.
-  - The Stage Controls let the host skip the current stage and clear all enemies from the map.
-  - Object Analysis allows you to search for Unity GameObjects and cycle through their components and children. Object Analysis also allows you to call some methods and change some attributes of components during runtime.
-  - Audio Analysis shows you what audio events are firing and where from.
-
-- 'F4' | Spawn from Debug Menu Hotkey
-
 # Special Thanks
 
 - Thank you to all the people who helped turn ideas into reality on the Risk of Rain 2 Modding Discord server!
