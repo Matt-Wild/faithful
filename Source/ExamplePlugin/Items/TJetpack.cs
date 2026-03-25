@@ -17,12 +17,16 @@ namespace Faithful
         ItemDisplaySettings displaySettings;
 
         // Store additional item settings
+        Setting<bool> showBuffSetting;
         Setting<float> fuelTimeSetting;
         Setting<float> fuelTimeStackingSetting;
         Setting<float> rechargeTimeSetting;
         Setting<float> rechargeTimeReductionSetting;
         Setting<float> maxVelocityMultiplierSetting;
         Setting<float> accelerationMultiplierSetting;
+
+        // Item settings
+        bool showBuff;
 
         // Constructor
         public TJetpack(Toolbox _toolbox) : base(_toolbox)
@@ -33,16 +37,16 @@ namespace Faithful
             // Create item
             item = Items.AddItem("4T0N_JETPACK", "4-T0N Jetpack", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
 
-            // Create buffs
-            emptyFuelBuff = Buffs.AddBuff("4T0N_JETPACK_EMPTY", "No Fuel", "texBuff4T0NJetpackEmpty", Color.white, false, _hasConfig: false);
-            lowFuelBuff = Buffs.AddBuff("4T0N_JETPACK_LOW", "Low Fuel", "texBuff4T0NJetpackLow", Color.white, false, _hasConfig: false);
-            highFuelBuff = Buffs.AddBuff("4T0N_JETPACK_HIGH", "High Fuel", "texBuff4T0NJetpackHigh", Color.white, false, _hasConfig: false);
-
             // Create item settings
             CreateSettings();
 
             // Fetch item settings
             FetchSettings();
+
+            // Create buffs
+            emptyFuelBuff = Buffs.AddBuff("4T0N_JETPACK_EMPTY", "No Fuel", "texBuff4T0NJetpackEmpty", Color.white, false, _hasConfig: false, _isHidden: !showBuff);
+            lowFuelBuff = Buffs.AddBuff("4T0N_JETPACK_LOW", "Low Fuel", "texBuff4T0NJetpackLow", Color.white, _hasConfig: false, _usePercentageDisplay: true, _isHidden: !showBuff);
+            highFuelBuff = Buffs.AddBuff("4T0N_JETPACK_HIGH", "High Fuel", "texBuff4T0NJetpackHigh", Color.white, _hasConfig: false, _usePercentageDisplay: true, _isHidden: !showBuff);
 
             // Inject on transfer item behaviours
             Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
@@ -87,6 +91,7 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
+            showBuffSetting = item.CreateSetting("SHOW_BUFF", "Enable Fuel Buff?", true, "Should the fuel remaining be shown as a buff?", false, true, _restartRequired: true);
             fuelTimeSetting = item.CreateSetting("FUEL_TIME", "Fuel Time", 3.0f, "How much fuel should the jetpack have? (3.0 = 3 seconds)", _valueFormatting: "{0:0.00}s");
             fuelTimeStackingSetting = item.CreateSetting("FUEL_TIME_STACKING", "Fuel Time Stacking", 1.5f, "How much additional fuel should the jetpack get per stack? (1.5 = 1.5 seconds)", _valueFormatting: "{0:0.00}s");
             rechargeTimeSetting = item.CreateSetting("RECHARGE_TIME", "Recharge Time", 8.0f, "How long should it take for the jetpack to refuel after touching the ground? (8.0 = 8 seconds)", _valueFormatting: "{0:0.00}s");
@@ -97,6 +102,9 @@ namespace Faithful
 
         public override void FetchSettings()
         {
+            // Get settings
+            showBuff = showBuffSetting.Value;
+
             // Update item texts with new settings
             item.UpdateItemTexts();
         }

@@ -1,5 +1,6 @@
 ﻿using EntityStates;
 using RoR2;
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -15,8 +16,8 @@ namespace Faithful
         protected Buff lowFuelBuff;
         protected Buff highFuelBuff;
 
-        // Current displayed fuel buff
-        protected Buff currentFuelBuff;
+        // Current displayed fuel buff percentage
+        protected int currentFuelBuffPerc;
 
         // Store if active
         protected bool active = false;
@@ -270,6 +271,7 @@ namespace Faithful
             //On.EntityStates.Mage.JetpackOn.OnExit += OnArtificerJetpackOnExit;
             On.EntityStates.Mage.JetpackOn.FixedUpdate += OnArtificerJetpackFixedUpdate;
             On.EntityStates.Mage.MageCharacterMain.ProcessJump += OnArtificerProcessJump;
+            On.RoR2.GlobalEventManager.IsImmuneToFallDamage += OnIsImmuneToFallDamage;
         }
 
         protected void Deactivate()
@@ -375,6 +377,22 @@ namespace Faithful
             orig(self); // Otherwise run normal processes
         }
 
+        private bool OnIsImmuneToFallDamage(On.RoR2.GlobalEventManager.orig_IsImmuneToFallDamage orig, GlobalEventManager self, CharacterBody body)
+        {
+            // Check if valid and correct character
+            if (self == null || body != character)
+            {
+                // Otherwise return normal result
+                return orig(self, body);
+            }
+
+            // Check if jet is active (don't do fall damage is jetpack is on)
+            if (jetActivated) return true;
+
+            // Otherwise return normal result
+            return orig(self, body);
+        }
+
         protected void JetpackBehaviour(GenericCharacterMain self)
         {
             // Check if game is paused
@@ -437,23 +455,35 @@ namespace Faithful
             if (!Utils.hosting) return;
 
             // Fetch fuel percentage
-            float fuelPerc = fuelRemainingPerc;
+            int fuelPerc = Mathf.CeilToInt(fuelRemainingPerc * 100.0f);
+
+            // Check if fuel percentage has changed
+            if (fuelPerc == currentFuelBuffPerc) return;
+
+            // Update current fuel buff percentage
+            currentFuelBuffPerc = fuelPerc;
 
             // Get needed buff to be displayed
-            Buff desiredDisplayBuff;
-            if (fuelPerc < 0.01f) desiredDisplayBuff = emptyFuelBuff;
-            else if (fuelPerc < 0.25f) desiredDisplayBuff = lowFuelBuff;
-            else desiredDisplayBuff = highFuelBuff;
-
-            // Check if display buff needs to be activated
-            if (desiredDisplayBuff != null && desiredDisplayBuff != currentFuelBuff)
+            if (fuelPerc == 0)
             {
-                // Remove current fuel buff
-                if (currentFuelBuff != null) character.RemoveBuff(currentFuelBuff.buffDef);
-
-                // Update current fuel buff
-                currentFuelBuff = desiredDisplayBuff;
-                character.AddBuff(currentFuelBuff.buffDef);
+                // Update buff counts
+                character.AddBuff(emptyFuelBuff.buffDef.buffIndex);
+                character.SetBuffCount(lowFuelBuff.buffDef.buffIndex, 0);
+                character.SetBuffCount(highFuelBuff.buffDef.buffIndex, 0);
+            }
+            else if (fuelPerc < 26)
+            {
+                // Update buff counts
+                character.RemoveBuff(emptyFuelBuff.buffDef.buffIndex);
+                character.SetBuffCount(lowFuelBuff.buffDef.buffIndex, fuelPerc);
+                character.SetBuffCount(highFuelBuff.buffDef.buffIndex, 0);
+            }
+            else
+            {
+                // Update buff counts
+                character.RemoveBuff(emptyFuelBuff.buffDef.buffIndex);
+                character.SetBuffCount(lowFuelBuff.buffDef.buffIndex, 0);
+                character.SetBuffCount(highFuelBuff.buffDef.buffIndex, fuelPerc);
             }
         }
 
