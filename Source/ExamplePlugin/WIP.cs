@@ -89,7 +89,7 @@ namespace Faithful
             CreateItem(_name: "Radiant Timepiece",
                 _pickup: "Increase the duration of temporary buffs.",
                 _description: "Increase the <style=cIsUtility>duration</style> of temporary buffs by <style=cIsUtility>1</style> <style=cStack>(+1 per stack)</style> second(s).",
-                _lore: "Order: Henlein Brand Pocket Watch 222nd Edition (Silver Gray)\r\nTracking Number: 1510******\r\nEstimated Delivery: 08/23/2057\r\nShipping Method: High Priority/Fragile\r\nShipping Address: Antiques Workshop, Continuum St., Saturn\r\nShipping Details:\r\n\r\nThank you for your purchase of:\r\n > 1 Henlein Brand Pocket Watch 222nd Edition, Silver Gray\r\n\r\nWe hope you are satisfied with its craftsmanship. We pride ourselves on our work as the largest luxury watch retailer of Earth so do contact our customer support line if you notice any defects. Our traditional horologists will always be available to repair any products for a small* fee.\r\n\r\nFurther details can be found in the handbook alongside your order.\r\n\r\nWe wish you a timely day.\r\n\r\n- Henlein\r\n",
+                _lore: "Order: Henlein Brand Pocket Watch 222nd Edition (Silver Gray)\r\nTracking Number: 1510******\r\nEstimated Delivery: 08/23/2057\r\nShipping Method: High Priority/Fragile\r\nShipping Address: Antiques Workshop, Continuum St., Saturn\r\nShipping Details:\r\n\r\nThank you for your purchase of:\r\n > 1 Henlein Brand Pocket Watch 222nd Edition, Silver Gray\r\n\r\nWe hope you are satisfied with its craftsmanship. We pride ourselves on our work as the largest luxury watch retailer of Earth so do contact our customer support line if you notice any defects. Our traditional horologists will always be available to repair any products for a small* fee.\r\n\r\nFurther details can be found in the handbook alongside your order.\r\n\r\nWe wish you a timely day.\r\n\r\n- Henlein",
                 _tier: ItemTier.Tier1,
                 _tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist],
                 _iconDir: "texradianttimepieceicon",
@@ -132,6 +132,43 @@ namespace Faithful
                     Utils.ConfigureScarfDynamicBone(dynamicBone);
                 });
 
+            CreateItem(_name: "Reserve Battery",
+                _pickup: "Killing an enemy adds a temporary extra charge of a random skill.",
+                _description: "Killing an enemy adds <style=cIsUtility>+1 temporary</style> charge of either your <style=cIsUtility>Secondary</style>, <style=cIsUtility>Utility</style> or <style=cIsUtility>Special skill</style>, up to a maximum of <style=cIsUtility>+1</style> <style=cStack>(+1 per stack)</style> for each skill.",
+                _lore: "> PRIMARY POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>1</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>2</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>3</style>] POWER STATUS : <style=cMono>97%</style>\r\n\r\n> COMMAND : <style=cMono>RECHARGE RESERVE [3]</style>\r\n\r\n> DAILY REMINDER : <style=cMono>\u0022A prepper is a fool every day but doomsday.\u0022</style>",
+                _tier: ItemTier.Tier1,
+                _tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist],
+                _iconDir: "texreservebatteryicon",
+                _modelDir: "reservebatterymesh",
+                _displayDir: "reservebatterydisplaymesh",
+                _displaySettingsCallback: _displaySettings =>
+                {
+                    // Add character display settings
+                    _displaySettings.AddCharacterDisplay("Commando", "GunL", new Vector3(-0.025F, 0.056F, 0F), new Vector3(0F, 0F, 315F), new Vector3(0.05F, 0.05F, 0.05F));
+                    _displaySettings.AddCharacterDisplay("Commando", "GunR", new Vector3(0.025F, 0.056F, 0F), new Vector3(0F, 180F, 315F), new Vector3(0.05F, 0.05F, 0.05F));
+                    _displaySettings.AddCharacterDisplay("Huntress", "ThighL", new Vector3(0.1075F, 0.15F, -0.0105F), new Vector3(357.75F, 297.375F, 186.375F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Bandit", "ThighL", new Vector3(0.10825F, 0.265F, -0.016F), new Vector3(0F, 93.75F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("MUL-T", "UpperArmR", new Vector3(0.5675F, 2.225F, -0.025F), new Vector3(0F, 270F, 187.5F), new Vector3(0.8F, 0.8F, 0.8F));
+                    _displaySettings.AddCharacterDisplay("Engineer", "UpperArmL", new Vector3(0.07F, 0.1925F, -0.06125F), new Vector3(350F, 120F, 5F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Turret", "LegBar2", new Vector3(-0.325F, 0.9125F, -0.03F), new Vector3(0F, 90F, 0F), new Vector3(0.35F, 0.35F, 0.35F));
+                    _displaySettings.AddCharacterDisplay("Walker Turret", "LegBar2", new Vector3(-0.325F, 0.9125F, -0.03F), new Vector3(0F, 90F, 0F), new Vector3(0.35F, 0.35F, 0.35F));
+                    _displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(-0.1495F, 0.08375F, 0.0695F), new Vector3(13.75F, 280F, 323.75F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("Mercenary", "UpperArmL", new Vector3(-0.016F, 0.152F, -0.115F), new Vector3(345F, 165F, 20F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("REX", "CalfFrontL", new Vector3(-0.0725F, 0.525F, -0.025F), new Vector3(0F, 90F, 180F), new Vector3(0.2F, 0.2F, 0.2F));
+                    _displaySettings.AddCharacterDisplay("Loader", "MechBase", new Vector3(-0.1575F, 0.2625F, 0.4315F), new Vector3(0F, 0F, 0F), new Vector3(0.06F, 0.06F, 0.06F));
+                    _displaySettings.AddCharacterDisplay("Acrid", "Jaw", new Vector3(0F, 2.4F, -0.525F), new Vector3(2.5F, 0F, 90F), new Vector3(1F, 1F, 1F));
+                    _displaySettings.AddCharacterDisplay("Captain", "Stomach", new Vector3(0.235F, 0.13F, -0.24F), new Vector3(350.5F, 156.25F, 352.5F), new Vector3(0.125F, 0.125F, 0.125F));
+                    _displaySettings.AddCharacterDisplay("Railgunner", "ThighL", new Vector3(0.09715F, 0.251F, 0.0013F), new Vector3(0F, 82.5F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Void Fiend", "Chest", new Vector3(-0.2275F, 0.1825F, 0.07672F), new Vector3(33.75F, 144F, 293.75F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Seeker", "ThighR", new Vector3(0.01225F, 0.3335F, 0.096F), new Vector3(352.5F, 0F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(-0.39125F, 0.0768F, 0.19725F), new Vector3(7.75F, 317.5F, 20F), new Vector3(0.15F, 0.15F, 0.15F));
+                    _displaySettings.AddCharacterDisplay("Chef", "LowerArmR", new Vector3(0F, 0F, -0.065F), new Vector3(0F, 355F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Operator", "CalfL", new Vector3(-0.345F, -0.0014F, 0.105F), new Vector3(88.25F, 255F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Drifter", "BagBottom", new Vector3(-0.123F, 0.1985F, 0.3025F), new Vector3(337.95F, 299F, 30.5F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(-0.29F, 0F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(0.29F, 0F, 0F), new Vector3(0F, 180F, 270F), new Vector3(0.08F, 0.08F, 0.08F));
+                });
+
             CreateItem(_name: "Service Start-up Drive",
                 _pickup: "Gain access to a machine capsule each stage that contains a powerful drone.",
                 _description: "A <style=cIsUtility>machine capsule</style> containing a drone (79%/<style=cIsHealing>20%</style>/<style=cIsHealth>1%</style>) will appear in a random location <style=cIsUtility>on each stage</style>. <style=cStack>(Increases rarity chances of the drone per stack).</style>",
@@ -170,7 +207,7 @@ namespace Faithful
             CreateItem(_name: "Chakrams",
                 _pickup: "Activating your Primary skill also throws a piercing chakram that returns to you. <style=cIsVoid>Corrupts all Shurikens</style>.",
                 _description: "Activating your <style=cIsUtility>Primary skill</style> also throws a <style=cIsDamage>piercing chakram</style> that deals <style=cIsDamage>400%</style> <style=cStack>(+100% per stack)</style> base damage and returns to you. You can hold up to <style=cIsUtility>3</style> <style=cStack>(+1 per stack)</style> <style=cIsDamage>chakrams</style>. <style=cIsVoid>Corrupts all Shurikens</style>.",
-                _lore: "Order: Golden Steel Chakrams\r\nTracking Number: 78*******\r\nEstimated Delivery: 06/16/2060\r\nShipping Method: Priority\r\nShipping Address: \u0022Secret Hideout\u0022, Earth\r\nShipping Details:\r\n\r\nShouldn't soar off to one side like the others did. Lemme know if there's anything else you want, we've got a new stock of some classics coming in next month by the time you read this. Nunchucks, nagamaki, kunai, all that classic stuff.\r\n\r\nAlso, please change your address. It looks stupid every time I see it.\r\n",
+                _lore: "Order: Golden Steel Chakrams\r\nTracking Number: 78*******\r\nEstimated Delivery: 06/16/2060\r\nShipping Method: Priority\r\nShipping Address: \u0022Secret Hideout\u0022, Earth\r\nShipping Details:\r\n\r\nShouldn't soar off to one side like the others did. Lemme know if there's anything else you want, we've got a new stock of some classics coming in next month by the time you read this. Nunchucks, nagamaki, kunai, all that classic stuff.\r\n\r\nAlso, please change your address. It looks stupid every time I see it.",
                 _tier: ItemTier.VoidTier2,
                 _tags: [ItemTag.Damage],
                 _iconDir: "texchakramicon",

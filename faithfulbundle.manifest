@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3052695467
+CRC: 2398152430
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 57b0e53a1c0b562c3d1f74a0345ff7ea
+    Hash: cb5968d527613377184256306a9a64a8
   TypeTreeHash:
     serializedVersion: 2
     Hash: e50c578b8b723f3899bea765d83207e3
@@ -179,6 +179,7 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Items/HexCluster/AltIcons/texHexClusterUniqueIcon.png
 - Assets/Survivors/Technician/Mesh/TechnicianAlloySkinTurret.prefab
+- Assets/Items/ReserveBattery/texReserveBatteryNormal.png
 - Assets/Items/NoxiousSlimes/Materials/texNoxiousSlimeGlass.mat
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterVoidIcon.png
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaTier1Icon.png
@@ -216,6 +217,7 @@ Assets:
 - Assets/Items/HermitsShawl/HermitShawlDisplayMesh.fbx
 - Assets/Items/HermitsShawl/AltIcons/texHermitShawlTier3Icon.png
 - Assets/Items/TargetingMatrix/AltIcons/texTargetingMatrixLunarIcon.png
+- Assets/Items/ReserveBattery/texReserveBatteryIcon.png
 - Assets/Items/HexCluster/HexClusterMesh.prefab
 - Assets/Items/RadiantTimepiece/RadiantTimepieceDisplayMesh.fbx
 - Assets/Items/SecondHand/texBuffSecondHand.png
@@ -227,17 +229,21 @@ Assets:
 - Assets/Items/SecondHand/SecondHandDisplayMesh.obj
 - Assets/Items/HasteningGreave/texHasteningGreave.png
 - Assets/Items/RadiantTimepiece/AltIcons/texRadiantTimepieceUniqueIcon.png
-- Assets/Items/SecondHand/AltIcons/texSecondHandTier3Icon.png
+- Assets/Items/ReserveBattery/ReserveBatteryMesh.obj
 - Assets/Items/NoxiousSlimes/NoxiousSlimeDisplayMesh.prefab
 - Assets/Items/HexCluster/texHexClusterAchievement.png
+- Assets/Items/SecondHand/AltIcons/texSecondHandTier3Icon.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackBaseFlare.png
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaIcon.png
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeMesh.fbx
 - Assets/Items/CollectorsVision/Shrine/Materials/texShrineRecollectionSymbol.mat
 - Assets/Items/HermitsShawl/HermitShawlMesh.prefab
-- Assets/Items/CauterizingGreave/CauterizingGreaveMesh.fbx
+- Assets/Items/ReserveBattery/Materials/texReserveBattery.mat
+- Assets/Items/ReserveBattery/texReserveBattery.png
+- Assets/Items/ReserveBattery/AltIcons/texReserveBatteryVoidIcon.png
 - Assets/Survivors/Technician/Icons/texBuffElectroSpeed.png
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinRobotLights.prefab
+- Assets/Items/CauterizingGreave/CauterizingGreaveMesh.fbx
 - Assets/Items/BrassScrews/AltIcons/texBrassScrewsTier1Icon.png
 - Assets/Survivors/Technician/Icons/texTechnicianMasteryIcon.png
 - Assets/Items/Chakram/ChakramMesh.prefab
@@ -248,6 +254,7 @@ Assets:
 - Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeTier1Icon.png
 - Assets/Items/MatterAccelerator/texMatterAcceleratorIcon.png
 - Assets/Items/LongshotGeode/AltIcons/texLongshotGeodeTier1Icon.png
+- Assets/Items/ReserveBattery/ReserveBatteryDisplayMesh.obj
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
 - Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.prefab
 - Assets/Items/SecondHand/AltIcons/texSecondHandTier1Icon.png
@@ -342,8 +349,8 @@ Assets:
 - Assets/Items/CollectorsVision/AltIcons/texCollectorsVisionTier2Icon.png
 - Assets/Survivors/Technician/Projectiles/Mesh/TechnicianTurretRocketMesh.fbx
 - Assets/Items/MeltingWarbler/Materials/texMeltingWarbler.mat
+- Assets/Items/ReserveBattery/AltIcons/texReserveBatteryBossIcon.png
 - Assets/Items/HexCluster/texHexCluster.png
-- Assets/Survivors/Technician/Icons/texCrosshairTrackerCore.png
 - Assets/Items/ServiceStartupDrive/ServiceStart-upDriveMesh.obj
 - Assets/Survivors/Technician/Allies/Mesh/TechnicianTurretMesh.fbx
 - Assets/Survivors/Technician/Icons/texTechnicianIcon.png
@@ -351,6 +358,7 @@ Assets:
 - Assets/Survivors/Technician/Textures/texTechnicianMasteryNormal.png
 - Assets/Items/HexCluster/HexClusterDisplayMesh.prefab
 - Assets/Items/HasteningGreave/HasteningGreaveDisplayMesh.prefab
+- Assets/Survivors/Technician/Icons/texCrosshairTrackerCore.png
 - Assets/Items/BrassScrews/texBuffTeleporterScrew.png
 - Assets/Items/HermitsShawl/texHermitShawlDisplayNormal.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpack.png
@@ -406,6 +414,7 @@ Assets:
 - Assets/Items/TargetingMatrix/TargetingMatrixMesh.prefab
 - Assets/Skills/Railgunner/texRailgunnerCoinNormal.png
 - Assets/Items/CopperGear/AltIcons/texCopperGearTier1Icon.png
+- Assets/Items/ReserveBattery/AltIcons/texReserveBatteryTier1Icon.png
 - Assets/Items/CollectorsVision/Shrine/Materials/texShrineRecollection.mat
 - Assets/Items/RadiantTimepiece/texRadiantTimepieceNormal.png
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
@@ -466,6 +475,7 @@ Assets:
 - Assets/Items/ServiceStartupDrive/Materials/texServiceStartupDrive.mat
 - Assets/Items/MatterAccelerator/Materials/texMatterAccelerator.mat
 - Assets/Items/MatterAccelerator/MatterAcceleratorDisplayMesh.fbx
+- Assets/Items/ReserveBattery/ReserveBatteryDisplayMesh.prefab
 - Assets/Items/CollectorsVision/AltIcons/texCollectorsVisionTier1Icon.png
 - Assets/Items/NoxiousSlimes/NoxiousSlimeMesh.prefab
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.prefab
@@ -485,10 +495,11 @@ Assets:
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinTurretLights.prefab
 - Assets/Items/HasteningGreave/texHasteningGreaveEmission.png
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDisplayMesh.obj
-- Assets/Survivors/Technician/Projectiles/Mesh/TechnicianFloatingGrenadeMesh.fbx
+- Assets/Items/ReserveBattery/texReserveBatteryEmission.png
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveTier2Icon.png
 - Assets/Survivors/Technician/Textures/texTechnicianAlloyNormal.png
 - Assets/Equipment/Divider/texDividerEmission.png
+- Assets/Survivors/Technician/Projectiles/Mesh/TechnicianFloatingGrenadeMesh.fbx
 - Assets/Equipment/Divider/Materials/texDivider.mat
 - Assets/Equipment/Divider/texDividerUnavailable.png
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackTier1Icon.png
@@ -545,8 +556,9 @@ Assets:
 - Assets/Items/HexCluster/AltIcons/texHexClusterTier1Achievement.png
 - Assets/Textures/Technician/texLightningTechnician.png
 - Assets/Equipment/ChargefieldPylon/Materials/texChargefieldPylon.mat
-- Assets/Equipment/Divider/DividerIndicator.prefab
+- Assets/Items/ReserveBattery/AltIcons/texReserveBatteryLunarIcon.png
 - Assets/Items/CollectorsVision/Shrine/RecollectionShrineMesh.fbx
+- Assets/Equipment/Divider/DividerIndicator.prefab
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterTier3Icon.png
 - Assets/Items/BrassScrews/AltIcons/texBrassScrewsUniqueIcon.png
 - Assets/Items/HexCluster/AltIcons/texHexClusterVoidAchievement.png
@@ -598,6 +610,7 @@ Assets:
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveLunarIcon.png
 - Assets/Items/CollectorsVision/texCollectorsVisionEmission.png
 - Assets/Survivors/Technician/Icons/texTechnicianLinkUpIcon.png
+- Assets/Items/ReserveBattery/AltIcons/texReserveBatteryTier2Icon.png
 - Assets/Items/NoxiousSlimes/NoxiousSlimeSlimeMesh.obj
 - Assets/Items/4-T0NJetpack/texBuff4T0NJetpackLow.png
 - Assets/Items/LongshotGeode/AltIcons/texLongshotGeodeUniqueIcon.png
@@ -650,6 +663,7 @@ Assets:
 - Assets/Equipment/ChargefieldPylon/texChargefieldPylon.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
 - Assets/Items/HermitsShawl/texHermitShawlNormal.png
+- Assets/Items/ReserveBattery/AltIcons/texReserveBatteryUniqueIcon.png
 - Assets/Items/MatterAccelerator/MatterAcceleratorMesh.prefab
 - Assets/Items/LeadersPennon/texLeadersPennonNormal.png
 - Assets/Items/CollectorsVision/texCollectorsVision.png
@@ -682,6 +696,7 @@ Assets:
 - Assets/Items/NoxiousSlimes/NoxiousSlimeCaseMesh.obj
 - Assets/Items/ServiceStartupDrive/ServiceStart-upDriveMesh.prefab
 - Assets/Items/4-T0NJetpack/texBuff4T0NJetpackHigh.png
+- Assets/Items/ReserveBattery/AltIcons/texReserveBatteryTier3Icon.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeEmission.png
 - Assets/Items/TargetingMatrix/AltIcons/texTargetingMatrixBossIcon.png
 - Assets/Items/CollectorsVision/CollectorsVisionMetalMesh.obj
@@ -702,6 +717,7 @@ Assets:
 - Assets/Items/SecondHand/AltIcons/texSecondHandUniqueIcon.png
 - Assets/Items/4-T0NJetpack/texBuff4T0NJetpackEmpty.png
 - Assets/Items/HermitsShawl/Materials/texHermitShawl.mat
+- Assets/Items/ReserveBattery/ReserveBatteryMesh.prefab
 - Assets/Items/LeadersPennon/AltIcons/texLeadersPennonTier3Icon.png
 - Assets/Items/VengefulToaster/texVengefulToasterAchievement.png
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackUniqueIcon.png
