@@ -42,7 +42,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.3.27";
+        public const string PluginVersion = "1.3.28";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -75,6 +75,7 @@ namespace Faithful
         private static NoxiousSlime noxiousSlime;
         private static CollectorsVision collectorsVision;
         private static TJetpack tJetpack;
+        private static MatterAccelerator matterAccelerator;
         private static DebugItem debugItem;
         
         // Survivors
@@ -144,6 +145,7 @@ namespace Faithful
             noxiousSlime = new NoxiousSlime(toolbox);
             collectorsVision = new CollectorsVision(toolbox, inspiration);
             tJetpack = new TJetpack(toolbox);
+            matterAccelerator = new MatterAccelerator(toolbox);
             debugItem = new DebugItem(toolbox);
 
             // Create WIP content

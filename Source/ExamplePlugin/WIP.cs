@@ -49,43 +49,6 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(-0.09F, 0.025F, 0F), new Vector3(0F, 180F, 270F), new Vector3(0.1125F, 0.1125F, 0.1125F));
                 });
 
-            CreateItem(_name: "Matter Accelerator",
-                _pickup: "Increase movement speed while you have a shield or barrier.",
-                _description: "Gain a <style=cIsHealing>shield</style> equal to <style=cIsHealing>5%</style> of your maximum health. While you have a <style=cIsHealing>shield</style> or <style=cIsHealing>barrier</style>, <style=cIsUtility>movement speed</style> is increased by <style=cIsUtility>20%</style> <style=cStack>(+20% per stack)</style>.",
-                _lore: "\u0022Day 17 of making a homemade matter accelerator.\r\n\r\nThere's some good and bad news on my progress so far.\r\n\r\nThe good news is that I've finally got it working consistently enough to start testing its specs. The bad news is that I'm going to need a better camera in order to record any actual results. The one I have now is way too blurry.\r\n\r\nOh, I also managed to trigger my neighbor's home security system. So I should probably work on avoiding that.\u0022",
-                _tier: ItemTier.Tier1,
-                _tags: [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated],
-                _iconDir: "texmatteracceleratoricon",
-                _modelDir: "matteracceleratormesh",
-                _displayDir: "matteracceleratordisplaymesh",
-                _displaySettingsCallback: _displaySettings =>
-                {
-                    // Add character display settings
-                    _displaySettings.AddCharacterDisplay("Commando", "LowerArmR", new Vector3(-0.01F, 0.1725F, 0F), new Vector3(87.5F, 90F, 90F), new Vector3(0.225F, 0.225F, 0.225F));
-                    _displaySettings.AddCharacterDisplay("Huntress", "UpperArmR", new Vector3(0.0185F, 0.22F, 0.005F), new Vector3(270F, 0F, 0F), new Vector3(0.2F, 0.2F, 0.2F));
-                    _displaySettings.AddCharacterDisplay("Bandit", "CalfL", new Vector3(0F, 0.275F, 0.0125F), new Vector3(87.5F, 0F, 0F), new Vector3(0.225F, 0.225F, 0.225F));
-                    _displaySettings.AddCharacterDisplay("MUL-T", "LowerArmL", new Vector3(0.2625F, 1.9F, 0F), new Vector3(270F, 0F, 0F), new Vector3(2.75F, 2.75F, 2.75F));
-                    _displaySettings.AddCharacterDisplay("Engineer", "LowerArmR", new Vector3(-0.005F, 0.145F, 0F), new Vector3(90F, 0F, 0F), new Vector3(0.225F, 0.225F, 0.225F));
-                    _displaySettings.AddCharacterDisplay("Turret", "Head", new Vector3(0F, 0.575F, 1.5625F), new Vector3(0F, 0F, 0F), new Vector3(0.6F, 0.6F, 0.6F));
-                    _displaySettings.AddCharacterDisplay("Walker Turret", "Head", new Vector3(0F, 0.785F, 0.395F), new Vector3(0F, 0F, 0F), new Vector3(0.9F, 0.9F, 1F));
-                    _displaySettings.AddCharacterDisplay("Artificer", "CalfL", new Vector3(-0.0075F, 0.16125F, 0.05F), new Vector3(270F, 0F, 0F), new Vector3(0.2125F, 0.2125F, 0.2125F));
-                    _displaySettings.AddCharacterDisplay("Mercenary", "ThighR", new Vector3(-0.0115F, 0.3275F, 0F), new Vector3(90F, 0F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
-                    _displaySettings.AddCharacterDisplay("REX", "CalfBackR", new Vector3(0F, 0.475F, -0.0325F), new Vector3(90F, 0F, 0F), new Vector3(0.4F, 0.4F, 0.4F));
-                    _displaySettings.AddCharacterDisplay("Loader", "LowerArmR", new Vector3(-0.005F, 0.15F, 0.0025F), new Vector3(85F, 180F, 180F), new Vector3(0.2F, 0.2F, 0.2F));
-                    _displaySettings.AddCharacterDisplay("Acrid", "UpperArmR", new Vector3(0.15F, 3.1F, 0F), new Vector3(90F, 0F, 0F), new Vector3(3F, 3F, 3F));
-                    _displaySettings.AddCharacterDisplay("Captain", "HandL", new Vector3(-0.00375F, 0.134F, 0.0035F), new Vector3(90F, 0F, 0F), new Vector3(0.1275F, 0.1275F, 0.1275F));
-                    _displaySettings.AddCharacterDisplay("Railgunner", "MuzzleSniper", new Vector3(0F, 0F, -0.0635F), new Vector3(0F, 0F, 0F), new Vector3(0.125F, 0.125F, 0.06F));
-                    _displaySettings.AddCharacterDisplay("Void Fiend", "ThighL", new Vector3(0.01F, 0.26675F, 0F), new Vector3(90F, 0F, 0F), new Vector3(0.275F, 0.275F, 0.225F));
-                    _displaySettings.AddCharacterDisplay("Seeker", "CalfL", new Vector3(0F, 0.1365F, -0.015F), new Vector3(90F, 0F, 0F), new Vector3(0.2F, 0.2F, 0.2F));
-                    _displaySettings.AddCharacterDisplay("False Son", "LowerArmL", new Vector3(0.01115F, 0.288F, 0F), new Vector3(271.25F, 63.25F, 63.250F), new Vector3(0.45F, 0.45F, 0.45F));
-                    _displaySettings.AddCharacterDisplay("Chef", "Pelvis", new Vector3(0.06875F, 0F, 0F), new Vector3(0F, 90F, 0F), new Vector3(0.375F, 0.375F, 0.175F));
-                    _displaySettings.AddCharacterDisplay("Operator", "UpperArmL", new Vector3(-0.136F, -0.0065F, -0.009F), new Vector3(10F, 262.5F, 0F), new Vector3(0.2F, 0.2F, 0.2F));
-                    _displaySettings.AddCharacterDisplay("Drifter", "LowerArmR", new Vector3(-0.175F, 0F, 0F), new Vector3(0F, 90F, 0F), new Vector3(0.225F, 0.225F, 0.15F));
-                    _displaySettings.AddCharacterDisplay("Best Buddy", "CableR", new Vector3(0.0075F, 0.00025F, 0.0075F), new Vector3(315F, 307.5F, 35F), new Vector3(0.25F, 0.25F, 0.25F));
-                    _displaySettings.AddCharacterDisplay("Scavenger", "LowerArmR", new Vector3(0F, 1.375F, 0F), new Vector3(90F, 0F, 0F), new Vector3(1.75F, 1.75F, 1.75F));
-                    _displaySettings.AddCharacterDisplay("Technician", "LowerArmL", new Vector3(0F, 0.225F, 0F), new Vector3(275F, 90F, 270F), new Vector3(0.15F, 0.15F, 0.125F));
-                });
-
             CreateItem(_name: "Radiant Timepiece",
                 _pickup: "Increase the duration of temporary buffs.",
                 _description: "Increase the <style=cIsUtility>duration</style> of temporary buffs by <style=cIsUtility>1</style> <style=cStack>(+1 per stack)</style> second(s).",
