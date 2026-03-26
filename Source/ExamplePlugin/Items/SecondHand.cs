@@ -10,6 +10,7 @@ namespace Faithful
         // Store item and buff
         Item secondHandItem;
         Buff secondHandBuff;
+        Buff secondHandEffectBuff;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
@@ -34,7 +35,8 @@ namespace Faithful
 
             // Create Second Hand item and buff
             secondHandItem = Items.AddItem("SECOND_HAND", "Second Hand", [ItemTag.Damage, ItemTag.Utility, ItemTag.Technology, ItemTag.MobilityRelated], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
-            secondHandBuff = Buffs.AddBuff("SECOND_HAND", "Second Hand", "texbuffsecondhand", Color.white);
+            secondHandBuff = Buffs.AddBuff("SECOND_HAND", "Second Hand", "texbuffsecondhand", Color.white, false);
+            secondHandEffectBuff = Buffs.AddBuff("SECOND_HAND_EFFECT", "Second Hand", "texbuffsecondhand", Color.white, _isHidden: true, _hasConfig: false);
 
             // Create item settings
             CreateSettings();
@@ -43,7 +45,7 @@ namespace Faithful
             FetchSettings();
 
             // Add stats modification
-            Behaviour.AddStatsMod(secondHandBuff, SecondHandStatsMod);
+            Behaviour.AddStatsMod(secondHandEffectBuff, SecondHandStatsMod);
 
             // Link Generic Character Fixed Update behaviour
             Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate);
@@ -125,13 +127,16 @@ namespace Faithful
                 int targetSecondHandCount = _character.isGrounded || _character.characterMotor == null ? inventory.GetItemCount(secondHandItem.itemDef) : 0;
 
                 // Get current amount of Second Hand buffs
-                int currentSecondHandCount = characterBody.GetBuffCount(secondHandBuff.buffDef);
+                int currentSecondHandCount = characterBody.GetBuffCount(secondHandEffectBuff.buffDef);
 
                 // Check if character has the wrong amount of buffs
                 if (targetSecondHandCount != currentSecondHandCount)
                 {
                     // Update Second Hand buff count
-                    characterBody.SetBuffCount(secondHandBuff.buffDef.buffIndex, targetSecondHandCount);
+                    characterBody.SetBuffCount(secondHandEffectBuff.buffDef.buffIndex, targetSecondHandCount);
+
+                    // Update visual buff
+                    characterBody.SetBuffCount(secondHandBuff.buffDef.buffIndex, targetSecondHandCount > 0 ? 1 : 0);
                 }
             }
         }

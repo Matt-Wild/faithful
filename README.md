@@ -40,7 +40,7 @@ Thank you to Coldeiб for his Russian translation of our mod!
 If you would like to provide, improve or request a translation for Faithful, please join our Discord and get in touch!
 
 # New Items
-All items can be disabled individually in this mod's config.
+All items can be disabled or altered in this mod's config.
 <table>
 	<thead>
 		<tr>
@@ -56,7 +56,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Copper Gear</b><br>
-				Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be adjusted</b>!
+				Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone.
 			</td>
 		</tr>
     <tr>
@@ -66,35 +66,35 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSpaciousUmbrellaIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Spacious Umbrella</b><br>
-				Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>. <b>This item can be adjusted</b>!
+				Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>.
 			</td>
 		</tr>
 		<tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texHermitShawlIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Hermit's Shawl</b><br>
-				Leaving combat grants Patience, increasing damage by <b>+25%</b>. You can have up to <b>4 (</b>+4 per stack<b>)</b> stacks that are all gained over <b>10</b> seconds. All stacks of Patience are consumed upon dealing damage. <b>This item can be adjusted</b>!
+				Leaving combat grants Patience, increasing damage by <b>+25%</b>. You can have up to <b>4 (</b>+4 per stack<b>)</b> stacks that are all gained over <b>10</b> seconds. All stacks of Patience are consumed upon dealing damage.
 			</td>
 		</tr>
 		<tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texVengefulToasterIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Vengeful Toaster</b><br>
-				Getting hit grants Vengeance for <b>4 (</b>+1 per stack<b>)</b> seconds. Each stack of Vengeance increases damage by <b>+75%</b>. All stacks of Vengeance are consumed upon dealing damage. <b>This item can be adjusted</b>!
+				Getting hit grants Vengeance for <b>4 (</b>+1 per stack<b>)</b> seconds. Each stack of Vengeance increases damage by <b>+75%</b>. All stacks of Vengeance are consumed upon dealing damage.
 			</td>
 		</tr>
 		<tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSecondHandIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Second Hand</b><br>
-				Increase attack speed by <b>20% (</b>+20% per stack<b>)</b> and movement speed by <b>30% (</b>+30% per stack<b>)</b> while touching the ground. <b>This item can be adjusted</b>!
+				Increase attack speed by <b>20% (</b>+20% per stack<b>)</b> and movement speed by <b>30% (</b>+30% per stack<b>)</b> while touching the ground.
 			</td>
 		</tr>
 		<tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texTargetingMatrixIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Targeting Matrix</b><br>
-				<b>Target</b> a random enemy on kill. Damage dealt to the <b>target</b> has a <b>+100%</b> chance to '<b>Critically Strike</b>' and killing the <b>target</b> increases <b>Critical Strike</b> damage by <b>+10% (</b>+5% per stack<b>)</b>, up to <b>3 (</b>+1 per stack<b>)</b>. <b>This item can be adjusted</b>!
+				<b>Target</b> a random enemy on kill. Damage dealt to the <b>target</b> has a <b>+100%</b> chance to '<b>Critically Strike</b>' and killing the <b>target</b> increases <b>Critical Strike</b> damage by <b>+10% (</b>+5% per stack<b>)</b>, up to <b>3 (</b>+1 per stack<b>)</b>.
 			</td>
 		</tr>
     <tr>
@@ -104,14 +104,14 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/tex4T0NJetpackIcon.png?raw=true" width=128></td>
 			<td>
 				<b>4-T0N Jetpack</b><br>
-				Holding the jump key while falling boosts you upwards for up to <b>3 (</b>+1.5 per stack<b>)</b> seconds. Fully recharges in <b>8 (</b>-20% per stack<b>)</b> seconds while touching the ground. <b>This item can be adjusted</b>!
+				Holding the jump key while falling boosts you upwards for up to <b>3 (</b>+1.5 per stack<b>)</b> seconds. Fully recharges in <b>8 (</b>-20% per stack<b>)</b> seconds while touching the ground.
       		</td>
 		</tr>
     <tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texNoxiousSlimeIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Noxious Slimes</b><br>
-				<b>10%</b> chance to blight an enemy for <b>300%</b> base damage. All damaging debuffs deal <b>+100% (</b>+100% per stack<b>)</b> damage. <b>This item can be adjusted</b>!
+				<b>10%</b> chance to blight an enemy for <b>300%</b> base damage. All damaging debuffs deal <b>+100% (</b>+100% per stack<b>)</b> damage.
       		</td>
 		</tr>
     <tr>
@@ -121,14 +121,14 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texHasteningGreaveIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Hastening Greave</b><br>
-				Increase attack speed by <b>100% (</b>+100% per stack<b>)</b>. Reduce base damage by <b>50% (</b>+50% per stack<b>)</b>. <b>This item can be adjusted</b>!
+				Increase attack speed by <b>100% (</b>+100% per stack<b>)</b>. Reduce base damage by <b>50% (</b>+50% per stack<b>)</b>.
       		</td>
 		</tr>
     <tr>
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCauterizingGreaveIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Cauterizing Greave</b><br>
-				Increase max health by <b>100% (</b>+100% per stack<b>)</b>. Reduce healing received by <b>50% (</b>+50% per stack<b>)</b>. <b>This item can be adjusted</b>!
+				Increase max health by <b>100% (</b>+100% per stack<b>)</b>. Reduce healing received by <b>50% (</b>+50% per stack<b>)</b>.
       		</td>
 		</tr>
 	</tbody>
@@ -152,7 +152,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texBrassScrewsIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Brass Screws</b><br>
-				Increase damage by <b>20% (</b>+20% per stack<b>)</b> while inside the Teleporter zone. <b>This item can be adjusted</b>!
+				Increase damage by <b>20% (</b>+20% per stack<b>)</b> while inside the Teleporter zone.
 			</td>
       <td> 
 				Corrupts all <b>Copper Gears</b>.
@@ -162,7 +162,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLongshotGeodeIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Longshot Geode</b><br>
-			  Increase damage to enemies further than <b>40m</b> away by <b>15% (</b>+15% per stack<b>)</b>. <b>This item can be adjusted</b>!
+			  Increase damage to enemies further than <b>40m</b> away by <b>15% (</b>+15% per stack<b>)</b>.
 			</td>
       <td> 
 				Corrupts all <b>Focus Crystals</b>.
@@ -172,7 +172,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLeadersPennonIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Leader's Pennon</b><br>
-				Create a ward around yourself that strengthens all allies other than yourself within <b>15m (</b>+7.5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>. <b>This item can be adjusted</b>!
+				Create a ward around yourself that strengthens all allies other than yourself within <b>15m (</b>+7.5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>.
 			</td>
       <td> 
 				Corrupts all <b>Warbanners</b>.
@@ -185,7 +185,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texDrownedVisageIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Drowned Visage</b><br>
-				Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>. <b>This item can be adjusted</b>!
+				Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>.
 			</td>
       <td> 
 				Corrupts all <b>Spacious Umbrellas</b>.
@@ -195,7 +195,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texMeltingWarblerIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Melting Warbler</b><br>
-				Increase jump height by <b>2m (</b>+2m per stack<b>)</b>. <b>This item can be adjusted</b>!
+				Increase jump height by <b>2m (</b>+2m per stack<b>)</b>.
 			</td>
       <td> 
 				Corrupts all <b>Wax Quails</b>.
@@ -208,7 +208,7 @@ All items can be disabled individually in this mod's config.
 			<td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCollectorsVisionIcon.png?raw=true" width=128></td>
 			<td>
 				<b>Collector's Vision</b><br>
-				Each unique item collected per stage grants <b>1% (</b>+1% per stack<b>)</b> permanent Inspiration, increasing <b>Critical Strike</b> chance by <b>+1%</b> and granting an additional <b>+20% Critical Strike</b> damage. <b>This item can be adjusted</b>!
+				Each unique item collected per stage grants <b>1% (</b>+1% per stack<b>)</b> permanent Inspiration, increasing <b>Critical Strike</b> chance by <b>+1%</b> and granting an additional <b>+20% Critical Strike</b> damage.
       </td>
       <td> 
 				Corrupts all <b>Laser Scopes</b>.
