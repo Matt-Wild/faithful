@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1041017244
+CRC: 3812996906
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7438a4e53021d5fe0fd37b7a51f82cc7
+    Hash: f1f829e47502d2518d2864ad3254c05e
   TypeTreeHash:
     serializedVersion: 2
     Hash: e50c578b8b723f3899bea765d83207e3
@@ -427,6 +427,7 @@ Assets:
 - Assets/Items/4-T0NJetpack/texRamp4T0NFire.png
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterLunarAchievement.png
 - Assets/Survivors/Technician/Textures/texTechnicianMastery.png
+- Assets/Items/MatterAccelerator/texMatterAcceleratorBuff.png
 - Assets/Items/MeltingWarbler/MeltingWarblerMesh.prefab
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonMesh.obj
 - Assets/Equipment/ChargefieldPylon/texChargefieldPylonDeploy.png
