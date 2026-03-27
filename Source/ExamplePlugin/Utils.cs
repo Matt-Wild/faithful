@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using HarmonyLib;
-using Newtonsoft.Json;
 using R2API;
 using RoR2;
 using RoR2.ExpansionManagement;
@@ -1231,29 +1230,29 @@ namespace Faithful
             return GetCharacterSpawnCard(_name) != null;
         }
 
-        public static void ConfigureScarfDynamicBone(DynamicBone _dynamicBone)
+        public static void ConfigureDynamicBone(DynamicBone _dynamicBone, DynamicBoneConfig _config)
         {
             // Set up dynamic bone
             _dynamicBone.m_Root = _dynamicBone.transform;
-            _dynamicBone.m_UpdateRate = 60.0f;
-            _dynamicBone.m_UpdateMode = DynamicBone.UpdateMode.Normal;
-            _dynamicBone.m_Damping = 0.576f;
-            _dynamicBone.m_Elasticity = 0.016f;
-            _dynamicBone.m_Stiffness = 0.0f;
-            _dynamicBone.m_Inert = 0.0f;
-            _dynamicBone.m_Radius = 0.0f;
-            _dynamicBone.m_EndLength = 0.69f;
-            _dynamicBone.m_EndOffset = Vector3.zero;
-            _dynamicBone.m_Gravity = new Vector3(0.0f, -0.01f, 0.0f);
-            _dynamicBone.m_LocalGravity = new Vector3(0.0f, 0.01f, -0.01f);
-            _dynamicBone.m_Force = Vector3.zero;
-            _dynamicBone.m_Colliders = new List<DynamicBoneCollider>();
-            _dynamicBone.m_Exclusions = new List<Transform>();
-            _dynamicBone.m_FreezeAxis = DynamicBone.FreezeAxis.None;
-            _dynamicBone.m_DistantDisable = false;
-            _dynamicBone.m_ReferenceObject = null;
-            _dynamicBone.m_DistanceToObject = 20.0f;
-            _dynamicBone.neverOptimize = false;
+            _dynamicBone.m_UpdateRate = _config.UpdateRate;
+            _dynamicBone.m_UpdateMode = _config.UpdateMode;
+            _dynamicBone.m_Damping = _config.Damping;
+            _dynamicBone.m_Elasticity = _config.Elasticity;
+            _dynamicBone.m_Stiffness = _config.Stiffness;
+            _dynamicBone.m_Inert = _config.Inert;
+            _dynamicBone.m_Radius = _config.Radius;
+            _dynamicBone.m_EndLength = _config.EndLength;
+            _dynamicBone.m_EndOffset = _config.EndOffset;
+            _dynamicBone.m_Gravity = _config.Gravity;
+            _dynamicBone.m_LocalGravity = _config.LocalGravity;
+            _dynamicBone.m_Force = _config.Force;
+            _dynamicBone.m_Colliders = _config.Colliders;
+            _dynamicBone.m_Exclusions = _config.Exclusions;
+            _dynamicBone.m_FreezeAxis = _config.FreezeAxis;
+            _dynamicBone.m_DistantDisable = _config.DistantDisable;
+            _dynamicBone.m_ReferenceObject = _config.ReferenceObject;
+            _dynamicBone.m_DistanceToObject = _config.DistanceToObject;
+            _dynamicBone.neverOptimize = _config.NeverOptimize;
 
             // Check for scarf dynamic bone
             DynamicBone scarfDynamicBone = Assets.scarfDynamicBone;
@@ -2347,6 +2346,33 @@ namespace Faithful
                 // Return list
                 return names;
             }
+        }
+    }
+
+    internal struct DynamicBoneConfig
+    {
+        public float UpdateRate = 60.0f;
+        public DynamicBone.UpdateMode UpdateMode = DynamicBone.UpdateMode.Normal;
+        public float Damping = 0.576f;
+        public float Elasticity = 0.016f;
+        public float Stiffness = 0.0f;
+        public float Inert = 0.0f;
+        public float Radius = 0.0f;
+        public float EndLength = 0.69f;
+        public Vector3 EndOffset = Vector3.zero;
+        public Vector3 Gravity = new Vector3(0.0f, -0.01f, 0.0f);
+        public Vector3 LocalGravity = new Vector3(0.0f, 0.01f, -0.01f);
+        public Vector3 Force = Vector3.zero;
+        public List<DynamicBoneCollider> Colliders = new();
+        public List<Transform> Exclusions = new();
+        public DynamicBone.FreezeAxis FreezeAxis = DynamicBone.FreezeAxis.None;
+        public bool DistantDisable = false;
+        public Transform ReferenceObject = null;
+        public float DistanceToObject = 20.0f;
+        public bool NeverOptimize = false;
+
+        public DynamicBoneConfig()
+        {
         }
     }
 

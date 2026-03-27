@@ -10,6 +10,7 @@ namespace Faithful
         // Store item and buff
         Item matterAcceleratorItem;
         Buff matterAcceleratorBuff;
+        Buff matterAcceleratorSpeedBuff;
         Buff matterAcceleratorHealthBuff;
 
         // Store display settings
@@ -33,8 +34,9 @@ namespace Faithful
 
             // Create Second Hand item and buff
             matterAcceleratorItem = Items.AddItem("MATTER_ACCELERATOR", "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _displaySettings: displaySettings);
-            matterAcceleratorBuff = Buffs.AddBuff("MATTER_ACCELERATOR", "Matter Accelerator", "texMatterAcceleratorIcon", Color.white, _isHidden: true, _hasConfig: false);
-            matterAcceleratorHealthBuff = Buffs.AddBuff("MATTER_ACCELERATOR_HEALTH", "Matter Accelerator Health", "texMatterAcceleratorIcon", Color.white, _isHidden: true, _hasConfig: false);
+            matterAcceleratorBuff = Buffs.AddBuff("MATTER_ACCELERATOR", "Matter Accelerator", "texMatterAcceleratorBuff", Color.white, false);
+            matterAcceleratorSpeedBuff = Buffs.AddBuff("MATTER_ACCELERATOR_SPEED", "Matter Accelerator Speed", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false);
+            matterAcceleratorHealthBuff = Buffs.AddBuff("MATTER_ACCELERATOR_HEALTH", "Matter Accelerator Health", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false);
 
             // Create item settings
             CreateSettings();
@@ -43,7 +45,7 @@ namespace Faithful
             FetchSettings();
 
             // Add stats modification
-            Behaviour.AddStatsMod(matterAcceleratorBuff, MatterAcceleratorBuffStatsMod);
+            Behaviour.AddStatsMod(matterAcceleratorSpeedBuff, MatterAcceleratorBuffStatsMod);
             Behaviour.AddStatsMod(matterAcceleratorHealthBuff, MatterAcceleratorHealthBuffStatsMod);
 
             // Link Generic Character Fixed Update behaviour
@@ -134,13 +136,20 @@ namespace Faithful
             if (itemCount <= 0)
             {
                 // Ensure no buffs
-                if (characterBody.GetBuffCount(matterAcceleratorBuff.buffDef.buffIndex) > 0) characterBody.SetBuffCount(matterAcceleratorBuff.buffDef.buffIndex, 0);
-                if (characterBody.GetBuffCount(matterAcceleratorHealthBuff.buffDef.buffIndex) > 0) characterBody.SetBuffCount(matterAcceleratorHealthBuff.buffDef.buffIndex, 0);
+                characterBody.SetBuffCount(matterAcceleratorBuff.buffDef.buffIndex, 0);
+                characterBody.SetBuffCount(matterAcceleratorSpeedBuff.buffDef.buffIndex, 0);
+                characterBody.SetBuffCount(matterAcceleratorHealthBuff.buffDef.buffIndex, 0);
                 return;
             }
 
+            // Get needed amount of speed buffs
+            int neededSpeed = healthComponent.shield > 0.0f || healthComponent.barrier > 0.0f ? itemCount : 0;
+
+            // Update visual buff
+            characterBody.SetBuffCount(matterAcceleratorBuff.buffDef.buffIndex, neededSpeed > 0 ? 1 : 0);
+
             // Update speed buff based on shield or barrier
-            characterBody.SetBuffCount(matterAcceleratorBuff.buffDef.buffIndex, healthComponent.shield > 0.0f || healthComponent.barrier > 0.0f ? itemCount : 0);
+            characterBody.SetBuffCount(matterAcceleratorSpeedBuff.buffDef.buffIndex, neededSpeed);
 
             // Update health buff based on max health
             characterBody.SetBuffCount(matterAcceleratorHealthBuff.buffDef.buffIndex, Mathf.CeilToInt(healthComponent.fullHealth * shieldGain));

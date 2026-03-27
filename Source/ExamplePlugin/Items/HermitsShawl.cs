@@ -109,7 +109,7 @@ namespace Faithful
             DynamicBone dynamicBone = shawl.AddComponent<DynamicBone>();
             
             // Set up dynamic bone
-            Utils.ConfigureScarfDynamicBone(dynamicBone);
+            Utils.ConfigureDynamicBone(dynamicBone, new DynamicBoneConfig());
         }
 
         void OnDamageDealt(DamageReport _report)

@@ -1,4 +1,5 @@
-﻿using R2API;
+﻿using EntityStates;
+using R2API;
 using RoR2;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Faithful
         // Store item and buff
         Item copperGearItem;
         Buff copperGearBuff;
+        Buff copperGearEffectBuff;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
@@ -31,7 +33,8 @@ namespace Faithful
 
             // Create Copper Gear item and buff
             copperGearItem = Items.AddItem("COPPER_GEAR", "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _displaySettings: displaySettings);
-            copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "Copper Gear", "texbuffteleportergear", Color.white);
+            copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "Copper Gear", "texbuffteleportergear", Color.white, false);
+            copperGearEffectBuff = Buffs.AddBuff("COPPER_GEAR_EFFECT", "Copper Gear", "texbuffteleportergear", Color.white, _isHidden: true, _hasConfig: false);
 
             // Create item settings
             CreateSettings();
@@ -40,10 +43,13 @@ namespace Faithful
             FetchSettings();
 
             // Add stats modification
-            Behaviour.AddStatsMod(copperGearBuff, CopperGearStatsMod);
+            Behaviour.AddStatsMod(copperGearEffectBuff, CopperGearStatsMod);
 
             // Link Holdout Zone behaviour
             Behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
+
+            // Link Generic Character Fixed Update behaviour
+            Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -128,10 +134,10 @@ namespace Faithful
                 if (copperGearCount > 0)
                 {
                     // Refresh Copper Gear buffs
-                    Utils.RefreshTimedBuffs(_body, copperGearBuff.buffDef, buffDuration);
+                    Utils.RefreshTimedBuffs(_body, copperGearEffectBuff.buffDef, buffDuration);
 
                     // Get needed amount of buffs
-                    int needed = copperGearCount - _body.GetBuffCount(copperGearBuff.buffDef);
+                    int needed = copperGearCount - _body.GetBuffCount(copperGearEffectBuff.buffDef);
 
                     // Check if there are too many buffs (can happen if the player loses items while in the zone)
                     if (needed < 0)
@@ -140,7 +146,7 @@ namespace Faithful
                         for (int i = 0; i < -needed; i++)
                         {
                             // Remove Copper Gear buff
-                            _body.RemoveOldestTimedBuff(copperGearBuff.buffDef);
+                            _body.RemoveOldestTimedBuff(copperGearEffectBuff.buffDef);
                         }
                     }
 
@@ -151,10 +157,21 @@ namespace Faithful
                         for (int i = 0; i < needed; i++)
                         {
                             // Add Copper Gear buff
-                            _body.AddTimedBuff(copperGearBuff.buffDef, buffDuration);
+                            _body.AddTimedBuff(copperGearEffectBuff.buffDef, buffDuration);
                         }
                     }
                 }
+            }
+        }
+
+        void GenericCharacterFixedUpdate(GenericCharacterMain _character)
+        {
+            // Check for character body and inventory
+            CharacterBody characterBody = _character.characterBody;
+            if (characterBody)
+            {
+                // Update visual buff
+                characterBody.SetBuffCount(copperGearBuff.buffDef.buffIndex, characterBody.GetBuffCount(copperGearEffectBuff.buffDef.buffIndex) > 0 ? 1 : 0);
             }
         }
     }

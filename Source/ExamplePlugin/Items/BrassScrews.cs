@@ -1,4 +1,5 @@
-﻿using R2API;
+﻿using EntityStates;
+using R2API;
 using RoR2;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Faithful
         // Store item and buff
         Item brassScrewsItem;
         Buff brassScrewsBuff;
+        Buff brassScrewsEffectBuff;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
@@ -31,7 +33,8 @@ namespace Faithful
 
             // Create Brass Screws item and buff
             brassScrewsItem = Items.AddItem("BRASS_SCREWS", "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_COPPER_GEAR_NAME", _displaySettings: displaySettings);
-            brassScrewsBuff = Buffs.AddBuff("BRASS_SCREWS", "Brass Screws", "texbuffteleporterscrew", Color.white);
+            brassScrewsBuff = Buffs.AddBuff("BRASS_SCREWS", "Brass Screws", "texbuffteleporterscrew", Color.white, false);
+            brassScrewsEffectBuff = Buffs.AddBuff("BRASS_SCREWS_EFFECT", "Brass Screws", "texbuffteleporterscrew", Color.white, _isHidden: true, _hasConfig: false);
 
             // Create item settings
             CreateSettings();
@@ -40,10 +43,13 @@ namespace Faithful
             FetchSettings();
 
             // Add stats modification
-            Behaviour.AddStatsMod(brassScrewsBuff, BrassScrewsStatsMod);
+            Behaviour.AddStatsMod(brassScrewsEffectBuff, BrassScrewsStatsMod);
 
             // Link Holdout Zone behaviour
             Behaviour.AddInHoldoutZoneCallback(InHoldoutZone);
+
+            // Link Generic Character Fixed Update behaviour
+            Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -124,10 +130,10 @@ namespace Faithful
                 if (brassScrewsCount > 0)
                 {
                     // Refresh Brass Screws buffs
-                    Utils.RefreshTimedBuffs(_body, brassScrewsBuff.buffDef, buffDuration);
+                    Utils.RefreshTimedBuffs(_body, brassScrewsEffectBuff.buffDef, buffDuration);
 
                     // Get needed amount of buffs
-                    int needed = brassScrewsCount - _body.GetBuffCount(brassScrewsBuff.buffDef);
+                    int needed = brassScrewsCount - _body.GetBuffCount(brassScrewsEffectBuff.buffDef);
 
                     // Check if there are too many buffs (can happen if the player loses items while in the zone)
                     if (needed < 0)
@@ -136,7 +142,7 @@ namespace Faithful
                         for (int i = 0; i < -needed; i++)
                         {
                             // Remove Brass Screws buff
-                            _body.RemoveOldestTimedBuff(brassScrewsBuff.buffDef);
+                            _body.RemoveOldestTimedBuff(brassScrewsEffectBuff.buffDef);
                         }
                     }
 
@@ -147,10 +153,21 @@ namespace Faithful
                         for (int i = 0; i < needed; i++)
                         {
                             // Add Brass Screws buff
-                            _body.AddTimedBuff(brassScrewsBuff.buffDef, buffDuration);
+                            _body.AddTimedBuff(brassScrewsEffectBuff.buffDef, buffDuration);
                         }
                     }
                 }
+            }
+        }
+
+        void GenericCharacterFixedUpdate(GenericCharacterMain _character)
+        {
+            // Check for character body and inventory
+            CharacterBody characterBody = _character.characterBody;
+            if (characterBody)
+            {
+                // Update visual buff
+                characterBody.SetBuffCount(brassScrewsBuff.buffDef.buffIndex, characterBody.GetBuffCount(brassScrewsEffectBuff.buffDef.buffIndex) > 0 ? 1 : 0);
             }
         }
     }

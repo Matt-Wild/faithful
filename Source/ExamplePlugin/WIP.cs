@@ -86,13 +86,19 @@ namespace Faithful
                 _modifyItemDisplayPrefabCallback: _prefab =>
                 {
                     // Get first timepiece object
-                    GameObject shawl = Utils.FindChildByName(_prefab.transform, "Chain.001");
+                    GameObject chain = Utils.FindChildByName(_prefab.transform, "Chain.001");
 
                     // Add dynamic bone behaviour
-                    DynamicBone dynamicBone = shawl.AddComponent<DynamicBone>();
+                    DynamicBone dynamicBone = chain.AddComponent<DynamicBone>();
+
+                    // Set up dynamic bone config
+                    DynamicBoneConfig dynamicBoneConfig = new DynamicBoneConfig();
+                    dynamicBoneConfig.Gravity = new Vector3(0.0f, -0.02f, 0.0f);
+                    dynamicBoneConfig.LocalGravity = new Vector3(0.0f, 0.02f, -0.02f);
+                    dynamicBoneConfig.Exclusions = new List<Transform>();   // Add bones to be ignored here
 
                     // Set up dynamic bone
-                    Utils.ConfigureScarfDynamicBone(dynamicBone);
+                    Utils.ConfigureDynamicBone(dynamicBone, dynamicBoneConfig);
                 });
 
             CreateItem(_name: "Reserve Battery",
