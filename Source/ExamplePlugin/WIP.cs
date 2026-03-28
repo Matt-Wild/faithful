@@ -73,10 +73,10 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("REX", "PlatformBase", new Vector3(-0.375F, 0.025F, -0.5475F), new Vector3(0F, 195F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
                     _displaySettings.AddCharacterDisplay("Loader", "MechBase", new Vector3(0.1705F, 0.315F, -0.175F), new Vector3(0F, 180F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
                     _displaySettings.AddCharacterDisplay("Acrid", "SpineChest3", new Vector3(1.5425F, 1.475F, -0.05F), new Vector3(335F, 90F, 270F), new Vector3(1F, 1F, 1F));
-                    _displaySettings.AddCharacterDisplay("Captain", "Pelvis", new Vector3(0.1475F, -0.0615F, -0.175F), new Vector3(357.5F, 167.5F, 183.75F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Captain", "Stomach", new Vector3(0.185F, 0.071F, 0.12F), new Vector3(353.75F, 30F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Railgunner", "Pelvis", new Vector3(0.07F, 0.12F, 0.135F), new Vector3(22.5F, 20F, 182.5F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Void Fiend", "Chest", new Vector3(0.15125F, -0.07375F, -0.15F), new Vector3(17.5F, 159.25F, 339.25F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(0.23475F, -0.0175F, -0.027F), new Vector3(332.5F, 98.75F, 1F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(-0.18F, -0.0175F, -0.1425F), new Vector3(335F, 216.25F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("False Son", "Pelvis", new Vector3(-0.15875F, 0.024F, -0.2425F), new Vector3(355F, 185F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
                     _displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(-0.1375F, -0.245F, -0.22F), new Vector3(90F, 270F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
                     _displaySettings.AddCharacterDisplay("Operator", "Stomach", new Vector3(-0.017F, 0.0925F, -0.0705F), new Vector3(292F, 212F, 237.5F), new Vector3(0.1F, 0.1F, 0.1F));
@@ -93,9 +93,16 @@ namespace Faithful
 
                     // Set up dynamic bone config
                     DynamicBoneConfig dynamicBoneConfig = new DynamicBoneConfig();
-                    dynamicBoneConfig.Gravity = new Vector3(0.0f, -0.02f, 0.0f);
-                    dynamicBoneConfig.LocalGravity = new Vector3(0.0f, 0.02f, -0.02f);
-                    dynamicBoneConfig.Exclusions = new List<Transform>();   // Add bones to be ignored here
+                    dynamicBoneConfig.Damping = 0.375f;
+                    dynamicBoneConfig.Elasticity = 0.02f;
+                    dynamicBoneConfig.Stiffness = 0.5f;
+                    dynamicBoneConfig.Gravity = new Vector3(0.0f, -1.0f, 0.0f);
+                    dynamicBoneConfig.LocalGravity = new Vector3(0.0f, -0.1f, -0.5f);
+                    dynamicBoneConfig.Exclusions = new List<Transform>
+                    {
+                        Utils.FindChildByName(_prefab.transform, "BigHand").transform,
+                        Utils.FindChildByName(_prefab.transform, "SmallHand").transform
+                    };   // Add bones to be ignored here
 
                     // Set up dynamic bone
                     Utils.ConfigureDynamicBone(dynamicBone, dynamicBoneConfig);
