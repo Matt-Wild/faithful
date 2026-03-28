@@ -59,9 +59,6 @@ namespace Faithful
         protected float fuelUsed = 0.0f;
         protected float lastJetTime;
 
-        // Store if this jetpack belongs to Artificer
-        protected bool artificer = false;
-
         // Store if this jetpack has a display
         protected bool hasDisplay = false;
 
@@ -118,9 +115,6 @@ namespace Faithful
             // Check for jetpack
             if (jetpack == null)
             {
-                // Jetpack does not belong to Artificer
-                artificer = false;
-
                 // Does not have display
                 hasDisplay = false;
 
@@ -193,21 +187,11 @@ namespace Faithful
             flickerRightOff.light = jetsOff.GetComponent<Transform>().Find("Point_Light_Right").GetComponent<Light>();
             flickerRightOff.sinWaves = Assets.mageJetWaves;
 
-            // Check if Artificer
-            if (characterModel.name == "mdlMage")
+            // Check if Artificer or Seeker
+            if (characterModel.name == "mdlMage" || characterModel.name == "mdlSeeker")
             {
-                // Jetpack belongs to Artificer
-                artificer = true;
-
                 // Disable additional boosters
                 additionalBoosters.transform.localScale = Vector3.zero;
-            }
-
-            // Otherwise say jetpack does not belong to artificer
-            else
-            {
-                // Jetpack does not belong to Artificer
-                artificer = false;
             }
         }
 
