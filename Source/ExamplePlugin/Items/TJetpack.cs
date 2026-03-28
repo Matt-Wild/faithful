@@ -81,7 +81,7 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Captain", "Chest", new Vector3(0F, 0.125F, -0.3075F), new Vector3(0F, 180F, 0F), new Vector3(0.45F, 0.45F, 0.45F));
             displaySettings.AddCharacterDisplay("Railgunner", "Backpack", new Vector3(-0.00375F, -0.2875F, 0.02425F), new Vector3(0F, 178.75F, 0F), new Vector3(0.3725F, 0.3725F, 0.3725F));
             displaySettings.AddCharacterDisplay("Void Fiend", "Stomach", new Vector3(-0.001F, 0F, -0.2F), new Vector3(5F, 179F, 0F), new Vector3(0.3F, 0.3F, 0.3F));
-            displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(0F, 0.1575F, -0.21F), new Vector3(345F, 180F, 0F), new Vector3(0.4F, 0.4F, 0.4F));
+            displaySettings.AddCharacterDisplay("Seeker", "Pack", new Vector3(0.0405F, -0.2025F, -0.129F), new Vector3(348.75F, 154.5F, 317F), new Vector3(0.425F, 0.425F, 0.425F));
             displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(0.00375F, 0F, -0.46F), new Vector3(22.5F, 180.25F, 0.25F), new Vector3(0.5F, 0.5F, 0.5F));
             displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(0.0375F, -0.3F, 0F), new Vector3(65F, 270F, 0F), new Vector3(0.375F, 0.375F, 0.375F));
             displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(0F, 0.00175F, -0.025F), new Vector3(2.5F, 180F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
