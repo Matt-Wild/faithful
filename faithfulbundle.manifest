@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3812996906
+CRC: 359642380
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f1f829e47502d2518d2864ad3254c05e
+    Hash: 41dd98e9810f76a23ff07f2b42b4b2a1
   TypeTreeHash:
     serializedVersion: 2
     Hash: e50c578b8b723f3899bea765d83207e3
@@ -197,6 +197,7 @@ Assets:
 - Assets/Items/TargetingMatrix/texTargetingMatrixEmission.png
 - Assets/Items/BrassScrews/BrassScrewsDisplayMesh.obj
 - Assets/Items/HermitsShawl/AltIcons/texHermitShawlTier3Achievement.png
+- Assets/Items/PlasmaFieldGen/AltIcons/texPlasmaFieldGeneratorVoidIcon.png
 - Assets/Items/CollectorsVision/CollectorsVisionMesh.prefab
 - Assets/Items/LongshotGeode/AltIcons/texLongshotGeodeTier2Icon.png
 - Assets/Survivors/Technician/Icons/texTechnicianPrimeIcon.png
@@ -251,11 +252,13 @@ Assets:
 - Assets/Survivors/Technician/Textures/texTechnicianEmission.png
 - Assets/Textures/Skills/Default/texDefaultPrimaryIcon.png
 - Assets/Items/TargetingMatrix/TargetingMatrixDisplayMesh.fbx
-- Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeTier1Icon.png
+- Assets/Items/PlasmaFieldGen/PlasmaFieldGeneratorMesh.prefab
 - Assets/Items/MatterAccelerator/texMatterAcceleratorIcon.png
 - Assets/Items/LongshotGeode/AltIcons/texLongshotGeodeTier1Icon.png
 - Assets/Items/ReserveBattery/ReserveBatteryDisplayMesh.obj
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
+- Assets/Items/PlasmaFieldGen/AltIcons/texPlasmaFieldGeneratorUniqueIcon.png
+- Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeTier1Icon.png
 - Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.prefab
 - Assets/Items/SecondHand/AltIcons/texSecondHandTier1Icon.png
 - Assets/Equipment/Divider/AltIcons/texDividerLunarIcon.png
@@ -371,14 +374,15 @@ Assets:
 - Assets/Survivors/Technician/Icons/texTechnicianPowervoltIcon.png
 - Assets/Textures/Skills/Default/texDefaultUtilityIcon.png
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveTier3Icon.png
+- Assets/Items/PlasmaFieldGen/texPlasmaFieldGeneratorNormal.png
 - Assets/Items/ServiceStartupDrive/AltIcons/texServiceStartupDriveVoidIcon.png
-- Assets/Equipment/Divider/DividerDisplayMesh.obj
 - Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeVoidIcon.png
+- Assets/Equipment/Divider/DividerDisplayMesh.obj
 - Assets/Items/MatterAccelerator/AltIcons/texMatterAcceleratorVoidIcon.png
-- Assets/Items/CopperGear/CopperGearMesh.obj
+- Assets/Items/PlasmaFieldGen/AltIcons/texPlasmaFieldGeneratorBossIcon.png
 - Assets/Items/CopperGear/texCopperGearEmission.png
 - Assets/UI/texCustomExpansionIcon.png
-- Assets/Items/Chakram/AltIcons/texChakramVoidIcon.png
+- Assets/Items/CopperGear/CopperGearMesh.obj
 - Assets/Items/LeadersPennon/texLeadersPennon.png
 - Assets/Debug/UI/DebugAudioInstanceCanvas.prefab
 - Assets/Items/ServiceStartupDrive/texServiceStartupDrive.png
@@ -390,6 +394,7 @@ Assets:
 - Assets/Equipment/Divider/AltIcons/texDividerLunarAchievement.png
 - Assets/Textures/Technician/texTechnicianFlare.png
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageVoidIcon.png
+- Assets/Items/Chakram/AltIcons/texChakramVoidIcon.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionSymbol.png
 - Assets/Placeholder/Model/Cube.obj
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeRendererBody.prefab
@@ -398,14 +403,15 @@ Assets:
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackLunarIcon.png
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaDisplayMesh.obj
 - Assets/Equipment/Divider/texDividerAchievement.png
-- Assets/Items/ServiceStartupDrive/AltIcons/texServiceStartupDriveTier1Icon.png
+- Assets/Items/PlasmaFieldGen/AltIcons/texPlasmaFieldGeneratorTier1Icon.png
 - Assets/Monsters/MechaSpider/Textures/texMechanicalSpiderEmission.png
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageTier1Icon.png
 - Assets/Equipment/Divider/AltIcons/texDividerEquipmentAchievement.png
-- Assets/Survivors/Technician/Icons/texTechnicianAlloyIcon.png
+- Assets/Items/ServiceStartupDrive/AltIcons/texServiceStartupDriveTier1Icon.png
 - Assets/Items/HermitsShawl/texHermitShawlIcon.png
 - Assets/Items/ServiceStartupDrive/ServiceStart-upDriveDisplayMesh.obj
 - Assets/Survivors/Technician/Projectiles/TechnicianTurretRocket.prefab
+- Assets/Survivors/Technician/Icons/texTechnicianAlloyIcon.png
 - Assets/Items/CopperGear/CopperGearDisplayMesh.obj
 - Assets/Survivors/Technician/Projectiles/TechnicianPointlink.prefab
 - Assets/Items/BrassScrews/BrassScrewsMesh.obj
@@ -463,6 +469,7 @@ Assets:
 - Assets/Items/Chakram/texChakramIcon.png
 - Assets/Equipment/ChargefieldPylon/texChargefieldPylonIcon.png
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveTier1Icon.png
+- Assets/Items/PlasmaFieldGen/Materials/texPlasmaFieldGenerator.mat
 - Assets/Items/BrassScrews/AltIcons/texBrassScrewsTier3Icon.png
 - Assets/Items/TargetingMatrix/texTargetingMatrixAchievement.png
 - Assets/Items/VengefulToaster/VengefulToasterMesh.obj
@@ -518,6 +525,7 @@ Assets:
 - Assets/Equipment/Divider/DividerMesh.obj
 - Assets/Items/NoxiousSlimes/NoxiousSlimeEyesMesh.obj
 - Assets/Items/MatterAccelerator/AltIcons/texMatterAcceleratorUniqueIcon.png
+- Assets/Items/PlasmaFieldGen/PlasmaFieldGeneratorMesh.fbx
 - Assets/Items/Chakram/texChakramNormal.png
 - Assets/Debug/UI/DebugObjectAnalysisEntry.prefab
 - Assets/Items/HermitsShawl/AltIcons/texHermitShawlTier2Icon.png
@@ -562,9 +570,10 @@ Assets:
 - Assets/Equipment/Divider/DividerIndicator.prefab
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterTier3Icon.png
 - Assets/Items/BrassScrews/AltIcons/texBrassScrewsUniqueIcon.png
+- Assets/Items/PlasmaFieldGen/texPlasmaFieldGenerator.png
 - Assets/Items/HexCluster/AltIcons/texHexClusterVoidAchievement.png
-- Assets/Items/MeltingWarbler/MeltingWarblerMesh.obj
 - Assets/Items/MatterAccelerator/texMatterAcceleratorNormal.png
+- Assets/Items/MeltingWarbler/MeltingWarblerMesh.obj
 - Assets/Items/LongshotGeode/LongshotGeodeDisplayMesh.prefab
 - Assets/Debug/UI/DebugCanvas.prefab
 - Assets/Equipment/Divider/AltIcons/texDividerEquipmentIcon.png
@@ -600,6 +609,7 @@ Assets:
 - Assets/Items/NoxiousSlimes/Materials/texNoxiousSlimeEyes.mat
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageBossIcon.png
 - Assets/Items/HermitsShawl/AltIcons/texHermitShawlUniqueIcon.png
+- Assets/Items/PlasmaFieldGen/AltIcons/texPlasmaFieldGeneratorLunarIcon.png
 - Assets/Survivors/Technician/Icons/texTechnicianArcIcon.png
 - Assets/Items/HasteningGreave/AltIcons/texHasteningGreaveTier3Icon.png
 - Assets/Items/LeadersPennon/AltIcons/texLeadersPennonTier2Icon.png
@@ -643,8 +653,9 @@ Assets:
 - Assets/Items/LeadersPennon/Materials/texLeadersPennon.mat
 - Assets/Skills/Railgunner/texRailgunnerCoin.png
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaVoidIcon.png
-- Assets/Items/Chakram/Materials/texChakram.mat
+- Assets/Items/PlasmaFieldGen/AltIcons/texPlasmaFieldGeneratorTier3Icon.png
 - Assets/Items/Chakram/AltIcons/texChakramLunarIcon.png
+- Assets/Items/Chakram/Materials/texChakram.mat
 - Assets/Items/CopperGear/AltIcons/texCopperGearBossIcon.png
 - Assets/Survivors/Technician/Icons/texTechnicianConduitDirectIcon.png
 - Assets/Survivors/Technician/Icons/texTechnicianJackhammerIcon.png
@@ -677,6 +688,7 @@ Assets:
 - Assets/Survivors/Technician/Icons/texBuffElectroHeal.png
 - Assets/Items/LeadersPennon/texRampPennonBuff.png
 - Assets/Items/CollectorsVision/AltIcons/texCollectorsVisionVoidIcon.png
+- Assets/Items/PlasmaFieldGen/PlasmaFieldGeneratorDisplayMesh.prefab
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackTier2Achievement.png
 - Assets/Placeholder/Item/texTemporalCubeConsumedIcon.png
 - Assets/Items/LongshotGeode/Materials/texLongshotGeodeCrystal.mat
@@ -725,6 +737,8 @@ Assets:
 - Assets/Items/RadiantTimepiece/texRadiantTimepieceEmission.png
 - Assets/Items/HermitsShawl/texHermitShawl.png
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaTier2Icon.png
+- Assets/Items/PlasmaFieldGen/AltIcons/texPlasmaFieldGeneratorTier2Icon.png
+- Assets/Items/PlasmaFieldGen/texPlasmaFieldGeneratorIcon.png
 - Assets/Items/CopperGear/Materials/texCopperGear.mat
 - Assets/Survivors/Technician/Mesh/TechnicianMasterySkinTurretLights.prefab
 - Assets/Textures/Skills/Default/texDefaultSpecialIcon.png
@@ -760,6 +774,7 @@ Assets:
 - Assets/Items/CopperGear/AltIcons/texCopperGearTier3Icon.png
 - Assets/Items/HermitsShawl/AltIcons/texHermitShawlTier1Icon.png
 - Assets/Survivors/Technician/Icons/texTechnicianChargeFlowIcon.png
+- Assets/Items/PlasmaFieldGen/PlasmaFieldGeneratorDisplayMesh.fbx
 - Assets/Items/MeltingWarbler/AltIcons/texMeltingWarblerTier1Icon.png
 - Assets/Items/TargetingMatrix/AltIcons/texTargetingMatrixTier3Icon.png
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaLunarIcon.png
@@ -770,6 +785,7 @@ Assets:
 - Assets/Items/ServiceStartupDrive/AltIcons/texServiceStartupDriveLunarIcon.png
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaBossAchievement.png
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinTechnician.prefab
+- Assets/Items/PlasmaFieldGen/texPlasmaFieldGeneratorEmission.png
 - Assets/Items/SecondHand/Materials/texSecondHand.mat
 - Assets/Survivors/Technician/Icons/texTechnicianProximitySeekerIcon.png
 Dependencies: []

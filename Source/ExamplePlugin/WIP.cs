@@ -145,6 +145,43 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(0.29F, 0F, 0F), new Vector3(0F, 180F, 270F), new Vector3(0.08F, 0.08F, 0.08F));
                 });
 
+            CreateItem(_name: "Plasma Field Generator",
+                _pickup: "Gain a shield and reduce its recharge time. <style=cIsVoid>Corrupts all Personal Shield Generators</style>.",
+                _description: "Gain a <style=cIsHealing>shield</style> equal to <style=cIsHealing>4%</style> <style=cStack>(+4% per stack)</style> of your maximum health and reduce its <style=cIsUtility>recharge time</style> by <style=cIsUtility>5%</style> <style=cStack>(+5% per stack)</style>. Recharges outside of danger. <style=cIsVoid>Corrupts all Personal Shield Generators</style>.",
+                _lore: "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM CARGO BAY 4 OF UES [Redacted] --//</style>\r\n\r\n\u0022...The heck's up with all these defective shield devices? ...Hinon? I thought the stuff they made was alright.\u0022\r\n\r\n\u0022These things? I wouldn't try any on if I were you. Defective shield devices are no fun to mess with in the first place but these ones... best not even touch them without equipment just to be safe.\u0022\r\n\r\n\u0022Yeesh. How'd they manage to mess up all of these?\u0022\r\n\r\n\u0022If I recall correctly, they went straight to human testing immediately with this particular model since they were so confident and... uh... it couldn't have gone worse, I'd say.\u0022\r\n\r\n\u0022Right. You said you used to work there, didn't you? What happened?\u0022\r\n\r\n\u0022They put it on the first guy and BOOM! He's gone the second they turned the thing on. Then the device just fell to the floor and deactivated, apparently.\u0022\r\n\r\n\u0022Gone? Like, 'gone' gone or...?\u0022\r\n\r\n\u0022Just... poof. They thought they'd teleported him somehow. It took them an embarrassingly long time to figure that they'd simply vaporized the poor guy on the spot. Given not a trace of him was left.\u0022\r\n\r\n\u0022Holy [REDACTED]. How are they still in business?\u0022\r\n\r\n\u0022Oh, yeah, nobody ever got put away for the incident. Heck, nobody even got fired! They couldn't exactly maintain their image if word got out so they tried covering up the whole thing.\u0022\r\n\r\n\u0022...You're kidding. Sounds like you'd be better off working clean-up on the Contact Light than being there.\u0022\r\n\r\n\u0022You're telling me. I quit on the spot when the internal report reached my department.\u0022\r\n\r\n\u0022...Don't tell the captain I said that by the way.\u0022\r\n\r\n\u0022Trust me, buddy. My lips are sealed.\u0022",
+                _tier: ItemTier.VoidTier1,
+                _tags: [ItemTag.Utility, ItemTag.Technology],
+                _iconDir: "texplasmafieldgeneratoricon",
+                _modelDir: "plasmafieldgeneratormesh",
+                _displayDir: "plasmafieldgeneratordisplaymesh",
+                _corruptToken: "ITEM_PERSONALSHIELD_NAME",
+                _displaySettingsCallback: _displaySettings =>
+                {
+                    // Add character display settings
+                    _displaySettings.AddCharacterDisplay("Commando", "Chest", new Vector3(0F, 0.315F, 0.184F), new Vector3(326.75F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Huntress", "Chest", new Vector3(-0.001F, 0.1715F, 0.1635F), new Vector3(330F, 0F, 0F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("Bandit", "UpperArmR", new Vector3(-0.00115F, 0.2015F, -0.092F), new Vector3(345F, 180F, 180F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(-0.05F, 1.2325F, 3.325F), new Vector3(0F, 0F, 0F), new Vector3(0.4F, 0.4F, 0.4F));
+                    _displaySettings.AddCharacterDisplay("Engineer", "Chest", new Vector3(0F, 0.27862F, 0.24375F), new Vector3(355F, 0F, 180F), new Vector3(0.125F, 0.125F, 0.125F));
+                    _displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, 0.65375F, -0.275F), new Vector3(0F, 180F, 180F), new Vector3(0.325F, 0.325F, 0.325F));
+                    _displaySettings.AddCharacterDisplay("Walker Turret", "Head", new Vector3(0F, 0.61625F, -1.1275F), new Vector3(21.25F, 180F, 180F), new Vector3(0.325F, 0.325F, 0.325F));
+                    _displaySettings.AddCharacterDisplay("Artificer", "Chest", new Vector3(0F, 0.1955F, 0.1285F), new Vector3(332.5F, 0F, 0F), new Vector3(0.065F, 0.065F, 0.065F));
+                    _displaySettings.AddCharacterDisplay("Mercenary", "Chest", new Vector3(0F, 0.175F, 0.175F), new Vector3(336.25F, 0F, 0F), new Vector3(0.09F, 0.09F, 0.09F));
+                    _displaySettings.AddCharacterDisplay("REX", "PlatformBase", new Vector3(0.61F, -0.19F, 0.149F), new Vector3(0F, 78.75F, 0F), new Vector3(0.1125F, 0.1125F, 0.1125F));
+                    _displaySettings.AddCharacterDisplay("Loader", "Chest", new Vector3(0F, 0.19925F, 0.182F), new Vector3(333.75F, 0F, 0F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("Acrid", "ClavicleR", new Vector3(1.005F, 1.925F, 1.6F), new Vector3(326.75F, 45F, 92.5F), new Vector3(0.8F, 0.8F, 0.8F));
+                    _displaySettings.AddCharacterDisplay("Captain", "Chest", new Vector3(0F, 0.2285F, 0.204F), new Vector3(349.5F, 0F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
+                    _displaySettings.AddCharacterDisplay("Railgunner", "UpperArmL", new Vector3(0.047F, 0.129F, -0.019F), new Vector3(0F, 105F, 0F), new Vector3(0.0625F, 0.0625F, 0.0625F));
+                    _displaySettings.AddCharacterDisplay("Void Fiend", "UpperArmR", new Vector3(0.196F, -0.0585F, -0.0075F), new Vector3(15F, 103.375F, 345F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Seeker", "Chest", new Vector3(0F, 0.06125F, 0.085F), new Vector3(350F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(0F, 0.4175F, 0.17625F), new Vector3(322.5F, 0F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(-0.28375F, 0.22775F, 0F), new Vector3(280F, 270F, 180F), new Vector3(0.09F, 0.09F, 0.09F));
+                    _displaySettings.AddCharacterDisplay("Operator", "Chest", new Vector3(-0.01F, -0.1025F, -0.08575F), new Vector3(67.5F, 158.75F, 270F), new Vector3(0.04F, 0.04F, 0.04F));
+                    _displaySettings.AddCharacterDisplay("Drifter", "Chest", new Vector3(-0.0145F, 0.285F, 0F), new Vector3(297.5F, 257.5F, 195F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Scavenger", "Head", new Vector3(-2.5375F, 2.05F, -5.725F), new Vector3(302.5F, 206.25F, 157.5F), new Vector3(1.2F, 1.2F, 1.2F));
+                    _displaySettings.AddCharacterDisplay("Technician", "Chest", new Vector3(0F, 0.115F, 0.145F), new Vector3(3.75F, 0F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
+                });
+
             CreateItem(_name: "Service Start-up Drive",
                 _pickup: "Gain access to a machine capsule each stage that contains a powerful drone.",
                 _description: "A <style=cIsUtility>machine capsule</style> containing a drone (79%/<style=cIsHealing>20%</style>/<style=cIsHealth>1%</style>) will appear in a random location <style=cIsUtility>on each stage</style>. <style=cStack>(Increases rarity chances of the drone per stack).</style>",
@@ -194,7 +231,7 @@ namespace Faithful
                 {
                     // Add character display settings
                     _displaySettings.AddCharacterDisplay("Commando", "HandR", new Vector3(-0.0045F, 0.07375F, 0.0425F), new Vector3(50.5F, 262.5F, 268F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("Huntress", "BowHinge2L", new Vector3(-0.042F, 0.37125F, 0.0075F), new Vector3(90F, 90F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Huntress", "BowHinge2L", new Vector3(-0.042F, 0.37125F, 0.0075F), new Vector3(90F, 270F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Huntress", "BowHinge2R", new Vector3(-0.042F, 0.37125F, -0.0075F), new Vector3(90F, 90F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Bandit", "FootL", new Vector3(-0.034F, 0.0005F, 0.0003F), new Vector3(345.75F, 181F, 83.75F), new Vector3(0.0625F, 0.0625F, 0.0625F));
                     _displaySettings.AddCharacterDisplay("Bandit", "FootR", new Vector3(0.034F, 0.0005F, 0.0003F), new Vector3(14.25F, 359F, 263.25F), new Vector3(0.0625F, 0.0625F, 0.0625F));
