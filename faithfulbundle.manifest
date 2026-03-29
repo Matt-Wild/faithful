@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 359642380
+CRC: 3647696823
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 41dd98e9810f76a23ff07f2b42b4b2a1
+    Hash: bd20f93700d812f2d6589d345fab9600
   TypeTreeHash:
     serializedVersion: 2
     Hash: e50c578b8b723f3899bea765d83207e3
@@ -183,6 +183,7 @@ Assets:
 - Assets/Items/NoxiousSlimes/Materials/texNoxiousSlimeGlass.mat
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterVoidIcon.png
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaTier1Icon.png
+- Assets/Items/MatterAccelerator/texMatterAcceleratorVoid.png
 - Assets/Items/MeltingWarbler/AltIcons/texMeltingWarblerLunarIcon.png
 - Assets/Survivors/Technician/mdlTechnician.prefab
 - Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeLunarIcon.png
@@ -368,7 +369,7 @@ Assets:
 - Assets/Items/Chakram/ChakramDisplayMesh.prefab
 - Assets/Items/LongshotGeode/LongshotGeodeMesh.prefab
 - Assets/Items/SecondHand/AltIcons/texSecondHandVoidIcon.png
-- Assets/Survivors/Technician/Icons/texTurretRoboticShotgunIcon.png
+- Assets/Items/MatterAccelerator/Materials/texMatterAcceleratorVoid.mat
 - Assets/Survivors/Technician/Projectiles/Mesh/TechnicianPointlinkMesh.fbx
 - Assets/Items/SecondHand/SecondHandMesh.obj
 - Assets/Survivors/Technician/Icons/texTechnicianPowervoltIcon.png
@@ -397,7 +398,7 @@ Assets:
 - Assets/Items/Chakram/AltIcons/texChakramVoidIcon.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionSymbol.png
 - Assets/Placeholder/Model/Cube.obj
-- Assets/Survivors/Technician/Mesh/TechnicianPrimeRendererBody.prefab
+- Assets/Survivors/Technician/Icons/texTurretRoboticShotgunIcon.png
 - Assets/Items/Chakram/AltIcons/texChakramTier1Icon.png
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystalRamp.png
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackLunarIcon.png
@@ -425,6 +426,7 @@ Assets:
 - Assets/Items/RadiantTimepiece/texRadiantTimepieceNormal.png
 - Assets/Items/BrassScrews/texBrassScrewsNormal.jpg
 - Assets/Items/4-T0NJetpack/4T0NJetpackMesh.obj
+- Assets/Survivors/Technician/Mesh/TechnicianPrimeRendererBody.prefab
 - Assets/Placeholder/Item/TemporalCubeMesh.obj
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterTier2Achievement.png
 - Assets/Items/ServiceStartupDrive/AltIcons/texServiceStartupDriveTier2Icon.png
@@ -556,6 +558,7 @@ Assets:
 - Assets/Items/LongshotGeode/LongshotGeodeRockMesh.obj
 - Assets/Items/CollectorsVision/Shrine/RecollectionShrineMesh.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianPointlinkIcon.png
+- Assets/Items/MatterAccelerator/texMatterAcceleratorVoidBuff.png
 - Assets/Items/BrassScrews/AltIcons/texBrassScrewsTier2Icon.png
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackBossIcon.png
 - Assets/Items/VengefulToaster/Materials/texVengefulToaster.mat
