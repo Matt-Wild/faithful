@@ -153,6 +153,9 @@ namespace Faithful
             // Check for valid buff and character body
             if (_buff == null || _character == null) return 0.0f;
 
+            // Exclude debuffs
+            if (_buff.isDebuff) return 0.0f;
+
             // Check for valid inventory
             Inventory inventory = _character.inventory;
             if (inventory == null) return 0.0f;
