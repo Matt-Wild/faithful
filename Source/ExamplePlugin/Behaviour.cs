@@ -19,7 +19,10 @@ namespace Faithful
     internal delegate void DamageReportCallback(DamageReport _report);
 
     internal delegate void OnAddBuffCallback(BuffIndex _buff, CharacterBody _character);
-    internal delegate void OnAddTimedBuffCallback(BuffDef _buff, float _duration, CharacterBody _character);
+    internal delegate void OnAddTimedBuffCallback(BuffDef _buff, ref float _duration, CharacterBody _character);
+    internal delegate void OnAddTimedBuffMaxStacksCallback(BuffDef _buff, ref float _duration, ref int _maxStacks, CharacterBody _character);
+    internal delegate void OnExtendTimedBuffsCallback(BuffDef _buff, ref float _duration, ref float _max, CharacterBody _character);
+    internal delegate void OnSetTimedBuffDurationCallback(BuffDef _buff, ref float _duration, bool _allStacks, CharacterBody _character);
     internal delegate void OnInflictDamageOverTimeCallback(GameObject _victimObject, GameObject _attackerObject, DotController.DotIndex _dotIndex, float _duration, float _damageMultiplier, uint? _maxStacksFromAttacker);
     internal delegate void OnInflictDamageOverTimeRefCallback(ref InflictDotInfo _inflictDotInfo);
 
@@ -79,6 +82,9 @@ namespace Faithful
         // Buff, debuff and DoT callbacks
         private static List<OnAddBuffCallback> onAddBuffCallbacks = new List<OnAddBuffCallback>();
         private static List<OnAddTimedBuffCallback> onAddTimedBuffCallbacks = new List<OnAddTimedBuffCallback>();
+        private static List<OnAddTimedBuffMaxStacksCallback> onAddTimedBuffMaxStacksCallbacks = new List<OnAddTimedBuffMaxStacksCallback>();
+        private static List<OnExtendTimedBuffsCallback> onExtendTimedBuffsCallbacks = new List<OnExtendTimedBuffsCallback>();
+        private static List<OnSetTimedBuffDurationCallback> onSetTimedBuffDurationCallbacks = new List<OnSetTimedBuffDurationCallback>();
         private static List<OnInflictDamageOverTimeCallback> onInflictDamageOverTimeCallbacks = new List<OnInflictDamageOverTimeCallback>();
         private static List<OnInflictDamageOverTimeRefCallback> onInflictDamageOverTimeRefCallbacks = new List<OnInflictDamageOverTimeRefCallback>();
 
@@ -152,6 +158,9 @@ namespace Faithful
             On.RoR2.CharacterBody.Start += HookCharacterBodyStart;
             On.RoR2.CharacterBody.AddBuff_BuffIndex += HookAddBuffIndex;
             On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += HookAddTimedBuffDef;
+            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float_int += HookAddTimedBuffDefMaxStacks;
+            On.RoR2.CharacterBody.ExtendTimedBuffIfPresent_BuffDef_float_float += HookExtendTimedBuffs;
+            On.RoR2.CharacterBody.SetTimedBuffDurationIfPresent += HookSetTimedBuffDuration;
             On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int += HookServerGiveItemPermanent;
             On.RoR2.Inventory.GiveItemTemp += HookServerGiveItemTemporary;
             On.RoR2.Inventory.RemoveItem_ItemIndex_int += HookServerRemoveItem;
@@ -191,6 +200,9 @@ namespace Faithful
             On.RoR2.CharacterBody.Start -= HookCharacterBodyStart;
             On.RoR2.CharacterBody.AddBuff_BuffIndex -= HookAddBuffIndex;
             On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float -= HookAddTimedBuffDef;
+            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float_int -= HookAddTimedBuffDefMaxStacks;
+            On.RoR2.CharacterBody.ExtendTimedBuffIfPresent_BuffDef_float_float -= HookExtendTimedBuffs;
+            On.RoR2.CharacterBody.SetTimedBuffDurationIfPresent -= HookSetTimedBuffDuration;
             On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int -= HookServerGiveItemPermanent;
             On.RoR2.Inventory.RemoveItem_ItemIndex_int -= HookServerRemoveItem;
             On.RoR2.Inventory.HandleInventoryChanged -= HookInventoryChanged;
@@ -450,6 +462,30 @@ namespace Faithful
             onAddTimedBuffCallbacks.Add(_callback);
 
             DebugLog("Added On Add Timed Buff behaviour");
+        }
+
+        // Add On Add Timed Buff Max Stacks callback
+        public static void AddOnAddTimedBuffMaxStacksCallback(OnAddTimedBuffMaxStacksCallback _callback)
+        {
+            onAddTimedBuffMaxStacksCallbacks.Add(_callback);
+
+            DebugLog("Added On Add Timed Buff Max Stacks behaviour");
+        }
+
+        // Add On Extend Timed Buffs callback
+        public static void AddOnExtendTimedBuffsCallback(OnExtendTimedBuffsCallback _callback)
+        {
+            onExtendTimedBuffsCallbacks.Add(_callback);
+
+            DebugLog("Added On Extend Timed Buffs behaviour");
+        }
+
+        // Add On Set Timed Buff Duration callback
+        public static void AddOnSetTimedBuffDurationCallback(OnSetTimedBuffDurationCallback _callback)
+        {
+            onSetTimedBuffDurationCallbacks.Add(_callback);
+
+            DebugLog("Added On Set Timed Buff Duration behaviour");
         }
 
         // Add On Inflict Damage Over Time callback
@@ -829,10 +865,46 @@ namespace Faithful
             foreach (OnAddTimedBuffCallback callback in onAddTimedBuffCallbacks)
             {
                 // Call
-                callback(buffDef, duration, self);
+                callback(buffDef, ref duration, self);
             }
 
             orig(self, buffDef, duration); // Run normal processes
+        }
+
+        private static void HookAddTimedBuffDefMaxStacks(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffDef_float_int orig, CharacterBody self, BuffDef buffDef, float duration, int maxStacks)
+        {
+            // Cycle through On Add Timed Buff Max Stacks callbacks
+            foreach (OnAddTimedBuffMaxStacksCallback callback in onAddTimedBuffMaxStacksCallbacks)
+            {
+                // Call
+                callback(buffDef, ref duration, ref maxStacks, self);
+            }
+
+            orig(self, buffDef, duration, maxStacks); // Run normal processes
+        }
+
+        private static void HookExtendTimedBuffs(On.RoR2.CharacterBody.orig_ExtendTimedBuffIfPresent_BuffDef_float_float orig, CharacterBody self, BuffDef buffDef, float duration, float max)
+        {
+            // Cycle through On Extend Timed Buffs callbacks
+            foreach (OnExtendTimedBuffsCallback callback in onExtendTimedBuffsCallbacks)
+            {
+                // Call
+                callback(buffDef, ref duration, ref max, self);
+            }
+
+            orig(self, buffDef, duration, max); // Run normal processes
+        }
+
+        private static void HookSetTimedBuffDuration(On.RoR2.CharacterBody.orig_SetTimedBuffDurationIfPresent orig, CharacterBody self, BuffDef buffDef, float duration, bool allStacks)
+        {
+            // Cycle through On Set Timed Buff Duration callbacks
+            foreach (OnSetTimedBuffDurationCallback callback in onSetTimedBuffDurationCallbacks)
+            {
+                // Call
+                callback(buffDef, ref duration, allStacks, self);
+            }
+
+            orig(self, buffDef, duration, allStacks); // Run normal processes
         }
 
         private static void HookInflictDamageOverTime(On.RoR2.DotController.orig_InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 orig, GameObject victimObject, GameObject attackerObject, DotController.DotIndex dotIndex, float duration, float damageMultiplier, uint? maxStacksFromAttacker)

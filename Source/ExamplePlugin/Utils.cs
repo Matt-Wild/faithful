@@ -157,6 +157,9 @@ namespace Faithful
         // Cache for TMP fonts to avoid redundant searches
         static private Dictionary<string, TMP_FontAsset> fontCache = new Dictionary<string, TMP_FontAsset>();
 
+        // Cached items
+        static private Dictionary<string, ItemBase> items = new Dictionary<string, ItemBase>();
+
         public static void Init(PluginInfo _pluginInfo)
         {
             // Detect assemblies
@@ -324,6 +327,13 @@ namespace Faithful
             ContentAddition.AddExpansionDef(expansionDef);
         }
 
+        // Register item with utils
+        public static void RegisterItem(string _token, ItemBase _item)
+        {
+            // Add item to dictionary
+            items[_token] = _item;
+        }
+
         // Refresh chosen buff on chosen character
         public static void RefreshTimedBuffs(CharacterBody body, BuffDef buffDef, float duration, int amount = int.MaxValue)
         {
@@ -331,6 +341,13 @@ namespace Faithful
             {
                 return; // Body not valid
             }
+
+            Debug.Log(duration);
+
+            // Account for Radiant Timepiece
+            duration += Faithful.radiantTimepiece.GetAdditionalTimedBuffDuration(buffDef, body);
+
+            Debug.Log(duration);
 
             // Count how many buffs have been refreshed
             int counter = 0;

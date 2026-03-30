@@ -51,38 +51,39 @@ namespace Faithful
         Toolbox toolbox;
 
         // Buffs
-        private static GodMode godMode;
-        private static Vengeance vengeance;
-        private static Patience patience;
-        private static Inspiration inspiration;
-        private static Overclocked overclocked;
-        private static Repair repair;
+        internal static GodMode godMode;
+        internal static Vengeance vengeance;
+        internal static Patience patience;
+        internal static Inspiration inspiration;
+        internal static Overclocked overclocked;
+        internal static Repair repair;
 
         // Items
-        private static CopperGear copperGear;
-        private static TargetingMatrix targetingMatrix;
-        private static BrassScrews brassScrews;
-        private static MeltingWarbler meltingWarbler;
-        private static VengefulToaster vengefulToaster;
-        private static HermitsShawl hermitsShawl;
-        private static SpaciousUmbrella spaciousUmbrella;
-        private static SecondHand secondHand;
-        private static LeadersPennon leadersPennon;
-        private static DrownedVisage drownedVisage;
-        private static LongshotGeode longshotGeode;
-        private static HasteningGreave hasteningGreave;
-        private static CauterizingGreave cauterizingGreave;
-        private static NoxiousSlime noxiousSlime;
-        private static CollectorsVision collectorsVision;
-        private static TJetpack tJetpack;
-        private static MatterAccelerator matterAccelerator;
-        private static DebugItem debugItem;
-        
+        internal static CopperGear copperGear;
+        internal static TargetingMatrix targetingMatrix;
+        internal static BrassScrews brassScrews;
+        internal static MeltingWarbler meltingWarbler;
+        internal static VengefulToaster vengefulToaster;
+        internal static HermitsShawl hermitsShawl;
+        internal static SpaciousUmbrella spaciousUmbrella;
+        internal static SecondHand secondHand;
+        internal static LeadersPennon leadersPennon;
+        internal static DrownedVisage drownedVisage;
+        internal static LongshotGeode longshotGeode;
+        internal static HasteningGreave hasteningGreave;
+        internal static CauterizingGreave cauterizingGreave;
+        internal static NoxiousSlime noxiousSlime;
+        internal static CollectorsVision collectorsVision;
+        internal static TJetpack tJetpack;
+        internal static MatterAccelerator matterAccelerator;
+        internal static RadiantTimepiece radiantTimepiece;
+        internal static DebugItem debugItem;
+
         // Survivors
-        private static Technician technician;
+        internal static Technician technician;
 
         // Interactables
-        private static Interactable recollectionShrine;
+        internal static Interactable recollectionShrine;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -146,6 +147,7 @@ namespace Faithful
             collectorsVision = new CollectorsVision(toolbox, inspiration);
             tJetpack = new TJetpack(toolbox);
             matterAccelerator = new MatterAccelerator(toolbox);
+            radiantTimepiece = new RadiantTimepiece(toolbox);
             debugItem = new DebugItem(toolbox);
 
             // Create WIP content

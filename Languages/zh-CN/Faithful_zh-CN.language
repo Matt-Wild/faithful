@@ -124,6 +124,11 @@
 	"FAITHFUL_MATTER_ACCELERATOR_LORE": "“自制物质加速器的第17天。\r\n\r\n到目前为止，我的进展有好消息也有坏消息。\r\n\r\n好消息是，我终于让它稳定运行到足以开始测试性能了。坏消息是，我得弄个更好的相机才能记录下任何实际结果。我现在这个拍出来太模糊了。\r\n\r\n哦，我还成功触发了邻居家的安保系统。所以我大概也该想办法避免这事再发生了。”",
 	"FAITHFUL_MATTER_ACCELERATOR_BUFF": "物质加速器",
 	
+	"FAITHFUL_RADIANT_TIMEPIECE_NAME": "辉耀怀表",
+	"FAITHFUL_RADIANT_TIMEPIECE_PICKUP": "延长临时增益的持续时间。",
+	"FAITHFUL_RADIANT_TIMEPIECE_DESC": "临时增益的<style=cIsUtility>持续时间</style>延长 <style=cIsUtility>[DURATION]</style> <style=cStack>(每层额外+[DURATION_STACKING] 秒)</style>。",
+	"FAITHFUL_RADIANT_TIMEPIECE_LORE": "订单：Henlein 品牌怀表 第222版（银灰色）\r\n追踪编号：1510******\r\n预计送达时间：08/23/2057\r\n配送方式：高优先级/易碎品\r\n收货地址：土星，Continuum 街古董工坊\r\n配送详情：\r\n\r\n感谢您购买：\r\n > 1 件 Henlein 品牌怀表 第222版，银灰色\r\n\r\n我们希望您对其工艺感到满意。作为地球上最大的奢侈腕表零售商，我们始终以自身的工艺为傲，因此若您发现任何瑕疵，请联系我们的客服热线。我们的传统钟表匠将随时为您维修任何产品，仅收取少量*费用。\r\n\r\n更多详情可参见与订单一同附上的手册。\r\n\r\n祝您度过准时的一天。\r\n\r\n- Henlein",
+	
 	"FAITHFUL_SURVIVOR_TECHNICIAN_NAME": "技师",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_DESCRIPTION": "技师利用她的装置与技术，释放强力的电能伤害。\n\n< ! > 即使电弧无法直接命中敌人，对附近的无人机或炮塔使用它也能通过超频造成伤害。\n\n< ! > 在使用电弧连接强敌时施放能压是清理周围杂兵的有效手段。\n\n< ! > 充能流可用于突进或在靠近敌人或机械盟友时闪避攻击。\n\n< ! > 将技师的导管部署并引导至有利位置，可用于削弱接近的敌人或配合充能流实现机动。",
 	"FAITHFUL_SURVIVOR_TECHNICIAN_SUBTITLE": "系统渗透者",

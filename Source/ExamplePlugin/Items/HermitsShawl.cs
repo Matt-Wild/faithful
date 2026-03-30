@@ -34,7 +34,7 @@ namespace Faithful
             CreateDisplaySettings("HermitShawlDisplayMesh");
 
             // Create item
-            item = Items.AddItem("HERMITS_SHAWL", "Hermits Shawl", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            item = Items.AddItem("HERMITS_SHAWL", "Hermits Shawl", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
 
             // Create item settings
             CreateSettings();
@@ -100,7 +100,7 @@ namespace Faithful
             item.UpdateItemTexts();
         }
 
-        void ModifyModelPrefab(GameObject _prefab)
+        void ModifyDisplayPrefab(GameObject _prefab)
         {
             // Get first shawl object
             GameObject shawl = Utils.FindChildByName(_prefab.transform, "Shawl.001");

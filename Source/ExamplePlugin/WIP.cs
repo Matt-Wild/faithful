@@ -49,65 +49,6 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(-0.09F, 0.025F, 0F), new Vector3(0F, 180F, 270F), new Vector3(0.1125F, 0.1125F, 0.1125F));
                 });
 
-            CreateItem(_name: "Radiant Timepiece",
-                _pickup: "Increase the duration of temporary buffs.",
-                _description: "Increase the <style=cIsUtility>duration</style> of temporary buffs by <style=cIsUtility>1</style> <style=cStack>(+1 per stack)</style> second(s).",
-                _lore: "Order: Henlein Brand Pocket Watch 222nd Edition (Silver Gray)\r\nTracking Number: 1510******\r\nEstimated Delivery: 08/23/2057\r\nShipping Method: High Priority/Fragile\r\nShipping Address: Antiques Workshop, Continuum St., Saturn\r\nShipping Details:\r\n\r\nThank you for your purchase of:\r\n > 1 Henlein Brand Pocket Watch 222nd Edition, Silver Gray\r\n\r\nWe hope you are satisfied with its craftsmanship. We pride ourselves on our work as the largest luxury watch retailer of Earth so do contact our customer support line if you notice any defects. Our traditional horologists will always be available to repair any products for a small* fee.\r\n\r\nFurther details can be found in the handbook alongside your order.\r\n\r\nWe wish you a timely day.\r\n\r\n- Henlein",
-                _tier: ItemTier.Tier1,
-                _tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist],
-                _iconDir: "texradianttimepieceicon",
-                _modelDir: "radianttimepiecemesh",
-                _displayDir: "radianttimepiecedisplaymesh",
-                _displaySettingsCallback: _displaySettings =>
-                {
-                    // Add character display settings
-                    _displaySettings.AddCharacterDisplay("Commando", "Stomach", new Vector3(-0.08F, 0F, -0.12975F), new Vector3(352.5F, 185F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-                    _displaySettings.AddCharacterDisplay("Huntress", "Chest", new Vector3(0.1685F, 0.0205F, 0.0575F), new Vector3(0F, 90F, 348.75F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("Bandit", "Stomach", new Vector3(0.035F, -0.0275F, -0.17F), new Vector3(340F, 180F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("MUL-T", "Chest", new Vector3(1.53F, 0.45F, -1.825F), new Vector3(0F, 180F, 0F), new Vector3(1F, 1F, 1F));
-                    _displaySettings.AddCharacterDisplay("Engineer", "Chest", new Vector3(-0.0745F, -0.105F, -0.3336F), new Vector3(345F, 180F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("Turret", "Head", new Vector3(-0.42F, 0.15F, -1.4375F), new Vector3(0F, 215F, 0F), new Vector3(0.4F, 0.4F, 0.4F));
-                    _displaySettings.AddCharacterDisplay("Walker Turret", "Head", new Vector3(-0.63F, 0.92F, -1.595F), new Vector3(0F, 180F, 0F), new Vector3(0.4F, 0.4F, 0.4F));
-                    _displaySettings.AddCharacterDisplay("Artificer", "Pelvis", new Vector3(0.195F, -0.0075F, -0.0125F), new Vector3(17.25F, 75.5F, 195F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("Mercenary", "Pelvis", new Vector3(0.1125F, 0.104F, 0.079F), new Vector3(7.5F, 0F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("REX", "PlatformBase", new Vector3(-0.375F, 0.025F, -0.5475F), new Vector3(0F, 195F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
-                    _displaySettings.AddCharacterDisplay("Loader", "MechBase", new Vector3(0.1705F, 0.315F, -0.175F), new Vector3(0F, 180F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-                    _displaySettings.AddCharacterDisplay("Acrid", "SpineChest3", new Vector3(1.5425F, 1.475F, -0.05F), new Vector3(335F, 90F, 270F), new Vector3(1F, 1F, 1F));
-                    _displaySettings.AddCharacterDisplay("Captain", "Stomach", new Vector3(0.185F, 0.071F, 0.12F), new Vector3(353.75F, 30F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("Railgunner", "Pelvis", new Vector3(0.07F, 0.12F, 0.135F), new Vector3(22.5F, 20F, 182.5F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("Void Fiend", "Chest", new Vector3(0.15125F, -0.07375F, -0.15F), new Vector3(17.5F, 159.25F, 339.25F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("Seeker", "Pelvis", new Vector3(-0.18F, -0.0175F, -0.1425F), new Vector3(335F, 216.25F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("False Son", "Pelvis", new Vector3(-0.15875F, 0.024F, -0.2425F), new Vector3(355F, 185F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
-                    _displaySettings.AddCharacterDisplay("Chef", "Chest", new Vector3(-0.1375F, -0.245F, -0.22F), new Vector3(90F, 270F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-                    _displaySettings.AddCharacterDisplay("Operator", "Stomach", new Vector3(-0.017F, 0.0925F, -0.0705F), new Vector3(292F, 212F, 237.5F), new Vector3(0.1F, 0.1F, 0.1F));
-                    _displaySettings.AddCharacterDisplay("Drifter", "Chest", new Vector3(0.25675F, -0.09575F, -0.3425F), new Vector3(60F, 207.5F, 257.5F), new Vector3(0.12F, 0.12F, 0.12F));
-                    _displaySettings.AddCharacterDisplay("Technician", "Pelvis", new Vector3(-0.11625F, 0.0475F, -0.194F), new Vector3(355F, 180F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-                },
-                _modifyItemDisplayPrefabCallback: _prefab =>
-                {
-                    // Get first timepiece object
-                    GameObject chain = Utils.FindChildByName(_prefab.transform, "Chain.001");
-
-                    // Add dynamic bone behaviour
-                    DynamicBone dynamicBone = chain.AddComponent<DynamicBone>();
-
-                    // Set up dynamic bone config
-                    DynamicBoneConfig dynamicBoneConfig = new DynamicBoneConfig();
-                    dynamicBoneConfig.Damping = 0.375f;
-                    dynamicBoneConfig.Elasticity = 0.02f;
-                    dynamicBoneConfig.Stiffness = 0.5f;
-                    dynamicBoneConfig.Gravity = new Vector3(0.0f, -1.0f, 0.0f);
-                    dynamicBoneConfig.LocalGravity = new Vector3(0.0f, -0.1f, -0.5f);
-                    dynamicBoneConfig.Exclusions = new List<Transform>
-                    {
-                        Utils.FindChildByName(_prefab.transform, "BigHand").transform,
-                        Utils.FindChildByName(_prefab.transform, "SmallHand").transform
-                    };   // Add bones to be ignored here
-
-                    // Set up dynamic bone
-                    Utils.ConfigureDynamicBone(dynamicBone, dynamicBoneConfig);
-                });
-
             CreateItem(_name: "Reserve Battery",
                 _pickup: "Killing an enemy adds a temporary extra charge of a random skill.",
                 _description: "Killing an enemy adds <style=cIsUtility>+1 temporary</style> charge of either your <style=cIsUtility>Secondary</style>, <style=cIsUtility>Utility</style> or <style=cIsUtility>Special skill</style>, up to a maximum of <style=cIsUtility>+1</style> <style=cStack>(+1 per stack)</style> for each skill.",
