@@ -16,10 +16,14 @@ namespace Faithful
         // Store additional item settings
         Setting<float> durationSetting;
         Setting<float> durationStackingSetting;
+        Setting<string> buffBlacklistSetting;
 
         // Store item stats
         float duration;
         float durationStacking;
+
+        // List of blacklisted buff indexes that this item doesn't work with
+        List<BuffIndex> buffBlacklist = [];
 
         // Constructor
         public RadiantTimepiece(Toolbox _toolbox) : base(_toolbox)
@@ -83,6 +87,7 @@ namespace Faithful
             // Create settings specific to this item
             durationSetting = radiantTimepieceItem.CreateSetting("DURATION", "Duration", 1.0f, "How much should this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
             durationStackingSetting = radiantTimepieceItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much should further stacks of this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
+            buffBlacklistSetting = radiantTimepieceItem.CreateSetting("BUFF_BLACKLIST", "Buff Blacklist", "bdParrying,bdVoidFogMild,bdVoidRaidCrabWardWipeFog,bdImmune,bdUntargetable,bdHiddenInvincibility,bdMedkitHeal,bdKnockBackActiveWindow", "Which buffs should this item not apply to?\n\nProvide as a comma separated list.\n(Cooldowns, DOTs, and debuffs are already ignored)", _valueFormatting: "{0:0.0}%", _isStat: false);
         }
 
         public override void FetchSettings()
@@ -90,6 +95,27 @@ namespace Faithful
             // Get item settings
             duration = durationSetting.Value;
             durationStacking = durationStackingSetting.Value;
+
+            // Update buff blacklist
+            // This should be called whenever the main menu is up to refresh it
+            buffBlacklist.Clear();
+            string[] providedStrings = buffBlacklistSetting.Value.Split([','], StringSplitOptions.RemoveEmptyEntries);
+            if (BuffCatalog.buffDefs != null)
+            {
+                foreach (BuffDef def in BuffCatalog.buffDefs)
+                {
+                    // Check if buff name contains any of the provided strings, and if so add it to the blacklist
+                    // Don't worry about case sensitivity (for ease of config)
+                    foreach (string str in providedStrings)
+                    {
+                        if (def.name.ToLower().Contains(str.Trim().ToLower()))
+                        {
+                            buffBlacklist.Add(def.buffIndex);
+                            break;
+                        }
+                    }
+                }
+            }
 
             // Update item texts with new settings
             radiantTimepieceItem.UpdateItemTexts();
@@ -153,8 +179,11 @@ namespace Faithful
             // Check for valid buff and character body
             if (_buff == null || _character == null) return 0.0f;
 
-            // Exclude debuffs
-            if (_buff.isDebuff) return 0.0f;
+            // Exclude debuffs, cooldowns, and DOTs
+            if (_buff.isDebuff || _buff.isCooldown || _buff.isDOT) return 0.0f;
+
+            // Check if buff is blacklisted
+            if (buffBlacklist.Contains(_buff.buffIndex)) return 0.0f;
 
             // Check for valid inventory
             Inventory inventory = _character.inventory;

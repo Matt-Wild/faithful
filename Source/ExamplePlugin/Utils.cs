@@ -342,12 +342,8 @@ namespace Faithful
                 return; // Body not valid
             }
 
-            Debug.Log(duration);
-
             // Account for Radiant Timepiece
             duration += Faithful.radiantTimepiece.GetAdditionalTimedBuffDuration(buffDef, body);
-
-            Debug.Log(duration);
 
             // Count how many buffs have been refreshed
             int counter = 0;
