@@ -74,6 +74,7 @@ namespace Faithful
         internal static CauterizingGreave cauterizingGreave;
         internal static NoxiousSlime noxiousSlime;
         internal static CollectorsVision collectorsVision;
+        internal static AppraisersEye appraisersEye;
         internal static TJetpack tJetpack;
         internal static MatterAccelerator matterAccelerator;
         internal static RadiantTimepiece radiantTimepiece;
@@ -144,6 +145,7 @@ namespace Faithful
             hasteningGreave = new HasteningGreave(toolbox);
             cauterizingGreave = new CauterizingGreave(toolbox);
             noxiousSlime = new NoxiousSlime(toolbox);
+            appraisersEye = new AppraisersEye(toolbox);
             collectorsVision = new CollectorsVision(toolbox, inspiration);
             tJetpack = new TJetpack(toolbox);
             matterAccelerator = new MatterAccelerator(toolbox);

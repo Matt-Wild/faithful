@@ -16,6 +16,7 @@
 	"FAITHFUL_VENGEANCE_BUFF": "Vengeance",
 	"FAITHFUL_PATIENCE_BUFF": "Patience",
 	"FAITHFUL_INSPIRATION_BUFF": "Inspiration",
+	"FAITHFUL_SCRUTINIZED_BUFF": "Scrutinized",
 	"FAITHFUL_OVERCLOCKED_BUFF": "Overclocked",
 	"FAITHFUL_REPAIR_BUFF": "Arc Healing",
 	
@@ -112,6 +113,11 @@
 	"FAITHFUL_COLLECTORS_VISION_PICKUP": "Collecting unique items increases 'Critical Strike' chance and 'Critical Strike' damage. <style=cIsVoid>Corrupts all [CORRUPTED_ITEM]</style>.",
 	"FAITHFUL_COLLECTORS_VISION_DESC": "Each unique item collected per stage grants <style=cIsDamage>[INSPIRATION_GAIN]%</style> <style=cStack>(+[INSPIRATION_GAIN_STACKING]% per stack)</style> permanent <style=cIsDamage>Inspiration</style>, increasing <style=cIsDamage>Critical Strike</style> chance by <style=cIsDamage>+1%</style> and granting an additional <style=cIsDamage>+[CRIT_DAMAGE_MULT]% Critical Strike</style> damage. <style=cIsVoid>Corrupts all [CORRUPTED_ITEM]</style>.",
 	"FAITHFUL_COLLECTORS_VISION_LORE": "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\n\n\u0022So, y'ever notice Bob? The guy's got this weird knack for collecting, like, everything. Pencils, coffee mugs, even the boss' autographed posters.\u0022\n\n\u0022Yeah, one day, he showed up wearin' this goofy-looking doohickey.\u0022\n\n\u0022Doohickey... That's what you call it? The thing's alive I swear it. One day I kid y'not that thing looked back at me... Like it's analyzing me head to toe.\u0022\n\n\u0022Whatever it is, Bob is really protective abou' it. Says he got it from his mate Jim as some sort of partin' gift.\u0022\n\n\u0022Jim... Tha' the guy who got sacked on all those branches over at [REDACTED] and caused that chaos in 23-B?\u0022\n\n\u0022Defini'ely not... Probably... Anyways none o' my business, ignorance is bliss. Now where's that damned screwdriver?\u0022\n\n[With perfect accuracy, Bob throws a screwdriver right onto the workstation from the other room]\n\n\u0022Cheers mate.\u0022\n\n\u0022I'm serious, man. It freaks me out... The guy's got more energy and precision than a caffeinated hummingbird...\u0022\n\n[Loud sounds of drilling, clunking and twisting metal]\n\n\u0022Mhm...\u0022\n\n\u0022Are you listenin'?... I heard rumors about what 'appened in 23-B... And I don't want it happenin' here.\u0022\n\n[Workshop sounds continue; sounds of objects being quickly dismantled and reassembled can be heard from the other room]\n\n\u0022Huh?... Oh. Yeh.\u0022\n\n\u0022I don't know how you're able to ignore all this. Even the cap' is unnerved by it all... thought the guy was on drugs.\u0022\n\n[A loud crackle can be heard followed closely by the emergency lighting whirring up, then silence]\n\n<style=cMono>\r//--SIGNAL LOST --//</style>",
+	
+	"FAITHFUL_APPRAISERS_EYE_NAME": "Appraiser's Eye",
+	"FAITHFUL_APPRAISERS_EYE_PICKUP": "Critical strikes scrutinize enemy weaknesses.",
+	"FAITHFUL_APPRAISERS_EYE_DESC": "<style=cIsDamage>Critical Strikes scrutinize</style> enemies up to <style=cIsDamage>1</style> <style=cStack>(+1 per stack)</style> time(s), increasing <style=cIsDamage>Critical Strike</style> damage taken by <style=cIsDamage>20%</style> from all sources.",
+	"FAITHFUL_APPRAISERS_EYE_LORE": ":)",
 	
 	"FAITHFUL_4T0N_JETPACK_NAME": "4-T0N Jetpack",
 	"FAITHFUL_4T0N_JETPACK_PICKUP": "Hold 'Jump' while falling to boost upwards. Recharges over time after landing.",

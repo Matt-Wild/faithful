@@ -90,7 +90,9 @@ namespace Faithful
 
         // Item interaction callbacks
         private static List<OnTransferItemCallback> onGiveItemPermanentCallbacks = new List<OnTransferItemCallback>();
+        private static List<OnTransferItemCallback> onGiveItemPermanentLateCallbacks = new List<OnTransferItemCallback>();
         private static List<OnTransferItemFloatCallback> onGiveItemTemporaryCallbacks = new List<OnTransferItemFloatCallback>();
+        private static List<OnTransferItemFloatCallback> onGiveItemTemporaryLateCallbacks = new List<OnTransferItemFloatCallback>();
         private static List<OnTransferItemCallback> onRemoveItemCallbacks = new List<OnTransferItemCallback>();
         private static List<OnInventoryCallback> onInventoryChangedCallbacks = new List<OnInventoryCallback>();
         private static Dictionary<ItemDef, List<OnInventoryCallback>> onItemAddedCallbacks = new Dictionary<ItemDef, List<OnInventoryCallback>>();
@@ -512,12 +514,28 @@ namespace Faithful
             DebugLog("Added On Give Item Permanent behaviour");
         }
 
+        // Add On Give Item Permanent Late callback (SERVER ONLY)
+        public static void AddServerOnGiveItemPermanentLateCallback(OnTransferItemCallback _callback)
+        {
+            onGiveItemPermanentLateCallbacks.Add(_callback);
+
+            DebugLog("Added On Give Item Permanent Late behaviour");
+        }
+
         // Add On Give Item Temporary callback (SERVER ONLY)
         public static void AddServerOnGiveItemTemporaryCallback(OnTransferItemFloatCallback _callback)
         {
             onGiveItemTemporaryCallbacks.Add(_callback);
 
             DebugLog("Added On Give Item Temporary behaviour");
+        }
+
+        // Add On Give Item Temporary callback (SERVER ONLY)
+        public static void AddServerOnGiveItemTemporaryLateCallback(OnTransferItemFloatCallback _callback)
+        {
+            onGiveItemTemporaryLateCallbacks.Add(_callback);
+
+            DebugLog("Added On Give Item Temporary Late behaviour");
         }
 
         // Add On Remove Item callback (SERVER ONLY)
@@ -941,6 +959,13 @@ namespace Faithful
             }
 
             orig(self, itemIndex, countToAdd); // Run normal processes
+
+            // Cycle through On Give Item Late callbacks
+            foreach (OnTransferItemCallback callback in onGiveItemPermanentLateCallbacks)
+            {
+                // Call
+                callback(self, itemIndex, countToAdd);
+            }
         }
 
         private static void HookServerGiveItemTemporary(On.RoR2.Inventory.orig_GiveItemTemp orig, Inventory self, ItemIndex itemIndex, float countToAdd)
@@ -953,6 +978,13 @@ namespace Faithful
             }
 
             orig(self, itemIndex, countToAdd); // Run normal processes
+
+            // Cycle through On Give Item Late callbacks
+            foreach (OnTransferItemFloatCallback callback in onGiveItemTemporaryLateCallbacks)
+            {
+                // Call
+                callback(self, itemIndex, countToAdd);
+            }
         }
 
         private static void HookServerRemoveItem(On.RoR2.Inventory.orig_RemoveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)

@@ -1,4 +1,7 @@
-﻿using RoR2;
+﻿using On.RoR2.UI.LogBook;
+using RoR2;
+using RoR2.ExpansionManagement;
+using System;
 using System.Collections.Generic;
 
 namespace Faithful
@@ -20,6 +23,9 @@ namespace Faithful
 
             // Create item override settings
             CreateAllItemsSettings();
+
+            // Hook behaviour
+            LogBookController.CanSelectItemEntry += OnCanSelectItemEntry;
         }
 
         static void CreateAllItemsSettings()
@@ -40,16 +46,25 @@ namespace Faithful
             }
         }
 
-        public static Item AddItem(string _token, string _safeName, ItemTag[] _tags, string _iconDir, string _modelDir, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null)
+        public static Item AddItem(string _token, string _safeName, ItemTag[] _tags, string _iconDir, string _modelDir, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null, string _namePrefix = null, bool _hiddenFromLogbook = false)
         {
             // Create item
-            Item newItem = new Item(_token, _safeName, _tags, _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, _hidden, _corruptToken, _displaySettings, _modifyItemModelPrefabCallback, _modifyItemDisplayPrefabCallback, _canNeverBeTemporary, _debugOnly, _WIP, _overrideName, _overridePickup, _overrideDescription, _overrideLore);
+            Item newItem = new(_token, _safeName, _tags, _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, _hidden, _corruptToken, _displaySettings, _modifyItemModelPrefabCallback, _modifyItemDisplayPrefabCallback, _canNeverBeTemporary, _debugOnly, _WIP, _overrideName, _overridePickup, _overrideDescription, _overrideLore, _namePrefix, _hiddenFromLogbook);
 
             // Add item to items list
             items.Add(newItem);
 
             // Return new item
             return newItem;
+        }
+
+        static bool OnCanSelectItemEntry(LogBookController.orig_CanSelectItemEntry orig, ItemDef itemDef, Dictionary<ExpansionDef, bool> expansionAvailability)
+        {
+            // Check if item is hidden from logbook
+            foreach (Item item in items) if (item.itemDef == itemDef) if (item.hiddenFromLogbook) return false;
+
+            // Return original method result if not hidden from logbook
+            return orig(itemDef, expansionAvailability);
         }
 
         public static Item GetItem(string _token)

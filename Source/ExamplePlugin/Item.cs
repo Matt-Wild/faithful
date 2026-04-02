@@ -34,6 +34,9 @@ namespace Faithful
         // Is this item hidden
         public bool hidden = false;
 
+        // Is this item hidden from the logbook
+        public bool hiddenFromLogbook = false;
+
         // Is this item WIP
         public bool WIP = false;
 
@@ -47,8 +50,11 @@ namespace Faithful
         private string overrideDescription = string.Empty;
         private string overrideLore = string.Empty;
 
+        // Used for logbook ordering
+        private string namePrefix = string.Empty;
+
         // Constructor
-        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null)
+        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null, string _namePrefix = null, bool _hiddenFromLogbook = false)
         {
             // Assign token
             token = _token;
@@ -56,8 +62,14 @@ namespace Faithful
             // Assign if hidden
             hidden = _hidden;
 
+            // Assign if hidden from logbook
+            hiddenFromLogbook = _hiddenFromLogbook;
+
             // Assign if WIP
             WIP = _WIP;
+
+            // Assign name prefix
+            namePrefix = _namePrefix ?? "";
 
             // Assign name
             name = WIP ? _safeName : Languages.GetLanguageString($"FAITHFUL_{token}_NAME");
@@ -110,7 +122,7 @@ namespace Faithful
             itemDef.deprecatedTier = forceHide ? ItemTier.NoTier : _tier;
 
             // Automatically review temporary item tag
-            if ((_tier == ItemTier.Tier1 || _tier == ItemTier.Tier2 || _tier == ItemTier.Tier3 || _tier == ItemTier.Boss) && !_canNeverBeTemporary)
+            if ((_tier == ItemTier.Tier1 || _tier == ItemTier.Tier2 || _tier == ItemTier.Tier3 || _tier == ItemTier.Boss || _tier == ItemTier.VoidTier1 || _tier == ItemTier.VoidTier2 || _tier == ItemTier.VoidTier3 || _tier == ItemTier.VoidBoss) && !_canNeverBeTemporary)
             {
                 // Check for tag
                 if (!_tags.Contains(ItemTag.CanBeTemporary))
@@ -320,7 +332,7 @@ namespace Faithful
             }
 
             // Update item texts
-            itemDef.name = $"{Utils.GetXMLSafeString(safeName)}_FAITHFUL_{token}_ITEM";
+            itemDef.name = $"{Utils.GetXMLSafeString(string.IsNullOrWhiteSpace(namePrefix) ? safeName : $"{namePrefix} FROM {safeName}")}_FAITHFUL_{token}_ITEM";
             itemDef.nameToken = string.IsNullOrEmpty(overrideName) ? $"FAITHFUL_{token}_NAME" : overrideName;
             itemDef.pickupToken = Items.extendAllPickupDescriptions ? $"FAITHFUL_{token}_DESC" : extendedPickupDescSetting == null ? $"FAITHFUL_{token}_PICKUP" : extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP";
             itemDef.descriptionToken = $"FAITHFUL_{token}_DESC";

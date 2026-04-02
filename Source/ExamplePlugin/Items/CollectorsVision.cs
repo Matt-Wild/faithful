@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Collections.Generic;
 
 namespace Faithful
 {
@@ -12,6 +13,9 @@ namespace Faithful
 
         // Store reference to inspiration buff behaviour
         Inspiration inspirationBehaviour;
+
+        // Appraiser's Eye item granted after reaching 100% inspiration
+        Item appraisersEye;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
@@ -32,6 +36,19 @@ namespace Faithful
         float critDamageMult;
         float inspirationReturnPerc;
 
+        // Used for timing item given notifications for after the original item has already pushed it's notification
+        struct PendingEyeNotification
+        {
+            public CharacterMaster master;
+            public PickupIndex grantingPickupIndex;
+            public int remainingChecks;
+
+            public PendingEyeNotification()
+            {
+            }
+        }
+        static readonly List<PendingEyeNotification> pendingEyeNotifications = [];
+
         // Constructor
         public CollectorsVision(Toolbox _toolbox, Inspiration _inspiration) : base(_toolbox)
         {
@@ -40,6 +57,9 @@ namespace Faithful
 
             // Get Vengeance buff
             inspirationBuff = Buffs.GetBuff("INSPIRATION");
+
+            // Get Appraiser's Eye item
+            appraisersEye = Items.GetItem("APPRAISERS_EYE");
 
             // Create display settings
             CreateDisplaySettings("collectorsvisiondisplaymesh");
@@ -54,11 +74,14 @@ namespace Faithful
             FetchSettings();
 
             // Link On Give Item behaviours
-            Behaviour.AddServerOnGiveItemPermanentCallback(OnGiveItemPermanent);
-            Behaviour.AddServerOnGiveItemTemporaryCallback(OnGiveItemTemporary);
+            Behaviour.AddServerOnGiveItemPermanentLateCallback(OnGiveItemPermanent);
+            Behaviour.AddServerOnGiveItemTemporaryLateCallback(OnGiveItemTemporary);
 
             // Add on scene exit behaviour
             Behaviour.AddOnPreSceneExitCallback(OnSceneExit);
+
+            // Hook other behaviour
+            On.RoR2.CharacterMasterNotificationQueue.PushPickupNotification_CharacterMaster_PickupIndex_bool_int += OnPushPickupNotification;
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -153,6 +176,12 @@ namespace Faithful
                 return;
             }
 
+            // Ignore Appraiser's Eye
+            if (appraisersEye != null && _index == appraisersEye.itemDef.itemIndex)
+            {
+                return;
+            }
+
             // Attempt to get Character Body
             CharacterBody body = Utils.GetInventoryBody(_inventory);
             if (body == null)
@@ -168,7 +197,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = _inventory.GetItemCount(collectorsVisionItem.itemDef);
+            int count = _inventory.GetItemCountEffective(collectorsVisionItem.itemDef);
             if (count > 0.0f)
             {
                 // Get Collector's Vision index
@@ -189,14 +218,28 @@ namespace Faithful
                 // Set flag
                 helper.stageFlags.Set($"CS_{_index}_FFS");
 
+                // Get current amount of buffs
+                int currentBuffs = body.GetBuffCount(inspirationBuff.buffDef);
+
                 // Check if should cap inspiration
                 if (capInspiration)
                 {
-                    // Get current amount of buffs
-                    int currentBuffs = body.GetBuffCount(inspirationBuff.buffDef);
+                    // Check if already at 100% inspiration
+                    if (currentBuffs >= 100)
+                    {
+                        // Check if has given appraiser's eye this stage
+                        if (!helper.stageFlags.Get("CS_APPRAISERS_EYE_GIVEN"))
+                        {
+                            // Grant appraiser's eye
+                            GrantEye(_inventory, _index);
+
+                            // Set flag to prevent giving multiple appraiser's eyes in one stage
+                            helper.stageFlags.Set("CS_APPRAISERS_EYE_GIVEN");
+                        }
+                    }
 
                     // Calculate buffs to add
-                    int buffsToAdd =  Mathf.Min(inspirationGain + inspirationGainStacking * (count - 1), 100 - currentBuffs);
+                    int buffsToAdd = Mathf.Min(inspirationGain + inspirationGainStacking * (count - 1), 100 - currentBuffs);
 
                     // Grant buffs
                     for (int i = 0; i < buffsToAdd; i++)
@@ -213,6 +256,82 @@ namespace Faithful
                     {
                         body.AddBuff(inspirationBuff.buffDef);
                     }
+
+                    // Check if is over 100% inspiration
+                    if (body.GetBuffCount(inspirationBuff.buffDef) > 100)
+                    {
+                        // Check if has given appraiser's eye this stage
+                        if (!helper.stageFlags.Get("CS_APPRAISERS_EYE_GIVEN"))
+                        {
+                            // Grant appraiser's eye
+                            GrantEye(_inventory, _index);
+
+                            // Set flag to prevent giving multiple appraiser's eyes in one stage
+                            helper.stageFlags.Set("CS_APPRAISERS_EYE_GIVEN");
+                        }
+                    }
+                }
+            }
+        }
+
+        private void OnPushPickupNotification(On.RoR2.CharacterMasterNotificationQueue.orig_PushPickupNotification_CharacterMaster_PickupIndex_bool_int orig, CharacterMaster characterMaster, PickupIndex pickupIndex, bool isTemporary, int upgradeCount)
+        {
+            // Perform original method functionality
+            orig(characterMaster, pickupIndex, isTemporary, upgradeCount);
+
+            // Process pending eye notifications
+            ProcessPendingEyeNotifications(characterMaster, pickupIndex);
+        }
+
+        private void GrantEye(Inventory _inventory, ItemIndex _grantingItemIndex)
+        {
+            // Grant appraiser's eye
+            _inventory.GiveItemPermanent(appraisersEye.itemDef);
+
+            // Try get character master
+            CharacterMaster master = _inventory.gameObject.GetComponent<CharacterMaster>();
+            if (master == null) return;
+
+            // Add to pending notifications to give notification after the original item has already given its notification
+            pendingEyeNotifications.Add(new PendingEyeNotification
+            {
+                master = master,
+                grantingPickupIndex = PickupCatalog.FindPickupIndex(_grantingItemIndex),
+                remainingChecks = 10    // For avoiding keeping pending notifications around for too long if something goes wrong with the notification processing
+            });
+        }
+
+        private void ProcessPendingEyeNotifications(CharacterMaster _master, PickupIndex _pushedPickupIndex)
+        {
+            // Cycle through pending notifications
+            for (int i = pendingEyeNotifications.Count - 1; i >= 0; i--)
+            {
+                PendingEyeNotification notification = pendingEyeNotifications[i];
+
+                // Check if master is still valid
+                if (notification.master == null)
+                {
+                    pendingEyeNotifications.RemoveAt(i);
+                    continue;
+                }
+
+                // Check if this is the pickup notification that granted the eye for the pending notification
+                if (_master == notification.master && _pushedPickupIndex == notification.grantingPickupIndex)
+                {
+                    pendingEyeNotifications.RemoveAt(i);
+
+                    // Send eye notification
+                    CharacterMasterNotificationQueue.PushItemNotification(_master, appraisersEye.itemDef.itemIndex);
+                    continue;
+                }
+
+                // Decrement remaining checks
+                notification.remainingChecks--;
+
+                // Check if should remove pending notification due to too many checks
+                if (notification.remainingChecks <= 0)
+                {
+                    pendingEyeNotifications.RemoveAt(i);
                 }
             }
         }
