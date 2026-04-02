@@ -17,10 +17,10 @@ namespace Faithful
         public AppraisersEye(Toolbox _toolbox) : base(_toolbox)
         {
             // Create display settings
-            //CreateDisplaySettings("TemporalCubeMesh");
+            CreateDisplaySettings("appraiserseyedisplaymesh");
 
             // Create item and buff
-            appraisersEyeItem = Items.AddItem("APPRAISERS_EYE", "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.WorldUnique], "texTemporalCubeIcon", "TemporalCubeMesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings, _WIP: true, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
+            appraisersEyeItem = Items.AddItem("APPRAISERS_EYE", "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings, _WIP: true, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
             scrutinizedBuff = Buffs.AddBuff("SCRUTINIZED", "Scrutinized", "texTemporalCubeIcon", Color.white, _isDebuff: true);
 
             // Create item settings
@@ -45,33 +45,28 @@ namespace Faithful
             }
 
             // Add character display settings
-            displaySettings.AddCharacterDisplay("Commando", "GunL", new Vector3(0.205F, 0F, 0F), new Vector3(0F, 90F, 180F), new Vector3(0.0525F, 0.0525F, 0.0525F));
-            displaySettings.AddCharacterDisplay("Commando", "GunR", new Vector3(-0.205F, 0F, 0F), new Vector3(0F, 270F, 180F), new Vector3(0.0525F, 0.0525F, 0.0525F));
-            displaySettings.AddCharacterDisplay("Huntress", "BowBase", new Vector3(0F, -0.0145F, -0.0775F), new Vector3(90F, 180F, 0F), new Vector3(0.07F, 0.07F, 0.07F));
-            displaySettings.AddCharacterDisplay("Bandit", "SideWeapon", new Vector3(0F, -0.1165F, 0.1925F), new Vector3(90F, 0F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
-            displaySettings.AddCharacterDisplay("MUL-T", "Head", new Vector3(2.275F, 2.475F, -0.35F), new Vector3(300F, 180F, 90F), new Vector3(0.725F, 0.725F, 0.725F));
-            displaySettings.AddCharacterDisplay("Engineer", "CannonHeadL", new Vector3(0.11475F, 0.395F, 0.22F), new Vector3(270F, 225F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
-            displaySettings.AddCharacterDisplay("Engineer", "CannonHeadR", new Vector3(-0.11475F, 0.395F, 0.22F), new Vector3(270F, 135F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
-            displaySettings.AddCharacterDisplay("Turret", "Head", new Vector3(0.805F, 0.54618F, 1.8275F), new Vector3(0F, 0F, 270F), new Vector3(0.1125F, 0.1125F, 0.1125F));
-            displaySettings.AddCharacterDisplay("Walker Turret", "Head", new Vector3(0.615F, 0.7805F, 0.71F), new Vector3(0F, 0F, 270F), new Vector3(0.175F, 0.175F, 0.175F));
-            displaySettings.AddCharacterDisplay("Artificer", "LowerArmL", new Vector3(0F, 0.22075F, -0.20375F), new Vector3(270F, 2.5F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("Artificer", "LowerArmR", new Vector3(0.0225F, 0.2225F, 0.2045F), new Vector3(270F, 182.5F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
-            displaySettings.AddCharacterDisplay("Mercenary", "Head", new Vector3(0.1865F, 0.0715F, 0.0675F), new Vector3(2.5F, 355F, 270F), new Vector3(0.075F, 0.075F, 0.075F));
-            displaySettings.AddCharacterDisplay("REX", "AimOriginSyringe", new Vector3(0.2825F, 0.09425F, -0.1575F), new Vector3(0F, 0F, 270F), new Vector3(0.2F, 0.2F, 0.2F));
-            displaySettings.AddCharacterDisplay("Loader", "Head", new Vector3(0.181F, 0.1635F, 0.02625F), new Vector3(0F, 0F, 282.5F), new Vector3(0.065F, 0.065F, 0.065F));
-            displaySettings.AddCharacterDisplay("Acrid", "LowerArmL", new Vector3(-1.0431F, 4.035F, -1.631F), new Vector3(275F, 35F, 358F), new Vector3(1F, 1F, 1F));
-            displaySettings.AddCharacterDisplay("Captain", "HandL", new Vector3(0.1525F, 0.0625F, -0.0075F), new Vector3(271F, 314.5F, 318.5F), new Vector3(0.06F, 0.06F, 0.06F));
-            displaySettings.AddCharacterDisplay("Railgunner", "GunScope", new Vector3(0F, 0.32F, 0.08F), new Vector3(0F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Void Fiend", "Hand", new Vector3(0.0965F, 0.1135F, 0.01375F), new Vector3(275F, 270F, 2F), new Vector3(0.075F, 0.075F, 0.075F));
-            displaySettings.AddCharacterDisplay("Seeker", "HandL", new Vector3(-0.071F, -0.016F, -0.1245F), new Vector3(295.5F, 357.5F, 40F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Seeker", "HandR", new Vector3(-0.01875F, -0.045F, 0.1425F), new Vector3(286.25F, 207.25F, 317.5F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("False Son", "Chest", new Vector3(-0.399F, 0.2925F, 0.1575F), new Vector3(0F, 0F, 165F), new Vector3(0.1F, 0.1F, 0.1F));
-            displaySettings.AddCharacterDisplay("Chef", "Cleaver", new Vector3(0.08025F, 0.5105F, 0F), new Vector3(270F, 270F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Chef", "PizzaCutter", new Vector3(-0.18175F, 0.4075F, -0.00025F), new Vector3(270F, 90F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Technician", "HandL", new Vector3(-0.094F, 0.11F, -0.0165F), new Vector3(270F, 90F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Technician", "HandR", new Vector3(0.094F, 0.11F, -0.0165F), new Vector3(270F, 270F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Operator", "MuzzleGun", new Vector3(0F, 0.105F, 0.0348F), new Vector3(2.5F, 0F, 0F), new Vector3(0.05F, 0.05F, 0.05F));
-            displaySettings.AddCharacterDisplay("Drifter", "Chest", new Vector3(-0.275F, -0.023F, -0.295F), new Vector3(275F, 315F, 120F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("Commando", "Head", new Vector3(0.0925F, 0.25F, 0.13375F), new Vector3(355F, 37.5F, 352.5F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Huntress", "Head", new Vector3(0F, 0.1621F, 0.12725F), new Vector3(344F, 0F, 0F), new Vector3(0.0825F, 0.0825F, 0.0825F));
+            displaySettings.AddCharacterDisplay("Bandit", "Head", new Vector3(0F, 0.055F, 0.12375F), new Vector3(0F, 0F, 0F), new Vector3(0.08F, 0.08F, 0.08F));
+            displaySettings.AddCharacterDisplay("MUL-T", "Head", new Vector3(-0.93F, 3.3725F, -0.46F), new Vector3(303.75F, 180F, 180F), new Vector3(1F, 1F, 1F));
+            displaySettings.AddCharacterDisplay("Engineer", "CannonHeadR", new Vector3(0F, 0.375F, 0F), new Vector3(270F, 0F, 0F), new Vector3(0.2F, 0.2F, 0.2F));
+            displaySettings.AddCharacterDisplay("Engineer", "CannonHeadL", new Vector3(0F, 0.375F, 0F), new Vector3(270F, 0F, 0F), new Vector3(0.2F, 0.2F, 0.2F));
+            displaySettings.AddCharacterDisplay("Turret", "Head", new Vector3(0F, 0.5745F, -0.26F), new Vector3(0F, 0F, 0F), new Vector3(0.2F, 0.2F, 0.2F));
+            displaySettings.AddCharacterDisplay("Walker Turret", "Head", new Vector3(0F, 0.79125F, 0.6F), new Vector3(0F, 0F, 0F), new Vector3(0.225F, 0.225F, 0.225F));
+            displaySettings.AddCharacterDisplay("Artificer", "Head", new Vector3(0F, 0.099F, 0.1025F), new Vector3(338.5F, 0F, 0F), new Vector3(0.0475F, 0.0475F, 0.0475F));
+            displaySettings.AddCharacterDisplay("Mercenary", "Head", new Vector3(0.0541F, 0.14375F, 0.12125F), new Vector3(345.75F, 37.5F, 358.75F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("REX", "Eye", new Vector3(0F, 0.8375F, 0F), new Vector3(270F, 0F, 0F), new Vector3(0.25F, 0.25F, 0.25F));
+            displaySettings.AddCharacterDisplay("Loader", "Head", new Vector3(0.05375F, 0.121F, 0.112F), new Vector3(345F, 31.25F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Acrid", "Head", new Vector3(0F, 2.145F, 1.1125F), new Vector3(350F, 0F, 0F), new Vector3(1F, 1F, 1F));
+            displaySettings.AddCharacterDisplay("Captain", "Head", new Vector3(0F, 0.0675F, 0.1325F), new Vector3(355F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Railgunner", "Head", new Vector3(0F, 0.125F, 0.1075F), new Vector3(337.5F, 0F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
+            displaySettings.AddCharacterDisplay("Void Fiend", "Hand", new Vector3(-0.019F, 0.09F, 0.0145F), new Vector3(350F, 270F, 180F), new Vector3(0.08F, 0.08F, 0.08F));
+            displaySettings.AddCharacterDisplay("Seeker", "Head", new Vector3(0F, 0.1615F, 0.1215F), new Vector3(351.25F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("False Son", "HandR", new Vector3(0.01525F, 0.144F, -0.0404F), new Vector3(348.75F, 191.25F, 180F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.2065F, 0.1195F, -0.08675F), new Vector3(287.5F, 180F, 180F), new Vector3(0.11F, 0.11F, 0.11F));
+            displaySettings.AddCharacterDisplay("Operator", "Head", new Vector3(-0.12555F, -0.1748F, 0.05195F), new Vector3(67.5F, 313.75F, 317.5F), new Vector3(0.05125F, 0.05125F, 0.05125F));
+            displaySettings.AddCharacterDisplay("Drifter", "Head", new Vector3(-0.121F, 0.1885F, -0.06F), new Vector3(290F, 202.5F, 158.75F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Technician", "ChestEye", new Vector3(0F, 0F, 0F), new Vector3(270F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
         }
 
         protected override void CreateSettings()
