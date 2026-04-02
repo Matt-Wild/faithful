@@ -42,10 +42,6 @@ namespace Faithful
             public CharacterMaster master;
             public PickupIndex grantingPickupIndex;
             public int remainingChecks;
-
-            public PendingEyeNotification()
-            {
-            }
         }
         static readonly List<PendingEyeNotification> pendingEyeNotifications = [];
 
@@ -297,7 +293,7 @@ namespace Faithful
             {
                 master = master,
                 grantingPickupIndex = PickupCatalog.FindPickupIndex(_grantingItemIndex),
-                remainingChecks = 10    // For avoiding keeping pending notifications around for too long if something goes wrong with the notification processing
+                remainingChecks = 64    // For avoiding keeping pending notifications around for too long if something goes wrong with the notification processing
             });
         }
 
