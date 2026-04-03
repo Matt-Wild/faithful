@@ -13,6 +13,12 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store item settings
+        Setting<bool> hiddenFromLogbookSetting;
+
+        // Store item stats
+        bool hiddenFromLogbook;
+
         // Constructor
         public AppraisersEye(Toolbox _toolbox) : base(_toolbox)
         {
@@ -20,8 +26,8 @@ namespace Faithful
             CreateDisplaySettings("appraiserseyedisplaymesh");
 
             // Create item and buff
-            appraisersEyeItem = Items.AddItem("APPRAISERS_EYE", "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings, _WIP: true, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
-            scrutinizedBuff = Buffs.AddBuff("SCRUTINIZED", "Scrutinized", "texTemporalCubeIcon", Color.white, _isDebuff: true);
+            appraisersEyeItem = Items.AddItem("APPRAISERS_EYE", "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _displaySettings: displaySettings, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
+            scrutinizedBuff = Buffs.AddBuff("SCRUTINIZED", "Scrutinized", "texBuffScrutinizedEye", Color.white, _isDebuff: true);
 
             // Create item settings
             CreateSettings();
@@ -71,10 +77,18 @@ namespace Faithful
 
         protected override void CreateSettings()
         {
+            // Create settings specific to this item
+            hiddenFromLogbookSetting = appraisersEyeItem.CreateSetting("HIDDEN_FROM_LOGBOOK", "Hide From Logbook?", true, "Should this item be hidden from the logbook?", false, _canRandomise: false, _restartRequired: true);
         }
 
         public override void FetchSettings()
         {
+            // Get item settings
+            hiddenFromLogbook = hiddenFromLogbookSetting.Value;
+
+            // Update if hidden in logbook
+            appraisersEyeItem.hiddenFromLogbook = hiddenFromLogbook;
+
             // Update item texts with new settings
             appraisersEyeItem.UpdateItemTexts();
         }

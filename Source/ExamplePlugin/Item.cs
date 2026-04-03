@@ -53,6 +53,9 @@ namespace Faithful
         // Used for logbook ordering
         private string namePrefix = string.Empty;
 
+        // Used for language token variants
+        public string descriptionVariant = string.Empty;
+
         // Constructor
         public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null, string _namePrefix = null, bool _hiddenFromLogbook = false)
         {
@@ -316,7 +319,7 @@ namespace Faithful
             if (string.IsNullOrEmpty(overrideDescription))
             {
                 // Use 3 parameter version to add language override for specific language
-                LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken($"FAITHFUL_{token}_DESC", $"ITEM_{token}", corruptedNameSafe));
+                LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken(string.IsNullOrWhiteSpace(descriptionVariant) ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_{descriptionVariant}_DESC", $"ITEM_{token}", corruptedNameSafe));
             }
             else
             {
@@ -389,8 +392,8 @@ namespace Faithful
             pickupOverrideSetting = CreateSetting("PICKUP_OVERRIDE", "Override Item Pickup", "", "Should this item have a different pickup?\n\nFor styling and dynamic stat tags, open the .language file for examples.", false, _canRandomise: false);
             descriptionOverrideSetting = CreateSetting("DESCRIPTION_OVERRIDE", "Override Item Description", "", "Should this item have a different description?\n\nFor styling and dynamic stat tags, open the .language file for examples.", false, _canRandomise: false);
 
-            // Check if void item
-            if (isVoid)
+            // Check if void item and normally has a corrupted item
+            if (isVoid && !string.IsNullOrWhiteSpace(defaultCorruptedToken))
             {
                 // Create corrupt override setting
                 corruptedOverrideSetting = CreateSetting("CORRUPTED_OVERRIDE", "Override Corrupted Item", "", "Should this item corrupt something else instead of it's default item?", false, _canRandomise: false, _restartRequired: true);
