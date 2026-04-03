@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 31106114
+CRC: 1147787332
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cdb89d372c9ef65ee39b3e07e7428f4b
+    Hash: 010b6e44f6915901a131473e73da79b1
   TypeTreeHash:
     serializedVersion: 2
     Hash: e50c578b8b723f3899bea765d83207e3
@@ -282,15 +282,15 @@ Assets:
 - Assets/Items/HexCluster/AltIcons/texHexClusterLunarAchievement.png
 - Assets/Survivors/Technician/Mesh/TechnicianAlloySkinRobot.prefab
 - Assets/Items/CauterizingGreave/CauterizingGreaveDisplayMesh.fbx
+- Assets/Items/AppraisersEye/texBuffScrutinizedEye.png
 - Assets/Items/VengefulToaster/texVengefulToasterEmission.png
-- Assets/Equipment/ChargefieldPylon/AltIcons/texChargefieldPylonLunarAchievement.png
 - Assets/Items/RadiantTimepiece/RadiantTimepieceMesh.fbx
-- Assets/Equipment/ChargefieldPylon/texChargefieldPylonAchievement.png
+- Assets/Equipment/ChargefieldPylon/AltIcons/texChargefieldPylonLunarAchievement.png
 - Assets/Skills/Railgunner/RailgunnerCoinMesh.prefab
 - Assets/Items/AppraisersEye/AppraisersEyeMesh.fbx
-- Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeTier2Achievement.png
+- Assets/Equipment/ChargefieldPylon/texChargefieldPylonAchievement.png
 - Assets/Items/HermitsShawl/texHermitShawlDisplay.png
-- Assets/Monsters/MechaSpider/Textures/texMechanicalSpider.png
+- Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeTier2Achievement.png
 - Assets/Items/HasteningGreave/texHasteningGreaveNormal.png
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackLunarAchievement.png
 - Assets/Items/HasteningGreave/texHasteningGreaveIcon.png
@@ -298,6 +298,7 @@ Assets:
 - Assets/Items/SpaciousUmbrella/texSpaciousUmbrellaNormal.png
 - Assets/Items/MatterAccelerator/texMatterAcceleratorEmission.png
 - Assets/Items/HasteningGreave/HasteningGreaveMesh.prefab
+- Assets/Monsters/MechaSpider/Textures/texMechanicalSpider.png
 - Assets/Items/TargetingMatrix/AltIcons/texTargetingMatrixVoidIcon.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeAchievement.png
 - Assets/Items/AppraisersEye/AltIcons/texAppraisersEyeTier3Icon.png
