@@ -1,5 +1,14 @@
 # Changelog
 
+### v1.4.0 Matter Accelerator, Radiant Timepiece, And Appraiser's Eye
+- Added 3 new items (Matter Accelerator, Radiant Timepiece, and Appraiser's Eye).
+- Collector's Vision now awards Appraiser's Eye at 100% Inspiration (can be disabled via config).
+- Buffed Vengeful Toaster's buff duration stacking from 1s -> 2s (config adjustment/reset required).
+- Updated interaction texts for Shrine of Recollection to be more inline with the current Inspiration buff.
+- Second Hand, Copper Gear, and Brass Screws buffs no longer visually stack to align better with base game.
+- Improved item display for Jetpack on Seeker.
+- Changed Inspiration buff icon.
+
 #### v1.3.27 Jetpack And Targeting Matrix Changes
 - Targeting Matrix effect now shows through terrain to make finding the target easier (can be disabled via config).
 - Jetpack now has a buff indicating fuel remaining (can be disabled via config).
@@ -52,10 +61,10 @@
 #### v1.3.14 Vengeful Toaster Concussion Device Bug
 - Railgunner's Concussion Device no longer grants vengeance.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.13 Spacious Umbrella Buff
 - Spacious Umbrella has been buffed with reduced stacking falloff.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.12 Locales Framework
 - Changed item and buff internal names to be more robust for the future implementation of additional locales and to avoid future mod conflicts.

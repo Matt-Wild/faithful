@@ -1880,6 +1880,20 @@ namespace Faithful
             return null;
         }
 
+        public static CharacterModel GetCharacterModel(CharacterBody _body)
+        {
+            // Validate input
+            if (!_body) return null;
+
+            // Attempt to fetch valid model locator
+            ModelLocator modelLocator = _body.modelLocator;
+            if (!modelLocator) modelLocator = _body.GetComponent<ModelLocator>();
+            if (!modelLocator || !modelLocator.modelTransform) return null;
+
+            // Return character model component from model transform
+            return modelLocator.modelTransform.GetComponent<CharacterModel>();
+        }
+
         // Get all Holdout Zones this character is in
         public static List<HoldoutZoneController> GetHoldoutZonesContainingCharacter(CharacterMaster _character)
         {

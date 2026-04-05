@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using UnityEngine.Networking;
-using System.IO;
-using System.Collections.Generic;
-using R2API;
-using UnityEngine.AddressableAssets;
-using RoR2.ExpansionManagement;
+﻿using R2API;
 using Rewired.ComponentControls.Effects;
+using RoR2.ExpansionManagement;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.Networking;
 
 namespace Faithful
 {

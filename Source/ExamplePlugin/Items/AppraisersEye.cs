@@ -28,6 +28,15 @@ namespace Faithful
         int maxDebuffsStacking;
         static float critDamage;
 
+        // Overlay for Scrutinized debuff
+        static readonly Overlays.Overlay scrutinizedOverlay = Overlays.CreateOverlay(new Overlays.OverlaySettings
+        {
+            MaterialAddress = "RoR2/Base/CritOnUse/matFullCrit.mat",
+            Colour = new Color(0.16f, 0.0f, 0.32f, 0.64f),
+            Persistent = true,
+            AnimateShaderAlpha = false
+        });
+
         // IL hook identifiers
         const string takeDamageProcessHookName = "AppraisersEye.TakeDamageProcess";
 
@@ -50,6 +59,7 @@ namespace Faithful
             // Link behaviour
             Behaviour.AddOnHitEnemyLateCallback(OnHitEnemyLate);
 
+            // More specific IL hooks
             IL.RoR2.HealthComponent.TakeDamageProcess += IL_HealthComponent_TakeDamageProcess;
         }
 
@@ -148,6 +158,13 @@ namespace Faithful
             // Apply debuff if below cap
             if (victimDebuffCount < currentMaxDebuffs)
             {
+                // Check if first debuff
+                if (victimDebuffCount == 0)
+                {
+                    // Apply Scrutinized overlay
+                    Overlays.ApplyOverlay(scrutinizedOverlay, victimBody);
+                }
+
                 victimBody.AddBuff(scrutinizedBuff.buffDef.buffIndex);
             }
         }
