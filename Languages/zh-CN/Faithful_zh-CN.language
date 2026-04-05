@@ -7,8 +7,8 @@
 
 	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_NAME": "回忆神龛",
 	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_CONTEXT": "向回忆神龛祈祷",
-	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_MESSAGE_2P": "<style=cShrine>你向神龛祈祷。随着你恢复了 {1} 点灵感，你的思绪剧痛。</color>",
-	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_MESSAGE": "<style=cShrine>{0} 向神龛祈祷，恢复了 {1} 点灵感。</color>",
+	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_MESSAGE_2P": "<style=cShrine>你向神龛祈祷。随着你恢复了 {1}% 点灵感，你的思绪剧痛。</color>",
+	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_MESSAGE": "<style=cShrine>{0} 向神龛祈祷，恢复了 {1}% 点灵感。</color>",
 	"FAITHFUL_INTERACTABLE_RECOLLECTION_SHRINE_DESCRIPTION": "当一位持有虚空道具“收集者的视野”的幸存者激活时，回忆神龛将恢复该幸存者自上次使用回忆神龛以来的最高灵感值的一部分。",
   
 	"FAITHFUL_DEBUG_MODE_BUFF": "上帝模式",
@@ -16,6 +16,7 @@
 	"FAITHFUL_VENGEANCE_BUFF": "复仇",
 	"FAITHFUL_PATIENCE_BUFF": "耐心",
 	"FAITHFUL_INSPIRATION_BUFF": "灵感",
+	"FAITHFUL_SCRUTINIZED_BUFF": "审视",
 	"FAITHFUL_OVERCLOCKED_BUFF": "超频",
 	"FAITHFUL_REPAIR_BUFF": "电弧治疗",
 
@@ -110,9 +111,15 @@
 
 	"FAITHFUL_COLLECTORS_VISION_NAME": "收集者的视野",
 	"FAITHFUL_COLLECTORS_VISION_PICKUP": "收集独特物品可提高“暴击率”和“暴击伤害”。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
-	"FAITHFUL_COLLECTORS_VISION_DESC": "每阶段收集一个独特物品可永久获得 <style=cIsDamage>[INSPIRATION_GAIN]%</style> <style=cStack>(每层额外+[INSPIRATION_GAIN_STACKING]%)</style> 点 <style=cIsDamage>灵感</style>，使<style=cIsDamage>暴击率</style>提高 <style=cIsDamage>+1%</style>，并额外提供 <style=cIsDamage>+[CRIT_DAMAGE_MULT]% 暴击伤害</style>。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
+	"FAITHFUL_COLLECTORS_VISION_DESC": "每关收集的每件独特物品都会提供 <style=cIsDamage>[INSPIRATION_GAIN]%</style> <style=cStack>(每层额外+[INSPIRATION_GAIN_STACKING]%)</style> 的永久<style=cIsDamage>灵感</style>，使<style=cIsDamage>暴击</style>几率提高 <style=cIsDamage>+1%</style>，并额外造成 <style=cIsDamage>+[CRIT_DAMAGE_MULT]% 暴击</style>伤害。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
+	"FAITHFUL_COLLECTORS_VISION_VAR1_DESC": "每关收集的每件独特物品都会提供 <style=cIsDamage>[INSPIRATION_GAIN]%</style> <style=cStack>(每层额外+[INSPIRATION_GAIN_STACKING]%)</style> 的永久<style=cIsDamage>灵感</style>，使<style=cIsDamage>暴击</style>几率提高 <style=cIsDamage>+1%</style>，并额外造成 <style=cIsDamage>+[CRIT_DAMAGE_MULT]% 暴击</style>伤害。达到 100% 时，下一次拾取独特物品将获得一个 <style=cIsVoid>鉴定师之眼</style>。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
 	"FAITHFUL_COLLECTORS_VISION_LORE": "<style=cMono>\r//--来自 UES [已编辑] 的自动转录--//</style>\n\n“你有没有注意过 Bob？那家伙特别喜欢收集各种东西。铅笔、咖啡杯，甚至老板的签名海报。”\n\n“记得。有天他戴着个傻兮兮的玩意儿过来。”\n\n“‘玩意儿’？你就叫那玩意儿‘玩意儿’？我发誓它是活的。有一天，它还盯着我看……从头到脚扫了一遍。”\n\n“不管那是啥，Bob 可是护着它得很。他说是朋友 Jim 留给他的临别礼物。”\n\n“Jim？就是那个在 [已编辑] 被炒鱿鱼、还把 23-B 弄得鸡飞狗跳的家伙？”\n\n“应该不是……可能吧……总之不关我事，少知道点才轻松。话说那该死的螺丝刀在哪儿？”\n\n【Bob 从另一个房间精准地将螺丝刀扔到工作台上】\n\n“谢了哥们。”\n\n“我是认真的。这家伙吓人……比嗑了咖啡因的蜂鸟还高效。”\n\n【电钻、金属撞击和扭曲声响起】\n\n“嗯哼……”\n\n“你有在听吗？……我听说了 23-B 的事，我不想我们这也出事。”\n\n【工作间的声音持续，背景中不断传来被快速拆解与组装的声音】\n\n“啊？……哦。好吧。”\n\n“我真不明白你怎么能无动于衷。连队长都被吓到了……还以为他嗑药了。”\n\n【刺耳电流声响起，紧接着是应急灯启动的声音，然后一片寂静】\n\n<style=cMono>\r//--信号中断--//</style>",
-
+	
+	"FAITHFUL_APPRAISERS_EYE_NAME": "鉴定师之眼",
+	"FAITHFUL_APPRAISERS_EYE_PICKUP": "暴击会审视敌人的弱点。",
+	"FAITHFUL_APPRAISERS_EYE_DESC": "<style=cIsDamage>暴击会审视</style>敌人，最多 <style=cIsDamage>[MAX_DEBUFFS]</style> <style=cStack>(每层额外+[MAX_DEBUFFS_STACKING] 次)</style>，使其受到的所有来源<style=cIsDamage>暴击</style>伤害提高 <style=cIsDamage>[CRIT_DAMAGE_MULT]%</style>。",
+	"FAITHFUL_APPRAISERS_EYE_LORE": "<style=cMono>\r//--来自UES [已编辑] 的自动转录--//</style>\n\n“告诉我，刚才那声噼啪只是继电器烧了而已。”\n\n“否定。C货舱已进入手动封锁。有人触发了库存激光、地板秤，还有——不知怎么——育婴室加热器。”\n\n“什么玩意？”\n\n“就是说啊。”\n\n[远处传来金属碰撞声。每隔几秒都能听见一声湿黏的爆裂声。]\n\n“我可不回那里面去了。”\n\n“哎呀，得了吧。Bob 又不会伤着谁。”\n\n“他现在在货舱里对着托盘讲话呢，Gary。而且每次他拿起什么东西，他肩上那个怪玩意儿就会闪一下，然后就有一个紫色小蛋从里面掉出来，跟在下发票似的。”\n\n“那不是蛋。”\n\n“它们冲我眨眼了。”\n\n“……行吧。好吧。它们可能是蛋。”\n\n[广播器发出刺耳的反馈啸叫。]\n\n“全体甲板工注意：不管是谁把C货舱封上的，立刻打开。里面有易爆货物，而 Bob [已编辑] 拒绝回应通讯。”\n\n“船长，恕我直言，我觉得 Bob 已经失控了。他把三十二支信号棒按色泽、重量，还有他所谓的‘气质’排成了一排。然后他那玩意儿扫了一下架子，现在已经有半打长着眼睛的蛋盯着那箱射钉枪了。”\n\n“也许它在繁殖。”\n\n“也许你最好别这么说。”\n\n“不管怎么说，有一点是肯定的——无论如何我都不会进去。”\n\n“同意。要是那东西哪天学会说话了，我一定在它开始给我们定价之前就辞职。”<style=cMono>\r\n\n//--转录结束：本地存储已被未经授权的货单修订损坏--//</style>",
+	
 	"FAITHFUL_4T0N_JETPACK_NAME": "4-T0N 喷气背包",
 	"FAITHFUL_4T0N_JETPACK_PICKUP": "下落时按住“跳跃”可向上推进。落地后会随时间充能。",
 	"FAITHFUL_4T0N_JETPACK_DESC": "下落时按住跳跃键可 <style=cIsUtility>向上推进</style>，持续最多 <style=cIsUtility>[FUEL_TIME]</style> 秒 <style=cStack>(每层额外+[FUEL_TIME_STACKING]秒)</style>。落地后在 <style=cIsUtility>[RECHARGE_TIME]</style> 秒内完全充能 <style=cStack>(每层减少-[RECHARGE_TIME_REDUCTION]%)</style>。",

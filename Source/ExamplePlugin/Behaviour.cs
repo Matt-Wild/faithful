@@ -16,6 +16,8 @@ namespace Faithful
     internal delegate void StatsModCallback(int _count, RecalculateStatsAPI.StatHookEventArgs _stats);
 
     internal delegate void OnIncomingDamageCallback(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim);
+    internal delegate void OnHitEnemyCallback(DamageInfo _info, GameObject _victim);
+    internal delegate void OnTakeDamageProcessCallback(HealthComponent _healthComponent, DamageInfo _info);
     internal delegate void DamageReportCallback(DamageReport _report);
 
     internal delegate void OnAddBuffCallback(BuffIndex _buff, CharacterBody _character);
@@ -76,6 +78,8 @@ namespace Faithful
 
         // Damage Report callbacks
         private static List<OnIncomingDamageCallback> onIncomingDamageCallbacks = new List<OnIncomingDamageCallback>();
+        private static List<OnHitEnemyCallback> onHitEnemyLateCallbacks = new List<OnHitEnemyCallback>();
+        private static List<OnTakeDamageProcessCallback> onTakeDamageProcessCallbacks = new List<OnTakeDamageProcessCallback>();
         private static List<DamageReportCallback> onDamageDealtCallbacks = new List<DamageReportCallback>();
         private static List<DamageReportCallback> onCharacterDeathCallbacks = new List<DamageReportCallback>();
 
@@ -172,6 +176,7 @@ namespace Faithful
             On.RoR2.DotController.InflictDot_refInflictDotInfo += HookInflictDamageOverTimeRef;
             On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
             On.RoR2.HealthComponent.Heal += HookHeal;
+            On.RoR2.HealthComponent.TakeDamageProcess += HookTakeDamageProcess;
             On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats;
             On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects += HookUpdateVisualEffects;
             On.RoR2.CharacterBody.FixedUpdate += HookCharacterBodyFixedUpdate;
@@ -181,6 +186,7 @@ namespace Faithful
             On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump;
             On.EntityStates.GenericCharacterMain.FixedUpdate += HookGenericCharacterFixedUpdate;
             On.RoR2.SceneExitController.SetState += HookSceneExitControllerSetState;
+            On.RoR2.GlobalEventManager.OnHitEnemy += HookOnHitEnemy;
             RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
             GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
@@ -213,6 +219,7 @@ namespace Faithful
             On.RoR2.DotController.InflictDot_refInflictDotInfo -= HookInflictDamageOverTimeRef;
             On.RoR2.HealthComponent.Awake -= HookHealthComponentAwake;
             On.RoR2.HealthComponent.Heal -= HookHeal;
+            On.RoR2.HealthComponent.TakeDamageProcess -= HookTakeDamageProcess;
             On.RoR2.CharacterBody.RecalculateStats -= HookRecalculateStats;
             On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects -= HookUpdateVisualEffects;
             On.RoR2.CharacterBody.FixedUpdate -= HookCharacterBodyFixedUpdate;
@@ -220,6 +227,7 @@ namespace Faithful
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor -= HookPurchaseCanBeAfforded;
             On.EntityStates.GenericCharacterMain.ProcessJump -= HookProcessJump;
             On.EntityStates.GenericCharacterMain.FixedUpdate -= HookGenericCharacterFixedUpdate;
+            On.RoR2.GlobalEventManager.OnHitEnemy -= HookOnHitEnemy;
             RecalculateStatsAPI.GetStatCoefficients -= HookStatsMod;
             GlobalEventManager.onServerDamageDealt -= HookOnDamageDealt;
             GlobalEventManager.onCharacterDeathGlobal -= HookOnCharacterDeath;
@@ -432,6 +440,22 @@ namespace Faithful
             onIncomingDamageCallbacks.Add(_callback);
 
             DebugLog("Added On Incoming Damage behaviour");
+        }
+
+        // Add On Hit Enemy Late callback
+        public static void AddOnHitEnemyLateCallback(OnHitEnemyCallback _callback)
+        {
+            onHitEnemyLateCallbacks.Add(_callback);
+
+            DebugLog("Added On Hit Enemy Late behaviour");
+        }
+
+        // Add On Take Damage Process callback
+        public static void AddOnTakeDamageProcessCallback(OnTakeDamageProcessCallback _callback)
+        {
+            onTakeDamageProcessCallbacks.Add(_callback);
+
+            DebugLog("Added On Take Damage Process behaviour");
         }
 
         // Add On Damage Dealt callback
@@ -1051,6 +1075,18 @@ namespace Faithful
             return orig(self, amount, procChainMask, nonRegen); // Run normal processes
         }
 
+        private static void HookTakeDamageProcess(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, HealthComponent self, DamageInfo damageInfo)
+        {
+            // Cycle through On Take Damage Process callbacks
+            foreach (OnTakeDamageProcessCallback callback in onTakeDamageProcessCallbacks)
+            {
+                // Call
+                callback(self, damageInfo);
+            }
+
+            orig(self, damageInfo); // Run normal processes
+        }
+
         private static void HookRecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
         {
             orig(self); // Run normal processes
@@ -1189,6 +1225,18 @@ namespace Faithful
             }
 
             orig(self, newState); // Run normal processes
+        }
+
+        private static void HookOnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
+        {
+            orig(self, damageInfo, victim); // Run normal processes
+
+            // Cycle through On Hit Enemy Late callbacks
+            foreach (OnHitEnemyCallback callback in onHitEnemyLateCallbacks)
+            {
+                // Call
+                callback(damageInfo, victim);
+            }
         }
 
         private static void HookOnDamageDealt(DamageReport _report)

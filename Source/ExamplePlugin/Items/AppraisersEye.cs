@@ -1,4 +1,7 @@
-﻿using RoR2;
+﻿using Mono.Cecil;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using RoR2;
 using System;
 using UnityEngine;
 
@@ -7,17 +10,26 @@ namespace Faithful
     internal class AppraisersEye : ItemBase
     {
         // Store item and buff
-        Item appraisersEyeItem;
-        Buff scrutinizedBuff;
+        static Item appraisersEyeItem;
+        static Buff scrutinizedBuff;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
 
         // Store item settings
         Setting<bool> hiddenFromLogbookSetting;
+        Setting<int> maxDebuffsSetting;
+        Setting<int> maxDebuffsStackingSetting;
+        Setting<float> critDamageSetting;
 
         // Store item stats
         bool hiddenFromLogbook;
+        int maxDebuffs;
+        int maxDebuffsStacking;
+        static float critDamage;
+
+        // IL hook identifiers
+        const string takeDamageProcessHookName = "AppraisersEye.TakeDamageProcess";
 
         // Constructor
         public AppraisersEye(Toolbox _toolbox) : base(_toolbox)
@@ -36,7 +48,9 @@ namespace Faithful
             FetchSettings();
 
             // Link behaviour
-            Behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
+            Behaviour.AddOnHitEnemyLateCallback(OnHitEnemyLate);
+
+            IL.RoR2.HealthComponent.TakeDamageProcess += IL_HealthComponent_TakeDamageProcess;
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -79,12 +93,18 @@ namespace Faithful
         {
             // Create settings specific to this item
             hiddenFromLogbookSetting = appraisersEyeItem.CreateSetting("HIDDEN_FROM_LOGBOOK", "Hide From Logbook?", true, "Should this item be hidden from the logbook?", false, _canRandomise: false, _restartRequired: true);
+            maxDebuffsSetting = appraisersEyeItem.CreateSetting("MAX_DEBUFFS", "Max Debuffs", 1, "What's the maximum amount of scrutinized you should be able to apply to a single enemy using this item? (1 = 1 scrutinized)");
+            maxDebuffsStackingSetting = appraisersEyeItem.CreateSetting("MAX_DEBUFFS_STACKING", "Max Debuffs Stacking", 1, "What's the maximum amount of scrutinized you should be able to apply to a single enemy using further stacks of this item? (1 = 1 scrutinized)");
+            critDamageSetting = appraisersEyeItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should each stack of scrutinized increase crit damage? (20.0 = 20% increase)");
         }
 
         public override void FetchSettings()
         {
             // Get item settings
             hiddenFromLogbook = hiddenFromLogbookSetting.Value;
+            maxDebuffs = maxDebuffsSetting.Value;
+            maxDebuffsStacking = maxDebuffsStackingSetting.Value;
+            critDamage = critDamageSetting.Value / 100.0f;
 
             // Update if hidden in logbook
             appraisersEyeItem.hiddenFromLogbook = hiddenFromLogbook;
@@ -93,36 +113,99 @@ namespace Faithful
             appraisersEyeItem.UpdateItemTexts();
         }
 
-        private void OnIncomingDamage(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim)
+        private void OnHitEnemyLate(DamageInfo _info, GameObject _victim)
         {
-            // Check if crit
-            if (_report.crit == false) return;
+            // Validate input
+            if (_info == null || _victim == null) return;
 
-            // Check for attacker and victim
-            if (_attacker == null || _victim == null) return;
+            // Get victim body
+            CharacterBody victimBody = _victim.GetComponent<CharacterBody>();
+            if (victimBody == null) return;
 
-            // Attempt to get attacker and victim bodies
-            CharacterBody attackerBody = _attacker.GetBody();
-            CharacterBody victimBody = _victim.GetBody();
-            if (attackerBody == null || victimBody == null) return;
+            // Only crits should apply the debuff and damage bonus
+            if (_info.crit == false) return;
 
-            // Attempt to get attacker inventory
+            // Get attacker body
+            if (_info.attacker == null) return;
+
+            CharacterBody attackerBody = _info.attacker.GetComponent<CharacterBody>();
+            if (attackerBody == null) return;
+
+            // Get attacker inventory
             Inventory attackerInventory = attackerBody.inventory;
             if (attackerInventory == null) return;
 
-            // Get attacker item count and victim debuff count
+            // Get item count
             int attackerItemCount = attackerInventory.GetItemCountEffective(appraisersEyeItem.itemDef.itemIndex);
+            if (attackerItemCount <= 0) return;
+
+            // Calculate max debuffs this attacker can apply
+            int currentMaxDebuffs = maxDebuffs + ((attackerItemCount - 1) * maxDebuffsStacking);
+
+            // Get current debuff count
             int victimDebuffCount = victimBody.GetBuffCount(scrutinizedBuff.buffDef.buffIndex);
 
-            // Check if can add debuff
-            if (attackerItemCount > victimDebuffCount)
+            // Apply debuff if below cap
+            if (victimDebuffCount < currentMaxDebuffs)
             {
-                // Add debuff to victim
                 victimBody.AddBuff(scrutinizedBuff.buffDef.buffIndex);
             }
+        }
 
-            // Increase damage based on debuff count
-            _report.damage *= 1.0f + (0.2f * victimDebuffCount);
+        private static void IL_HealthComponent_TakeDamageProcess(ILContext _il)
+        {
+            ILCursor c = new ILCursor(_il);
+
+            if (!ILHelper.TryGotoNext(
+                c,
+                takeDamageProcessHookName,
+                x => ILHelper.MatchFieldLoadOrPropertyGetter(x, "RoR2.CharacterBody", "critMultiplier"),
+                x => x.OpCode == OpCodes.Mul))
+            {
+                ILHelper.DumpInstructions(_il, takeDamageProcessHookName);
+                return;
+            }
+
+            ILHelper.EmitFloatModifier<HealthComponent, DamageInfo>(
+                c,
+                OpCodes.Ldarg_0,
+                OpCodes.Ldarg_1,
+                ModifyFinalCritDamage);
+
+            if (Utils.verboseConsole) Log.Info($"[{takeDamageProcessHookName}] Successfully hooked crit multiplier.");
+        }
+
+        private static float ModifyFinalCritDamage(float _currentDamage, HealthComponent _healthComponent, DamageInfo _info)
+        {
+            // Validate input
+            if (_healthComponent == null || _info == null)
+            {
+                return _currentDamage;
+            }
+
+            // Ignore if not a crit
+            if (_info.crit == false)
+            {
+                return _currentDamage;
+            }
+
+            // Attempt to get character body
+            CharacterBody characterBody = _healthComponent.body;
+            if (characterBody == null)
+            {
+                return _currentDamage;
+            }
+
+            // Get debuff count
+            int debuffCount = characterBody.GetBuffCount(scrutinizedBuff.buffDef.buffIndex);
+
+            // Apply bonus damage
+            if (debuffCount > 0)
+            {
+                _currentDamage *= 1.0f + (critDamage * debuffCount);
+            }
+
+            return _currentDamage;
         }
     }
 }
