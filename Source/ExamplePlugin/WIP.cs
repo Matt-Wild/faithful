@@ -123,6 +123,43 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Chest", new Vector3(0F, 0.115F, 0.145F), new Vector3(3.75F, 0F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
                 });
 
+            CreateItem(_name: "Toxin Canister",
+                _pickup: "Chance on hit to create a damaging cloud that follows enemies. <style=cIsVoid>Corrupts all Sticky Bombs</style>.",
+                _description: "<style=cIsDamage>5%</style> <style=cStack>(+5% per stack)</style> chance on hit to attach a <style=cIsDamage>gas canister</style> that creates a damaging cloud around itself, dealing <style=cIsDamage>250%</style> TOTAL damage over <style=cIsDamage>5</style> seconds. <style=cIsVoid>Corrupts all Sticky Bombs</style>.",
+                _lore: "<style=cMono>\rAudio transcription complete from on-site security camera.\r\nDate: [Redacted].\r\nTime: [Redacted].\r\nLocation: Main building breakroom.\r\n\r\nPrinting...</style>\r\n\r\n\u0022Oi, you! What the hell are you doing just sitting there?! There's been a gas leak!\u0022\r\n\r\n\u0022...I can't smell anything. There's no alarm going off so it's probably fine.\u0022\r\n\r\n\u0022Have you got the survival instincts of a brick?! We don't have alarms for everything! We need to get out of here!\u0022\r\n\r\n\u0022Quiet down. I'm getting kinda sleepy... I think I'll go take a nap.\u0022",
+                _tier: ItemTier.VoidTier1,
+                _tags: [ItemTag.Damage],
+                _iconDir: "textoxincanistericon",
+                _modelDir: "toxincanistermesh",
+                _displayDir: "toxincanisterdisplaymesh",
+                _corruptToken: "ITEM_STICKYBOMB_NAME",
+                _displaySettingsCallback: _displaySettings =>
+                {
+                    // Add character display settings
+                    _displaySettings.AddCharacterDisplay("Commando", "ThighL", new Vector3(0.11675F, 0.3675F, -0.01275F), new Vector3(350F, 355F, 176.25F), new Vector3(0.1675F, 0.1675F, 0.1675F));
+                    _displaySettings.AddCharacterDisplay("Huntress", "ThighL", new Vector3(0.1315F, 0.35425F, 0.05555F), new Vector3(7.5F, 191.25F, 188.75F), new Vector3(0.1675F, 0.1675F, 0.1675F));
+                    _displaySettings.AddCharacterDisplay("Bandit", "ThighL", new Vector3(0.09F, 0.145F, 0.075F), new Vector3(351.25F, 353.75F, 173.75F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("MUL-T", "UpperArmL", new Vector3(-1.1F, 2.425F, 0.09F), new Vector3(3.75F, 356.75F, 320F), new Vector3(1F, 1F, 1F));
+                    _displaySettings.AddCharacterDisplay("Engineer", "ThighL", new Vector3(0.1225F, 0.30375F, 0.0175F), new Vector3(10F, 162.5F, 183.75F), new Vector3(0.1675F, 0.1675F, 0.1675F));
+                    _displaySettings.AddCharacterDisplay("Turret", "Neck", new Vector3(0F, 0F, -0.2675F), new Vector3(5.5F, 0F, 0F), new Vector3(0.475F, 0.475F, 0.475F));
+                    _displaySettings.AddCharacterDisplay("Walker Turret", "Head", new Vector3(0.4225F, -0.635F, -0.0725F), new Vector3(7.5F, 0F, 0F), new Vector3(0.475F, 0.475F, 0.475F));
+                    _displaySettings.AddCharacterDisplay("Artificer", "ThighL", new Vector3(0.12725F, 0.3785F, 0.0335F), new Vector3(351.25F, 274.5F, 184F), new Vector3(0.175F, 0.175F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("Mercenary", "ThighL", new Vector3(0.124F, 0.29F, 0.0895F), new Vector3(10.75F, 148.75F, 181.25F), new Vector3(0.175F, 0.175F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("REX", "FootBackL", new Vector3(0F, 0.275F, -0.125F), new Vector3(11.25F, 0F, 0F), new Vector3(0.225F, 0.225F, 0.225F));
+                    _displaySettings.AddCharacterDisplay("Loader", "ThighL", new Vector3(0.13F, 0.2375F, 0.10375F), new Vector3(353.75F, 353.75F, 168.75F), new Vector3(0.175F, 0.175F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("Acrid", "ThighL", new Vector3(1.5105F, 1.1535F, -0.1375F), new Vector3(10F, 170F, 192.5F), new Vector3(1F, 1F, 1F));
+                    _displaySettings.AddCharacterDisplay("Captain", "ThighL", new Vector3(0.11575F, 0.29525F, 0.058F), new Vector3(351.25F, 0F, 173.75F), new Vector3(0.175F, 0.175F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("Railgunner", "Chest", new Vector3(0.01675F, -0.02055F, 0.1885F), new Vector3(5.5F, 356.75F, 148.75F), new Vector3(0.075F, 0.075F, 0.075F));
+                    _displaySettings.AddCharacterDisplay("Void Fiend", "ThighR", new Vector3(0.1075F, 0.16875F, -0.055F), new Vector3(10F, 167.5F, 177.5F), new Vector3(0.15F, 0.15F, 0.15F));
+                    _displaySettings.AddCharacterDisplay("Seeker", "ThighL", new Vector3(0.16375F, 0.189F, 0.03975F), new Vector3(5F, 185F, 195F), new Vector3(0.175F, 0.175F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("False Son", "ThighL", new Vector3(0.18775F, 0.42105F, -0.02025F), new Vector3(7F, 183.75F, 188F), new Vector3(0.175F, 0.175F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("Chef", "Base", new Vector3(-0.025F, 0F, 0.575F), new Vector3(270F, 3.75F, 0F), new Vector3(0.175F, 0.175F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("Operator", "Head", new Vector3(-0.1275F, -0.1805F, -0.054F), new Vector3(18.75F, 0F, 340F), new Vector3(0.05F, 0.05F, 0.05F));
+                    _displaySettings.AddCharacterDisplay("Drifter", "ThighL", new Vector3(-0.06685F, -0.13375F, -0.25285F), new Vector3(0F, 26.75F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
+                    _displaySettings.AddCharacterDisplay("Scavenger", "Weapon", new Vector3(-3F, 20F, 0F), new Vector3(0F, 0F, 180F), new Vector3(2F, 2F, 2F));
+                    _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(-0.0575F, 0.1885F, 0.0825F), new Vector3(1.25F, 56.25F, 186F), new Vector3(0.08F, 0.08F, 0.08F));
+                });
+
             CreateItem(_name: "Service Start-up Drive",
                 _pickup: "Gain access to a machine capsule each stage that contains a powerful drone.",
                 _description: "A <style=cIsUtility>machine capsule</style> containing a drone (79%/<style=cIsHealing>20%</style>/<style=cIsHealth>1%</style>) will appear in a random location <style=cIsUtility>on each stage</style>. <style=cStack>(Increases rarity chances of the drone per stack).</style>",
