@@ -8,6 +8,7 @@
 - Second Hand, Copper Gear, and Brass Screws buffs no longer visually stack to align better with base game.
 - Improved item display for Jetpack on Seeker.
 - Changed Inspiration buff icon.
+- Fixed some personalisation settings randomizing in Randomizer Mode (which definitely shouldn't).
 
 #### v1.3.27 Jetpack And Targeting Matrix Changes
 - Targeting Matrix effect now shows through terrain to make finding the target easier (can be disabled via config).

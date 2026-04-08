@@ -106,8 +106,8 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            enableTargetEffectSetting = targetingMatrixItem.CreateSetting("ENABLE_TARGET_EFFECT", "Enable Target Visual Effect?", true, "Should the target have a visual effect?", false, true);
-            targetEffectGlobalSetting = targetingMatrixItem.CreateSetting("TARGET_EFFECT_GLOBAL", "Make Target Visual Effect Always Present?", true, "When you have a target, should you be able to see it from anywhere on the stage?", false, true);
+            enableTargetEffectSetting = targetingMatrixItem.CreateSetting("ENABLE_TARGET_EFFECT", "Enable Target Visual Effect?", true, "Should the target have a visual effect?", false, true, _canRandomise: false);
+            targetEffectGlobalSetting = targetingMatrixItem.CreateSetting("TARGET_EFFECT_GLOBAL", "Make Target Visual Effect Always Present?", true, "When you have a target, should you be able to see it from anywhere on the stage?", false, true, _canRandomise: false);
             maxDistanceSetting = targetingMatrixItem.CreateSetting("MAX_DISTANCE", "Max Targeting Distance", 300.0f, "How far away does the target need to be to be considered out of range? (300.0 = 300 meters)", false, _minValue: 100.0f, _valueFormatting: "{0:0}m");
             outOfRangeTimeSetting = targetingMatrixItem.CreateSetting("OUT_OF_RANGE_TIME", "Out Of Range Time", 15.0f, "How long does a target need to be out of range until it is removed from being a target? (15.0 = 15 seconds)", false, _minValue: 0.0f, _valueFormatting: "{0:0.0}s");
             critDamageSetting = targetingMatrixItem.CreateSetting("CRIT_DAMAGE", "Crit Damage", 10.0f, "How much critical damage should be provided by each stack of this item's buff with a single stack of this item? (10.0 = 10% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.0}%");

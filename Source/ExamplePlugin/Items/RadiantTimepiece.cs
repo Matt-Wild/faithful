@@ -87,7 +87,7 @@ namespace Faithful
             // Create settings specific to this item
             durationSetting = radiantTimepieceItem.CreateSetting("DURATION", "Duration", 1.0f, "How much should this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
             durationStackingSetting = radiantTimepieceItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much should further stacks of this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
-            buffBlacklistSetting = radiantTimepieceItem.CreateSetting("BUFF_BLACKLIST", "Buff Blacklist", "bdParrying,bdVoidFogMild,bdVoidRaidCrabWardWipeFog,bdImmune,bdUntargetable,bdHiddenInvincibility,bdMedkitHeal,bdKnockBackActiveWindow", "Which buffs should this item not apply to?\n\nProvide as a comma separated list.\n(Cooldowns, DOTs, and debuffs are already ignored)", _valueFormatting: "{0:0.0}%", _isStat: false);
+            buffBlacklistSetting = radiantTimepieceItem.CreateSetting("BUFF_BLACKLIST", "Buff Blacklist", "bdParrying,bdVoidFogMild,bdVoidRaidCrabWardWipeFog,bdImmune,bdUntargetable,bdHiddenInvincibility,bdMedkitHeal,bdKnockBackActiveWindow", "Which buffs should this item not apply to?\n\nProvide as a comma separated list.\n(Cooldowns, DOTs, and debuffs are already ignored)", _valueFormatting: "{0:0.0}%", _isStat: false, _canRandomise: false);
         }
 
         public override void FetchSettings()

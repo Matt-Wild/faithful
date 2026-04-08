@@ -100,8 +100,6 @@ namespace Faithful
                     {
                         // Set as not synced
                         synced = false;
-
-                        // No need to check other settings
                         break;
                     }
                 }
@@ -157,20 +155,6 @@ namespace Faithful
             }
         }
 
-        /*[Command]
-        private void CmdSyncSetting(ISetting _setting)
-        {
-            // Log message on all clients
-            RpcSyncSetting(_setting.token, _setting.GetSettingData());
-        }
-
-        [ClientRpc]
-        private void RpcSyncSetting(string _token, SettingData _settingData)
-        {
-            // Sync setting on client
-            Config.FetchSetting(_token).SetSyncedValue(_settingData);
-        }*/
-
         public void LogMessage(string _message)
         {
             // Check if server
@@ -220,6 +204,54 @@ namespace Faithful
                     jetpackBehaviour.CmdSyncJetpack(_data);
                 }
             }
+        }
+
+        public void QueueDelayedPickupNotification(CharacterMaster _master, PickupIndex _triggerPickupIndex, PickupIndex _queuedPickupIndex)
+        {
+            // Validate input
+            if (!NetworkServer.active || _master == null) return;
+
+            // Host/local-player fast path
+            if (_master == Utils.localPlayer)
+            {
+                CollectorsVision.QueuePendingNotification(_master, _triggerPickupIndex, _queuedPickupIndex);
+                return;
+            }
+
+            // Attempt to get required components
+            NetUtils netUtils = _master.GetComponent<NetUtils>();
+            NetworkIdentity masterIdentity = _master.GetComponent<NetworkIdentity>();
+            PlayerCharacterMasterController playerController = _master.playerCharacterMasterController;
+            NetworkUser networkUser = playerController != null ? playerController.networkUser : null;
+
+            if (netUtils == null || masterIdentity == null || networkUser == null || networkUser.connectionToClient == null)
+            {
+                if (Utils.verboseConsole)
+                {
+                    Log.Warning($"[NET UTILS] - QueueDelayedPickupNotification failed | Master: {_master.name} | Has NetUtils: {netUtils != null} | Has MasterIdentity: {masterIdentity != null} | Has PlayerController: {playerController != null} | Has NetworkUser: {networkUser != null} | Has Connection: {networkUser?.connectionToClient != null}");
+                }
+                return;
+            }
+
+            // Tell only the owning client to queue the delayed notification
+            netUtils.TargetQueueDelayedPickupNotification(networkUser.connectionToClient, masterIdentity.netId, _triggerPickupIndex.value, _queuedPickupIndex.value);
+        }
+
+        [TargetRpc]
+        private void TargetQueueDelayedPickupNotification(NetworkConnection _target, NetworkInstanceId _masterNetId, int _triggerPickupIndexValue, int _queuedPickupIndexValue)
+        {
+            // Attempt to resolve master on this client
+            GameObject masterObject = ClientScene.FindLocalObject(_masterNetId);
+            if (masterObject == null) return;
+
+            CharacterMaster master = masterObject.GetComponent<CharacterMaster>();
+            if (master == null) return;
+
+            if (Utils.verboseConsole) Log.Debug($"[NET UTILS] - TargetQueueDelayedPickupNotification received | MasterNetId: {_masterNetId} | Trigger: {_triggerPickupIndexValue} | Queued: {_queuedPickupIndexValue}");
+
+            // Do not gate this with master.isLocalPlayer
+            // This TargetRpc already arrived on the correct client
+            CollectorsVision.QueuePendingNotification(master, new PickupIndex(_triggerPickupIndexValue), new PickupIndex(_queuedPickupIndexValue));
         }
     }
 }

@@ -32,9 +32,7 @@ namespace Faithful
         static readonly Overlays.Overlay scrutinizedOverlay = Overlays.CreateOverlay(new Overlays.OverlaySettings
         {
             MaterialAddress = "RoR2/Base/CritOnUse/matFullCrit.mat",
-            Colour = new Color(0.16f, 0.0f, 0.32f, 0.64f),
-            Persistent = true,
-            AnimateShaderAlpha = false
+            Colour = new Color(0.16f, 0.0f, 0.32f, 0.64f)
         });
 
         // IL hook identifiers
@@ -48,7 +46,7 @@ namespace Faithful
 
             // Create item and buff
             appraisersEyeItem = Items.AddItem("APPRAISERS_EYE", "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _displaySettings: displaySettings, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
-            scrutinizedBuff = Buffs.AddBuff("SCRUTINIZED", "Scrutinized", "texBuffScrutinizedEye", Color.white, _isDebuff: true);
+            scrutinizedBuff = Buffs.AddBuff("SCRUTINIZED", "Scrutinized", "texBuffScrutinizedEye", Color.white, _isDebuff: true, _overlay: scrutinizedOverlay);
 
             // Create item settings
             CreateSettings();
@@ -158,13 +156,6 @@ namespace Faithful
             // Apply debuff if below cap
             if (victimDebuffCount < currentMaxDebuffs)
             {
-                // Check if first debuff
-                if (victimDebuffCount == 0)
-                {
-                    // Apply Scrutinized overlay
-                    Overlays.ApplyOverlay(scrutinizedOverlay, victimBody);
-                }
-
                 victimBody.AddBuff(scrutinizedBuff.buffDef.buffIndex);
             }
         }

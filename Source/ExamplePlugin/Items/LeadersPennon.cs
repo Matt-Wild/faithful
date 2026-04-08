@@ -106,8 +106,8 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            enableRadiusIndicatorSetting = leadersPennonItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", true, "Should this item have a radius indicator visual effect?", false, true);
-            enableBuffEffectSetting = leadersPennonItem.CreateSetting("ENABLE_BUFF_EFFECT", "Enable Buff Visual Effect?", true, "Should this item's buff have a visual effect?", false, true);
+            enableRadiusIndicatorSetting = leadersPennonItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", true, "Should this item have a radius indicator visual effect?", false, true, _canRandomise: false);
+            enableBuffEffectSetting = leadersPennonItem.CreateSetting("ENABLE_BUFF_EFFECT", "Enable Buff Visual Effect?", true, "Should this item's buff have a visual effect?", false, true, _canRandomise: false);
             radiusSetting = leadersPennonItem.CreateSetting("RADIUS", "Radius", 15.0f, "How big should the base radius be of this item's effect? (15.0 = 15 meters)", _valueFormatting: "{0:0.0}m");
             radiusStackingSetting = leadersPennonItem.CreateSetting("RADIUS_STACKING", "Radius Stacking", 7.5f, "How much should the radius of this item's effect increase per stack? (7.5 = 7.5 meters)", _valueFormatting: "{0:0.00}m");
             attackSpeedSetting = leadersPennonItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 30.0f, "How much should this item increase ally's attack speed? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");

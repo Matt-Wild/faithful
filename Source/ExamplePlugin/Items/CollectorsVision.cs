@@ -39,12 +39,13 @@ namespace Faithful
         float inspirationReturnPerc;
 
         // Used for timing item given notifications for after the original item has already pushed it's notification
-        struct PendingEyeNotification
+        private struct PendingEyeNotification
         {
             public CharacterMaster master;
             public PickupIndex grantingPickupIndex;
-            public int remainingChecks;
+            public PickupIndex queuedPickupIndex;
         }
+
         static readonly List<PendingEyeNotification> pendingEyeNotifications = [];
 
         // Constructor
@@ -291,20 +292,19 @@ namespace Faithful
             // Ignore if not granting Appraiser's Eye
             if (!grantAppraisersEye) return;
 
-            // Grant appraiser's eye
+            // Grant Appraiser's Eye
             _inventory.GiveItemPermanent(appraisersEye.itemDef);
 
             // Try get character master
-            CharacterMaster master = _inventory.gameObject.GetComponent<CharacterMaster>();
+            CharacterMaster master = _inventory.GetComponent<CharacterMaster>();
             if (master == null) return;
 
-            // Add to pending notifications to give notification after the original item has already given its notification
-            pendingEyeNotifications.Add(new PendingEyeNotification
-            {
-                master = master,
-                grantingPickupIndex = PickupCatalog.FindPickupIndex(_grantingItemIndex),
-                remainingChecks = 64    // For avoiding keeping pending notifications around for too long if something goes wrong with the notification processing
-            });
+            // Queue notification on the owning client so order is preserved
+            PickupIndex grantingPickupIndex = PickupCatalog.FindPickupIndex(_grantingItemIndex);
+            PickupIndex eyePickupIndex = PickupCatalog.FindPickupIndex(appraisersEye.itemDef.itemIndex);
+
+            NetUtils netUtils = master.GetComponent<NetUtils>();
+            netUtils?.QueueDelayedPickupNotification(master, grantingPickupIndex, eyePickupIndex);
         }
 
         private void ProcessPendingEyeNotifications(CharacterMaster _master, PickupIndex _pushedPickupIndex)
@@ -321,25 +321,27 @@ namespace Faithful
                     continue;
                 }
 
-                // Check if this is the pickup notification that granted the eye for the pending notification
+                // Check if this is the pickup notification that granted the eye
                 if (_master == notification.master && _pushedPickupIndex == notification.grantingPickupIndex)
                 {
                     pendingEyeNotifications.RemoveAt(i);
-
-                    // Send eye notification
-                    CharacterMasterNotificationQueue.PushItemNotification(_master, appraisersEye.itemDef.itemIndex);
-                    continue;
-                }
-
-                // Decrement remaining checks
-                notification.remainingChecks--;
-
-                // Check if should remove pending notification due to too many checks
-                if (notification.remainingChecks <= 0)
-                {
-                    pendingEyeNotifications.RemoveAt(i);
+                    CharacterMasterNotificationQueue.PushPickupNotification(_master, notification.queuedPickupIndex);
                 }
             }
+        }
+
+        internal static void QueuePendingNotification(CharacterMaster _master, PickupIndex _grantingPickupIndex, PickupIndex _queuedPickupIndex)
+        {
+            // Validate master
+            if (_master == null) return;
+
+            // Add to pending notifications
+            pendingEyeNotifications.Add(new PendingEyeNotification
+            {
+                master = _master,
+                grantingPickupIndex = _grantingPickupIndex,
+                queuedPickupIndex = _queuedPickupIndex
+            });
         }
 
         private void OnSceneExit(SceneExitController _exitController)
