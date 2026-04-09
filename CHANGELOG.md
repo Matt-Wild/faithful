@@ -1,5 +1,9 @@
 # Changelog
 
+#### v1.4.1 Hypercrit2 Compatibility
+- Fixed compatibility issue between v1.4.0 update and Hypercrit2.
+- Fixed minor issue with some missing language tokens for buffs.
+
 ### v1.4.0 Matter Accelerator, Radiant Timepiece, And Appraiser's Eye
 - Added 3 new items (Matter Accelerator, Radiant Timepiece, and Appraiser's Eye).
 - Collector's Vision now awards Appraiser's Eye at 100% Inspiration (can be disabled via config).
@@ -56,13 +60,13 @@
 #### v1.3.16 Alloyed Collective Item Displays
 - Added missing item displays for Alloyed Collective.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 #### v1.3.15 Alloyed Collective Update
 - Faithful now functional with Alloyed Collective.
 
 #### v1.3.14 Vengeful Toaster Concussion Device Bug
 - Railgunner's Concussion Device no longer grants vengeance.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 #### v1.3.13 Spacious Umbrella Buff
 - Spacious Umbrella has been buffed with reduced stacking falloff.

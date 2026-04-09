@@ -68,7 +68,6 @@
 	"FAITHFUL_LEADERS_PENNON_DESC": "Create a ward around yourself that strengthens all allies other than yourself within <style=cIsUtility>[RADIUS]m</style> <style=cStack>(+[RADIUS_STACKING]m per stack)</style>. Raise <style=cIsDamage>attack speed</style> by <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(+[ATTACK_SPEED_STACKING]% per stack)</style> and <style=cIsHealing>passive health regeneration</style> by <style=cIsHealing>+[REGEN]hp/s</style> <style=cStack>(+[REGEN_STACKING]hp/s per stack)</style>. <style=cIsVoid>Corrupts all [CORRUPTED_ITEM]</style>.",
 	"FAITHFUL_LEADERS_PENNON_LORE": "We knew we'd never win. This planet was as hellish as it was relentless.\n\nMany died as soon as the blast doors opened. Lizard people, giant jellyfish, constructs made of the very ground beneath our very feet. They all conspired somehow - someway - to massacre us all. We never stood a chance.\n\nAnd our squad leader, that damn idiot... What was left of him was marked with the flag that led us to our demise.",
 	"FAITHFUL_LEADERS_PENNON_BUFF": "Leader's Pennon",
-	"FAITHFUL_LEADERS_PENNON_VISUAL_BUFF": "Leader's Pennon",
 	
 	"FAITHFUL_SECOND_HAND_NAME": "Second Hand",
 	"FAITHFUL_SECOND_HAND_PICKUP": "Increase attack speed and movement speed while grounded.",
@@ -124,6 +123,9 @@
 	"FAITHFUL_4T0N_JETPACK_PICKUP": "Hold 'Jump' while falling to boost upwards. Recharges over time after landing.",
 	"FAITHFUL_4T0N_JETPACK_DESC": "Holding the jump key while falling <style=cIsUtility>boosts you upwards</style> for up to <style=cIsUtility>[FUEL_TIME]</style> <style=cStack>(+[FUEL_TIME_STACKING] per stack)</style> seconds. Fully recharges in <style=cIsUtility>[RECHARGE_TIME]</style> <style=cStack>(-[RECHARGE_TIME_REDUCTION]% per stack)</style> seconds while touching the ground.",
 	"FAITHFUL_4T0N_JETPACK_LORE": "Order: High-Power Photon Jetpack\nTracking Number: 76*************\nEstimated Delivery: 04/07/2057\nShipping Method: High Priority/Fragile\nShipping Address: Floor 77, Corp INC, Jupiter\nShipping Details:\n\nHere's the new jetpack you ordered, sir. This one should last you a good while longer.\n\nAlthough, I do advise that you don't try to use it to fly to the other office again. The higher-ups wanted me to let you know that they wouldn't be paying off your medical bills next time, sir.",
+	"FAITHFUL_4T0N_JETPACK_EMPTY_BUFF": "No Fuel",
+	"FAITHFUL_4T0N_JETPACK_LOW_BUFF": "Low Fuel",
+	"FAITHFUL_4T0N_JETPACK_HIGH_BUFF": "High Fuel",
 	
 	"FAITHFUL_MATTER_ACCELERATOR_NAME": "Matter Accelerator",
 	"FAITHFUL_MATTER_ACCELERATOR_PICKUP": "Increase movement speed while you have a shield or barrier.",

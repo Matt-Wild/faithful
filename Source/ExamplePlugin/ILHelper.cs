@@ -9,10 +9,7 @@ namespace Faithful
     {
         internal static bool MatchFieldLoad(Instruction _instruction, string _declaringTypeFullName, string _fieldName)
         {
-            if (_instruction == null)
-            {
-                return false;
-            }
+            if (_instruction == null) return false;
 
             if (_instruction.OpCode == OpCodes.Ldfld && _instruction.Operand is FieldReference fieldReference)
             {
@@ -26,10 +23,7 @@ namespace Faithful
 
         internal static bool MatchMethodCall(Instruction _instruction, string _declaringTypeFullName, string _methodName)
         {
-            if (_instruction == null)
-            {
-                return false;
-            }
+            if (_instruction == null) return false;
 
             if ((_instruction.OpCode == OpCodes.Call || _instruction.OpCode == OpCodes.Callvirt) &&
                 _instruction.Operand is MethodReference methodReference)
@@ -50,12 +44,35 @@ namespace Faithful
 
         internal static bool TryGotoNext(ILCursor _cursor, string _hookName, params Func<Instruction, bool>[] _predicates)
         {
-            if (_cursor.TryGotoNext(MoveType.After, _predicates))
+            if (_cursor.TryGotoNext(MoveType.After, _predicates)) return true;
+
+            Log.Warning($"[{_hookName}] Failed to find IL pattern.");
+            return false;
+        }
+
+        internal static bool TryGotoAfterMemberThenNextOp(ILCursor _cursor, string _hookName, Func<Instruction, bool> _memberPredicate, OpCode _nextOpCode, int _maxLookAhead = 8)
+        {
+            int originalIndex = _cursor.Index;
+
+            if (!_cursor.TryGotoNext(MoveType.After, _memberPredicate))
             {
-                return true;
+                Log.Warning($"[{_hookName}] Failed to find IL anchor.");
+                return false;
             }
 
-            Log.Error($"[{_hookName}] Failed to find IL pattern.");
+            for (int i = 0; i < _maxLookAhead && _cursor.Next != null; i++)
+            {
+                if (_cursor.Next.OpCode == _nextOpCode)
+                {
+                    _cursor.Goto(_cursor.Next, MoveType.After);
+                    return true;
+                }
+
+                _cursor.Index++;
+            }
+
+            _cursor.Index = originalIndex;
+            Log.Warning($"[{_hookName}] Found anchor, but did not find expected '{_nextOpCode}' within {_maxLookAhead} instructions.");
             return false;
         }
 
@@ -66,16 +83,56 @@ namespace Faithful
             _cursor.EmitDelegate(_modifier);
         }
 
-        internal static void DumpInstructions(ILContext _il, string _hookName)
+        internal static void SafeDumpInstructions(ILContext _il, string _hookName, int _maxInstructions = 120)
         {
-            Log.Info($"[{_hookName}] IL dump start");
-
-            for (int i = 0; i < _il.Body.Instructions.Count; i++)
+            try
             {
-                Log.Info($"[{_hookName}] {i}: {_il.Body.Instructions[i]}");
-            }
+                Log.Info($"[{_hookName}] IL dump start");
 
-            Log.Info($"[{_hookName}] IL dump end");
+                int count = Math.Min(_il.Body.Instructions.Count, _maxInstructions);
+
+                for (int i = 0; i < count; i++)
+                {
+                    Instruction instruction = _il.Body.Instructions[i];
+
+                    string operandText;
+                    try
+                    {
+                        operandText = FormatOperand(instruction.Operand);
+                    }
+                    catch (Exception e)
+                    {
+                        operandText = $"<operand unreadable: {e.GetType().Name}>";
+                    }
+
+                    Log.Info($"[{_hookName}] {i}: IL_{instruction.Offset:X4}: {instruction.OpCode} {operandText}");
+                }
+
+                if (_il.Body.Instructions.Count > count)
+                {
+                    Log.Info($"[{_hookName}] IL dump truncated at {_maxInstructions} instructions.");
+                }
+
+                Log.Info($"[{_hookName}] IL dump end");
+            }
+            catch (Exception e)
+            {
+                Log.Error($"[{_hookName}] SafeDumpInstructions failed: {e}");
+            }
+        }
+
+        private static string FormatOperand(object _operand)
+        {
+            if (_operand == null) return string.Empty;
+
+            try
+            {
+                return _operand.ToString();
+            }
+            catch
+            {
+                return $"<{_operand.GetType().FullName}>";
+            }
         }
     }
 }

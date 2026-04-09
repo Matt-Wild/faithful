@@ -34,7 +34,7 @@ namespace Faithful
             // Create Copper Gear item and buff
             copperGearItem = Items.AddItem("COPPER_GEAR", "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _displaySettings: displaySettings);
             copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "Copper Gear", "texbuffteleportergear", Color.white, false);
-            copperGearEffectBuff = Buffs.AddBuff("COPPER_GEAR_EFFECT", "Copper Gear", "texbuffteleportergear", Color.white, _isHidden: true, _hasConfig: false);
+            copperGearEffectBuff = Buffs.AddBuff("COPPER_GEAR_EFFECT", "Copper Gear", "texbuffteleportergear", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "COPPER_GEAR");
 
             // Create item settings
             CreateSettings();

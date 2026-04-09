@@ -1,5 +1,4 @@
-﻿using Mono.Cecil;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RoR2;
 using System;
@@ -27,6 +26,12 @@ namespace Faithful
         int maxDebuffs;
         int maxDebuffsStacking;
         static float critDamage;
+
+        // Hook state
+        static bool critDamageHookSetupAttempted;
+        static bool critDamageILHookRegistered;
+        static bool critDamageILPatternMatched;
+        static bool critDamageFallbackEnabled;
 
         // Overlay for Scrutinized debuff
         static readonly Overlays.Overlay scrutinizedOverlay = Overlays.CreateOverlay(new Overlays.OverlaySettings
@@ -57,8 +62,8 @@ namespace Faithful
             // Link behaviour
             Behaviour.AddOnHitEnemyLateCallback(OnHitEnemyLate);
 
-            // More specific IL hooks
-            IL.RoR2.HealthComponent.TakeDamageProcess += IL_HealthComponent_TakeDamageProcess;
+            // More specific crit damage setup
+            SetupCritDamageModifier();
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -121,6 +126,63 @@ namespace Faithful
             appraisersEyeItem.UpdateItemTexts();
         }
 
+        private void SetupCritDamageModifier()
+        {
+            // Don't attempt this more than once
+            if (critDamageHookSetupAttempted) return;
+
+            // Update hook state
+            critDamageHookSetupAttempted = true;
+            critDamageILHookRegistered = false;
+            critDamageILPatternMatched = false;
+
+            // Attempt to do preferred IL hook
+            try
+            {
+                IL.RoR2.HealthComponent.TakeDamageProcess += IL_HealthComponent_TakeDamageProcess;
+                critDamageILHookRegistered = true;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"[{takeDamageProcessHookName}] Failed to register IL hook. Falling back to behavioural replacement. Exception: {e}");
+            }
+
+            // Check if fallback is needed
+            if (!critDamageILHookRegistered)
+            {
+                EnableCritDamageFallback("IL hook registration failed.");
+            }
+            else if (!critDamageILPatternMatched)
+            {
+                EnableCritDamageFallback("IL hook registered, but pattern was not matched.");
+            }
+        }
+
+        private void EnableCritDamageFallback(string _reason)
+        {
+            // Ignore if fallback already enabled
+            if (critDamageFallbackEnabled) return;
+
+            critDamageFallbackEnabled = true;
+            Behaviour.AddOnTakeDamageProcessCallback(OnTakeDamageProcess);
+
+            Log.Warning($"[{takeDamageProcessHookName}] Using last-resort behavioural fallback. Reason: {_reason}");
+        }
+
+        private void OnTakeDamageProcess(HealthComponent _healthComponent, DamageInfo _info)
+        {
+            // If the IL hook is active, do nothing - this is the ideal behaviour
+            if (critDamageILPatternMatched) return;
+
+            // Validate input
+            if (_info == null) return;
+
+            // Modify damage
+            // This isn't ideal since it applies the crit bonus before some skills register the damage as a crit
+            // For attacks like Bandit's backstab this will not work properly - it is only a fallback
+            _info.damage = ModifyFinalCritDamage(_info.damage, _healthComponent, _info);
+        }
+
         private void OnHitEnemyLate(DamageInfo _info, GameObject _victim)
         {
             // Validate input
@@ -143,6 +205,10 @@ namespace Faithful
             Inventory attackerInventory = attackerBody.inventory;
             if (attackerInventory == null) return;
 
+            // Validate item and buff
+            if (scrutinizedBuff == null || scrutinizedBuff.buffDef == null) return;
+            if (appraisersEyeItem == null || appraisersEyeItem.itemDef == null) return;
+
             // Get item count
             int attackerItemCount = attackerInventory.GetItemCountEffective(appraisersEyeItem.itemDef.itemIndex);
             if (attackerItemCount <= 0) return;
@@ -162,47 +228,58 @@ namespace Faithful
 
         private static void IL_HealthComponent_TakeDamageProcess(ILContext _il)
         {
-            ILCursor c = new ILCursor(_il);
-
-            if (!ILHelper.TryGotoNext(
-                c,
-                takeDamageProcessHookName,
-                x => ILHelper.MatchFieldLoadOrPropertyGetter(x, "RoR2.CharacterBody", "critMultiplier"),
-                x => x.OpCode == OpCodes.Mul))
+            try
             {
-                ILHelper.DumpInstructions(_il, takeDamageProcessHookName);
-                return;
+                ILCursor c = new(_il);
+
+                // Hopefully compatible with vanilla and Hypercrit2
+                // Find critMultiplier load/getter, then find the next mul shortly afterwards
+                if (!ILHelper.TryGotoAfterMemberThenNextOp(
+                    c,
+                    takeDamageProcessHookName,
+                    x => ILHelper.MatchFieldLoadOrPropertyGetter(x, "RoR2.CharacterBody", "critMultiplier"),
+                    OpCodes.Mul,
+                    8))
+                {
+                    critDamageILPatternMatched = false;
+
+                    if (Utils.verboseConsole) ILHelper.SafeDumpInstructions(_il, takeDamageProcessHookName);
+                    return;
+                }
+
+                ILHelper.EmitFloatModifier<HealthComponent, DamageInfo>(
+                    c,
+                    OpCodes.Ldarg_0,
+                    OpCodes.Ldarg_1,
+                    ModifyFinalCritDamage);
+
+                critDamageILPatternMatched = true;
+
+                if (Utils.verboseConsole) Log.Info($"[{takeDamageProcessHookName}] Successfully hooked crit damage multiplier.");
             }
+            catch (Exception e)
+            {
+                critDamageILPatternMatched = false;
+                Log.Error($"[{takeDamageProcessHookName}] Exception while applying IL hook: {e}");
 
-            ILHelper.EmitFloatModifier<HealthComponent, DamageInfo>(
-                c,
-                OpCodes.Ldarg_0,
-                OpCodes.Ldarg_1,
-                ModifyFinalCritDamage);
-
-            if (Utils.verboseConsole) Log.Info($"[{takeDamageProcessHookName}] Successfully hooked crit multiplier.");
+                if (Utils.verboseConsole) ILHelper.SafeDumpInstructions(_il, takeDamageProcessHookName);
+            }
         }
 
         private static float ModifyFinalCritDamage(float _currentDamage, HealthComponent _healthComponent, DamageInfo _info)
         {
             // Validate input
-            if (_healthComponent == null || _info == null)
-            {
-                return _currentDamage;
-            }
+            if (_healthComponent == null || _info == null) return _currentDamage;
 
             // Ignore if not a crit
-            if (_info.crit == false)
-            {
-                return _currentDamage;
-            }
+            if (_info.crit == false) return _currentDamage;
 
             // Attempt to get character body
             CharacterBody characterBody = _healthComponent.body;
-            if (characterBody == null)
-            {
-                return _currentDamage;
-            }
+            if (characterBody == null) return _currentDamage;
+
+            // Validate buff
+            if (scrutinizedBuff == null || scrutinizedBuff.buffDef == null) return _currentDamage;
 
             // Get debuff count
             int debuffCount = characterBody.GetBuffCount(scrutinizedBuff.buffDef.buffIndex);

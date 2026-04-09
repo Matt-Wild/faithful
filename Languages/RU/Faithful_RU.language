@@ -68,7 +68,6 @@
         "FAITHFUL_LEADERS_PENNON_DESC": "Создайте вокруг себя область, которая усиливает всех союзников, кроме вас, в радиусе <style=cIsUtility>[RADIUS] метров</style> <style=cStack>(+[RADIUS_STACKING] метров за шт.)</style>. Увеличивает <style=cIsDamage>скорость атаки</style> на <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(+[ATTACK_SPEED_STACKING]% за шт.)</style> и <style=cIsHealing>пассивную регенерацию здоровья</style> на <style=cIsHealing>+[REGEN]ОЗ/сек</style> <style=cStack>(+[REGEN_STACKING]ОЗ/сек за шт.)</style>. <style=cIsVoid>Оскверняет все [CORRUPTED_ITEM]</style>.",
         "FAITHFUL_LEADERS_PENNON_LORE": "Мы знали, что никогда не победим. Эта планета была столь же адской, сколь и безжалостной.\n\nМногие погибли, как только открылись двери. Люди-ящерицы, гигантские медузы, конструкции из самой земли под нашими ногами. Все они как-то — каким-то образом — сговорились вырезать нас всех. У нас никогда не было ни шанса.\n\nА наш командир, этот чёртов идиот... То, что от него осталось, было отмечено флагом, который привёл нас к нашей гибели.",
         "FAITHFUL_LEADERS_PENNON_BUFF": "Вымпел лидера",
-        "FAITHFUL_LEADERS_PENNON_VISUAL_BUFF": "Вымпел лидера",
 
         "FAITHFUL_SECOND_HAND_NAME": "Секундная стрелка",
         "FAITHFUL_SECOND_HAND_PICKUP": "Увеличивает скорость атаки и передвижения, пока вы на земле.",
@@ -124,6 +123,9 @@
         "FAITHFUL_4T0N_JETPACK_PICKUP": "Удерживайте 'Прыжок' при падении, чтобы взлететь вверх. Перезаряжается со временем, после приземления.",
         "FAITHFUL_4T0N_JETPACK_DESC": "Удержание клавиши прыжка при падении позволяет <style=cIsUtility>взлететь вверх</style> на срок, до <style=cIsUtility>[FUEL_TIME]</style> <style=cStack>(+[FUEL_TIME_STACKING] за шт.)</style> секунды. Полностью перезаряжается за <style=cIsUtility>[RECHARGE_TIME]</style> <style=cStack>(-[RECHARGE_TIME_REDUCTION]% за шт.)</style> секунд, пока вы касаетесь земли.",
         "FAITHFUL_4T0N_JETPACK_LORE": "Заказ: высокомощный фотонный реактивный ранец\nНомер отслеживания: 76*************\nПримерная дата доставки: 07.04.2057\nСпособ доставки: Высокий приоритет/Хрупкий\nАдрес доставки: Этаж 77, Корп. INC, Юпитер\nДетали доставки:\n\nВот новый реактивный ранец, который вы заказали, сэр. Этот должен прослужить вам гораздо дольше.\n\nХотя, всё же, советую вам не пытаться использовать его, чтобы снова перелететь в другой офис. Руководство попросило меня, сообщить вам, что в следующий раз они не будут оплачивать ваши медицинские счета, сэр.",
+		"FAITHFUL_4T0N_JETPACK_EMPTY_BUFF": "Нет топлива",
+		"FAITHFUL_4T0N_JETPACK_LOW_BUFF": "Мало топлива",
+		"FAITHFUL_4T0N_JETPACK_HIGH_BUFF": "Много топлива",
 		
 		"FAITHFUL_MATTER_ACCELERATOR_NAME": "Ускоритель материи",
 		"FAITHFUL_MATTER_ACCELERATOR_PICKUP": "Увеличивает скорость передвижения, пока у вас есть щит или барьер.",

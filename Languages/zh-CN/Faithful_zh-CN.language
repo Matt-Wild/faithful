@@ -68,7 +68,6 @@
 	"FAITHFUL_LEADERS_PENNON_DESC": "在你周围制造一个领域，使 <style=cIsUtility>[RADIUS]米</style> 范围内的其他盟友获得强化 <style=cStack>(每层额外+[RADIUS_STACKING]米)</style>。提升 <style=cIsDamage>攻击速度</style> <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(每层额外+[ATTACK_SPEED_STACKING]%)</style>，并提升 <style=cIsHealing>被动生命回复</style> <style=cIsHealing>+[REGEN]生命值/秒</style> <style=cStack>(每层额外+[REGEN_STACKING]生命值/秒)</style>。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
 	"FAITHFUL_LEADERS_PENNON_LORE": "我们知道自己赢不了。这颗星球既像地狱，又无情至极。\n\n爆破门一开，许多人就当场丧命。蜥蜴人、巨型水母、由脚下土地组成的构造体……它们似乎都联手要把我们屠光。我们从一开始就没机会。\n\n还有我们的队长，那该死的笨蛋……他最后只剩下一面引领我们走向灭亡的旗帜。",
 	"FAITHFUL_LEADERS_PENNON_BUFF": "领袖旗帜",
-	"FAITHFUL_LEADERS_PENNON_VISUAL_BUFF": "领袖旗帜",
 
 	"FAITHFUL_SECOND_HAND_NAME": "副表指针",
 	"FAITHFUL_SECOND_HAND_PICKUP": "站在地面上时提高攻击速度与移动速度。",
@@ -124,6 +123,9 @@
 	"FAITHFUL_4T0N_JETPACK_PICKUP": "下落时按住“跳跃”可向上推进。落地后会随时间充能。",
 	"FAITHFUL_4T0N_JETPACK_DESC": "下落时按住跳跃键可 <style=cIsUtility>向上推进</style>，持续最多 <style=cIsUtility>[FUEL_TIME]</style> 秒 <style=cStack>(每层额外+[FUEL_TIME_STACKING]秒)</style>。落地后在 <style=cIsUtility>[RECHARGE_TIME]</style> 秒内完全充能 <style=cStack>(每层减少-[RECHARGE_TIME_REDUCTION]%)</style>。",
 	"FAITHFUL_4T0N_JETPACK_LORE": "订单：高能光子喷气背包\n追踪编号：76*************\n预计送达时间：2057年4月7日\n运输方式：高优先级 / 易碎\n收货地址：木星，第77层，Corp INC\n运输详情：\n\n先生，这是您订购的新喷气背包。这一款应该能坚持更久。\n\n不过我得提醒您，请不要再尝试用它飞到另一个办公室了。上层让我通知您——下次他们不会再替您报销医药费了，先生。",
+	"FAITHFUL_4T0N_JETPACK_EMPTY_BUFF": "无燃料",
+	"FAITHFUL_4T0N_JETPACK_LOW_BUFF": "燃料不足",
+	"FAITHFUL_4T0N_JETPACK_HIGH_BUFF": "高燃料",
 	
 	"FAITHFUL_MATTER_ACCELERATOR_NAME": "物质加速器",
 	"FAITHFUL_MATTER_ACCELERATOR_PICKUP": "拥有护盾或屏障时提高移动速度。",

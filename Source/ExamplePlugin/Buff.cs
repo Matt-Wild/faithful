@@ -18,17 +18,21 @@ namespace Faithful
 
         // Buff token and name
         public string token;
+        public string langTokenOverride;
         public string name;
         public string safeName;
 
         // Constructor
-        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null)
+        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, string _langTokenOverride = null)
         {
             // Assign token
             token = _token;
 
+            // Assign language token override
+            langTokenOverride = _langTokenOverride;
+
             // Assign name
-            name = Languages.GetLanguageString($"FAITHFUL_{_token}_BUFF");
+            name = Languages.GetLanguageString($"FAITHFUL_{langToken}_BUFF");
             safeName = _safeName;
 
             // Assign overlay
@@ -113,5 +117,6 @@ namespace Faithful
         }
 
         public bool overlayEnabled => enableOverlaySetting != null && enableOverlaySetting.Value && overlay != null;
+        public string langToken => string.IsNullOrEmpty(langTokenOverride) ? token : langTokenOverride;
     }
 }
