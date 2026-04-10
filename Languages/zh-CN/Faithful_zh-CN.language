@@ -81,8 +81,8 @@
 	"FAITHFUL_SPACIOUS_UMBRELLA_LORE": "订单：塑料雨伞（已损坏）\n追踪编号：178******\n预计送达时间：2056年9月2日\n运输方式：标准\n收货地址：地球，阿盖尔郡，大地气象研究所\n运输详情：\n\n我希望你不是打算真的用这个老家伙。如果你用了，被淋湿了可别怪我。",
 
 	"FAITHFUL_DROWNED_VISAGE_NAME": "溺亡面容",
-	"FAITHFUL_DROWNED_VISAGE_PICKUP": "在为传送器充能时，击杀敌人有较低几率使传送器额外充能少量。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
-	"FAITHFUL_DROWNED_VISAGE_DESC": "在传送器范围内击杀敌人时，有 <style=cIsUtility>[CHANCE]%</style> <style=cStack>(每层额外+[CHANCE_STACKING]%)</style> 的几率使传送器充能 <style=cIsUtility>[CHARGE_AMOUNT]%</style>。大型或精英怪物则改为充能 <style=cIsUtility>[LARGE_CHARGE_AMOUNT]%</style>。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
+	"FAITHFUL_DROWNED_VISAGE_PICKUP": "在为传送器充能时，击杀敌人有概率使传送器额外充能少量。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
+	"FAITHFUL_DROWNED_VISAGE_DESC": "位于传送器范围内时，击杀敌人有 <style=cIsUtility>[CHANCE]%</style> <style=cStack>(每层额外+[CHANCE]%)</style> 的概率使传送器充能 <style=cIsUtility>[CHARGE_AMOUNT]%</style>。大型或精英怪物则改为充能 <style=cIsUtility>[LARGE_CHARGE_AMOUNT]%</style>。<style=cIsVoid>腐化所有 [CORRUPTED_ITEM]</style>。",
 	"FAITHFUL_DROWNED_VISAGE_LORE": "> 自动报告 4241442054494d4520544f2046495348 现已从记录 412044524f574e454420564953414745 获取。\n> 如需查看更多人员详情，请参考该记录。\n> 报告类型：转录\n> - 来源：412044524f574e454420564953414745（个人作战服记录器）\n> 优先级：高\n> 报告内容：\n\n-- 以下摘录为标记审查内容 --\n\nDave：“你听说过这里有只巨型怪物的胡扯传言吧？”\n\nMichael：“当然听说过。除非我睡得比Gary还死，不然不可能没听说。”\n\nDave：“哈哈！貌似就是他看到的。他说那是他在这儿见过最可怕的东西。”\n\nMichael：“哈！那就没那么吓人吧。可能是他值班时做了个噩梦。”\n\nDave：“听起来像是他的作风。我说我们晚饭吃鱼的时候，他脸都白了。”\n\nMichael：“哈哈！你这是在欺负那可怜人，Dave！”\n\nDave：“既然真那么吓人，他怎么连个样子都形容不出来。就说是某种诱饵，然后——”\n\nMichael：“等等，钓线在动！”\n\nDave：“哇哦，你钓到什么了？！”\n\n【钓竿回收声】\n\nMichael：“……哦。只是条小鱼……”\n\nDave：“嘿……我刚刚真的以为出事了。老实说，我心脏都停了半拍。”\n\nMichael：“我也是。那本来会是个好故事，哈——”\n\n【金属咔哒声】\n\n-- 录音结束 --\n\n-- 审查摘录结束 --\n\n> 完整音频请参阅报告 5448455927524520414c4c2044454144。",
 	
 	"FAITHFUL_LONGSHOT_GEODE_NAME": "远射晶核",
