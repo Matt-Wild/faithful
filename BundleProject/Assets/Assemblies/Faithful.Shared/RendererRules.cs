@@ -24,6 +24,7 @@ namespace Faithful.Shared
         CaptainSupplyDropAreaIndicator2 = 150,
         CaptainSupplyDropAreaIndicatorOuter = 160,
         ChefAlwaysOnTop = 170,
+		Chest = 175,
         ChildStarCore = 180,
         ChildStarGlow = 190,
         ChipProjectile = 200,
@@ -68,6 +69,13 @@ namespace Faithful.Shared
         [Header("General")]
         public RendererModifier modifier = RendererModifier.None;
         public bool salvageExistingProperties = false;
+		
+		[Header("Dither Model")]
+		public bool addDitherModelComponent = false;
+		public float ditherModelFade = 1.0f;
+		public float ditherModelOldFade = 1.0f;
+		public MeshCollider ditherModelBounds;
+		public List<Renderer> ditherModelRenderers = new();
 
         [Header("Shader Attributes")]
         public List<ShaderTextureRule> textureRules = new();

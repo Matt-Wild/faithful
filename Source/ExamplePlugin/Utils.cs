@@ -976,7 +976,14 @@ namespace Faithful
 
         public static Material ProcessRendererRules(Material _material, RendererRules _rules, bool _useShared = false)
         {
-            if (!_material || _rules == null) return _material;
+            // Validate rules
+            if (_rules == null) return _material;
+
+            // Do DitherModel logic
+            ProcessRendererRulesDitherModel(_rules);
+
+            // Validate material
+            if (!_material) return _material;
 
             // Get cache key for material
             string cacheKey = _useShared ? BuildRendererRulesCacheKey(_material, _rules) : null;
@@ -1126,6 +1133,29 @@ namespace Faithful
             return mat;
         }
 
+        private static void ProcessRendererRulesDitherModel(RendererRules _rules)
+        {
+            // Validate input
+            if (_rules == null) return;
+
+            // Check if should add DitherModel component
+            if (!_rules.addDitherModelComponent) return;
+
+            // Fetch game object
+            GameObject go = _rules.gameObject;
+            if (go == null) return;
+
+            // Fetch or add DitherModel component
+            DitherModel ditherModel = go.GetComponent<DitherModel>();
+            if (ditherModel == null) ditherModel = go.AddComponent<DitherModel>();
+
+            // Configure DitherModel component
+            ditherModel.fade = _rules.ditherModelFade;
+            ditherModel.oldFade = _rules.ditherModelOldFade;
+            ditherModel.bounds = _rules.ditherModelBounds;
+            ditherModel.renderers = [.. _rules.ditherModelRenderers];
+        }
+
         private static Material GetRendererRulesModifierTemplate(RendererModifier _modifier)
         {
             return _modifier switch
@@ -1175,6 +1205,7 @@ namespace Faithful
                 RendererModifier.VoidDeathBombAreaIndicatorFront => Assets.voidDeathBombAreaIndicatorFrontMaterial,
                 RendererModifier.VoidSurvivorBlasterSphereAreaIndicator => Assets.voidSurvivorBlasterSphereAreaIndicatorMaterial,
                 RendererModifier.VoidSurvivorBlasterSphereAreaIndicatorCorrupted => Assets.voidSurvivorBlasterSphereAreaIndicatorCorruptedMaterial,
+                RendererModifier.Chest => Assets.chestMaterial,
                 _ => null,
             };
         }

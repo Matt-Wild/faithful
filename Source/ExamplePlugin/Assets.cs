@@ -64,6 +64,7 @@ namespace Faithful
         public static Material voidDeathBombAreaIndicatorFrontMaterial;
         public static Material voidSurvivorBlasterSphereAreaIndicatorMaterial;
         public static Material voidSurvivorBlasterSphereAreaIndicatorCorruptedMaterial;
+        public static Material chestMaterial;
         public static Wave[] mageJetWaves;
         public static GameObject mageJetAkEventsPrefab;
         public static GameObject radiusIndicatorPrefab;
@@ -184,6 +185,7 @@ namespace Faithful
             voidDeathBombAreaIndicatorFrontMaterial = FetchAsset<Material>("RoR2/Base/Common/matVoidDeathBombAreaIndicatorFront.mat");
             voidSurvivorBlasterSphereAreaIndicatorMaterial = FetchAsset<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorBlasterSphereAreaIndicator.mat");
             voidSurvivorBlasterSphereAreaIndicatorCorruptedMaterial = FetchAsset<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorBlasterSphereAreaIndicatorCorrupted.mat");
+            chestMaterial = FetchAsset<Material>("RoR2/Base/Chest1/matChest1.mat");
 
             mageJetWaves = Addressables.LoadAssetAsync<GameObject>("92199783eae803f4095bc93685a5ee70").WaitForCompletion().GetComponent<Transform>().Find("ModelBase").Find("mdlMage").Find("MageArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("JetsOn").Find("Point Light").GetComponent<RoR2.FlickerLight>().sinWaves;
 

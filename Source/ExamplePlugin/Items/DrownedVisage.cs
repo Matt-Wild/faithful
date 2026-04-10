@@ -79,8 +79,8 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            chanceSetting = drownedVisageItem.CreateSetting("CHANCE", "Charge Chance", 2.5f, "What should the chance be for this item to charge the teleporter when killing an enemy within the teleporter zone? (2.5 = 2.5% chance)", _valueFormatting: "{0:0.00}%");
-            chanceStackingSetting = drownedVisageItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 2.5f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (2.5 = 2.5% chance)", _valueFormatting: "{0:0.00}%");
+            chanceSetting = drownedVisageItem.CreateSetting("CHANCE", "Charge Chance", 5.0f, "What should the chance be for this item to charge the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
+            chanceStackingSetting = drownedVisageItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 5.0f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
             chargeAmountSetting = drownedVisageItem.CreateSetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, "How much should this item charge the teleporter? (5.0 = 5% charge)", _valueFormatting: "{0:0.00}%");
         }
 
