@@ -1,5 +1,3 @@
-# Changelog
-
 ### v1.4.2
 
 **Balance**
