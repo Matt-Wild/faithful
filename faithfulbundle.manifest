@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2075488660
+CRC: 904562395
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a63dd98be311ba9d14ff1295cdd5d32c
+    Hash: b001a514e6882688c1ab542f7177115c
   TypeTreeHash:
     serializedVersion: 2
     Hash: e50c578b8b723f3899bea765d83207e3
@@ -323,6 +323,7 @@ Assets:
 - Assets/Items/CauterizingGreave/CauterizingGreaveMesh.prefab
 - Assets/Items/CopperGear/AltIcons/texCopperGearUniqueIcon.png
 - Assets/Items/CollectorsVision/CollectorsVisionMesh.obj
+- Assets/Items/ServiceStartupDrive/Capsule/Materials/texTrimSheetDroneCapsuleDark.mat
 - Assets/Items/Chakram/texChakramIcon.png
 - Assets/Equipment/ChargefieldPylon/texChargefieldPylonIcon.png
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveTier1Icon.png
@@ -643,6 +644,8 @@ Assets:
 - Assets/Items/ServiceStartupDrive/AltIcons/texServiceStartupDriveTier2Icon.png
 - Assets/Items/MatterAccelerator/texMatterAcceleratorBuff.png
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterLunarAchievement.png
+- Assets/Items/ServiceStartupDrive/Capsule/texTrimSheetDroneCapsuleDarkNormal.png
+- Assets/Items/ServiceStartupDrive/Capsule/DroneCapsuleMesh.prefab
 - Assets/Equipment/ChargefieldPylon/texChargefieldPylonDeploy.png
 - Assets/Items/Chakram/ChakramDisplayMesh.obj
 - Assets/Items/LeadersPennon/AltIcons/texLeadersPennonTier1Icon.png
@@ -689,6 +692,7 @@ Assets:
 - Assets/Equipment/Divider/Materials/texDivider.mat
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaTier3Achievement.png
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystal.png
+- Assets/Items/ServiceStartupDrive/Capsule/DroneCapsuleMesh.fbx
 - Assets/Survivors/Technician/Mesh/TechnicianAlloySkinTurretLights.prefab
 - Assets/Items/AppraisersEye/AltIcons/texAppraisersEyeTier2Icon.png
 - Assets/Equipment/ChargefieldPylon/AltIcons/texChargefieldPylonEquipmentIcon.png
@@ -748,6 +752,7 @@ Assets:
 - Assets/Items/LongshotGeode/AltIcons/texLongshotGeodeUniqueIcon.png
 - Assets/Survivors/Technician/Materials/texTechnicianAlloy.mat
 - Assets/Items/LongshotGeode/texLongshotGeodeCrystalNormal.png
+- Assets/Items/ServiceStartupDrive/Capsule/texTrimSheetDroneCapsuleDark.png
 - Assets/Items/MeltingWarbler/AltIcons/texMeltingWarblerUniqueIcon.png
 - Assets/Survivors/Technician/Textures/texTechnicianAlloy.png
 - Assets/Items/LeadersPennon/texIndicatorPennonMask.png
