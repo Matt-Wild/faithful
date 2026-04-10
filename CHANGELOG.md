@@ -1,267 +1,462 @@
 # Changelog
 
-#### v1.4.1 Hypercrit2 Compatibility
-- Fixed compatibility issue between v1.4.0 update and Hypercrit2.
-- Fixed minor issue with some missing language tokens for buffs.
+### v1.4.2
 
-### v1.4.0 Matter Accelerator, Radiant Timepiece, And Appraiser's Eye
-- Added 3 new items (Matter Accelerator, Radiant Timepiece, and Appraiser's Eye).
+**Balance**
+- Increased Drowned Visage chance and chance stacking from 2.5% to 5%.
+- Drowned Visage now charges the teleporter by 10% instead of 5% after large or elite kills.
+
+**Visuals**
+- Added dithering to Shrine of Recollection.
+
+### v1.4.1
+
+**Compatibility**
+- Fixed a compatibility issue between v1.4.0 and Hypercrit2.
+
+**Fixes**
+- Fixed minor missing language tokens for buffs.
+
+## v1.4.0
+
+**Added**
+- Added 3 new items: Matter Accelerator, Radiant Timepiece, and Appraiser's Eye.
+
+**Changed**
 - Collector's Vision now awards Appraiser's Eye at 100% Inspiration (can be disabled via config).
-- Buffed Vengeful Toaster's buff duration stacking from 1s -> 2s (config adjustment/reset required).
-- Updated interaction texts for Shrine of Recollection to be more inline with the current Inspiration buff.
-- Second Hand, Copper Gear, and Brass Screws buffs no longer visually stack to align better with base game.
-- Improved item display for Jetpack on Seeker.
-- Changed Inspiration buff icon.
-- Fixed some personalisation settings randomizing in Randomizer Mode (which definitely shouldn't).
+- Increased Vengeful Toaster's buff duration stacking from 1s to 2s.
+- Updated Shrine of Recollection interaction text to better match the current Inspiration buff.
+- Second Hand, Copper Gear, and Brass Screws buffs no longer visually stack, to better align with the base game.
 
-#### v1.3.27 Jetpack And Targeting Matrix Changes
-- Targeting Matrix effect now shows through terrain to make finding the target easier (can be disabled via config).
-- Jetpack now has a buff indicating fuel remaining (can be disabled via config).
+**Visuals**
+- Improved the Jetpack item display for Seeker.
+- Changed the Inspiration buff icon.
+
+**Fixes**
+- Fixed some personalisation settings randomising in Randomizer Mode.
+
+**Note**
+- Config adjustment or reset required for the Vengeful Toaster duration stacking change.
+
+### v1.3.27
+
+**Changed**
+- Targeting Matrix now shows through terrain to make the target easier to find (can be disabled via config).
+- Jetpack now shows a fuel remaining buff (can be disabled via config).
 - Jetpack now mitigates fall damage while in use (can be disabled via config).
 
-#### v1.3.26 Item Tag And Lore Update
-- Updated items to include newly introduced item tags.
-- Replaced current quotes in item lore with quotes more faithful to the base game.
+### v1.3.26
 
-#### v1.3.25 Custom Pickups And Descriptions
-- Added config options for changing pickups and descriptions for items.
+**Changed**
+- Updated items to include newly introduced item tags.
+- Replaced item lore quotes with quotes more faithful to the base game.
+
+### v1.3.25
+
+**Config**
+- Added config options for changing item pickups and descriptions.
+
+**Fixes**
 - Fixed mod managers flattening Faithful's folder structure.
 
-#### v1.3.24 Mod Manager Language Path Fix
-- Fixed issue with language files not being found due to installation via mod managers altering file paths.
+### v1.3.24
 
-#### v1.3.23 Collector's Vision Changes And Localization
-- Added new locales for Russian and Chinese Simplified.
-- Changed Collector's Vision settings, description and buff to be percent based (tied to additional crit chance).
+**Fixes**
+- Fixed language files not being found when installation via mod managers altered file paths.
 
-#### v1.3.22 Recollection Shrine Change And Gear/Screws Fixes
-- Added WIP content setting that allows WIP content from 'Faithful' to load into the game (default off).
-- Improved visuals for Shrine of Recollection.
-- Fixed buff count not updating correctly when in the teleporter zone for Copper Gear and Brass Screws.
+### v1.3.23
+
+**Localization**
+- Added Russian and Simplified Chinese locales.
+
+**Changed**
+- Changed Collector's Vision settings, description, and buff to be percent-based and tied to additional critical chance.
+
+### v1.3.22
+
+**Added**
+- Added a WIP content setting that allows WIP Faithful content to load into the game (default off).
+
+**Visuals**
+- Improved Shrine of Recollection visuals.
+
+**Fixes**
+- Fixed buff count not updating correctly inside the teleporter zone for Copper Gear and Brass Screws.
 - Fixed item displays no longer appearing on Engineer's alternate Turrets.
 
-#### v1.3.21 Item Visual Improvements
-- Improved the visuals of many icons, pickup and display item models through better use of in-game shaders.
+### v1.3.21
 
-#### v1.3.20 Redesigning The Targeting Matrix
+**Visuals**
+- Improved the visuals of many icons, pickup models, and display models through better use of in-game shaders.
+
+### v1.3.20
+
+**Changed**
 - Targeting Matrix has been redesigned as a green item by popular request.
-- Fixed Operator's alt secondary not being affected by Targeting Matrix.
 
-#### v1.3.19 Collector's Vision Temporary Item Config
-- Added config option for Collector's Vision for counting temporary items (default on).
+**Fixes**
+- Fixed Operator's alternate secondary not being affected by Targeting Matrix.
 
-#### v1.3.18 New Shrine of Recollection Locations
-- The Shrine of Recollection now had additional spawn positions for new Alloyed Collective stages.
-- Disabled void items are no longer given a corruption pair.
+### v1.3.19
 
-#### v1.3.17 Removed Debugging Log
-- Removed annoying "PING" logs that were left in after debugging, whoops.
+**Config**
+- Added a Collector's Vision config option for counting temporary items (default on).
 
-#### v1.3.16 Alloyed Collective Item Displays
+### v1.3.18
+
+**Changed**
+- Added additional Shrine of Recollection spawn positions for new Alloyed Collective stages.
+- Disabled void items no longer receive a corruption pair.
+
+### v1.3.17
+
+**Changed**
+- Removed the annoying "PING" logs left in after debugging. Whoops.
+
+### v1.3.16
+
+**Visuals**
 - Added missing item displays for Alloyed Collective.
 
 <details><summary><strong>Old Changelogs</strong></summary>
 
-#### v1.3.15 Alloyed Collective Update
-- Faithful now functional with Alloyed Collective.
+### v1.3.15
 
-#### v1.3.14 Vengeful Toaster Concussion Device Bug
+**Compatibility**
+- Faithful is now functional with Alloyed Collective.
+
+### v1.3.14
+
+**Fixes**
 - Railgunner's Concussion Device no longer grants vengeance.
 
-#### v1.3.13 Spacious Umbrella Buff
+### v1.3.13
+
+**Balance**
 - Spacious Umbrella has been buffed with reduced stacking falloff.
 
-#### v1.3.12 Locales Framework
-- Changed item and buff internal names to be more robust for the future implementation of additional locales and to avoid future mod conflicts.
+### v1.3.12
 
-#### v1.3.11 Toaster/Shawl Buff Deletion Fix
+**Changed**
+- Changed item and buff internal names to be more robust for future locale support and to avoid mod conflicts.
+
+### v1.3.11
+
+**Fixes**
 - Vengeful Toaster and Hermit's Shawl no longer waste their associated buffs on damage events that do no actual damage.
 
-#### v1.3.10 Verbose Console Setting
-- Separated verbose console output into it's own setting.
+### v1.3.10
+
+**Config**
+- Separated verbose console output into its own setting.
+
+**Fixes**
 - Fixed some assets needlessly trying to become networked by the Prefab API.
 
-#### v1.3.9 Longshot Geode Indicator
-- Added optional radius indicator for Longshot Geode (default off).
+### v1.3.9
 
-#### v1.3.8 Leader's Pennon Attack Speed And Regen Stacking
-- Added additional configs for Leader's Pennon to support attack speed and regen stacking.
+**Added**
+- Added an optional radius indicator for Longshot Geode (default off).
 
-#### v1.3.7 Jetpack Material Fix
-- Fixed broken Jetpack material.
+### v1.3.8
+
+**Config**
+- Added additional configs for Leader's Pennon attack speed and regeneration stacking.
+
+### v1.3.7
+
+**Fixes**
+- Fixed the broken Jetpack material.
 - Switched some asset fetch operations to use GUIDs.
 
-#### v1.3.6 Memory Optimisation Update Fix
+### v1.3.6
+
+**Compatibility**
 - Updated Faithful to work with the new "Memory Optimisation Update".
 
-#### v1.3.5 Carbonizer Laser Fix
-- Fixed issue with Carbonizer laser sometimes disappearing - oops.
+### v1.3.5
 
-#### v1.3.4 Hermit's Shawl Fix
-- Fixed minor error with Hermit's Shawl when some modded characters are destroyed.
+**Fixes**
+- Fixed an issue with the Carbonizer laser sometimes disappearing. Oops.
 
-#### v1.3.3 Targeting Matrix Fix
-- Fixed error with Targeting Matrix on modded characters with no model locator.
+### v1.3.4
 
-#### v1.3.2 More Jetpack Adjustments
-- Small 4-T0N Jetpack buff - also adding pickup spawning tools to debug UI.
+**Fixes**
+- Fixed a minor error with Hermit's Shawl when some modded characters are destroyed.
 
-#### v1.3.1 Corrupted Item String Fixes
+### v1.3.3
+
+**Fixes**
+- Fixed an error with Targeting Matrix on modded characters with no model locator.
+
+### v1.3.2
+
+**Changed**
+- Slightly buffed 4-T0N Jetpack.
+- Added pickup spawning tools to the debug UI.
+
+### v1.3.1
+
+**Fixes**
 - Made the code for finding item corruptions more robust.
 
-### v1.3.0 Shrine of Recollection
-- Added special Collector's Vision interactable 'Shrine of Recollection'.
+## v1.3.0
 
-#### v1.2.15 Debug UI Refinements
-- Debug UI transformed to fit better with the rest of the game.
+**Added**
+- Added the Collector's Vision interactable: Shrine of Recollection.
 
-#### v1.2.14 Item Name Configs
-- Added configs for overriding the name of items.
-- Changed description and details of the Leader's Pennon to make it's use more clear.
+### v1.2.15
 
-#### v1.2.13 Survivors Of The Void Requirement Fix
-- The Faithful expansion no longer requires Survivors of the Void to be enabled.
+**Changed**
+- Refined the debug UI to better match the rest of the game.
 
-#### v1.2.12 Corruption Overrides
-- Added configs for overriding the corrupted items for void items.
+### v1.2.14
 
-#### v1.2.11 Language Token Fix
-- Fixed various issues by switching to use of overlay language tokens from the Language API.
+**Config**
+- Added configs for overriding item names.
 
-#### v1.2.10 LookingGlass Compatibility Fix
-- LookingGlass now only overrides the extended item descriptions config if full pickup descriptions has been enabled.
+**Changed**
+- Changed the Leader's Pennon description and details to make its use clearer.
 
-#### v1.2.9 LookingGlass Compatibility
+### v1.2.13
+
+**Fixes**
+- Faithful no longer requires Survivors of the Void to be enabled.
+
+### v1.2.12
+
+**Config**
+- Added configs for overriding corrupted items for void items.
+
+### v1.2.11
+
+**Fixes**
+- Fixed various issues by switching to overlay language tokens from the Language API.
+
+### v1.2.10
+
+**Compatibility**
+- LookingGlass now only overrides the extended item descriptions config when full pickup descriptions is enabled.
+
+### v1.2.9
+
+**Compatibility**
 - LookingGlass now overrides the extended item descriptions config.
 
-#### v1.2.8 Risk Of Options Compatibility
-- Added compatibility for Risk Of Options.
+### v1.2.8
 
-#### v1.2.7 Turret Item Displays
+**Compatibility**
+- Added Risk of Options compatibility.
+
+### v1.2.7
+
+**Visuals**
 - Added all missing item displays for Engineer's turrets.
 
-#### v1.2.6 Hermit's Shawl Config
-- Added separate config value for Hermit's Shawl max buff stacking.
+### v1.2.6
 
-#### v1.2.5 Jetpack Changes
+**Config**
+- Added a separate config value for Hermit's Shawl max buff stacking.
+
+### v1.2.5
+
+**Changed**
 - Made 4-T0N Jetpack stronger over a shorter duration.
-- Decreased fuel time from 4s -> 3s.
-- Decreased fuel time stacking from 2s -> 1.5s.
-- Decreased recharge time from 12s -> 8s.
-- 4-T0N Jetpack is now affected by jump power inceasing items.
+- Decreased fuel time from 4s to 3s.
+- Decreased fuel time stacking from 2s to 1.5s.
+- Decreased recharge time from 12s to 8s.
+- 4-T0N Jetpack is now affected by jump power increasing items.
 
-#### v1.2.4 Noxious Slimes Blight
+### v1.2.4
+
+**Changed**
 - Noxious Slimes now has a small chance to blight enemies on hit.
 
-#### v1.2.3 Balance Changes
-- Decreased Longshot Geode's range condition from 50m -> 40m.
-- Increased Leader's Pennon radius stacking from 5m -> 7.5m.
-- Increased Melting Warbler's jump height bonus from 1m -> 2m.
-- Vengeance buff from Vengeful Toaster is no longer removed by DoTs.
-- Please note that balance changes require a config reset to apply (or manual config adjustment).
+### v1.2.3
 
-#### v1.2.2 Hermit's Shawl No Longer Debug Only
-- Fixed Hermit's Shawl being left as debug only - oops.
+**Balance**
+- Decreased Longshot Geode's range condition from 50m to 40m.
+- Increased Leader's Pennon radius stacking from 5m to 7.5m.
+- Increased Melting Warbler's jump height bonus from 1m to 2m.
+- Vengeance from Vengeful Toaster is no longer removed by damage-over-time effects.
 
-#### v1.2.1 All Item Configs
-- Added override configs for all items - Allows disabling all items, disabling all item displays and enabling extended pickup descriptions for all items with one simple config change.
+**Note**
+- Balance changes require a config reset or manual config adjustment to apply.
 
-### v1.2.0 Hermit's Shawl
+### v1.2.2
+
+**Fixes**
+- Fixed Hermit's Shawl being left as debug only. Oops.
+
+### v1.2.1
+
+**Config**
+- Added override configs for all items, including disabling all items, disabling all item displays, and enabling extended pickup descriptions with one config change.
+
+## v1.2.0
+
+**Added**
 - Added the Hermit's Shawl item.
 
-#### v1.1.6 Fixed Rogue Config Entries
+### v1.1.6
+
+**Fixes**
 - Fixed rogue config entries for debug items (delete old config to clean).
 
-#### v1.1.5 Debug Spawning Improvements
-- The debug spawn menu now allows you to spawn elites.
-- The debug spawn menu now allows you to modify the power of the characters you spawn.
+### v1.1.5
 
-#### v1.1.4 Targeting Matrix Target Blacklist
+**Added**
+- The debug spawn menu can now spawn elites.
+- The debug spawn menu can now modify the power of spawned characters.
+
+### v1.1.4
+
+**Fixes**
 - Targeting Matrix can no longer target Healing Cores.
 
-#### v1.1.3 Adjusted Randomized Stats
-- Leader's Pennon, Copper Gear and Brass Screws buff durations no longer get randomized in the randomizer mode.
-- Leader's Pennon hidden regen multiplicative buff no longer gets randomized in the randomizer mode.
+### v1.1.3
 
-#### v1.1.2 Fixed Target Matrix Lag On Death
-- Fixed NRE errors that sometimes occurred when dying with the Target Matrix.
+**Changed**
+- Leader's Pennon, Copper Gear, and Brass Screws buff durations no longer get randomised in Randomizer Mode.
+- Leader's Pennon hidden regeneration multiplier buff no longer gets randomised in Randomizer Mode.
 
-#### v1.1.1 Targeting Matrix Animation
-- Added animation for Targeting Matrix activation/deactivation.
+### v1.1.2
 
-### v1.1.0 Finalized Targeting Matrix
-- Finalized adjustments for Targeting Matrix.
+**Fixes**
+- Fixed NRE errors that sometimes occurred when dying with Targeting Matrix.
 
-#### v1.0.21 Targeting Matrix
+### v1.1.1
+
+**Added**
+- Added an animation for Targeting Matrix activation and deactivation.
+
+## v1.1.0
+
+**Changed**
+- Finalised adjustments for Targeting Matrix.
+
+### v1.0.21
+
+**Added**
 - Added the Targeting Matrix item.
-- Added unique visual effect for Leader's Pennon.
+- Added a unique visual effect for Leader's Pennon.
+
+**Fixes**
 - Fixed some minor config issues.
 
-#### v1.0.20 Changelog
-- Improved mod changelog.
+### v1.0.20
 
-#### v1.0.19 Item Randomizer
-- Added option to randomize the stats of all items added by this mod (disabled by default).
-- Fixed Leader's Pennon radius indicator staying when the player owning it dies.
-- Fixed lots of problems when some players in a multiplayer lobby have godmode enabled while the others do not.
+**Changed**
+- Improved the mod changelog.
 
-#### v1.0.18 Config Passing
+### v1.0.19
+
+**Added**
+- Added an option to randomise the stats of all items added by this mod (disabled by default).
+
+**Fixes**
+- Fixed Leader's Pennon radius indicator persisting after the owning player dies.
+- Fixed multiple issues when some players in a multiplayer lobby have godmode enabled while others do not.
+
+### v1.0.18
+
+**Changed**
 - The host's config now gets passed to clients who use it while in the host's game.
 
-#### v1.0.17 Readme Amendment
-- Fixed inconsistency in Readme.
+### v1.0.17
 
-#### v1.0.16 Melting Warbler and Collector's Vision Customisation
-- The Melting Warbler and Collector's Vision items can now be customised in the config.
+**Fixes**
+- Fixed an inconsistency in the README.
 
-#### v1.0.15 Longshot Geode and Leader's Pennon Customisation
-- The Longshot Geode and Leader's Pennon items can now be customised in the config.
+### v1.0.16
 
-#### v1.0.14 Alternate Item Pickup Descriptions
-- Added alternate item pickup descriptions for item adjustments that cause the original descriptions to be inaccurate.
+**Config**
+- Melting Warbler and Collector's Vision can now be customised in the config.
 
-#### v1.0.13 Hastening Greave and Cauterizing Greave Customisation
-- The Hastening Greave and Cauterizing Greave items can now be customised in the config.
+### v1.0.15
 
-#### v1.0.12 Item Placements
-- Changed Faithful item placements to have them appear in their proper positions in the logbook and command menus.
+**Config**
+- Longshot Geode and Leader's Pennon can now be customised in the config.
 
-#### v1.0.11 Noxious Slimes Customisation
-- The Noxious Slimes item can now be adjusted in the config.
+### v1.0.14
 
-#### v1.0.10 Vengeful Toaster, Second Hand and 4-T0N Jetpack Refinements
-- Adjusted 4-T0N Jetpack to make it 'bouncier'.
-- The Vengeful Toaster, Second Hand and 4-T0N Jetpack items can now be customised in the config.
+**Added**
+- Added alternate item pickup descriptions for adjustments that make the original descriptions inaccurate.
 
-#### v1.0.9 Copper Gear and Brass Screw Refinements
-- Fixed issue with the Copper Gear and Brass Screw sometimes not providing their buffs to the player within the teleporter zone.
-- The Copper Gear and Brass Screw items can now be customised in the config.
+### v1.0.13
 
-#### v1.0.8 Spacious Umbrella and Drowned Visage Customisation
-- The Spacious Umbrella and Drowned Visage items can now be customised in the config.
+**Config**
+- Hastening Greave and Cauterizing Greave can now be customised in the config.
 
-#### v1.0.7 Toggleable Expansion
-- Added Faithful content into its own expansion that can be enabled and disabled in the lobby.
+### v1.0.12
 
-#### v1.0.6 BepInEx Config
-- Replaced config text file with BepInEx config.
+**Changed**
+- Changed Faithful item placements so they appear in their proper positions in the logbook and command menus.
 
-#### v1.0.5 Warbanner Visual Effect Fix
-- Fixed the warbanner temporary visual effect getting yeeted, oops.
+### v1.0.11
 
-#### v1.0.4 Modded Spawn Card Conflicts
+**Config**
+- Noxious Slimes can now be adjusted in the config.
+
+### v1.0.10
+
+**Changed**
+- Adjusted 4-T0N Jetpack to make it "bouncier".
+
+**Config**
+- Vengeful Toaster, Second Hand, and 4-T0N Jetpack can now be customised in the config.
+
+### v1.0.9
+
+**Fixes**
+- Fixed Copper Gear and Brass Screw sometimes not providing their buffs inside the teleporter zone.
+
+**Config**
+- Copper Gear and Brass Screw can now be customised in the config.
+
+### v1.0.8
+
+**Config**
+- Spacious Umbrella and Drowned Visage can now be customised in the config.
+
+### v1.0.7
+
+**Added**
+- Added Faithful content as its own expansion that can be enabled and disabled in the lobby.
+
+### v1.0.6
+
+**Changed**
+- Replaced the config text file with a BepInEx config.
+
+### v1.0.5
+
+**Fixes**
+- Fixed the warbanner temporary visual effect getting yeeted. Oops.
+
+### v1.0.4
+
+**Fixes**
 - Fixed errors with debugging tools when modded spawn cards are created.
 
-#### v1.0.3 Readme Swap
-- Fixed the readme for the store page.
+### v1.0.3
 
-#### v1.0.2 Version Mismatch
-- Fixed minor version mismatch issue.
+**Fixes**
+- Fixed the README for the store page.
 
-#### v1.0.1 Oopsies
+### v1.0.2
+
+**Fixes**
+- Fixed a minor version mismatch issue.
+
+### v1.0.1
+
+**Changed**
 - Forgor smth...
 
-#### v1.0.0 Release
+## v1.0.0
+
+**Release**
 - Praying I didn't forget anything...
 
 </details>
