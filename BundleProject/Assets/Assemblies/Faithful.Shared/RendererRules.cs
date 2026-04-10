@@ -74,7 +74,7 @@ namespace Faithful.Shared
 		public bool addDitherModelComponent = false;
 		public float ditherModelFade = 1.0f;
 		public float ditherModelOldFade = 1.0f;
-		public MeshCollider ditherModelBounds;
+		public Collider ditherModelBounds;
 		public List<Renderer> ditherModelRenderers = new();
 
         [Header("Shader Attributes")]
