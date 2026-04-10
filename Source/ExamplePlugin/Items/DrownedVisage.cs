@@ -16,11 +16,13 @@ namespace Faithful
         Setting<float> chanceSetting;
         Setting<float> chanceStackingSetting;
         Setting<float> chargeAmountSetting;
+        Setting<float> largeChargeAmountSetting;
 
         // Store item stats
         float chance;
         float chanceStacking;
         float chargeAmount;
+        float largeChargeAmount;
 
         // Constructor
         public DrownedVisage(Toolbox _toolbox) : base(_toolbox)
@@ -82,6 +84,7 @@ namespace Faithful
             chanceSetting = drownedVisageItem.CreateSetting("CHANCE", "Charge Chance", 5.0f, "What should the chance be for this item to charge the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
             chanceStackingSetting = drownedVisageItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 5.0f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
             chargeAmountSetting = drownedVisageItem.CreateSetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, "How much should this item charge the teleporter? (5.0 = 5% charge)", _valueFormatting: "{0:0.00}%");
+            largeChargeAmountSetting = drownedVisageItem.CreateSetting("LARGE_CHARGE_AMOUNT", "Charge Amount Large", 10.0f, "How much should killing a large or elite enemy charge the teleporter? (10.0 = 10% charge)", _valueFormatting: "{0:0.00}%");
         }
 
         public override void FetchSettings()
@@ -90,6 +93,7 @@ namespace Faithful
             chance = chanceSetting.Value;
             chanceStacking = chanceStackingSetting.Value;
             chargeAmount = chargeAmountSetting.Value / 100.0f;
+            largeChargeAmount = largeChargeAmountSetting.Value / 100.0f;
 
             // Update item texts with new settings
             drownedVisageItem.UpdateItemTexts();
@@ -98,41 +102,26 @@ namespace Faithful
         void OnCharacterDeath(DamageReport _report)
         {
             // Check for attacking character
-            if (_report.attackerMaster == null)
-            {
-                return;
-            }
+            if (_report.attackerMaster == null) return;
 
             // Get attack character master
             CharacterMaster character = _report.attackerMaster;
 
             // Check attacker team
-            if (character.teamIndex != TeamIndex.Player)
-            {
-                return;
-            }
+            if (character.teamIndex != TeamIndex.Player) return;
 
             // Check for body
-            if (!character.hasBody)
-            {
-                return;
-            }
+            if (!character.hasBody) return;
 
             // Check for attacker inventory
             Inventory inventory = character.inventory;
-            if (!inventory)
-            {
-                return;
-            }
+            if (!inventory) return;
 
             // Get count for item
-            int count = inventory.GetItemCount(drownedVisageItem.itemDef);
+            int count = inventory.GetItemCountEffective(drownedVisageItem.itemDef);
 
             // Check for item
-            if (count == 0)
-            {
-                return;
-            }
+            if (count == 0) return;
 
             // Roll the dice
             if (Util.CheckRoll(chance + (chanceStacking * (count - 1)), character))
@@ -140,11 +129,25 @@ namespace Faithful
                 // Get Holdout Zones containing character
                 List<HoldoutZoneController> zones = Utils.GetHoldoutZonesContainingCharacter(character);
 
+                // Get charge amount based on victim
+                float actualChargeAmount = chargeAmount;
+
+                // Attempt to get victim character body
+                CharacterBody victimBody = _report.victimBody;
+                if (victimBody)
+                {
+                    // Check if victim is elite or large (boss)
+                    if (victimBody.isElite || victimBody.isChampion)
+                    {
+                        actualChargeAmount = largeChargeAmount;
+                    }
+                }
+
                 // Cycle through Holdout Zones
                 foreach (HoldoutZoneController zone in zones)
                 {
                     // Add charge to zone
-                    Utils.ChargeHoldoutZone(zone, chargeAmount);
+                    Utils.ChargeHoldoutZone(zone, actualChargeAmount);
                 }
             }
         }
