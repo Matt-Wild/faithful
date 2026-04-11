@@ -201,7 +201,7 @@ All items can be disabled or altered in this mod's config.
       <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texDrownedVisageIcon.png?raw=true" width=128></td>
       <td>
         <b>Drowned Visage</b><br>
-        Killing an enemy while within the Teleporter radius has a <b>2.5% (</b>+2.5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>.
+        Killing an enemy while within the Teleporter radius has a <b>5% (</b>+5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>. Large or elite monsters charge it by <b>10%</b> instead.
       </td>
       <td>
         Corrupts all <b>Spacious Umbrellas</b>.
