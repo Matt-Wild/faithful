@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1779789176
+CRC: 3465296257
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c9b8e21652d0dbbb88a8f9e33b74d862
+    Hash: 1eeee3e8b4ca8b25b76d5c8552dc4e2a
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7e6c650ee147aa14e558837369331065
@@ -803,6 +803,7 @@ Assets:
 - Assets/Items/RadiantTimepiece/AltIcons/texRadiantTimepieceBossIcon.png
 - Assets/Survivors/Technician/Textures/texTechnicianAlloyEmission.png
 - Assets/Items/HexCluster/AltIcons/texHexClusterVoidIcon.png
+- Assets/Items/ServiceStartupDrive/Capsule/texTrimSheetDroneCapsuleDarkEmission.png
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterTier3Achievement.png
 - Assets/Survivors/Technician/Mesh/TechnicianAlloyRendererBody.prefab
 - Assets/Items/AppraisersEye/AppraisersEyeDisplayMesh.fbx
