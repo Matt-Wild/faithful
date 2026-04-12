@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3465296257
+CRC: 68100161
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1eeee3e8b4ca8b25b76d5c8552dc4e2a
+    Hash: cd5e389e25a42e23cebd13cc7f8f2af5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7e6c650ee147aa14e558837369331065
@@ -384,6 +384,7 @@ Assets:
 - Assets/Items/MatterAccelerator/texMatterAcceleratorNormal.png
 - Assets/Equipment/Divider/AltIcons/texDividerEquipmentIcon.png
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveBossIcon.png
+- Assets/Items/BrassScrews/texBuffDeathScrew.png
 - Assets/Items/VengefulToaster/VengefulToasterDisplayMesh.obj
 - Assets/Equipment/Divider/texDividerArrow.png
 - Assets/Monsters/MechaSpider/Mesh/MechanicalSpiderMesh.fbx
@@ -612,6 +613,7 @@ Assets:
 - Assets/Survivors/Technician/Icons/texTechnicianPowervoltIcon.png
 - Assets/Items/HexCluster/HexClusterDisplayMesh.prefab
 - Assets/Items/BrassScrews/texBuffTeleporterScrew.png
+- Assets/Items/CopperGear/texBuffDeathGear.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpack.png
 - Assets/Items/Chakram/ChakramDisplayMesh.prefab
 - Assets/Items/LongshotGeode/LongshotGeodeMesh.prefab
