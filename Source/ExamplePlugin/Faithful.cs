@@ -24,6 +24,9 @@ namespace Faithful
 
     [BepInDependency(PrefabAPI.PluginGUID)]
 
+    // For Quality support
+    [BepInDependency("com.Gorakh.ItemQualities", BepInDependency.DependencyFlags.SoftDependency)]
+
     // This attribute is required, and lists metadata for your plugin.
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
@@ -42,7 +45,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.4.2";
+        public const string PluginVersion = "1.4.3";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -163,6 +166,9 @@ namespace Faithful
             {
                 technician = new Technician();
             }
+
+            // Attempt to init Quality support
+            QualityCompatBootstrap.TryInit();
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing our mod!");

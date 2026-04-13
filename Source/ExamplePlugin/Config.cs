@@ -90,7 +90,7 @@ namespace Faithful
             return settings[_token];
         }
 
-        public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "", bool _useRawToken = false)
+        public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "", bool _useRawToken = false, string _quality = "")
         {
             // Get language string
             string languageString = _useRawToken ? _token : Languages.GetLanguageString(_token);
@@ -103,6 +103,16 @@ namespace Faithful
             {
                 // Add underscore to prefix
                 tokenPrefix += "_";
+            }
+
+            // Get quality suffix
+            string qualitySuffix = _quality;
+
+            // Check for quality suffix
+            if (qualitySuffix != "")
+            {
+                // Add quality prefix to suffix
+                qualitySuffix = "_QUALITY_" + qualitySuffix;
             }
 
             // Cycle through settings
@@ -121,11 +131,21 @@ namespace Faithful
                     if (!setting.Value.isDefault && setting.Value.isStat && Languages.HasLanguageString($"{_token}_ALT"))
                     {
                         // Return formatted alt token instead
-                        return FormatLanguageToken($"{_token}_ALT", _tokenPrefix);
+                        return FormatLanguageToken($"{_token}_ALT", _tokenPrefix, _corruptedItemName, _useRawToken, _quality);
                     }
 
                     // Remove token prefix from setting token
                     settingToken = settingToken.Replace(tokenPrefix, "");
+                }
+
+                // Check for quality suffix
+                if (qualitySuffix != "")
+                {
+                    // Check if quality suffix is in setting token
+                    if (!settingToken.Contains(qualitySuffix)) continue;
+
+                    // Remove quality suffix from setting token
+                    settingToken = settingToken.Replace(qualitySuffix, "");
                 }
 
                 // Add language formatting indicator

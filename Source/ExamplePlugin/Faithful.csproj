@@ -23,7 +23,11 @@
     <PackageReference Include="R2API.Prefab" Version="1.1.1" />
     <PackageReference Include="R2API.Director" Version="[2.3.6,)" />
     <PackageReference Include="R2API.RecalculateStats" Version="1.6.3" />
-    <PackageReference Include="RiskOfRain2.GameLibs" Version="1.4.0-r.0" />
+	<PackageReference Include="R2API.Core" Version="5.3.0" />
+	<PackageReference Include="R2API.Colors" Version="1.0.3" />
+	<PackageReference Include="R2API.DamageType" Version="1.1.7" />
+	<PackageReference Include="R2API.Deployable" Version="1.0.1" />
+    <PackageReference Include="RiskOfRain2.GameLibs" Version="1.4.1-r.0" />
     <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
     <PackageReference Include="MMHOOK.RoR2" Version="2025.11.19" NoWarn="NU1701">
       <NoWarn>NU1701</NoWarn>
@@ -71,6 +75,10 @@
       <HintPath>libs\Zio.dll</HintPath>
       <Private>false</Private>
     </Reference>
+	<Reference Include="ItemQualities">
+	  <HintPath>libs\ItemQualities.dll</HintPath>
+	  <Private>false</Private>
+	</Reference>
     <Reference Include="Faithful.Shared">
       <HintPath>libs\Faithful.Shared.dll</HintPath>
       <Private>true</Private>

@@ -32,7 +32,9 @@
   
     "FAITHFUL_COPPER_GEAR_NAME": "Copper Gear",
 	"FAITHFUL_COPPER_GEAR_PICKUP": "Increase attack speed while within the Teleporter zone.",
+	"FAITHFUL_COPPER_GEAR_PICKUP_QUALITY": "<sprite name=\"Quality\"> Killing an enemy while within the Teleporter zone gives you a burst of attack speed.",
 	"FAITHFUL_COPPER_GEAR_DESC": "Increase <style=cIsDamage>attack speed</style> by <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(+[ATTACK_SPEED_STACKING]% per stack)</style> while inside the Teleporter zone.",
+	"FAITHFUL_COPPER_GEAR_DESC_QUALITY": "Each enemy killed while inside the Teleporter zone increases <style=cIsDamage>attack speed</style> by <sprite name=\"Quality\"> <style=cIsDamage>[ATTACK_SPEED]%</style> for <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds.",
 	"FAITHFUL_COPPER_GEAR_LORE": "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u0022Hey, you know those clockmakers we met when we went on that trip to Earth?\u0022\n\n\u0022Yeah, I remember. Why are you bringing them up now?\u0022\n\n\u0022A couple o' them told me that they were always in the zone when wearing one of these gears 'round their wrist. Said it helped 'em work way faster.\u0022\n\n\u0022I see but… what does that have to do with the mountain of lemurian corpses behind you?\u0022\n\n\u0022Well, uh… I can tell you that it works.\u0022",
 	"FAITHFUL_COPPER_GEAR_BUFF": "Copper Gear",
 	

@@ -1,8 +1,9 @@
-﻿using RoR2;
-using R2API;
-using UnityEngine;
+﻿using R2API;
+using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Faithful
 {
@@ -56,8 +57,11 @@ namespace Faithful
         // Used for language token variants
         public string descriptionVariant = string.Empty;
 
+        // Has support for Quality
+        public bool supportsQuality = false;
+
         // Constructor
-        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null, string _namePrefix = null, bool _hiddenFromLogbook = false)
+        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null, string _namePrefix = null, bool _hiddenFromLogbook = false, bool _supportsQuality = false)
         {
             // Assign token
             token = _token;
@@ -70,6 +74,9 @@ namespace Faithful
 
             // Assign if WIP
             WIP = _WIP;
+
+            // Assign if supports quality
+            supportsQuality = _supportsQuality;
 
             // Assign name prefix
             namePrefix = _namePrefix ?? "";
@@ -306,7 +313,7 @@ namespace Faithful
             }
 
             // Create overlay tokens
-            if (string.IsNullOrEmpty(overridePickup))
+            if (string.IsNullOrWhiteSpace(overridePickup))
             {
                 // Use 3 parameter version to add language override for specific language
                 LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}", corruptedNameSafe));
@@ -316,10 +323,10 @@ namespace Faithful
                 // Use 3 parameter version to add language override for specific language
                 LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken(overridePickup, $"ITEM_{token}", corruptedNameSafe, true));
             }
-            if (string.IsNullOrEmpty(overrideDescription))
+            if (string.IsNullOrWhiteSpace(overrideDescription))
             {
                 // Use 3 parameter version to add language override for specific language
-                LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken(string.IsNullOrWhiteSpace(descriptionVariant) ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_{descriptionVariant}_DESC", $"ITEM_{token}", corruptedNameSafe));
+                LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken(descriptionToken, $"ITEM_{token}", corruptedNameSafe));
             }
             else
             {
@@ -328,18 +335,40 @@ namespace Faithful
             }
 
             // For lore overrides, overlay tokens are the only things that work
-            if (!string.IsNullOrEmpty(overrideLore))
+            if (!string.IsNullOrWhiteSpace(overrideLore))
             {
                 // Use 3 parameter version to add language override for specific language
                 LanguageAPI.AddOverlay($"FAITHFUL_{token}_LORE", overrideLore);
             }
 
             // Update item texts
-            itemDef.name = $"{Utils.GetXMLSafeString(string.IsNullOrWhiteSpace(namePrefix) ? safeName : $"{namePrefix} FROM {safeName}")}_FAITHFUL_{token}_ITEM";
+            itemDef.name = $"{Utils.GetXMLSafeString(string.IsNullOrWhiteSpace(namePrefix) ? safeName : $"{namePrefix} FROM {safeName}")}_FAITHFUL_{token}_ITEM".ToUpper();
             itemDef.nameToken = string.IsNullOrEmpty(overrideName) ? $"FAITHFUL_{token}_NAME" : overrideName;
-            itemDef.pickupToken = Items.extendAllPickupDescriptions ? $"FAITHFUL_{token}_DESC" : extendedPickupDescSetting == null ? $"FAITHFUL_{token}_PICKUP" : extendedPickupDescSetting.Value ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP";
+            itemDef.pickupToken = extendPickupDescription ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP";
             itemDef.descriptionToken = $"FAITHFUL_{token}_DESC";
             itemDef.loreToken = $"FAITHFUL_{token}_LORE";
+
+            // If this item supports quality and quality is enabled then update quality item texts as well
+            if (supportsQuality && Utils.qualityEnabled) UpdateQualityItemTexts();
+        }
+
+        private void UpdateQualityItemTexts()
+        {
+            // Get prefixes for tokens
+            string pickupPrefix = Language.GetString(itemDef.pickupToken);
+            string descriptionPrefix = Language.GetString(itemDef.descriptionToken);
+
+            // Create overlays for quality item tokens for each quality
+            foreach (string quality in Enum.GetNames(typeof(Quality)))
+            {
+                // Create description token first
+                string qualityDescription = $"{descriptionPrefix}\n{Config.FormatLanguageToken($"FAITHFUL_{token}_DESC_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality)}";
+                LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_DESC", qualityDescription);
+
+                // Check if extended pickup description is enabled
+                if (extendPickupDescription) LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", qualityDescription);
+                else LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", $"{pickupPrefix}\n{Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality)}");
+            }
         }
 
         public void FetchSettings()
@@ -420,6 +449,20 @@ namespace Faithful
             return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {safeName}", _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
         }
 
+        public QualitySetting<T> CreateQualitySetting<T>(string _tokenAddition, string _key, T _uncommonDefaultValue, T _rareDefaultValue, T _epicDefaultValue, T _legendaryDefaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false, string _valueFormatting = "{0:0}")
+        {
+            // Check if hidden
+            if (hidden)
+            {
+                // Error and return
+                Debug.LogError($"ATTEMPTED TO CREATE QUALITY SETTING ON HIDDEN ITEM '{name}'!");
+                return null;
+            }
+
+            // Return new setting
+            return QualityConfig.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {safeName}", _key, _uncommonDefaultValue, _rareDefaultValue, _epicDefaultValue, _legendaryDefaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
+        }
+
         public Setting<T> FetchSetting<T>(string _tokenAddition)
         {
             // Check if hidden
@@ -432,6 +475,20 @@ namespace Faithful
 
             // Fetch setting from config
             return Config.FetchSetting<T>($"ITEM_{token}_{_tokenAddition}");
+        }
+
+        public QualitySetting<T> FetchQualitySetting<T>(string _tokenAddition)
+        {
+            // Check if hidden
+            if (hidden)
+            {
+                // Error and return
+                Debug.LogError($"ATTEMPTED TO FETCH QUALITY SETTING ON HIDDEN ITEM '{name}'!");
+                return null;
+            }
+
+            // Fetch quality setting from config
+            return QualityConfig.FetchSetting<T>($"ITEM_{token}_{_tokenAddition}");
         }
 
         public string corruptedNameSafe
@@ -477,6 +534,8 @@ namespace Faithful
         }
 
         public bool isEnabled => WIP ? Utils.WIPContentEnabled : enabledSetting.Value;
+        string descriptionToken => string.IsNullOrWhiteSpace(descriptionVariant) ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_{descriptionVariant}_DESC";
+        bool extendPickupDescription => Items.extendAllPickupDescriptions || (!(extendedPickupDescSetting == null) && extendedPickupDescSetting.Value);
     }
 
     internal class ItemDisplayModel : MonoBehaviour

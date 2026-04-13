@@ -35,6 +35,9 @@ namespace Faithful
         // Store if expansion is enabled
         public static bool expansionEnabled = true;
 
+        // If Quality is enabled
+        public static bool qualityEnabled = false;
+
         /*// Detected assemblies
         static private Assembly lookingGlassAssembly = null;
 
@@ -188,6 +191,9 @@ namespace Faithful
 
             // Update randomiser mode from config
             _randomiserMode = randomiserModeSetting.Value;
+
+            // Update if quality is enabled
+            qualityEnabled = QualityCompatBootstrap.IsAvailable;
 
             // Provide plugin info
             pluginInfo = _pluginInfo;

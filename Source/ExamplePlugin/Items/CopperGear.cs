@@ -25,6 +25,16 @@ namespace Faithful
         float attackSpeedStacking;
         float buffDuration;
 
+        // Store additional quality settings
+        QualitySetting<float> attackSpeedQualitySetting;
+        QualitySetting<float> durationQualitySetting;
+        QualitySetting<float> durationStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> attackSpeedQualityValues = new();
+        QualityValues<float> durationQualityValues = new();
+        QualityValues<float> durationStackingQualityValues = new();
+
         // Constructor
         public CopperGear(Toolbox _toolbox) : base(_toolbox)
         {
@@ -32,7 +42,7 @@ namespace Faithful
             CreateDisplaySettings("coppergeardisplaymesh");
 
             // Create Copper Gear item and buff
-            copperGearItem = Items.AddItem("COPPER_GEAR", "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _displaySettings: displaySettings);
+            copperGearItem = Items.AddItem("COPPER_GEAR", "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _supportsQuality: true, _displaySettings: displaySettings);
             copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "Copper Gear", "texbuffteleportergear", Color.white, false);
             copperGearEffectBuff = Buffs.AddBuff("COPPER_GEAR_EFFECT", "Copper Gear", "texbuffteleportergear", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "COPPER_GEAR");
 
@@ -99,6 +109,17 @@ namespace Faithful
             attackSpeedSetting = copperGearItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 25.0f, "How much should this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
             attackSpeedStackingSetting = copperGearItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 25.0f, "How much should further stacks of this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
             buffDurationSetting = copperGearItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (copperGearItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            attackSpeedQualitySetting = copperGearItem.CreateQualitySetting("ATTACK_SPEED", "Attack Speed", 5.0f, 10.0f, 20.0f, 30.0f, "How much should each kill increase attack speed while within the teleporter radius? (5.0 = 5% increase)", _valueFormatting: "{0:0.0}%");
+            durationQualitySetting = copperGearItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
+            durationStackingQualitySetting = copperGearItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -108,8 +129,19 @@ namespace Faithful
             attackSpeedStacking = attackSpeedStackingSetting.Value / 100.0f;
             buffDuration = buffDurationSetting.Value;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (copperGearItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             copperGearItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            attackSpeedQualityValues.UpdateValues(attackSpeedQualitySetting);
+            durationQualityValues.UpdateValues(durationQualitySetting);
+            durationStackingQualityValues.UpdateValues(durationStackingQualitySetting);
         }
 
         void CopperGearStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
