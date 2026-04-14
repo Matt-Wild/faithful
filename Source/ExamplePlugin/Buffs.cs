@@ -19,10 +19,10 @@ namespace Faithful
             On.RoR2.CharacterModel.UpdateOverlays += OnUpdateOverlays;
         }
 
-        public static Buff AddBuff(string _token, string _safeName, string _iconDir, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, string _langTokenOverride = null)
+        public static Buff AddBuff(string _token, string _safeName, string _iconDir, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, string _langTokenOverride = null, bool _qualityBuff = false)
         {
             // Create buff
-            Buff newBuff = new Buff(_token, _safeName, _iconDir, _colour, _canStack, _isDebuff, _isHidden, _hasConfig, _usePercentageDisplay, _overlay, _langTokenOverride);
+            Buff newBuff = new Buff(_token, _safeName, _iconDir, _colour, _canStack, _isDebuff, _isHidden, _hasConfig, _usePercentageDisplay, _overlay, _langTokenOverride, _qualityBuff);
 
             // Add buff to buffs list
             buffs.Add(newBuff);

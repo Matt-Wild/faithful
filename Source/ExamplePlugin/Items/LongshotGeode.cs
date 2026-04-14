@@ -6,9 +6,6 @@ namespace Faithful
 {
     internal class LongshotGeode : ItemBase
     {
-        // Store item
-        Item longshotGeodeItem;
-
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -31,7 +28,7 @@ namespace Faithful
             CreateDisplaySettings("longshotgeodedisplaymesh");
 
             // Create Longshot Geode item
-            longshotGeodeItem = Items.AddItem("LONGSHOT_GEODE", "Longshot Geode", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem("LONGSHOT_GEODE", "Longshot Geode", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -83,10 +80,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            enableRadiusIndicatorSetting = longshotGeodeItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", false, "Should this item have a radius indicator visual effect?", false, true, _canRandomise: false);
-            damageSetting = longshotGeodeItem.CreateSetting("DAMAGE", "Damage", 15.0f, "How much should this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
-            damageStackingSetting = longshotGeodeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 15.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
-            distanceSetting = longshotGeodeItem.CreateSetting("DISTANCE", "Distance", 40.0f, "How far should the target need to be for the damage bonus to be applied? (40.0 = 40 meters)", _valueFormatting: "{0:0.0}m");
+            enableRadiusIndicatorSetting = mainItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", false, "Should this item have a radius indicator visual effect?", false, true, _canRandomise: false);
+            damageSetting = mainItem.CreateSetting("DAMAGE", "Damage", 15.0f, "How much should this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
+            damageStackingSetting = mainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 15.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
+            distanceSetting = mainItem.CreateSetting("DISTANCE", "Distance", 40.0f, "How far should the target need to be for the damage bonus to be applied? (40.0 = 40 meters)", _valueFormatting: "{0:0.0}m");
         }
 
         public override void FetchSettings()
@@ -98,7 +95,7 @@ namespace Faithful
             distanceThreshold = distanceSetting.Value;
 
             // Update item texts with new settings
-            longshotGeodeItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void OnIncomingDamage(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim)
@@ -126,7 +123,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = attackerBody.inventory.GetItemCount(longshotGeodeItem.itemDef);
+            int count = attackerBody.inventory.GetItemCount(mainItem.itemDef);
 
             // Has item?
             if (count > 0)

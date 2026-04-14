@@ -7,9 +7,6 @@ namespace Faithful
 {
     internal class RadiantTimepiece : ItemBase
     {
-        // Store item
-        Item radiantTimepieceItem;
-
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -32,7 +29,7 @@ namespace Faithful
             CreateDisplaySettings("RadiantTimepieceDisplayMesh");
 
             // Create Second Hand item and buff
-            radiantTimepieceItem = Items.AddItem("RADIANT_TIMEPIECE", "Radiant Timepiece", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist], "texRadiantTimepieceIcon", "RadiantTimepieceMesh", _tier: ItemTier.Tier1, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
+            mainItem = Items.AddItem("RADIANT_TIMEPIECE", "Radiant Timepiece", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist], "texRadiantTimepieceIcon", "RadiantTimepieceMesh", _tier: ItemTier.Tier1, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
 
             // Create item settings
             CreateSettings();
@@ -85,9 +82,9 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            durationSetting = radiantTimepieceItem.CreateSetting("DURATION", "Duration", 1.0f, "How much should this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
-            durationStackingSetting = radiantTimepieceItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much should further stacks of this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
-            buffBlacklistSetting = radiantTimepieceItem.CreateSetting("BUFF_BLACKLIST", "Buff Blacklist", "bdParrying,bdVoidFogMild,bdVoidRaidCrabWardWipeFog,bdImmune,bdUntargetable,bdHiddenInvincibility,bdMedkitHeal,bdKnockBackActiveWindow", "Which buffs should this item not apply to?\n\nProvide as a comma separated list.\n(Cooldowns, DOTs, and debuffs are already ignored)", _valueFormatting: "{0:0.0}%", _isStat: false, _canRandomise: false);
+            durationSetting = mainItem.CreateSetting("DURATION", "Duration", 1.0f, "How much should this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
+            durationStackingSetting = mainItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much should further stacks of this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
+            buffBlacklistSetting = mainItem.CreateSetting("BUFF_BLACKLIST", "Buff Blacklist", "bdParrying,bdVoidFogMild,bdVoidRaidCrabWardWipeFog,bdImmune,bdUntargetable,bdHiddenInvincibility,bdMedkitHeal,bdKnockBackActiveWindow", "Which buffs should this item not apply to?\n\nProvide as a comma separated list.\n(Cooldowns, DOTs, and debuffs are already ignored)", _valueFormatting: "{0:0.0}%", _isStat: false, _canRandomise: false);
         }
 
         public override void FetchSettings()
@@ -118,7 +115,7 @@ namespace Faithful
             }
 
             // Update item texts with new settings
-            radiantTimepieceItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void ModifyDisplayPrefab(GameObject _prefab)
@@ -190,7 +187,7 @@ namespace Faithful
             if (inventory == null) return 0.0f;
 
             // Get item count
-            int itemCount = inventory.GetItemCountEffective(radiantTimepieceItem.itemDef);
+            int itemCount = inventory.GetItemCountEffective(mainItem.itemDef);
 
             // Apply effect to duration if we have at least 1 item
             if (itemCount == 0) return 0.0f;

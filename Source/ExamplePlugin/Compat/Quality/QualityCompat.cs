@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using ItemQualities;
 using ItemQualities.ContentManagement;
+using ItemQualities.Utilities.Extensions;
+using RoR2;
 
 namespace Faithful
 {
@@ -33,6 +35,50 @@ namespace Faithful
             }
 
             yield break;
+        }
+
+        public static QualityCounts GetItemCountsEffective(Inventory _inventory, Item _item)
+        {
+            // Try get item group
+            if (!itemQualityGroups.TryGetValue(_item, out ItemQualityGroup itemGroup))
+            {
+                Log.Warning($"[QUALITY COMPAT] - Couldn't find quality group for item '{_item.name}', returning default counts!");
+                return new QualityCounts();
+            }
+
+            // Get inaccessible counts
+            ItemQualityCounts baseCounts = _inventory.GetItemCountsEffective(itemGroup);
+
+            // Return item counts
+            return new QualityCounts
+            {
+                UNCOMMON = baseCounts.UncommonCount,
+                RARE = baseCounts.RareCount,
+                EPIC = baseCounts.EpicCount,
+                LEGENDARY = baseCounts.LegendaryCount
+            };
+        }
+
+        public static QualityCounts GetItemCountsPermanent(Inventory _inventory, Item _item)
+        {
+            // Try get item group
+            if (!itemQualityGroups.TryGetValue(_item, out ItemQualityGroup itemGroup))
+            {
+                Log.Warning($"[QUALITY COMPAT] - Couldn't find quality group for item '{_item.name}', returning default counts!");
+                return new QualityCounts();
+            }
+
+            // Get inaccessible counts
+            ItemQualityCounts baseCounts = _inventory.GetItemCountsPermanent(itemGroup);
+
+            // Return item counts
+            return new QualityCounts
+            {
+                UNCOMMON = baseCounts.UncommonCount,
+                RARE = baseCounts.RareCount,
+                EPIC = baseCounts.EpicCount,
+                LEGENDARY = baseCounts.LegendaryCount
+            };
         }
     }
 }

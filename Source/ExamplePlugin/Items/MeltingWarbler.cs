@@ -6,9 +6,6 @@ namespace Faithful
 {
     internal class MeltingWarbler : ItemBase
     {
-        // Store item
-        Item meltingWarblerItem;
-
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -27,7 +24,7 @@ namespace Faithful
             CreateDisplaySettings("meltingwarblerdisplaymesh");
 
             // Create Melting Warbler item
-            meltingWarblerItem = Items.AddItem("MELTING_WARBLER", "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem("MELTING_WARBLER", "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -36,7 +33,7 @@ namespace Faithful
             FetchSettings();
 
             // Add stats modification
-            Behaviour.AddStatsMod(meltingWarblerItem, MeltingWarblerStatsMod);
+            Behaviour.AddStatsMod(mainItem, MeltingWarblerStatsMod);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -79,8 +76,8 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            jumpBoostSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST", "Jump Boost", 2.0f, "How much should this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
-            jumpBoostStackingSetting = meltingWarblerItem.CreateSetting("JUMP_BOOST_STACKING", "Jump Boost Stacking", 2.0f, "How much should further stacks of this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
+            jumpBoostSetting = mainItem.CreateSetting("JUMP_BOOST", "Jump Boost", 2.0f, "How much should this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
+            jumpBoostStackingSetting = mainItem.CreateSetting("JUMP_BOOST_STACKING", "Jump Boost Stacking", 2.0f, "How much should further stacks of this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
         }
 
         public override void FetchSettings()
@@ -90,7 +87,7 @@ namespace Faithful
             jumpBoostStacking = jumpBoostStackingSetting.Value;
 
             // Update item texts with new settings
-            meltingWarblerItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void MeltingWarblerStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)

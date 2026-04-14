@@ -37,6 +37,7 @@
 	"FAITHFUL_COPPER_GEAR_DESC_QUALITY": "Each enemy killed while inside the Teleporter zone increases <style=cIsDamage>attack speed</style> by <sprite name=\"Quality\"> <style=cIsDamage>[ATTACK_SPEED]%</style> for <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds.",
 	"FAITHFUL_COPPER_GEAR_LORE": "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u0022Hey, you know those clockmakers we met when we went on that trip to Earth?\u0022\n\n\u0022Yeah, I remember. Why are you bringing them up now?\u0022\n\n\u0022A couple o' them told me that they were always in the zone when wearing one of these gears 'round their wrist. Said it helped 'em work way faster.\u0022\n\n\u0022I see but… what does that have to do with the mountain of lemurian corpses behind you?\u0022\n\n\u0022Well, uh… I can tell you that it works.\u0022",
 	"FAITHFUL_COPPER_GEAR_BUFF": "Copper Gear",
+	"FAITHFUL_COPPER_GEAR_QUALITY_BUFF": "Copper Kill",
 	
 	"FAITHFUL_TARGETING_MATRIX_NAME": "Targeting Matrix",
 	"FAITHFUL_TARGETING_MATRIX_PICKUP": "Target a random enemy on kill. Damage dealt to the target will 'Critically Strike'. Killing the target increases your 'Critical Strike' damage.",

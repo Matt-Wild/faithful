@@ -7,8 +7,7 @@ namespace Faithful
 {
     internal class BrassScrews : ItemBase
     {
-        // Store item and buff
-        Item brassScrewsItem;
+        // Store buff
         Buff brassScrewsBuff;
         Buff brassScrewsEffectBuff;
 
@@ -32,7 +31,7 @@ namespace Faithful
             CreateDisplaySettings("brassscrewsdisplaymesh");
 
             // Create Brass Screws item and buff
-            brassScrewsItem = Items.AddItem("BRASS_SCREWS", "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_COPPER_GEAR_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem("BRASS_SCREWS", "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_COPPER_GEAR_NAME", _displaySettings: displaySettings);
             brassScrewsBuff = Buffs.AddBuff("BRASS_SCREWS", "Brass Screws", "texbuffteleporterscrew", Color.white, false);
             brassScrewsEffectBuff = Buffs.AddBuff("BRASS_SCREWS_EFFECT", "Brass Screws", "texbuffteleporterscrew", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "BRASS_SCREWS");
 
@@ -92,9 +91,9 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            damageSetting = brassScrewsItem.CreateSetting("DAMAGE", "Damage", 20.0f, "How much should this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            damageStackingSetting = brassScrewsItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 20.0f, "How much should further stacks of this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            buffDurationSetting = brassScrewsItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
+            damageSetting = mainItem.CreateSetting("DAMAGE", "Damage", 20.0f, "How much should this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            damageStackingSetting = mainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 20.0f, "How much should further stacks of this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            buffDurationSetting = mainItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
         }
 
         public override void FetchSettings()
@@ -105,7 +104,7 @@ namespace Faithful
             buffDuration = buffDurationSetting.Value;
 
             // Update item texts with new settings
-            brassScrewsItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void BrassScrewsStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -124,7 +123,7 @@ namespace Faithful
             if (inventory)
             {
                 // Get Brass Screws amount
-                int brassScrewsCount = inventory.GetItemCount(brassScrewsItem.itemDef.itemIndex);
+                int brassScrewsCount = inventory.GetItemCount(mainItem.itemDef.itemIndex);
 
                 // Has Brass Screws?
                 if (brassScrewsCount > 0)

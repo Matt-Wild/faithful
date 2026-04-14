@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Faithful
 {
@@ -10,6 +11,18 @@ namespace Faithful
         LEGENDARY
     }
 
+    internal struct QualityCounts
+    {
+        public int UNCOMMON = 0;
+        public int RARE = 0;
+        public int EPIC = 0;
+        public int LEGENDARY = 0;
+
+        public QualityCounts()
+        {
+        }
+    }
+
     internal class QualityValues<T>
     {
         public T UNCOMMON { get; private set; }
@@ -17,16 +30,33 @@ namespace Faithful
         public T EPIC { get; private set; }
         public T LEGENDARY { get; private set; }
 
-        public void UpdateValues(QualitySetting<T> _setting)
+        public void UpdateValues(QualitySetting<T> _setting, float _multiplier = 1.0f)
         {
             // Check for setting
             if (_setting == null) return;
 
             // Update values from setting
-            UNCOMMON = _setting.GetValue(Quality.UNCOMMON);
-            RARE = _setting.GetValue(Quality.RARE);
-            EPIC = _setting.GetValue(Quality.EPIC);
-            LEGENDARY = _setting.GetValue(Quality.LEGENDARY);
+            UNCOMMON = ApplyMultiplier(_setting.GetValue(Quality.UNCOMMON), _multiplier);
+            RARE = ApplyMultiplier(_setting.GetValue(Quality.RARE), _multiplier);
+            EPIC = ApplyMultiplier(_setting.GetValue(Quality.EPIC), _multiplier);
+            LEGENDARY = ApplyMultiplier(_setting.GetValue(Quality.LEGENDARY), _multiplier);
+        }
+
+        private static T ApplyMultiplier(T value, float multiplier)
+        {
+            if (typeof(T) == typeof(float))
+            {
+                float floatValue = (float)(object)value;
+                return (T)(object)(floatValue * multiplier);
+            }
+
+            if (typeof(T) == typeof(int))
+            {
+                int intValue = (int)(object)value;
+                return (T)(object)Mathf.RoundToInt(intValue * multiplier);
+            }
+
+            return value;
         }
 
         public T GetValue(Quality _quality)

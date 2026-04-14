@@ -6,9 +6,6 @@ namespace Faithful
 {
     internal class NoxiousSlime : ItemBase
     {
-        // Store item
-        Item noxiousSlimeItem;
-
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -29,7 +26,7 @@ namespace Faithful
             CreateDisplaySettings("noxiousslimedisplaymesh");
 
             // Create Noxious Slime item
-            noxiousSlimeItem = Items.AddItem("NOXIOUS_SLIME", "Noxious Slimes", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _displaySettings: displaySettings);
+            mainItem = Items.AddItem("NOXIOUS_SLIME", "Noxious Slimes", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -83,9 +80,9 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            damageSetting = noxiousSlimeItem.CreateSetting("DAMAGE", "Damage", 100.0f, "How much should this item increase the damage of damaging debuffs? (100.0 = 100% increase)", _valueFormatting: "{0:0.0}%");
-            damageStackingSetting = noxiousSlimeItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 100.0f, "How much should further stacks of this item increase the damage of damaging debuffs? (100.0 = 100% increase)", _valueFormatting: "{0:0.0}%");
-            blightChanceSetting = noxiousSlimeItem.CreateSetting("BLIGHT_CHANCE", "Blight Chance", 10.0f, "What percentage chance should this item have to inflict blight on hit? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
+            damageSetting = mainItem.CreateSetting("DAMAGE", "Damage", 100.0f, "How much should this item increase the damage of damaging debuffs? (100.0 = 100% increase)", _valueFormatting: "{0:0.0}%");
+            damageStackingSetting = mainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 100.0f, "How much should further stacks of this item increase the damage of damaging debuffs? (100.0 = 100% increase)", _valueFormatting: "{0:0.0}%");
+            blightChanceSetting = mainItem.CreateSetting("BLIGHT_CHANCE", "Blight Chance", 10.0f, "What percentage chance should this item have to inflict blight on hit? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -96,7 +93,7 @@ namespace Faithful
             blightChance = blightChanceSetting.Value;
 
             // Update item texts with new settings
-            noxiousSlimeItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo)
@@ -121,7 +118,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = attackerBody.inventory.GetItemCount(noxiousSlimeItem.itemDef);
+            int count = attackerBody.inventory.GetItemCount(mainItem.itemDef);
 
             // Has item?
             if (count > 0)
@@ -160,7 +157,7 @@ namespace Faithful
             if (inventory == null) return;
 
             // Check for item
-            if (inventory.GetItemCount(noxiousSlimeItem.itemDef.itemIndex) == 0) return;
+            if (inventory.GetItemCount(mainItem.itemDef.itemIndex) == 0) return;
 
             // Roll dice
             if (Util.CheckRoll(blightChance * _report.damageInfo.procCoefficient, attacker))

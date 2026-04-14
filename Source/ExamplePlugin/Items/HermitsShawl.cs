@@ -5,9 +5,8 @@ namespace Faithful
 {
     internal class HermitsShawl : ItemBase
     {
-        // Store item and buff
+        // Store buff
         Buff buff;
-        Item item;
 
         // Store reference to buff behaviour
         Patience buffBehaviour;
@@ -34,7 +33,7 @@ namespace Faithful
             CreateDisplaySettings("HermitShawlDisplayMesh");
 
             // Create item
-            item = Items.AddItem("HERMITS_SHAWL", "Hermits Shawl", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
+            mainItem = Items.AddItem("HERMITS_SHAWL", "Hermits Shawl", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
 
             // Create item settings
             CreateSettings();
@@ -85,10 +84,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            maxBuffsSetting = item.CreateSetting("MAX_BUFFS", "Max Buffs", 4, "What's the maximum stack of patience the player should be able to receive with a single stack of this item? (4 = 4 stacks)");
-            maxBuffsStackingSetting = item.CreateSetting("MAX_BUFFS_STACKING", "Max Buffs Stacking", 4, "How many additional stacks of patience should the player be able to receive per extra stack of this item? (4 = 4 stacks)");
-            buffCooldownSetting = item.CreateSetting("BUFF_RECHARGE", "Buff Recharge Time", 10.0f, "After leaving combat how long does it take to receive the maximum amount of patience? (10.0 = 10 seconds)", _valueFormatting: "{0:0.0}s");
-            damageSetting = item.CreateSetting("DAMAGE", "Damage", 25.0f, "How much should each stack of patience increase damage? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            maxBuffsSetting = mainItem.CreateSetting("MAX_BUFFS", "Max Buffs", 4, "What's the maximum stack of patience the player should be able to receive with a single stack of this item? (4 = 4 stacks)");
+            maxBuffsStackingSetting = mainItem.CreateSetting("MAX_BUFFS_STACKING", "Max Buffs Stacking", 4, "How many additional stacks of patience should the player be able to receive per extra stack of this item? (4 = 4 stacks)");
+            buffCooldownSetting = mainItem.CreateSetting("BUFF_RECHARGE", "Buff Recharge Time", 10.0f, "After leaving combat how long does it take to receive the maximum amount of patience? (10.0 = 10 seconds)", _valueFormatting: "{0:0.0}s");
+            damageSetting = mainItem.CreateSetting("DAMAGE", "Damage", 25.0f, "How much should each stack of patience increase damage? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -97,7 +96,7 @@ namespace Faithful
             buffBehaviour.damage = damageSetting.Value / 100.0f;
 
             // Update item texts with new settings
-            item.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void ModifyDisplayPrefab(GameObject _prefab)

@@ -6,9 +6,6 @@ namespace Faithful
 {
     internal class DrownedVisage : ItemBase
     {
-        // Store item
-        Item drownedVisageItem;
-
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -31,7 +28,7 @@ namespace Faithful
             CreateDisplaySettings("drownedvisagedisplaymesh");
 
             // Create Drowned Visage item
-            drownedVisageItem = Items.AddItem("DROWNED_VISAGE", "Drowned Visage", [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_SPACIOUS_UMBRELLA_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem("DROWNED_VISAGE", "Drowned Visage", [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_SPACIOUS_UMBRELLA_NAME", _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -81,10 +78,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            chanceSetting = drownedVisageItem.CreateSetting("CHANCE", "Charge Chance", 5.0f, "What should the chance be for this item to charge the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
-            chanceStackingSetting = drownedVisageItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 5.0f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
-            chargeAmountSetting = drownedVisageItem.CreateSetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, "How much should this item charge the teleporter? (5.0 = 5% charge)", _valueFormatting: "{0:0.00}%");
-            largeChargeAmountSetting = drownedVisageItem.CreateSetting("LARGE_CHARGE_AMOUNT", "Charge Amount Large", 10.0f, "How much should killing a large or elite enemy charge the teleporter? (10.0 = 10% charge)", _valueFormatting: "{0:0.00}%");
+            chanceSetting = mainItem.CreateSetting("CHANCE", "Charge Chance", 5.0f, "What should the chance be for this item to charge the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
+            chanceStackingSetting = mainItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 5.0f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
+            chargeAmountSetting = mainItem.CreateSetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, "How much should this item charge the teleporter? (5.0 = 5% charge)", _valueFormatting: "{0:0.00}%");
+            largeChargeAmountSetting = mainItem.CreateSetting("LARGE_CHARGE_AMOUNT", "Charge Amount Large", 10.0f, "How much should killing a large or elite enemy charge the teleporter? (10.0 = 10% charge)", _valueFormatting: "{0:0.00}%");
         }
 
         public override void FetchSettings()
@@ -96,7 +93,7 @@ namespace Faithful
             largeChargeAmount = largeChargeAmountSetting.Value / 100.0f;
 
             // Update item texts with new settings
-            drownedVisageItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void OnCharacterDeath(DamageReport _report)
@@ -118,7 +115,7 @@ namespace Faithful
             if (!inventory) return;
 
             // Get count for item
-            int count = inventory.GetItemCountEffective(drownedVisageItem.itemDef);
+            int count = inventory.GetItemCountEffective(mainItem.itemDef);
 
             // Check for item
             if (count == 0) return;

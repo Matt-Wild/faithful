@@ -7,8 +7,7 @@ namespace Faithful
 {
     internal class SecondHand : ItemBase
     {
-        // Store item and buff
-        Item secondHandItem;
+        // Store buffs
         Buff secondHandBuff;
         Buff secondHandEffectBuff;
 
@@ -34,7 +33,7 @@ namespace Faithful
             CreateDisplaySettings("secondhanddisplaymesh");
 
             // Create Second Hand item and buff
-            secondHandItem = Items.AddItem("SECOND_HAND", "Second Hand", [ItemTag.Damage, ItemTag.Utility, ItemTag.Technology, ItemTag.MobilityRelated], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
+            mainItem = Items.AddItem("SECOND_HAND", "Second Hand", [ItemTag.Damage, ItemTag.Utility, ItemTag.Technology, ItemTag.MobilityRelated], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
             secondHandBuff = Buffs.AddBuff("SECOND_HAND", "Second Hand", "texbuffsecondhand", Color.white, false);
             secondHandEffectBuff = Buffs.AddBuff("SECOND_HAND_EFFECT", "Second Hand", "texbuffsecondhand", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "SECOND_HAND");
 
@@ -91,10 +90,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedSetting = secondHandItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 20.0f, "How much should this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            attackSpeedStackingSetting = secondHandItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 20.0f, "How much should further stacks of this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            speedSetting = secondHandItem.CreateSetting("SPEED", "Movement Speed", 30.0f, "How much should this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
-            speedStackingSetting = secondHandItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 30.0f, "How much should further stacks of this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            attackSpeedSetting = mainItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 20.0f, "How much should this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            attackSpeedStackingSetting = mainItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 20.0f, "How much should further stacks of this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            speedSetting = mainItem.CreateSetting("SPEED", "Movement Speed", 30.0f, "How much should this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            speedStackingSetting = mainItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 30.0f, "How much should further stacks of this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -106,7 +105,7 @@ namespace Faithful
             speedStacking = speedStackingSetting.Value / 100.0f;
 
             // Update item texts with new settings
-            secondHandItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void SecondHandStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -124,7 +123,7 @@ namespace Faithful
             if (characterBody && inventory)
             {
                 // Get target Second Hand buff amount
-                int targetSecondHandCount = _character.isGrounded || _character.characterMotor == null ? inventory.GetItemCount(secondHandItem.itemDef) : 0;
+                int targetSecondHandCount = _character.isGrounded || _character.characterMotor == null ? inventory.GetItemCount(mainItem.itemDef) : 0;
 
                 // Get current amount of Second Hand buffs
                 int currentSecondHandCount = characterBody.GetBuffCount(secondHandEffectBuff.buffDef);

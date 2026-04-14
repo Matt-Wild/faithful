@@ -6,9 +6,6 @@ namespace Faithful
 {
     internal class HasteningGreave : ItemBase
     {
-        // Store item
-        Item hasteningGreaveItem;
-
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -31,7 +28,7 @@ namespace Faithful
             CreateDisplaySettings("hasteninggreavedisplaymesh");
 
             // Create Longshot Geode item
-            hasteningGreaveItem = Items.AddItem("HASTENING_GREAVE", "Hastening Greave", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            mainItem = Items.AddItem("HASTENING_GREAVE", "Hastening Greave", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
 
             // Create item settings
             CreateSettings();
@@ -82,10 +79,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedBuffSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
-            attackSpeedBuffStackingSetting = hasteningGreaveItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
-            damageNerfSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
-            damageNerfStackingSetting = hasteningGreaveItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
+            attackSpeedBuffSetting = mainItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
+            attackSpeedBuffStackingSetting = mainItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
+            damageNerfSetting = mainItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
+            damageNerfStackingSetting = mainItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -97,7 +94,7 @@ namespace Faithful
             damageNerfStacking = 1.0f - damageNerfStackingSetting.Value / 100.0f;
 
             // Update item texts with new settings
-            hasteningGreaveItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void ModifyModelPrefab(GameObject _prefab)
@@ -130,7 +127,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = _body.inventory.GetItemCount(hasteningGreaveItem.itemDef);
+            int count = _body.inventory.GetItemCount(mainItem.itemDef);
 
             // Check for item
             if (count == 0) return;

@@ -1,16 +1,23 @@
 ﻿using EntityStates;
 using R2API;
 using RoR2;
+using System;
 using UnityEngine;
 
 namespace Faithful
 {
     internal class CopperGear : ItemBase
     {
-        // Store item and buff
-        Item copperGearItem;
+        // Store buffs
         Buff copperGearBuff;
         Buff copperGearEffectBuff;
+
+        // Quality buffs
+        Buff copperGearQualityBuff;
+        Buff copperGearQualityUncommonBuff;
+        Buff copperGearQualityRareBuff;
+        Buff copperGearQualityEpicBuff;
+        Buff copperGearQualityLegendaryBuff;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
@@ -42,7 +49,7 @@ namespace Faithful
             CreateDisplaySettings("coppergeardisplaymesh");
 
             // Create Copper Gear item and buff
-            copperGearItem = Items.AddItem("COPPER_GEAR", "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _supportsQuality: true, _displaySettings: displaySettings);
+            mainItem = Items.AddItem("COPPER_GEAR", "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _supportsQuality: true, _displaySettings: displaySettings);
             copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "Copper Gear", "texbuffteleportergear", Color.white, false);
             copperGearEffectBuff = Buffs.AddBuff("COPPER_GEAR_EFFECT", "Copper Gear", "texbuffteleportergear", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "COPPER_GEAR");
 
@@ -60,6 +67,25 @@ namespace Faithful
 
             // Link Generic Character Fixed Update behaviour
             Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Create Quality stuff
+            copperGearQualityBuff = Buffs.AddBuff("COPPER_GEAR_QUALITY", "Copper Kill", "texBuffDeathGear", Color.white, _qualityBuff: true);
+            copperGearQualityUncommonBuff = Buffs.AddBuff("COPPER_GEAR_QUALITY_UNCOMMON", "Copper Kill", "texBuffDeathGear", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "COPPER_GEAR_QUALITY");
+            copperGearQualityRareBuff = Buffs.AddBuff("COPPER_GEAR_QUALITY_RARE", "Copper Kill", "texBuffDeathGear", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "COPPER_GEAR_QUALITY");
+            copperGearQualityEpicBuff = Buffs.AddBuff("COPPER_GEAR_QUALITY_EPIC", "Copper Kill", "texBuffDeathGear", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "COPPER_GEAR_QUALITY");
+            copperGearQualityLegendaryBuff = Buffs.AddBuff("COPPER_GEAR_QUALITY_LEGENDARY", "Copper Kill", "texBuffDeathGear", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "COPPER_GEAR_QUALITY");
+
+            // Link On Character Death behaviour
+            Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath_Quality);
+
+            // Add stats mods for buffs
+            Behaviour.AddStatsMod(copperGearQualityUncommonBuff, UncommonStatsMod_Quality);
+            Behaviour.AddStatsMod(copperGearQualityRareBuff, RareStatsMod_Quality);
+            Behaviour.AddStatsMod(copperGearQualityEpicBuff, EpicStatsMod_Quality);
+            Behaviour.AddStatsMod(copperGearQualityLegendaryBuff, LegendaryStatsMod_Quality);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -106,20 +132,20 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedSetting = copperGearItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 25.0f, "How much should this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
-            attackSpeedStackingSetting = copperGearItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 25.0f, "How much should further stacks of this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
-            buffDurationSetting = copperGearItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
+            attackSpeedSetting = mainItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 25.0f, "How much should this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            attackSpeedStackingSetting = mainItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 25.0f, "How much should further stacks of this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            buffDurationSetting = mainItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
 
             // Create quality settings for this item if quality is enabled and this item supports quality
-            if (copperGearItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
         }
 
         protected void CreateQualitySettings()
         {
             // Create quality settings specific to this item
-            attackSpeedQualitySetting = copperGearItem.CreateQualitySetting("ATTACK_SPEED", "Attack Speed", 5.0f, 10.0f, 20.0f, 30.0f, "How much should each kill increase attack speed while within the teleporter radius? (5.0 = 5% increase)", _valueFormatting: "{0:0.0}%");
-            durationQualitySetting = copperGearItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
-            durationStackingQualitySetting = copperGearItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
+            attackSpeedQualitySetting = mainItem.CreateQualitySetting("ATTACK_SPEED", "Attack Speed", 5.0f, 10.0f, 20.0f, 30.0f, "How much should each kill increase attack speed while within the teleporter radius? (5.0 = 5% increase)", _valueFormatting: "{0:0.0}%");
+            durationQualitySetting = mainItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
+            durationStackingQualitySetting = mainItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -130,16 +156,16 @@ namespace Faithful
             buffDuration = buffDurationSetting.Value;
 
             // Fetch quality settings for this item if quality is enabled and this item supports quality
-            if (copperGearItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
 
             // Update item texts with new settings
-            copperGearItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         protected void FetchQualitySettings()
         {
             // Update item quality values
-            attackSpeedQualityValues.UpdateValues(attackSpeedQualitySetting);
+            attackSpeedQualityValues.UpdateValues(attackSpeedQualitySetting, 0.01f);
             durationQualityValues.UpdateValues(durationQualitySetting);
             durationStackingQualityValues.UpdateValues(durationStackingQualitySetting);
         }
@@ -160,7 +186,7 @@ namespace Faithful
             if (inventory)
             {
                 // Get Copper Gear amount
-                int copperGearCount = inventory.GetItemCount(copperGearItem.itemDef);
+                int copperGearCount = inventory.GetItemCount(mainItem.itemDef);
 
                 // Has Copper Gears?
                 if (copperGearCount > 0)
@@ -205,6 +231,84 @@ namespace Faithful
                 // Update visual buff
                 characterBody.SetBuffCount(copperGearBuff.buffDef.buffIndex, characterBody.GetBuffCount(copperGearEffectBuff.buffDef.buffIndex) > 0 ? 1 : 0);
             }
+        }
+
+        private void UncommonStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify attack speed
+            _stats.attackSpeedMultAdd += attackSpeedQualityValues.UNCOMMON * _count;
+        }
+
+        private void RareStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify attack speed
+            _stats.attackSpeedMultAdd += attackSpeedQualityValues.RARE * _count;
+        }
+
+        private void EpicStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify attack speed
+            _stats.attackSpeedMultAdd += attackSpeedQualityValues.EPIC * _count;
+        }
+
+        private void LegendaryStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify attack speed
+            _stats.attackSpeedMultAdd += attackSpeedQualityValues.LEGENDARY * _count;
+        }
+
+        private void OnCharacterDeath_Quality(DamageReport _report)
+        {
+            // Attempt to fetch attacker inventory and body
+            if (_report == null) return;
+            CharacterMaster master = _report.attackerMaster;
+            if (master == null) return;
+            Inventory inventory = master.inventory;
+            if (inventory == null) return;
+            CharacterBody body = master.GetBody();
+            if (body == null) return;
+
+            // Check if character is in a holdout zone
+            if (Utils.GetHoldoutZonesContainingCharacter(master).Count <= 0) return;
+
+            // Get item counts
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+
+            // Effective quality should be highest quality the attacker possesses
+            Quality effectiveQuality = Quality.UNCOMMON;
+            if (counts.LEGENDARY > 0) effectiveQuality = Quality.LEGENDARY;
+            else if (counts.EPIC > 0) effectiveQuality = Quality.EPIC;
+            else if (counts.RARE > 0) effectiveQuality = Quality.RARE;
+            else if (counts.UNCOMMON <= 0) return;
+
+            // Calculate buff duration
+            float buffDuration = counts.UNCOMMON == 0 ? 0.0f : durationQualityValues.UNCOMMON + (counts.UNCOMMON - 1) * durationStackingQualityValues.UNCOMMON;
+            buffDuration += counts.RARE == 0 ? 0.0f : durationQualityValues.RARE + (counts.RARE - 1) * durationStackingQualityValues.RARE;
+            buffDuration += counts.EPIC == 0 ? 0.0f : durationQualityValues.EPIC + (counts.EPIC - 1) * durationStackingQualityValues.EPIC;
+            buffDuration += counts.LEGENDARY == 0 ? 0.0f : durationQualityValues.LEGENDARY + (counts.LEGENDARY - 1) * durationStackingQualityValues.LEGENDARY;
+
+            // Give buff
+            switch (effectiveQuality)
+            {
+                case Quality.UNCOMMON:
+                    body.AddTimedBuff(copperGearQualityUncommonBuff.buffDef, buffDuration);
+                    break;
+
+                case Quality.RARE:
+                    body.AddTimedBuff(copperGearQualityRareBuff.buffDef, buffDuration);
+                    break;
+
+                case Quality.EPIC:
+                    body.AddTimedBuff(copperGearQualityEpicBuff.buffDef, buffDuration);
+                    break;
+
+                case Quality.LEGENDARY:
+                    body.AddTimedBuff(copperGearQualityLegendaryBuff.buffDef, buffDuration);
+                    break;
+            }
+
+            // Give visual buff
+            body.AddTimedBuff(copperGearQualityBuff.buffDef, buffDuration);
         }
     }
 }

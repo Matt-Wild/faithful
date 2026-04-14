@@ -2267,6 +2267,8 @@ namespace Faithful
             }
         }
 
+        public static List<ItemBase> ItemBehaviours => itemBehaviours;
+
         public static bool debugMode
         {
             get { return _debugMode; }

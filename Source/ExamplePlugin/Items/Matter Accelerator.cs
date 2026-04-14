@@ -7,8 +7,7 @@ namespace Faithful
 {
     internal class MatterAccelerator : ItemBase
     {
-        // Store item and buff
-        Item matterAcceleratorItem;
+        // Store buffs
         Buff matterAcceleratorBuff;
         Buff matterAcceleratorSpeedBuff;
         Buff matterAcceleratorHealthBuff;
@@ -33,7 +32,7 @@ namespace Faithful
             CreateDisplaySettings("MatterAcceleratorDisplayMesh");
 
             // Create Second Hand item and buff
-            matterAcceleratorItem = Items.AddItem("MATTER_ACCELERATOR", "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _displaySettings: displaySettings);
+            mainItem = Items.AddItem("MATTER_ACCELERATOR", "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _displaySettings: displaySettings);
             matterAcceleratorBuff = Buffs.AddBuff("MATTER_ACCELERATOR", "Matter Accelerator", "texMatterAcceleratorBuff", Color.white, false);
             matterAcceleratorSpeedBuff = Buffs.AddBuff("MATTER_ACCELERATOR_SPEED", "Matter Accelerator Speed", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
             matterAcceleratorHealthBuff = Buffs.AddBuff("MATTER_ACCELERATOR_HEALTH", "Matter Accelerator Health", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
@@ -92,9 +91,9 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            shieldGainSetting = matterAcceleratorItem.CreateSetting("SHIELD_GAIN", "Shield Gain", 5.0f, "How much shield should this item provide? (5.0 = 5% shield)", _valueFormatting: "{0:0.0}%");
-            speedSetting = matterAcceleratorItem.CreateSetting("SPEED", "Movement Speed", 20.0f, "How much should this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            speedStackingSetting = matterAcceleratorItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 20.0f, "How much should further stacks of this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            shieldGainSetting = mainItem.CreateSetting("SHIELD_GAIN", "Shield Gain", 5.0f, "How much shield should this item provide? (5.0 = 5% shield)", _valueFormatting: "{0:0.0}%");
+            speedSetting = mainItem.CreateSetting("SPEED", "Movement Speed", 20.0f, "How much should this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            speedStackingSetting = mainItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 20.0f, "How much should further stacks of this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -105,7 +104,7 @@ namespace Faithful
             speedStacking = speedStackingSetting.Value / 100.0f;
 
             // Update item texts with new settings
-            matterAcceleratorItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void MatterAcceleratorHealthBuffStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -132,7 +131,7 @@ namespace Faithful
             if (!healthComponent) return;
 
             // Get item count
-            int itemCount = inventory.GetItemCount(matterAcceleratorItem.itemDef);
+            int itemCount = inventory.GetItemCount(mainItem.itemDef);
             if (itemCount <= 0)
             {
                 // Ensure no buffs

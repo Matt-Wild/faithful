@@ -16,6 +16,13 @@ namespace Faithful
 
             // Safer init method
             InitNoInline();
+
+            // Init item quality constructors
+            foreach (ItemBase itemBehaviour in Utils.ItemBehaviours)
+            {
+                if (!itemBehaviour.SupportsQuality) continue;
+                itemBehaviour.QualityConstructor();
+            }
         }
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]

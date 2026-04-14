@@ -10,6 +10,9 @@ namespace Faithful
         public Setting<bool> hiddenSetting;
         public Setting<bool> enableOverlaySetting;
 
+        // Is this buff used specifically for Quality?
+        public bool qualityBuff = false;
+
         // Buff def
         public BuffDef buffDef;
 
@@ -23,10 +26,13 @@ namespace Faithful
         public string safeName;
 
         // Constructor
-        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, string _langTokenOverride = null)
+        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, string _langTokenOverride = null, bool _qualityBuff = false)
         {
             // Assign token
             token = _token;
+
+            // Assign if quality buff
+            qualityBuff = _qualityBuff;
 
             // Assign language token override
             langTokenOverride = _langTokenOverride;
@@ -51,7 +57,7 @@ namespace Faithful
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = _hasConfig ? hiddenSetting.Value : false;
+                forceHide = hiddenSetting != null ? hiddenSetting.Value : false;
             }
 
             // Create buff def
@@ -112,8 +118,11 @@ namespace Faithful
 
         public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _restartRequired = false, string _valueFormatting = "{0:0}")
         {
+            // Never create settings for this buff if it's a quality buff but quality isn't active
+            if (qualityBuff && !Utils.qualityEnabled) return null;
+
             // Return new setting
-            return Config.CreateSetting($"BUFF_{token}_{_tokenAddition}", $"Buff: {safeName}", _key, _defaultValue, _description, _restartRequired: _restartRequired, _valueFormatting: _valueFormatting);
+            return Config.CreateSetting($"BUFF_{token}_{_tokenAddition}", qualityBuff ? $"Quality Buff: {safeName}" : $"Buff: {safeName}", _key, _defaultValue, _description, _restartRequired: _restartRequired, _valueFormatting: _valueFormatting);
         }
 
         public bool overlayEnabled => enableOverlaySetting != null && enableOverlaySetting.Value && overlay != null;

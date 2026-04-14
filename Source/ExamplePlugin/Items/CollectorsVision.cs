@@ -7,9 +7,8 @@ namespace Faithful
 {
     internal class CollectorsVision : ItemBase
     {
-        // Store item and buff
+        // Store buff
         Buff inspirationBuff;
-        Item collectorsVisionItem;
 
         // Store reference to inspiration buff behaviour
         Inspiration inspirationBehaviour;
@@ -64,7 +63,7 @@ namespace Faithful
             CreateDisplaySettings("collectorsvisiondisplaymesh");
 
             // Create Collector's Vision item
-            collectorsVisionItem = Items.AddItem("COLLECTORS_VISION", "Collectors Vision", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem("COLLECTORS_VISION", "Collectors Vision", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -127,13 +126,13 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            countTemporarySetting = collectorsVisionItem.CreateSetting("COUNT_TEMPORARY", "Count Temporary Items?", true, "Should this item count temporary items when providing inspiration?", false, _canRandomise: false);
-            capInspirationSetting = collectorsVisionItem.CreateSetting("CAP_INSPIRATION", "Cap Inspiration?", true, "Should inspiration granted by this item be capped at 100%?", false, _canRandomise: false);
-            grantAppraisersEyeSetting = collectorsVisionItem.CreateSetting("GRANT_EYE", "Grant Appraisers Eye?", true, "After reaching 100% inspiration, should collecting more unique items award Appraiser's Eye?", false, _canRandomise: false);
-            inspirationGainSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How much inspiration should this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
-            inspirationGainStackingSetting = collectorsVisionItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How much inspiration should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
-            critDamageSetting = collectorsVisionItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should 1% of inspiration increase the crit damage multiplier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            inspirationReturnSetting = collectorsVisionItem.CreateSetting("INSPIRATION_RETURN", "Inspiration Return", 50.0f, "How much inspiration acquired by the end of a stage should the shrine of recollection return? (50.0 = 50% return)", _valueFormatting: "{0:0.0}%", _maxValue: 100.0f);
+            countTemporarySetting = mainItem.CreateSetting("COUNT_TEMPORARY", "Count Temporary Items?", true, "Should this item count temporary items when providing inspiration?", false, _canRandomise: false);
+            capInspirationSetting = mainItem.CreateSetting("CAP_INSPIRATION", "Cap Inspiration?", true, "Should inspiration granted by this item be capped at 100%?", false, _canRandomise: false);
+            grantAppraisersEyeSetting = mainItem.CreateSetting("GRANT_EYE", "Grant Appraisers Eye?", true, "After reaching 100% inspiration, should collecting more unique items award Appraiser's Eye?", false, _canRandomise: false);
+            inspirationGainSetting = mainItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How much inspiration should this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
+            inspirationGainStackingSetting = mainItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How much inspiration should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
+            critDamageSetting = mainItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should 1% of inspiration increase the crit damage multiplier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            inspirationReturnSetting = mainItem.CreateSetting("INSPIRATION_RETURN", "Inspiration Return", 50.0f, "How much inspiration acquired by the end of a stage should the shrine of recollection return? (50.0 = 50% return)", _valueFormatting: "{0:0.0}%", _maxValue: 100.0f);
         }
 
         public override void FetchSettings()
@@ -151,10 +150,10 @@ namespace Faithful
             inspirationBehaviour.critDamageMult = critDamageMult;
 
             // Update item description variant
-            collectorsVisionItem.descriptionVariant = grantAppraisersEye ? "VAR1" : string.Empty;
+            mainItem.descriptionVariant = grantAppraisersEye ? "VAR1" : string.Empty;
 
             // Update item texts with new settings
-            collectorsVisionItem.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void OnGiveItemPermanent(Inventory _inventory, ItemIndex _index, int _count)
@@ -201,7 +200,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = _inventory.GetItemCountEffective(collectorsVisionItem.itemDef);
+            int count = _inventory.GetItemCountEffective(mainItem.itemDef);
             if (count > 0.0f)
             {
                 // Get Collector's Vision index

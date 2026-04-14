@@ -7,9 +7,6 @@ namespace Faithful
 
     internal class WIPItem : ItemBase
     {
-        // Store item
-        Item item;
-
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -34,7 +31,7 @@ namespace Faithful
             if (_createDisplaySettings) CreateDisplaySettings(_displayDir);
 
             // Create Copper Gear item and buff
-            item = Items.AddItem(Utils.GetXMLSafeString(_name).ToUpper(), _name, _tags ?? [], _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, 
+            mainItem = Items.AddItem(Utils.GetXMLSafeString(_name).ToUpper(), _name, _tags ?? [], _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, 
                 _hidden, _corruptToken, displaySettings, _modifyItemModelPrefabCallback, _modifyItemDisplayPrefabCallback, _canNeverBeTemporary, 
                 _debugOnly, true, _name, _pickup, _description, _lore);
 
@@ -98,7 +95,7 @@ namespace Faithful
         public override void FetchSettings()
         {
             // Update item texts with new settings
-            item.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
     }
 }

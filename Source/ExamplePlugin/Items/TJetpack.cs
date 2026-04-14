@@ -5,9 +5,6 @@ namespace Faithful
 {
     internal class TJetpack : ItemBase
     {
-        // Store item
-        Item item;
-
         // Buffs for amount of fuel remaining
         Buff emptyFuelBuff;
         Buff lowFuelBuff;
@@ -36,7 +33,7 @@ namespace Faithful
             CreateDisplaySettings("4t0njetpackdisplaymesh");
 
             // Create item
-            item = Items.AddItem("4T0N_JETPACK", "4-T0N Jetpack", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
+            mainItem = Items.AddItem("4T0N_JETPACK", "4-T0N Jetpack", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -92,14 +89,14 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            showBuffSetting = item.CreateSetting("SHOW_BUFF", "Enable Fuel Buff?", true, "Should the fuel remaining be shown as a buff?", false, true, _restartRequired: true, _canRandomise: false);
-            disableFallDamageSetting = item.CreateSetting("DISABLE_FALL_DAMAGE", "Disable Fall Damage?", true, "When using the jetpack, should fall damage be mitigated?", false, _canRandomise: false);
-            fuelTimeSetting = item.CreateSetting("FUEL_TIME", "Fuel Time", 3.0f, "How much fuel should the jetpack have? (3.0 = 3 seconds)", _valueFormatting: "{0:0.00}s");
-            fuelTimeStackingSetting = item.CreateSetting("FUEL_TIME_STACKING", "Fuel Time Stacking", 1.5f, "How much additional fuel should the jetpack get per stack? (1.5 = 1.5 seconds)", _valueFormatting: "{0:0.00}s");
-            rechargeTimeSetting = item.CreateSetting("RECHARGE_TIME", "Recharge Time", 8.0f, "How long should it take for the jetpack to refuel after touching the ground? (8.0 = 8 seconds)", _valueFormatting: "{0:0.00}s");
-            rechargeTimeReductionSetting = item.CreateSetting("RECHARGE_TIME_REDUCTION", "Recharge Time Reduction", 20.0f, "How much should further stacks of this item decrease the recharge time of the jetpack? (20.0 = 20% reduction)", _maxValue: 100.0f, _randomiserMin: 1.0f, _randomiserMax: 40.0f, _valueFormatting: "{0:0.0}%");
-            maxVelocityMultiplierSetting = item.CreateSetting("MAX_VELOCITY_MULTIPLIER", "Max Velocity Multiplier", 1.0f, "How much faster or slower would you like the jetpack's max velocity to be? (1.0 = 1x max velocity)", _valueFormatting: "{0:0.00}x");
-            accelerationMultiplierSetting = item.CreateSetting("ACCELERATION_MULTIPLIER", "Acceleration Multiplier", 1.0f, "How much stronger or weaker would you like the jetpack to be? (1.0 = 1x acceleration)", _valueFormatting: "{0:0.00}x");
+            showBuffSetting = mainItem.CreateSetting("SHOW_BUFF", "Enable Fuel Buff?", true, "Should the fuel remaining be shown as a buff?", false, true, _restartRequired: true, _canRandomise: false);
+            disableFallDamageSetting = mainItem.CreateSetting("DISABLE_FALL_DAMAGE", "Disable Fall Damage?", true, "When using the jetpack, should fall damage be mitigated?", false, _canRandomise: false);
+            fuelTimeSetting = mainItem.CreateSetting("FUEL_TIME", "Fuel Time", 3.0f, "How much fuel should the jetpack have? (3.0 = 3 seconds)", _valueFormatting: "{0:0.00}s");
+            fuelTimeStackingSetting = mainItem.CreateSetting("FUEL_TIME_STACKING", "Fuel Time Stacking", 1.5f, "How much additional fuel should the jetpack get per stack? (1.5 = 1.5 seconds)", _valueFormatting: "{0:0.00}s");
+            rechargeTimeSetting = mainItem.CreateSetting("RECHARGE_TIME", "Recharge Time", 8.0f, "How long should it take for the jetpack to refuel after touching the ground? (8.0 = 8 seconds)", _valueFormatting: "{0:0.00}s");
+            rechargeTimeReductionSetting = mainItem.CreateSetting("RECHARGE_TIME_REDUCTION", "Recharge Time Reduction", 20.0f, "How much should further stacks of this item decrease the recharge time of the jetpack? (20.0 = 20% reduction)", _maxValue: 100.0f, _randomiserMin: 1.0f, _randomiserMax: 40.0f, _valueFormatting: "{0:0.0}%");
+            maxVelocityMultiplierSetting = mainItem.CreateSetting("MAX_VELOCITY_MULTIPLIER", "Max Velocity Multiplier", 1.0f, "How much faster or slower would you like the jetpack's max velocity to be? (1.0 = 1x max velocity)", _valueFormatting: "{0:0.00}x");
+            accelerationMultiplierSetting = mainItem.CreateSetting("ACCELERATION_MULTIPLIER", "Acceleration Multiplier", 1.0f, "How much stronger or weaker would you like the jetpack to be? (1.0 = 1x acceleration)", _valueFormatting: "{0:0.00}x");
         }
 
         public override void FetchSettings()
@@ -108,7 +105,7 @@ namespace Faithful
             showBuff = showBuffSetting.Value;
 
             // Update item texts with new settings
-            item.UpdateItemTexts();
+            mainItem.UpdateItemTexts();
         }
 
         void OnInventoryChanged(Inventory _inventory)
@@ -128,7 +125,7 @@ namespace Faithful
             }
 
             // Get new item count
-            int count = _inventory.GetItemCount(item.itemDef);
+            int count = _inventory.GetItemCount(mainItem.itemDef);
 
             // Update TJetpack item count
             helper.tJetpack.UpdateItemCount(count);
@@ -143,7 +140,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = _character.inventory.GetItemCount(item.itemDef);
+            int count = _character.inventory.GetItemCount(mainItem.itemDef);
 
             // Has item?
             if (count > 0)
