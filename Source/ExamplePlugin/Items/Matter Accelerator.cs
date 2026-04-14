@@ -12,6 +12,9 @@ namespace Faithful
         Buff matterAcceleratorSpeedBuff;
         Buff matterAcceleratorHealthBuff;
 
+        // Quality buffs
+        Buff matterAcceleratorQualityBuff;
+
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -25,6 +28,16 @@ namespace Faithful
         float speed;
         float speedStacking;
 
+        // Store additional quality settings
+        QualitySetting<float> healthPercQualitySetting;
+        QualitySetting<float> speedQualitySetting;
+        QualitySetting<float> speedStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> healthPercQualityValues = new();
+        QualityValues<float> speedQualityValues = new();
+        QualityValues<float> speedStackingQualityValues = new();
+
         // Constructor
         public MatterAccelerator(Toolbox _toolbox) : base(_toolbox)
         {
@@ -32,7 +45,7 @@ namespace Faithful
             CreateDisplaySettings("MatterAcceleratorDisplayMesh");
 
             // Create Second Hand item and buff
-            mainItem = Items.AddItem("MATTER_ACCELERATOR", "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _displaySettings: displaySettings);
+            mainItem = Items.AddItem("MATTER_ACCELERATOR", "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _supportsQuality: true, _displaySettings: displaySettings);
             matterAcceleratorBuff = Buffs.AddBuff("MATTER_ACCELERATOR", "Matter Accelerator", "texMatterAcceleratorBuff", Color.white, false);
             matterAcceleratorSpeedBuff = Buffs.AddBuff("MATTER_ACCELERATOR_SPEED", "Matter Accelerator Speed", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
             matterAcceleratorHealthBuff = Buffs.AddBuff("MATTER_ACCELERATOR_HEALTH", "Matter Accelerator Health", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
@@ -49,6 +62,18 @@ namespace Faithful
 
             // Link Generic Character Fixed Update behaviour
             Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Create Quality stuff
+            matterAcceleratorQualityBuff = Buffs.AddBuff("MATTER_ACCELERATOR_QUALITY", "Matter Accelerator", "texBuffDeathGear", Color.white, _qualityBuff: true, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
+
+            // Add stats mods for buffs
+            Behaviour.AddStatsMod(matterAcceleratorQualityBuff, StatsMod_Quality);
+
+            // Link Generic Character Fixed Update behaviour
+            Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate_Quality);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -94,6 +119,17 @@ namespace Faithful
             shieldGainSetting = mainItem.CreateSetting("SHIELD_GAIN", "Shield Gain", 5.0f, "How much shield should this item provide? (5.0 = 5% shield)", _valueFormatting: "{0:0.0}%");
             speedSetting = mainItem.CreateSetting("SPEED", "Movement Speed", 20.0f, "How much should this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
             speedStackingSetting = mainItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 20.0f, "How much should further stacks of this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            healthPercQualitySetting = mainItem.CreateQualitySetting("HEALTH_PERC", "Health Percentage", 1.0f, 1.0f, 1.0f, 1.0f, "How much shield is required to receive one instance of the buff? (1.0 = 1% max health)", _valueFormatting: "{0:0.0}%");
+            speedQualitySetting = mainItem.CreateQualitySetting("SPEED", "Movement Speed", 1.0f, 2.0f, 3.0f, 5.0f, "How much should the buff increase movement speed? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
+            speedStackingQualitySetting = mainItem.CreateQualitySetting("SPEED_STACKING", "Movement Speed Stacking", 1.0f, 2.0f, 3.0f, 5.0f, "How much should further stacks of the buff increase movement speed? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -103,8 +139,19 @@ namespace Faithful
             speed = speedSetting.Value / 100.0f;
             speedStacking = speedStackingSetting.Value / 100.0f;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             mainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            healthPercQualityValues.UpdateValues(healthPercQualitySetting, 0.01f);
+            speedQualityValues.UpdateValues(speedQualitySetting);
+            speedStackingQualityValues.UpdateValues(speedStackingQualitySetting);
         }
 
         void MatterAcceleratorHealthBuffStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -117,6 +164,12 @@ namespace Faithful
         {
             // Modify movement speed
             _stats.moveSpeedMultAdd += _count > 1 ? speed + (speedStacking * (_count - 1)) : speed;
+        }
+
+        private void StatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify movement speed
+            _stats.moveSpeedMultAdd += _count * 0.01f;
         }
 
         void GenericCharacterFixedUpdate(GenericCharacterMain _character)
@@ -152,6 +205,54 @@ namespace Faithful
 
             // Update health buff based on max health
             characterBody.SetBuffCount(matterAcceleratorHealthBuff.buffDef.buffIndex, Mathf.CeilToInt(healthComponent.fullHealth * shieldGain));
+        }
+
+        void GenericCharacterFixedUpdate_Quality(GenericCharacterMain _character)
+        {
+            // Check for character body and inventory
+            CharacterBody characterBody = _character.characterBody;
+            Inventory inventory = characterBody?.inventory;
+            if (!characterBody || !inventory) return;
+
+            // Check for health components
+            HealthComponent healthComponent = characterBody.healthComponent;
+            if (!healthComponent) return;
+
+            // Get item counts
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+
+            // Check for any valid item
+            if (counts.Total == 0)
+            {
+                characterBody.SetBuffCount(matterAcceleratorQualityBuff.buffDef.buffIndex, 0);
+                return;
+            }
+
+            // Get percentage of max health that is shield
+            float shieldPerc = healthComponent.shield / (characterBody.baseMaxHealth + characterBody.levelMaxHealth * (characterBody.level - 1));
+
+            // 0 shield shortcut
+            if (shieldPerc == 0.0f)
+            {
+                characterBody.SetBuffCount(matterAcceleratorQualityBuff.buffDef.buffIndex, 0);
+                return;
+            }
+
+            // Total up needed extra speed
+            float neededSpeed = 0.0f;
+
+            float uncommonBonus = shieldPerc / healthPercQualityValues.UNCOMMON;
+            float rareBonus = shieldPerc / healthPercQualityValues.RARE;
+            float epicBonus = shieldPerc / healthPercQualityValues.EPIC;
+            float legendaryBonus = shieldPerc / healthPercQualityValues.LEGENDARY;
+
+            neededSpeed += counts.UNCOMMON == 0 ? 0.0f : (speedQualityValues.UNCOMMON + (counts.UNCOMMON - 1) * speedStackingQualityValues.UNCOMMON) * uncommonBonus;
+            neededSpeed += counts.RARE == 0 ? 0.0f : (speedQualityValues.RARE + (counts.RARE - 1) * speedStackingQualityValues.RARE) * rareBonus;
+            neededSpeed += counts.EPIC == 0 ? 0.0f : (speedQualityValues.EPIC + (counts.EPIC - 1) * speedStackingQualityValues.EPIC) * epicBonus;
+            neededSpeed += counts.LEGENDARY == 0 ? 0.0f : (speedQualityValues.LEGENDARY + (counts.LEGENDARY - 1) * speedStackingQualityValues.LEGENDARY) * legendaryBonus;
+
+            // Update speed bonus from quality
+            characterBody.SetBuffCount(matterAcceleratorQualityBuff.buffDef.buffIndex, Mathf.FloorToInt(neededSpeed));
         }
     }
 }

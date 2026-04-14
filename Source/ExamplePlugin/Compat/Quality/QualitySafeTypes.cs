@@ -21,6 +21,8 @@ namespace Faithful
         public QualityCounts()
         {
         }
+
+        public readonly int Total => UNCOMMON + RARE + EPIC + LEGENDARY;
     }
 
     internal class QualityValues<T>

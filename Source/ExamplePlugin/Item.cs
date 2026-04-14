@@ -279,18 +279,18 @@ namespace Faithful
 
         public void UpdateItemTexts()
         {
-            // Check for name override
+            // Check for name override setting
             if (nameOverrideSetting != null && !string.IsNullOrWhiteSpace(nameOverrideSetting.Value))
             {
                 // Set name overlay
-                nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_{token}_NAME", nameOverrideSetting.Value);
+                nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_NAME", nameOverrideSetting.Value);
             }
 
-            // No name override and needs to remove overlay
-            else if (nameOverlay != null)
+            // No name override setting (still do WIP override etc)
+            else
             {
                 // Set name overlay
-                nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_{token}_NAME", Languages.GetLanguageString($"FAITHFUL_{token}_NAME"));
+                nameOverlay = LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_NAME", string.IsNullOrEmpty(overrideName) ? Languages.GetLanguageString($"FAITHFUL_{token}_NAME") : overrideName);
             }
 
             // Check for pickup override
@@ -316,37 +316,42 @@ namespace Faithful
             if (string.IsNullOrWhiteSpace(overridePickup))
             {
                 // Use 3 parameter version to add language override for specific language
-                LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}", corruptedNameSafe));
+                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP", $"ITEM_{token}", corruptedNameSafe));
             }
             else
             {
                 // Use 3 parameter version to add language override for specific language
-                LanguageAPI.AddOverlay($"FAITHFUL_{token}_PICKUP", Config.FormatLanguageToken(overridePickup, $"ITEM_{token}", corruptedNameSafe, true));
+                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_PICKUP", Config.FormatLanguageToken(overridePickup, $"ITEM_{token}", corruptedNameSafe, true));
             }
             if (string.IsNullOrWhiteSpace(overrideDescription))
             {
                 // Use 3 parameter version to add language override for specific language
-                LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken(descriptionToken, $"ITEM_{token}", corruptedNameSafe));
+                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_DESC", Config.FormatLanguageToken(descriptionSourceToken, $"ITEM_{token}", corruptedNameSafe));
             }
             else
             {
                 // Use 3 parameter version to add language override for specific language
-                LanguageAPI.AddOverlay($"FAITHFUL_{token}_DESC", Config.FormatLanguageToken(overrideDescription, $"ITEM_{token}", corruptedNameSafe, true));
+                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_DESC", Config.FormatLanguageToken(overrideDescription, $"ITEM_{token}", corruptedNameSafe, true));
             }
 
-            // For lore overrides, overlay tokens are the only things that work
+            // Update lore token
             if (!string.IsNullOrWhiteSpace(overrideLore))
             {
                 // Use 3 parameter version to add language override for specific language
-                LanguageAPI.AddOverlay($"FAITHFUL_{token}_LORE", overrideLore);
+                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_LORE", overrideLore);
+            }
+            else
+            {
+                // Use 3 parameter version to add language override for specific language
+                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_LORE", Languages.GetLanguageString($"FAITHFUL_{token}_LORE"));
             }
 
             // Update item texts
             itemDef.name = $"{Utils.GetXMLSafeString(string.IsNullOrWhiteSpace(namePrefix) ? safeName : $"{namePrefix} FROM {safeName}")}_FAITHFUL_{token}_ITEM".ToUpper();
-            itemDef.nameToken = string.IsNullOrEmpty(overrideName) ? $"FAITHFUL_{token}_NAME" : overrideName;
-            itemDef.pickupToken = extendPickupDescription ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_PICKUP";
-            itemDef.descriptionToken = $"FAITHFUL_{token}_DESC";
-            itemDef.loreToken = $"FAITHFUL_{token}_LORE";
+            itemDef.nameToken = string.IsNullOrEmpty(overrideName) ? $"FAITHFUL_ITEM_{token}_NAME" : overrideName;
+            itemDef.pickupToken = extendPickupDescription ? $"FAITHFUL_ITEM_{token}_DESC" : $"FAITHFUL_ITEM_{token}_PICKUP";
+            itemDef.descriptionToken = $"FAITHFUL_ITEM_{token}_DESC";
+            itemDef.loreToken = $"FAITHFUL_ITEM_{token}_LORE";
 
             // If this item supports quality and quality is enabled then update quality item texts as well
             if (supportsQuality && Utils.qualityEnabled) UpdateQualityItemTexts();
@@ -355,19 +360,19 @@ namespace Faithful
         private void UpdateQualityItemTexts()
         {
             // Get prefixes for tokens
-            string pickupPrefix = Language.GetString(itemDef.pickupToken);
-            string descriptionPrefix = Language.GetString(itemDef.descriptionToken);
+            string pickupPrefix = Config.FormatLanguageToken(pickupUnprocessed, $"ITEM_{token}", _warn: false);
+            string descriptionPrefix = Config.FormatLanguageToken(descriptionUnprocessed, $"ITEM_{token}", _warn: false);
 
             // Create overlays for quality item tokens for each quality
             foreach (string quality in Enum.GetNames(typeof(Quality)))
             {
                 // Create description token first
-                string qualityDescription = $"{descriptionPrefix}\n{Config.FormatLanguageToken($"FAITHFUL_{token}_DESC_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality)}";
+                string qualityDescription = $"{descriptionPrefix}{Config.FormatLanguageToken($"FAITHFUL_{token}_DESC_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality)}";
                 LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_DESC", qualityDescription);
 
                 // Check if extended pickup description is enabled
                 if (extendPickupDescription) LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", qualityDescription);
-                else LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", $"{pickupPrefix}\n{Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality)}");
+                else LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", $"{pickupPrefix}{Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality)}");
             }
         }
 
@@ -427,12 +432,6 @@ namespace Faithful
                 // Create corrupt override setting
                 corruptedOverrideSetting = CreateSetting("CORRUPTED_OVERRIDE", "Override Corrupted Item", "", "Should this item corrupt something else instead of it's default item?", false, _canRandomise: false, _restartRequired: true);
             }
-
-            // Clean previous unused default settings
-            Setting<bool> temp1 = CreateSetting("TEMP1", "Enable item?", true, "Should this item appear in runs?");
-            Setting<bool> temp2 = CreateSetting("TEMP2", "Enable item displays?", true, "Should this item have item displays on the compatible character models?");
-            temp1.Delete();
-            temp2.Delete();
         }
 
         public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false, string _valueFormatting = "{0:0}")
@@ -444,6 +443,8 @@ namespace Faithful
                 Debug.LogError($"ATTEMPTED TO CREATE SETTING ON HIDDEN ITEM '{name}'!");
                 return null;
             }
+
+            if (Utils.verboseConsole) Log.Info($"[ITEM] | Creating setting '{_key}' for '{safeName} ({token})'");
 
             // Return new setting
             return Config.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {safeName}", _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
@@ -458,6 +459,8 @@ namespace Faithful
                 Debug.LogError($"ATTEMPTED TO CREATE QUALITY SETTING ON HIDDEN ITEM '{name}'!");
                 return null;
             }
+
+            if (Utils.verboseConsole) Log.Info($"[ITEM] | Creating Quality setting '{_key}' for '{safeName} ({token})'");
 
             // Return new setting
             return QualityConfig.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {safeName}", _key, _uncommonDefaultValue, _rareDefaultValue, _epicDefaultValue, _legendaryDefaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
@@ -534,7 +537,9 @@ namespace Faithful
         }
 
         public bool isEnabled => WIP ? Utils.WIPContentEnabled : enabledSetting.Value;
-        string descriptionToken => string.IsNullOrWhiteSpace(descriptionVariant) ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_{descriptionVariant}_DESC";
+        string pickupUnprocessed => string.IsNullOrWhiteSpace(overridePickup) ? $"FAITHFUL_{token}_PICKUP" : overridePickup;
+        string descriptionUnprocessed => string.IsNullOrWhiteSpace(overrideDescription) ? descriptionSourceToken : overrideDescription;
+        string descriptionSourceToken => string.IsNullOrWhiteSpace(descriptionVariant) ? $"FAITHFUL_{token}_DESC" : $"FAITHFUL_{token}_{descriptionVariant}_DESC";
         bool extendPickupDescription => Items.extendAllPickupDescriptions || (!(extendedPickupDescSetting == null) && extendedPickupDescSetting.Value);
     }
 

@@ -11,6 +11,13 @@ namespace Faithful
         Buff brassScrewsBuff;
         Buff brassScrewsEffectBuff;
 
+        // Quality buffs
+        Buff brassScrewsQualityBuff;
+        Buff brassScrewsQualityUncommonBuff;
+        Buff brassScrewsQualityRareBuff;
+        Buff brassScrewsQualityEpicBuff;
+        Buff brassScrewsQualityLegendaryBuff;
+
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -24,6 +31,16 @@ namespace Faithful
         float damageStacking;
         float buffDuration;
 
+        // Store additional quality settings
+        QualitySetting<float> damageQualitySetting;
+        QualitySetting<float> durationQualitySetting;
+        QualitySetting<float> durationStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> damageQualityValues = new();
+        QualityValues<float> durationQualityValues = new();
+        QualityValues<float> durationStackingQualityValues = new();
+
         // Constructor
         public BrassScrews(Toolbox _toolbox) : base(_toolbox)
         {
@@ -31,7 +48,7 @@ namespace Faithful
             CreateDisplaySettings("brassscrewsdisplaymesh");
 
             // Create Brass Screws item and buff
-            mainItem = Items.AddItem("BRASS_SCREWS", "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_COPPER_GEAR_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem("BRASS_SCREWS", "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_COPPER_GEAR_NAME", _supportsQuality: true, _displaySettings: displaySettings);
             brassScrewsBuff = Buffs.AddBuff("BRASS_SCREWS", "Brass Screws", "texbuffteleporterscrew", Color.white, false);
             brassScrewsEffectBuff = Buffs.AddBuff("BRASS_SCREWS_EFFECT", "Brass Screws", "texbuffteleporterscrew", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "BRASS_SCREWS");
 
@@ -49,6 +66,25 @@ namespace Faithful
 
             // Link Generic Character Fixed Update behaviour
             Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Create Quality stuff
+            brassScrewsQualityBuff = Buffs.AddBuff("BRASS_SCREWS_QUALITY", "Brass Kill", "texBuffDeathScrew", Color.white, _qualityBuff: true);
+            brassScrewsQualityUncommonBuff = Buffs.AddBuff("BRASS_SCREWS_QUALITY_UNCOMMON", "Brass Kill", "texBuffDeathScrew", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "BRASS_SCREWS_QUALITY");
+            brassScrewsQualityRareBuff = Buffs.AddBuff("BRASS_SCREWS_QUALITY_RARE", "Brass Kill", "texBuffDeathScrew", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "BRASS_SCREWS_QUALITY");
+            brassScrewsQualityEpicBuff = Buffs.AddBuff("BRASS_SCREWS_QUALITY_EPIC", "Brass Kill", "texBuffDeathScrew", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "BRASS_SCREWS_QUALITY");
+            brassScrewsQualityLegendaryBuff = Buffs.AddBuff("BRASS_SCREWS_QUALITY_LEGENDARY", "Brass Kill", "texBuffDeathScrew", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "BRASS_SCREWS_QUALITY");
+
+            // Link On Character Death behaviour
+            Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath_Quality);
+
+            // Add stats mods for buffs
+            Behaviour.AddStatsMod(brassScrewsQualityUncommonBuff, UncommonStatsMod_Quality);
+            Behaviour.AddStatsMod(brassScrewsQualityRareBuff, RareStatsMod_Quality);
+            Behaviour.AddStatsMod(brassScrewsQualityEpicBuff, EpicStatsMod_Quality);
+            Behaviour.AddStatsMod(brassScrewsQualityLegendaryBuff, LegendaryStatsMod_Quality);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -94,6 +130,17 @@ namespace Faithful
             damageSetting = mainItem.CreateSetting("DAMAGE", "Damage", 20.0f, "How much should this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
             damageStackingSetting = mainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 20.0f, "How much should further stacks of this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
             buffDurationSetting = mainItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            damageQualitySetting = mainItem.CreateQualitySetting("DAMAGE", "Damage", 5.0f, 10.0f, 20.0f, 30.0f, "How much should each kill increase damage while within the teleporter radius? (5.0 = 5% increase)", _valueFormatting: "{0:0.0}%");
+            durationQualitySetting = mainItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the damage buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
+            durationStackingQualitySetting = mainItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the damage buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -103,8 +150,19 @@ namespace Faithful
             damageStacking = damageStackingSetting.Value / 100.0f;
             buffDuration = buffDurationSetting.Value;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             mainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            damageQualityValues.UpdateValues(damageQualitySetting, 0.01f);
+            durationQualityValues.UpdateValues(durationQualitySetting);
+            durationStackingQualityValues.UpdateValues(durationStackingQualitySetting);
         }
 
         void BrassScrewsStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -168,6 +226,84 @@ namespace Faithful
                 // Update visual buff
                 characterBody.SetBuffCount(brassScrewsBuff.buffDef.buffIndex, characterBody.GetBuffCount(brassScrewsEffectBuff.buffDef.buffIndex) > 0 ? 1 : 0);
             }
+        }
+
+        private void UncommonStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify damage
+            _stats.damageMultAdd += damageQualityValues.UNCOMMON * _count;
+        }
+
+        private void RareStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify damage
+            _stats.damageMultAdd += damageQualityValues.RARE * _count;
+        }
+
+        private void EpicStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify damage
+            _stats.damageMultAdd += damageQualityValues.EPIC * _count;
+        }
+
+        private void LegendaryStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify damage
+            _stats.damageMultAdd += damageQualityValues.LEGENDARY * _count;
+        }
+
+        private void OnCharacterDeath_Quality(DamageReport _report)
+        {
+            // Attempt to fetch attacker inventory and body
+            if (_report == null) return;
+            CharacterMaster master = _report.attackerMaster;
+            if (master == null) return;
+            Inventory inventory = master.inventory;
+            if (inventory == null) return;
+            CharacterBody body = master.GetBody();
+            if (body == null) return;
+
+            // Check if character is in a holdout zone
+            if (Utils.GetHoldoutZonesContainingCharacter(master).Count <= 0) return;
+
+            // Get item counts
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+
+            // Effective quality should be highest quality the attacker possesses
+            Quality effectiveQuality = Quality.UNCOMMON;
+            if (counts.LEGENDARY > 0) effectiveQuality = Quality.LEGENDARY;
+            else if (counts.EPIC > 0) effectiveQuality = Quality.EPIC;
+            else if (counts.RARE > 0) effectiveQuality = Quality.RARE;
+            else if (counts.UNCOMMON <= 0) return;
+
+            // Calculate buff duration
+            float buffDuration = counts.UNCOMMON == 0 ? 0.0f : durationQualityValues.UNCOMMON + (counts.UNCOMMON - 1) * durationStackingQualityValues.UNCOMMON;
+            buffDuration += counts.RARE == 0 ? 0.0f : durationQualityValues.RARE + (counts.RARE - 1) * durationStackingQualityValues.RARE;
+            buffDuration += counts.EPIC == 0 ? 0.0f : durationQualityValues.EPIC + (counts.EPIC - 1) * durationStackingQualityValues.EPIC;
+            buffDuration += counts.LEGENDARY == 0 ? 0.0f : durationQualityValues.LEGENDARY + (counts.LEGENDARY - 1) * durationStackingQualityValues.LEGENDARY;
+
+            // Give buff
+            switch (effectiveQuality)
+            {
+                case Quality.UNCOMMON:
+                    body.AddTimedBuff(brassScrewsQualityUncommonBuff.buffDef, buffDuration);
+                    break;
+
+                case Quality.RARE:
+                    body.AddTimedBuff(brassScrewsQualityRareBuff.buffDef, buffDuration);
+                    break;
+
+                case Quality.EPIC:
+                    body.AddTimedBuff(brassScrewsQualityEpicBuff.buffDef, buffDuration);
+                    break;
+
+                case Quality.LEGENDARY:
+                    body.AddTimedBuff(brassScrewsQualityLegendaryBuff.buffDef, buffDuration);
+                    break;
+            }
+
+            // Give visual buff
+            body.AddTimedBuff(brassScrewsQualityBuff.buffDef, buffDuration);
         }
     }
 }

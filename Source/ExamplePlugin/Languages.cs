@@ -114,7 +114,7 @@ namespace Faithful
             return GetLanguageDictionary().ContainsKey(_token);
         }
 
-        public static string GetLanguageString(string _token, bool _prioritiseRoR2Language = false)
+        public static string GetLanguageString(string _token, bool _prioritiseRoR2Language = false, bool _warn = true)
         {
             // Get current language dictionary
             Dictionary<string, string> languageDictionary = GetLanguageDictionary();
@@ -140,7 +140,7 @@ namespace Faithful
                 // Token not found
                 else
                 {
-                    Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
+                    if (_warn) Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
                     return _token; // Return original token
                 }
             }
@@ -157,8 +157,7 @@ namespace Faithful
                 // Token not found
                 else
                 {
-                    Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
-
+                    if (_warn) Log.Warning($"[UTILS] - Language token '{_token}' requested but not found.");
                     return Language.GetString(_token); // Revert to RoR2.Language
                 }
             }

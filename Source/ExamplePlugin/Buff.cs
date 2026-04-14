@@ -38,7 +38,7 @@ namespace Faithful
             langTokenOverride = _langTokenOverride;
 
             // Assign name
-            name = Languages.GetLanguageString($"FAITHFUL_{langToken}_BUFF");
+            name = Languages.GetLanguageString($"FAITHFUL_{sourceToken}_BUFF");
             safeName = _safeName;
 
             // Assign overlay
@@ -64,7 +64,7 @@ namespace Faithful
             buffDef = ScriptableObject.CreateInstance<BuffDef>();
 
             // Set buff name
-            buffDef.name = $"{safeName}_FAITHFUL_{token}_BUFF";
+            buffDef.name = safeName;
 
             // Set buff colour
             buffDef.buffColor = _colour;
@@ -110,10 +110,6 @@ namespace Faithful
             {
                 enableOverlaySetting = CreateSetting("OVERLAY", "Enable Overlay?", true, "Should the character overlay for this buff be enabled?");
             }
-
-            // Clean previous unused default settings
-            Setting<bool> temp1 = CreateSetting("TEMP1", "Hide buff?", false, "Should the icon for this buff be hidden during runs?");
-            temp1.Delete();
         }
 
         public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _restartRequired = false, string _valueFormatting = "{0:0}")
@@ -121,11 +117,13 @@ namespace Faithful
             // Never create settings for this buff if it's a quality buff but quality isn't active
             if (qualityBuff && !Utils.qualityEnabled) return null;
 
+            if (Utils.verboseConsole) Log.Info($"[BUFF] | Creating setting '{_key}' for '{safeName} ({token})'");
+
             // Return new setting
             return Config.CreateSetting($"BUFF_{token}_{_tokenAddition}", qualityBuff ? $"Quality Buff: {safeName}" : $"Buff: {safeName}", _key, _defaultValue, _description, _restartRequired: _restartRequired, _valueFormatting: _valueFormatting);
         }
 
         public bool overlayEnabled => enableOverlaySetting != null && enableOverlaySetting.Value && overlay != null;
-        public string langToken => string.IsNullOrEmpty(langTokenOverride) ? token : langTokenOverride;
+        public string sourceToken => string.IsNullOrEmpty(langTokenOverride) ? token : langTokenOverride;
     }
 }

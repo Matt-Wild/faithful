@@ -90,10 +90,10 @@ namespace Faithful
             return settings[_token];
         }
 
-        public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "", bool _useRawToken = false, string _quality = "")
+        public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "", bool _useRawToken = false, string _quality = "", bool _warn = true)
         {
             // Get language string
-            string languageString = _useRawToken ? _token : Languages.GetLanguageString(_token);
+            string languageString = _useRawToken ? _token : Languages.GetLanguageString(_token, _warn);
 
             // Get token prefix
             string tokenPrefix = _tokenPrefix;
@@ -175,6 +175,16 @@ namespace Faithful
                     Log.Error($"[CONFIG] - Was unable to process corrupted item token for language token '{_token}' as no corrupted item name was provided.");
                     languageString = languageString.Replace(" <style=cIsVoid>Corrupts all [CORRUPTED_ITEM]</style>.", "");
                 }
+            }
+
+            // Otherwise check for corrupted item
+            else if (!string.IsNullOrWhiteSpace(_corruptedItemName))
+            {
+                // Add corruption text to language string
+                languageString += " " + Languages.GetLanguageString("FAITHFUL_ITEM_CORRUPT");
+
+                // Replace unique CORRUPTED_ITEM token
+                languageString = languageString.Replace("[CORRUPTED_ITEM]", Languages.GetLanguageString("FAITHFUL_LANGUAGE") == "English" ? Utils.Pluralize(_corruptedItemName) : _corruptedItemName);
             }
 
             // Return formatted language string
