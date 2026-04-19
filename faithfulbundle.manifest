@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 68100161
+CRC: 642732762
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cd5e389e25a42e23cebd13cc7f8f2af5
+    Hash: afc6ec3ca5940ec5b042d7e25adeaa1e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7e6c650ee147aa14e558837369331065
@@ -187,6 +187,7 @@ Assets:
 - Assets/Survivors/Technician/mdlTechnician.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianAchievement.png
 - Assets/Textures/Technician/texRampTechnician.png
+- Assets/Items/MeltingWarbler/texMeltingWarblerBuff.png
 - Assets/Items/SecondHand/AltIcons/texSecondHandTier2Icon.png
 - Assets/Items/CauterizingGreave/texCauterizingGreaveNormal.png
 - Assets/Items/VengefulToaster/VengefulToasterMesh.prefab
@@ -313,6 +314,7 @@ Assets:
 - Assets/Items/MeltingWarbler/MeltingWarblerMesh.prefab
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonMesh.obj
 - Assets/Items/HexCluster/AltIcons/texHexClusterBossAchievement.png
+- Assets/Items/DrownedVisage/texDrownedVisageBuff.png
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterLunarIcon.png
 - Assets/Items/4-T0NJetpack/Materials/tex4T0NJetpack.mat
 - Assets/Items/CopperGear/texBuffTeleporterGear.png
