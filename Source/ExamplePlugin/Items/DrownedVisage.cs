@@ -6,6 +6,9 @@ namespace Faithful
 {
     internal class DrownedVisage : ItemBase
     {
+        // Quality buffs
+        Buff drownedVisageQualityBuff;
+
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -21,6 +24,17 @@ namespace Faithful
         float chargeAmount;
         float largeChargeAmount;
 
+        // Store additional quality settings
+        QualitySetting<float> chargeAmountQualitySetting;
+        QualitySetting<float> chargeAmountStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> chargeAmountQualityValues = new();
+        QualityValues<float> chargeAmountStackingQualityValues = new();
+
+        // Static quality values
+        const float chargeDurationQuality = 10.0f;
+
         // Constructor
         public DrownedVisage(Toolbox _toolbox) : base(_toolbox)
         {
@@ -28,7 +42,7 @@ namespace Faithful
             CreateDisplaySettings("drownedvisagedisplaymesh");
 
             // Create Drowned Visage item
-            mainItem = Items.AddItem("DROWNED_VISAGE", "Drowned Visage", [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_SPACIOUS_UMBRELLA_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem("DROWNED_VISAGE", "Drowned Visage", [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_SPACIOUS_UMBRELLA_NAME", _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -38,6 +52,15 @@ namespace Faithful
 
             // Link On Character Death behaviour
             Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Create Quality stuff
+            drownedVisageQualityBuff = Buffs.AddBuff("DROWNED_VISAGE_QUALITY", "Drowned Visage", "texDrownedVisageBuff", Color.white, _canStack: false, _qualityBuff: true);
+
+            // Link Quality behaviour
+            Behaviour.AddInHoldoutZoneCallback(InHoldoutZone_Quality);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -82,6 +105,16 @@ namespace Faithful
             chanceStackingSetting = mainItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 5.0f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
             chargeAmountSetting = mainItem.CreateSetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, "How much should this item charge the teleporter? (5.0 = 5% charge)", _valueFormatting: "{0:0.00}%");
             largeChargeAmountSetting = mainItem.CreateSetting("LARGE_CHARGE_AMOUNT", "Charge Amount Large", 10.0f, "How much should killing a large or elite enemy charge the teleporter? (10.0 = 10% charge)", _valueFormatting: "{0:0.00}%");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            chargeAmountQualitySetting = mainItem.CreateQualitySetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, 10.0f, 15.0f, 20.0f, "How much extra charge should this item provide to the teleporter over time? (5.0 = 5% charge)", _valueFormatting: "{0:0.0}%");
+            chargeAmountStackingQualitySetting = mainItem.CreateQualitySetting("CHARGE_AMOUNT_STACKING", "Charge Amount Stacking", 5.0f, 10.0f, 15.0f, 20.0f, "How much extra charge should further stacks of this item provide to the teleporter over time? (5.0 = 5% charge)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -92,8 +125,18 @@ namespace Faithful
             chargeAmount = chargeAmountSetting.Value / 100.0f;
             largeChargeAmount = largeChargeAmountSetting.Value / 100.0f;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             mainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            chargeAmountQualityValues.UpdateValues(chargeAmountQualitySetting, 0.01f);
+            chargeAmountStackingQualityValues.UpdateValues(chargeAmountStackingQualitySetting, 0.01f);
         }
 
         void OnCharacterDeath(DamageReport _report)
@@ -107,7 +150,7 @@ namespace Faithful
             // Check attacker team
             if (character.teamIndex != TeamIndex.Player) return;
 
-            // Check for body
+            // Check for master
             if (!character.hasBody) return;
 
             // Check for attacker inventory
@@ -146,7 +189,56 @@ namespace Faithful
                     // Add charge to zone
                     Utils.ChargeHoldoutZone(zone, actualChargeAmount);
                 }
+
+                // \/ \/ QUALITY BEHAVIOUR \/ \/ 
+
+                // Check if quality is enabled
+                if (Utils.qualityEnabled && zones.Count > 0)
+                {
+                    // Attempt to get character body
+                    CharacterBody body = _report.attackerBody;
+                    if (body == null) return;
+
+                    // Get quality item counts
+                    QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+
+                    // Add or refresh buff if has item
+                    if (qualityCounts.Total > 0)
+                    {
+                        if (body.GetBuffCount(drownedVisageQualityBuff.buffDef.buffIndex) > 0) Utils.RefreshTimedBuffs(body, drownedVisageQualityBuff.buffDef, chargeDurationQuality);
+                        else body.AddTimedBuff(drownedVisageQualityBuff.buffDef.buffIndex, chargeDurationQuality);
+                    }
+                }
             }
+        }
+
+        private void InHoldoutZone_Quality(CharacterBody _contained, HoldoutZoneController _zone)
+        {
+            // Validate input
+            if (_contained == null || _zone == null) return;
+
+            // Check for buff
+            if (_contained.GetBuffCount(drownedVisageQualityBuff.buffDef.buffIndex) <= 0) return;
+
+            // Attempt to fetch inventory
+            Inventory inventory = _contained.inventory;
+            if (inventory == null) return;
+
+            // Get time modifier for increased holdout zone charge
+            float timeModifier = Time.deltaTime / chargeDurationQuality;
+
+            // Get item counts
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+
+            // Calculate charge to be provided to teleporter
+            float unscaledCharge = 0.0f;
+            unscaledCharge += counts.UNCOMMON == 0 ? 0 : chargeAmountQualityValues.UNCOMMON + (counts.UNCOMMON - 1) * chargeAmountStackingQualityValues.UNCOMMON;
+            unscaledCharge += counts.RARE == 0 ? 0 : chargeAmountQualityValues.RARE + (counts.RARE - 1) * chargeAmountStackingQualityValues.RARE;
+            unscaledCharge += counts.EPIC == 0 ? 0 : chargeAmountQualityValues.EPIC + (counts.EPIC - 1) * chargeAmountStackingQualityValues.EPIC;
+            unscaledCharge += counts.LEGENDARY == 0 ? 0 : chargeAmountQualityValues.LEGENDARY + (counts.LEGENDARY - 1) * chargeAmountStackingQualityValues.LEGENDARY;
+
+            // Provide charge
+            Utils.ChargeHoldoutZone(_zone, unscaledCharge * timeModifier);
         }
     }
 }
