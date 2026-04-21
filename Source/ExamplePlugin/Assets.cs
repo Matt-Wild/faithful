@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.Networking;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Faithful
 {
@@ -112,6 +114,11 @@ namespace Faithful
         private const string defaultIcon = "textemporalcubeicon";
         private const string defaultConsumedIcon = "textemporalcubeconsumedicon";
         private const string defaultBuffIcon = "texbufftemporalcube";
+
+        // Vanilla item lookup
+        private static readonly Dictionary<string, RoR2.ItemDef> officialItemLookup = new(System.StringComparer.OrdinalIgnoreCase);
+        private static readonly HashSet<string> scannedOfficialItemKeys = new(System.StringComparer.OrdinalIgnoreCase);
+        private static bool builtOfficialItemLookup;
 
         public static void Init()
         {
@@ -457,6 +464,74 @@ namespace Faithful
         {
             // Fetch asset from addressables
             return Addressables.LoadAssetAsync<T>(_path).WaitForCompletion();
+        }
+
+        public static bool TryGetOfficialItem(string _value, out RoR2.ItemDef _itemDef)
+        {
+            _itemDef = null;
+
+            if (string.IsNullOrWhiteSpace(_value)) return false;
+
+            BuildOfficialItemLookup();
+
+            return officialItemLookup.TryGetValue(_value.Trim(), out _itemDef) && _itemDef != null;
+        }
+
+        private static void BuildOfficialItemLookup()
+        {
+            if (builtOfficialItemLookup) return;
+
+            builtOfficialItemLookup = true;
+
+            foreach (IResourceLocator locator in Addressables.ResourceLocators)
+            {
+                foreach (object keyObject in locator.Keys)
+                {
+                    if (keyObject is not string key) continue;
+
+                    if (!key.StartsWith("RoR2/", System.StringComparison.OrdinalIgnoreCase)) continue;
+
+                    if (!key.EndsWith(".asset", System.StringComparison.OrdinalIgnoreCase)) continue;
+
+                    if (!scannedOfficialItemKeys.Add(key)) continue;
+
+                    var locationsHandle = Addressables.LoadResourceLocationsAsync(key, typeof(RoR2.ItemDef));
+                    IList<IResourceLocation> locations = locationsHandle.WaitForCompletion();
+
+                    if (locations == null || locations.Count == 0) continue;
+
+                    RoR2.ItemDef itemDef = Addressables.LoadAssetAsync<RoR2.ItemDef>(locations[0]).WaitForCompletion();
+
+                    if (itemDef == null) continue;
+
+                    CacheOfficialItemAliases(itemDef, key);
+                }
+            }
+        }
+
+        private static void CacheOfficialItemAliases(RoR2.ItemDef _itemDef, string _path)
+        {
+            if (_itemDef == null) return;
+
+            AddOfficialItemAlias(_itemDef.name, _itemDef);
+            AddOfficialItemAlias(_itemDef.nameToken, _itemDef);
+            AddOfficialItemAlias(_path, _itemDef);
+
+            string displayName = RoR2.Language.GetString(_itemDef.nameToken);
+
+            if (!string.IsNullOrWhiteSpace(displayName) && !string.Equals(displayName, _itemDef.nameToken, System.StringComparison.Ordinal))
+            {
+                AddOfficialItemAlias(displayName, _itemDef);
+            }
+        }
+
+        private static void AddOfficialItemAlias(string _alias, RoR2.ItemDef _itemDef)
+        {
+            if (string.IsNullOrWhiteSpace(_alias) || _itemDef == null) return;
+
+            _alias = _alias.Trim();
+
+            if (!officialItemLookup.ContainsKey(_alias)) officialItemLookup.Add(_alias, _itemDef);
         }
 
         public static Sprite GetIcon(string _name)
