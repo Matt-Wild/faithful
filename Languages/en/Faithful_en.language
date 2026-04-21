@@ -34,9 +34,9 @@
   
     "FAITHFUL_COPPER_GEAR_NAME": "Copper Gear",
 	"FAITHFUL_COPPER_GEAR_PICKUP": "Increase attack speed while within the Teleporter zone.",
-	"FAITHFUL_COPPER_GEAR_PICKUP_QUALITY": "\n<sprite name=\"Quality\"> Killing an enemy while within the Teleporter zone gives you a burst of attack speed.",
+	"FAITHFUL_COPPER_GEAR_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> Killing an enemy while within the Teleporter zone gives you a burst of attack speed.",
 	"FAITHFUL_COPPER_GEAR_DESC": "Increase <style=cIsDamage>attack speed</style> by <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(+[ATTACK_SPEED_STACKING]% per stack)</style> while inside the Teleporter zone.",
-	"FAITHFUL_COPPER_GEAR_DESC_QUALITY": "\nEach enemy killed while inside the Teleporter zone increases <style=cIsDamage>attack speed</style> by <sprite name=\"Quality\"> <style=cIsDamage>[ATTACK_SPEED]%</style> for <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds.",
+	"FAITHFUL_COPPER_GEAR_DESC_QUALITY": "[PREFIX]\nEach enemy killed while inside the Teleporter zone increases <style=cIsDamage>attack speed</style> by <sprite name=\"Quality\"> <style=cIsDamage>[ATTACK_SPEED]%</style> for <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds.",
 	"FAITHFUL_COPPER_GEAR_LORE": "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u0022Hey, you know those clockmakers we met when we went on that trip to Earth?\u0022\n\n\u0022Yeah, I remember. Why are you bringing them up now?\u0022\n\n\u0022A couple o' them told me that they were always in the zone when wearing one of these gears 'round their wrist. Said it helped 'em work way faster.\u0022\n\n\u0022I see but… what does that have to do with the mountain of lemurian corpses behind you?\u0022\n\n\u0022Well, uh… I can tell you that it works.\u0022",
 	"FAITHFUL_COPPER_GEAR_BUFF": "Copper Gear",
 	"FAITHFUL_COPPER_GEAR_QUALITY_BUFF": "Copper Kill",
@@ -49,9 +49,9 @@
 	
 	"FAITHFUL_BRASS_SCREWS_NAME": "Brass Screws",
 	"FAITHFUL_BRASS_SCREWS_PICKUP": "Increase damage while within the Teleporter zone.",
-	"FAITHFUL_BRASS_SCREWS_PICKUP_QUALITY": " <sprite name=\"Quality\"> Killing an enemy while within the Teleporter zone gives you a temporary damage boost.",
+	"FAITHFUL_BRASS_SCREWS_PICKUP_QUALITY": "[PREFIX] <sprite name=\"Quality\"> Killing an enemy while within the Teleporter zone gives you a temporary damage boost.",
 	"FAITHFUL_BRASS_SCREWS_DESC": "Increase damage by <style=cIsDamage>[DAMAGE]%</style> <style=cStack>(+[DAMAGE_STACKING]% per stack)</style> while inside the Teleporter zone.",
-	"FAITHFUL_BRASS_SCREWS_DESC_QUALITY": " Each enemy killed while inside the Teleporter zone increases damage by <sprite name=\"Quality\"> <style=cIsDamage>[DAMAGE]%</style> for <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds.",
+	"FAITHFUL_BRASS_SCREWS_DESC_QUALITY": "[PREFIX] Each enemy killed while inside the Teleporter zone increases damage by <sprite name=\"Quality\"> <style=cIsDamage>[DAMAGE]%</style> for <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds.",
 	"FAITHFUL_BRASS_SCREWS_LORE": "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u0022Yo, how’re you holding up- woah!\u0022\n\n\u0022Oh, u-uh... Hey, there. I’ve been... a little busy as you can see.\u0022\n\n\u0022I never thought I'd see so many dead beetles and... a queen? Did you kill an entire nest? By yourself?! How’d you-?! Gah!\u0022\n\n\u0022Heheh... yeah. It was real bloody.\u0022\n\n\u0022H-how’d you even manage all this? Are... are those screws?\u0022\n\n\u0022These? Yeah, your whole 'gear' talk gave me an idea.\u0022",
 	"FAITHFUL_BRASS_SCREWS_BUFF": "Brass Screws",
 	"FAITHFUL_BRASS_SCREWS_QUALITY_BUFF": "Brass Kill",
@@ -90,9 +90,9 @@
 	
 	"FAITHFUL_DROWNED_VISAGE_NAME": "Drowned Visage",
 	"FAITHFUL_DROWNED_VISAGE_PICKUP": "While charging the Teleporter, gain a chance on kill to charge the Teleporter by a small amount.",
-	"FAITHFUL_DROWNED_VISAGE_PICKUP_QUALITY": "<sprite name=\"Quality\"> Charge gained on kill provides bonus charge over time.",
+	"FAITHFUL_DROWNED_VISAGE_PICKUP_QUALITY": "[PREFIX] <sprite name=\"Quality\"> Charge gained on kill provides bonus charge over time.",
 	"FAITHFUL_DROWNED_VISAGE_DESC": "Killing an enemy while within the Teleporter radius has a <style=cIsUtility>[CHANCE]%</style> <style=cStack>(+[CHANCE_STACKING]% per stack)</style> chance to charge the Teleporter by <style=cIsUtility>[CHARGE_AMOUNT]%</style>. Large or elite monsters charge it by <style=cIsUtility>[LARGE_CHARGE_AMOUNT]%</style> instead.",
-	"FAITHFUL_DROWNED_VISAGE_DESC_QUALITY": " Remaining within the Teleporter radius also charges the Teleporter by an additional <sprite name=\"Quality\"> <style=cIsUtility>[CHARGE_AMOUNT]%</style> <style=cStack>(+[CHARGE_AMOUNT_STACKING]% per stack)</style> over <style=cIsUtility>10</style> seconds.",
+	"FAITHFUL_DROWNED_VISAGE_DESC_QUALITY": "[PREFIX] Remaining within the Teleporter radius also charges the Teleporter by an additional <sprite name=\"Quality\"> <style=cIsUtility>[CHARGE_AMOUNT]%</style> <style=cStack>(+[CHARGE_AMOUNT_STACKING]% per stack)</style> over <style=cIsUtility>10</style> seconds.",
 	"FAITHFUL_DROWNED_VISAGE_LORE": "> Automated report 4241442054494d4520544f2046495348 is now available from site record 412044524f574e454420564953414745.\n> Please refer to record 412044524f574e454420564953414745 for additional personnel details during your review.\n> Report Type: Transcription\n> - Source: 412044524f574e454420564953414745 (Personal Suit Recorder)\n> Priority: High\n> Report Content:\n\n-- Beginning of Excerpt Flagged for Review --\n\nDave: \u0022You've heard the nonsense rumors of that giant monster around here, right?\u0022\n\nMichael: \u0022O' course I have. I'd have to be sleeping deeper than Gary to miss that.\u0022\n\nDave: \u0022Hah! He's the one who saw it apparently. Said it was the scariest thing he'd seen here.\u0022\n\nMichael: \u0022Ha! Can't be that bad, then. Maybe he just dreamed it up while kipping on duty.\u0022\n\nDave: \u0022Sounds like 'im. Looked like death when I told him we were planning on fish today.\u0022\n\nMichael: \u0022Haha! Now you're just bullying the poor guy, Dave!\u0022\n\nDave: \u0022For something apparently so terrifying, he sure had a hard time describing it. Something about a lure and-\u0022\n\nMichael: \u0022Hold up, the line's pulling!\u0022\n\nDave: \u0022Woah, you snagged somethin'?!\u0022\n\n[Fishing rod reeling]\n\nMichael: \u0022...Oh. It's just a small fry...\u0022\n\nDave: \u0022Heh... I thought that was it for a moment. Honestly, thought my heart stopped.\u0022\n\nMichael: \u0022Me, too. Wouldn't that've be a story, hu-\u0022\n\n[Metallic crunch]\n\n-- End of Recording --\n\n-- End of Excerpt Flagged for Review --\n\n> Please refer to report 5448455927524520414c4c2044454144 for full audio excerpt.",
 	"FAITHFUL_DROWNED_VISAGE_QUALITY_BUFF": "Drowned Visage",
 	
@@ -140,9 +140,9 @@
 	
 	"FAITHFUL_MATTER_ACCELERATOR_NAME": "Matter Accelerator",
 	"FAITHFUL_MATTER_ACCELERATOR_PICKUP": "Increase movement speed while you have a shield or barrier.",
-	"FAITHFUL_MATTER_ACCELERATOR_PICKUP_QUALITY": "\n<sprite name=\"Quality\"> Increase movement speed based on your current shield.",
+	"FAITHFUL_MATTER_ACCELERATOR_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> Increase movement speed based on your current shield.",
 	"FAITHFUL_MATTER_ACCELERATOR_DESC": "Gain a <style=cIsHealing>shield</style> equal to <style=cIsHealing>[SHIELD_GAIN]%</style> of your maximum health. While you have a <style=cIsHealing>shield</style> or <style=cIsHealing>barrier</style>, <style=cIsUtility>movement speed</style> is increased by <style=cIsUtility>[SPEED]%</style> <style=cStack>(+[SPEED_STACKING]% per stack)</style>.",
-	"FAITHFUL_MATTER_ACCELERATOR_DESC_QUALITY": "\nIncrease <style=cIsUtility>movement speed</style> by <sprite name=\"Quality\"> <style=cIsUtility>[SPEED]%</style> <style=cStack>(+[SPEED_STACKING]% per stack)</style> for every <style=cIsHealing>[HEALTH_PERC]%</style> of your <style=cIsHealing>base maximum health</style> that is <style=cIsHealing>shield</style>.",
+	"FAITHFUL_MATTER_ACCELERATOR_DESC_QUALITY": "[PREFIX]\nIncrease <style=cIsUtility>movement speed</style> by <sprite name=\"Quality\"> <style=cIsUtility>[SPEED]%</style> <style=cStack>(+[SPEED_STACKING]% per stack)</style> for every <style=cIsHealing>[HEALTH_PERC]%</style> of your <style=cIsHealing>base maximum health</style> that is <style=cIsHealing>shield</style>.",
 	"FAITHFUL_MATTER_ACCELERATOR_LORE": "\u0022Day 17 of making a homemade matter accelerator.\r\n\r\nThere's some good and bad news on my progress so far.\r\n\r\nThe good news is that I've finally got it working consistently enough to start testing its specs. The bad news is that I'm going to need a better camera in order to record any actual results. The one I have now is way too blurry.\r\n\r\nOh, I also managed to trigger my neighbor's home security system. So I should probably work on avoiding that.\u0022",
 	"FAITHFUL_MATTER_ACCELERATOR_BUFF": "Matter Accelerator",
 	

@@ -367,12 +367,12 @@ namespace Faithful
             foreach (string quality in Enum.GetNames(typeof(Quality)))
             {
                 // Create description token first
-                string qualityDescription = $"{descriptionPrefix}{Config.FormatLanguageToken($"FAITHFUL_{token}_DESC_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality)}";
+                string qualityDescription = Config.FormatLanguageToken($"FAITHFUL_{token}_DESC_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality).Replace("[PREFIX]", descriptionPrefix);
                 LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_DESC", qualityDescription);
 
                 // Check if extended pickup description is enabled
                 if (extendPickupDescription) LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", qualityDescription);
-                else LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", $"{pickupPrefix}{Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality)}");
+                else LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality).Replace("[PREFIX]", pickupPrefix));
             }
         }
 
