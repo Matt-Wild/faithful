@@ -87,8 +87,8 @@ namespace Faithful
                 });
 
             CreateItem(_name: "Plasma Field Generator",
-                _pickup: "Gain a shield and reduce its recharge time. <style=cIsVoid>Corrupts all Personal Shield Generators</style>.",
-                _description: "Gain a <style=cIsHealing>shield</style> equal to <style=cIsHealing>4%</style> <style=cStack>(+4% per stack)</style> of your maximum health and reduce its <style=cIsUtility>recharge time</style> by <style=cIsUtility>5%</style> <style=cStack>(+5% per stack)</style>. Recharges outside of danger. <style=cIsVoid>Corrupts all Personal Shield Generators</style>.",
+                _pickup: "Gain a shield and reduce its recharge time.",
+                _description: "Gain a <style=cIsHealing>shield</style> equal to <style=cIsHealing>4%</style> <style=cStack>(+4% per stack)</style> of your maximum health and reduce its <style=cIsUtility>recharge time</style> by <style=cIsUtility>5%</style> <style=cStack>(+5% per stack)</style>. Recharges outside of danger.",
                 _lore: "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM CARGO BAY 4 OF UES [Redacted] --//</style>\r\n\r\n\u0022...The heck's up with all these defective shield devices? ...Hinon? I thought the stuff they made was alright.\u0022\r\n\r\n\u0022These things? I wouldn't try any on if I were you. Defective shield devices are no fun to mess with in the first place but these ones... best not even touch them without equipment just to be safe.\u0022\r\n\r\n\u0022Yeesh. How'd they manage to mess up all of these?\u0022\r\n\r\n\u0022If I recall correctly, they went straight to human testing immediately with this particular model since they were so confident and... uh... it couldn't have gone worse, I'd say.\u0022\r\n\r\n\u0022Right. You said you used to work there, didn't you? What happened?\u0022\r\n\r\n\u0022They put it on the first guy and BOOM! He's gone the second they turned the thing on. Then the device just fell to the floor and deactivated, apparently.\u0022\r\n\r\n\u0022Gone? Like, 'gone' gone or...?\u0022\r\n\r\n\u0022Just... poof. They thought they'd teleported him somehow. It took them an embarrassingly long time to figure that they'd simply vaporized the poor guy on the spot. Given not a trace of him was left.\u0022\r\n\r\n\u0022Holy [REDACTED]. How are they still in business?\u0022\r\n\r\n\u0022Oh, yeah, nobody ever got put away for the incident. Heck, nobody even got fired! They couldn't exactly maintain their image if word got out so they tried covering up the whole thing.\u0022\r\n\r\n\u0022...You're kidding. Sounds like you'd be better off working clean-up on the Contact Light than being there.\u0022\r\n\r\n\u0022You're telling me. I quit on the spot when the internal report reached my department.\u0022\r\n\r\n\u0022...Don't tell the captain I said that by the way.\u0022\r\n\r\n\u0022Trust me, buddy. My lips are sealed.\u0022",
                 _tier: ItemTier.VoidTier1,
                 _tags: [ItemTag.Utility, ItemTag.Technology],
@@ -124,8 +124,8 @@ namespace Faithful
                 });
 
             CreateItem(_name: "Toxin Canister",
-                _pickup: "Chance on hit to create a damaging cloud that follows enemies. <style=cIsVoid>Corrupts all Sticky Bombs</style>.",
-                _description: "<style=cIsDamage>5%</style> <style=cStack>(+5% per stack)</style> chance on hit to attach a <style=cIsDamage>gas canister</style> that creates a damaging cloud around itself, dealing <style=cIsDamage>250%</style> TOTAL damage over <style=cIsDamage>5</style> seconds. <style=cIsVoid>Corrupts all Sticky Bombs</style>.",
+                _pickup: "Chance on hit to create a damaging cloud that follows enemies.",
+                _description: "<style=cIsDamage>5%</style> <style=cStack>(+5% per stack)</style> chance on hit to attach a <style=cIsDamage>gas canister</style> that creates a damaging cloud around itself, dealing <style=cIsDamage>250%</style> TOTAL damage over <style=cIsDamage>5</style> seconds.",
                 _lore: "<style=cMono>\rAudio transcription complete from on-site security camera.\r\nDate: [Redacted].\r\nTime: [Redacted].\r\nLocation: Main building breakroom.\r\n\r\nPrinting...</style>\r\n\r\n\u0022Oi, you! What the hell are you doing just sitting there?! There's been a gas leak!\u0022\r\n\r\n\u0022...I can't smell anything. There's no alarm going off so it's probably fine.\u0022\r\n\r\n\u0022Have you got the survival instincts of a brick?! We don't have alarms for everything! We need to get out of here!\u0022\r\n\r\n\u0022Quiet down. I'm getting kinda sleepy... I think I'll go take a nap.\u0022",
                 _tier: ItemTier.VoidTier1,
                 _tags: [ItemTag.Damage],
@@ -196,8 +196,8 @@ namespace Faithful
                 });
 
             CreateItem(_name: "Chakrams",
-                _pickup: "Activating your Primary skill also throws a piercing chakram that returns to you. <style=cIsVoid>Corrupts all Shurikens</style>.",
-                _description: "Activating your <style=cIsUtility>Primary skill</style> also throws a <style=cIsDamage>piercing chakram</style> that deals <style=cIsDamage>400%</style> <style=cStack>(+100% per stack)</style> base damage and returns to you. You can hold up to <style=cIsUtility>3</style> <style=cStack>(+1 per stack)</style> <style=cIsDamage>chakrams</style>. <style=cIsVoid>Corrupts all Shurikens</style>.",
+                _pickup: "Activating your Primary skill also throws a piercing chakram that returns to you.",
+                _description: "Activating your <style=cIsUtility>Primary skill</style> also throws a <style=cIsDamage>piercing chakram</style> that deals <style=cIsDamage>400%</style> <style=cStack>(+100% per stack)</style> base damage and returns to you. You can hold up to <style=cIsUtility>3</style> <style=cStack>(+1 per stack)</style> <style=cIsDamage>chakrams</style>.",
                 _lore: "Order: Golden Steel Chakrams\r\nTracking Number: 78*******\r\nEstimated Delivery: 06/16/2060\r\nShipping Method: Priority\r\nShipping Address: \u0022Secret Hideout\u0022, Earth\r\nShipping Details:\r\n\r\nShouldn't soar off to one side like the others did. Lemme know if there's anything else you want, we've got a new stock of some classics coming in next month by the time you read this. Nunchucks, nagamaki, kunai, all that classic stuff.\r\n\r\nAlso, please change your address. It looks stupid every time I see it.",
                 _tier: ItemTier.VoidTier2,
                 _tags: [ItemTag.Damage],
