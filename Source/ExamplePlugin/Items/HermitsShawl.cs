@@ -21,7 +21,7 @@ namespace Faithful
         Setting<float> damageSetting;
 
         // Constructor
-        public HermitsShawl(Toolbox _toolbox, Patience _patience) : base(_toolbox)
+        public HermitsShawl(Toolbox _toolbox, Patience _patience) : base(_toolbox, "HERMITS_SHAWL")
         {
             // Assign vengeance behaviour
             buffBehaviour = _patience;
@@ -33,7 +33,7 @@ namespace Faithful
             CreateDisplaySettings("HermitShawlDisplayMesh");
 
             // Create item
-            mainItem = Items.AddItem("HERMITS_SHAWL", "Hermits Shawl", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
+            mainItem = Items.AddItem(token, "Hermits Shawl", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
 
             // Create item settings
             CreateSettings();

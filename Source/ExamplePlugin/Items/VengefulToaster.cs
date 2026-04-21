@@ -24,7 +24,7 @@ namespace Faithful
         float durationStacking;
 
         // Constructor
-        public VengefulToaster(Toolbox _toolbox, Vengeance _vengeance) : base(_toolbox)
+        public VengefulToaster(Toolbox _toolbox, Vengeance _vengeance) : base(_toolbox, "VENGEFUL_TOASTER")
         {
             // Assign vengeance behaviour
             vengeanceBehaviour = _vengeance;
@@ -36,7 +36,7 @@ namespace Faithful
             CreateDisplaySettings("vengefultoasterdisplaymesh");
 
             // Create Vengeful Toaster item
-            mainItem = Items.AddItem("VENGEFUL_TOASTER", "Vengeful Toaster", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2, _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Vengeful Toaster", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();

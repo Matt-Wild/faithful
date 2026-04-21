@@ -5,17 +5,23 @@
         // Toolbox
         protected Toolbox toolbox;
 
+        // Store token
+        protected string token;
+
         // Main item that behaviour revolves around
-        protected Item mainItem;
+        public Item mainItem;
 
         // Constructor
-        public ItemBase(Toolbox _toolbox)
+        public ItemBase(Toolbox _toolbox, string _token)
         {
             // Assign toolbox
             toolbox = _toolbox;
 
+            // Assign token
+            token = _token;
+
             // Register with utils
-            Utils.RegisterItemBehaviour(this);
+            Utils.RegisterItem(_token, this);
         }
 
         public virtual void QualityConstructor()

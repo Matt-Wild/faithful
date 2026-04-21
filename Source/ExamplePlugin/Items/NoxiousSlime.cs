@@ -20,13 +20,13 @@ namespace Faithful
         float blightChance;
 
         // Constructor
-        public NoxiousSlime(Toolbox _toolbox) : base(_toolbox)
+        public NoxiousSlime(Toolbox _toolbox) : base(_toolbox, "NOXIOUS_SLIME")
         {
             // Create display settings
             CreateDisplaySettings("noxiousslimedisplaymesh");
 
             // Create Noxious Slime item
-            mainItem = Items.AddItem("NOXIOUS_SLIME", "Noxious Slimes", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Noxious Slimes", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();

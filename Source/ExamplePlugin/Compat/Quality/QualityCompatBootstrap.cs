@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using BepInEx.Bootstrap;
 
 namespace Faithful
@@ -18,10 +19,10 @@ namespace Faithful
             InitNoInline();
 
             // Init item quality constructors
-            foreach (ItemBase itemBehaviour in Utils.ItemBehaviours)
+            foreach (KeyValuePair<string, ItemBase> pair in Utils.Items)
             {
-                if (!itemBehaviour.SupportsQuality) continue;
-                itemBehaviour.QualityConstructor();
+                if (!pair.Value.SupportsQuality) continue;
+                pair.Value.QualityConstructor();
             }
         }
 

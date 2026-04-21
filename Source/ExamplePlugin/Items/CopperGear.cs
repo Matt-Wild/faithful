@@ -43,13 +43,13 @@ namespace Faithful
         QualityValues<float> durationStackingQualityValues = new();
 
         // Constructor
-        public CopperGear(Toolbox _toolbox) : base(_toolbox)
+        public CopperGear(Toolbox _toolbox) : base(_toolbox, "COPPER_GEAR")
         {
             // Create display settings
             CreateDisplaySettings("coppergeardisplaymesh");
 
             // Create Copper Gear item and buff
-            mainItem = Items.AddItem("COPPER_GEAR", "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _supportsQuality: true, _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _supportsQuality: true, _displaySettings: displaySettings);
             copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "Copper Gear", "texbuffteleportergear", Color.white, false);
             copperGearEffectBuff = Buffs.AddBuff("COPPER_GEAR_EFFECT", "Copper Gear", "texbuffteleportergear", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "COPPER_GEAR");
 

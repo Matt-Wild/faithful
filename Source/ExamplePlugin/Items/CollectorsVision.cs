@@ -48,7 +48,7 @@ namespace Faithful
         static readonly List<PendingEyeNotification> pendingEyeNotifications = [];
 
         // Constructor
-        public CollectorsVision(Toolbox _toolbox, Inspiration _inspiration) : base(_toolbox)
+        public CollectorsVision(Toolbox _toolbox, Inspiration _inspiration) : base(_toolbox, "COLLECTORS_VISION")
         {
             // Assign inspiration buff behaviour
             inspirationBehaviour = _inspiration;
@@ -63,7 +63,7 @@ namespace Faithful
             CreateDisplaySettings("collectorsvisiondisplaymesh");
 
             // Create Collector's Vision item
-            mainItem = Items.AddItem("COLLECTORS_VISION", "Collectors Vision", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Collectors Vision", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();

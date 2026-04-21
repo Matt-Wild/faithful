@@ -35,13 +35,13 @@ namespace Faithful
         int maxBuffsStacking;
 
         // Constructor
-        public TargetingMatrix(Toolbox _toolbox) : base(_toolbox)
+        public TargetingMatrix(Toolbox _toolbox) : base(_toolbox, "TARGETING_MATRIX")
         {
             // Create display settings
             CreateDisplaySettings("targetingmatrixdisplaymesh");
 
             // Create Targeting Matrix item and buff
-            mainItem = Items.AddItem("TARGETING_MATRIX", "Targeting Matrix", [ItemTag.Damage, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            mainItem = Items.AddItem(token, "Targeting Matrix", [ItemTag.Damage, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
             targetingMatrixBuff = Buffs.AddBuff("TARGETING_MATRIX", "Targeting Matrix", "texTargetingMatrixBuff", Color.white);
 
             // Create item settings

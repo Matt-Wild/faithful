@@ -17,13 +17,13 @@ namespace Faithful
         float sizeStacking;
 
         // Constructor
-        public SpaciousUmbrella(Toolbox _toolbox) : base(_toolbox)
+        public SpaciousUmbrella(Toolbox _toolbox) : base(_toolbox, "SPACIOUS_UMBRELLA")
         {
             // Create display settings
             CreateDisplaySettings("spaciousumbrelladisplaymesh");
 
             // Create Copper Gear item and buff
-            mainItem = Items.AddItem("SPACIOUS_UMBRELLA", "Spacious Umbrella", [ItemTag.Utility, ItemTag.HoldoutZoneRelated, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "texspaciousumbrellaicon", "spaciousumbrellamesh", ItemTier.Tier2, _simulacrumBanned: true, _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Spacious Umbrella", [ItemTag.Utility, ItemTag.HoldoutZoneRelated, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "texspaciousumbrellaicon", "spaciousumbrellamesh", ItemTier.Tier2, _simulacrumBanned: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();

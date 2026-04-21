@@ -5,10 +5,10 @@ namespace Faithful
     internal class DebugItem : ItemBase
     {
         // Constructor
-        public DebugItem(Toolbox _toolbox) : base(_toolbox)
+        public DebugItem(Toolbox _toolbox) : base(_toolbox, "DEBUG_ITEM")
         {
             // Create item
-            mainItem = Items.AddItem("DEBUG_ITEM", "Debug Item", [ItemTag.Any], "texTemporalCubeIcon", "Cube_TemporaryAsset", ItemTier.NoTier, _simulacrumBanned: true, _hidden: true, _debugOnly: true);
+            mainItem = Items.AddItem(token, "Debug Item", [ItemTag.Any], "texTemporalCubeIcon", "Cube_TemporaryAsset", ItemTier.NoTier, _simulacrumBanned: true, _hidden: true, _debugOnly: true);
         }
 
         protected override void CreateSettings()

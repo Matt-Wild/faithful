@@ -36,13 +36,13 @@ namespace Faithful
         const float chargeDurationQuality = 10.0f;
 
         // Constructor
-        public DrownedVisage(Toolbox _toolbox) : base(_toolbox)
+        public DrownedVisage(Toolbox _toolbox) : base(_toolbox, "DROWNED_VISAGE")
         {
             // Create display settings
             CreateDisplaySettings("drownedvisagedisplaymesh");
 
             // Create Drowned Visage item
-            mainItem = Items.AddItem("DROWNED_VISAGE", "Drowned Visage", [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_SPACIOUS_UMBRELLA_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Drowned Visage", [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_SPACIOUS_UMBRELLA_NAME", _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();

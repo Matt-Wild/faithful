@@ -22,13 +22,13 @@ namespace Faithful
         float damageNerfStacking;
 
         // Constructor
-        public HasteningGreave(Toolbox _toolbox) : base(_toolbox)
+        public HasteningGreave(Toolbox _toolbox) : base(_toolbox, "HASTENING_GREAVE")
         {
             // Create display settings
             CreateDisplaySettings("hasteninggreavedisplaymesh");
 
             // Create Longshot Geode item
-            mainItem = Items.AddItem("HASTENING_GREAVE", "Hastening Greave", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            mainItem = Items.AddItem(token, "Hastening Greave", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
 
             // Create item settings
             CreateSettings();

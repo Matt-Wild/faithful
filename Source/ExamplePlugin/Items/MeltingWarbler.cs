@@ -18,13 +18,13 @@ namespace Faithful
         float jumpBoostStacking;
 
         // Constructor
-        public MeltingWarbler(Toolbox _toolbox) : base(_toolbox)
+        public MeltingWarbler(Toolbox _toolbox) : base(_toolbox, "MELTING_WARBLER")
         {
             // Create display settings
             CreateDisplaySettings("meltingwarblerdisplaymesh");
 
             // Create Melting Warbler item
-            mainItem = Items.AddItem("MELTING_WARBLER", "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();

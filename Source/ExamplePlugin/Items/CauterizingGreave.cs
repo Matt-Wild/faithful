@@ -22,13 +22,13 @@ namespace Faithful
         float healingNerfStacking;
 
         // Constructor
-        public CauterizingGreave(Toolbox _toolbox) : base(_toolbox)
+        public CauterizingGreave(Toolbox _toolbox) : base(_toolbox, "CAUTERIZING_GREAVE")
         {
             // Create display settings
             CreateDisplaySettings("cauterizinggreavedisplaymesh");
 
             // Create Longshot Geode item
-            mainItem = Items.AddItem("CAUTERIZING_GREAVE", "Cauterizing Greave", [ItemTag.Utility], "texcauterizinggreaveicon", "cauterizinggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            mainItem = Items.AddItem(token, "Cauterizing Greave", [ItemTag.Utility], "texcauterizinggreaveicon", "cauterizinggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
 
             // Create item settings
             CreateSettings();

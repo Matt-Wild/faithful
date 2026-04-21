@@ -39,13 +39,13 @@ namespace Faithful
         QualityValues<float> speedStackingQualityValues = new();
 
         // Constructor
-        public MatterAccelerator(Toolbox _toolbox) : base(_toolbox)
+        public MatterAccelerator(Toolbox _toolbox) : base(_toolbox, "MATTER_ACCELERATOR")
         {
             // Create display settings
             CreateDisplaySettings("MatterAcceleratorDisplayMesh");
 
             // Create Second Hand item and buff
-            mainItem = Items.AddItem("MATTER_ACCELERATOR", "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _supportsQuality: true, _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _supportsQuality: true, _displaySettings: displaySettings);
             matterAcceleratorBuff = Buffs.AddBuff("MATTER_ACCELERATOR", "Matter Accelerator", "texMatterAcceleratorBuff", Color.white, false);
             matterAcceleratorSpeedBuff = Buffs.AddBuff("MATTER_ACCELERATOR_SPEED", "Matter Accelerator Speed", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
             matterAcceleratorHealthBuff = Buffs.AddBuff("MATTER_ACCELERATOR_HEALTH", "Matter Accelerator Health", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");

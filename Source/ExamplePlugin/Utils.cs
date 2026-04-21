@@ -1,20 +1,21 @@
 ﻿using BepInEx;
+using Faithful.Shared;
 using HarmonyLib;
 using R2API;
 using RoR2;
+using RoR2.ContentManagement;
 using RoR2.ExpansionManagement;
 using RoR2.Navigation;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
-using Faithful.Shared;
 
 namespace Faithful
 {
@@ -151,9 +152,6 @@ namespace Faithful
         /*// Store language dictionary for early lookups
         static private Dictionary<string, string> languageDictionary;*/
 
-        // Store list of item behaviours
-        static private List<ItemBase> itemBehaviours = new List<ItemBase>();
-
         // Store list of character behaviours
         static private List<System.WeakReference<ICharacterBehaviour>> characterBehaviours = new List<System.WeakReference<ICharacterBehaviour>>();
 
@@ -204,8 +202,8 @@ namespace Faithful
             // Config Simulacrum
             On.RoR2.InfiniteTowerRun.OverrideRuleChoices += InjectSimulacrumBannedItems;
 
-            // Config item corruptions
-            On.RoR2.Items.ContagiousItemManager.Init += SetupItemCorruptions;
+            // Init content pack provider
+            FaithfulContentPackProvider.Init();
 
             // Check if debug mode is enabled
             if (debugMode)
@@ -375,13 +373,13 @@ namespace Faithful
         public static void RefreshItemSettings()
         {
             // Fetch settings for items
-            Items.FetchSettings();
+            global::Faithful.Items.FetchSettings();
 
             // Cycle through item behaviours
-            foreach (ItemBase itemBehaviour in itemBehaviours)
+            foreach (KeyValuePair<string, ItemBase> pair in items)
             {
                 // Tell item behaviour to fetch it's settings again
-                itemBehaviour.FetchSettings();
+                pair.Value.FetchSettings();
             }
 
             // Cycle through character behaviours
@@ -403,12 +401,6 @@ namespace Faithful
         {
             // Add item def to banned list for Simulacrum
             simulacrumBanned.Add(_item);
-        }
-
-        public static void RegisterItemBehaviour(ItemBase _itemBehaviour)
-        {
-            // Add to list
-            itemBehaviours.Add(_itemBehaviour);
         }
 
         public static void RegisterCharacterBehaviour(ICharacterBehaviour _characterBehaviour)
@@ -627,24 +619,36 @@ namespace Faithful
             }
         }
 
-        private static void SetupItemCorruptions(On.RoR2.Items.ContagiousItemManager.orig_Init orig)
+        internal static ItemDef.Pair[] BuildCorruptionPairsForContentPack(HG.ReadOnlyArray<ContentPackLoadInfo> _peerLoadInfos)
         {
-            // Create item pair list
-            List<ItemDef.Pair> itemPairs = new List<ItemDef.Pair>();
+            List<ItemDef> availableItems = [];
 
-            // Cycle through corruption pairs
-            foreach (CorruptPair pair in corruptionPairs)
+            foreach (ContentPackLoadInfo peerLoadInfo in _peerLoadInfos)
             {
-                // Add to item pairs
-                itemPairs.Add(pair.GetPair());
+                foreach (ItemDef itemDef in peerLoadInfo.previousContentPack.itemDefs)
+                {
+                    if (itemDef == null) continue;
+                    availableItems.Add(itemDef);
+                }
             }
 
-            // Append corruption pairs to contagious items pair array
-            ItemCatalog.itemRelationships[DLC1Content.ItemRelationshipTypes.ContagiousItem] = ItemCatalog.itemRelationships[DLC1Content.ItemRelationshipTypes.ContagiousItem].AddRangeToArray(itemPairs.ToArray());
+            ContentPackItemResolver resolver = new(availableItems, items);
+            List<ItemDef.Pair> builtPairs = [];
 
-            if (_verboseConsole) Log.Debug("Added item corruptions");
+            foreach (CorruptPair pair in corruptionPairs)
+            {
+                if (pair.TryBuildPair(resolver.Resolve, out ItemDef.Pair builtPair))
+                {
+                    builtPairs.Add(builtPair);
 
-            orig(); // Run normal processes
+                    if (_verboseConsole)
+                    {
+                        Log.Debug($"[UTILS] | Added content-pack corruption pair: '{builtPair.itemDef1?.name}' -> '{builtPair.itemDef2?.name}'");
+                    }
+                }
+            }
+
+            return [.. builtPairs];
         }
 
         private static void OnCharacterSpawnCardAwake(On.RoR2.CharacterSpawnCard.orig_Awake orig, CharacterSpawnCard self)
@@ -2267,7 +2271,7 @@ namespace Faithful
             }
         }
 
-        public static List<ItemBase> ItemBehaviours => itemBehaviours;
+        public static Dictionary<string, ItemBase> Items => items;
 
         public static bool debugMode
         {
@@ -2442,61 +2446,80 @@ namespace Faithful
         }
     }
 
-    internal struct CorruptPair
+    internal readonly struct CorruptPair
     {
-        // Store corrupter and corrupted
-        private ItemDef corrupter;
-        private string corruptedToken;
-        private string corruptedOverride = "";
+        private readonly ItemDef corrupter;
+        private readonly string corruptedToken;
+        private readonly string corruptedOverride;
+
+        public ItemDef Corrupter => corrupter;
+        public string CorruptedToken => corruptedToken;
+        public string CorruptedOverride => corruptedOverride;
 
         public CorruptPair(ItemDef _corrupter, string _corruptedToken, string _corruptedOverride)
         {
-            // Assign corrupter and corrupted
             corrupter = _corrupter;
-            corruptedToken = _corruptedToken;
-            corruptedOverride = _corruptedOverride;
+            corruptedToken = _corruptedToken ?? "";
+            corruptedOverride = _corruptedOverride ?? "";
         }
 
-        public ItemDef.Pair GetPair()
+        public bool TryBuildPair(System.Func<string, ItemDef> _itemResolver, out ItemDef.Pair _pair)
         {
-            // Copy corrupted token to local
-            string localCorruptedToken = corruptedToken;
+            _pair = default;
 
-            // Check for corrupt override
-            if (corruptedOverride != "")
+            if (corrupter == null)
             {
-                // Get item to corrupt
-                ItemDef overrideCorrupted = Utils.GetItem(corruptedOverride);
+                Log.Error("[UTILS] | Failed to build corruption pair because the corrupter ItemDef was null.");
+                return false;
+            }
 
-                // Check for new corrupted item
+            if (_itemResolver == null)
+            {
+                Log.Error($"[UTILS] | Failed to build corruption pair for '{corrupter.name}' because the item resolver was null.");
+                return false;
+            }
+
+            string lookupValue = corruptedToken;
+
+            if (!string.IsNullOrWhiteSpace(corruptedOverride))
+            {
+                ItemDef overrideCorrupted = _itemResolver(corruptedOverride);
+
                 if (overrideCorrupted != null)
                 {
-                    // Return setup item pair
-                    return new ItemDef.Pair { itemDef1 = overrideCorrupted, itemDef2 = corrupter };
+                    _pair = new ItemDef.Pair
+                    {
+                        itemDef1 = overrideCorrupted,
+                        itemDef2 = corrupter
+                    };
+
+                    return true;
                 }
 
-                // Override not found
-                else
-                {
-                    // Log warning
-                    Log.Warning($"[UTILS] | Failed to assign override for corrupted item '{corruptedOverride}' for void item '{corrupter.name}' reverting to default item.");
-                }
+                Log.Warning($"[UTILS] | Failed to assign override for corrupted item '{corruptedOverride}' for void item '{corrupter.name}', reverting to default item.");
             }
-            
-            // Get item to corrupt
-            ItemDef corrupted = ItemCatalog.allItemDefs.Where(x => x.nameToken == localCorruptedToken).FirstOrDefault();
 
-            // Found item?
-            if (!corrupted)
+            if (string.IsNullOrWhiteSpace(lookupValue))
             {
-                Log.Error($"Failed to add '{localCorruptedToken}' as corrupted by '{corrupter.nameToken}', unable to find '{localCorruptedToken}'");
-
-                // Return empty item pair
-                return new ItemDef.Pair();
+                Log.Error($"[UTILS] | Failed to add corruption for '{corrupter.name}' because no default corrupted token was provided.");
+                return false;
             }
 
-            // Return setup item pair
-            return new ItemDef.Pair { itemDef1 = corrupted, itemDef2 = corrupter };
+            ItemDef corrupted = _itemResolver(lookupValue);
+
+            if (corrupted == null)
+            {
+                Log.Error($"[UTILS] | Failed to add '{lookupValue}' as corrupted by '{corrupter.nameToken}', unable to resolve '{lookupValue}'.");
+                return false;
+            }
+
+            _pair = new ItemDef.Pair
+            {
+                itemDef1 = corrupted,
+                itemDef2 = corrupter
+            };
+
+            return true;
         }
     }
 

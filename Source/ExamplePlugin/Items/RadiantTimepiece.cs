@@ -23,13 +23,13 @@ namespace Faithful
         List<BuffIndex> buffBlacklist = [];
 
         // Constructor
-        public RadiantTimepiece(Toolbox _toolbox) : base(_toolbox)
+        public RadiantTimepiece(Toolbox _toolbox) : base(_toolbox, "RADIANT_TIMEPIECE")
         {
             // Create display settings
             CreateDisplaySettings("RadiantTimepieceDisplayMesh");
 
             // Create Second Hand item and buff
-            mainItem = Items.AddItem("RADIANT_TIMEPIECE", "Radiant Timepiece", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist], "texRadiantTimepieceIcon", "RadiantTimepieceMesh", _tier: ItemTier.Tier1, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
+            mainItem = Items.AddItem(token, "Radiant Timepiece", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist], "texRadiantTimepieceIcon", "RadiantTimepieceMesh", _tier: ItemTier.Tier1, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
 
             // Create item settings
             CreateSettings();

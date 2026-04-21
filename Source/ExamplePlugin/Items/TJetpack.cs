@@ -27,13 +27,13 @@ namespace Faithful
         bool showBuff;
 
         // Constructor
-        public TJetpack(Toolbox _toolbox) : base(_toolbox)
+        public TJetpack(Toolbox _toolbox) : base(_toolbox, "4T0N_JETPACK")
         {
             // Create display settings
             CreateDisplaySettings("4t0njetpackdisplaymesh");
 
             // Create item
-            mainItem = Items.AddItem("4T0N_JETPACK", "4-T0N Jetpack", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "4-T0N Jetpack", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();

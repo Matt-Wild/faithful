@@ -42,13 +42,13 @@ namespace Faithful
         QualityValues<float> durationStackingQualityValues = new();
 
         // Constructor
-        public BrassScrews(Toolbox _toolbox) : base(_toolbox)
+        public BrassScrews(Toolbox _toolbox) : base(_toolbox, "BRASS_SCREWS")
         {
             // Create display settings
             CreateDisplaySettings("brassscrewsdisplaymesh");
 
             // Create Brass Screws item and buff
-            mainItem = Items.AddItem("BRASS_SCREWS", "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_COPPER_GEAR_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_COPPER_GEAR_NAME", _supportsQuality: true, _displaySettings: displaySettings);
             brassScrewsBuff = Buffs.AddBuff("BRASS_SCREWS", "Brass Screws", "texbuffteleporterscrew", Color.white, false);
             brassScrewsEffectBuff = Buffs.AddBuff("BRASS_SCREWS_EFFECT", "Brass Screws", "texbuffteleporterscrew", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "BRASS_SCREWS");
 

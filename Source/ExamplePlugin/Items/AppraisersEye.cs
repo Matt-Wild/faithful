@@ -43,13 +43,13 @@ namespace Faithful
         const string takeDamageProcessHookName = "AppraisersEye.TakeDamageProcess";
 
         // Constructor
-        public AppraisersEye(Toolbox _toolbox) : base(_toolbox)
+        public AppraisersEye(Toolbox _toolbox) : base(_toolbox, "APPRAISERS_EYE")
         {
             // Create display settings
             CreateDisplaySettings("appraiserseyedisplaymesh");
 
             // Create item and buff
-            mainItem = Items.AddItem("APPRAISERS_EYE", "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _displaySettings: displaySettings, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
+            mainItem = Items.AddItem(token, "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _displaySettings: displaySettings, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
             scrutinizedBuff = Buffs.AddBuff("SCRUTINIZED", "Scrutinized", "texBuffScrutinizedEye", Color.white, _isDebuff: true, _overlay: scrutinizedOverlay);
 
             // Create item settings

@@ -22,13 +22,13 @@ namespace Faithful
         float distanceThreshold;
 
         // Constructor
-        public LongshotGeode(Toolbox _toolbox) : base(_toolbox)
+        public LongshotGeode(Toolbox _toolbox) : base(_toolbox, "LONGSHOT_GEODE")
         {
             // Create display settings
             CreateDisplaySettings("longshotgeodedisplaymesh");
 
             // Create Longshot Geode item
-            mainItem = Items.AddItem("LONGSHOT_GEODE", "Longshot Geode", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Longshot Geode", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();

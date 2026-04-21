@@ -19,7 +19,7 @@ namespace Faithful
             bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, 
             ItemDisplayCallback _displaySettingsCallback = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null,
             ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false,
-            string _pickup = null, string _description = null, string _lore = null) : base(Utils.toolbox)
+            string _pickup = null, string _description = null, string _lore = null) : base(Utils.toolbox, Utils.GetXMLSafeString(_name).ToUpper())
         {
             // Don't create item is WIP content is disabled
             if (!Utils.WIPContentEnabled) return;
@@ -31,7 +31,7 @@ namespace Faithful
             if (_createDisplaySettings) CreateDisplaySettings(_displayDir);
 
             // Create Copper Gear item and buff
-            mainItem = Items.AddItem(Utils.GetXMLSafeString(_name).ToUpper(), _name, _tags ?? [], _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, 
+            mainItem = Items.AddItem(token, _name, _tags ?? [], _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, 
                 _hidden, _corruptToken, displaySettings, _modifyItemModelPrefabCallback, _modifyItemDisplayPrefabCallback, _canNeverBeTemporary, 
                 _debugOnly, true, _name, _pickup, _description, _lore);
 
