@@ -128,8 +128,8 @@ namespace Faithful
         {
             // Create quality settings specific to this item
             healthPercQualitySetting = mainItem.CreateQualitySetting("HEALTH_PERC", "Health Percentage", 1.0f, 1.0f, 1.0f, 1.0f, "How much shield is required to receive one instance of the buff? (1.0 = 1% max health)", _valueFormatting: "{0:0.0}%");
-            speedQualitySetting = mainItem.CreateQualitySetting("SPEED", "Movement Speed", 1.0f, 2.0f, 3.0f, 5.0f, "How much should the buff increase movement speed? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
-            speedStackingQualitySetting = mainItem.CreateQualitySetting("SPEED_STACKING", "Movement Speed Stacking", 1.0f, 2.0f, 3.0f, 5.0f, "How much should further stacks of the buff increase movement speed? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
+            speedQualitySetting = mainItem.CreateQualitySetting("SPEED", "Movement Speed", 1.0f, 2.0f, 3.0f, 5.0f, "How much should the buff increase movement speed? (1.0 = 1% increase)", _valueFormatting: "{0:0.0}%");
+            speedStackingQualitySetting = mainItem.CreateQualitySetting("SPEED_STACKING", "Movement Speed Stacking", 1.0f, 2.0f, 3.0f, 5.0f, "How much should further stacks of the buff increase movement speed? (1.0 = 1% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
