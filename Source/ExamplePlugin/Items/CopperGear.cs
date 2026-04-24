@@ -144,8 +144,8 @@ namespace Faithful
         {
             // Create quality settings specific to this item
             attackSpeedQualitySetting = mainItem.CreateQualitySetting("ATTACK_SPEED", "Attack Speed", 5.0f, 10.0f, 20.0f, 30.0f, "How much should each kill increase attack speed while within the teleporter radius? (5.0 = 5% increase)", _valueFormatting: "{0:0.0}%");
-            durationQualitySetting = mainItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
-            durationStackingQualitySetting = mainItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}%");
+            durationQualitySetting = mainItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
+            durationStackingQualitySetting = mainItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
         }
 
         public override void FetchSettings()

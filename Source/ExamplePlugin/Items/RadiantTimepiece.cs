@@ -22,6 +22,14 @@ namespace Faithful
         // List of blacklisted buff indexes that this item doesn't work with
         List<BuffIndex> buffBlacklist = [];
 
+        // Store additional quality settings
+        QualitySetting<float> durationQualitySetting;
+        QualitySetting<float> durationStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> durationQualityValues = new();
+        QualityValues<float> durationStackingQualityValues = new();
+
         // Constructor
         public RadiantTimepiece(Toolbox _toolbox) : base(_toolbox, "RADIANT_TIMEPIECE")
         {
@@ -29,7 +37,7 @@ namespace Faithful
             CreateDisplaySettings("RadiantTimepieceDisplayMesh");
 
             // Create Second Hand item and buff
-            mainItem = Items.AddItem(token, "Radiant Timepiece", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist], "texRadiantTimepieceIcon", "RadiantTimepieceMesh", _tier: ItemTier.Tier1, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
+            mainItem = Items.AddItem(token, "Radiant Timepiece", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist], "texRadiantTimepieceIcon", "RadiantTimepieceMesh", _tier: ItemTier.Tier1, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab, _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -42,6 +50,11 @@ namespace Faithful
             Behaviour.AddOnAddTimedBuffMaxStacksCallback(OnAddTimedBuffMaxStacks);
             Behaviour.AddOnExtendTimedBuffsCallback(OnExtendTimedBuffs);
             Behaviour.AddOnSetTimedBuffDurationCallback(OnSetTimedBuffDuration);
+        }
+
+        public override void QualityConstructor()
+        {
+            // No new behaviour needed
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -82,9 +95,19 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            durationSetting = mainItem.CreateSetting("DURATION", "Duration", 1.0f, "How much should this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
-            durationStackingSetting = mainItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much should further stacks of this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}%");
+            durationSetting = mainItem.CreateSetting("DURATION", "Duration", 1.0f, "How much should this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}s");
+            durationStackingSetting = mainItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much should further stacks of this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}s");
             buffBlacklistSetting = mainItem.CreateSetting("BUFF_BLACKLIST", "Buff Blacklist", "bdParrying,bdVoidFogMild,bdVoidRaidCrabWardWipeFog,bdImmune,bdUntargetable,bdHiddenInvincibility,bdMedkitHeal,bdKnockBackActiveWindow", "Which buffs should this item not apply to?\n\nProvide as a comma separated list.\n(Cooldowns, DOTs, and debuffs are already ignored)", _valueFormatting: "{0:0.0}%", _isStat: false, _canRandomise: false);
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            durationQualitySetting = mainItem.CreateQualitySetting("DURATION", "Duration", 25.0f, 50.0f, 75.0f, 100.0f, "How much longer should this item's quality variants increase the duration of temporary buffs? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            durationStackingQualitySetting = mainItem.CreateQualitySetting("DURATION_STACKING", "Duration Stacking", 25.0f, 50.0f, 75.0f, 100.0f, "How much longer should further stacks of this item's quality variants increase the duration of temporary buffs? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -114,8 +137,18 @@ namespace Faithful
                 }
             }
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             mainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            durationQualityValues.UpdateValues(durationQualitySetting, 0.01f);
+            durationStackingQualityValues.UpdateValues(durationStackingQualitySetting, 0.01f);
         }
 
         void ModifyDisplayPrefab(GameObject _prefab)
@@ -191,7 +224,25 @@ namespace Faithful
 
             // Apply effect to duration if we have at least 1 item
             if (itemCount == 0) return 0.0f;
-            return duration + durationStacking * (itemCount - 1);
+
+            // Check if Quality is enabled
+            if (!Utils.qualityEnabled) return duration + durationStacking * (itemCount - 1);
+
+            // Apply flat duration increase
+            float newDuration = duration + durationStacking * (itemCount - 1);
+
+            // Get quality item counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+
+            // Sum up Quality duration multiplier
+            float qualityDurationMultiplier = 1.0f;
+            qualityDurationMultiplier += qualityCounts.UNCOMMON == 0 ? 0.0f : durationQualityValues.UNCOMMON + (qualityCounts.UNCOMMON - 1) * durationStackingQualityValues.UNCOMMON;
+            qualityDurationMultiplier += qualityCounts.RARE == 0 ? 0.0f : durationQualityValues.RARE + (qualityCounts.RARE - 1) * durationStackingQualityValues.RARE;
+            qualityDurationMultiplier += qualityCounts.EPIC == 0 ? 0.0f : durationQualityValues.EPIC + (qualityCounts.EPIC - 1) * durationStackingQualityValues.EPIC;
+            qualityDurationMultiplier += qualityCounts.LEGENDARY == 0 ? 0.0f : durationQualityValues.LEGENDARY + (qualityCounts.LEGENDARY - 1) * durationStackingQualityValues.LEGENDARY;
+
+            // Return multiplied duration
+            return newDuration * qualityDurationMultiplier;
         }
     }
 }
