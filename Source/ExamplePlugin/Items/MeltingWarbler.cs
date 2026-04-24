@@ -1,11 +1,20 @@
-﻿using R2API;
+﻿using EntityStates;
+using R2API;
 using RoR2;
+using System;
 using UnityEngine;
 
 namespace Faithful
 {
     internal class MeltingWarbler : ItemBase
     {
+        // Quality buffs
+        Buff meltingWarblerQualityBuff;
+        Buff meltingWarblerQualityUncommonBuff;
+        Buff meltingWarblerQualityRareBuff;
+        Buff meltingWarblerQualityEpicBuff;
+        Buff meltingWarblerQualityLegendaryBuff;
+
         // Store display settings
         ItemDisplaySettings displaySettings;
 
@@ -17,6 +26,14 @@ namespace Faithful
         float jumpBoost;
         float jumpBoostStacking;
 
+        // Store additional quality settings
+        QualitySetting<float> speedQualitySetting;
+        QualitySetting<float> speedStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> speedQualityValues = new();
+        QualityValues<float> speedStackingQualityValues = new();
+
         // Constructor
         public MeltingWarbler(Toolbox _toolbox) : base(_toolbox, "MELTING_WARBLER")
         {
@@ -24,7 +41,7 @@ namespace Faithful
             CreateDisplaySettings("meltingwarblerdisplaymesh");
 
             // Create Melting Warbler item
-            mainItem = Items.AddItem(token, "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -34,6 +51,25 @@ namespace Faithful
 
             // Add stats modification
             Behaviour.AddStatsMod(mainItem, MeltingWarblerStatsMod);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Create Quality stuff
+            meltingWarblerQualityBuff = Buffs.AddBuff("MELTING_WARBLER_QUALITY", "Melting Warbler", "texMeltingWarblerBuff", Color.white, _qualityBuff: true, _canStack: false);
+            meltingWarblerQualityUncommonBuff = Buffs.AddBuff("MELTING_WARBLER_QUALITY_UNCOMMON", "Melting Warbler", "texMeltingWarblerBuff", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "MELTING_WARBLER_QUALITY");
+            meltingWarblerQualityRareBuff = Buffs.AddBuff("MELTING_WARBLER_QUALITY_RARE", "Melting Warbler", "texMeltingWarblerBuff", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "MELTING_WARBLER_QUALITY");
+            meltingWarblerQualityEpicBuff = Buffs.AddBuff("MELTING_WARBLER_QUALITY_EPIC", "Melting Warbler", "texMeltingWarblerBuff", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "MELTING_WARBLER_QUALITY");
+            meltingWarblerQualityLegendaryBuff = Buffs.AddBuff("MELTING_WARBLER_QUALITY_LEGENDARY", "Melting Warbler", "texMeltingWarblerBuff", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "MELTING_WARBLER_QUALITY");
+
+            // Add stats modification
+            Behaviour.AddStatsMod(meltingWarblerQualityUncommonBuff, UncommonStatsMod_Quality);
+            Behaviour.AddStatsMod(meltingWarblerQualityRareBuff, RareStatsMod_Quality);
+            Behaviour.AddStatsMod(meltingWarblerQualityEpicBuff, EpicStatsMod_Quality);
+            Behaviour.AddStatsMod(meltingWarblerQualityLegendaryBuff, LegendaryStatsMod_Quality);
+
+            // Link Generic Character Fixed Update behaviour
+            Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate_Quality);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -78,6 +114,16 @@ namespace Faithful
             // Create settings specific to this item
             jumpBoostSetting = mainItem.CreateSetting("JUMP_BOOST", "Jump Boost", 2.0f, "How much should this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
             jumpBoostStackingSetting = mainItem.CreateSetting("JUMP_BOOST_STACKING", "Jump Boost Stacking", 2.0f, "How much should further stacks of this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            speedQualitySetting = mainItem.CreateQualitySetting("SPEED", "Speed", 30.0f, 60.0f, 100.0f, 150.0f, "How much should this item increase movement speed while airborne? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            speedStackingQualitySetting = mainItem.CreateQualitySetting("SPEED_STACKING", "Speed Stacking", 30.0f, 60.0f, 100.0f, 150.0f, "How much should further stacks of this item increase movement speed while airborne? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -86,8 +132,18 @@ namespace Faithful
             jumpBoost = jumpBoostSetting.Value;
             jumpBoostStacking = jumpBoostStackingSetting.Value;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             mainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            speedQualityValues.UpdateValues(speedQualitySetting, 0.01f);
+            speedStackingQualityValues.UpdateValues(speedStackingQualitySetting, 0.01f);
         }
 
         void MeltingWarblerStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -97,6 +153,77 @@ namespace Faithful
 
             // Modify jump power
             _stats.baseJumpPowerAdd += 1.75f * jumpBoost + 1.75f * jumpBoostStacking * (_count - 1);
+        }
+
+        void GenericCharacterFixedUpdate_Quality(GenericCharacterMain _character)
+        {
+            // Check for character body and inventory
+            CharacterBody characterBody = _character.characterBody;
+            Inventory inventory = characterBody?.inventory;
+            if (characterBody && inventory)
+            {
+                // Check if grounded or character motor is null
+                if (_character.isGrounded || _character.characterMotor == null)
+                {
+                    // Update all buff counts
+                    characterBody.SetBuffCount(meltingWarblerQualityBuff.buffDef.buffIndex, 0);
+                    characterBody.SetBuffCount(meltingWarblerQualityUncommonBuff.buffDef.buffIndex, 0);
+                    characterBody.SetBuffCount(meltingWarblerQualityRareBuff.buffDef.buffIndex, 0);
+                    characterBody.SetBuffCount(meltingWarblerQualityEpicBuff.buffDef.buffIndex, 0);
+                    characterBody.SetBuffCount(meltingWarblerQualityLegendaryBuff.buffDef.buffIndex, 0);
+
+                    // Done
+                    return;
+                }
+
+                // Get quality item counts
+                QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+
+                // Check for any quality stacks
+                if (counts.Total <= 0)
+                {
+                    // Update all buff counts
+                    characterBody.SetBuffCount(meltingWarblerQualityBuff.buffDef.buffIndex, 0);
+                    characterBody.SetBuffCount(meltingWarblerQualityUncommonBuff.buffDef.buffIndex, 0);
+                    characterBody.SetBuffCount(meltingWarblerQualityRareBuff.buffDef.buffIndex, 0);
+                    characterBody.SetBuffCount(meltingWarblerQualityEpicBuff.buffDef.buffIndex, 0);
+                    characterBody.SetBuffCount(meltingWarblerQualityLegendaryBuff.buffDef.buffIndex, 0);
+
+                    // Done
+                    return;
+                }
+
+                // Update buff counts based on quality item counts
+                characterBody.SetBuffCount(meltingWarblerQualityBuff.buffDef.buffIndex, 1);
+                characterBody.SetBuffCount(meltingWarblerQualityUncommonBuff.buffDef.buffIndex, counts.UNCOMMON);
+                characterBody.SetBuffCount(meltingWarblerQualityRareBuff.buffDef.buffIndex, counts.RARE);
+                characterBody.SetBuffCount(meltingWarblerQualityEpicBuff.buffDef.buffIndex, counts.EPIC);
+                characterBody.SetBuffCount(meltingWarblerQualityLegendaryBuff.buffDef.buffIndex, counts.LEGENDARY);
+            }
+        }
+
+        private void UncommonStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Increase movement speed
+            _stats.moveSpeedMultAdd += _count == 0 ? 0.0f : speedQualityValues.UNCOMMON + (_count - 1) * speedStackingQualityValues.UNCOMMON;
+        }
+
+        private void RareStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Increase movement speed
+            _stats.moveSpeedMultAdd += _count == 0 ? 0.0f : speedQualityValues.RARE + (_count - 1) * speedStackingQualityValues.RARE;
+        }
+
+        private void EpicStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Increase movement speed
+            _stats.moveSpeedMultAdd += _count == 0 ? 0.0f : speedQualityValues.EPIC + (_count - 1) * speedStackingQualityValues.EPIC;
+        }
+
+        private void LegendaryStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Increase movement speed
+            _stats.moveSpeedMultAdd += _count == 0 ? 0.0f : speedQualityValues.LEGENDARY + (_count - 1) * speedStackingQualityValues.LEGENDARY;
         }
     }
 }
