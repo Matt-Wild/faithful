@@ -71,6 +71,9 @@ namespace Faithful
 
         public void SetTargetSize(float _targetSize)
         {
+            // Check if target size is already the same as current target size
+            if (Mathf.Approximately(_targetSize, m_targetSize)) return;
+
             // Set target size
             m_targetSize = _targetSize;
 

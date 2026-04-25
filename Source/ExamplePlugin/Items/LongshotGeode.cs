@@ -21,6 +21,16 @@ namespace Faithful
         float damageStacking;
         float distanceThreshold;
 
+        // Store additional quality settings
+        QualitySetting<float> distanceQualitySetting;
+        QualitySetting<float> damageQualitySetting;
+        QualitySetting<float> damageStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> distanceQualityValues = new();
+        QualityValues<float> damageQualityValues = new();
+        QualityValues<float> damageStackingQualityValues = new();
+
         // Constructor
         public LongshotGeode(Toolbox _toolbox) : base(_toolbox, "LONGSHOT_GEODE")
         {
@@ -28,7 +38,7 @@ namespace Faithful
             CreateDisplaySettings("longshotgeodedisplaymesh");
 
             // Create Longshot Geode item
-            mainItem = Items.AddItem(token, "Longshot Geode", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _displaySettings: displaySettings);
+            mainItem = Items.AddItem(token, "Longshot Geode", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -38,6 +48,11 @@ namespace Faithful
 
             // Add On Incoming Damage behaviour
             Behaviour.AddOnIncomingDamageCallback(OnIncomingDamage);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Behaviour integrated into base hooks
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -84,6 +99,17 @@ namespace Faithful
             damageSetting = mainItem.CreateSetting("DAMAGE", "Damage", 15.0f, "How much should this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
             damageStackingSetting = mainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 15.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
             distanceSetting = mainItem.CreateSetting("DISTANCE", "Distance", 40.0f, "How far should the target need to be for the damage bonus to be applied? (40.0 = 40 meters)", _valueFormatting: "{0:0.0}m");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            distanceQualitySetting = mainItem.CreateQualitySetting("DISTANCE", "Distance", 35.0f, 30.0f, 25.0f, 20.0f, "How far should the target need to be for the damage bonus to be applied? (35.0 = 35 meters)", _valueFormatting: "{0:0.0}m");
+            damageQualitySetting = mainItem.CreateQualitySetting("DAMAGE", "Damage", 25.0f, 35.0f, 50.0f, 75.0f, "How much should this item increase damage while the target is beyond the distance threshold? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            damageStackingQualitySetting = mainItem.CreateQualitySetting("DAMAGE_STACKING", "Damage Stacking", 25.0f, 35.0f, 50.0f, 75.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -94,8 +120,19 @@ namespace Faithful
             damageStacking = damageStackingSetting.Value / 100.0f;
             distanceThreshold = distanceSetting.Value;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             mainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            distanceQualityValues.UpdateValues(distanceQualitySetting);
+            damageQualityValues.UpdateValues(damageQualitySetting, 0.01f);
+            damageStackingQualityValues.UpdateValues(damageStackingQualitySetting, 0.01f);
         }
 
         void OnIncomingDamage(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim)
@@ -123,21 +160,58 @@ namespace Faithful
             }
 
             // Get item count
-            int count = attackerBody.inventory.GetItemCount(mainItem.itemDef);
+            int count = attackerBody.inventory.GetItemCountEffective(mainItem.itemDef);
 
             // Has item?
-            if (count > 0)
-            {
-                // Get distance between bodies
-                float distance = (attackerBody.transform.position - victimBody.transform.position).magnitude;
+            if (count <= 0) return;
 
-                // Check if distance is greater or equal to 50 metres
-                if (distance >= distanceThreshold)
+            // Get distance between bodies
+            float distance = (attackerBody.transform.position - victimBody.transform.position).magnitude;
+
+            // Remember original damage
+            float originalDamage = _report.damage;
+
+            // Get distance threshold
+            float currentDistanceThreshold = distanceThreshold;
+
+            // Quality behaviour
+            if (Utils.qualityEnabled)
+            {
+                // Get quality item counts
+                QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(attackerBody.inventory, mainItem);
+
+                // Subtract quality variants from base count (they change behaviour from the base item)
+                count -= qualityCounts.Total;
+
+                // Update distance threshold
+                if (qualityCounts.LEGENDARY > 0) currentDistanceThreshold = distanceQualityValues.LEGENDARY;
+                else if (qualityCounts.EPIC > 0) currentDistanceThreshold = distanceQualityValues.EPIC;
+                else if (qualityCounts.RARE > 0) currentDistanceThreshold = distanceQualityValues.RARE;
+                else if (qualityCounts.UNCOMMON > 0) currentDistanceThreshold = distanceQualityValues.UNCOMMON;
+
+                // Check if distance is further than distance threshold
+                if (distance >= currentDistanceThreshold)
                 {
-                    // Apply damage bonus and colour index
-                    _report.damageColorIndex = DamageColorIndex.Nearby;
-                    _report.damage *= 1.0f + damage + (damageStacking * (count - 1));
+                    // Update damage from quality counts
+                    _report.damage *= 1.0f + (qualityCounts.UNCOMMON == 0 ? 0.0f : damageQualityValues.UNCOMMON + (qualityCounts.UNCOMMON - 1) * damageStackingQualityValues.UNCOMMON)
+                                           + (qualityCounts.RARE == 0 ? 0.0f : damageQualityValues.RARE + (qualityCounts.RARE - 1) * damageStackingQualityValues.RARE)
+                                           + (qualityCounts.EPIC == 0 ? 0.0f : damageQualityValues.EPIC + (qualityCounts.EPIC - 1) * damageStackingQualityValues.EPIC)
+                                           + (qualityCounts.LEGENDARY == 0 ? 0.0f : damageQualityValues.LEGENDARY + (qualityCounts.LEGENDARY - 1) * damageStackingQualityValues.LEGENDARY);
                 }
+            }
+
+            // Check if distance is greater or equal to 50 metres (check for item count after quality check)
+            if (count > 0 && distance >= currentDistanceThreshold)
+            {
+                // Apply damage bonus
+                _report.damage *= 1.0f + damage + (damageStacking * (count - 1));
+            }
+
+            // Check if damage was modified
+            if (_report.damage != originalDamage)
+            {
+                // Update damage colour
+                _report.damageColorIndex = DamageColorIndex.Nearby;
             }
         }
     }

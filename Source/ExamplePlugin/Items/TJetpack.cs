@@ -42,9 +42,9 @@ namespace Faithful
             FetchSettings();
 
             // Create buffs
-            emptyFuelBuff = Buffs.AddBuff("4T0N_JETPACK_EMPTY", "No Fuel", "texBuff4T0NJetpackEmpty", Color.white, false, _hasConfig: false, _isHidden: !showBuff);
-            lowFuelBuff = Buffs.AddBuff("4T0N_JETPACK_LOW", "Low Fuel", "texBuff4T0NJetpackLow", Color.white, _hasConfig: false, _usePercentageDisplay: true, _isHidden: !showBuff);
-            highFuelBuff = Buffs.AddBuff("4T0N_JETPACK_HIGH", "High Fuel", "texBuff4T0NJetpackHigh", Color.white, _hasConfig: false, _usePercentageDisplay: true, _isHidden: !showBuff);
+            emptyFuelBuff = Buffs.AddBuff("4T0N_JETPACK_EMPTY", "Jetpack Fuel Empty", "texBuff4T0NJetpackEmpty", Color.white, false, _hasConfig: false, _isHidden: !showBuff);
+            lowFuelBuff = Buffs.AddBuff("4T0N_JETPACK_LOW", "Jetpack Fuel Low", "texBuff4T0NJetpackLow", Color.white, _hasConfig: false, _usePercentageDisplay: true, _isHidden: !showBuff);
+            highFuelBuff = Buffs.AddBuff("4T0N_JETPACK_HIGH", "Jetpack Fuel High", "texBuff4T0NJetpackHigh", Color.white, _hasConfig: false, _usePercentageDisplay: true, _isHidden: !showBuff);
 
             // Inject on transfer item behaviours
             Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
