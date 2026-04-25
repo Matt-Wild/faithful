@@ -128,6 +128,9 @@ namespace Faithful
         // Additional behaviour callbacks
         private CharacterBodyCallback m_onCharacterBodyConfigured;
 
+        // For registering custom entity state for this survivor
+        private static readonly HashSet<Type> m_registeredEntityStates = [];
+
         public void Init(string _token, string _modelName, string _portraitName, string _defaultSkinName, Color? _bodyColor = null, int _sortPosition = 100, string _crosshairName = "Standard",
                          float _maxHealth = 110.0f, float _healthRegen = 1.0f, float _armour = 0.0f, float _shield = 0.0f, int _jumpCount = 1, float _damage = 12.0f, float _attackSpeed = 1.0f,
                          float _crit = 1.0f, float _moveSpeed = 7.0f, float _acceleration = 80.0f, float _jumpPower = 15.0f, bool _autoCalculateLevelStats = true, 
@@ -958,7 +961,7 @@ namespace Faithful
             // Not applicable for passives
             if (_family != SkillSlot.None)
             {
-                mySkillDef.activationState = _activationState;
+                mySkillDef.activationState = RegisterActivationState(_activationState);
                 mySkillDef.activationStateMachineName = "Weapon";
                 mySkillDef.baseMaxStock = _baseMaxStock;
                 mySkillDef.baseRechargeInterval = _baseRechargeInterval;
@@ -986,6 +989,39 @@ namespace Faithful
                 unlockableDef = null,
                 viewableNode = new ViewablesCatalog.Node(mySkillDef.skillNameToken, false, null)
             };
+        }
+
+        private SerializableEntityStateType RegisterActivationState(SerializableEntityStateType _activationState)
+        {
+            Type stateType = _activationState.stateType;
+
+            if (stateType == null)
+            {
+                Print.Error(this, "Could not register activation state because stateType was null");
+                return _activationState;
+            }
+
+            if (!typeof(EntityState).IsAssignableFrom(stateType))
+            {
+                Print.Error(this, $"Could not register activation state '{stateType.FullName}' because it does not inherit from EntityState");
+                return _activationState;
+            }
+
+            // Avoid trying to register the same state repeatedly if multiple skills use it
+            if (!m_registeredEntityStates.Add(stateType))
+            {
+                return _activationState;
+            }
+
+            SerializableEntityStateType registeredState = ContentAddition.AddEntityState(stateType, out bool wasAdded);
+
+            if (!wasAdded)
+            {
+                Print.Warning(this, $"EntityState '{stateType.FullName}' may not have been registered successfully");
+                return _activationState;
+            }
+
+            return registeredState;
         }
 
         // Yoinked from Henry mod

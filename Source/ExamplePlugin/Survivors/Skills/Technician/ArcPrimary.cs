@@ -11,7 +11,7 @@ namespace Faithful.Skills.Technician
     {
         GameObject arcEffectPrefab = Assets.technicianArcPrefab;
 
-        float baseEntryDuration = 0.0f;
+        float baseEntryDuration = 0.05f;
 
         float procCoefficientPerTick = 0.625f;
 
