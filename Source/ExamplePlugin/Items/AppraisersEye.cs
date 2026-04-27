@@ -49,7 +49,7 @@ namespace Faithful
             CreateDisplaySettings("appraiserseyedisplaymesh");
 
             // Create item and buff
-            mainItem = Items.AddItem(token, "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _displaySettings: displaySettings, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
+            MainItem = Items.AddItem(token, "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _displaySettings: displaySettings, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
             scrutinizedBuff = Buffs.AddBuff("SCRUTINIZED", "Scrutinized", "texBuffScrutinizedEye", Color.white, _isDebuff: true, _overlay: scrutinizedOverlay);
 
             // Create item settings
@@ -104,10 +104,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            hiddenFromLogbookSetting = mainItem.CreateSetting("HIDDEN_FROM_LOGBOOK", "Hide From Logbook?", true, "Should this item be hidden from the logbook?", false, _canRandomise: false, _restartRequired: true);
-            maxDebuffsSetting = mainItem.CreateSetting("MAX_DEBUFFS", "Max Debuffs", 1, "What's the maximum amount of scrutinized you should be able to apply to a single enemy using this item? (1 = 1 scrutinized)");
-            maxDebuffsStackingSetting = mainItem.CreateSetting("MAX_DEBUFFS_STACKING", "Max Debuffs Stacking", 1, "What's the maximum amount of scrutinized you should be able to apply to a single enemy using further stacks of this item? (1 = 1 scrutinized)");
-            critDamageSetting = mainItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should each stack of scrutinized increase crit damage? (20.0 = 20% increase)");
+            hiddenFromLogbookSetting = MainItem.CreateSetting("HIDDEN_FROM_LOGBOOK", "Hide From Logbook?", true, "Should this item be hidden from the logbook?", false, _canRandomise: false, _restartRequired: true);
+            maxDebuffsSetting = MainItem.CreateSetting("MAX_DEBUFFS", "Max Debuffs", 1, "What's the maximum amount of scrutinized you should be able to apply to a single enemy using this item? (1 = 1 scrutinized)");
+            maxDebuffsStackingSetting = MainItem.CreateSetting("MAX_DEBUFFS_STACKING", "Max Debuffs Stacking", 1, "What's the maximum amount of scrutinized you should be able to apply to a single enemy using further stacks of this item? (1 = 1 scrutinized)");
+            critDamageSetting = MainItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should each stack of scrutinized increase crit damage? (20.0 = 20% increase)");
         }
 
         public override void FetchSettings()
@@ -119,10 +119,10 @@ namespace Faithful
             critDamage = critDamageSetting.Value / 100.0f;
 
             // Update if hidden in logbook
-            mainItem.hiddenFromLogbook = hiddenFromLogbook;
+            MainItem.hiddenFromLogbook = hiddenFromLogbook;
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         private void SetupCritDamageModifier()
@@ -206,10 +206,10 @@ namespace Faithful
 
             // Validate item and buff
             if (scrutinizedBuff == null || scrutinizedBuff.buffDef == null) return;
-            if (mainItem == null || mainItem.itemDef == null) return;
+            if (MainItem == null || MainItem.itemDef == null) return;
 
             // Get item count
-            int attackerItemCount = attackerInventory.GetItemCountEffective(mainItem.itemDef.itemIndex);
+            int attackerItemCount = attackerInventory.GetItemCountEffective(MainItem.itemDef.itemIndex);
             if (attackerItemCount <= 0) return;
 
             // Calculate max debuffs this attacker can apply

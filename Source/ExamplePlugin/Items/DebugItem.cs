@@ -8,7 +8,7 @@ namespace Faithful
         public DebugItem(Toolbox _toolbox) : base(_toolbox, "DEBUG_ITEM")
         {
             // Create item
-            mainItem = Items.AddItem(token, "Debug Item", [ItemTag.Any], "texTemporalCubeIcon", "Cube_TemporaryAsset", ItemTier.NoTier, _simulacrumBanned: true, _hidden: true, _debugOnly: true);
+            MainItem = Items.AddItem(token, "Debug Item", [ItemTag.Any], "texTemporalCubeIcon", "Cube_TemporaryAsset", ItemTier.NoTier, _simulacrumBanned: true, _hidden: true, _debugOnly: true);
         }
 
         protected override void CreateSettings()
@@ -18,7 +18,7 @@ namespace Faithful
         public override void FetchSettings()
         {
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
     }
 }

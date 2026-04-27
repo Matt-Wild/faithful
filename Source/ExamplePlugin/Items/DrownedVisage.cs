@@ -42,7 +42,7 @@ namespace Faithful
             CreateDisplaySettings("drownedvisagedisplaymesh");
 
             // Create Drowned Visage item
-            mainItem = Items.AddItem(token, "Drowned Visage", [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_SPACIOUS_UMBRELLA_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Drowned Visage", [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_SPACIOUS_UMBRELLA_NAME", _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -101,20 +101,20 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            chanceSetting = mainItem.CreateSetting("CHANCE", "Charge Chance", 5.0f, "What should the chance be for this item to charge the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
-            chanceStackingSetting = mainItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 5.0f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
-            chargeAmountSetting = mainItem.CreateSetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, "How much should this item charge the teleporter? (5.0 = 5% charge)", _valueFormatting: "{0:0.00}%");
-            largeChargeAmountSetting = mainItem.CreateSetting("LARGE_CHARGE_AMOUNT", "Charge Amount Large", 10.0f, "How much should killing a large or elite enemy charge the teleporter? (10.0 = 10% charge)", _valueFormatting: "{0:0.00}%");
+            chanceSetting = MainItem.CreateSetting("CHANCE", "Charge Chance", 5.0f, "What should the chance be for this item to charge the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
+            chanceStackingSetting = MainItem.CreateSetting("CHANCE_STACKING", "Charge Chance Stacking", 5.0f, "What should the additional stacking chance be for charging the teleporter when killing an enemy within the teleporter zone? (5.0 = 5.0% chance)", _valueFormatting: "{0:0.00}%");
+            chargeAmountSetting = MainItem.CreateSetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, "How much should this item charge the teleporter? (5.0 = 5% charge)", _valueFormatting: "{0:0.00}%");
+            largeChargeAmountSetting = MainItem.CreateSetting("LARGE_CHARGE_AMOUNT", "Charge Amount Large", 10.0f, "How much should killing a large or elite enemy charge the teleporter? (10.0 = 10% charge)", _valueFormatting: "{0:0.00}%");
 
             // Create quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
         }
 
         protected void CreateQualitySettings()
         {
             // Create quality settings specific to this item
-            chargeAmountQualitySetting = mainItem.CreateQualitySetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, 10.0f, 15.0f, 20.0f, "How much extra charge should this item provide to the teleporter over time? (5.0 = 5% charge)", _valueFormatting: "{0:0.0}%");
-            chargeAmountStackingQualitySetting = mainItem.CreateQualitySetting("CHARGE_AMOUNT_STACKING", "Charge Amount Stacking", 5.0f, 10.0f, 15.0f, 20.0f, "How much extra charge should further stacks of this item provide to the teleporter over time? (5.0 = 5% charge)", _valueFormatting: "{0:0.0}%");
+            chargeAmountQualitySetting = MainItem.CreateQualitySetting("CHARGE_AMOUNT", "Charge Amount", 5.0f, 10.0f, 15.0f, 20.0f, "How much extra charge should this item provide to the teleporter over time? (5.0 = 5% charge)", _valueFormatting: "{0:0.0}%");
+            chargeAmountStackingQualitySetting = MainItem.CreateQualitySetting("CHARGE_AMOUNT_STACKING", "Charge Amount Stacking", 5.0f, 10.0f, 15.0f, 20.0f, "How much extra charge should further stacks of this item provide to the teleporter over time? (5.0 = 5% charge)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -126,10 +126,10 @@ namespace Faithful
             largeChargeAmount = largeChargeAmountSetting.Value / 100.0f;
 
             // Fetch quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         protected void FetchQualitySettings()
@@ -158,7 +158,7 @@ namespace Faithful
             if (!inventory) return;
 
             // Get count for item
-            int count = inventory.GetItemCountEffective(mainItem.itemDef);
+            int count = inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Check for item
             if (count == 0) return;
@@ -200,7 +200,7 @@ namespace Faithful
                     if (body == null) return;
 
                     // Get quality item counts
-                    QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+                    QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
 
                     // Add or refresh buff if has item
                     if (qualityCounts.Total > 0)
@@ -228,7 +228,7 @@ namespace Faithful
             float timeModifier = Time.deltaTime / chargeDurationQuality;
 
             // Get item counts
-            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
 
             // Calculate charge to be provided to teleporter
             float unscaledCharge = 0.0f;

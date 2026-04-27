@@ -1,4 +1,6 @@
-﻿namespace Faithful
+﻿using System.Collections.Generic;
+
+namespace Faithful
 {
     internal class ItemBase
     {
@@ -9,7 +11,20 @@
         protected string token;
 
         // Main item that behaviour revolves around
-        public Item mainItem;
+        private Item m_mainItem;
+        public Item MainItem
+        {
+            get => m_mainItem;
+            set
+            {
+                // Assign main item
+                m_mainItem = value;
+                
+                // Link manual tokens callbacks
+                m_mainItem.descriptionManualSettings = DescriptionManualTokens;
+                m_mainItem.qualityDescriptionManualSettings = QualityDescriptionManualTokens;
+            }
+        }
 
         // Constructor
         public ItemBase(Toolbox _toolbox, string _token)
@@ -30,7 +45,7 @@
             if (SupportsQuality && Utils.qualityEnabled && Utils.verboseConsole)
             {
                 // Log warning
-                Log.Warning($"[{mainItem.name}] - Item missing 'QualityConstructor' method.");
+                Log.Warning($"[{MainItem.name}] - Item missing 'QualityConstructor' method.");
             }
         }
 
@@ -40,7 +55,7 @@
             if (Utils.verboseConsole)
             {
                 // Log warning
-                Log.Warning($"[{mainItem.name}] - Item missing 'CreateSettings' method.");
+                Log.Warning($"[{MainItem.name}] - Item missing 'CreateSettings' method.");
             }
         }
 
@@ -50,8 +65,20 @@
             if (Utils.verboseConsole)
             {
                 // Log warning
-                Log.Warning($"[{mainItem.name}] - Item missing 'FetchSettings' method.");
+                Log.Warning($"[{MainItem.name}] - Item missing 'FetchSettings' method.");
             }
+        }
+
+        public virtual Dictionary<string, string> DescriptionManualTokens()
+        {
+            // Assume no manual tokens
+            return null;
+        }
+
+        public virtual Dictionary<string, string> QualityDescriptionManualTokens(Quality _quality)
+        {
+            // Assume no manual tokens
+            return null;
         }
 
         public bool SupportsQuality
@@ -59,14 +86,14 @@
             get
             {
                 // Check for main item ref
-                if (mainItem == null)
+                if (MainItem == null)
                 {
                     Log.Warning($"[ITEM BASE] - Cannot return accurate 'SupportsQuality' value, main item is null!");
                     return false;
                 }
 
                 // Return if main item supports quality
-                return mainItem.supportsQuality;
+                return MainItem.supportsQuality;
             }
         }
     }

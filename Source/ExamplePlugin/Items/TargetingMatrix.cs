@@ -41,7 +41,7 @@ namespace Faithful
             CreateDisplaySettings("targetingmatrixdisplaymesh");
 
             // Create Targeting Matrix item and buff
-            mainItem = Items.AddItem(token, "Targeting Matrix", [ItemTag.Damage, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            MainItem = Items.AddItem(token, "Targeting Matrix", [ItemTag.Damage, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
             targetingMatrixBuff = Buffs.AddBuff("TARGETING_MATRIX", "Targeting Matrix", "texTargetingMatrixBuff", Color.white);
 
             // Create item settings
@@ -105,14 +105,14 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            enableTargetEffectSetting = mainItem.CreateSetting("ENABLE_TARGET_EFFECT", "Enable Target Visual Effect?", true, "Should the target have a visual effect?", false, true, _canRandomise: false);
-            targetEffectGlobalSetting = mainItem.CreateSetting("TARGET_EFFECT_GLOBAL", "Make Target Visual Effect Always Present?", true, "When you have a target, should you be able to see it from anywhere on the stage?", false, true, _canRandomise: false);
-            maxDistanceSetting = mainItem.CreateSetting("MAX_DISTANCE", "Max Targeting Distance", 300.0f, "How far away does the target need to be to be considered out of range? (300.0 = 300 meters)", false, _minValue: 100.0f, _valueFormatting: "{0:0}m");
-            outOfRangeTimeSetting = mainItem.CreateSetting("OUT_OF_RANGE_TIME", "Out Of Range Time", 15.0f, "How long does a target need to be out of range until it is removed from being a target? (15.0 = 15 seconds)", false, _minValue: 0.0f, _valueFormatting: "{0:0.0}s");
-            critDamageSetting = mainItem.CreateSetting("CRIT_DAMAGE", "Crit Damage", 10.0f, "How much critical damage should be provided by each stack of this item's buff with a single stack of this item? (10.0 = 10% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.0}%");
-            critDamageStackingSetting = mainItem.CreateSetting("CRIT_DAMAGE_STACKING", "Crit Damage Stacking", 5.0f, "How much should the critical damage of an individual stack of this item's buff be increased by per stack of this item? (5.0 = 5% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.0}%");
-            maxBuffsSetting = mainItem.CreateSetting("MAX_BUFFS", "Max Buffs", 3, "What's the maximum stack of this item's buff that the player should be able to receive with a single stack of this item? (3 = 3 stacks)", _minValue: 0, _randomiserMin: 0, _randomiserMax: 5);
-            maxBuffsStackingSetting = mainItem.CreateSetting("MAX_BUFFS_STACKING", "Max Buffs Stacking", 1, "How many extra stacks of this item's buff should the player be able to receive per stack? (1 = 1 stack)", _minValue: 0, _randomiserMin: 0, _randomiserMax: 3);
+            enableTargetEffectSetting = MainItem.CreateSetting("ENABLE_TARGET_EFFECT", "Enable Target Visual Effect?", true, "Should the target have a visual effect?", false, true, _canRandomise: false);
+            targetEffectGlobalSetting = MainItem.CreateSetting("TARGET_EFFECT_GLOBAL", "Make Target Visual Effect Always Present?", true, "When you have a target, should you be able to see it from anywhere on the stage?", false, true, _canRandomise: false);
+            maxDistanceSetting = MainItem.CreateSetting("MAX_DISTANCE", "Max Targeting Distance", 300.0f, "How far away does the target need to be to be considered out of range? (300.0 = 300 meters)", false, _minValue: 100.0f, _valueFormatting: "{0:0}m");
+            outOfRangeTimeSetting = MainItem.CreateSetting("OUT_OF_RANGE_TIME", "Out Of Range Time", 15.0f, "How long does a target need to be out of range until it is removed from being a target? (15.0 = 15 seconds)", false, _minValue: 0.0f, _valueFormatting: "{0:0.0}s");
+            critDamageSetting = MainItem.CreateSetting("CRIT_DAMAGE", "Crit Damage", 10.0f, "How much critical damage should be provided by each stack of this item's buff with a single stack of this item? (10.0 = 10% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.0}%");
+            critDamageStackingSetting = MainItem.CreateSetting("CRIT_DAMAGE_STACKING", "Crit Damage Stacking", 5.0f, "How much should the critical damage of an individual stack of this item's buff be increased by per stack of this item? (5.0 = 5% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.0}%");
+            maxBuffsSetting = MainItem.CreateSetting("MAX_BUFFS", "Max Buffs", 3, "What's the maximum stack of this item's buff that the player should be able to receive with a single stack of this item? (3 = 3 stacks)", _minValue: 0, _randomiserMin: 0, _randomiserMax: 5);
+            maxBuffsStackingSetting = MainItem.CreateSetting("MAX_BUFFS_STACKING", "Max Buffs Stacking", 1, "How many extra stacks of this item's buff should the player be able to receive per stack? (1 = 1 stack)", _minValue: 0, _randomiserMin: 0, _randomiserMax: 3);
         }
 
         public override void FetchSettings()
@@ -128,7 +128,7 @@ namespace Faithful
             maxBuffsStacking = maxBuffsStackingSetting.Value;
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         void ModifyModelPrefab(GameObject _prefab)
@@ -164,7 +164,7 @@ namespace Faithful
             if (inventory == null) return;
 
             // Get count for item
-            int count = inventory.GetItemCountEffective(mainItem.itemDef);
+            int count = inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Check for item
             if (count == 0) return;
@@ -210,7 +210,7 @@ namespace Faithful
             CharacterBody attacker = _attacker.GetBody();
 
             // Get attacker item count
-            int attackerItemCount = _attacker.inventory.GetItemCountEffective(mainItem.itemDef);
+            int attackerItemCount = _attacker.inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Get attacker buff count
             int attackerBuffCount = attacker.GetBuffCount(targetingMatrixBuff.buffDef);
@@ -262,7 +262,7 @@ namespace Faithful
             if (characterBody == null) return;
 
             // Get item and buff count
-            int itemCount = _inventory.GetItemCountEffective(mainItem.itemDef);
+            int itemCount = _inventory.GetItemCountEffective(MainItem.itemDef);
             int buffCount = characterBody.GetBuffCount(targetingMatrixBuff.buffDef);
 
             // Calculate max buff stack for targeting matrix
@@ -360,7 +360,7 @@ namespace Faithful
             if (!_attacker.inventory) return false;
 
             // Get item count
-            int count = _attacker.inventory.GetItemCountEffective(mainItem.itemDef);
+            int count = _attacker.inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Check for item
             if (count == 0) return false;

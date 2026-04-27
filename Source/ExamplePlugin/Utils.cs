@@ -1612,6 +1612,24 @@ namespace Faithful
             return _word + "s";
         }
 
+        public static int CalculateStackingValue(int _count, int _firstStack, int _additionalStacks)
+        {
+            // Ignore empty stacks
+            if (_count <= 0) return 0;
+
+            // Return first stack plus additional stacks
+            return _firstStack + _additionalStacks * (_count - 1);
+        }
+
+        public static float CalculateStackingValue(float _count, float _firstStack, float _additionalStacks)
+        {
+            // Ignore empty stacks
+            if (_count <= 0) return 0.0f;
+
+            // Return first stack plus additional stacks
+            return _firstStack + _additionalStacks * (_count - 1);
+        }
+
         public static void AnalyseGameObject(GameObject _gameObject)
         {
             // Create message stirng

@@ -48,7 +48,7 @@ namespace Faithful
             CreateDisplaySettings("brassscrewsdisplaymesh");
 
             // Create Brass Screws item and buff
-            mainItem = Items.AddItem(token, "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_COPPER_GEAR_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_COPPER_GEAR_NAME", _supportsQuality: true, _displaySettings: displaySettings);
             brassScrewsBuff = Buffs.AddBuff("BRASS_SCREWS", "Brass Screws", "texbuffteleporterscrew", Color.white, false);
             brassScrewsEffectBuff = Buffs.AddBuff("BRASS_SCREWS_EFFECT", "Brass Screws", "texbuffteleporterscrew", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "BRASS_SCREWS");
 
@@ -127,20 +127,20 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            damageSetting = mainItem.CreateSetting("DAMAGE", "Damage", 20.0f, "How much should this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            damageStackingSetting = mainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 20.0f, "How much should further stacks of this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            buffDurationSetting = mainItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
+            damageSetting = MainItem.CreateSetting("DAMAGE", "Damage", 20.0f, "How much should this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            damageStackingSetting = MainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 20.0f, "How much should further stacks of this item increase damage while within the teleporter radius? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            buffDurationSetting = MainItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
 
             // Create quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
         }
 
         protected void CreateQualitySettings()
         {
             // Create quality settings specific to this item
-            damageQualitySetting = mainItem.CreateQualitySetting("DAMAGE", "Damage", 5.0f, 10.0f, 20.0f, 30.0f, "How much should each kill increase damage while within the teleporter radius? (5.0 = 5% increase)", _valueFormatting: "{0:0.0}%");
-            durationQualitySetting = mainItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the damage buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
-            durationStackingQualitySetting = mainItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the damage buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
+            damageQualitySetting = MainItem.CreateQualitySetting("DAMAGE", "Damage", 5.0f, 10.0f, 20.0f, 30.0f, "How much should each kill increase damage while within the teleporter radius? (5.0 = 5% increase)", _valueFormatting: "{0:0.0}%");
+            durationQualitySetting = MainItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the damage buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
+            durationStackingQualitySetting = MainItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the damage buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
         }
 
         public override void FetchSettings()
@@ -151,10 +151,10 @@ namespace Faithful
             buffDuration = buffDurationSetting.Value;
 
             // Fetch quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         protected void FetchQualitySettings()
@@ -181,7 +181,7 @@ namespace Faithful
             if (inventory)
             {
                 // Get Brass Screws amount
-                int brassScrewsCount = inventory.GetItemCount(mainItem.itemDef.itemIndex);
+                int brassScrewsCount = inventory.GetItemCount(MainItem.itemDef.itemIndex);
 
                 // Has Brass Screws?
                 if (brassScrewsCount > 0)
@@ -267,7 +267,7 @@ namespace Faithful
             if (Utils.GetHoldoutZonesContainingCharacter(master).Count <= 0) return;
 
             // Get item counts
-            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
 
             // Effective quality should be highest quality the attacker possesses
             Quality effectiveQuality = Quality.UNCOMMON;

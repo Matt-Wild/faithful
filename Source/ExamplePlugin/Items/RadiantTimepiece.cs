@@ -37,7 +37,7 @@ namespace Faithful
             CreateDisplaySettings("RadiantTimepieceDisplayMesh");
 
             // Create Second Hand item and buff
-            mainItem = Items.AddItem(token, "Radiant Timepiece", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist], "texRadiantTimepieceIcon", "RadiantTimepieceMesh", _tier: ItemTier.Tier1, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Radiant Timepiece", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist], "texRadiantTimepieceIcon", "RadiantTimepieceMesh", _tier: ItemTier.Tier1, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab, _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -95,19 +95,19 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            durationSetting = mainItem.CreateSetting("DURATION", "Duration", 1.0f, "How much should this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}s");
-            durationStackingSetting = mainItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much should further stacks of this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}s");
-            buffBlacklistSetting = mainItem.CreateSetting("BUFF_BLACKLIST", "Buff Blacklist", "bdParrying,bdVoidFogMild,bdVoidRaidCrabWardWipeFog,bdImmune,bdUntargetable,bdHiddenInvincibility,bdMedkitHeal,bdKnockBackActiveWindow", "Which buffs should this item not apply to?\n\nProvide as a comma separated list.\n(Cooldowns, DOTs, and debuffs are already ignored)", _valueFormatting: "{0:0.0}%", _isStat: false, _canRandomise: false);
+            durationSetting = MainItem.CreateSetting("DURATION", "Duration", 1.0f, "How much should this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}s");
+            durationStackingSetting = MainItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 1.0f, "How much should further stacks of this item increase the duration of temporary buffs? (1.0 = 1 second)", _valueFormatting: "{0:0.0}s");
+            buffBlacklistSetting = MainItem.CreateSetting("BUFF_BLACKLIST", "Buff Blacklist", "bdParrying,bdVoidFogMild,bdVoidRaidCrabWardWipeFog,bdImmune,bdUntargetable,bdHiddenInvincibility,bdMedkitHeal,bdKnockBackActiveWindow", "Which buffs should this item not apply to?\n\nProvide as a comma separated list.\n(Cooldowns, DOTs, and debuffs are already ignored)", _valueFormatting: "{0:0.0}%", _isStat: false, _canRandomise: false);
 
             // Create quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
         }
 
         protected void CreateQualitySettings()
         {
             // Create quality settings specific to this item
-            durationQualitySetting = mainItem.CreateQualitySetting("DURATION", "Duration", 25.0f, 50.0f, 75.0f, 100.0f, "How much longer should this item's quality variants increase the duration of temporary buffs? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
-            durationStackingQualitySetting = mainItem.CreateQualitySetting("DURATION_STACKING", "Duration Stacking", 25.0f, 50.0f, 75.0f, 100.0f, "How much longer should further stacks of this item's quality variants increase the duration of temporary buffs? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            durationQualitySetting = MainItem.CreateQualitySetting("DURATION", "Duration", 25.0f, 50.0f, 75.0f, 100.0f, "How much longer should this item's quality variants increase the duration of temporary buffs? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            durationStackingQualitySetting = MainItem.CreateQualitySetting("DURATION_STACKING", "Duration Stacking", 25.0f, 50.0f, 75.0f, 100.0f, "How much longer should further stacks of this item's quality variants increase the duration of temporary buffs? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -138,10 +138,10 @@ namespace Faithful
             }
 
             // Fetch quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         protected void FetchQualitySettings()
@@ -220,7 +220,7 @@ namespace Faithful
             if (inventory == null) return 0.0f;
 
             // Get item count
-            int itemCount = inventory.GetItemCountEffective(mainItem.itemDef);
+            int itemCount = inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Apply effect to duration if we have at least 1 item
             if (itemCount == 0) return 0.0f;
@@ -232,7 +232,7 @@ namespace Faithful
             float newDuration = duration + durationStacking * (itemCount - 1);
 
             // Get quality item counts
-            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
 
             // Sum up Quality duration multiplier
             float qualityDurationMultiplier = 1.0f;

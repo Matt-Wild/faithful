@@ -90,10 +90,29 @@ namespace Faithful
             return settings[_token];
         }
 
-        public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "", bool _useRawToken = false, string _quality = "", bool _warn = true)
+        public static string FormatLanguageToken(string _token, string _tokenPrefix = "", string _corruptedItemName = "", bool _useRawToken = false, string _quality = "", bool _warn = true, Dictionary<string, string> _manualSettingTokens = null)
         {
             // Get language string
             string languageString = _useRawToken ? _token : Languages.GetLanguageString(_token, _warn);
+
+            // Process manual setting tokens first so they take priority over normal settings
+            if (_manualSettingTokens != null)
+            {
+                foreach (KeyValuePair<string, string> manualToken in _manualSettingTokens)
+                {
+                    string settingToken = manualToken.Key;
+
+                    // Allow both "CRIT_CHANCE" and "[CRIT_CHANCE]" as dictionary keys
+                    if (!settingToken.StartsWith("["))
+                    {
+                        settingToken = $"[{settingToken}]";
+                    }
+
+                    string settingValue = manualToken.Value ?? "";
+
+                    languageString = languageString.Replace(settingToken, settingValue);
+                }
+            }
 
             // Get token prefix
             string tokenPrefix = _tokenPrefix;

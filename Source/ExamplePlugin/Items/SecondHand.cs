@@ -33,7 +33,7 @@ namespace Faithful
             CreateDisplaySettings("secondhanddisplaymesh");
 
             // Create Second Hand item and buff
-            mainItem = Items.AddItem(token, "Second Hand", [ItemTag.Damage, ItemTag.Utility, ItemTag.Technology, ItemTag.MobilityRelated], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Second Hand", [ItemTag.Damage, ItemTag.Utility, ItemTag.Technology, ItemTag.MobilityRelated], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
             secondHandBuff = Buffs.AddBuff("SECOND_HAND", "Second Hand", "texbuffsecondhand", Color.white, false);
             secondHandEffectBuff = Buffs.AddBuff("SECOND_HAND_EFFECT", "Second Hand", "texbuffsecondhand", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "SECOND_HAND");
 
@@ -90,10 +90,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedSetting = mainItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 20.0f, "How much should this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            attackSpeedStackingSetting = mainItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 20.0f, "How much should further stacks of this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            speedSetting = mainItem.CreateSetting("SPEED", "Movement Speed", 30.0f, "How much should this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
-            speedStackingSetting = mainItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 30.0f, "How much should further stacks of this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            attackSpeedSetting = MainItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 20.0f, "How much should this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            attackSpeedStackingSetting = MainItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 20.0f, "How much should further stacks of this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            speedSetting = MainItem.CreateSetting("SPEED", "Movement Speed", 30.0f, "How much should this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            speedStackingSetting = MainItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 30.0f, "How much should further stacks of this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -105,7 +105,7 @@ namespace Faithful
             speedStacking = speedStackingSetting.Value / 100.0f;
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         void SecondHandStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -123,7 +123,7 @@ namespace Faithful
             if (characterBody && inventory)
             {
                 // Get target Second Hand buff amount
-                int targetSecondHandCount = _character.isGrounded || _character.characterMotor == null ? inventory.GetItemCount(mainItem.itemDef) : 0;
+                int targetSecondHandCount = _character.isGrounded || _character.characterMotor == null ? inventory.GetItemCount(MainItem.itemDef) : 0;
 
                 // Get current amount of Second Hand buffs
                 int currentSecondHandCount = characterBody.GetBuffCount(secondHandEffectBuff.buffDef);

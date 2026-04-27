@@ -36,7 +36,7 @@ namespace Faithful
             CreateDisplaySettings("vengefultoasterdisplaymesh");
 
             // Create Vengeful Toaster item
-            mainItem = Items.AddItem(token, "Vengeful Toaster", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Vengeful Toaster", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -86,9 +86,9 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            durationSetting = mainItem.CreateSetting("DURATION", "Duration", 4.0f, "How long should the vengeance buff last when granted? (4.0 = 4 seconds)", _valueFormatting: "{0:0.00}s");
-            durationStackingSetting = mainItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 2.0f, "How much longer should the vengeance buff last when granted with additional item stacks? (2.0 = 2 seconds)", _valueFormatting: "{0:0.00}s");
-            damageSetting = mainItem.CreateSetting("DAMAGE", "Damage", 75.0f, "How much should each stack of vengeance increase damage? (75.0 = 75% increase)", _valueFormatting: "{0:0.0}%");
+            durationSetting = MainItem.CreateSetting("DURATION", "Duration", 4.0f, "How long should the vengeance buff last when granted? (4.0 = 4 seconds)", _valueFormatting: "{0:0.00}s");
+            durationStackingSetting = MainItem.CreateSetting("DURATION_STACKING", "Duration Stacking", 2.0f, "How much longer should the vengeance buff last when granted with additional item stacks? (2.0 = 2 seconds)", _valueFormatting: "{0:0.00}s");
+            damageSetting = MainItem.CreateSetting("DAMAGE", "Damage", 75.0f, "How much should each stack of vengeance increase damage? (75.0 = 75% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -101,7 +101,7 @@ namespace Faithful
             vengeanceBehaviour.damage = damageSetting.Value / 100.0f;
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         void OnDamageDealt(DamageReport _report)
@@ -114,7 +114,7 @@ namespace Faithful
             if (inventory)
             {
                 // Get Vengeful Toaster amount
-                int vengefulToasterCount = inventory.GetItemCount(mainItem.itemDef.itemIndex);
+                int vengefulToasterCount = inventory.GetItemCount(MainItem.itemDef.itemIndex);
 
                 // Has Vengeful Toasters?
                 if (vengefulToasterCount > 0)

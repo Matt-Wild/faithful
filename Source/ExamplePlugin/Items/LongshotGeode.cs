@@ -38,7 +38,7 @@ namespace Faithful
             CreateDisplaySettings("longshotgeodedisplaymesh");
 
             // Create Longshot Geode item
-            mainItem = Items.AddItem(token, "Longshot Geode", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Longshot Geode", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -95,21 +95,21 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            enableRadiusIndicatorSetting = mainItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", false, "Should this item have a radius indicator visual effect?", false, true, _canRandomise: false);
-            damageSetting = mainItem.CreateSetting("DAMAGE", "Damage", 15.0f, "How much should this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
-            damageStackingSetting = mainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 15.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
-            distanceSetting = mainItem.CreateSetting("DISTANCE", "Distance", 40.0f, "How far should the target need to be for the damage bonus to be applied? (40.0 = 40 meters)", _valueFormatting: "{0:0.0}m");
+            enableRadiusIndicatorSetting = MainItem.CreateSetting("ENABLE_RADIUS_INDICATOR", "Enable Radius Indicator?", false, "Should this item have a radius indicator visual effect?", false, true, _canRandomise: false);
+            damageSetting = MainItem.CreateSetting("DAMAGE", "Damage", 15.0f, "How much should this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
+            damageStackingSetting = MainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 15.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (15.0 = 15% increase)", _valueFormatting: "{0:0.0}%");
+            distanceSetting = MainItem.CreateSetting("DISTANCE", "Distance", 40.0f, "How far should the target need to be for the damage bonus to be applied? (40.0 = 40 meters)", _valueFormatting: "{0:0.0}m");
 
             // Create quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
         }
 
         protected void CreateQualitySettings()
         {
             // Create quality settings specific to this item
-            distanceQualitySetting = mainItem.CreateQualitySetting("DISTANCE", "Distance", 35.0f, 30.0f, 25.0f, 20.0f, "How far should the target need to be for the damage bonus to be applied? (35.0 = 35 meters)", _valueFormatting: "{0:0.0}m");
-            damageQualitySetting = mainItem.CreateQualitySetting("DAMAGE", "Damage", 25.0f, 35.0f, 50.0f, 75.0f, "How much should this item increase damage while the target is beyond the distance threshold? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
-            damageStackingQualitySetting = mainItem.CreateQualitySetting("DAMAGE_STACKING", "Damage Stacking", 25.0f, 35.0f, 50.0f, 75.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            distanceQualitySetting = MainItem.CreateQualitySetting("DISTANCE", "Distance", 35.0f, 30.0f, 25.0f, 20.0f, "How far should the target need to be for the damage bonus to be applied? (35.0 = 35 meters)", _valueFormatting: "{0:0.0}m");
+            damageQualitySetting = MainItem.CreateQualitySetting("DAMAGE", "Damage", 25.0f, 35.0f, 50.0f, 75.0f, "How much should this item increase damage while the target is beyond the distance threshold? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            damageStackingQualitySetting = MainItem.CreateQualitySetting("DAMAGE_STACKING", "Damage Stacking", 25.0f, 35.0f, 50.0f, 75.0f, "How much should further stacks of this item increase damage while the target is beyond the distance threshold? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -121,10 +121,10 @@ namespace Faithful
             distanceThreshold = distanceSetting.Value;
 
             // Fetch quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         protected void FetchQualitySettings()
@@ -160,7 +160,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = attackerBody.inventory.GetItemCountEffective(mainItem.itemDef);
+            int count = attackerBody.inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Has item?
             if (count <= 0) return;
@@ -178,7 +178,7 @@ namespace Faithful
             if (Utils.qualityEnabled)
             {
                 // Get quality item counts
-                QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(attackerBody.inventory, mainItem);
+                QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(attackerBody.inventory, MainItem);
 
                 // Subtract quality variants from base count (they change behaviour from the base item)
                 count -= qualityCounts.Total;

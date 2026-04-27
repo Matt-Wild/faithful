@@ -49,7 +49,7 @@ namespace Faithful
             CreateDisplaySettings("coppergeardisplaymesh");
 
             // Create Copper Gear item and buff
-            mainItem = Items.AddItem(token, "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _supportsQuality: true, _displaySettings: displaySettings);
             copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "Copper Gear", "texbuffteleportergear", Color.white, false);
             copperGearEffectBuff = Buffs.AddBuff("COPPER_GEAR_EFFECT", "Copper Gear", "texbuffteleportergear", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "COPPER_GEAR");
 
@@ -132,20 +132,20 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedSetting = mainItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 25.0f, "How much should this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
-            attackSpeedStackingSetting = mainItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 25.0f, "How much should further stacks of this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
-            buffDurationSetting = mainItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
+            attackSpeedSetting = MainItem.CreateSetting("ATTACK_SPEED", "Attack Speed", 25.0f, "How much should this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            attackSpeedStackingSetting = MainItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 25.0f, "How much should further stacks of this item increase attack speed while within the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            buffDurationSetting = MainItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the teleporter radius? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
 
             // Create quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
         }
 
         protected void CreateQualitySettings()
         {
             // Create quality settings specific to this item
-            attackSpeedQualitySetting = mainItem.CreateQualitySetting("ATTACK_SPEED", "Attack Speed", 5.0f, 10.0f, 20.0f, 30.0f, "How much should each kill increase attack speed while within the teleporter radius? (5.0 = 5% increase)", _valueFormatting: "{0:0.0}%");
-            durationQualitySetting = mainItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
-            durationStackingQualitySetting = mainItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
+            attackSpeedQualitySetting = MainItem.CreateQualitySetting("ATTACK_SPEED", "Attack Speed", 5.0f, 10.0f, 20.0f, 30.0f, "How much should each kill increase attack speed while within the teleporter radius? (5.0 = 5% increase)", _valueFormatting: "{0:0.0}%");
+            durationQualitySetting = MainItem.CreateQualitySetting("DURATION", "Buff Duration", 2.5f, 5.0f, 10.0f, 15.0f, "How long should the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
+            durationStackingQualitySetting = MainItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 2.5f, 5.0f, 10.0f, 15.0f, "How much longer should further stacks of this item make the attack speed buff last after each kill while within the teleporter radius? (2.5 = 2.5 seconds)", _valueFormatting: "{0:0.0}s");
         }
 
         public override void FetchSettings()
@@ -156,10 +156,10 @@ namespace Faithful
             buffDuration = buffDurationSetting.Value;
 
             // Fetch quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         protected void FetchQualitySettings()
@@ -186,7 +186,7 @@ namespace Faithful
             if (inventory)
             {
                 // Get Copper Gear amount
-                int copperGearCount = inventory.GetItemCount(mainItem.itemDef);
+                int copperGearCount = inventory.GetItemCount(MainItem.itemDef);
 
                 // Has Copper Gears?
                 if (copperGearCount > 0)
@@ -272,7 +272,7 @@ namespace Faithful
             if (Utils.GetHoldoutZonesContainingCharacter(master).Count <= 0) return;
 
             // Get item counts
-            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
 
             // Effective quality should be highest quality the attacker possesses
             Quality effectiveQuality = Quality.UNCOMMON;

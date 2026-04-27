@@ -41,7 +41,7 @@ namespace Faithful
             CreateDisplaySettings("meltingwarblerdisplaymesh");
 
             // Create Melting Warbler item
-            mainItem = Items.AddItem(token, "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -50,7 +50,7 @@ namespace Faithful
             FetchSettings();
 
             // Add stats modification
-            Behaviour.AddStatsMod(mainItem, MeltingWarblerStatsMod);
+            Behaviour.AddStatsMod(MainItem, MeltingWarblerStatsMod);
         }
 
         public override void QualityConstructor()
@@ -112,18 +112,18 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            jumpBoostSetting = mainItem.CreateSetting("JUMP_BOOST", "Jump Boost", 2.0f, "How much should this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
-            jumpBoostStackingSetting = mainItem.CreateSetting("JUMP_BOOST_STACKING", "Jump Boost Stacking", 2.0f, "How much should further stacks of this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
+            jumpBoostSetting = MainItem.CreateSetting("JUMP_BOOST", "Jump Boost", 2.0f, "How much should this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
+            jumpBoostStackingSetting = MainItem.CreateSetting("JUMP_BOOST_STACKING", "Jump Boost Stacking", 2.0f, "How much should further stacks of this item increase the jump height of the player? (2.0 = 2 meters)", _valueFormatting: "{0:0.00}m");
 
             // Create quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
         }
 
         protected void CreateQualitySettings()
         {
             // Create quality settings specific to this item
-            speedQualitySetting = mainItem.CreateQualitySetting("SPEED", "Speed", 30.0f, 60.0f, 100.0f, 150.0f, "How much should this item increase movement speed while airborne? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
-            speedStackingQualitySetting = mainItem.CreateQualitySetting("SPEED_STACKING", "Speed Stacking", 30.0f, 60.0f, 100.0f, 150.0f, "How much should further stacks of this item increase movement speed while airborne? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            speedQualitySetting = MainItem.CreateQualitySetting("SPEED", "Speed", 30.0f, 60.0f, 100.0f, 150.0f, "How much should this item increase movement speed while airborne? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+            speedStackingQualitySetting = MainItem.CreateQualitySetting("SPEED_STACKING", "Speed Stacking", 30.0f, 60.0f, 100.0f, 150.0f, "How much should further stacks of this item increase movement speed while airborne? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -133,10 +133,10 @@ namespace Faithful
             jumpBoostStacking = jumpBoostStackingSetting.Value;
 
             // Fetch quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         protected void FetchQualitySettings()
@@ -177,7 +177,7 @@ namespace Faithful
                 }
 
                 // Get quality item counts
-                QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+                QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
 
                 // Check for any quality stacks
                 if (counts.Total <= 0)

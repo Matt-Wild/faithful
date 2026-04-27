@@ -28,7 +28,7 @@ namespace Faithful
             CreateDisplaySettings("hasteninggreavedisplaymesh");
 
             // Create Longshot Geode item
-            mainItem = Items.AddItem(token, "Hastening Greave", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            MainItem = Items.AddItem(token, "Hastening Greave", [ItemTag.Utility], "texhasteninggreaveicon", "hasteninggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
 
             // Create item settings
             CreateSettings();
@@ -79,10 +79,10 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            attackSpeedBuffSetting = mainItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
-            attackSpeedBuffStackingSetting = mainItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
-            damageNerfSetting = mainItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
-            damageNerfStackingSetting = mainItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
+            attackSpeedBuffSetting = MainItem.CreateSetting("ATTACK_SPEED_BUFF", "Attack Speed Increase", 100.0f, "How much should this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
+            attackSpeedBuffStackingSetting = MainItem.CreateSetting("ATTACK_SPEED_BUFF_STACKING", "Attack Speed Increase Stacking", 100.0f, "How much should further stacks of this item increase the attack speed of the player? (100.0 = 100% increase)", _minValue: 0.1f, _valueFormatting: "{0:0}%");
+            damageNerfSetting = MainItem.CreateSetting("DAMAGE_NERF", "Damage Decrease", 50.0f, "How much should this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
+            damageNerfStackingSetting = MainItem.CreateSetting("DAMAGE_NERF_STACKING", "Damage Decrease Stacking", 50.0f, "How much should further stacks of this item decrease the damage of the player? (50.0 = 50% decrease)", _randomiserMin: 0.0f, _randomiserMax: 90.0f, _minValue: 0.1f, _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -94,7 +94,7 @@ namespace Faithful
             damageNerfStacking = 1.0f - damageNerfStackingSetting.Value / 100.0f;
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         void ModifyModelPrefab(GameObject _prefab)
@@ -127,7 +127,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = _body.inventory.GetItemCount(mainItem.itemDef);
+            int count = _body.inventory.GetItemCount(MainItem.itemDef);
 
             // Check for item
             if (count == 0) return;

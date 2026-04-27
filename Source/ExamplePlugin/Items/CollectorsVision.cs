@@ -37,6 +37,14 @@ namespace Faithful
         float critDamageMult;
         float inspirationReturnPerc;
 
+        // Store additional quality settings
+        QualitySetting<int> inspirationGainQualitySetting;
+        QualitySetting<int> inspirationGainStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<int> inspirationGainQualityValues = new();
+        QualityValues<int> inspirationGainStackingQualityValues = new();
+
         // Used for timing item given notifications for after the original item has already pushed it's notification
         private struct PendingEyeNotification
         {
@@ -63,7 +71,7 @@ namespace Faithful
             CreateDisplaySettings("collectorsvisiondisplaymesh");
 
             // Create Collector's Vision item
-            mainItem = Items.AddItem(token, "Collectors Vision", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Collectors Vision", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -80,6 +88,11 @@ namespace Faithful
 
             // Hook other behaviour
             On.RoR2.CharacterMasterNotificationQueue.PushPickupNotification_CharacterMaster_PickupIndex_bool_int += OnPushPickupNotification;
+        }
+
+        public override void QualityConstructor()
+        {
+            // No special Quality behaviours are required for this item
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -126,13 +139,23 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            countTemporarySetting = mainItem.CreateSetting("COUNT_TEMPORARY", "Count Temporary Items?", true, "Should this item count temporary items when providing inspiration?", false, _canRandomise: false);
-            capInspirationSetting = mainItem.CreateSetting("CAP_INSPIRATION", "Cap Inspiration?", true, "Should inspiration granted by this item be capped at 100%?", false, _canRandomise: false);
-            grantAppraisersEyeSetting = mainItem.CreateSetting("GRANT_EYE", "Grant Appraisers Eye?", true, "After reaching 100% inspiration, should collecting more unique items award Appraiser's Eye?", false, _canRandomise: false);
-            inspirationGainSetting = mainItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How much inspiration should this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
-            inspirationGainStackingSetting = mainItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How much inspiration should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
-            critDamageSetting = mainItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should 1% of inspiration increase the crit damage multiplier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            inspirationReturnSetting = mainItem.CreateSetting("INSPIRATION_RETURN", "Inspiration Return", 50.0f, "How much inspiration acquired by the end of a stage should the shrine of recollection return? (50.0 = 50% return)", _valueFormatting: "{0:0.0}%", _maxValue: 100.0f);
+            countTemporarySetting = MainItem.CreateSetting("COUNT_TEMPORARY", "Count Temporary Items?", true, "Should this item count temporary items when providing inspiration?", false, _canRandomise: false);
+            capInspirationSetting = MainItem.CreateSetting("CAP_INSPIRATION", "Cap Inspiration?", true, "Should inspiration granted by this item be capped at 100%?", false, _canRandomise: false);
+            grantAppraisersEyeSetting = MainItem.CreateSetting("GRANT_EYE", "Grant Appraisers Eye?", true, "After reaching 100% inspiration, should collecting more unique items award Appraiser's Eye?", false, _canRandomise: false);
+            inspirationGainSetting = MainItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How much inspiration should this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
+            inspirationGainStackingSetting = MainItem.CreateSetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 1, "How much inspiration should further stacks of this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
+            critDamageSetting = MainItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should 1% of inspiration increase the crit damage multiplier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            inspirationReturnSetting = MainItem.CreateSetting("INSPIRATION_RETURN", "Inspiration Return", 50.0f, "How much inspiration acquired by the end of a stage should the shrine of recollection return? (50.0 = 50% return)", _valueFormatting: "{0:0.0}%", _maxValue: 100.0f);
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            inspirationGainQualitySetting = MainItem.CreateQualitySetting("INSPIRATION_GAIN", "Inspiration Gain", 2, 3, 5, 10, "How much inspiration should this quality item give the player when they pick up a new unique item for the stage? (2 = 2% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
+            inspirationGainStackingQualitySetting = MainItem.CreateQualitySetting("INSPIRATION_GAIN_STACKING", "Inspiration Gain Stacking", 2, 3, 5, 10, "How much inspiration should further stacks of this quality item give the player when they pick up a new unique item for the stage? (2 = 2% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
         }
 
         public override void FetchSettings()
@@ -150,10 +173,38 @@ namespace Faithful
             inspirationBehaviour.critDamageMult = critDamageMult;
 
             // Update item description variant
-            mainItem.descriptionVariant = grantAppraisersEye ? "VAR1" : string.Empty;
+            MainItem.descriptionVariant = grantAppraisersEye ? "VAR1" : string.Empty;
+
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            inspirationGainQualityValues.UpdateValues(inspirationGainQualitySetting);
+            inspirationGainStackingQualityValues.UpdateValues(inspirationGainStackingQualitySetting);
+        }
+
+        public override Dictionary<string, string> DescriptionManualTokens()
+        {
+            return new Dictionary<string, string>
+            {
+                { "CRIT_CHANCE", inspirationGain.ToString() },
+                { "CRIT_DAMAGE_MULT", Mathf.RoundToInt(critDamageMult * 100.0f * inspirationGain).ToString() }
+            };
+        }
+
+        public override Dictionary<string, string> QualityDescriptionManualTokens(Quality _quality)
+        {
+            return new Dictionary<string, string>
+            {
+                { "CRIT_CHANCE", inspirationGainQualityValues.GetValue(_quality).ToString() },
+                { "CRIT_DAMAGE_MULT", Mathf.RoundToInt(critDamageMult * 100.0f * inspirationGainQualityValues.GetValue(_quality)).ToString() }
+            };
         }
 
         void OnGiveItemPermanent(Inventory _inventory, ItemIndex _index, int _count)
@@ -200,14 +251,11 @@ namespace Faithful
             }
 
             // Get item count
-            int count = _inventory.GetItemCountEffective(mainItem.itemDef);
-            if (count > 0.0f)
+            int count = _inventory.GetItemCountEffective(MainItem.itemDef);
+            if (count > 0)
             {
-                // Get Collector's Vision index
-                ItemIndex collectorsIndex = ItemCatalog.FindItemIndex("FAITHFUL_COLLECTORS_VISION_NAME");
-
-                // Ensure it's not Collector's Vision
-                if (_index == collectorsIndex)
+                // Ensure it's not Appraiser's Eye
+                if (_index == Faithful.appraisersEye.MainItem.itemDef.itemIndex)
                 {
                     return;
                 }
@@ -223,6 +271,9 @@ namespace Faithful
 
                 // Get current amount of buffs
                 int currentBuffs = body.GetBuffCount(inspirationBuff.buffDef);
+
+                // Calculate buffs to add
+                int buffsToAdd = CalculateInspirationGain(_inventory, count);
 
                 // Check if should cap inspiration
                 if (capInspiration)
@@ -241,8 +292,8 @@ namespace Faithful
                         }
                     }
 
-                    // Calculate buffs to add
-                    int buffsToAdd = Mathf.Min(inspirationGain + inspirationGainStacking * (count - 1), 100 - currentBuffs);
+                    // Cap buffs to add
+                    buffsToAdd = Mathf.Min(buffsToAdd, 100 - currentBuffs);
 
                     // Grant buffs
                     for (int i = 0; i < buffsToAdd; i++)
@@ -255,7 +306,7 @@ namespace Faithful
                 else
                 {
                     // Grant buffs
-                    for (int i = 0; i < inspirationGain + inspirationGainStacking * (count - 1); i++)
+                    for (int i = 0; i < buffsToAdd; i++)
                     {
                         body.AddBuff(inspirationBuff.buffDef);
                     }
@@ -275,6 +326,35 @@ namespace Faithful
                     }
                 }
             }
+        }
+
+        private int CalculateInspirationGain(Inventory _inventory, int _count)
+        {
+            // Default all stacks to normal Collector's Vision
+            int normalCount = _count;
+            int totalGain = 0;
+
+            // Check if quality is enabled
+            if (MainItem.supportsQuality && Utils.qualityEnabled)
+            {
+                // Get quality item counts
+                QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(_inventory, MainItem);
+
+                // Quality items are already included in the effective count, so remove them from normal stacks
+                normalCount = Mathf.Max(0, _count - qualityCounts.Total);
+
+                // Add quality inspiration gains
+                totalGain += Utils.CalculateStackingValue(qualityCounts.UNCOMMON, inspirationGainQualityValues.UNCOMMON, inspirationGainStackingQualityValues.UNCOMMON);
+                totalGain += Utils.CalculateStackingValue(qualityCounts.RARE, inspirationGainQualityValues.RARE, inspirationGainStackingQualityValues.RARE);
+                totalGain += Utils.CalculateStackingValue(qualityCounts.EPIC, inspirationGainQualityValues.EPIC, inspirationGainStackingQualityValues.EPIC);
+                totalGain += Utils.CalculateStackingValue(qualityCounts.LEGENDARY, inspirationGainQualityValues.LEGENDARY, inspirationGainStackingQualityValues.LEGENDARY);
+            }
+
+            // Add normal inspiration gains
+            totalGain += Utils.CalculateStackingValue(normalCount, inspirationGain, inspirationGainStacking);
+
+            // Return calculated inspiration gain
+            return totalGain;
         }
 
         private void OnPushPickupNotification(On.RoR2.CharacterMasterNotificationQueue.orig_PushPickupNotification_CharacterMaster_PickupIndex_bool_int orig, CharacterMaster characterMaster, PickupIndex pickupIndex, bool isTemporary, int upgradeCount)

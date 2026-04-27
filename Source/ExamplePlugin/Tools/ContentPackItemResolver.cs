@@ -20,16 +20,16 @@ namespace Faithful
             foreach (KeyValuePair<string, ItemBase> kvp in _faithfulItems)
             {
                 ItemBase itemBase = kvp.Value;
-                if (itemBase?.mainItem.itemDef == null) continue;
+                if (itemBase?.MainItem.itemDef == null) continue;
 
-                RegisterAliases(itemBase.mainItem.itemDef);
+                RegisterAliases(itemBase.MainItem.itemDef);
 
                 // Add plenty of aliases for Faithful items
-                AddAlias(kvp.Key, itemBase.mainItem.itemDef);
-                AddAlias($"ITEM_{kvp.Key}", itemBase.mainItem.itemDef);
-                AddAlias($"FAITHFUL_{kvp.Key}_NAME", itemBase.mainItem.itemDef);
-                AddAlias($"FAITHFUL_ITEM_{kvp.Key}_NAME", itemBase.mainItem.itemDef);
-                AddAlias(itemBase.mainItem.safeName, itemBase.mainItem.itemDef);
+                AddAlias(kvp.Key, itemBase.MainItem.itemDef);
+                AddAlias($"ITEM_{kvp.Key}", itemBase.MainItem.itemDef);
+                AddAlias($"FAITHFUL_{kvp.Key}_NAME", itemBase.MainItem.itemDef);
+                AddAlias($"FAITHFUL_ITEM_{kvp.Key}_NAME", itemBase.MainItem.itemDef);
+                AddAlias(itemBase.MainItem.safeName, itemBase.MainItem.itemDef);
             }
         }
 

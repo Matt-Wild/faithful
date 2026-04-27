@@ -8,6 +8,8 @@ using UnityEngine;
 namespace Faithful
 {
     internal delegate void ModifyPrefabCallback(GameObject _prefab);
+    internal delegate Dictionary<string, string> ManualSettingTokensCallback();
+    internal delegate Dictionary<string, string> QualityManualSettingTokensCallback(Quality _quality);
 
     internal class Item
     {
@@ -59,6 +61,10 @@ namespace Faithful
 
         // Has support for Quality
         public bool supportsQuality = false;
+
+        // Callbacks for manual setting tokens that get injected into language strings
+        public ManualSettingTokensCallback descriptionManualSettings;
+        public QualityManualSettingTokensCallback qualityDescriptionManualSettings;
 
         // Constructor
         public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null, string _namePrefix = null, bool _hiddenFromLogbook = false, bool _supportsQuality = false)
@@ -326,12 +332,12 @@ namespace Faithful
             if (string.IsNullOrWhiteSpace(overrideDescription))
             {
                 // Use 3 parameter version to add language override for specific language
-                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_DESC", Config.FormatLanguageToken(descriptionSourceToken, $"ITEM_{token}", corruptedNameSafe));
+                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_DESC", Config.FormatLanguageToken(descriptionSourceToken, $"ITEM_{token}", corruptedNameSafe, _manualSettingTokens: GetManualDescriptionSettings()));
             }
             else
             {
                 // Use 3 parameter version to add language override for specific language
-                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_DESC", Config.FormatLanguageToken(overrideDescription, $"ITEM_{token}", corruptedNameSafe, true));
+                LanguageAPI.AddOverlay($"FAITHFUL_ITEM_{token}_DESC", Config.FormatLanguageToken(overrideDescription, $"ITEM_{token}", corruptedNameSafe, true, _manualSettingTokens: GetManualDescriptionSettings()));
             }
 
             // Update lore token
@@ -361,18 +367,21 @@ namespace Faithful
         {
             // Get prefixes for tokens
             string pickupPrefix = Config.FormatLanguageToken(pickupUnprocessed, $"ITEM_{token}", _warn: false);
-            string descriptionPrefix = Config.FormatLanguageToken(descriptionUnprocessed, $"ITEM_{token}", _warn: false);
+            string descriptionPrefix = Config.FormatLanguageToken(descriptionUnprocessed, $"ITEM_{token}", _warn: false, _manualSettingTokens: GetManualDescriptionSettings());
 
             // Create overlays for quality item tokens for each quality
-            foreach (string quality in Enum.GetNames(typeof(Quality)))
+            foreach (Quality quality in Enum.GetValues(typeof(Quality)))
             {
+                // Get string version of quality
+                string qualityString = quality.ToString();
+
                 // Create description token first
-                string qualityDescription = Config.FormatLanguageToken($"FAITHFUL_{token}_DESC_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality).Replace("[PREFIX]", descriptionPrefix);
-                LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_DESC", qualityDescription);
+                string qualityDescription = Config.FormatLanguageToken(string.IsNullOrWhiteSpace(descriptionVariant) ? $"FAITHFUL_{token}_DESC_QUALITY" : $"FAITHFUL_{token}_{descriptionVariant}_DESC_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: qualityString, _manualSettingTokens: GetQualityManualDescriptionSettings(quality)).Replace("[PREFIX]", descriptionPrefix);
+                LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{qualityString}_DESC", qualityDescription);
 
                 // Check if extended pickup description is enabled
-                if (extendPickupDescription) LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", qualityDescription);
-                else LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{quality}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: quality).Replace("[PREFIX]", pickupPrefix));
+                if (extendPickupDescription) LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{qualityString}_PICKUP", qualityDescription);
+                else LanguageAPI.AddOverlay($"ITEM_{itemDef.name}_{qualityString}_PICKUP", Config.FormatLanguageToken($"FAITHFUL_{token}_PICKUP_QUALITY", $"ITEM_{token}", corruptedNameSafe, _quality: qualityString).Replace("[PREFIX]", pickupPrefix));
             }
         }
 
@@ -492,6 +501,32 @@ namespace Faithful
 
             // Fetch quality setting from config
             return QualityConfig.FetchSetting<T>($"ITEM_{token}_{_tokenAddition}");
+        }
+
+        private Dictionary<string, string> GetManualDescriptionSettings()
+        {
+            // Check for manual description setting tokens callback
+            if (descriptionManualSettings != null)
+            {
+                // Return result of callback
+                return descriptionManualSettings();
+            }
+
+            // No manual description setting tokens
+            return null;
+        }
+
+        private Dictionary<string, string> GetQualityManualDescriptionSettings(Quality _quality)
+        {
+            // Check for quality manual description setting tokens callback
+            if (qualityDescriptionManualSettings != null)
+            {
+                // Return result of callback
+                return qualityDescriptionManualSettings(_quality);
+            }
+
+            // No quality manual description setting tokens
+            return null;
         }
 
         public string corruptedNameSafe

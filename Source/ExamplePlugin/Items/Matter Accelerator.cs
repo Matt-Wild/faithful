@@ -45,7 +45,7 @@ namespace Faithful
             CreateDisplaySettings("MatterAcceleratorDisplayMesh");
 
             // Create Second Hand item and buff
-            mainItem = Items.AddItem(token, "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _supportsQuality: true, _displaySettings: displaySettings);
             matterAcceleratorBuff = Buffs.AddBuff("MATTER_ACCELERATOR", "Matter Accelerator", "texMatterAcceleratorBuff", Color.white, false);
             matterAcceleratorSpeedBuff = Buffs.AddBuff("MATTER_ACCELERATOR_SPEED", "Matter Accelerator Speed", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
             matterAcceleratorHealthBuff = Buffs.AddBuff("MATTER_ACCELERATOR_HEALTH", "Matter Accelerator Health", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
@@ -116,20 +116,20 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            shieldGainSetting = mainItem.CreateSetting("SHIELD_GAIN", "Shield Gain", 5.0f, "How much shield should this item provide? (5.0 = 5% shield)", _valueFormatting: "{0:0.0}%");
-            speedSetting = mainItem.CreateSetting("SPEED", "Movement Speed", 20.0f, "How much should this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
-            speedStackingSetting = mainItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 20.0f, "How much should further stacks of this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            shieldGainSetting = MainItem.CreateSetting("SHIELD_GAIN", "Shield Gain", 5.0f, "How much shield should this item provide? (5.0 = 5% shield)", _valueFormatting: "{0:0.0}%");
+            speedSetting = MainItem.CreateSetting("SPEED", "Movement Speed", 20.0f, "How much should this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            speedStackingSetting = MainItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 20.0f, "How much should further stacks of this item increase movement speed while having shield or barrier? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
 
             // Create quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
         }
 
         protected void CreateQualitySettings()
         {
             // Create quality settings specific to this item
-            healthPercQualitySetting = mainItem.CreateQualitySetting("HEALTH_PERC", "Health Percentage", 1.0f, 1.0f, 1.0f, 1.0f, "How much shield is required to receive one instance of the buff? (1.0 = 1% max health)", _valueFormatting: "{0:0.0}%");
-            speedQualitySetting = mainItem.CreateQualitySetting("SPEED", "Movement Speed", 1.0f, 2.0f, 3.0f, 5.0f, "How much should the buff increase movement speed? (1.0 = 1% increase)", _valueFormatting: "{0:0.0}%");
-            speedStackingQualitySetting = mainItem.CreateQualitySetting("SPEED_STACKING", "Movement Speed Stacking", 1.0f, 2.0f, 3.0f, 5.0f, "How much should further stacks of the buff increase movement speed? (1.0 = 1% increase)", _valueFormatting: "{0:0.0}%");
+            healthPercQualitySetting = MainItem.CreateQualitySetting("HEALTH_PERC", "Health Percentage", 1.0f, 1.0f, 1.0f, 1.0f, "How much shield is required to receive one instance of the buff? (1.0 = 1% max health)", _valueFormatting: "{0:0.0}%");
+            speedQualitySetting = MainItem.CreateQualitySetting("SPEED", "Movement Speed", 1.0f, 2.0f, 3.0f, 5.0f, "How much should the buff increase movement speed? (1.0 = 1% increase)", _valueFormatting: "{0:0.0}%");
+            speedStackingQualitySetting = MainItem.CreateQualitySetting("SPEED_STACKING", "Movement Speed Stacking", 1.0f, 2.0f, 3.0f, 5.0f, "How much should further stacks of the buff increase movement speed? (1.0 = 1% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -140,10 +140,10 @@ namespace Faithful
             speedStacking = speedStackingSetting.Value / 100.0f;
 
             // Fetch quality settings for this item if quality is enabled and this item supports quality
-            if (mainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
 
             // Update item texts with new settings
-            mainItem.UpdateItemTexts();
+            MainItem.UpdateItemTexts();
         }
 
         protected void FetchQualitySettings()
@@ -184,7 +184,7 @@ namespace Faithful
             if (!healthComponent) return;
 
             // Get item count
-            int itemCount = inventory.GetItemCount(mainItem.itemDef);
+            int itemCount = inventory.GetItemCount(MainItem.itemDef);
             if (itemCount <= 0)
             {
                 // Ensure no buffs
@@ -219,7 +219,7 @@ namespace Faithful
             if (!healthComponent) return;
 
             // Get item counts
-            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, mainItem);
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
 
             // Check for any valid item
             if (counts.Total == 0)
