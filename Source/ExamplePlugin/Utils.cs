@@ -161,6 +161,9 @@ namespace Faithful
         // Cached items
         static private Dictionary<string, ItemBase> items = new Dictionary<string, ItemBase>();
 
+        // Active holdout zones
+        private static readonly List<HoldoutZoneController> activeHoldoutZones = new();
+
         public static void Init(PluginInfo _pluginInfo)
         {
             // Detect assemblies
@@ -785,6 +788,35 @@ namespace Faithful
                 if (verboseConsole)
                 {
                     Log.Debug($"[UTILS] - Randomised item stats.");
+                }
+            }
+        }
+
+        public static void RegisterActiveHoldoutZone(HoldoutZoneController _zone)
+        {
+            if (_zone == null) return;
+
+            // Avoid duplicates
+            if (!activeHoldoutZones.Contains(_zone))
+            {
+                activeHoldoutZones.Add(_zone);
+            }
+        }
+
+        public static void UnregisterActiveHoldoutZone(HoldoutZoneController _zone)
+        {
+            if (_zone == null) return;
+
+            activeHoldoutZones.Remove(_zone);
+        }
+
+        private static void RemoveNullActiveHoldoutZones()
+        {
+            for (int i = activeHoldoutZones.Count - 1; i >= 0; i--)
+            {
+                if (activeHoldoutZones[i] == null)
+                {
+                    activeHoldoutZones.RemoveAt(i);
                 }
             }
         }
@@ -1966,14 +1998,22 @@ namespace Faithful
             Vector3 charPos = _character.GetBody().transform.position;
 
             // Initialise list of zones containing character
-            List<HoldoutZoneController> containing = new List<HoldoutZoneController>();
+            List<HoldoutZoneController> containing = [];
 
-            // Get all Holdout Zones
-            HoldoutZoneController[] zones = UnityEngine.Object.FindObjectsOfType<HoldoutZoneController>();
+            // Remember if needs to clean active holdout zones list
+            bool needsClean = false;
 
-            // Cycle through zones
-            foreach (HoldoutZoneController zone in zones)
+            // Cycle through active holdout zones
+            foreach (HoldoutZoneController zone in activeHoldoutZones)
             {
+                // Check if zone is valid and active
+                if (zone == null || !zone.isActiveAndEnabled)
+                {
+                    // Mark that clean is needed and skip this zone
+                    needsClean = true;
+                    continue;
+                }
+
                 // Calculate distance
                 float distance = (zone.gameObject.transform.position - charPos).magnitude;
 
@@ -1984,6 +2024,9 @@ namespace Faithful
                     containing.Add(zone);
                 }
             }
+
+            // Clean active holdout zones list if needed
+            if (needsClean) RemoveNullActiveHoldoutZones();
 
             // Return list of zones containing character
             return containing;

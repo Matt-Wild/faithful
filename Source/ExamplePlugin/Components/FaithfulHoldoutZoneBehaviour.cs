@@ -26,6 +26,8 @@ namespace Faithful
                 // Add Holdout Zone hooks
                 zone.calcRadius += OnCalcRadius;
             }
+
+            Utils.RegisterActiveHoldoutZone(zone);
         }
 
         private void OnDisable()
@@ -36,6 +38,8 @@ namespace Faithful
                 // Remove Holdout Zone hooks
                 zone.calcRadius -= OnCalcRadius;
             }
+
+            Utils.UnregisterActiveHoldoutZone(zone);
         }
 
         public void Init(List<OnHoldoutZoneCalcRadiusCallback> _onHoldoutZoneCalcRadiusCallbacks)

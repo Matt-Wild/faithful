@@ -13,6 +13,10 @@ namespace Faithful
         // Contains base items and their quality groups
         static Dictionary<Item, ItemQualityGroup> itemQualityGroups = [];
 
+        // Cached item counts for more efficient lookups
+        static Dictionary<Inventory, Dictionary<Item, QualityCounts>> cachedItemCountsEffective = [];
+        static Dictionary<Inventory, Dictionary<Item, QualityCounts>> cachedItemCountsPermanent = [];
+
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         internal static void Init()
         {
@@ -20,6 +24,22 @@ namespace Faithful
 
             // Hook into load content event
             QualityContentManager.LoadContentAsync += LoadQualityContent;
+
+            // Hook into inventory changed event to clear cached counts
+            On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
+        }
+
+        private static void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
+        {
+            // Call original behaviour
+            orig(self);
+
+            // Check for inventory
+            if (self.inventory == null) return;
+
+            // Clear cached counts for inventory
+            cachedItemCountsEffective.Remove(self.inventory);
+            cachedItemCountsPermanent.Remove(self.inventory);
         }
 
         private static IEnumerator LoadQualityContent(QualityContentLoadArgs _args)
@@ -46,17 +66,39 @@ namespace Faithful
                 return new QualityCounts();
             }
 
+            // Check for inventory cache
+            if (cachedItemCountsEffective.TryGetValue(_inventory, out Dictionary<Item, QualityCounts> inventoryCache))
+            {
+                // Check for cached quality counts
+                if (inventoryCache.TryGetValue(_item, out QualityCounts cachedCounts))
+                {
+                    // Return cached counts
+                    return cachedCounts;
+                }
+            }
+            else
+            {
+                // Create new cache for inventory
+                cachedItemCountsEffective.Add(_inventory, []);
+            }
+
             // Get inaccessible counts
             ItemQualityCounts baseCounts = _inventory.GetItemCountsEffective(itemGroup);
 
-            // Return item counts
-            return new QualityCounts
+            // Get counts in accessible format
+            QualityCounts counts = new()
             {
                 UNCOMMON = baseCounts.UncommonCount,
                 RARE = baseCounts.RareCount,
                 EPIC = baseCounts.EpicCount,
                 LEGENDARY = baseCounts.LegendaryCount
             };
+
+            // Add counts to cache
+            cachedItemCountsEffective[_inventory].Add(_item, counts);
+
+            // Return counts
+            return counts;
         }
 
         public static QualityCounts GetItemCountsPermanent(Inventory _inventory, Item _item)
@@ -68,17 +110,39 @@ namespace Faithful
                 return new QualityCounts();
             }
 
+            // Check for inventory cache
+            if (cachedItemCountsPermanent.TryGetValue(_inventory, out Dictionary<Item, QualityCounts> inventoryCache))
+            {
+                // Check for cached quality counts
+                if (inventoryCache.TryGetValue(_item, out QualityCounts cachedCounts))
+                {
+                    // Return cached counts
+                    return cachedCounts;
+                }
+            }
+            else
+            {
+                // Create new cache for inventory
+                cachedItemCountsPermanent.Add(_inventory, []);
+            }
+
             // Get inaccessible counts
             ItemQualityCounts baseCounts = _inventory.GetItemCountsPermanent(itemGroup);
 
-            // Return item counts
-            return new QualityCounts
+            // Get counts in accessible format
+            QualityCounts counts = new()
             {
                 UNCOMMON = baseCounts.UncommonCount,
                 RARE = baseCounts.RareCount,
                 EPIC = baseCounts.EpicCount,
                 LEGENDARY = baseCounts.LegendaryCount
             };
+
+            // Add counts to cache
+            cachedItemCountsPermanent[_inventory].Add(_item, counts);
+
+            // Return counts
+            return counts;
         }
     }
 }

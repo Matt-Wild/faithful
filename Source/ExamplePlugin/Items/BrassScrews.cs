@@ -263,6 +263,9 @@ namespace Faithful
             CharacterBody body = master.GetBody();
             if (body == null) return;
 
+            // Cheap early-out before holdout zone scanning and Quality count lookup
+            if (inventory.GetItemCountEffective(MainItem.itemDef) <= 0) return;
+
             // Check if character is in a holdout zone
             if (Utils.GetHoldoutZonesContainingCharacter(master).Count <= 0) return;
 
