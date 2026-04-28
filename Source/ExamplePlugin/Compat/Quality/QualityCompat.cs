@@ -27,6 +27,16 @@ namespace Faithful
 
             // Hook into inventory changed event to clear cached counts
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
+
+            // Hook into on destroy inventory event to clear cached counts
+            On.RoR2.Inventory.OnDestroy += Inventory_OnDestroy;
+
+            // Do a manual full inventory cache wipe when leaving a stage
+            Behaviour.AddOnPreSceneExitCallback((_exitController) =>
+            {
+                cachedItemCountsEffective.Clear();
+                cachedItemCountsPermanent.Clear();
+            });
         }
 
         private static void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
@@ -40,6 +50,19 @@ namespace Faithful
             // Clear cached counts for inventory
             cachedItemCountsEffective.Remove(self.inventory);
             cachedItemCountsPermanent.Remove(self.inventory);
+        }
+
+        private static void Inventory_OnDestroy(On.RoR2.Inventory.orig_OnDestroy orig, Inventory self)
+        {
+            // Call original behaviour
+            orig(self);
+
+            // Check for inventory
+            if (self == null) return;
+
+            // Clear cached counts for inventory
+            cachedItemCountsEffective.Remove(self);
+            cachedItemCountsPermanent.Remove(self);
         }
 
         private static IEnumerator LoadQualityContent(QualityContentLoadArgs _args)
