@@ -40,15 +40,20 @@ namespace Faithful
             skinDef.icon = _skinIcon;
             skinDef.unlockableDef = _unlockableDef;
             skinDef.rootObject = root;
-            skinDef.rendererInfos = skinRendererInfos;
-            skinDef.gameObjectActivations = new SkinDef.GameObjectActivation[0];
-            skinDef.projectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0];
-            skinDef.minionSkinReplacements = new SkinDef.MinionSkinReplacement[0];
             skinDef.nameToken = _skinToken;
             skinDef.name = Languages.GetLanguageString(_skinToken);
 
+            // Create SkinDefParams
+            SkinDefParams skinDefParams = ScriptableObject.CreateInstance<SkinDefParams>();
+            skinDefParams.name = skinDef.name + "Params";
+            skinDef.skinDefParams = skinDefParams;
+            skinDefParams.rendererInfos = skinRendererInfos;
+            skinDefParams.gameObjectActivations = [];
+            skinDefParams.projectileGhostReplacements = [];
+            skinDefParams.minionSkinReplacements = [];
+
             // Initialise mesh replacements list
-            List<SkinDef.MeshReplacement> meshReplacements = new List<SkinDef.MeshReplacement>();
+            List<SkinDefParams.MeshReplacement> meshReplacements = new List<SkinDefParams.MeshReplacement>();
 
             // Index used to find renderer infos
             int rendererInfosIndex = 0;
@@ -111,7 +116,7 @@ namespace Faithful
 
                                             // Process renderer rules for replacement material
                                             Material replacementMaterial = Assets.GetMaterial(skinReplacement.replacementMaterial);
-                                            skinDef.rendererInfos[rendererInfosIndex].defaultMaterial = Utils.ProcessRendererRules(replacementMaterial, rendererRules, true);
+                                            skinDef.skinDefParams.rendererInfos[rendererInfosIndex].defaultMaterial = Utils.ProcessRendererRules(replacementMaterial, rendererRules, true);
                                         }
                                     }
                                 }
@@ -119,7 +124,7 @@ namespace Faithful
                                 // If renderer rules were not found, perform normal HG shader conversion
                                 if (!foundRendererRules)
                                 {
-                                    skinDef.rendererInfos[rendererInfosIndex].defaultMaterial = Assets.GetMaterial(skinReplacement.replacementMaterial).ConvertDefaultShaderToHopoo();
+                                    skinDef.skinDefParams.rendererInfos[rendererInfosIndex].defaultMaterial = Assets.GetMaterial(skinReplacement.replacementMaterial).ConvertDefaultShaderToHopoo();
                                 }
                             }
                         }
@@ -128,7 +133,7 @@ namespace Faithful
 
                 // Add default mesh to mesh replacements list
                 meshReplacements.Add(
-                    new SkinDef.MeshReplacement
+                    new SkinDefParams.MeshReplacement
                     {
                         renderer = defaultRendererInfos[rendererInfosIndex].renderer,
                         mesh = replacementMesh
@@ -140,7 +145,7 @@ namespace Faithful
             }
 
             // Assign mesh replacements
-            skinDef.meshReplacements = [.. meshReplacements];
+            skinDef.skinDefParams.meshReplacements = [.. meshReplacements];
 
             // Unsubscribe the spooky nothing method
             On.RoR2.SkinDef.Awake -= DoNothing;

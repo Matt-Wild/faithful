@@ -110,6 +110,9 @@ namespace Faithful
         // The skins controller lets you add additional skins to characters
         private ModelSkinController m_skinController;
 
+        // The skins controller for the survivor display prefab
+        private ModelSkinController m_displaySkinController;
+
         // List of skins used by this survivor
         private List<SkinDef> m_skins = new List<SkinDef>();
 
@@ -834,6 +837,13 @@ namespace Faithful
             // Update base renderer infos for display prefab character model
             characterModel.baseRendererInfos = m_characterModel.baseRendererInfos;
 
+            // Ensure display prefab has a skin controller
+            m_displaySkinController = m_displayPrefab.GetComponent<ModelSkinController>();
+            if (!m_displaySkinController)
+            {
+                m_displaySkinController = m_displayPrefab.AddComponent<ModelSkinController>();
+            }
+
             // Convert all materials in all renderers for this game object to HG shader
             Utils.ConvertAllRenderersToHopooShader(m_displayPrefab);
         }
@@ -1179,7 +1189,13 @@ namespace Faithful
             m_skins.Add(newSkin);
 
             // Update skin controller
-            m_skinController.skins = m_skins.ToArray();
+            m_skinController.skins = [.. m_skins];
+
+            // Update display prefab skin controller
+            if (m_displaySkinController)
+            {
+                m_displaySkinController.skins = [.. m_skins];
+            }
         }
 
         // Accessors
