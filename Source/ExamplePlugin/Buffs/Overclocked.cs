@@ -16,7 +16,7 @@ namespace Faithful
         static readonly Overlays.Overlay overlay = Overlays.CreateOverlay(new Overlays.OverlaySettings
         {
             MaterialAddress = "RoR2/Base/CritOnUse/matFullCrit.mat",
-            Colour = new Color(0.32f, 0.32f, 0.0f, 0.64f)
+            Colour = new Color(0.16f, 1.0f, 0.0f, 0.6f)
         });
 
         public Overclocked()
