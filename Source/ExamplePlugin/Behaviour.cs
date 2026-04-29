@@ -1043,6 +1043,13 @@ namespace Faithful
             ItemDef itemDef = ItemCatalog.GetItemDef(itemIndex);
             if (itemDef == null) return;
 
+            // Check if quality is enabled
+            if (Utils.qualityEnabled)
+            {
+                // Ensure to check for base item instead of quality item
+                itemDef = QualityCompat.GetBaseItem(itemDef);   // This returns the original item def is no match is found
+            }
+
             // Check for item added callbacks
             if (onItemAddedCallbacks.ContainsKey(itemDef))
             {

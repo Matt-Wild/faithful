@@ -126,12 +126,14 @@ namespace Faithful
 
             // Get quality suffix
             string qualitySuffix = _quality;
+            string qualityFallbackSuffix = "";
 
             // Check for quality suffix
             if (qualitySuffix != "")
             {
                 // Add quality prefix to suffix
                 qualitySuffix = "_QUALITY_" + qualitySuffix;
+                qualityFallbackSuffix = "_QUALITY_ALL";
             }
 
             // Cycle through settings
@@ -172,6 +174,39 @@ namespace Faithful
 
                 // Replace setting token in language string with appropriate value
                 languageString = languageString.Replace(settingToken, setting.Value.ValueObject.ToString());
+            }
+
+            // Do a second pass for quality fallback suffix if it exists
+            if (qualityFallbackSuffix != "")
+            {
+                // Cycle through settings
+                foreach (KeyValuePair<string, ISetting> setting in settings)
+                {
+                    // Get setting token
+                    string settingToken = setting.Key;
+
+                    // Check for token prefix
+                    if (tokenPrefix != "")
+                    {
+                        // Check if token prefix is in setting token
+                        if (!settingToken.Contains(tokenPrefix)) continue;
+
+                        // Remove token prefix from setting token
+                        settingToken = settingToken.Replace(tokenPrefix, "");
+                    }
+
+                    // Check if quality fallback suffix is in setting token
+                    if (!settingToken.Contains(qualityFallbackSuffix)) continue;
+
+                    // Remove quality fallback suffix from setting token
+                    settingToken = settingToken.Replace(qualityFallbackSuffix, "");
+
+                    // Add language formatting indicator
+                    settingToken = $"[{settingToken}]";
+
+                    // Replace setting token in language string with appropriate value
+                    languageString = languageString.Replace(settingToken, setting.Value.ValueObject.ToString());
+                }
             }
 
             // Remove empty stacking strings from language string

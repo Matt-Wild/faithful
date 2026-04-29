@@ -56,7 +56,7 @@ namespace Faithful
             if (inventory != null)
             {
                 // Update item count with current item amount
-                UpdateItemCount(inventory.GetItemCount(hermitsShawlItem.itemDef));
+                UpdateItemCount(inventory.GetItemCountEffective(hermitsShawlItem.itemDef));
             }
 
             // Hook behaviour
@@ -100,7 +100,7 @@ namespace Faithful
             if (characterBody != character) return;
 
             // Get item count
-            int itemCount = _inventory.GetItemCount(hermitsShawlItem.itemDef);
+            int itemCount = _inventory.GetItemCountEffective(hermitsShawlItem.itemDef);
 
             // Update item count
             UpdateItemCount(itemCount);
@@ -145,7 +145,7 @@ namespace Faithful
             if (body != character) return;
 
             // Get new item count
-            int newCount = _inventory.GetItemCount(hermitsShawlItem.itemDef);
+            int newCount = _inventory.GetItemCountEffective(hermitsShawlItem.itemDef);
 
             // Update item count
             UpdateItemCount(newCount);

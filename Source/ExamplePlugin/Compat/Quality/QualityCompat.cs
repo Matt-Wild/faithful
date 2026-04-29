@@ -80,6 +80,32 @@ namespace Faithful
             yield break;
         }
 
+        public static ItemDef GetBaseItem(ItemDef _qualityItem)
+        {
+            // Cycle through item quality groups to find matching quality item
+            foreach (KeyValuePair<Item, ItemQualityGroup> kvp in itemQualityGroups)
+            {
+                // Validate pair
+                if (kvp.Key == null || kvp.Value == null) continue;
+
+                // Get quality item indexes
+                ItemIndex uncommonIndex = kvp.Value.UncommonItemIndex;
+                ItemIndex rareIndex = kvp.Value.RareItemIndex;
+                ItemIndex epicIndex = kvp.Value.EpicItemIndex;
+                ItemIndex legendaryIndex = kvp.Value.LegendaryItemIndex;
+
+                // Check if any quality item index matches the provided quality item
+                if (uncommonIndex == _qualityItem.itemIndex || rareIndex == _qualityItem.itemIndex || epicIndex == _qualityItem.itemIndex || legendaryIndex == _qualityItem.itemIndex)
+                {
+                    // Return base item definition
+                    return kvp.Key.itemDef;
+                }
+            }
+
+            // Return original item definition if no match found
+            return _qualityItem;
+        }
+
         public static QualityCounts GetItemCountsEffective(Inventory _inventory, Item _item)
         {
             // Try get item group

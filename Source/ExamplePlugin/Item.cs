@@ -475,6 +475,22 @@ namespace Faithful
             return QualityConfig.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {safeName}", _key, _uncommonDefaultValue, _rareDefaultValue, _epicDefaultValue, _legendaryDefaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
         }
 
+        public QualitySetting<T> CreateQualitySetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _isStat = true, bool _isClientSide = false, T _minValue = default, T _maxValue = default, T _randomiserMin = default, T _randomiserMax = default, bool _canRandomise = true, bool _restartRequired = false, string _valueFormatting = "{0:0}")
+        {
+            // Check if hidden
+            if (hidden)
+            {
+                // Error and return
+                Debug.LogError($"ATTEMPTED TO CREATE QUALITY SETTING ON HIDDEN ITEM '{name}'!");
+                return null;
+            }
+
+            if (Utils.verboseConsole) Log.Info($"[ITEM] | Creating Quality setting '{_key}' for '{safeName} ({token})'");
+
+            // Return new setting
+            return QualityConfig.CreateSetting($"ITEM_{token}_{_tokenAddition}", $"Item: {safeName}", _key, _defaultValue, _description, _isStat, _isClientSide, _minValue, _maxValue, _randomiserMin, _randomiserMax, _canRandomise, _restartRequired, _valueFormatting);
+        }
+
         public Setting<T> FetchSetting<T>(string _tokenAddition)
         {
             // Check if hidden

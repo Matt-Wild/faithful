@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using System;
 using UnityEngine;
 
 namespace Faithful
@@ -20,6 +21,16 @@ namespace Faithful
         Setting<float> buffCooldownSetting;
         Setting<float> damageSetting;
 
+        // Store additional quality settings
+        QualitySetting<int> blockCostQualitySetting;
+        QualitySetting<float> blockChanceQualitySetting;
+        QualitySetting<float> blockChanceStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<int> blockCostQualityValues = new();
+        float blockChanceQuality;
+        float blockChanceStackingQuality;
+
         // Constructor
         public HermitsShawl(Toolbox _toolbox, Patience _patience) : base(_toolbox, "HERMITS_SHAWL")
         {
@@ -33,7 +44,7 @@ namespace Faithful
             CreateDisplaySettings("HermitShawlDisplayMesh");
 
             // Create item
-            MainItem = Items.AddItem(token, "Hermits Shawl", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab);
+            MainItem = Items.AddItem(token, "Hermits Shawl", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab, _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -43,6 +54,12 @@ namespace Faithful
 
             // Link On Damage Dealt behaviour
             Behaviour.AddOnDamageDealtCallback(OnDamageDealt);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Link On Character Death behaviour
+            Behaviour.AddOnIncomingDamageCallback(OnIncomingDamage_Quality);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -88,6 +105,17 @@ namespace Faithful
             maxBuffsStackingSetting = MainItem.CreateSetting("MAX_BUFFS_STACKING", "Max Buffs Stacking", 4, "How many additional stacks of patience should the player be able to receive per extra stack of this item? (4 = 4 stacks)");
             buffCooldownSetting = MainItem.CreateSetting("BUFF_RECHARGE", "Buff Recharge Time", 10.0f, "After leaving combat how long does it take to receive the maximum amount of patience? (10.0 = 10 seconds)", _valueFormatting: "{0:0.0}s");
             damageSetting = MainItem.CreateSetting("DAMAGE", "Damage", 25.0f, "How much should each stack of patience increase damage? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            blockCostQualitySetting = MainItem.CreateQualitySetting("BLOCK_COST", "Block Cost", 4, 3, 2, 1, "How many stacks of patience are consumed upon blocking damage? (4 = 4 stacks)", _minValue: 1);
+            blockChanceQualitySetting = MainItem.CreateQualitySetting("BLOCK_CHANCE", "Block Chance", 25.0f, "What is the chance of this item blocking damage when the user has enough patience? (25.0 = 25% chance)", _valueFormatting: "{0:0.0}%", _maxValue: 50.0f);
+            blockChanceStackingQualitySetting = MainItem.CreateQualitySetting("BLOCK_CHANCE_STACKING", "Block Chance Stacking", 25.0f, "What is the additional chance of further stacks of this item blocking damage when the user has enough patience? (25.0 = 25% chance)", _valueFormatting: "{0:0.0}%", _maxValue: 50.0f);
         }
 
         public override void FetchSettings()
@@ -95,8 +123,19 @@ namespace Faithful
             // Apply damage to buff
             buffBehaviour.damage = damageSetting.Value / 100.0f;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            blockCostQualityValues.UpdateValues(blockCostQualitySetting);
+            blockChanceQuality = blockChanceQualitySetting.Value / 100.0f;
+            blockChanceStackingQuality = blockChanceStackingQualitySetting.Value / 100.0f;
         }
 
         void ModifyDisplayPrefab(GameObject _prefab)
@@ -161,6 +200,63 @@ namespace Faithful
                     victim.SetBuffCount(buff.buffDef.buffIndex, 0);
                 }
             }
+        }
+
+        private void OnIncomingDamage_Quality(DamageInfo _report, CharacterMaster _attacker, CharacterMaster _victim)
+        {
+            // Validate input
+            if (_report == null || _attacker == null || _victim == null) return;
+
+            // Check for victim body
+            CharacterBody victim = _victim.GetBody();
+            if (victim == null) return;
+
+            // Try and get victim inventory
+            Inventory victimInventory = victim.inventory;
+            if (victimInventory == null) return;
+
+            // Get quality item counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(victimInventory, MainItem);
+            int totalQualityCount = qualityCounts.Total;
+            if (totalQualityCount <= 0) return;
+
+            // Get highest quality the victim possesses
+            Quality highestQuality = qualityCounts.GetHighestQuality();
+
+            // Get buffs required to block
+            int requiredBuffs = blockCostQualityValues.GetValue(highestQuality);
+
+            // Get victim buff count
+            int victimBuffCount = victim.GetBuffCount(buff.buffDef.buffIndex);
+
+            // Reject attack if victim has enough patience and block chance check passes
+            if (victimBuffCount > requiredBuffs && Util.CheckRoll(CalculateBlockChance(totalQualityCount) * 100.0f, 0.0f, null))
+            {
+                // Do bear effect for now
+                EffectData effectData3 = new()
+                {
+                    origin = _report.position,
+                    rotation = Util.QuaternionSafeLookRotation((_report.force != Vector3.zero) ? _report.force : UnityEngine.Random.onUnitSphere)
+				};
+                EffectManager.SpawnEffect(HealthComponent.AssetReferences.bearEffectPrefab, effectData3, true);
+                _report.rejected = true;
+
+                // Remove buffs equal to block cost
+                victim.SetBuffCount(buff.buffDef.buffIndex, victimBuffCount - requiredBuffs);
+            }
+        }
+
+        private float CalculateBlockChance(int _count)
+        {
+            // Check for any items
+            if (_count <= 0) return 0.0f;
+
+            // Get safe block chance and stacking block chance
+            float baseChance = Mathf.Clamp(blockChanceQuality, 0.0f, 0.5f);
+            float stackingChance = Mathf.Clamp(blockChanceStackingQuality, 0.0f, 0.5f);
+
+            // Hyperbolic stacking formula
+            return 1.0f - ((1.0f - baseChance) / (1.0f + stackingChance * (_count - 1)));
         }
     }
 }
