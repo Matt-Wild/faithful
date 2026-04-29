@@ -16,10 +16,17 @@ namespace Faithful
         // Heals per second (tick rate)
         public float m_tickRate = 2.0f;
 
+        // Overlay for buff
+        static readonly Overlays.Overlay overlay = Overlays.CreateOverlay(new Overlays.OverlaySettings
+        {
+            MaterialAddress = "RoR2/Base/CritOnUse/matFullCrit.mat",
+            Colour = new Color(0.0f, 0.0f, 0.64f, 0.64f)
+        });
+
         public Repair()
         {
             // Create buff
-            buff = Buffs.AddBuff("REPAIR", "Arc Healing", "texBuffElectroHeal", Color.white, false);
+            buff = Buffs.AddBuff("REPAIR", "Arc Healing", "texBuffElectroHeal", Color.white, false, _overlay: overlay);
 
             // Register on tick behaviour
             Behaviour.AddOnCharacterBodyTickCallback(m_tickRate, OnTick);
