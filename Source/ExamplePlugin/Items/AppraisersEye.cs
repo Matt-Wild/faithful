@@ -26,18 +26,18 @@ namespace Faithful
         int maxDebuffsStacking;
         static float critDamage;
 
-        // Hook state
-        static bool critDamageHookSetupAttempted;
-        static bool critDamageILHookRegistered;
-        static bool critDamageILPatternMatched;
-        static bool critDamageFallbackEnabled;
-
         // Overlay for Scrutinized debuff
         static readonly Overlays.Overlay scrutinizedOverlay = Overlays.CreateOverlay(new Overlays.OverlaySettings
         {
             MaterialAddress = "RoR2/Base/CritOnUse/matFullCrit.mat",
             Colour = new Color(0.16f, 0.0f, 0.32f, 0.64f)
         });
+
+        // Hook state
+        static bool critDamageHookSetupAttempted;
+        static bool critDamageILHookRegistered;
+        static bool critDamageILPatternMatched;
+        static bool critDamageFallbackEnabled;
 
         // IL hook identifiers
         const string takeDamageProcessHookName = "AppraisersEye.TakeDamageProcess";

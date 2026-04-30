@@ -80,6 +80,7 @@ namespace Faithful
         private static List<OnIncomingDamageCallback> onIncomingDamageCallbacks = new List<OnIncomingDamageCallback>();
         private static List<OnHitEnemyCallback> onHitEnemyLateCallbacks = new List<OnHitEnemyCallback>();
         private static List<OnTakeDamageProcessCallback> onTakeDamageProcessCallbacks = new List<OnTakeDamageProcessCallback>();
+        private static List<OnTakeDamageProcessCallback> onTakeDamageProcessLateCallbacks = new List<OnTakeDamageProcessCallback>();
         private static List<DamageReportCallback> onDamageDealtCallbacks = new List<DamageReportCallback>();
         private static List<DamageReportCallback> onCharacterDeathCallbacks = new List<DamageReportCallback>();
 
@@ -456,6 +457,14 @@ namespace Faithful
             onTakeDamageProcessCallbacks.Add(_callback);
 
             DebugLog("Added On Take Damage Process behaviour");
+        }
+
+        // Add On Take Damage Process Late callback
+        public static void AddOnTakeDamageProcessLateCallback(OnTakeDamageProcessCallback _callback)
+        {
+            onTakeDamageProcessLateCallbacks.Add(_callback);
+
+            DebugLog("Added On Take Damage Process Late behaviour");
         }
 
         // Add On Damage Dealt callback
@@ -1092,6 +1101,13 @@ namespace Faithful
             }
 
             orig(self, damageInfo); // Run normal processes
+
+            // Cycle through On Take Damage Process Late callbacks
+            foreach (OnTakeDamageProcessCallback callback in onTakeDamageProcessLateCallbacks)
+            {
+                // Call
+                callback(self, damageInfo);
+            }
         }
 
         private static void HookRecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)

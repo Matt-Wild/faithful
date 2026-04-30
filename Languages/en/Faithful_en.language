@@ -63,9 +63,9 @@
 	
 	"FAITHFUL_HERMITS_SHAWL_NAME": "Hermit's Shawl",
 	"FAITHFUL_HERMITS_SHAWL_PICKUP": "Deal more damage the longer you've been out of combat.",
-	"FAITHFUL_HERMITS_SHAWL_PICKUP_QUALITY": "[PREFIX] <sprite name=\"Quality\"> Chance to block incoming damage out of combat.",
+	"FAITHFUL_HERMITS_SHAWL_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> Chance to block incoming damage out of combat. Blocking damage heals you.",
 	"FAITHFUL_HERMITS_SHAWL_DESC": "Leaving combat grants <style=cIsDamage>Patience</style>, increasing damage by <style=cIsDamage>+[DAMAGE]%</style>. You can have up to <style=cIsDamage>[MAX_BUFFS]</style> <style=cStack>(+[MAX_BUFFS_STACKING] per stack)</style> stacks that are all gained over <style=cIsUtility>[BUFF_RECHARGE]</style> seconds. All stacks of <style=cIsDamage>Patience</style> are consumed upon dealing damage.",
-	"FAITHFUL_HERMITS_SHAWL_DESC_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> <style=cIsHealing>[BLOCK_CHANCE]%</style> <style=cStack>(+[BLOCK_CHANCE_STACKING]% per stack)</style> chance to <style=cIsHealing>block</style> incoming damage at the cost of <sprite name=\"Quality\"> <style=cIsDamage>[BLOCK_COST]</style> stacks of <style=cIsDamage>Patience</style>. <style=cIsUtility>Unaffected by luck</style>.",
+	"FAITHFUL_HERMITS_SHAWL_DESC_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> <style=cIsHealing>[BLOCK_CHANCE]%</style> <style=cStack>(+[BLOCK_CHANCE_STACKING]% per stack)</style> chance to <style=cIsHealing>block</style> incoming damage at the cost of <sprite name=\"Quality\"> <style=cIsDamage>[BLOCK_COST]</style> stacks of <style=cIsDamage>Patience</style>. <style=cIsUtility>Unaffected by luck</style>. <style=cIsHealing>Blocking</style> damage <style=cIsHealing>heals</style> you for <sprite name=\"Quality\"> <style=cIsHealing>[HEAL]</style> <style=cStack>(+[HEAL_STACKING] per stack)</style>.",
 	"FAITHFUL_HERMITS_SHAWL_LORE": "\u0022...And as the great hermit stepped down from her mountainside abode,\nseeing the crowd of pilgrims that had come to be in her presence,\nshe gracefully said,\n\n'STEP THE HELL OFF MY GARDEN!'\n\nMaybe modern humans should not be deified, but just the values they hold.\u0022\n\n- Records of Future Faith 2052\n",
 	
 	"FAITHFUL_MELTING_WARBLER_NAME": "Melting Warbler",
