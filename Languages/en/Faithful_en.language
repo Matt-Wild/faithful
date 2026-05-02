@@ -142,7 +142,9 @@
 	
 	"FAITHFUL_4T0N_JETPACK_NAME": "4-T0N Jetpack",
 	"FAITHFUL_4T0N_JETPACK_PICKUP": "Hold 'Jump' while falling to boost upwards. Recharges over time after landing.",
+	"FAITHFUL_4T0N_JETPACK_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> Enemies below you are ignited.",
 	"FAITHFUL_4T0N_JETPACK_DESC": "Holding the jump key while falling <style=cIsUtility>boosts you upwards</style> for up to <style=cIsUtility>[FUEL_TIME]</style> <style=cStack>(+[FUEL_TIME_STACKING] per stack)</style> seconds. Fully recharges in <style=cIsUtility>[RECHARGE_TIME]</style> <style=cStack>(-[RECHARGE_TIME_REDUCTION]% per stack)</style> seconds while touching the ground.",
+	"FAITHFUL_4T0N_JETPACK_DESC_QUALITY": "[PREFIX]\nWhile active, enemies below you are <style=cIsDamage>ignited</style> for <sprite name=\"Quality\"> <style=cIsDamage>[IGNITE_DAMAGE]%</style> <style=cStack>(+[IGNITE_DAMAGE_STACKING]% per stack)</style> base damage <sprite name=\"Quality\"> <style=cIsDamage>[IGNITE_FREQUENCY]</style> <style=cStack>(+[IGNITE_FREQUENCY_STACKING] per stack)</style> times every <style=cIsDamage>1</style> second.",
 	"FAITHFUL_4T0N_JETPACK_LORE": "Order: High-Power Photon Jetpack\nTracking Number: 76*************\nEstimated Delivery: 04/07/2057\nShipping Method: High Priority/Fragile\nShipping Address: Floor 77, Corp INC, Jupiter\nShipping Details:\n\nHere's the new jetpack you ordered, sir. This one should last you a good while longer.\n\nAlthough, I do advise that you don't try to use it to fly to the other office again. The higher-ups wanted me to let you know that they wouldn't be paying off your medical bills next time, sir.",
 	"FAITHFUL_4T0N_JETPACK_EMPTY_BUFF": "Jetpack Fuel Empty",
 	"FAITHFUL_4T0N_JETPACK_LOW_BUFF": "Jetpack Fuel Low",

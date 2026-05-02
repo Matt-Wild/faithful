@@ -26,6 +26,27 @@ namespace Faithful
         // Item settings
         bool showBuff;
 
+        // Store additional quality settings
+        QualitySetting<float> damageQualitySetting;
+        QualitySetting<float> damageStackingQualitySetting;
+        QualitySetting<float> frequencyQualitySetting;
+        QualitySetting<float> frequencyStackingQualitySetting;
+        QualitySetting<int> frequencyMaxQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> damageQualityValues = new();
+        QualityValues<float> damageStackingQualityValues = new();
+        QualityValues<float> frequencyQualityValues = new();
+        QualityValues<float> frequencyStackingQualityValues = new();
+        QualityValues<int> frequencyMaxQualityValues = new();
+
+        // Quality setting accessors
+        public QualityValues<float> DamageQualityValues => damageQualityValues;
+        public QualityValues<float> DamageStackingQualityValues => damageStackingQualityValues;
+        public QualityValues<float> FrequencyQualityValues => frequencyQualityValues;
+        public QualityValues<float> FrequencyStackingQualityValues => frequencyStackingQualityValues;
+        public QualityValues<int> FrequencyMaxQualityValues => frequencyMaxQualityValues;
+
         // Constructor
         public TJetpack(Toolbox _toolbox) : base(_toolbox, "4T0N_JETPACK")
         {
@@ -33,7 +54,7 @@ namespace Faithful
             CreateDisplaySettings("4t0njetpackdisplaymesh");
 
             // Create item
-            MainItem = Items.AddItem(token, "4-T0N Jetpack", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "4-T0N Jetpack", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -51,6 +72,11 @@ namespace Faithful
 
             // Inject character body behaviours
             Behaviour.AddOnCharacterBodyStartCallback(OnCharacterBodyStart);
+        }
+
+        public override void QualityConstructor()
+        {
+            // No extra quality behaviour needed here
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -97,6 +123,19 @@ namespace Faithful
             rechargeTimeReductionSetting = MainItem.CreateSetting("RECHARGE_TIME_REDUCTION", "Recharge Time Reduction", 20.0f, "How much should further stacks of this item decrease the recharge time of the jetpack? (20.0 = 20% reduction)", _maxValue: 100.0f, _randomiserMin: 1.0f, _randomiserMax: 40.0f, _valueFormatting: "{0:0.0}%");
             maxVelocityMultiplierSetting = MainItem.CreateSetting("MAX_VELOCITY_MULTIPLIER", "Max Velocity Multiplier", 1.0f, "How much faster or slower would you like the jetpack's max velocity to be? (1.0 = 1x max velocity)", _valueFormatting: "{0:0.00}x");
             accelerationMultiplierSetting = MainItem.CreateSetting("ACCELERATION_MULTIPLIER", "Acceleration Multiplier", 1.0f, "How much stronger or weaker would you like the jetpack to be? (1.0 = 1x acceleration)", _valueFormatting: "{0:0.00}x");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            damageQualitySetting = MainItem.CreateQualitySetting("IGNITE_DAMAGE", "Ignite Damage", 200.0f, 300.0f, 400.0f, 500.0f, "How much base damage should each jetpack ignite deal? (200.0 = 200% base damage)", _minValue: 0.0f, _valueFormatting: "{0:0.0}%");
+            damageStackingQualitySetting = MainItem.CreateQualitySetting("IGNITE_DAMAGE_STACKING", "Ignite Damage Stacking", 200.0f, 300.0f, 400.0f, 500.0f, "How much additional base damage should further quality stacks add to the jetpack ignite? (200.0 = 200% base damage)", _minValue: 0.0f, _valueFormatting: "{0:0.0}%");
+            frequencyQualitySetting = MainItem.CreateQualitySetting("IGNITE_FREQUENCY", "Ignite Frequency", 1.0f, 2.0f, 3.0f, 4.0f, "How many times per second should the jetpack ignite enemies below it? (1.0 = once per second)", _minValue: 0.0f, _valueFormatting: "{0:0.00}/s");
+            frequencyStackingQualitySetting = MainItem.CreateQualitySetting("IGNITE_FREQUENCY_STACKING", "Ignite Frequency Stacking", 1.0f, 2.0f, 3.0f, 4.0f, "How many additional ignites per second should further quality stacks add? (1.0 = once per second)", _minValue: 0.0f, _valueFormatting: "{0:0.00}/s");
+            frequencyMaxQualitySetting = MainItem.CreateQualitySetting("IGNITE_FREQUENCY_MAX", "Ignite Max Frequency", 15, 20, 30, 60, "What is the highest ignite frequency this quality can reach? (15 = 15 ignites per second)", _minValue: 1);
         }
 
         public override void FetchSettings()
@@ -104,8 +143,21 @@ namespace Faithful
             // Get settings
             showBuff = showBuffSetting.Value;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            damageQualityValues.UpdateValues(damageQualitySetting, 0.01f);
+            damageStackingQualityValues.UpdateValues(damageStackingQualitySetting, 0.01f);
+            frequencyQualityValues.UpdateValues(frequencyQualitySetting);
+            frequencyStackingQualityValues.UpdateValues(frequencyStackingQualitySetting);
+            frequencyMaxQualityValues.UpdateValues(frequencyMaxQualitySetting);
         }
 
         void OnInventoryChanged(Inventory _inventory)
@@ -125,7 +177,7 @@ namespace Faithful
             }
 
             // Get new item count
-            int count = _inventory.GetItemCount(MainItem.itemDef);
+            int count = _inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Update TJetpack item count
             helper.tJetpack.UpdateItemCount(count);
@@ -140,7 +192,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = _character.inventory.GetItemCount(MainItem.itemDef);
+            int count = _character.inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Has item?
             if (count > 0)

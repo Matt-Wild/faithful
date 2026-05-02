@@ -1,6 +1,6 @@
 ﻿using EntityStates;
 using RoR2;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -77,6 +77,16 @@ namespace Faithful
 
         // Store if this jetpack has initialised
         protected bool initialised = false;
+
+        // Quality "ignite" settings
+        protected static readonly float igniteDuration = 4.0f;
+        protected static readonly float igniteRange = 14.0f;
+        protected static readonly float igniteAngle = 45.0f;
+
+        // Quality "ignite" state
+        protected bool hasDoneInitialIgnite = false;
+        protected float igniteStopwatch = 0.0f;
+        protected readonly HashSet<HealthComponent> igniteVictims = [];
 
         public FaithfulTJetpackBehaviour()
         {
@@ -300,6 +310,9 @@ namespace Faithful
             // Update display buff
             UpdateDisplayBuff();
 
+            // Update quality ignite
+            UpdateIgnite();
+
             // Sync jetpack
             SyncJetpack();
 
@@ -474,50 +487,6 @@ namespace Faithful
                 character.SetBuffCount(highFuelBuff.buffDef.buffIndex, fuelPerc);
             }
         }
-
-        /*protected void OnArtificerJetpackOnEnter(On.EntityStates.Mage.JetpackOn.orig_OnEnter orig, EntityStates.Mage.JetpackOn self)
-        {
-            // Check if Artificer is this character
-            if (self == null || self.characterBody != character)
-            {
-                orig(self); // Run normal processes
-                return;
-            }
-
-            // Attempt to get Jet On effect
-            Transform jetOnEffect = self.FindModelChild("JetOn");
-
-            // Check for jetpack object
-            if (jetOnEffect)
-            {
-                // Kidnap Artificer jetpack
-                artificerJetpack = jetOnEffect.gameObject;
-
-                // Enable effect
-                artificerJetpack.SetActive(true);
-            }
-        }
-
-        protected void OnArtificerJetpackOnExit(On.EntityStates.Mage.JetpackOn.orig_OnExit orig, EntityStates.Mage.JetpackOn self)
-        {
-            // Check if Artificer is this character
-            if (self == null || self.characterBody != character)
-            {
-                orig(self); // Run normal processes
-                return;
-            }
-
-            // Check for jetpack object
-            if (artificerJetpack)
-            {
-                // Only disable effect if 4-T0N jetpack isn't active
-                if (!jetActivated)
-                {
-                    // Disable effect
-                    artificerJetpack.SetActive(false);
-                }
-            }
-        }*/
 
         protected void OnArtificerJetpackFixedUpdate(On.EntityStates.Mage.JetpackOn.orig_FixedUpdate orig, EntityStates.Mage.JetpackOn self)
         {
@@ -699,6 +668,175 @@ namespace Faithful
             // Sync with incoming data
             fuelUsed = _data.fuelUsed;
             jetActivated = _data.jetActivated;
+        }
+
+        protected void UpdateIgnite()
+        {
+            // Only the server should apply DoTs
+            if (!Utils.hosting || itemCount <= 0 || character == null || character.inventory == null || character.healthComponent == null || !character.healthComponent.alive)
+            {
+                igniteStopwatch = 0.0f;
+                hasDoneInitialIgnite = false;
+                return;
+            }
+
+            // Quality must be enabled for this extra behaviour
+            if (!Utils.qualityEnabled)
+            {
+                igniteStopwatch = 0.0f;
+                hasDoneInitialIgnite = false;
+                return;
+            }
+
+            // Check if jetpack item is valid and supports quality
+            if (Faithful.tJetpack == null || !Faithful.tJetpack.MainItem.supportsQuality)
+            {
+                igniteStopwatch = 0.0f;
+                hasDoneInitialIgnite = false;
+                return;
+            }
+
+            // Get quality counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(character.inventory, Faithful.tJetpack.MainItem);
+            if (qualityCounts.Total <= 0)
+            {
+                igniteStopwatch = 0.0f;
+                hasDoneInitialIgnite = false;
+                return;
+            }
+
+            // Calculate frequency
+            float igniteFrequency = CalculateIgniteFrequency(qualityCounts);
+            if (igniteFrequency <= 0.0f)
+            {
+                igniteStopwatch = 0.0f;
+                hasDoneInitialIgnite = false;
+                return;
+            }
+
+            // Convert ignites-per-second into interval
+            float igniteInterval = 1.0f / igniteFrequency;
+
+            // If not actively thrusting, preserve partial progress but do not advance it
+            if (!jetActivated)
+            {
+                igniteStopwatch = Mathf.Min(igniteStopwatch, igniteInterval * 0.95f);
+                return;
+            }
+
+            // Very first valid thrust gets an immediate ignite
+            if (!hasDoneInitialIgnite)
+            {
+                IgniteEnemiesBelow(CalculateIgniteDamage(qualityCounts));
+
+                hasDoneInitialIgnite = true;
+                igniteStopwatch = 0.0f;
+
+                return;
+            }
+
+            // Tick ignite interval
+            igniteStopwatch += Time.fixedDeltaTime;
+
+            // Use while loop to handle cases where framerate is too low and multiple ignites should occur in the same frame
+            while (igniteStopwatch >= igniteInterval)
+            {
+                igniteStopwatch -= igniteInterval;
+                IgniteEnemiesBelow(CalculateIgniteDamage(qualityCounts));
+            }
+        }
+
+        protected float CalculateIgniteDamage(QualityCounts _qualityCounts)
+        {
+            TJetpack jetpackItem = Faithful.tJetpack;
+            if (jetpackItem == null) return 0.0f;
+
+            // Damage is cumulative across qualities
+            return Utils.CalculateStackingValue(_qualityCounts.UNCOMMON, jetpackItem.DamageQualityValues.UNCOMMON, jetpackItem.DamageStackingQualityValues.UNCOMMON)
+                + Utils.CalculateStackingValue(_qualityCounts.RARE, jetpackItem.DamageQualityValues.RARE, jetpackItem.DamageStackingQualityValues.RARE)
+                + Utils.CalculateStackingValue(_qualityCounts.EPIC, jetpackItem.DamageQualityValues.EPIC, jetpackItem.DamageStackingQualityValues.EPIC)
+                + Utils.CalculateStackingValue(_qualityCounts.LEGENDARY, jetpackItem.DamageQualityValues.LEGENDARY, jetpackItem.DamageStackingQualityValues.LEGENDARY);
+        }
+
+        protected float CalculateIgniteFrequency(QualityCounts _qualityCounts)
+        {
+            TJetpack jetpackItem = Faithful.tJetpack;
+            if (jetpackItem == null) return 0.0f;
+
+            // Calculate each quality independently
+            float uncommonFrequency = CalculateIgniteFrequencyForQuality(_qualityCounts.UNCOMMON, jetpackItem.FrequencyQualityValues.UNCOMMON, jetpackItem.FrequencyStackingQualityValues.UNCOMMON, jetpackItem.FrequencyMaxQualityValues.UNCOMMON);
+            float rareFrequency = CalculateIgniteFrequencyForQuality(_qualityCounts.RARE, jetpackItem.FrequencyQualityValues.RARE, jetpackItem.FrequencyStackingQualityValues.RARE, jetpackItem.FrequencyMaxQualityValues.RARE);
+            float epicFrequency = CalculateIgniteFrequencyForQuality(_qualityCounts.EPIC, jetpackItem.FrequencyQualityValues.EPIC, jetpackItem.FrequencyStackingQualityValues.EPIC, jetpackItem.FrequencyMaxQualityValues.EPIC);
+            float legendaryFrequency = CalculateIgniteFrequencyForQuality(_qualityCounts.LEGENDARY, jetpackItem.FrequencyQualityValues.LEGENDARY, jetpackItem.FrequencyStackingQualityValues.LEGENDARY, jetpackItem.FrequencyMaxQualityValues.LEGENDARY);
+
+            // Frequencies are not cumulative - use the highest calculated value
+            return Mathf.Max(uncommonFrequency, rareFrequency, epicFrequency, legendaryFrequency);
+        }
+
+        protected float CalculateIgniteFrequencyForQuality(int _count, float _baseFrequency, float _stackingFrequency, int _maxFrequency)
+        {
+            // Calculate frequency for this quality
+            float frequency = Utils.CalculateStackingValue(_count, _baseFrequency, _stackingFrequency);
+
+            // Clamp to this quality's max frequency
+            return Mathf.Min(frequency, _maxFrequency);
+        }
+
+        protected void IgniteEnemiesBelow(float _damageCoefficient)
+        {
+            // Validate damage
+            if (_damageCoefficient <= 0.0f) return;
+
+            // Need team information
+            if (character.teamComponent == null) return;
+
+            // Get search origin
+            Vector3 origin = character.corePosition;
+
+            // Search below the jetpack user
+            BullseyeSearch search = new()
+            {
+                teamMaskFilter = TeamMask.GetEnemyTeams(character.teamComponent.teamIndex),
+                filterByLoS = false,
+                searchOrigin = origin,
+                searchDirection = Vector3.down,
+                sortMode = BullseyeSearch.SortMode.Distance,
+                maxDistanceFilter = igniteRange,
+                maxAngleFilter = igniteAngle
+            };
+
+            search.RefreshCandidates();
+            search.FilterOutGameObject(character.gameObject);
+
+            // Prevent hitting the same body multiple times from multiple hurtboxes
+            igniteVictims.Clear();
+
+            foreach (HurtBox hurtBox in search.GetResults())
+            {
+                // Validate target
+                if (hurtBox == null || hurtBox.healthComponent == null) continue;
+
+                HealthComponent healthComponent = hurtBox.healthComponent;
+                CharacterBody victimBody = healthComponent.body;
+
+                // Check if valid victim
+                if (victimBody == null || victimBody == character || !healthComponent.alive) continue;
+
+                // Keep the effect strictly below the jetpack user
+                if (victimBody.corePosition.y >= origin.y) continue;
+
+                // Only ignite each victim once per tick
+                if (!igniteVictims.Add(healthComponent)) continue;
+
+                // Ignite enemy
+                DotController.InflictDot(
+                    victimBody.gameObject,
+                    character.gameObject,
+                    hurtBox,
+                    DotController.DotIndex.Burn,
+                    igniteDuration,
+                    _damageCoefficient);
+            }
         }
 
         protected float fuelCapacity
