@@ -232,6 +232,62 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Drifter", "HandR", new Vector3(-0.0845F, -0.01505F, -0.09925F), new Vector3(342F, 11.65F, 109.5F), new Vector3(0.08F, 0.08F, 0.08F));
                     _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(0.08325F, 0.1225F, 0F), new Vector3(296.75F, 187.5F, 261.5F), new Vector3(0.055F, 0.055F, 0.055F));
                 });
+
+            CreateItem(_name: "Charming Facade",
+                _pickup: "Gain a 1% chance to temporarily charm a non-boss enemy on hit.",
+                _description: "Your attacks have a <style=cIsDamage>1%</style> chance to <style=cIsDamage>charm</style> a <style=cIsDamage>non-Boss enemy</style>, causing it to attack other enemies. Up to <style=cIsDamage>4</style> <style=cStack>(+4 per stack)</style> enemies can be <style=cIsDamage>charmed</style> at one time for up to <style=cIsDamage>30</style> <style=cStack>(+30 per stack)</style> seconds each.",
+                _lore: "\u0022They'd say that whispers on the wind would warn people to avoid the spirits of the forest; that they would be charmed and led to their demise if they didn't turn back... People would be lured in, used, and then stabbed in the back as soon as they lost their purpose; their bodies never being found as they were consumed by the very spirits who promised them fortune...\u0022\r\n\r\n\u0022Well, that just sounds like a bunch of occult garbage.\u0022\r\n\r\n\u0022...You're the one who asked for a ghost story.\u0022\r\n\r\n- Signal Echoes, UES Contact Light",
+                _tier: ItemTier.VoidTier3,
+                _tags: [ItemTag.Damage, ItemTag.Utility, ItemTag.AIBlacklist],
+                _iconDir: "texcharmingfacadeicon",
+                _modelDir: "charmingfacademesh",
+                _displayDir: "charmingfacadedisplaymesh",
+                _corruptToken: "ITEM_GHOSTONKILL_NAME",
+                _displaySettingsCallback: _displaySettings =>
+                {
+                    // Add character display settings
+                    _displaySettings.AddCharacterDisplay("Commando", "Head", new Vector3(0F, 0.225F, 0.1625F), new Vector3(345F, 0F, 0F), new Vector3(0.17F, 0.17F, 0.17F));
+                    _displaySettings.AddCharacterDisplay("Huntress", "Head", new Vector3(0F, 0.1925F, 0.1125F), new Vector3(340F, 0F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
+                    _displaySettings.AddCharacterDisplay("Bandit", "Head", new Vector3(0F, 0.0285F, 0.13F), new Vector3(5F, 0F, 0F), new Vector3(0.11F, 0.11F, 0.11F));
+                    _displaySettings.AddCharacterDisplay("MUL-T", "Head", new Vector3(0.395F, 3.05F, -1.15F), new Vector3(300F, 180F, 0F), new Vector3(0.5125F, 0.5125F, 0.5125F));
+                    _displaySettings.AddCharacterDisplay("Engineer", "Chest", new Vector3(0F, 0.5525F, 0.2015F), new Vector3(0F, 0F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
+                    _displaySettings.AddCharacterDisplay("Turret", "Head", new Vector3(0F, 0.5625F, -0.25F), new Vector3(0F, 0F, 0F), new Vector3(0.2F, 0.2F, 0.2F));
+                    _displaySettings.AddCharacterDisplay("Walker Turret", "Head", new Vector3(0F, 0.75F, 0.6525F), new Vector3(0F, 0F, 0F), new Vector3(0.225F, 0.225F, 0.225F));
+                    _displaySettings.AddCharacterDisplay("Artificer", "Head", new Vector3(0F, 0.05F, 0.1234F), new Vector3(355F, 0F, 0F), new Vector3(0.095F, 0.095F, 0.095F));
+                    _displaySettings.AddCharacterDisplay("Mercenary", "Head", new Vector3(0F, 0.13F, 0.14125F), new Vector3(350F, 0F, 0F), new Vector3(0.13F, 0.13F, 0.13F));
+                    _displaySettings.AddCharacterDisplay("REX", "Eye", new Vector3(0F, 0.875F, 0F), new Vector3(275F, 180F, 180F), new Vector3(0.15F, 0.15F, 0.15F));
+                    _displaySettings.AddCharacterDisplay("Loader", "Head", new Vector3(0F, 0.105F, 0.1475F), new Vector3(0F, 0F, 0F), new Vector3(0.14F, 0.14F, 0.14F));
+                    _displaySettings.AddCharacterDisplay("Acrid", "Head", new Vector3(1.65025F, 2.336F, 0.4155F), new Vector3(344F, 72.5F, 96.25F), new Vector3(-0.95F, 0.95F, 0.95F));
+                    _displaySettings.AddCharacterDisplay("Acrid", "Head", new Vector3(-1.65025F, 2.336F, 0.4155F), new Vector3(344F, 287.5F, 263.75F), new Vector3(0.95F, 0.95F, 0.95F));
+                    _displaySettings.AddCharacterDisplay("Captain", "Head", new Vector3(0F, 0.0595F, 0.18F), new Vector3(6.25F, 0F, 0F), new Vector3(0.14F, 0.14F, 0.14F));
+                    _displaySettings.AddCharacterDisplay("Railgunner", "Head", new Vector3(-0.08125F, 0.1375F, 0.0405F), new Vector3(330F, 295F, 2.5F), new Vector3(-0.09F, 0.09F, 0.09F));
+                    _displaySettings.AddCharacterDisplay("Void Fiend", "Head", new Vector3(0F, 0.0813F, 0.173F), new Vector3(342.5F, 0F, 358.75F), new Vector3(0.17F, 0.17F, 0.17F));
+                    _displaySettings.AddCharacterDisplay("Seeker", "Head", new Vector3(0F, 0.07575F, 0.13675F), new Vector3(0F, 0F, 0F), new Vector3(0.12F, 0.12F, 0.12F));
+                    _displaySettings.AddCharacterDisplay("False Son", "Head", new Vector3(0F, 0.1825F, 0.1785F), new Vector3(2.5F, 0F, 0F), new Vector3(0.14F, 0.14F, 0.14F));
+                    _displaySettings.AddCharacterDisplay("Chef", "Head", new Vector3(-0.2F, 0.1675F, 0F), new Vector3(275F, 90F, 0F), new Vector3(0.175F, 0.175F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("Operator", "Head", new Vector3(-0.13625F, -0.185F, 0F), new Vector3(70F, 270.75F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
+                    _displaySettings.AddCharacterDisplay("Drifter", "Head", new Vector3(-0.1115F, 0.223F, 0F), new Vector3(270F, 90F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
+                    _displaySettings.AddCharacterDisplay("Technician", "Head", new Vector3(0F, 0.135F, 0.142F), new Vector3(350F, 0F, 0F), new Vector3(0.165F, 0.165F, 0.165F));
+                },
+                _modifyItemDisplayPrefabCallback: _prefab =>
+                {
+                    // Get first display object
+                    GameObject rope = Utils.FindChildByName(_prefab.transform, "Rope.001");
+
+                    // Add dynamic bone behaviour
+                    DynamicBone dynamicBone = rope.AddComponent<DynamicBone>();
+
+                    // Set up dynamic bone config
+                    DynamicBoneConfig dynamicBoneConfig = new DynamicBoneConfig();
+                    dynamicBoneConfig.Damping = 0.375f;
+                    dynamicBoneConfig.Elasticity = 0.02f;
+                    dynamicBoneConfig.Stiffness = 0.5f;
+                    dynamicBoneConfig.Gravity = new Vector3(0.0f, -1.0f, 0.0f);
+                    dynamicBoneConfig.LocalGravity = new Vector3(0.5f, -0.1f, 0.0f);
+
+                    // Set up dynamic bone
+                    Utils.ConfigureDynamicBone(dynamicBone, dynamicBoneConfig);
+                });
         }
 
         public static void CreateItem(bool _createDisplaySettings = true, string _name = "WIP ITEM", ItemTag[] _tags = default, 
