@@ -79,7 +79,6 @@ namespace Faithful
         protected bool initialised = false;
 
         // Quality "ignite" settings
-        protected static readonly float igniteDuration = 4.0f;
         protected static readonly float igniteRange = 14.0f;
         protected static readonly float igniteAngle = 45.0f;
 
@@ -828,15 +827,37 @@ namespace Faithful
                 // Only ignite each victim once per tick
                 if (!igniteVictims.Add(healthComponent)) continue;
 
-                // Ignite enemy
-                DotController.InflictDot(
-                    victimBody.gameObject,
-                    character.gameObject,
-                    hurtBox,
-                    DotController.DotIndex.Burn,
-                    igniteDuration,
-                    _damageCoefficient);
+                // Jetpack flame attack
+                HitEnemyWithJetpackFlame(hurtBox, victimBody, _damageCoefficient / 1.5f);
             }
+        }
+
+        protected void HitEnemyWithJetpackFlame(HurtBox _hurtBox, CharacterBody _victimBody, float _directDamageCoefficient)
+        {
+            // Validate
+            if (_hurtBox == null || _victimBody == null || _victimBody.healthComponent == null) return;
+            if (_directDamageCoefficient <= 0.0f) return;
+
+            // Create damage info
+            DamageInfo damageInfo = new()
+            {
+                attacker = character.gameObject,
+                inflictor = gameObject,
+                damage = character.damage * _directDamageCoefficient,
+                damageColorIndex = DamageColorIndex.Default,
+                damageType = DamageType.IgniteOnHit,
+                crit = character.RollCrit(),
+                force = Vector3.zero,
+                position = _hurtBox.transform.position,
+                procCoefficient = 1.0f
+            };
+
+            // Apply direct hit
+            _victimBody.healthComponent.TakeDamage(damageInfo);
+
+            // Run normal hit callbacks
+            GlobalEventManager.instance.OnHitEnemy(damageInfo, _victimBody.gameObject);
+            GlobalEventManager.instance.OnHitAll(damageInfo, _victimBody.gameObject);
         }
 
         protected float fuelCapacity
