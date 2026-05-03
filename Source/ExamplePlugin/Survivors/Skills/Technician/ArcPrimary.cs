@@ -217,7 +217,6 @@ namespace Faithful.Skills.Technician
                         {
                             // Add timed mechanical ally buff
                             body.AddTimedBuff(mechanicalAllyBuffIndex, 1.0f);
-                            bulletAttack.owner.GetComponent<CharacterBody>().AddTimedBuff(mechanicalAllyBuffIndex, 1.0f);
                         }
                     }
                     // END INJECTED

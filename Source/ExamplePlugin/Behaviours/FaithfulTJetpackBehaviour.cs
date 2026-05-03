@@ -81,7 +81,11 @@ namespace Faithful
         // Quality "ignite" settings
         protected static readonly float igniteRange = 14.0f;
         protected static readonly float igniteAngle = 45.0f;
-
+        protected static readonly float baseIgniteDuration = 4.0f;
+        protected static readonly float directDamageFraction = 0.5f;
+        protected static readonly float burnDamageFraction = 0.5f;
+        protected static readonly float igniteDurationIncreaseFraction = 0.25f;  // Must be between 0 and 1, increases ignite duration when over 100% base damage (e.g. 200% base damage increases duration by 100% * igniteDurationIncreaseFraction (0.25) = 25%)
+        
         // Quality "ignite" state
         protected bool hasDoneInitialIgnite = false;
         protected float igniteStopwatch = 0.0f;
@@ -828,36 +832,89 @@ namespace Faithful
                 if (!igniteVictims.Add(healthComponent)) continue;
 
                 // Jetpack flame attack
-                HitEnemyWithJetpackFlame(hurtBox, victimBody, _damageCoefficient / 1.5f);
+                float directDamageCoefficient = _damageCoefficient * directDamageFraction;
+                float burnDamageCoefficient = _damageCoefficient * burnDamageFraction;
+                HitEnemyWithJetpackFlame(hurtBox, victimBody, directDamageCoefficient);
+                ApplyJetpackBurn(victimBody, burnDamageCoefficient);
             }
         }
 
-        protected void HitEnemyWithJetpackFlame(HurtBox _hurtBox, CharacterBody _victimBody, float _directDamageCoefficient)
+        protected void HitEnemyWithJetpackFlame(HurtBox _hurtBox, CharacterBody _victimBody, float _damageCoefficient)
         {
-            // Validate
+            // Host only behaviour
+            if (!Utils.hosting) return;
+
+            // Validate input
             if (_hurtBox == null || _victimBody == null || _victimBody.healthComponent == null) return;
-            if (_directDamageCoefficient <= 0.0f) return;
+            if (_damageCoefficient <= 0.0f) return;
 
             // Create damage info
             DamageInfo damageInfo = new()
             {
                 attacker = character.gameObject,
                 inflictor = gameObject,
-                damage = character.damage * _directDamageCoefficient,
-                damageColorIndex = DamageColorIndex.Default,
-                damageType = DamageType.IgniteOnHit,
+                damage = character.damage * _damageCoefficient,
+                damageColorIndex = DamageColorIndex.Item,
+                damageType = DamageType.Generic,
                 crit = character.RollCrit(),
                 force = Vector3.zero,
                 position = _hurtBox.transform.position,
                 procCoefficient = 1.0f
             };
 
-            // Apply direct hit
+            // Apply damage
             _victimBody.healthComponent.TakeDamage(damageInfo);
-
-            // Run normal hit callbacks
             GlobalEventManager.instance.OnHitEnemy(damageInfo, _victimBody.gameObject);
             GlobalEventManager.instance.OnHitAll(damageInfo, _victimBody.gameObject);
+        }
+
+        protected void ApplyJetpackBurn(CharacterBody _victimBody, float _burnDamageCoefficient)
+        {
+            // Host only behaviour
+            if (!Utils.hosting) return;
+
+            // Validate input
+            if (_victimBody == null || _victimBody.healthComponent == null) return;
+            if (_burnDamageCoefficient <= 0.0f) return;
+            if (character == null || character.inventory == null) return;
+
+            DotController.DotIndex dotIndex = DotController.DotIndex.Burn;
+            DotController.DotDef dotDef = DotController.dotDefs[(int)dotIndex];
+
+            // Desired total burn damage
+            float desiredBurnDamage = character.damage * _burnDamageCoefficient;
+
+            // Calculate burn duration
+            float desiredBurnDuration = baseIgniteDuration;
+            if (_burnDamageCoefficient > 1.0f) desiredBurnDuration *= 1.0f + (_burnDamageCoefficient - 1.0f) * igniteDurationIncreaseFraction;
+
+            // Vanilla Burn tick damage at damageMultiplier = 1
+            float baseTickDamage = Mathf.Min(dotDef.damageCoefficient * character.damage, _victimBody.healthComponent.fullCombinedHealth * 0.01f);
+            if (baseTickDamage <= 0.0f) return;
+
+            // Number of ticks over the fixed duration
+            float tickCount = desiredBurnDuration / dotDef.interval;
+            if (tickCount <= 0.0f) return;
+
+            // Convert desired total damage into the multiplier Burn actually expects
+            float damageMultiplier = desiredBurnDamage / (baseTickDamage * tickCount);
+
+            // Create DoT info
+            InflictDotInfo dotInfo = new()
+            {
+                attackerObject = character.gameObject,
+                victimObject = _victimBody.gameObject,
+                dotIndex = dotIndex,
+                duration = desiredBurnDuration,
+                damageMultiplier = damageMultiplier,
+                hitHurtBox = _victimBody.mainHurtBox
+            };
+
+            // Upgrade Burn if needed
+            StrengthenBurnUtils.CheckDotForUpgrade(character.inventory, ref dotInfo);
+
+            // Inflict DoT
+            DotController.InflictDot(ref dotInfo);
         }
 
         protected float fuelCapacity
