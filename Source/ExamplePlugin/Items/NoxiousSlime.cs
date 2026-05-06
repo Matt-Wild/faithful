@@ -1,4 +1,5 @@
-﻿using R2API;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using RoR2;
 using UnityEngine;
 
@@ -19,6 +20,24 @@ namespace Faithful
         float damageStacking;
         float blightChance;
 
+        // Store quality settings
+        protected QualitySetting<float> blightChanceQualitySetting;
+        protected QualitySetting<float> blightChanceStackingQualitySetting;
+        protected QualitySetting<float> blightDamageQualitySetting;
+        protected QualitySetting<float> blightDamageStackingQualitySetting;
+
+        // Store fetched quality values
+        protected readonly QualityValues<float> blightChanceQualityValues = new();
+        protected readonly QualityValues<float> blightChanceStackingQualityValues = new();
+        protected readonly QualityValues<float> blightDamageQualityValues = new();
+        protected readonly QualityValues<float> blightDamageStackingQualityValues = new();
+
+        private const float BlightDuration = 5.0f;
+
+        // Vanilla Blight at 5 seconds is effectively 300% total damage
+        // Quality damage is expressed as total damage, so we convert it to a damageMultiplier
+        private const float DefaultBlightTotalDamageCoefficient = 3.0f;
+
         // Constructor
         public NoxiousSlime(Toolbox _toolbox) : base(_toolbox, "NOXIOUS_SLIME")
         {
@@ -26,7 +45,7 @@ namespace Faithful
             CreateDisplaySettings("noxiousslimedisplaymesh");
 
             // Create Noxious Slime item
-            MainItem = Items.AddItem(token, "Noxious Slimes", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Noxious Slimes", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -39,6 +58,11 @@ namespace Faithful
 
             // Link On Damage Dealt behaviour
             Behaviour.AddOnDamageDealtCallback(OnDamageDealt);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Quality behaviour is handled through the existing damage-over-time and on-hit hooks
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -83,6 +107,18 @@ namespace Faithful
             damageSetting = MainItem.CreateSetting("DAMAGE", "Damage", 100.0f, "How much should this item increase the damage of damaging debuffs? (100.0 = 100% increase)", _valueFormatting: "{0:0.0}%");
             damageStackingSetting = MainItem.CreateSetting("DAMAGE_STACKING", "Damage Stacking", 100.0f, "How much should further stacks of this item increase the damage of damaging debuffs? (100.0 = 100% increase)", _valueFormatting: "{0:0.0}%");
             blightChanceSetting = MainItem.CreateSetting("BLIGHT_CHANCE", "Blight Chance", 10.0f, "What percentage chance should this item have to inflict blight on hit? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            blightChanceQualitySetting = MainItem.CreateQualitySetting("BLIGHT_CHANCE", "Blight Chance", 10.0f, 20.0f, 30.0f, 40.0f, "How much blight chance does this quality provide? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
+            blightChanceStackingQualitySetting = MainItem.CreateQualitySetting("BLIGHT_CHANCE_STACKING", "Blight Chance Stacking", 10.0f, 20.0f, 30.0f, 40.0f, "How much additional blight chance do further stacks of this quality provide? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
+            blightDamageQualitySetting = MainItem.CreateQualitySetting("BLIGHT_DAMAGE", "Blight Damage", 400.0f, 500.0f, 750.0f, 1000.0f, "How much blight damage does this quality provide? (400.0 = 400% increase)", _valueFormatting: "{0:0.0}%");
+            blightDamageStackingQualitySetting = MainItem.CreateQualitySetting("BLIGHT_DAMAGE_STACKING", "Blight Damage Stacking", 400.0f, 500.0f, 750.0f, 1000.0f, "How much additional blight damage does this quality provide? (400.0 = 400% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -92,8 +128,29 @@ namespace Faithful
             damageStacking = damageStackingSetting.Value / 100.0f;
             blightChance = blightChanceSetting.Value;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            blightChanceQualityValues.UpdateValues(blightChanceQualitySetting);
+            blightChanceStackingQualityValues.UpdateValues(blightChanceStackingQualitySetting);
+            blightDamageQualityValues.UpdateValues(blightDamageQualitySetting, 0.01f);
+            blightDamageStackingQualityValues.UpdateValues(blightDamageStackingQualitySetting, 0.01f);
+        }
+
+        public override Dictionary<string, string> QualityDescriptionManualTokens(Quality _quality)
+        {
+            return new Dictionary<string, string>
+            {
+                { "DAMAGE", damageSetting.Value.ToString() },
+                { "DAMAGE_STACKING", damageStackingSetting.Value.ToString() }
+            };
         }
 
         void OnInflictDamageOverTimeRef(ref InflictDotInfo _inflictDotInfo)
@@ -118,7 +175,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = attackerBody.inventory.GetItemCount(MainItem.itemDef);
+            int count = attackerBody.inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Has item?
             if (count > 0)
@@ -150,21 +207,86 @@ namespace Faithful
 
             // Check for victim body
             CharacterBody victimBody = _report.victimBody;
-            if (victimBody == null || !victimBody.healthComponent.alive) return;
+            if (victimBody == null || victimBody.healthComponent == null || !victimBody.healthComponent.alive) return;
 
             // Check for inventory of attacker
             Inventory inventory = attacker.inventory;
             if (inventory == null) return;
 
+            // Get effective item count
+            int count = inventory.GetItemCountEffective(MainItem.itemDef.itemIndex);
+
             // Check for item
-            if (inventory.GetItemCount(MainItem.itemDef.itemIndex) == 0) return;
+            if (count == 0) return;
+
+            // No Quality route
+            if (!Utils.qualityEnabled)
+            {
+                // Roll dice
+                if (Util.CheckRoll(blightChance * _report.damageInfo.procCoefficient, attacker))
+                {
+                    // Inflict blight
+                    InflictBlight(victimBody, attackerBody, DefaultBlightTotalDamageCoefficient);
+                }
+
+                return;
+            }
+
+            // Quality route
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
+
+            // Calculate quality blight chance
+            float totalBlightChance = 0.0f;
+            totalBlightChance += Utils.CalculateStackingValue(qualityCounts.UNCOMMON, blightChanceQualityValues.UNCOMMON, blightChanceStackingQualityValues.UNCOMMON);
+            totalBlightChance += Utils.CalculateStackingValue(qualityCounts.RARE, blightChanceQualityValues.RARE, blightChanceStackingQualityValues.RARE);
+            totalBlightChance += Utils.CalculateStackingValue(qualityCounts.EPIC, blightChanceQualityValues.EPIC, blightChanceStackingQualityValues.EPIC);
+            totalBlightChance += Utils.CalculateStackingValue(qualityCounts.LEGENDARY, blightChanceQualityValues.LEGENDARY, blightChanceStackingQualityValues.LEGENDARY);
+
+            // Calculate quality blight damage
+            float totalBlightDamage = 0.0f;
+            totalBlightDamage += Utils.CalculateStackingValue(qualityCounts.UNCOMMON, blightDamageQualityValues.UNCOMMON, blightDamageStackingQualityValues.UNCOMMON);
+            totalBlightDamage += Utils.CalculateStackingValue(qualityCounts.RARE, blightDamageQualityValues.RARE, blightDamageStackingQualityValues.RARE);
+            totalBlightDamage += Utils.CalculateStackingValue(qualityCounts.EPIC, blightDamageQualityValues.EPIC, blightDamageStackingQualityValues.EPIC);
+            totalBlightDamage += Utils.CalculateStackingValue(qualityCounts.LEGENDARY, blightDamageQualityValues.LEGENDARY, blightDamageStackingQualityValues.LEGENDARY);
+
+            // If there are normal Noxious Slimes as well, preserve their normal blight behaviour
+            int normalCount = count - qualityCounts.Total;
+            if (normalCount > 0)
+            {
+                totalBlightChance += blightChance;
+                totalBlightDamage += DefaultBlightTotalDamageCoefficient;
+            }
+
+            // Check if there is anything meaningful to apply
+            if (totalBlightChance <= 0.0f || totalBlightDamage <= 0.0f) return;
 
             // Roll dice
-            if (Util.CheckRoll(blightChance * _report.damageInfo.procCoefficient, attacker))
+            if (Util.CheckRoll(totalBlightChance * _report.damageInfo.procCoefficient, attacker))
             {
                 // Inflict blight
-                DotController.InflictDot(victimBody.gameObject, attackerBody.gameObject, victimBody.mainHurtBox, DotController.DotIndex.Blight, 5.0f);
+                InflictBlight(victimBody, attackerBody, totalBlightDamage);
             }
+        }
+
+        static void InflictBlight(CharacterBody _victimBody, CharacterBody _attackerBody, float _totalDamageCoefficient)
+        {
+            // Validate
+            if (_victimBody == null || _attackerBody == null || _totalDamageCoefficient <= 0.0f)
+            {
+                return;
+            }
+
+            // Vanilla Blight at 5 seconds is effectively 300% total damage
+            float damageMultiplier = _totalDamageCoefficient / DefaultBlightTotalDamageCoefficient;
+
+            // Inflict blight
+            DotController.InflictDot(
+                _victimBody.gameObject,
+                _attackerBody.gameObject,
+                _victimBody.mainHurtBox,
+                DotController.DotIndex.Blight,
+                BlightDuration,
+                damageMultiplier);
         }
     }
 }
