@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using Faithful.Shared;
-using HarmonyLib;
 using R2API;
 using RoR2;
 using RoR2.ContentManagement;
@@ -1985,6 +1984,42 @@ namespace Faithful
             return modelLocator.modelTransform.GetComponent<CharacterModel>();
         }
 
+        public static List<CharacterBody> GetAlivePlayerBodies(bool _requiresConnected = true)
+        {
+            List<CharacterBody> bodies = new List<CharacterBody>();
+
+            foreach (PlayerCharacterMasterController player in PlayerCharacterMasterController.instances)
+            {
+                // Ignore invalid/disconnected players if requested
+                if (player == null || (_requiresConnected && !player.isConnected))
+                {
+                    continue;
+                }
+
+                // Get player master
+                CharacterMaster master = player.master;
+                if (master == null || !master.hasBody)
+                {
+                    continue;
+                }
+
+                // Get player body
+                CharacterBody body = master.GetBody();
+                if (body == null || body.healthComponent == null)
+                {
+                    continue;
+                }
+
+                // Only include alive bodies
+                if (body.healthComponent.alive)
+                {
+                    bodies.Add(body);
+                }
+            }
+
+            return bodies;
+        }
+
         // Get all Holdout Zones this character is in
         public static List<HoldoutZoneController> GetHoldoutZonesContainingCharacter(CharacterMaster _character)
         {
@@ -2030,6 +2065,38 @@ namespace Faithful
 
             // Return list of zones containing character
             return containing;
+        }
+
+        // Check if character body is inside holdout zone
+        public static bool IsCharacterInHoldoutZone(CharacterBody _character, HoldoutZoneController _holdoutZone)
+        {
+            // Validate inputs
+            if (_character == null || _holdoutZone == null)
+            {
+                return false;
+            }
+
+            // Ignore inactive/disabled holdout zones
+            if (!_holdoutZone.isActiveAndEnabled)
+            {
+                return false;
+            }
+
+            // Use RoR2's built-in holdout zone radius check
+            return _holdoutZone.IsBodyInChargingRadius(_character);
+        }
+
+        // Check if character master is inside holdout zone
+        public static bool IsCharacterInHoldoutZone(CharacterMaster _character, HoldoutZoneController _holdoutZone)
+        {
+            // Validate character
+            if (_character == null || !_character.hasBody)
+            {
+                return false;
+            }
+
+            // Check body instead
+            return IsCharacterInHoldoutZone(_character.GetBody(), _holdoutZone);
         }
 
         // Return Hurt Boxes from RoR2 Sphere Search

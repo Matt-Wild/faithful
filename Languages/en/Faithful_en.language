@@ -90,7 +90,9 @@
 	
 	"FAITHFUL_SPACIOUS_UMBRELLA_NAME": "Spacious Umbrella",
 	"FAITHFUL_SPACIOUS_UMBRELLA_PICKUP": "Increase the size of the Teleporter zone.",
+	"FAITHFUL_SPACIOUS_UMBRELLA_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> Staying inside the Teleporter Zone temporarily increases its size over time.",
 	"FAITHFUL_SPACIOUS_UMBRELLA_DESC": "Increase the size of the Teleporter zone by <style=cIsUtility>[SIZE]%</style> <style=cStack>(+[SIZE_STACKING]% per stack)</style>.",
+	"FAITHFUL_SPACIOUS_UMBRELLA_DESC_QUALITY": "[PREFIX]\nWhile inside the Teleporter zone, it temporarily increases in size by <sprite name=\"Quality\"> <style=cIsUtility>[SIZE]m</style> <style=cStack>(+[SIZE_STACKING]m per stack)</style> every <style=cIsUtility>[INTERVAL]</style> seconds up to <style=cIsUtility>[MAX_INSTANCES]</style> times.",
 	"FAITHFUL_SPACIOUS_UMBRELLA_LORE": "Order: Plastic Umbrella (Damaged)\nTracking Number: 178******\nEstimated Delivery: 09/02/2056\nShipping Method: Standard\nShipping Address: Earthen Meteorology Institute, Argyllshire, Earth\nShipping Details:\n\nI hope you're not planning to actually use this old thing. If you do, don't blame me when you still get soaked.",
 	
 	"FAITHFUL_DROWNED_VISAGE_NAME": "Drowned Visage",

@@ -16,6 +16,18 @@ namespace Faithful
         float size;
         float sizeStacking;
 
+        // Store additional quality settings
+        QualitySetting<float> sizeQualitySetting;
+        QualitySetting<float> sizeStackingQualitySetting;
+        QualitySetting<float> intervalQualitySetting;
+        QualitySetting<int> maxInstancesQualitySetting;
+
+        // Store quality item stats
+        public QualityValues<float> SizeQualityValues = new();
+        public QualityValues<float> SizeStackingQualityValues = new();
+        public float IntervalQuality;
+        public int MaxInstancesQuality;
+
         // Constructor
         public SpaciousUmbrella(Toolbox _toolbox) : base(_toolbox, "SPACIOUS_UMBRELLA")
         {
@@ -23,7 +35,7 @@ namespace Faithful
             CreateDisplaySettings("spaciousumbrelladisplaymesh");
 
             // Create Copper Gear item and buff
-            MainItem = Items.AddItem(token, "Spacious Umbrella", [ItemTag.Utility, ItemTag.HoldoutZoneRelated, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "texspaciousumbrellaicon", "spaciousumbrellamesh", ItemTier.Tier2, _simulacrumBanned: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Spacious Umbrella", [ItemTag.Utility, ItemTag.HoldoutZoneRelated, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "texspaciousumbrellaicon", "spaciousumbrellamesh", ItemTier.Tier2, _simulacrumBanned: true, _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -33,6 +45,11 @@ namespace Faithful
 
             // Link Holdout Zone behaviour
             Behaviour.AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadius);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Quality behaviour is handled by FaithfulHoldoutZoneBehaviour
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -73,6 +90,18 @@ namespace Faithful
             // Create settings specific to this item
             sizeSetting = MainItem.CreateSetting("SIZE", "Radius Increase", 25.0f, "How much should this item increase the size of the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
             sizeStackingSetting = MainItem.CreateSetting("SIZE_STACKING", "Radius Increase Stacking", 25.0f, "How much should additional stacks of this item increase the size of the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            sizeQualitySetting = MainItem.CreateQualitySetting("SIZE", "Radius Increase", 2.5f, 5.0f, 10.0f, 20.0f, "How much should this quality item increase the size of the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            sizeStackingQualitySetting = MainItem.CreateQualitySetting("SIZE_STACKING", "Radius Increase Stacking", 2.5f, 5.0f, 10.0f, 20.0f, "How much should further stacks of this quality item increase the size of the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            intervalQualitySetting = MainItem.CreateQualitySetting("INTERVAL", "Interval", 5.0f, "At what interval should this item increase the teleporter radius? (5.0 = 5 seconds)", _valueFormatting: "{0:0.0}s");
+            maxInstancesQualitySetting = MainItem.CreateQualitySetting("MAX_INSTANCES", "Max Instances", 5, "How many times can this item increase the teleporter radius? (5 = 5 instances)", _valueFormatting: "{0:0.0}");
         }
 
         public override void FetchSettings()
@@ -81,8 +110,20 @@ namespace Faithful
             size = sizeSetting.Value / 100.0f;
             sizeStacking = sizeStackingSetting.Value / 100.0f;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            SizeQualityValues.UpdateValues(sizeQualitySetting);
+            SizeStackingQualityValues.UpdateValues(sizeStackingQualitySetting);
+            IntervalQuality = intervalQualitySetting.Value;
+            MaxInstancesQuality = maxInstancesQualitySetting.Value;
         }
 
         void OnHoldoutZoneCalcRadius(ref float _radius, HoldoutZoneController _zone)
@@ -101,7 +142,7 @@ namespace Faithful
             else if (count > 1)
             {
                 // Add onto radius
-                _radius += (size + (count * sizeStacking + Mathf.Log(count + 1, Mathf.Pow(2.0f, 1.0f / sizeStacking)) * (count / 4.0f)) / ((count / 4.0f) + 1) - sizeStacking) * _zone.baseRadius;
+                _radius += ((size + (count * sizeStacking + Mathf.Log(count + 1, Mathf.Pow(2.0f, 1.0f / sizeStacking)) * (count / 4.0f)) / ((count / 4.0f) + 1) - sizeStacking) + count * 0.02f) * _zone.baseRadius;
             }
         }
     }
