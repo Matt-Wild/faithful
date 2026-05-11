@@ -1,5 +1,6 @@
 ﻿using RoR2;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace Faithful
@@ -16,7 +17,7 @@ namespace Faithful
         private List<CharacterBody> holders = [];
 
         // Quality behaviour state
-        private bool allPlayersInside = false;
+        private bool playerInside = false;
         private float qualityTimer = 0.0f;
         private int qualityBuffsApplied = 0;
 
@@ -80,35 +81,35 @@ namespace Faithful
             }
             if (holders.Count == 0) return;
 
-            // Check if all holders are inside the holdout zone
-            bool allInside = true;
+            // Check if at least one holder is inside the holdout zone
+            bool inside = false;
             foreach (CharacterBody holder in holders)
             {
-                if (!Utils.IsCharacterInHoldoutZone(holder, zone))
+                if (Utils.IsCharacterInHoldoutZone(holder, zone))
                 {
-                    allInside = false;
+                    inside = true;
                     break;
                 }
             }
 
-            // If all holders are NOT inside the holdout zone, remove quality buffs and reset quality timer
-            if (!allInside)
+            // If no holders are inside the holdout zone, remove quality buffs and reset quality timer
+            if (!inside)
             {
-                allPlayersInside = false;
+                playerInside = false;
                 qualityTimer = 0.0f;
                 qualityBuffsApplied = 0;
                 return;
             }
 
-            // If all holders have just entered the holdout zone, start quality timer
-            if (!allPlayersInside)
+            // If a holder has just entered the holdout zone, start quality timer
+            if (!playerInside)
             {
-                allPlayersInside = true;
+                playerInside = true;
                 qualityTimer = Time.time;
                 qualityBuffsApplied = 0;
             }
 
-            // If all holders have been inside the holdout zone for the required interval, apply quality buff and reset timer
+            // If at least one holder has been inside the holdout zone for the required interval, apply quality buff and reset timer
             else if (Time.time - qualityTimer >= intervalQuality && qualityBuffsApplied < maxInstancesQuality)
             {
                 qualityBuffsApplied++;
@@ -143,12 +144,20 @@ namespace Faithful
             // Ignore if no holders or quality buffs
             if (holders.Count == 0 || qualityBuffsApplied == 0) return 0.0f;
 
+            // Get valid holders (ones inside zone)
+            List<CharacterBody> validHolders = [];
+            foreach (CharacterBody holder in holders)
+            {
+                if (Utils.IsCharacterInHoldoutZone(holder, zone)) validHolders.Add(holder);
+            }
+            if (validHolders.Count == 0) return 0.0f;
+
             // Sum up quality counts for all relevant holders
             int uncommonCount = 0;
             int rareCount = 0;
             int epicCount = 0;
             int legendaryCount = 0;
-            foreach (CharacterBody holder in holders)
+            foreach (CharacterBody holder in validHolders)
             {
                 QualityCounts counts = QualityCompat.GetItemCountsEffective(holder.inventory, Faithful.spaciousUmbrella.MainItem);
                 uncommonCount += counts.UNCOMMON;
