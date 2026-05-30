@@ -17,14 +17,14 @@ namespace Faithful
         // Character targeted character body
         public CharacterBody target;
 
+        // All currently targeted character bodies
+        private List<CharacterBody> targets = [];
+
+        // Store time since each target has been out of range
+        private Dictionary<CharacterBody, float> targetOutOfRangeTimers = [];
+
         // Store reference to visual effect
         private TemporaryVisualEffect visualEffect;
-
-        // Store time since being out of range of targeting
-        private float outOfRangeTimer;
-
-        // Store last known position of target
-        private Vector3 targetPos = Vector3.zero;
 
         // Store starting local position of display bone
         private Vector3 displayPos;
@@ -135,7 +135,7 @@ namespace Faithful
         void FixedUpdate()
         {
             // Check if no longer targeting something
-            if (targeting && target == null)
+            if (targeting && !HasAnyTarget)
             {
                 // Set as no longer targeting
                 targeting = false;
@@ -148,7 +148,7 @@ namespace Faithful
             }
 
             // Check if starting to target something
-            if (!targeting && target != null)
+            if (!targeting && HasAnyTarget)
             {
                 // Set as targeting
                 targeting = true;
@@ -165,31 +165,58 @@ namespace Faithful
 
             // BELOW IS HOST ONLY BEHAVIOUR
 
-            // Check for target
-            if (target == null) return;
+            // Check for targets
+            if (!HasAnyTarget) return;
 
-            // Get position of target
-            targetPos = target.corePosition;
+            // Track if targets changed
+            bool targetsChanged = false;
 
-            // Check if target is out of range
-            if (Vector3.Distance(targetPos, character.corePosition) > maxDistance)
+            // Cycle through targets backwards so targets can be removed during iteration
+            for (int i = targets.Count - 1; i >= 0; i--)
             {
-                // Add to out of range timer
-                outOfRangeTimer += Time.fixedDeltaTime;
+                // Get current target
+                CharacterBody currentTarget = targets[i];
+
+                // Check if target is invalid
+                if (currentTarget == null || currentTarget.healthComponent == null || !currentTarget.healthComponent.alive)
+                {
+                    // Remove invalid target
+                    RemoveTarget(currentTarget, false);
+                    targetsChanged = true;
+                    continue;
+                }
+
+                // Get position of target
+                Vector3 targetPos = currentTarget.corePosition;
+
+                // Check if target is out of range
+                if (Vector3.Distance(targetPos, character.corePosition) > maxDistance)
+                {
+                    // Add to out of range timer
+                    targetOutOfRangeTimers[currentTarget] = targetOutOfRangeTimers.TryGetValue(currentTarget, out float timer) ? timer + Time.fixedDeltaTime : Time.fixedDeltaTime;
+                }
+
+                // Target in range
+                else
+                {
+                    // Reset out of range timer
+                    targetOutOfRangeTimers[currentTarget] = 0.0f;
+                }
+
+                // Check if out of range for too long
+                if (targetOutOfRangeTimers.TryGetValue(currentTarget, out float outOfRangeTimer) && outOfRangeTimer > outOfRangeTime)
+                {
+                    // Remove target
+                    RemoveTarget(currentTarget, false);
+                    targetsChanged = true;
+                }
             }
 
-            // Target in range
-            else
+            // Check if targets changed
+            if (targetsChanged)
             {
-                // Reset out of range timer
-                outOfRangeTimer = 0.0f;
-            }
-
-            // Check if out of range for too long
-            if (outOfRangeTimer > outOfRangeTime)
-            {
-                // Remove target
-                RemoveTarget();
+                // Sync target state
+                CmdSyncTarget();
 
                 // Attempt to find new target
                 SearchForTarget();
@@ -250,6 +277,9 @@ namespace Faithful
             // Unregister with utils
             Utils.UnregisterCharacterBehaviour(this);
 
+            // Clear targets owned by this character
+            RemoveTarget(false);
+
             // Check for visual effect
             if (visualEffect != null)
             {
@@ -261,117 +291,285 @@ namespace Faithful
         public void OnKill(CharacterBody _killed)
         {
             // Check if target needs to be wiped
-            if (target != null && target == _killed)
+            if (HasTarget(_killed))
             {
                 // Remove target
-                RemoveTarget();
+                RemoveTarget(_killed);
             }
 
-            Invoke("SearchForTarget", 0.1f);
+            Invoke(nameof(SearchForTargetForKill), 0.1f);
         }
 
         void SearchForTarget()
         {
-            // Check if hosting and there is no current target
-            if (Utils.hosting && target == null)
+            SearchForTarget(int.MaxValue);
+        }
+
+        void SearchForTargetForKill()
+        {
+            // Validate character
+            if (character == null || character.inventory == null) return;
+
+            // Search only for the amount a single kill should add
+            int targetsPerKill = Faithful.targetingMatrix == null ? 0 : Faithful.targetingMatrix.GetTargetsPerKill(character.inventory);
+            SearchForTarget(targetsPerKill);
+        }
+
+        void SearchForTarget(int _maxTargetsToAdd)
+        {
+            // Host only behaviour
+            if (!Utils.hosting) return;
+
+            // Validate character
+            if (character == null || character.inventory == null) return;
+
+            // Get target capacity
+            int targetCapacity = Faithful.targetingMatrix == null ? 0 : Faithful.targetingMatrix.GetTargetCapacity(character.inventory);
+
+            // Check if no targets should be held
+            if (targetCapacity <= 0)
             {
-                // Get character bodies in scene
-                ReadOnlyCollection<CharacterBody> characterBodies = CharacterBody.readOnlyInstancesList;
-                if (characterBodies == null) return;
+                RemoveTarget();
+                return;
+            }
 
-                // Initialise filtered list of character bodies
-                List<CharacterBody> filteredCharacterBodies = new List<CharacterBody>();
+            // Trim targets if capacity was reduced
+            if (TrimTargetsToCapacity(targetCapacity))
+            {
+                CmdSyncTarget();
+            }
 
-                // Get targeter position
-                Vector3 targeterPos = character.corePosition;
+            // Check if target capacity is already reached
+            if (targets.Count >= targetCapacity) return;
 
-                // Cycle through character bodies in scene
-                foreach (CharacterBody characterBody in characterBodies)
+            // Check if no targets should be added from this search
+            if (_maxTargetsToAdd <= 0) return;
+
+            // Limit how many targets this search can add while still respecting total capacity
+            int targetLimit = _maxTargetsToAdd == int.MaxValue ? targetCapacity : Mathf.Min(targetCapacity, targets.Count + _maxTargetsToAdd);
+
+            // Get character bodies in scene
+            ReadOnlyCollection<CharacterBody> characterBodies = CharacterBody.readOnlyInstancesList;
+            if (characterBodies == null) return;
+
+            // Initialise filtered list of character bodies
+            List<CharacterBody> filteredCharacterBodies = new List<CharacterBody>();
+
+            // Get targeter position
+            Vector3 targeterPos = character.corePosition;
+
+            // Cycle through character bodies in scene
+            foreach (CharacterBody characterBody in characterBodies)
+            {
+                // Check if target is already held
+                if (HasTarget(characterBody)) continue;
+
+                // Check if on the same team as the targeter
+                if (characterBody.teamComponent.teamIndex == character.teamComponent.teamIndex) continue;
+
+                // Check if character body has a master
+                if (characterBody.master == null) continue;
+
+                // Check if character body has a health component
+                if (characterBody.healthComponent == null) continue;
+
+                // Check if character is alive
+                if (!characterBody.healthComponent.alive) continue;
+
+                // Get distance to target
+                float targetDistance = Vector3.Distance(targeterPos, characterBody.corePosition);
+
+                // Check if character body is too far from player
+                if (targetDistance > maxDistance) continue;
+
+                // Check if blacklisted
+                if (blacklistedIndexes.Contains(characterBody.bodyIndex)) continue;
+
+                // Valid target
+                filteredCharacterBodies.Add(characterBody);
+            }
+
+            // Track if new targets are added
+            bool targetsAdded = false;
+
+            // Cycle until no filtered character bodies remaining or search limit is reached
+            while (filteredCharacterBodies.Count > 0 && targets.Count < targetLimit)
+            {
+                // Get chosen target character body
+                CharacterBody chosenTarget = filteredCharacterBodies[Random.Range(0, filteredCharacterBodies.Count)];
+
+                // Remove from filtered list
+                filteredCharacterBodies.Remove(chosenTarget);
+
+                // Get faithful behaviour for chosen target
+                FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(chosenTarget);
+                if (targetCharacterBehaviour == null)
                 {
-                    // Check if on the same team as the targeter
-                    if (characterBody.teamComponent.teamIndex == character.teamComponent.teamIndex) continue;
-
-                    // Check if character body has a master
-                    if (characterBody.master == null) continue;
-
-                    // Check if character body has a health component
-                    if (characterBody.healthComponent == null) continue;
-
-                    // Check if character is alive
-                    if (!characterBody.healthComponent.alive) continue;
-
-                    // Get distance to target
-                    float targetDistance = Vector3.Distance(targeterPos, characterBody.corePosition);
-
-                    // Check if character body is too far from player
-                    if (targetDistance > maxDistance) continue;
-
-                    // Check if blacklisted
-                    if (blacklistedIndexes.Contains(characterBody.bodyIndex)) continue;
-
-                    // Valid target
-                    filteredCharacterBodies.Add(characterBody);
+                    continue;
                 }
 
-                // Cycle until no filtered character bodies remaining or a target is set
-                bool targetSet = false;
-                while (filteredCharacterBodies.Count > 0 && !targetSet)
+                // Get targeting matrix behaviour for chosen target
+                FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
+                if (targetTargetingMatrixBehaviour == null)
                 {
-                    // Get chosen target character body
-                    CharacterBody chosenTarget = filteredCharacterBodies[Random.Range(0, filteredCharacterBodies.Count)];
-
-                    // Get faithful behaviour for chosen target
-                    FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(chosenTarget);
-                    if (targetCharacterBehaviour == null)
-                    {
-                        // Remove from filtered list
-                        filteredCharacterBodies.Remove(chosenTarget);
-                        continue;
-                    }
-
-                    // Get targeting matrix behaviour for chosen target
-                    FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
-                    if (targetTargetingMatrixBehaviour == null)
-                    {
-                        // Remove from filtered list
-                        filteredCharacterBodies.Remove(chosenTarget);
-                        continue;
-                    }
-
-                    // Successful
-                    targetSet = true;
-
-                    // Set target
-                    targetTargetingMatrixBehaviour.SetTargeted(character);
-                    target = chosenTarget;
-
-                    // Sync target with clients
-                    CmdSyncTarget();
+                    continue;
                 }
+
+                // Set target
+                AddTarget(chosenTarget, targetTargetingMatrixBehaviour);
+                targetsAdded = true;
+            }
+
+            // Sync targets with clients
+            if (targetsAdded)
+            {
+                CmdSyncTarget();
             }
         }
 
         public void RemoveTarget(bool _sync = true)
         {
-            // Check for target
-            if (target == null) return;
+            // Check for targets
+            if (!HasAnyTarget) return;
 
-            // Get faithful behaviour for target
-            FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(target);
-            if (targetCharacterBehaviour == null) return;
+            // Copy targets so the list can be cleared during iteration
+            List<CharacterBody> targetsToRemove = [.. targets];
 
-            // Get targeting matrix behaviour for target
-            FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
-            if (targetTargetingMatrixBehaviour == null) return;
+            // Cycle through targets
+            foreach (CharacterBody currentTarget in targetsToRemove)
+            {
+                // Remove target without syncing each individual removal
+                RemoveTarget(currentTarget, false);
+            }
 
-            // Tell target targeting matrix behaviour that it's no longer being targeted
-            targetTargetingMatrixBehaviour.SetNotTargeted();
+            // Clear any null targets that could not be removed normally
+            targets.Clear();
+            targetOutOfRangeTimers.Clear();
 
-            // Remove target
+            // Clear primary target
             target = null;
 
             // Sync if hosting
             if (_sync && Utils.hosting) CmdSyncTarget();
+        }
+
+        public bool RemoveTarget(CharacterBody _target, bool _sync = true)
+        {
+            // Check for target
+            if (_target == null)
+            {
+                // Remove any null entries
+                bool removedNull = targets.RemoveAll(targetBody => targetBody == null) > 0;
+                UpdatePrimaryTarget();
+                return removedNull;
+            }
+
+            // Check if target is present
+            if (!targets.Contains(_target)) return false;
+
+            // Get faithful behaviour for target
+            FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(_target);
+
+            // Get targeting matrix behaviour for target
+            FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour == null ? null : targetCharacterBehaviour.targetingMatrix;
+
+            // Tell target targeting matrix behaviour that it's no longer being targeted
+            targetTargetingMatrixBehaviour?.SetNotTargeted();
+
+            // Remove target
+            targets.Remove(_target);
+            targetOutOfRangeTimers.Remove(_target);
+            UpdatePrimaryTarget();
+
+            // Sync if hosting
+            if (_sync && Utils.hosting) CmdSyncTarget();
+
+            return true;
+        }
+
+        public void RefreshTargetCapacity()
+        {
+            // Host only behaviour
+            if (!Utils.hosting) return;
+
+            // Validate character
+            if (character == null || character.inventory == null) return;
+
+            // Get target capacity
+            int targetCapacity = Faithful.targetingMatrix == null ? 0 : Faithful.targetingMatrix.GetTargetCapacity(character.inventory);
+
+            // Remove all targets if no targets should be held
+            if (targetCapacity <= 0)
+            {
+                RemoveTarget();
+                return;
+            }
+
+            // Trim targets if capacity was reduced
+            if (TrimTargetsToCapacity(targetCapacity))
+            {
+                CmdSyncTarget();
+            }
+        }
+
+        public bool HasTarget(CharacterBody _target)
+        {
+            // Check for target
+            if (_target == null) return false;
+
+            // Return if target is currently held
+            return targets.Contains(_target);
+        }
+
+        private void AddTarget(CharacterBody _target, FaithfulTargetingMatrixBehaviour _targetTargetingMatrixBehaviour)
+        {
+            // Validate target
+            if (_target == null || HasTarget(_target)) return;
+
+            // Add target
+            targets.Add(_target);
+            targetOutOfRangeTimers[_target] = 0.0f;
+            UpdatePrimaryTarget();
+
+            // Tell target targeting matrix behaviour that it's being targeted
+            _targetTargetingMatrixBehaviour?.SetTargeted(character);
+        }
+
+        private void UpdatePrimaryTarget()
+        {
+            // Remove null targets
+            targets.RemoveAll(targetBody => targetBody == null);
+
+            // Update primary target for compatibility with existing code
+            target = targets.Count > 0 ? targets[0] : null;
+        }
+
+        private bool TrimTargetsToCapacity(int _targetCapacity)
+        {
+            // Track if targets changed
+            bool targetsChanged = false;
+
+            // Remove targets until within capacity
+            while (targets.Count > _targetCapacity)
+            {
+                // Remove last target without syncing each individual removal
+                RemoveTarget(targets[targets.Count - 1], false);
+                targetsChanged = true;
+            }
+
+            return targetsChanged;
+        }
+
+        private bool HasAnyTarget
+        {
+            get
+            {
+                // Keep target list tidy
+                UpdatePrimaryTarget();
+
+                // Return if any target is present
+                return target != null;
+            }
         }
 
         public void SetTargeted(CharacterBody _targeter)
@@ -412,23 +610,26 @@ namespace Faithful
         [Command]
         public void CmdSyncTarget()
         {
-            // Check for target
-            if (target != null)
-            {
-                // Sync target on all clients
-                RpcSyncTarget(target.GetComponent<NetworkIdentity>().netId);
-            }
+            // Clear targets on clients first
+            RpcSyncNoTarget();
 
-            // No target
-            else
+            // Sync all targets on clients
+            foreach (CharacterBody currentTarget in targets)
             {
-                // Sync no target on all clients
-                RpcSyncNoTarget();
+                // Validate target
+                if (currentTarget == null) continue;
+
+                // Get network identity
+                NetworkIdentity networkIdentity = currentTarget.GetComponent<NetworkIdentity>();
+                if (networkIdentity == null) continue;
+
+                // Sync target on all clients
+                RpcAddSyncTarget(networkIdentity.netId);
             }
         }
 
         [ClientRpc]
-        private void RpcSyncTarget(NetworkInstanceId _targetNetID)
+        private void RpcAddSyncTarget(NetworkInstanceId _targetNetID)
         {
             // Unnecessary for host
             if (Utils.hosting) return;
@@ -452,9 +653,8 @@ namespace Faithful
             FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
             if (targetTargetingMatrixBehaviour == null) return;
 
-            // Set target
-            targetTargetingMatrixBehaviour.SetTargeted(character);
-            target = targetBody;
+            // Add target
+            AddTarget(targetBody, targetTargetingMatrixBehaviour);
         }
 
         [ClientRpc]
@@ -463,7 +663,7 @@ namespace Faithful
             // Unnecessary for host
             if (Utils.hosting) return;
 
-            // Remove target
+            // Remove targets
             RemoveTarget(false);
         }
 

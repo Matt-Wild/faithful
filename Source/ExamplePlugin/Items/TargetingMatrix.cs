@@ -24,6 +24,14 @@ namespace Faithful
         Setting<int> maxBuffsSetting;
         Setting<int> maxBuffsStackingSetting;
 
+        // Store additional quality settings
+        QualitySetting<int> targetsQualitySetting;
+        QualitySetting<int> targetsStackingQualitySetting;
+        QualitySetting<float> radiusQualitySetting;
+        QualitySetting<float> damageQualitySetting;
+        QualitySetting<float> damageStackingQualitySetting;
+        static readonly DamageAPI.ModdedDamageType targetingMatrixSplashDamageType = DamageAPI.ReserveDamageType();
+
         // Store item stats
         bool enableTargetEffect;
         bool targetEffectGlobal;
@@ -34,6 +42,13 @@ namespace Faithful
         int maxBuffs;
         int maxBuffsStacking;
 
+        // Store quality item stats
+        QualityValues<int> targetsQualityValues = new();
+        QualityValues<int> targetsStackingQualityValues = new();
+        QualityValues<float> radiusQualityValues = new();
+        QualityValues<float> damageQualityValues = new();
+        QualityValues<float> damageStackingQualityValues = new();
+
         // Constructor
         public TargetingMatrix(Toolbox _toolbox) : base(_toolbox, "TARGETING_MATRIX")
         {
@@ -41,7 +56,7 @@ namespace Faithful
             CreateDisplaySettings("targetingmatrixdisplaymesh");
 
             // Create Targeting Matrix item and buff
-            MainItem = Items.AddItem(token, "Targeting Matrix", [ItemTag.Damage, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", ItemTier.Tier2, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            MainItem = Items.AddItem(token, "Targeting Matrix", [ItemTag.Damage, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", ItemTier.Tier2, _supportsQuality: true, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
             targetingMatrixBuff = Buffs.AddBuff("TARGETING_MATRIX", "Targeting Matrix", "texTargetingMatrixBuff", Color.white);
 
             // Create item settings
@@ -64,6 +79,11 @@ namespace Faithful
 
             // Add fix for CMD_SWARM
             On.EntityStates.Drone.Command.Headbutt.OnEnter += OnOperatorCMDSwarmEnter;
+        }
+
+        public override void QualityConstructor()
+        {
+            // Quality behaviour is integrated into the existing targeting and damage hooks
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -113,6 +133,19 @@ namespace Faithful
             critDamageStackingSetting = MainItem.CreateSetting("CRIT_DAMAGE_STACKING", "Crit Damage Stacking", 5.0f, "How much should the critical damage of an individual stack of this item's buff be increased by per stack of this item? (5.0 = 5% increase)", _randomiserMin: 0.0f, _randomiserMax: 50.0f, _valueFormatting: "{0:0.0}%");
             maxBuffsSetting = MainItem.CreateSetting("MAX_BUFFS", "Max Buffs", 3, "What's the maximum stack of this item's buff that the player should be able to receive with a single stack of this item? (3 = 3 stacks)", _minValue: 0, _randomiserMin: 0, _randomiserMax: 5);
             maxBuffsStackingSetting = MainItem.CreateSetting("MAX_BUFFS_STACKING", "Max Buffs Stacking", 1, "How many extra stacks of this item's buff should the player be able to receive per stack? (1 = 1 stack)", _minValue: 0, _randomiserMin: 0, _randomiserMax: 3);
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            targetsQualitySetting = MainItem.CreateQualitySetting("TARGETS", "Targets", 2, 3, 4, 5, "How many enemies should this quality item be able to target at once? (2 = 2 enemies)", _minValue: 1);
+            targetsStackingQualitySetting = MainItem.CreateQualitySetting("TARGETS_STACKING", "Targets Stacking", 2, 3, 4, 5, "How many additional enemies should further stacks of this quality item be able to target? (2 = 2 enemies)", _minValue: 0);
+            radiusQualitySetting = MainItem.CreateQualitySetting("RADIUS", "Splash Radius", 10.0f, 20.0f, 30.0f, 40.0f, "How close should enemies need to be to a targeted enemy to take this quality item's splash damage? (10.0 = 10 meters)", _minValue: 0.0f, _valueFormatting: "{0:0.0}m");
+            damageQualitySetting = MainItem.CreateQualitySetting("DAMAGE", "Splash Damage", 10.0f, 20.0f, 30.0f, 40.0f, "How much total damage should this quality item's splash damage deal? (10.0 = 10% total damage)", _minValue: 0.0f, _valueFormatting: "{0:0.0}%");
+            damageStackingQualitySetting = MainItem.CreateQualitySetting("DAMAGE_STACKING", "Splash Damage Stacking", 10.0f, 20.0f, 30.0f, 40.0f, "How much additional total damage should further stacks of this quality item add to splash damage? (10.0 = 10% total damage)", _minValue: 0.0f, _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -127,8 +160,32 @@ namespace Faithful
             maxBuffs = maxBuffsSetting.Value;
             maxBuffsStacking = maxBuffsStackingSetting.Value;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            targetsQualityValues.UpdateValues(targetsQualitySetting);
+            targetsStackingQualityValues.UpdateValues(targetsStackingQualitySetting);
+            radiusQualityValues.UpdateValues(radiusQualitySetting);
+            damageQualityValues.UpdateValues(damageQualitySetting, 0.01f);
+            damageStackingQualityValues.UpdateValues(damageStackingQualitySetting, 0.01f);
+        }
+
+        public override Dictionary<string, string> QualityDescriptionManualTokens(Quality _quality)
+        {
+            return new Dictionary<string, string>
+            {
+                { "CRIT_DAMAGE", critDamageSetting.Value.ToString() },
+                { "CRIT_DAMAGE_STACKING", critDamageStackingSetting.Value.ToString() },
+                { "MAX_BUFFS", maxBuffsSetting.Value.ToString() },
+                { "MAX_BUFFS_STACKING", maxBuffsStackingSetting.Value.ToString() }
+            };
         }
 
         void ModifyModelPrefab(GameObject _prefab)
@@ -181,7 +238,7 @@ namespace Faithful
             if (targetingMatrixBehaviour == null) return;
 
             // Check if victim is attacker target
-            if (targetingMatrixBehaviour.target == _report.victimBody)
+            if (targetingMatrixBehaviour.HasTarget(_report.victimBody))
             {
                 // Calculate max buff stack for targeting matrix
                 int maxBuffStack = maxBuffs + (maxBuffsStacking * (count - 1));
@@ -208,6 +265,11 @@ namespace Faithful
 
             // Get attacker character body
             CharacterBody attacker = _attacker.GetBody();
+            if (attacker == null) return;
+
+            // Get victim character body
+            CharacterBody victim = _victim.GetBody();
+            if (victim == null) return;
 
             // Get attacker item count
             int attackerItemCount = _attacker.inventory.GetItemCountEffective(MainItem.itemDef);
@@ -219,7 +281,7 @@ namespace Faithful
             float critDamageIncrease = attackerBuffCount == 0 ? 0.0f : (critDamage + critDamageStacking * Mathf.Max(attackerItemCount - 1, 0)) * attackerBuffCount;
 
             // Check if targeting matrix should be activated
-            if (!GetMatrixActivated(_report, attacker, _victim.GetBody()))
+            if (!GetMatrixActivated(_report, attacker, victim))
             {
                 // If crit and attacker has buff, increase crit damage
                 if (_report.crit && attackerBuffCount > 0)
@@ -251,6 +313,9 @@ namespace Faithful
                 // Increase crit damage
                 _report.damage *= (attacker.critMultiplier + critDamageIncrease) / attacker.critMultiplier;
             }
+
+            // Quality variants splash a portion of the target damage to nearby enemies
+            TryApplyQualitySplashDamage(_report, attacker, victim, _attacker.inventory);
         }
 
         void OnInventoryChanged(Inventory _inventory)
@@ -275,17 +340,20 @@ namespace Faithful
                 characterBody.SetBuffCount(targetingMatrixBuff.buffDef.buffIndex, maxBuffStack);
             }
 
+            // Attempt to get faithful behaviour for character body
+            FaithfulCharacterBodyBehaviour characterBehaviour = Utils.FindCharacterBodyHelper(characterBody);
+            if (characterBehaviour == null) return;
+
+            // Attempt to get targeting matrix behaviour
+            FaithfulTargetingMatrixBehaviour targetingMatrixBehaviour = characterBehaviour.targetingMatrix;
+            if (targetingMatrixBehaviour == null) return;
+
+            // Refresh target capacity
+            targetingMatrixBehaviour.RefreshTargetCapacity();
+
             // Check if item count is zero
             if (itemCount == 0)
             {
-                // Attempt to get faithful behaviour for character body
-                FaithfulCharacterBodyBehaviour characterBehaviour = Utils.FindCharacterBodyHelper(characterBody);
-                if (characterBehaviour == null) return;
-
-                // Attempt to get targeting matrix behaviour
-                FaithfulTargetingMatrixBehaviour targetingMatrixBehaviour = characterBehaviour.targetingMatrix;
-                if (targetingMatrixBehaviour == null) return;
-
                 // Remove target
                 targetingMatrixBehaviour.RemoveTarget();
             }
@@ -374,10 +442,137 @@ namespace Faithful
             if (targetingMatrixBehaviour == null) return false;
 
             // Check if targeting matrix target is victim
-            if (targetingMatrixBehaviour.target != _victim) return false;
+            if (!targetingMatrixBehaviour.HasTarget(_victim)) return false;
 
             // Damage should be effected by targeting matrix
             return true;
+        }
+
+        public int GetTargetCapacity(Inventory _inventory)
+        {
+            // Check for inventory
+            if (_inventory == null) return 0;
+
+            // Get effective count
+            int count = _inventory.GetItemCountEffective(MainItem.itemDef);
+            if (count <= 0) return 0;
+
+            // Base Targeting Matrix can maintain one target regardless of stack count
+            if (!MainItem.supportsQuality || !Utils.qualityEnabled) return 1;
+
+            // Get quality item counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(_inventory, MainItem);
+            if (qualityCounts.Total <= 0) return 1;
+
+            // Quality stacks define the target capacity. Normal stacks do not add to quality capacity.
+            int targetCapacity = 0;
+            targetCapacity += Utils.CalculateStackingValue(qualityCounts.UNCOMMON, targetsQualityValues.UNCOMMON, targetsStackingQualityValues.UNCOMMON);
+            targetCapacity += Utils.CalculateStackingValue(qualityCounts.RARE, targetsQualityValues.RARE, targetsStackingQualityValues.RARE);
+            targetCapacity += Utils.CalculateStackingValue(qualityCounts.EPIC, targetsQualityValues.EPIC, targetsStackingQualityValues.EPIC);
+            targetCapacity += Utils.CalculateStackingValue(qualityCounts.LEGENDARY, targetsQualityValues.LEGENDARY, targetsStackingQualityValues.LEGENDARY);
+
+            return Mathf.Max(0, targetCapacity);
+        }
+
+        public int GetTargetsPerKill(Inventory _inventory)
+        {
+            // Check for inventory
+            if (_inventory == null) return 0;
+
+            // Get effective count
+            int count = _inventory.GetItemCountEffective(MainItem.itemDef);
+            if (count <= 0) return 0;
+
+            // Base Targeting Matrix targets one enemy per kill
+            if (!MainItem.supportsQuality || !Utils.qualityEnabled) return 1;
+
+            // Get quality item counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(_inventory, MainItem);
+            if (qualityCounts.Total <= 0) return 1;
+
+            // The highest held quality controls how many new targets a single kill can add
+            return Mathf.Max(0, targetsQualityValues.GetValue(qualityCounts.GetHighestQuality()));
+        }
+
+        private void TryApplyQualitySplashDamage(DamageInfo _report, CharacterBody _attacker, CharacterBody _victim, Inventory _inventory)
+        {
+            // Validate input
+            if (_report == null || _attacker == null || _victim == null || _inventory == null) return;
+
+            // Splash damage should not recursively splash again, but incoming proc-0 attacks should still work
+            if (_report.HasModdedDamageType(targetingMatrixSplashDamageType)) return;
+
+            // Check if quality behaviour is available
+            if (!MainItem.supportsQuality || !Utils.qualityEnabled) return;
+
+            // Get quality item counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(_inventory, MainItem);
+            if (qualityCounts.Total <= 0) return;
+
+            // Calculate splash damage
+            float damageCoefficient = 0.0f;
+            damageCoefficient += Utils.CalculateStackingValue(qualityCounts.UNCOMMON, damageQualityValues.UNCOMMON, damageStackingQualityValues.UNCOMMON);
+            damageCoefficient += Utils.CalculateStackingValue(qualityCounts.RARE, damageQualityValues.RARE, damageStackingQualityValues.RARE);
+            damageCoefficient += Utils.CalculateStackingValue(qualityCounts.EPIC, damageQualityValues.EPIC, damageStackingQualityValues.EPIC);
+            damageCoefficient += Utils.CalculateStackingValue(qualityCounts.LEGENDARY, damageQualityValues.LEGENDARY, damageStackingQualityValues.LEGENDARY);
+            if (damageCoefficient <= 0.0f) return;
+
+            // Use the highest held quality for radius
+            float radius = radiusQualityValues.GetValue(qualityCounts.GetHighestQuality());
+            if (radius <= 0.0f) return;
+
+            // Get nearby hurt boxes
+            HurtBox[] hurtBoxes = Utils.GetHurtBoxesInSphere(_victim.corePosition, radius);
+            if (hurtBoxes == null || hurtBoxes.Length == 0) return;
+
+            // Get attack team
+            TeamIndex attackerTeamIndex = TeamIndex.None;
+            if (_attacker.teamComponent)
+            {
+                attackerTeamIndex = _attacker.teamComponent.teamIndex;
+            }
+
+            // Track health components so one enemy is only hit once
+            HashSet<HealthComponent> hitVictims = [];
+
+            // Damage nearby enemies
+            foreach (HurtBox hurtBox in hurtBoxes)
+            {
+                // Validate hurt box and health component
+                HealthComponent healthComponent = hurtBox?.healthComponent;
+                if (healthComponent == null || !healthComponent.alive) continue;
+
+                // Get victim body
+                CharacterBody splashVictim = healthComponent.body;
+                if (splashVictim == null || splashVictim == _victim || splashVictim == _attacker) continue;
+
+                // Respect team and friendly fire rules
+                if (!FriendlyFireManager.ShouldDirectHitProceed(healthComponent, attackerTeamIndex)) continue;
+
+                // Only hit each health component once
+                if (!hitVictims.Add(healthComponent)) continue;
+
+                // Create splash damage info
+                DamageInfo splashDamageInfo = new()
+                {
+                    attacker = _attacker.gameObject,
+                    inflictor = _report.inflictor,
+                    damage = _report.damage * damageCoefficient,
+                    damageColorIndex = DamageColorIndex.Item,
+                    damageType = DamageType.Generic,
+                    crit = _report.crit,
+                    force = Vector3.zero,
+                    position = hurtBox.transform.position,
+                    procChainMask = _report.procChainMask,
+                    procCoefficient = 0.0f
+                };
+                splashDamageInfo.AddModdedDamageType(targetingMatrixSplashDamageType);
+
+                // Apply splash damage
+                healthComponent.TakeDamage(splashDamageInfo);
+                GlobalEventManager.instance.OnHitEnemy(splashDamageInfo, splashVictim.gameObject);
+                GlobalEventManager.instance.OnHitAll(splashDamageInfo, splashVictim.gameObject);
+            }
         }
     }
 }
