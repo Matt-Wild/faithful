@@ -564,7 +564,7 @@ namespace Faithful
                     force = Vector3.zero,
                     position = hurtBox.transform.position,
                     procChainMask = _report.procChainMask,
-                    procCoefficient = 0.0f
+                    procCoefficient = 0.5f
                 };
                 splashDamageInfo.AddModdedDamageType(targetingMatrixSplashDamageType);
 
