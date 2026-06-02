@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3669091703
+CRC: 1545298432
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3d0e004c643293f74595af1421c9f57c
+    Hash: 2f44bc428d56080c5454fe0ed2d82239
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7e6c650ee147aa14e558837369331065
@@ -525,6 +525,7 @@ Assets:
 - Assets/Items/LongshotGeode/AltIcons/texLongshotGeodeTier2Icon.png
 - Assets/Survivors/Technician/Icons/texTechnicianPrimeIcon.png
 - Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeUniqueIcon.png
+- Assets/Items/SecondHand/texBuffSecondHandBoost.png
 - Assets/Items/LongshotGeode/AltIcons/texLongshotGeodeBossIcon.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollectionNormal.png
 - Assets/Items/LongshotGeode/AltIcons/texLongshotGeodeVoidIcon.png
@@ -857,6 +858,7 @@ Assets:
 - Assets/Items/CollectorsVision/CollectorsVisionDisplayMesh.prefab
 - Assets/Items/LeadersPennon/AltIcons/texLeadersPennonVoidIcon.png
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaBossAchievement.png
+- Assets/Items/TargetingMatrix/texIndicatorTargetAreaMask.png
 - Assets/Items/SecondHand/Materials/texSecondHand.mat
 - Assets/Survivors/Technician/Icons/texTechnicianProximitySeekerIcon.png
 Dependencies: []
