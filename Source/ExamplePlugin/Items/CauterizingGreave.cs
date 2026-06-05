@@ -118,7 +118,7 @@ namespace Faithful
             if (_count == 0) return;
 
             // Increase max health
-            _stats.healthMultAdd += maxHealthBuff + (maxHealthBuffStacking * (_count - 1));
+            _stats.healthMultAdd += Utils.CalculateStackingValue(_count, maxHealthBuff, maxHealthBuffStacking);
         }
 
         void OnHeal(HealthComponent _healthComponent, ref float _amount, ref ProcChainMask _procChainMask, ref bool _nonRegen)
@@ -140,7 +140,7 @@ namespace Faithful
                 }
 
                 // Get item count
-                int count = body.inventory.GetItemCount(MainItem.itemDef);
+                int count = body.inventory.GetItemCountEffective(MainItem.itemDef);
 
                 // Has item?
                 if (count > 0)

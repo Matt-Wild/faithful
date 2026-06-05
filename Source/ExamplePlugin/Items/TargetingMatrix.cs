@@ -30,7 +30,8 @@ namespace Faithful
         QualitySetting<float> radiusQualitySetting;
         QualitySetting<float> damageQualitySetting;
         QualitySetting<float> damageStackingQualitySetting;
-        static readonly DamageAPI.ModdedDamageType targetingMatrixSplashDamageType = DamageAPI.ReserveDamageType();
+        static bool targetingMatrixSplashDamageTypeReserved;
+        static DamageAPI.ModdedDamageType targetingMatrixSplashDamageType;
 
         // Store item stats
         bool enableTargetEffect;
@@ -84,6 +85,17 @@ namespace Faithful
         public override void QualityConstructor()
         {
             // Quality behaviour is integrated into the existing targeting and damage hooks
+        }
+
+        static DamageAPI.ModdedDamageType GetTargetingMatrixSplashDamageType()
+        {
+            if (!targetingMatrixSplashDamageTypeReserved)
+            {
+                targetingMatrixSplashDamageType = DamageAPI.ReserveDamageType();
+                targetingMatrixSplashDamageTypeReserved = true;
+            }
+
+            return targetingMatrixSplashDamageType;
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -241,7 +253,7 @@ namespace Faithful
             if (targetingMatrixBehaviour.HasTarget(_report.victimBody))
             {
                 // Calculate max buff stack for targeting matrix
-                int maxBuffStack = maxBuffs + (maxBuffsStacking * (count - 1));
+                int maxBuffStack = Utils.CalculateStackingValue(count, maxBuffs, maxBuffsStacking);
 
                 // Get current buff count
                 int currentBuffCount = attackerBody.GetBuffCount(targetingMatrixBuff.buffDef);
@@ -278,7 +290,7 @@ namespace Faithful
             int attackerBuffCount = attacker.GetBuffCount(targetingMatrixBuff.buffDef);
 
             // Calculate crit damage increase from buffs
-            float critDamageIncrease = attackerBuffCount == 0 ? 0.0f : (critDamage + critDamageStacking * Mathf.Max(attackerItemCount - 1, 0)) * attackerBuffCount;
+            float critDamageIncrease = Utils.CalculateStackingValue(Mathf.Max(attackerItemCount, 1), critDamage, critDamageStacking) * attackerBuffCount;
 
             // Check if targeting matrix should be activated
             if (!GetMatrixActivated(_report, attacker, victim))
@@ -315,7 +327,10 @@ namespace Faithful
             }
 
             // Quality variants splash a portion of the target damage to nearby enemies
-            TryApplyQualitySplashDamage(_report, attacker, victim, _attacker.inventory);
+            if (MainItem.supportsQuality && Utils.qualityEnabled)
+            {
+                TryApplyQualitySplashDamage(_report, attacker, victim, _attacker.inventory);
+            }
         }
 
         void OnInventoryChanged(Inventory _inventory)
@@ -331,7 +346,7 @@ namespace Faithful
             int buffCount = characterBody.GetBuffCount(targetingMatrixBuff.buffDef);
 
             // Calculate max buff stack for targeting matrix
-            int maxBuffStack = itemCount == 0 ? 0 : maxBuffs + (maxBuffsStacking * (itemCount - 1));
+            int maxBuffStack = Utils.CalculateStackingValue(itemCount, maxBuffs, maxBuffsStacking);
 
             // Check if buff count exceeds max buff stack
             if (buffCount > maxBuffStack)
@@ -499,11 +514,12 @@ namespace Faithful
             // Validate input
             if (_report == null || _attacker == null || _victim == null || _inventory == null) return;
 
-            // Splash damage should not recursively splash again, but incoming proc-0 attacks should still work
-            if (_report.HasModdedDamageType(targetingMatrixSplashDamageType)) return;
-
             // Check if quality behaviour is available
             if (!MainItem.supportsQuality || !Utils.qualityEnabled) return;
+
+            // Splash damage should not recursively splash again, but incoming proc-0 attacks should still work
+            DamageAPI.ModdedDamageType splashDamageType = GetTargetingMatrixSplashDamageType();
+            if (_report.HasModdedDamageType(splashDamageType)) return;
 
             // Get quality item counts
             QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(_inventory, MainItem);
@@ -566,7 +582,7 @@ namespace Faithful
                     procChainMask = _report.procChainMask,
                     procCoefficient = 0.5f
                 };
-                splashDamageInfo.AddModdedDamageType(targetingMatrixSplashDamageType);
+                splashDamageInfo.AddModdedDamageType(splashDamageType);
 
                 // Apply splash damage
                 healthComponent.TakeDamage(splashDamageInfo);

@@ -111,8 +111,8 @@ namespace Faithful
         void SecondHandStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify attack speed
-            _stats.attackSpeedMultAdd += _count > 1 ? attackSpeed + (attackSpeedStacking * (_count - 1)) : attackSpeed;
-            _stats.moveSpeedMultAdd += _count > 1 ? speed + (speedStacking * (_count - 1)) : speed;
+            _stats.attackSpeedMultAdd += Utils.CalculateStackingValue(_count, attackSpeed, attackSpeedStacking);
+            _stats.moveSpeedMultAdd += Utils.CalculateStackingValue(_count, speed, speedStacking);
         }
 
         void GenericCharacterFixedUpdate(GenericCharacterMain _character)
@@ -123,7 +123,7 @@ namespace Faithful
             if (characterBody && inventory)
             {
                 // Get target Second Hand buff amount
-                int targetSecondHandCount = _character.isGrounded || _character.characterMotor == null ? inventory.GetItemCount(MainItem.itemDef) : 0;
+                int targetSecondHandCount = _character.isGrounded || _character.characterMotor == null ? inventory.GetItemCountEffective(MainItem.itemDef) : 0;
 
                 // Get current amount of Second Hand buffs
                 int currentSecondHandCount = characterBody.GetBuffCount(secondHandEffectBuff.buffDef);

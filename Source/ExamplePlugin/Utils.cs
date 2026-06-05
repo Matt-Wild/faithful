@@ -863,7 +863,7 @@ namespace Faithful
             }
 
             // Get Shattering Justice item count
-            int count = applierInventory.GetItemCount(RoR2Content.Items.ArmorReductionOnHit);
+            int count = applierInventory.GetItemCountEffective(RoR2Content.Items.ArmorReductionOnHit);
 
             // Test for item count and Pulverized buff
             if (count > 0 && !_target.HasBuff(RoR2Content.Buffs.Pulverized))
@@ -2208,7 +2208,7 @@ namespace Faithful
                     }
 
                     // Increment count
-                    count += character.inventory.GetItemCount(_itemDef);
+                    count += character.inventory.GetItemCountEffective(_itemDef);
                 }
             }
 

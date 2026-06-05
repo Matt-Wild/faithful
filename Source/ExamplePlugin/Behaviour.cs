@@ -1339,7 +1339,7 @@ namespace Faithful
             }
 
             // Get item amount
-            int itemCount = inventory.GetItemCount(item.itemDef);
+            int itemCount = inventory.GetItemCountEffective(item.itemDef);
 
             if (itemCount == 0)
             {
@@ -1414,7 +1414,7 @@ namespace Faithful
             }
 
             // Get item amount
-            int itemCount = inventory.GetItemCount(item.itemDef);
+            int itemCount = inventory.GetItemCountEffective(item.itemDef);
 
             if (itemCount == 0)
             {
@@ -1515,7 +1515,7 @@ namespace Faithful
             }
 
             // Get item amount
-            int itemCount = inventory.GetItemCount(item.itemDef);
+            int itemCount = inventory.GetItemCountEffective(item.itemDef);
 
             if (itemCount == 0)
             {

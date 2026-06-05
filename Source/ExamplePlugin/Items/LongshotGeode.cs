@@ -193,10 +193,10 @@ namespace Faithful
                 if (distance >= currentDistanceThreshold)
                 {
                     // Update damage from quality counts
-                    _report.damage *= 1.0f + (qualityCounts.UNCOMMON == 0 ? 0.0f : damageQualityValues.UNCOMMON + (qualityCounts.UNCOMMON - 1) * damageStackingQualityValues.UNCOMMON)
-                                           + (qualityCounts.RARE == 0 ? 0.0f : damageQualityValues.RARE + (qualityCounts.RARE - 1) * damageStackingQualityValues.RARE)
-                                           + (qualityCounts.EPIC == 0 ? 0.0f : damageQualityValues.EPIC + (qualityCounts.EPIC - 1) * damageStackingQualityValues.EPIC)
-                                           + (qualityCounts.LEGENDARY == 0 ? 0.0f : damageQualityValues.LEGENDARY + (qualityCounts.LEGENDARY - 1) * damageStackingQualityValues.LEGENDARY);
+                    _report.damage *= 1.0f + Utils.CalculateStackingValue(qualityCounts.UNCOMMON, damageQualityValues.UNCOMMON, damageStackingQualityValues.UNCOMMON)
+                                           + Utils.CalculateStackingValue(qualityCounts.RARE, damageQualityValues.RARE, damageStackingQualityValues.RARE)
+                                           + Utils.CalculateStackingValue(qualityCounts.EPIC, damageQualityValues.EPIC, damageStackingQualityValues.EPIC)
+                                           + Utils.CalculateStackingValue(qualityCounts.LEGENDARY, damageQualityValues.LEGENDARY, damageStackingQualityValues.LEGENDARY);
                 }
             }
 
@@ -204,7 +204,7 @@ namespace Faithful
             if (count > 0 && distance >= currentDistanceThreshold)
             {
                 // Apply damage bonus
-                _report.damage *= 1.0f + damage + (damageStacking * (count - 1));
+                _report.damage *= 1.0f + Utils.CalculateStackingValue(count, damage, damageStacking);
             }
 
             // Check if damage was modified

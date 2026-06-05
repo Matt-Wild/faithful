@@ -163,7 +163,7 @@ namespace Faithful
         void MatterAcceleratorBuffStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify movement speed
-            _stats.moveSpeedMultAdd += _count > 1 ? speed + (speedStacking * (_count - 1)) : speed;
+            _stats.moveSpeedMultAdd += Utils.CalculateStackingValue(_count, speed, speedStacking);
         }
 
         private void StatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -184,7 +184,7 @@ namespace Faithful
             if (!healthComponent) return;
 
             // Get item count
-            int itemCount = inventory.GetItemCount(MainItem.itemDef);
+            int itemCount = inventory.GetItemCountEffective(MainItem.itemDef);
             if (itemCount <= 0)
             {
                 // Ensure no buffs
@@ -246,10 +246,10 @@ namespace Faithful
             float epicBonus = shieldPerc / healthPercQualityValues.EPIC;
             float legendaryBonus = shieldPerc / healthPercQualityValues.LEGENDARY;
 
-            neededSpeed += counts.UNCOMMON == 0 ? 0.0f : (speedQualityValues.UNCOMMON + (counts.UNCOMMON - 1) * speedStackingQualityValues.UNCOMMON) * uncommonBonus;
-            neededSpeed += counts.RARE == 0 ? 0.0f : (speedQualityValues.RARE + (counts.RARE - 1) * speedStackingQualityValues.RARE) * rareBonus;
-            neededSpeed += counts.EPIC == 0 ? 0.0f : (speedQualityValues.EPIC + (counts.EPIC - 1) * speedStackingQualityValues.EPIC) * epicBonus;
-            neededSpeed += counts.LEGENDARY == 0 ? 0.0f : (speedQualityValues.LEGENDARY + (counts.LEGENDARY - 1) * speedStackingQualityValues.LEGENDARY) * legendaryBonus;
+            neededSpeed += Utils.CalculateStackingValue(counts.UNCOMMON, speedQualityValues.UNCOMMON, speedStackingQualityValues.UNCOMMON) * uncommonBonus;
+            neededSpeed += Utils.CalculateStackingValue(counts.RARE, speedQualityValues.RARE, speedStackingQualityValues.RARE) * rareBonus;
+            neededSpeed += Utils.CalculateStackingValue(counts.EPIC, speedQualityValues.EPIC, speedStackingQualityValues.EPIC) * epicBonus;
+            neededSpeed += Utils.CalculateStackingValue(counts.LEGENDARY, speedQualityValues.LEGENDARY, speedStackingQualityValues.LEGENDARY) * legendaryBonus;
 
             // Update speed bonus from quality
             characterBody.SetBuffCount(matterAcceleratorQualityBuff.buffDef.buffIndex, Mathf.FloorToInt(neededSpeed));

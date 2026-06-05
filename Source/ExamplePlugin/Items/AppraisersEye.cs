@@ -2,7 +2,9 @@
 using MonoMod.Cil;
 using RoR2;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
@@ -20,11 +22,24 @@ namespace Faithful
         Setting<int> maxDebuffsStackingSetting;
         Setting<float> critDamageSetting;
 
+        // Store quality settings
+        QualitySetting<float> damageQualitySetting;
+        QualitySetting<float> damageStackingQualitySetting;
+
         // Store item stats
         bool hiddenFromLogbook;
         int maxDebuffs;
         int maxDebuffsStacking;
         static float critDamage;
+
+        // Store quality item stats
+        QualityValues<float> damageQualityValues = new();
+        QualityValues<float> damageStackingQualityValues = new();
+
+        // Store quality explosion candidates by victim
+        static readonly Dictionary<HealthComponent, List<QualityExplosionCandidate>> qualityExplosionCandidates = new();
+
+        const float qualityExplosionRadius = 18.0f;
 
         // Overlay for Scrutinized debuff
         static readonly Overlays.Overlay scrutinizedOverlay = Overlays.CreateOverlay(new Overlays.OverlaySettings
@@ -49,7 +64,7 @@ namespace Faithful
             CreateDisplaySettings("appraiserseyedisplaymesh");
 
             // Create item and buff
-            MainItem = Items.AddItem(token, "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _displaySettings: displaySettings, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
+            MainItem = Items.AddItem(token, "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _supportsQuality: true, _displaySettings: displaySettings, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
             scrutinizedBuff = Buffs.AddBuff("SCRUTINIZED", "Scrutinized", "texBuffScrutinizedEye", Color.white, _isDebuff: true, _overlay: scrutinizedOverlay);
 
             // Create item settings
@@ -63,6 +78,12 @@ namespace Faithful
 
             // More specific crit damage setup
             SetupCritDamageModifier();
+        }
+
+        public override void QualityConstructor()
+        {
+            // Link Quality death explosion behaviour
+            Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath_Quality);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -108,6 +129,16 @@ namespace Faithful
             maxDebuffsSetting = MainItem.CreateSetting("MAX_DEBUFFS", "Max Debuffs", 1, "What's the maximum amount of scrutinized you should be able to apply to a single enemy using this item? (1 = 1 scrutinized)");
             maxDebuffsStackingSetting = MainItem.CreateSetting("MAX_DEBUFFS_STACKING", "Max Debuffs Stacking", 1, "What's the maximum amount of scrutinized you should be able to apply to a single enemy using further stacks of this item? (1 = 1 scrutinized)");
             critDamageSetting = MainItem.CreateSetting("CRIT_DAMAGE_MULT", "Crit Damage Multiplier", 20.0f, "How much should each stack of scrutinized increase crit damage? (20.0 = 20% increase)");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            damageQualitySetting = MainItem.CreateQualitySetting("DAMAGE", "Explosion Damage", 100.0f, 200.0f, 300.0f, 400.0f, "How much base damage should scrutinized enemies explode for on death per scrutinize stack? (100.0 = 100% base damage)", _minValue: 0.0f, _valueFormatting: "{0:0.0}%");
+            damageStackingQualitySetting = MainItem.CreateQualitySetting("DAMAGE_STACKING", "Explosion Damage Stacking", 100.0f, 200.0f, 300.0f, 400.0f, "How much additional base damage should further quality stacks add to scrutinized enemy death explosions per scrutinize stack? (100.0 = 100% base damage)", _minValue: 0.0f, _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
@@ -118,11 +149,31 @@ namespace Faithful
             maxDebuffsStacking = maxDebuffsStackingSetting.Value;
             critDamage = critDamageSetting.Value / 100.0f;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update if hidden in logbook
             MainItem.hiddenFromLogbook = hiddenFromLogbook;
 
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            damageQualityValues.UpdateValues(damageQualitySetting, 0.01f);
+            damageStackingQualityValues.UpdateValues(damageStackingQualitySetting, 0.01f);
+        }
+
+        public override Dictionary<string, string> QualityDescriptionManualTokens(Quality _quality)
+        {
+            return new Dictionary<string, string>
+            {
+                { "MAX_DEBUFFS", maxDebuffsSetting.Value.ToString() },
+                { "MAX_DEBUFFS_STACKING", maxDebuffsStackingSetting.Value.ToString() },
+                { "CRIT_DAMAGE_MULT", critDamageSetting.Value.ToString() }
+            };
         }
 
         private void SetupCritDamageModifier()
@@ -212,8 +263,14 @@ namespace Faithful
             int attackerItemCount = attackerInventory.GetItemCountEffective(MainItem.itemDef.itemIndex);
             if (attackerItemCount <= 0) return;
 
+            // Quality variants should remember crit attempts even if the victim is already at this attacker's cap
+            if (MainItem.supportsQuality && Utils.qualityEnabled)
+            {
+                TryRecordQualityExplosionCandidate(victimBody, attackerBody, attackerInventory);
+            }
+
             // Calculate max debuffs this attacker can apply
-            int currentMaxDebuffs = maxDebuffs + ((attackerItemCount - 1) * maxDebuffsStacking);
+            int currentMaxDebuffs = Utils.CalculateStackingValue(attackerItemCount, maxDebuffs, maxDebuffsStacking);
 
             // Get current debuff count
             int victimDebuffCount = victimBody.GetBuffCount(scrutinizedBuff.buffDef.buffIndex);
@@ -223,6 +280,186 @@ namespace Faithful
             {
                 victimBody.AddBuff(scrutinizedBuff.buffDef.buffIndex);
             }
+        }
+
+        private void OnCharacterDeath_Quality(DamageReport _report)
+        {
+            // Host only behaviour
+            if (!Utils.hosting) return;
+
+            // Check if quality behaviour is available
+            if (!MainItem.supportsQuality || !Utils.qualityEnabled) return;
+
+            // Check for victim body and buff
+            CharacterBody victimBody = _report.victimBody;
+            if (victimBody == null || victimBody.healthComponent == null) return;
+            if (scrutinizedBuff == null || scrutinizedBuff.buffDef == null) return;
+
+            // Get and forget any stored quality explosion candidates for this victim
+            HealthComponent victimHealthComponent = victimBody.healthComponent;
+            if (!qualityExplosionCandidates.TryGetValue(victimHealthComponent, out List<QualityExplosionCandidate> candidates))
+            {
+                return;
+            }
+            qualityExplosionCandidates.Remove(victimHealthComponent);
+
+            // Check if victim was scrutinized
+            int debuffCount = victimBody.GetBuffCount(scrutinizedBuff.buffDef.buffIndex);
+            if (debuffCount <= 0) return;
+
+            // Check for killer body and team
+            CharacterBody killerBody = _report.attackerBody;
+            if (killerBody == null || killerBody.teamComponent == null) return;
+            TeamIndex killerTeamIndex = killerBody.teamComponent.teamIndex;
+
+            // Get the strongest eligible ally who attempted to scrutinize this victim with a quality Appraiser's Eye
+            QualityExplosionCandidate bestCandidate = null;
+            float bestCombinedDamage = 0.0f;
+            foreach (QualityExplosionCandidate candidate in candidates)
+            {
+                if (candidate == null || candidate.teamIndex != killerTeamIndex) continue;
+
+                float combinedDamage = GetCandidateCombinedDamage(candidate);
+                if (combinedDamage > bestCombinedDamage)
+                {
+                    bestCandidate = candidate;
+                    bestCombinedDamage = combinedDamage;
+                }
+            }
+
+            // No quality attacker from the killer's team attempted to scrutinize this enemy
+            if (bestCandidate == null || bestCombinedDamage <= 0.0f) return;
+
+            // Explode based on the strongest candidate, multiplied by scrutinize count
+            FireQualityExplosion(victimBody, bestCandidate, bestCombinedDamage * debuffCount);
+        }
+
+        private void TryRecordQualityExplosionCandidate(CharacterBody _victimBody, CharacterBody _attackerBody, Inventory _attackerInventory)
+        {
+            // Validate input
+            if (_victimBody == null || _victimBody.healthComponent == null || _attackerBody == null || _attackerInventory == null) return;
+            if (_attackerBody.teamComponent == null) return;
+
+            // Check if quality behaviour is available
+            if (!MainItem.supportsQuality || !Utils.qualityEnabled) return;
+
+            // Calculate the attacker's quality explosion damage
+            float combinedDamage = CalculateQualityExplosionCombinedDamage(_attackerBody, _attackerInventory);
+            if (combinedDamage <= 0.0f) return;
+
+            // Get candidate list for this victim
+            HealthComponent victimHealthComponent = _victimBody.healthComponent;
+            if (!qualityExplosionCandidates.TryGetValue(victimHealthComponent, out List<QualityExplosionCandidate> candidates))
+            {
+                candidates = [];
+                qualityExplosionCandidates[victimHealthComponent] = candidates;
+            }
+
+            // Update existing candidate if this attacker has already attempted to scrutinize this victim
+            CharacterMaster attackerMaster = _attackerBody.master;
+            foreach (QualityExplosionCandidate candidate in candidates)
+            {
+                if (candidate.Matches(attackerMaster, _attackerBody))
+                {
+                    candidate.attackerMaster = attackerMaster;
+                    candidate.attackerBody = _attackerBody;
+                    candidate.teamIndex = _attackerBody.teamComponent.teamIndex;
+                    candidate.lastCombinedDamage = Mathf.Max(candidate.lastCombinedDamage, combinedDamage);
+                    return;
+                }
+            }
+
+            // Add new candidate
+            candidates.Add(new QualityExplosionCandidate
+            {
+                attackerMaster = attackerMaster,
+                attackerBody = _attackerBody,
+                teamIndex = _attackerBody.teamComponent.teamIndex,
+                lastCombinedDamage = combinedDamage
+            });
+        }
+
+        private float CalculateQualityExplosionCombinedDamage(CharacterBody _attackerBody, Inventory _attackerInventory)
+        {
+            // Validate input
+            if (_attackerBody == null || _attackerInventory == null) return 0.0f;
+
+            // Get quality item counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(_attackerInventory, MainItem);
+            if (qualityCounts.Total <= 0) return 0.0f;
+
+            // Calculate quality explosion damage coefficient
+            float damageCoefficient = 0.0f;
+            damageCoefficient += Utils.CalculateStackingValue(qualityCounts.UNCOMMON, damageQualityValues.UNCOMMON, damageStackingQualityValues.UNCOMMON);
+            damageCoefficient += Utils.CalculateStackingValue(qualityCounts.RARE, damageQualityValues.RARE, damageStackingQualityValues.RARE);
+            damageCoefficient += Utils.CalculateStackingValue(qualityCounts.EPIC, damageQualityValues.EPIC, damageStackingQualityValues.EPIC);
+            damageCoefficient += Utils.CalculateStackingValue(qualityCounts.LEGENDARY, damageQualityValues.LEGENDARY, damageStackingQualityValues.LEGENDARY);
+            if (damageCoefficient <= 0.0f) return 0.0f;
+
+            // Use vanilla on-kill proc damage handling, matching the Shatterspleen
+            return Util.OnKillProcDamage(_attackerBody.damage, damageCoefficient);
+        }
+
+        private float GetCandidateCombinedDamage(QualityExplosionCandidate _candidate)
+        {
+            // Validate candidate
+            if (_candidate == null) return 0.0f;
+
+            // Prefer current body and inventory values at death time when available
+            CharacterBody currentBody = _candidate.attackerMaster != null ? _candidate.attackerMaster.GetBody() : _candidate.attackerBody;
+            if (currentBody != null && currentBody.inventory != null)
+            {
+                float currentCombinedDamage = CalculateQualityExplosionCombinedDamage(currentBody, currentBody.inventory);
+                if (currentCombinedDamage > 0.0f)
+                {
+                    _candidate.attackerBody = currentBody;
+                    _candidate.lastCombinedDamage = currentCombinedDamage;
+                    return currentCombinedDamage;
+                }
+            }
+
+            // Fall back to the best stored value from previous crit attempts
+            return _candidate.lastCombinedDamage;
+        }
+
+        private void FireQualityExplosion(CharacterBody _victimBody, QualityExplosionCandidate _candidate, float _baseDamage)
+        {
+            // Validate input
+            if (_victimBody == null || _candidate == null || _baseDamage <= 0.0f) return;
+
+            // Use the candidate who supplied the highest combined damage as the explosion attacker
+            CharacterBody attackerBody = _candidate.attackerMaster != null ? _candidate.attackerMaster.GetBody() : _candidate.attackerBody;
+            GameObject attackerObject = attackerBody != null ? attackerBody.gameObject : null;
+
+            // Create Shatterspleen-style explosion
+            Vector3 position = _victimBody.corePosition;
+            Util.PlaySound("Play_bleedOnCritAndExplode_explode", _victimBody.gameObject);
+            GameObject blastObject = UnityEngine.Object.Instantiate(GlobalEventManager.CommonAssets.bleedOnHitAndExplodeBlastEffect, position, Quaternion.identity);
+            DelayBlast delayBlast = blastObject.GetComponent<DelayBlast>();
+            if (delayBlast == null)
+            {
+                UnityEngine.Object.Destroy(blastObject);
+                return;
+            }
+
+            delayBlast.position = position;
+            delayBlast.baseDamage = _baseDamage;
+            delayBlast.baseForce = 0.0f;
+            delayBlast.radius = qualityExplosionRadius;
+            delayBlast.attacker = attackerObject;
+            delayBlast.inflictor = null;
+            delayBlast.crit = attackerBody != null && Util.CheckRoll(attackerBody.crit, _candidate.attackerMaster);
+            delayBlast.maxTimer = 0.0f;
+            delayBlast.damageColorIndex = DamageColorIndex.Item;
+            delayBlast.falloffModel = BlastAttack.FalloffModel.SweetSpot;
+
+            TeamFilter teamFilter = blastObject.GetComponent<TeamFilter>();
+            if (teamFilter != null)
+            {
+                teamFilter.teamIndex = _candidate.teamIndex;
+            }
+
+            NetworkServer.Spawn(blastObject);
         }
 
         private static void IL_HealthComponent_TakeDamageProcess(ILContext _il)
@@ -290,6 +527,23 @@ namespace Faithful
             }
 
             return _currentDamage;
+        }
+
+        private class QualityExplosionCandidate
+        {
+            public CharacterMaster attackerMaster;
+            public CharacterBody attackerBody;
+            public TeamIndex teamIndex;
+            public float lastCombinedDamage;
+
+            public bool Matches(CharacterMaster _attackerMaster, CharacterBody _attackerBody)
+            {
+                // Prefer master matching because bodies can be recreated
+                if (_attackerMaster != null && attackerMaster == _attackerMaster) return true;
+
+                // Fall back to body matching for masterless attackers
+                return _attackerBody != null && attackerBody == _attackerBody;
+            }
         }
     }
 }

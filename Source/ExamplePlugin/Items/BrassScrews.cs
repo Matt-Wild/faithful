@@ -171,7 +171,7 @@ namespace Faithful
             if (_count == 0) return;
 
             // Modify damage
-            _stats.damageMultAdd += damage + damageStacking * (_count - 1);
+            _stats.damageMultAdd += Utils.CalculateStackingValue(_count, damage, damageStacking);
         }
 
         void InHoldoutZone(CharacterBody _body, HoldoutZoneController _zone)
@@ -181,7 +181,7 @@ namespace Faithful
             if (inventory)
             {
                 // Get Brass Screws amount
-                int brassScrewsCount = inventory.GetItemCount(MainItem.itemDef.itemIndex);
+                int brassScrewsCount = inventory.GetItemCountEffective(MainItem.itemDef.itemIndex);
 
                 // Has Brass Screws?
                 if (brassScrewsCount > 0)
@@ -280,10 +280,10 @@ namespace Faithful
             else if (counts.UNCOMMON <= 0) return;
 
             // Calculate buff duration
-            float buffDuration = counts.UNCOMMON == 0 ? 0.0f : durationQualityValues.UNCOMMON + (counts.UNCOMMON - 1) * durationStackingQualityValues.UNCOMMON;
-            buffDuration += counts.RARE == 0 ? 0.0f : durationQualityValues.RARE + (counts.RARE - 1) * durationStackingQualityValues.RARE;
-            buffDuration += counts.EPIC == 0 ? 0.0f : durationQualityValues.EPIC + (counts.EPIC - 1) * durationStackingQualityValues.EPIC;
-            buffDuration += counts.LEGENDARY == 0 ? 0.0f : durationQualityValues.LEGENDARY + (counts.LEGENDARY - 1) * durationStackingQualityValues.LEGENDARY;
+            float buffDuration = Utils.CalculateStackingValue(counts.UNCOMMON, durationQualityValues.UNCOMMON, durationStackingQualityValues.UNCOMMON);
+            buffDuration += Utils.CalculateStackingValue(counts.RARE, durationQualityValues.RARE, durationStackingQualityValues.RARE);
+            buffDuration += Utils.CalculateStackingValue(counts.EPIC, durationQualityValues.EPIC, durationStackingQualityValues.EPIC);
+            buffDuration += Utils.CalculateStackingValue(counts.LEGENDARY, durationQualityValues.LEGENDARY, durationStackingQualityValues.LEGENDARY);
 
             // Give buff
             switch (effectiveQuality)

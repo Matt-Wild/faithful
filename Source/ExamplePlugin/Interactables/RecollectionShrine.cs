@@ -108,7 +108,7 @@ namespace Faithful
             if (inv == null) return false;
 
             // Check for item
-            if (inv.GetItemCount(cvItem) <= 0) return false;
+            if (inv.GetItemCountEffective(cvItem) <= 0) return false;
 
             // Get player master controller
             PlayerCharacterMasterController player = body.master?.playerCharacterMasterController;

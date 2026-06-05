@@ -140,10 +140,10 @@ namespace Faithful
         void LeadersPennonStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Modify attack speed
-            _stats.attackSpeedMultAdd += attackSpeed + attackSpeedStacking * (_count - 1);
+            _stats.attackSpeedMultAdd += Utils.CalculateStackingValue(_count, attackSpeed, attackSpeedStacking);
 
             // Modify regen speed
-            _stats.baseRegenAdd += regen + regenStacking * (_count - 1);
+            _stats.baseRegenAdd += Utils.CalculateStackingValue(_count, regen, regenStacking);
             _stats.levelRegenAdd += regenPerLevel;
             _stats.regenMultAdd += regenMult;
         }
@@ -151,7 +151,7 @@ namespace Faithful
         void AllyWithItemToAlly(int _count, CharacterMaster _holder, CharacterMaster _other)
         {
             // Calculate effect radius
-            float radius = baseRadius + (_count - 1) * radiusStacking;     // REMEMBER TO SYNC THIS WITH FaithfulLeadersPennonBehaviour
+            float radius = Utils.CalculateStackingValue(_count, baseRadius, radiusStacking);     // REMEMBER TO SYNC THIS WITH FaithfulLeadersPennonBehaviour
 
             // Other ally in radius
             if ((_holder.GetBodyObject().transform.position - _other.GetBodyObject().transform.position).magnitude <= radius)
@@ -170,7 +170,7 @@ namespace Faithful
                     if (holderInv != null)
                     {
                         // Get needed amount of buffs
-                        int needed = holderInv.GetItemCount(MainItem.itemDef) - body.GetBuffCount(leadersPennonBuff.buffDef);
+                        int needed = holderInv.GetItemCountEffective(MainItem.itemDef) - body.GetBuffCount(leadersPennonBuff.buffDef);
 
                         // Catch up buff count
                         for (int i = 0; i < needed; i++) body.AddTimedBuff(leadersPennonBuff.buffDef, buffDuration);
@@ -186,7 +186,7 @@ namespace Faithful
                     if (holderInv != null)
                     {
                         // Get needed amount of buffs
-                        int needed = holderInv.GetItemCount(MainItem.itemDef);
+                        int needed = holderInv.GetItemCountEffective(MainItem.itemDef);
 
                         // Refresh needed amount of pennon buffs
                         Utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, buffDuration, needed);

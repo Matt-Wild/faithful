@@ -226,20 +226,20 @@ namespace Faithful
             if (itemCount == 0) return 0.0f;
 
             // Check if Quality is enabled
-            if (!Utils.qualityEnabled) return duration + durationStacking * (itemCount - 1);
+            if (!Utils.qualityEnabled) return Utils.CalculateStackingValue(itemCount, duration, durationStacking);
 
             // Apply flat duration increase
-            float newDuration = duration + durationStacking * (itemCount - 1);
+            float newDuration = Utils.CalculateStackingValue(itemCount, duration, durationStacking);
 
             // Get quality item counts
             QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
 
             // Sum up Quality duration multiplier
             float qualityDurationMultiplier = 1.0f;
-            qualityDurationMultiplier += qualityCounts.UNCOMMON == 0 ? 0.0f : durationQualityValues.UNCOMMON + (qualityCounts.UNCOMMON - 1) * durationStackingQualityValues.UNCOMMON;
-            qualityDurationMultiplier += qualityCounts.RARE == 0 ? 0.0f : durationQualityValues.RARE + (qualityCounts.RARE - 1) * durationStackingQualityValues.RARE;
-            qualityDurationMultiplier += qualityCounts.EPIC == 0 ? 0.0f : durationQualityValues.EPIC + (qualityCounts.EPIC - 1) * durationStackingQualityValues.EPIC;
-            qualityDurationMultiplier += qualityCounts.LEGENDARY == 0 ? 0.0f : durationQualityValues.LEGENDARY + (qualityCounts.LEGENDARY - 1) * durationStackingQualityValues.LEGENDARY;
+            qualityDurationMultiplier += Utils.CalculateStackingValue(qualityCounts.UNCOMMON, durationQualityValues.UNCOMMON, durationStackingQualityValues.UNCOMMON);
+            qualityDurationMultiplier += Utils.CalculateStackingValue(qualityCounts.RARE, durationQualityValues.RARE, durationStackingQualityValues.RARE);
+            qualityDurationMultiplier += Utils.CalculateStackingValue(qualityCounts.EPIC, durationQualityValues.EPIC, durationStackingQualityValues.EPIC);
+            qualityDurationMultiplier += Utils.CalculateStackingValue(qualityCounts.LEGENDARY, durationQualityValues.LEGENDARY, durationStackingQualityValues.LEGENDARY);
 
             // Return multiplied duration
             return newDuration * qualityDurationMultiplier;

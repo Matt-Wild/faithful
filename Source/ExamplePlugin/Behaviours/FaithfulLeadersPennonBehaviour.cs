@@ -41,7 +41,7 @@ namespace Faithful
             if (inventory != null)
             {
                 // Update item count with current item amount
-                UpdateItemCount(inventory.GetItemCount(Items.GetItem("LEADERS_PENNON").itemDef));
+                UpdateItemCount(inventory.GetItemCountEffective(Items.GetItem("LEADERS_PENNON").itemDef));
             }
 
             // Hook behaviour
@@ -98,7 +98,7 @@ namespace Faithful
             if (body != character) return;
 
             // Get new item count
-            int newCount = _inventory.GetItemCount(Items.GetItem("LEADERS_PENNON").itemDef);
+            int newCount = _inventory.GetItemCountEffective(Items.GetItem("LEADERS_PENNON").itemDef);
 
             // Update item count
             UpdateItemCount(newCount);
@@ -127,7 +127,7 @@ namespace Faithful
                 }
 
                 // Calculate radius indicator radius
-                float radius = baseRadius + (count - 1) * radiusStacking;  // REMEMBER TO SYNC THIS WITH LeadersPennon
+                float radius = Utils.CalculateStackingValue(count, baseRadius, radiusStacking);  // REMEMBER TO SYNC THIS WITH LeadersPennon
 
                 // Set radius indicator target size
                 radiusIndicator.SetTargetSize(radius);
@@ -137,7 +137,7 @@ namespace Faithful
             else
             {
                 // Calculate effect radius
-                float radius = baseRadius + (count - 1) * radiusStacking;  // REMEMBER TO SYNC THIS WITH LeadersPennon
+                float radius = Utils.CalculateStackingValue(count, baseRadius, radiusStacking);  // REMEMBER TO SYNC THIS WITH LeadersPennon
 
                 // Create radius indicator
                 radiusIndicator = Utils.CreateRadiusIndicator(character, 0.0f, radius, new Color(0.58039215f, 0.22745098f, 0.71764705f));

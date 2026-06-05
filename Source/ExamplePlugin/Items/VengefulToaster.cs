@@ -114,13 +114,13 @@ namespace Faithful
             if (inventory)
             {
                 // Get Vengeful Toaster amount
-                int vengefulToasterCount = inventory.GetItemCount(MainItem.itemDef.itemIndex);
+                int vengefulToasterCount = inventory.GetItemCountEffective(MainItem.itemDef.itemIndex);
 
                 // Has Vengeful Toasters?
                 if (vengefulToasterCount > 0)
                 {
                     // Calculate buff duration
-                    float buffDuration = vengefulToasterCount > 1 ? duration + (durationStacking * (vengefulToasterCount - 1)) : duration;
+                    float buffDuration = Utils.CalculateStackingValue(vengefulToasterCount, duration, durationStacking);
 
                     // Add Vengeance buff
                     _report.victimBody.AddTimedBuff(vengeanceBuff.buffDef, buffDuration);

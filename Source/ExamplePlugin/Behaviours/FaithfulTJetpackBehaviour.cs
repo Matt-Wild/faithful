@@ -922,7 +922,7 @@ namespace Faithful
             get
             {
                 // Calculate fuel capacity
-                return baseFuel + fuelPerStack * (itemCount - 1);
+                return Utils.CalculateStackingValue(itemCount, baseFuel, fuelPerStack);
             }
         }
 

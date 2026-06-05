@@ -152,7 +152,7 @@ namespace Faithful
             if (_count == 0) return;
 
             // Modify jump power
-            _stats.baseJumpPowerAdd += 1.75f * jumpBoost + 1.75f * jumpBoostStacking * (_count - 1);
+            _stats.baseJumpPowerAdd += 1.75f * Utils.CalculateStackingValue(_count, jumpBoost, jumpBoostStacking);
         }
 
         void GenericCharacterFixedUpdate_Quality(GenericCharacterMain _character)
@@ -205,25 +205,25 @@ namespace Faithful
         private void UncommonStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Increase movement speed
-            _stats.moveSpeedMultAdd += _count == 0 ? 0.0f : speedQualityValues.UNCOMMON + (_count - 1) * speedStackingQualityValues.UNCOMMON;
+            _stats.moveSpeedMultAdd += Utils.CalculateStackingValue(_count, speedQualityValues.UNCOMMON, speedStackingQualityValues.UNCOMMON);
         }
 
         private void RareStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Increase movement speed
-            _stats.moveSpeedMultAdd += _count == 0 ? 0.0f : speedQualityValues.RARE + (_count - 1) * speedStackingQualityValues.RARE;
+            _stats.moveSpeedMultAdd += Utils.CalculateStackingValue(_count, speedQualityValues.RARE, speedStackingQualityValues.RARE);
         }
 
         private void EpicStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Increase movement speed
-            _stats.moveSpeedMultAdd += _count == 0 ? 0.0f : speedQualityValues.EPIC + (_count - 1) * speedStackingQualityValues.EPIC;
+            _stats.moveSpeedMultAdd += Utils.CalculateStackingValue(_count, speedQualityValues.EPIC, speedStackingQualityValues.EPIC);
         }
 
         private void LegendaryStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
             // Increase movement speed
-            _stats.moveSpeedMultAdd += _count == 0 ? 0.0f : speedQualityValues.LEGENDARY + (_count - 1) * speedStackingQualityValues.LEGENDARY;
+            _stats.moveSpeedMultAdd += Utils.CalculateStackingValue(_count, speedQualityValues.LEGENDARY, speedStackingQualityValues.LEGENDARY);
         }
     }
 }

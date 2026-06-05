@@ -127,7 +127,7 @@ namespace Faithful
             }
 
             // Get item count
-            int count = _body.inventory.GetItemCount(MainItem.itemDef);
+            int count = _body.inventory.GetItemCountEffective(MainItem.itemDef);
 
             // Check for item
             if (count == 0) return;

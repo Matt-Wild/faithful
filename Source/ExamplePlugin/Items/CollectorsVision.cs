@@ -203,7 +203,8 @@ namespace Faithful
             return new Dictionary<string, string>
             {
                 { "CRIT_CHANCE", inspirationGainQualityValues.GetValue(_quality).ToString() },
-                { "CRIT_DAMAGE_MULT", Mathf.RoundToInt(critDamageMult * 100.0f * inspirationGainQualityValues.GetValue(_quality)).ToString() }
+                { "CRIT_DAMAGE_MULT", Mathf.RoundToInt(critDamageMult * 100.0f * inspirationGainQualityValues.GetValue(_quality)).ToString() },
+                { "APPRAISERS_EYE_QUALITY", GetAppraisersEyeQualityDescription(_quality) }
             };
         }
 
@@ -231,7 +232,7 @@ namespace Faithful
             }
 
             // Ignore Appraiser's Eye
-            if (appraisersEye != null && _index == appraisersEye.itemDef.itemIndex)
+            if (IsAppraisersEyeItemIndex(_index))
             {
                 return;
             }
@@ -255,7 +256,7 @@ namespace Faithful
             if (count > 0)
             {
                 // Ensure it's not Appraiser's Eye
-                if (_index == Faithful.appraisersEye.MainItem.itemDef.itemIndex)
+                if (IsAppraisersEyeItemIndex(_index))
                 {
                     return;
                 }
@@ -371,8 +372,12 @@ namespace Faithful
             // Ignore if not granting Appraiser's Eye
             if (!grantAppraisersEye) return;
 
+            // Get Appraiser's Eye item to grant
+            ItemDef eyeItemDef = GetGrantedEyeItemDef(_inventory);
+            if (eyeItemDef == null) return;
+
             // Grant Appraiser's Eye
-            _inventory.GiveItemPermanent(appraisersEye.itemDef);
+            _inventory.GiveItemPermanent(eyeItemDef);
 
             // Try get character master
             CharacterMaster master = _inventory.GetComponent<CharacterMaster>();
@@ -380,10 +385,60 @@ namespace Faithful
 
             // Queue notification on the owning client so order is preserved
             PickupIndex grantingPickupIndex = PickupCatalog.FindPickupIndex(_grantingItemIndex);
-            PickupIndex eyePickupIndex = PickupCatalog.FindPickupIndex(appraisersEye.itemDef.itemIndex);
+            PickupIndex eyePickupIndex = PickupCatalog.FindPickupIndex(eyeItemDef.itemIndex);
 
             NetUtils netUtils = master.GetComponent<NetUtils>();
             netUtils?.QueueDelayedPickupNotification(master, grantingPickupIndex, eyePickupIndex);
+        }
+
+        private ItemDef GetGrantedEyeItemDef(Inventory _inventory)
+        {
+            // Validate Appraiser's Eye
+            if (appraisersEye == null || appraisersEye.itemDef == null) return null;
+
+            // Normal route
+            if (!MainItem.supportsQuality || !Utils.qualityEnabled || !appraisersEye.supportsQuality) return appraisersEye.itemDef;
+
+            // Get quality Collector's Vision counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(_inventory, MainItem);
+            if (qualityCounts.Total <= 0) return appraisersEye.itemDef;
+
+            // Grant an Appraiser's Eye matching the highest held Collector's Vision quality
+            ItemDef qualityEyeItemDef = QualityCompat.GetQualityItemDef(appraisersEye, qualityCounts.GetHighestQuality());
+            return qualityEyeItemDef ?? appraisersEye.itemDef;
+        }
+
+        private bool IsAppraisersEyeItemIndex(ItemIndex _index)
+        {
+            // Validate Appraiser's Eye
+            if (appraisersEye == null || appraisersEye.itemDef == null || _index == ItemIndex.None) return false;
+
+            // Get item definition
+            ItemDef itemDef = ItemCatalog.GetItemDef(_index);
+            if (itemDef == null) return false;
+
+            // Check direct base item
+            if (itemDef == appraisersEye.itemDef) return true;
+
+            // Check quality variants
+            if (appraisersEye.supportsQuality && Utils.qualityEnabled)
+            {
+                return QualityCompat.GetBaseItem(itemDef) == appraisersEye.itemDef;
+            }
+
+            return false;
+        }
+
+        private static string GetAppraisersEyeQualityDescription(Quality _quality)
+        {
+            return _quality switch
+            {
+                Quality.UNCOMMON => "an <sprite name=\"QualityUncommon\"> uncommon quality",
+                Quality.RARE => "a <sprite name=\"QualityRare\"> rare quality",
+                Quality.EPIC => "an <sprite name=\"QualityEpic\"> epic quality",
+                Quality.LEGENDARY => "a <sprite name=\"QualityLegendary\"> legendary quality",
+                _ => "a quality"
+            };
         }
 
         private void ProcessPendingEyeNotifications(CharacterMaster _master, PickupIndex _pushedPickupIndex)

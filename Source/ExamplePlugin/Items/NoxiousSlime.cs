@@ -181,7 +181,7 @@ namespace Faithful
             if (count > 0)
             {
                 // Calculate damage multiplier
-                float damageMult = 1.0f + damage + (damageStacking * (count - 1));
+                float damageMult = 1.0f + Utils.CalculateStackingValue(count, damage, damageStacking);
 
                 // Modify DoT damage
                 _inflictDotInfo.damageMultiplier *= damageMult;

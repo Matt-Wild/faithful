@@ -164,7 +164,7 @@ namespace Faithful
             if (count == 0) return;
 
             // Roll the dice
-            if (Util.CheckRoll(chance + (chanceStacking * (count - 1)), character))
+            if (Util.CheckRoll(Utils.CalculateStackingValue(count, chance, chanceStacking), character))
             {
                 // Get Holdout Zones containing character
                 List<HoldoutZoneController> zones = Utils.GetHoldoutZonesContainingCharacter(character);
@@ -232,10 +232,10 @@ namespace Faithful
 
             // Calculate charge to be provided to teleporter
             float unscaledCharge = 0.0f;
-            unscaledCharge += counts.UNCOMMON == 0 ? 0 : chargeAmountQualityValues.UNCOMMON + (counts.UNCOMMON - 1) * chargeAmountStackingQualityValues.UNCOMMON;
-            unscaledCharge += counts.RARE == 0 ? 0 : chargeAmountQualityValues.RARE + (counts.RARE - 1) * chargeAmountStackingQualityValues.RARE;
-            unscaledCharge += counts.EPIC == 0 ? 0 : chargeAmountQualityValues.EPIC + (counts.EPIC - 1) * chargeAmountStackingQualityValues.EPIC;
-            unscaledCharge += counts.LEGENDARY == 0 ? 0 : chargeAmountQualityValues.LEGENDARY + (counts.LEGENDARY - 1) * chargeAmountStackingQualityValues.LEGENDARY;
+            unscaledCharge += Utils.CalculateStackingValue(counts.UNCOMMON, chargeAmountQualityValues.UNCOMMON, chargeAmountStackingQualityValues.UNCOMMON);
+            unscaledCharge += Utils.CalculateStackingValue(counts.RARE, chargeAmountQualityValues.RARE, chargeAmountStackingQualityValues.RARE);
+            unscaledCharge += Utils.CalculateStackingValue(counts.EPIC, chargeAmountQualityValues.EPIC, chargeAmountStackingQualityValues.EPIC);
+            unscaledCharge += Utils.CalculateStackingValue(counts.LEGENDARY, chargeAmountQualityValues.LEGENDARY, chargeAmountStackingQualityValues.LEGENDARY);
 
             // Provide charge
             Utils.ChargeHoldoutZone(_zone, unscaledCharge * timeModifier);

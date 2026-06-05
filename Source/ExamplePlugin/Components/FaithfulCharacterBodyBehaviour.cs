@@ -152,7 +152,7 @@ namespace Faithful
                 if (character.inventory != null)
                 {
                     // Update jetpack with jetpack item count
-                    tJetpack.UpdateItemCount(character.inventory.GetItemCount(Items.GetItem("4T0N_JETPACK").itemDef));
+                    tJetpack.UpdateItemCount(character.inventory.GetItemCountEffective(Items.GetItem("4T0N_JETPACK").itemDef));
                 }
 
                 // Check if debug mode

@@ -270,7 +270,7 @@ namespace Faithful
             get
             {
                 // Calculate max buffs
-                return maxBuffs + maxBuffsStacking * (itemCount - 1);
+                return Utils.CalculateStackingValue(itemCount, maxBuffs, maxBuffsStacking);
             }
         }
 
