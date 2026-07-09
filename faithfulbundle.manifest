@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1545298432
+CRC: 1737083168
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2f44bc428d56080c5454fe0ed2d82239
+    Hash: ab2e67ee85a38663b3a5c0f622de8374
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7e6c650ee147aa14e558837369331065
@@ -207,6 +207,7 @@ Assets:
 - Assets/Items/NoxiousSlimes/Materials/texNoxiousSlimeSlime.mat
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveUniqueIcon.png
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDisplayMesh.prefab
+- Assets/Items/LeadersPennon/texBuffLeaderSpeed.png
 - Assets/Items/SecondHand/SecondHandDisplayMesh.obj
 - Assets/Items/RadiantTimepiece/AltIcons/texRadiantTimepieceUniqueIcon.png
 - Assets/Items/SecondHand/AltIcons/texSecondHandTier3Icon.png
