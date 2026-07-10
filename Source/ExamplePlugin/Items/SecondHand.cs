@@ -1,6 +1,7 @@
 ﻿using EntityStates;
 using R2API;
 using RoR2;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Faithful
@@ -10,6 +11,13 @@ namespace Faithful
         // Store buffs
         Buff secondHandBuff;
         Buff secondHandEffectBuff;
+
+        // Quality buffs
+        Buff secondHandBoostBuff;
+        Buff secondHandBoostUncommonBuff;
+        Buff secondHandBoostRareBuff;
+        Buff secondHandBoostEpicBuff;
+        Buff secondHandBoostLegendaryBuff;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
@@ -26,6 +34,21 @@ namespace Faithful
         float speed;
         float speedStacking;
 
+        // Store additional quality settings
+        QualitySetting<float> boostAttackSpeedQualitySetting;
+        QualitySetting<float> boostAttackSpeedStackingQualitySetting;
+        QualitySetting<float> boostDelayQualitySetting;
+        QualitySetting<float> graceDurationQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> boostAttackSpeedQualityValues = new();
+        QualityValues<float> boostAttackSpeedStackingQualityValues = new();
+        QualityValues<float> graceDurationQualityValues = new();
+        float boostDelay = 3.0f;
+
+        // Store quality buff state
+        Dictionary<CharacterBody, SecondHandQualityState> qualityStates = [];
+
         // Constructor
         public SecondHand(Toolbox _toolbox) : base(_toolbox, "SECOND_HAND")
         {
@@ -33,7 +56,7 @@ namespace Faithful
             CreateDisplaySettings("secondhanddisplaymesh");
 
             // Create Second Hand item and buff
-            MainItem = Items.AddItem(token, "Second Hand", [ItemTag.Damage, ItemTag.Utility, ItemTag.Technology, ItemTag.MobilityRelated], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Second Hand", [ItemTag.Damage, ItemTag.Utility, ItemTag.Technology, ItemTag.MobilityRelated], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _supportsQuality: true, _displaySettings: displaySettings);
             secondHandBuff = Buffs.AddBuff("SECOND_HAND", "Second Hand", "texbuffsecondhand", Color.white, false);
             secondHandEffectBuff = Buffs.AddBuff("SECOND_HAND_EFFECT", "Second Hand", "texbuffsecondhand", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "SECOND_HAND");
 
@@ -48,6 +71,28 @@ namespace Faithful
 
             // Link Generic Character Fixed Update behaviour
             Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Create Quality stuff
+            secondHandBoostBuff = Buffs.AddBuff("SECOND_HAND_BOOST", "Second Hand Boost", "texBuffSecondHandBoost", Color.white, false, _qualityBuff: true);
+            secondHandBoostUncommonBuff = Buffs.AddBuff("SECOND_HAND_BOOST_UNCOMMON", "Second Hand Boost", "texBuffSecondHandBoost", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "SECOND_HAND_BOOST");
+            secondHandBoostRareBuff = Buffs.AddBuff("SECOND_HAND_BOOST_RARE", "Second Hand Boost", "texBuffSecondHandBoost", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "SECOND_HAND_BOOST");
+            secondHandBoostEpicBuff = Buffs.AddBuff("SECOND_HAND_BOOST_EPIC", "Second Hand Boost", "texBuffSecondHandBoost", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "SECOND_HAND_BOOST");
+            secondHandBoostLegendaryBuff = Buffs.AddBuff("SECOND_HAND_BOOST_LEGENDARY", "Second Hand Boost", "texBuffSecondHandBoost", Color.white, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "SECOND_HAND_BOOST");
+
+            // Add stats mods for quality boost buffs
+            Behaviour.AddStatsMod(secondHandBoostUncommonBuff, UncommonStatsMod_Quality);
+            Behaviour.AddStatsMod(secondHandBoostRareBuff, RareStatsMod_Quality);
+            Behaviour.AddStatsMod(secondHandBoostEpicBuff, EpicStatsMod_Quality);
+            Behaviour.AddStatsMod(secondHandBoostLegendaryBuff, LegendaryStatsMod_Quality);
+
+            // Clear stored quality state on scene exit
+            Behaviour.AddOnPreSceneExitCallback((_exitController) =>
+            {
+                qualityStates.Clear();
+            });
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -94,6 +139,18 @@ namespace Faithful
             attackSpeedStackingSetting = MainItem.CreateSetting("ATTACK_SPEED_STACKING", "Attack Speed Stacking", 20.0f, "How much should further stacks of this item increase attack speed while touching the ground? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
             speedSetting = MainItem.CreateSetting("SPEED", "Movement Speed", 30.0f, "How much should this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
             speedStackingSetting = MainItem.CreateSetting("SPEED_STACKING", "Movement Speed Stacking", 30.0f, "How much should further stacks of this item increase movement speed while touching the ground? (30.0 = 30% increase)", _valueFormatting: "{0:0.0}%");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            boostAttackSpeedQualitySetting = MainItem.CreateQualitySetting("BOOST_ATTACK_SPEED", "Boost Attack Speed", 20.0f, 40.0f, 60.0f, 80.0f, "How much attack speed should this item gain after being grounded long enough? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            boostAttackSpeedStackingQualitySetting = MainItem.CreateQualitySetting("BOOST_ATTACK_SPEED_STACKING", "Boost Attack Speed Stacking", 20.0f, 40.0f, 60.0f, 80.0f, "How much additional attack speed should further stacks of this quality item gain after being grounded long enough? (20.0 = 20% increase)", _valueFormatting: "{0:0.0}%");
+            boostDelayQualitySetting = MainItem.CreateQualitySetting("BOOST_DELAY", "Boost Delay", 3.0f, "How long should the player need to be grounded before gaining the boosted Second Hand buff? (3.0 = 3 seconds)", _isStat: false, _minValue: 0.0f, _canRandomise: false, _valueFormatting: "{0:0.0}s");
+            graceDurationQualitySetting = MainItem.CreateQualitySetting("GRACE_DURATION", "Grace Duration", 2.0f, 4.0f, 6.0f, 8.0f, "How long should this quality item keep its grounded buffs after leaving the ground? (2.0 = 2 seconds)", _isStat: false, _minValue: 0.0f, _valueFormatting: "{0:0.0}s");
         }
 
         public override void FetchSettings()
@@ -104,8 +161,20 @@ namespace Faithful
             speed = speedSetting.Value / 100.0f;
             speedStacking = speedStackingSetting.Value / 100.0f;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            boostAttackSpeedQualityValues.UpdateValues(boostAttackSpeedQualitySetting, 0.01f);
+            boostAttackSpeedStackingQualityValues.UpdateValues(boostAttackSpeedStackingQualitySetting, 0.01f);
+            graceDurationQualityValues.UpdateValues(graceDurationQualitySetting);
+            boostDelay = boostDelayQualitySetting.Value;
         }
 
         void SecondHandStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -122,8 +191,54 @@ namespace Faithful
             Inventory inventory = characterBody?.inventory;
             if (characterBody && inventory)
             {
+                // Get Second Hand item amount
+                int secondHandCount = inventory.GetItemCountEffective(MainItem.itemDef);
+
+                // Check if quality behaviour is available
+                bool qualityAvailable = MainItem.supportsQuality && Utils.qualityEnabled && secondHandBoostBuff != null;
+
+                // Get quality counts
+                QualityCounts qualityCounts = new();
+                if (qualityAvailable)
+                {
+                    qualityCounts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
+                }
+
+                // Check for item
+                if (secondHandCount <= 0 && qualityCounts.Total <= 0)
+                {
+                    // Clear Second Hand buffs
+                    SetSecondHandBuffs(characterBody, 0, false);
+
+                    // Clear quality buffs and state
+                    ClearQualityBuffs(characterBody);
+                    qualityStates.Remove(characterBody);
+
+                    // Done
+                    return;
+                }
+
+                // Check if grounded or character motor is null
+                bool grounded = _character.isGrounded || _character.characterMotor == null;
+
+                // Update quality state
+                bool baseActive = grounded;
+                bool boostActive = false;
+                if (qualityAvailable && qualityCounts.Total > 0)
+                {
+                    SecondHandQualityState state = UpdateQualityState(characterBody, qualityCounts, grounded);
+                    baseActive = grounded || state.graceTimer > 0.0f;
+                    boostActive = baseActive && state.groundedTimer >= boostDelay;
+                }
+                else
+                {
+                    // Clear quality buffs and state
+                    ClearQualityBuffs(characterBody);
+                    qualityStates.Remove(characterBody);
+                }
+
                 // Get target Second Hand buff amount
-                int targetSecondHandCount = _character.isGrounded || _character.characterMotor == null ? inventory.GetItemCountEffective(MainItem.itemDef) : 0;
+                int targetSecondHandCount = baseActive ? secondHandCount : 0;
 
                 // Get current amount of Second Hand buffs
                 int currentSecondHandCount = characterBody.GetBuffCount(secondHandEffectBuff.buffDef);
@@ -132,12 +247,118 @@ namespace Faithful
                 if (targetSecondHandCount != currentSecondHandCount)
                 {
                     // Update Second Hand buff count
-                    characterBody.SetBuffCount(secondHandEffectBuff.buffDef.buffIndex, targetSecondHandCount);
-
-                    // Update visual buff
-                    characterBody.SetBuffCount(secondHandBuff.buffDef.buffIndex, targetSecondHandCount > 0 ? 1 : 0);
+                    SetSecondHandBuffs(characterBody, targetSecondHandCount, boostActive);
                 }
+                else
+                {
+                    // Update visual buff
+                    characterBody.SetBuffCount(secondHandBuff.buffDef.buffIndex, targetSecondHandCount > 0 && !boostActive ? 1 : 0);
+                    if (qualityAvailable) characterBody.SetBuffCount(secondHandBoostBuff.buffDef.buffIndex, targetSecondHandCount > 0 && boostActive ? 1 : 0);
+                }
+
+                // Update quality boost buff counts
+                if (qualityAvailable) SetQualityBuffs(characterBody, qualityCounts, boostActive);
             }
+        }
+
+        private SecondHandQualityState UpdateQualityState(CharacterBody _body, QualityCounts _counts, bool _grounded)
+        {
+            // Try get quality state
+            if (!qualityStates.TryGetValue(_body, out SecondHandQualityState state))
+            {
+                // Create quality state
+                state = new SecondHandQualityState();
+                qualityStates[_body] = state;
+            }
+
+            // Get grace duration
+            float graceDuration = graceDurationQualityValues.GetValue(_counts.GetHighestQuality());
+
+            // Update grounded timer and grace timer
+            if (_grounded)
+            {
+                state.groundedTimer += Time.fixedDeltaTime;
+                state.graceTimer = graceDuration;
+            }
+            else
+            {
+                state.graceTimer = Mathf.Max(0.0f, state.graceTimer - Time.fixedDeltaTime);
+
+                // Keep the boost charged during the grace period, otherwise reset the grounded timer
+                if (state.groundedTimer >= boostDelay && state.graceTimer > 0.0f) state.groundedTimer = boostDelay;
+                else state.groundedTimer = 0.0f;
+            }
+
+            // Return quality state
+            return state;
+        }
+
+        private void SetSecondHandBuffs(CharacterBody _body, int _count, bool _boostActive)
+        {
+            // Update Second Hand buff count
+            _body.SetBuffCount(secondHandEffectBuff.buffDef.buffIndex, _count);
+
+            // Update visual buff
+            _body.SetBuffCount(secondHandBuff.buffDef.buffIndex, _count > 0 && !_boostActive ? 1 : 0);
+            if (secondHandBoostBuff != null) _body.SetBuffCount(secondHandBoostBuff.buffDef.buffIndex, _count > 0 && _boostActive ? 1 : 0);
+        }
+
+        private void SetQualityBuffs(CharacterBody _body, QualityCounts _counts, bool _boostActive)
+        {
+            // Get boost buff counts
+            int uncommonCount = _boostActive ? _counts.UNCOMMON : 0;
+            int rareCount = _boostActive ? _counts.RARE : 0;
+            int epicCount = _boostActive ? _counts.EPIC : 0;
+            int legendaryCount = _boostActive ? _counts.LEGENDARY : 0;
+
+            // Update boost buff counts
+            _body.SetBuffCount(secondHandBoostUncommonBuff.buffDef.buffIndex, uncommonCount);
+            _body.SetBuffCount(secondHandBoostRareBuff.buffDef.buffIndex, rareCount);
+            _body.SetBuffCount(secondHandBoostEpicBuff.buffDef.buffIndex, epicCount);
+            _body.SetBuffCount(secondHandBoostLegendaryBuff.buffDef.buffIndex, legendaryCount);
+        }
+
+        private void ClearQualityBuffs(CharacterBody _body)
+        {
+            // Validate input
+            if (_body == null || secondHandBoostBuff == null) return;
+
+            // Clear boost buff counts
+            _body.SetBuffCount(secondHandBoostBuff.buffDef.buffIndex, 0);
+            _body.SetBuffCount(secondHandBoostUncommonBuff.buffDef.buffIndex, 0);
+            _body.SetBuffCount(secondHandBoostRareBuff.buffDef.buffIndex, 0);
+            _body.SetBuffCount(secondHandBoostEpicBuff.buffDef.buffIndex, 0);
+            _body.SetBuffCount(secondHandBoostLegendaryBuff.buffDef.buffIndex, 0);
+        }
+
+        private void UncommonStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify attack speed
+            _stats.attackSpeedMultAdd += Utils.CalculateStackingValue(_count, boostAttackSpeedQualityValues.UNCOMMON, boostAttackSpeedStackingQualityValues.UNCOMMON);
+        }
+
+        private void RareStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify attack speed
+            _stats.attackSpeedMultAdd += Utils.CalculateStackingValue(_count, boostAttackSpeedQualityValues.RARE, boostAttackSpeedStackingQualityValues.RARE);
+        }
+
+        private void EpicStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify attack speed
+            _stats.attackSpeedMultAdd += Utils.CalculateStackingValue(_count, boostAttackSpeedQualityValues.EPIC, boostAttackSpeedStackingQualityValues.EPIC);
+        }
+
+        private void LegendaryStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify attack speed
+            _stats.attackSpeedMultAdd += Utils.CalculateStackingValue(_count, boostAttackSpeedQualityValues.LEGENDARY, boostAttackSpeedStackingQualityValues.LEGENDARY);
+        }
+
+        private class SecondHandQualityState
+        {
+            public float groundedTimer;
+            public float graceTimer;
         }
     }
 }
