@@ -272,7 +272,7 @@ namespace Faithful
             }
 
             // Get grace duration
-            float graceDuration = graceDurationQualityValues.GetValue(_counts.GetHighestQuality());
+            float graceDuration = GetGraceDuration(_body, _counts);
 
             // Update grounded timer and grace timer
             if (_grounded)
@@ -291,6 +291,21 @@ namespace Faithful
 
             // Return quality state
             return state;
+        }
+
+        private float GetGraceDuration(CharacterBody _body, QualityCounts _counts)
+        {
+            // Get base grace duration
+            float graceDuration = graceDurationQualityValues.GetValue(_counts.GetHighestQuality());
+
+            // Radiant Timepiece should extend the aerial grace period like a temporary buff duration
+            if (Faithful.radiantTimepiece != null && secondHandBuff != null)
+            {
+                graceDuration += Faithful.radiantTimepiece.GetAdditionalTimedBuffDuration(secondHandBuff.buffDef, _body);
+            }
+
+            // Return grace duration
+            return graceDuration;
         }
 
         private void SetSecondHandBuffs(CharacterBody _body, int _count, bool _boostActive)
