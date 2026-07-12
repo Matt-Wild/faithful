@@ -60,7 +60,9 @@
 	
 	"FAITHFUL_VENGEFUL_TOASTER_NAME": "Vengeful Toaster",
 	"FAITHFUL_VENGEFUL_TOASTER_PICKUP": "Taking damage temporarily increases your own.",
+	"FAITHFUL_VENGEFUL_TOASTER_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> Nearby allies taking damage also temporarily increases damage. Chance to further increase damage at lower health.",
 	"FAITHFUL_VENGEFUL_TOASTER_DESC": "Getting hit grants <style=cIsDamage>Vengeance</style> for <style=cIsUtility>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds. Each stack of <style=cIsDamage>Vengeance</style> increases damage by <style=cIsDamage>+[DAMAGE]%</style>. All stacks of <style=cIsDamage>Vengeance</style> are consumed upon dealing damage.",
+	"FAITHFUL_VENGEFUL_TOASTER_DESC_QUALITY": "[PREFIX]\nGain <style=cIsDamage>Vengeance</style> for every ally that takes damage within <sprite name=\"Quality\"> <style=cIsUtility>[RADIUS]m</style>. For every <style=cIsHealth>1% health missing</style>, gain a <sprite name=\"Quality\"> <style=cIsDamage>[CHANCE]%</style> <style=cStack>(+[CHANCE_STACKING]% per stack)</style> chance to gain <style=cIsDamage>1</style> extra stack of <style=cIsDamage>Vengeance</style>. Every interval of <style=cIsDamage>100%</style> chance <style=cIsUtility>guarantees</style> another <style=cIsDamage>Vengeance</style> stack.",
 	"FAITHFUL_VENGEFUL_TOASTER_LORE": "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\n<style=cMono>\r\n//--DISMISSAL REPORT --//</style>\n\n\u0022Boss! Boss! I've created a kitchen appliance that can feel pain!\u0022\n\n\u0022...Why didn’t we fire you after that buzzsaw drone incident...?\u0022",
 	
 	"FAITHFUL_HERMITS_SHAWL_NAME": "Hermit's Shawl",
