@@ -1,5 +1,6 @@
 ﻿using R2API;
 using RoR2;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -10,6 +11,13 @@ namespace Faithful
         // Store buffs
         Buff leadersPennonBuff;
         Buff leadersPennonVisualBuff;
+
+        // Quality buffs
+        Buff leadersPennonSpeedBuff;
+        Buff leadersPennonSpeedUncommonBuff;
+        Buff leadersPennonSpeedRareBuff;
+        Buff leadersPennonSpeedEpicBuff;
+        Buff leadersPennonSpeedLegendaryBuff;
 
         // Store display settings
         ItemDisplaySettings displaySettings;
@@ -40,6 +48,16 @@ namespace Faithful
         float regenMult;
         float buffDuration;
 
+        // Store additional quality settings
+        QualitySetting<float> speedQualitySetting;
+        QualitySetting<float> durationQualitySetting;
+        QualitySetting<float> durationStackingQualitySetting;
+
+        // Store quality item stats
+        QualityValues<float> speedQualityValues = new();
+        QualityValues<float> durationQualityValues = new();
+        QualityValues<float> durationStackingQualityValues = new();
+
         // Constructor
         public LeadersPennon(Toolbox _toolbox) : base(_toolbox, "LEADERS_PENNON")
         {
@@ -49,7 +67,7 @@ namespace Faithful
             // Create Leader's Pennon item and buff
             leadersPennonBuff = Buffs.AddBuff("LEADERS_PENNON", "Leaders Pennon", "texbuffleaderarea", Color.white, true, _isHidden: true, _hasConfig: false);
             leadersPennonVisualBuff = Buffs.AddBuff("LEADERS_PENNON_VISUAL", "Leaders Pennon", "texbuffleaderarea", Color.white, false, _langTokenOverride: "LEADERS_PENNON");
-            MainItem = Items.AddItem(token, "Leaders Pennon", [ItemTag.Utility, ItemTag.AIBlacklist], "texleaderspennonicon", "leaderspennonmesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME", _displaySettings: displaySettings);
+            MainItem = Items.AddItem(token, "Leaders Pennon", [ItemTag.Utility, ItemTag.AIBlacklist], "texleaderspennonicon", "leaderspennonmesh", ItemTier.VoidTier1, _corruptToken: "ITEM_WARDONLEVEL_NAME", _supportsQuality: true, _displaySettings: displaySettings);
 
             // Create item settings
             CreateSettings();
@@ -65,6 +83,28 @@ namespace Faithful
 
             // Add stats modification
             Behaviour.AddStatsMod(leadersPennonBuff, LeadersPennonStatsMod);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Create Quality stuff
+            leadersPennonSpeedBuff = Buffs.AddBuff("LEADERS_PENNON_SPEED", "Leaders Pennon Speed", "texBuffLeaderSpeed", Color.white, false, _qualityBuff: true);
+            leadersPennonSpeedUncommonBuff = Buffs.AddBuff("LEADERS_PENNON_SPEED_UNCOMMON", "Leaders Pennon Speed", "texBuffLeaderSpeed", Color.white, false, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "LEADERS_PENNON_SPEED");
+            leadersPennonSpeedRareBuff = Buffs.AddBuff("LEADERS_PENNON_SPEED_RARE", "Leaders Pennon Speed", "texBuffLeaderSpeed", Color.white, false, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "LEADERS_PENNON_SPEED");
+            leadersPennonSpeedEpicBuff = Buffs.AddBuff("LEADERS_PENNON_SPEED_EPIC", "Leaders Pennon Speed", "texBuffLeaderSpeed", Color.white, false, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "LEADERS_PENNON_SPEED");
+            leadersPennonSpeedLegendaryBuff = Buffs.AddBuff("LEADERS_PENNON_SPEED_LEGENDARY", "Leaders Pennon Speed", "texBuffLeaderSpeed", Color.white, false, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "LEADERS_PENNON_SPEED");
+
+            // Link On Purchase Interaction Begin behaviour
+            Behaviour.AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBegin_Quality);
+
+            // Link character tick behaviour for holder self-buffing
+            Behaviour.AddOnCharacterBodyTickCallback(3.0f, OnCharacterBodyTick_Quality);
+
+            // Add stats mods for speed buffs
+            Behaviour.AddStatsMod(leadersPennonSpeedUncommonBuff, UncommonStatsMod_Quality);
+            Behaviour.AddStatsMod(leadersPennonSpeedRareBuff, RareStatsMod_Quality);
+            Behaviour.AddStatsMod(leadersPennonSpeedEpicBuff, EpicStatsMod_Quality);
+            Behaviour.AddStatsMod(leadersPennonSpeedLegendaryBuff, LegendaryStatsMod_Quality);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -116,6 +156,17 @@ namespace Faithful
             regenPerLevelSetting = MainItem.CreateSetting("REGEN_PER_LEVEL", "Regen Per Level", 1.0f, "How much should this item increase ally's regen per level? (1.0 = 1 hp/s)", _valueFormatting: "{0:0.00}hp/s");
             regenMultSetting = MainItem.CreateSetting("REGEN_MULT", "Regen Multiplier", 30.0f, "How much should this item increase ally's regen multiplicatively? (30.0 = 30% increase)", _canRandomise: false, _valueFormatting: "{0:0.0}%");
             buffDurationSetting = MainItem.CreateSetting("BUFF_DURATION", "Buff Duration", 1.0f, "How long should the buff be retained after leaving the radius of this item's effect? (1.0 = 1 second)", _minValue: 0.1f, _canRandomise: false, _valueFormatting: "{0:0.00}s");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            speedQualitySetting = MainItem.CreateQualitySetting("SPEED", "Movement Speed", 20.0f, 40.0f, 70.0f, 100.0f, "How much movement speed should this quality item grant nearby allies after activating an interactable? (20.0 = 20% movement speed)", _isStat: false, _minValue: 0.0f, _valueFormatting: "{0:0.0}%");
+            durationQualitySetting = MainItem.CreateQualitySetting("DURATION", "Buff Duration", 5.0f, 10.0f, 15.0f, 20.0f, "How long should this quality item increase nearby ally movement speed after activating an interactable? (5.0 = 5 seconds)", _minValue: 0.0f, _valueFormatting: "{0:0.0}s");
+            durationStackingQualitySetting = MainItem.CreateQualitySetting("DURATION_STACKING", "Buff Duration Stacking", 5.0f, 10.0f, 15.0f, 20.0f, "How much longer should further stacks of this quality item increase nearby ally movement speed after activating an interactable? (5.0 = 5 seconds)", _minValue: 0.0f, _valueFormatting: "{0:0.0}s");
         }
 
         public override void FetchSettings()
@@ -133,8 +184,32 @@ namespace Faithful
             regenMult = regenMultSetting.Value / 100.0f;
             buffDuration = buffDurationSetting.Value;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+        }
+
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            speedQualityValues.UpdateValues(speedQualitySetting, 0.01f);
+            durationQualityValues.UpdateValues(durationQualitySetting);
+            durationStackingQualityValues.UpdateValues(durationStackingQualitySetting);
+        }
+
+        public override Dictionary<string, string> QualityDescriptionManualTokens(Quality _quality)
+        {
+            return new Dictionary<string, string>
+            {
+                { "RADIUS", radiusSetting.Value.ToString() },
+                { "RADIUS_STACKING", radiusStackingSetting.Value.ToString() },
+                { "ATTACK_SPEED", attackSpeedSetting.Value.ToString() },
+                { "ATTACK_SPEED_STACKING", attackSpeedStackingSetting.Value.ToString() },
+                { "REGEN", regenSetting.Value.ToString() },
+                { "REGEN_STACKING", regenStackingSetting.Value.ToString() }
+            };
         }
 
         void LeadersPennonStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -159,43 +234,169 @@ namespace Faithful
                 // Get body of other
                 CharacterBody body = _other.GetBody();
 
-                // If other ally doesn't have buff already
-                if (body.GetBuffCount(leadersPennonVisualBuff.buffDef) == 0)
-                {
-                    // Grant buff
-                    body.AddTimedBuff(leadersPennonVisualBuff.buffDef, buffDuration);
-
-                    // Check for holder inventory
-                    Inventory holderInv = _holder.inventory;
-                    if (holderInv != null)
-                    {
-                        // Get needed amount of buffs
-                        int needed = holderInv.GetItemCountEffective(MainItem.itemDef) - body.GetBuffCount(leadersPennonBuff.buffDef);
-
-                        // Catch up buff count
-                        for (int i = 0; i < needed; i++) body.AddTimedBuff(leadersPennonBuff.buffDef, buffDuration);
-                    }
-                }
-                else
-                {
-                    // Refresh Leader's Pennon buffs on other ally
-                    Utils.RefreshTimedBuffs(body, leadersPennonVisualBuff.buffDef, buffDuration);
-
-                    // Check for holder inventory
-                    Inventory holderInv = _holder.inventory;
-                    if (holderInv != null)
-                    {
-                        // Get needed amount of buffs
-                        int needed = holderInv.GetItemCountEffective(MainItem.itemDef);
-
-                        // Refresh needed amount of pennon buffs
-                        Utils.RefreshTimedBuffs(body, leadersPennonBuff.buffDef, buffDuration, needed);
-
-                        // Add additional buffs if needed
-                        for (int i = 0; i < needed - body.GetBuffCount(leadersPennonBuff.buffDef); i++) body.AddTimedBuff(leadersPennonBuff.buffDef, buffDuration);
-                    }
-                }
+                // Grant Leader's Pennon buffs
+                GrantLeadersPennonBuffs(body, _count);
             }
+        }
+
+        private void GrantLeadersPennonBuffs(CharacterBody _body, int _count)
+        {
+            // Validate input
+            if (_body == null || _count <= 0) return;
+
+            // If ally doesn't have buff already
+            if (_body.GetBuffCount(leadersPennonVisualBuff.buffDef) == 0)
+            {
+                // Grant buff
+                _body.AddTimedBuff(leadersPennonVisualBuff.buffDef, buffDuration);
+
+                // Get needed amount of buffs
+                int needed = _count - _body.GetBuffCount(leadersPennonBuff.buffDef);
+
+                // Catch up buff count
+                for (int i = 0; i < needed; i++) _body.AddTimedBuff(leadersPennonBuff.buffDef, buffDuration);
+            }
+            else
+            {
+                // Refresh Leader's Pennon buffs
+                Utils.RefreshTimedBuffs(_body, leadersPennonVisualBuff.buffDef, buffDuration);
+
+                // Refresh needed amount of pennon buffs
+                Utils.RefreshTimedBuffs(_body, leadersPennonBuff.buffDef, buffDuration, _count);
+
+                // Add additional buffs if needed
+                for (int i = 0; i < _count - _body.GetBuffCount(leadersPennonBuff.buffDef); i++) _body.AddTimedBuff(leadersPennonBuff.buffDef, buffDuration);
+            }
+        }
+
+        private void OnCharacterBodyTick_Quality(CharacterBody _body)
+        {
+            // Validate input
+            if (_body == null) return;
+
+            // Check for inventory
+            Inventory inventory = _body.inventory;
+            if (inventory == null) return;
+
+            // Get Leader's Pennon amount
+            int itemCount = inventory.GetItemCountEffective(MainItem.itemDef);
+            if (itemCount <= 0) return;
+
+            // Get quality item counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
+            if (qualityCounts.Total <= 0) return;
+
+            // Possessing any quality variant lets the holder receive their own Leader's Pennon buffs
+            GrantLeadersPennonBuffs(_body, itemCount);
+        }
+
+        private void OnPurchaseInteractionBegin_Quality(PurchaseInteraction _shop, CharacterMaster _activator)
+        {
+            // Validate input
+            if (_shop == null || _activator == null || !_activator.hasBody) return;
+
+            // Check for activator body and inventory
+            CharacterBody activatorBody = _activator.GetBody();
+            Inventory inventory = _activator.inventory;
+            if (activatorBody == null || inventory == null) return;
+
+            // Get Leader's Pennon amount
+            int itemCount = inventory.GetItemCountEffective(MainItem.itemDef);
+            if (itemCount <= 0) return;
+
+            // Get quality item counts
+            QualityCounts qualityCounts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
+            if (qualityCounts.Total <= 0) return;
+
+            // Calculate effect values
+            Quality effectiveQuality = qualityCounts.GetHighestQuality();
+            float duration = GetSpeedBuffDuration_Quality(qualityCounts);
+            float radius = Utils.CalculateStackingValue(itemCount, baseRadius, radiusStacking);
+            if (duration <= 0.0f || radius <= 0.0f) return;
+
+            // Get holder team
+            TeamIndex teamIndex = activatorBody.teamComponent ? activatorBody.teamComponent.teamIndex : _activator.teamIndex;
+
+            // Apply speed buff to nearby allies and the holder
+            foreach (CharacterMaster ally in Utils.GetCharactersForTeam(teamIndex))
+            {
+                // Check for ally body
+                CharacterBody allyBody = ally.GetBody();
+                if (allyBody == null || allyBody.healthComponent == null || !allyBody.healthComponent.alive) continue;
+
+                // Check if ally is holder or within the regular Leader's Pennon radius
+                bool inRadius = ally == _activator || (activatorBody.corePosition - allyBody.corePosition).sqrMagnitude <= radius * radius;
+                if (!inRadius) continue;
+
+                // Apply speed buff
+                ApplySpeedBuff_Quality(allyBody, effectiveQuality, duration);
+            }
+        }
+
+        private float GetSpeedBuffDuration_Quality(QualityCounts _qualityCounts)
+        {
+            // Add up duration from all quality stacks
+            float duration = 0.0f;
+            duration += Utils.CalculateStackingValue(_qualityCounts.UNCOMMON, durationQualityValues.UNCOMMON, durationStackingQualityValues.UNCOMMON);
+            duration += Utils.CalculateStackingValue(_qualityCounts.RARE, durationQualityValues.RARE, durationStackingQualityValues.RARE);
+            duration += Utils.CalculateStackingValue(_qualityCounts.EPIC, durationQualityValues.EPIC, durationStackingQualityValues.EPIC);
+            duration += Utils.CalculateStackingValue(_qualityCounts.LEGENDARY, durationQualityValues.LEGENDARY, durationStackingQualityValues.LEGENDARY);
+
+            return duration;
+        }
+
+        private void ApplySpeedBuff_Quality(CharacterBody _body, Quality _quality, float _duration)
+        {
+            // Validate input
+            if (_body == null || _duration <= 0.0f) return;
+
+            // Refresh or apply visual speed buff
+            if (_body.GetBuffCount(leadersPennonSpeedBuff.buffDef) > 0) Utils.RefreshTimedBuffs(_body, leadersPennonSpeedBuff.buffDef, _duration);
+            else _body.AddTimedBuff(leadersPennonSpeedBuff.buffDef, _duration);
+
+            // Get quality speed buff
+            Buff speedBuff = GetSpeedBuff_Quality(_quality);
+            if (speedBuff == null) return;
+
+            // Refresh or apply quality speed buff
+            if (_body.GetBuffCount(speedBuff.buffDef) > 0) Utils.RefreshTimedBuffs(_body, speedBuff.buffDef, _duration);
+            else _body.AddTimedBuff(speedBuff.buffDef, _duration);
+        }
+
+        private Buff GetSpeedBuff_Quality(Quality _quality)
+        {
+            return _quality switch
+            {
+                Quality.UNCOMMON => leadersPennonSpeedUncommonBuff,
+                Quality.RARE => leadersPennonSpeedRareBuff,
+                Quality.EPIC => leadersPennonSpeedEpicBuff,
+                Quality.LEGENDARY => leadersPennonSpeedLegendaryBuff,
+                _ => null
+            };
+        }
+
+        private void UncommonStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify movement speed
+            _stats.moveSpeedMultAdd += speedQualityValues.UNCOMMON * _count;
+        }
+
+        private void RareStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify movement speed
+            _stats.moveSpeedMultAdd += speedQualityValues.RARE * _count;
+        }
+
+        private void EpicStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify movement speed
+            _stats.moveSpeedMultAdd += speedQualityValues.EPIC * _count;
+        }
+
+        private void LegendaryStatsMod_Quality(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Modify movement speed
+            _stats.moveSpeedMultAdd += speedQualityValues.LEGENDARY * _count;
         }
 
         void UpdateVisualEffects(CharacterBody _body)
