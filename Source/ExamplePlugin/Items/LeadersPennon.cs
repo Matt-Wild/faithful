@@ -94,8 +94,8 @@ namespace Faithful
             leadersPennonSpeedEpicBuff = Buffs.AddBuff("LEADERS_PENNON_SPEED_EPIC", "Leaders Pennon Speed", "texBuffLeaderSpeed", Color.white, false, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "LEADERS_PENNON_SPEED");
             leadersPennonSpeedLegendaryBuff = Buffs.AddBuff("LEADERS_PENNON_SPEED_LEGENDARY", "Leaders Pennon Speed", "texBuffLeaderSpeed", Color.white, false, _isHidden: true, _hasConfig: false, _qualityBuff: true, _langTokenOverride: "LEADERS_PENNON_SPEED");
 
-            // Link On Purchase Interaction Begin behaviour
-            Behaviour.AddOnPurchaseInteractionBeginCallback(OnPurchaseInteractionBegin_Quality);
+            // Link On Interaction Begin Proc behaviour
+            Behaviour.AddOnInteractionBeginProcCallback(OnInteractionBeginProc_Quality);
 
             // Link character tick behaviour for holder self-buffing
             Behaviour.AddOnCharacterBodyTickCallback(3.0f, OnCharacterBodyTick_Quality);
@@ -290,15 +290,16 @@ namespace Faithful
             GrantLeadersPennonBuffs(_body, itemCount);
         }
 
-        private void OnPurchaseInteractionBegin_Quality(PurchaseInteraction _shop, CharacterMaster _activator)
+        private void OnInteractionBeginProc_Quality(Interactor _interactor, IInteractable _interactable, GameObject _interactableObject)
         {
             // Validate input
-            if (_shop == null || _activator == null || !_activator.hasBody) return;
+            if (_interactor == null || _interactable == null || !_interactableObject) return;
 
             // Check for activator body and inventory
-            CharacterBody activatorBody = _activator.GetBody();
-            Inventory inventory = _activator.inventory;
-            if (activatorBody == null || inventory == null) return;
+            CharacterBody activatorBody = _interactor.GetComponent<CharacterBody>();
+            CharacterMaster activatorMaster = activatorBody ? activatorBody.master : null;
+            Inventory inventory = activatorMaster ? activatorMaster.inventory : null;
+            if (activatorBody == null || activatorMaster == null || inventory == null) return;
 
             // Get Leader's Pennon amount
             int itemCount = inventory.GetItemCountEffective(MainItem.itemDef);
@@ -315,7 +316,7 @@ namespace Faithful
             if (duration <= 0.0f || radius <= 0.0f) return;
 
             // Get holder team
-            TeamIndex teamIndex = activatorBody.teamComponent ? activatorBody.teamComponent.teamIndex : _activator.teamIndex;
+            TeamIndex teamIndex = activatorBody.teamComponent ? activatorBody.teamComponent.teamIndex : activatorMaster.teamIndex;
 
             // Apply speed buff to nearby allies and the holder
             foreach (CharacterMaster ally in Utils.GetCharactersForTeam(teamIndex))
@@ -325,7 +326,7 @@ namespace Faithful
                 if (allyBody == null || allyBody.healthComponent == null || !allyBody.healthComponent.alive) continue;
 
                 // Check if ally is holder or within the regular Leader's Pennon radius
-                bool inRadius = ally == _activator || (activatorBody.corePosition - allyBody.corePosition).sqrMagnitude <= radius * radius;
+                bool inRadius = ally == activatorMaster || (activatorBody.corePosition - allyBody.corePosition).sqrMagnitude <= radius * radius;
                 if (!inRadius) continue;
 
                 // Apply speed buff

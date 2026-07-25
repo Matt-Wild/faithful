@@ -36,6 +36,7 @@ namespace Faithful
 
     internal delegate void CharacterBodyCallback(CharacterBody _body);
 
+    internal delegate void OnInteractionBeginProcCallback(Interactor _interactor, IInteractable _interactable, GameObject _interactableObject);
     internal delegate void OnPurchaseInteractionBeginCallback(PurchaseInteraction _shop, CharacterMaster _activator);
     internal delegate bool OnPurchaseCanBeAffordedCallback(PurchaseInteraction _shop, CharacterMaster _activator);
     internal delegate void InteractorCallback(Interactor _interactor);
@@ -114,6 +115,7 @@ namespace Faithful
         private static Dictionary<float, CharacterBodyCallback> onCharacterBodyTickCallbacks = new Dictionary<float, CharacterBodyCallback>();
 
         // Interactable callbacks
+        private static List<OnInteractionBeginProcCallback> onInteractionBeginProcCallbacks = new List<OnInteractionBeginProcCallback>();
         private static List<OnPurchaseInteractionBeginCallback> onPurchaseInteractionBeginCallbacks = new List<OnPurchaseInteractionBeginCallback>();
         private static List<OnPurchaseCanBeAffordedCallback> onPurchaseCanBeAffordedCallbacks = new List<OnPurchaseCanBeAffordedCallback>();
 
@@ -182,6 +184,7 @@ namespace Faithful
             On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects += HookUpdateVisualEffects;
             On.RoR2.CharacterBody.FixedUpdate += HookCharacterBodyFixedUpdate;
             On.RoR2.CharacterBody.RollCrit += HookCharacterBodyRollCrit;
+            GlobalEventManager.OnInteractionsGlobal += HookInteractionBegin;
             On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin;
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
             On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump;
@@ -224,6 +227,7 @@ namespace Faithful
             On.RoR2.CharacterBody.RecalculateStats -= HookRecalculateStats;
             On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects -= HookUpdateVisualEffects;
             On.RoR2.CharacterBody.FixedUpdate -= HookCharacterBodyFixedUpdate;
+            GlobalEventManager.OnInteractionsGlobal -= HookInteractionBegin;
             On.RoR2.PurchaseInteraction.OnInteractionBegin -= HookPurchaseInteractionBegin;
             On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor -= HookPurchaseCanBeAfforded;
             On.EntityStates.GenericCharacterMain.ProcessJump -= HookProcessJump;
@@ -694,6 +698,14 @@ namespace Faithful
             onCharacterBodyTickCallbacks.Add(_tickRate, _callback);
 
             DebugLog("Added On Character Body Tick behaviour");
+        }
+
+        // Add On Interaction Begin Proc callback
+        public static void AddOnInteractionBeginProcCallback(OnInteractionBeginProcCallback _callback)
+        {
+            onInteractionBeginProcCallbacks.Add(_callback);
+
+            DebugLog("Added On Interaction Begin Proc behaviour");
         }
 
         // Add On Purchase Interaction Begin callback
@@ -1170,6 +1182,54 @@ namespace Faithful
 
             // Return normal roll crit result
             return orig(self);
+        }
+
+        private static void HookInteractionBegin(Interactor _interactor, IInteractable _interactable, GameObject _interactableObject)
+        {
+            // Validate input
+            if (_interactor == null || _interactable == null || !_interactableObject) return;
+
+            // Check if this interactable is allowed to trigger interaction-based item procs
+            if (!CanRunInteractionBeginProc(_interactable, _interactableObject)) return;
+
+            // Cycle through On Interaction Begin Proc callbacks
+            foreach (OnInteractionBeginProcCallback callback in onInteractionBeginProcCallbacks)
+            {
+                // Call
+                callback(_interactor, _interactable, _interactableObject);
+            }
+        }
+
+        private static bool CanRunInteractionBeginProc(IInteractable _interactable, GameObject _interactableObject)
+        {
+            MonoBehaviour interactableBehaviour = _interactable as MonoBehaviour;
+            if (!interactableBehaviour) return false;
+
+            // Match base game Fireworks/Squid Polyp interaction proc gate
+            InteractionProcFilter interactionProcFilter = _interactableObject.GetComponent<InteractionProcFilter>();
+            if (interactionProcFilter) return interactionProcFilter.shouldAllowOnInteractionBeginProc;
+
+            PurchaseInteraction purchaseInteraction = _interactable as PurchaseInteraction;
+            if (purchaseInteraction) return !purchaseInteraction.disableSpawnOnInteraction;
+
+            DelusionChestController delusionChestController = interactableBehaviour.GetComponent<DelusionChestController>();
+            if (delusionChestController)
+            {
+                PickupPickerController pickupPickerController = interactableBehaviour.GetComponent<PickupPickerController>();
+                return pickupPickerController == null || !pickupPickerController.enabled;
+            }
+
+            if (interactableBehaviour.GetComponent<GenericPickupController>()) return false;
+            if (interactableBehaviour.GetComponent<VehicleSeat>()) return false;
+            if (interactableBehaviour.GetComponent<NetworkUIPromptController>()) return false;
+
+            PowerPedestal powerPedestal = interactableBehaviour.GetComponent<PowerPedestal>();
+            if (powerPedestal) return powerPedestal.CanTriggerFireworks;
+
+            AccessCodesNodeController accessCodesNodeController = interactableBehaviour.GetComponent<AccessCodesNodeController>();
+            if (accessCodesNodeController) return accessCodesNodeController.CheckInteractionOrder();
+
+            return true;
         }
 
         private static void HookPurchaseInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)
