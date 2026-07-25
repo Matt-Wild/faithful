@@ -34,62 +34,90 @@
   
     "FAITHFUL_COPPER_GEAR_NAME": "铜齿轮",
 	"FAITHFUL_COPPER_GEAR_PICKUP": "在传送器区域内提高攻击速度。",
+	"FAITHFUL_COPPER_GEAR_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> 在传送器区域内击杀敌人会使你获得一阵攻击速度提升。",
 	"FAITHFUL_COPPER_GEAR_DESC": "在传送器区域内，<style=cIsDamage>攻击速度</style>提高 <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(每层额外+[ATTACK_SPEED_STACKING]%)</style>。",
+	"FAITHFUL_COPPER_GEAR_DESC_QUALITY": "[PREFIX]\n在传送器区域内每击杀一名敌人，<style=cIsDamage>攻击速度</style>提高 <sprite name=\"Quality\"> <style=cIsDamage>[ATTACK_SPEED]%</style>，持续 <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> 秒 <style=cStack>(每层额外+[DURATION_STACKING]秒)</style>。",
 	"FAITHFUL_COPPER_GEAR_LORE": "<style=cMono>\r//--来自UES [已编辑] 的自动转录--//</style>\r\n\r\n“嘿，你还记得我们去地球旅行时遇到的那些钟表匠吗？”\n\n“记得啊。你现在提他们干嘛？”\n\n“他们中有几个跟我说，戴着这种齿轮在手腕上时，总是‘进入状态’。说这玩意儿能让他们干活快得多。”\n\n“我明白了……但这跟你身后那堆利姆瑞恩尸体有什么关系？”\n\n“呃……我可以告诉你，它确实有用。”",
 	"FAITHFUL_COPPER_GEAR_BUFF": "铜齿轮",
+	"FAITHFUL_COPPER_GEAR_QUALITY_BUFF": "铜齿轮击杀",
 
 	"FAITHFUL_TARGETING_MATRIX_NAME": "瞄准矩阵",
 	"FAITHFUL_TARGETING_MATRIX_PICKUP": "击杀时标记一名随机敌人。对该目标造成的伤害将“暴击”。击杀该目标会提高你的“暴击”伤害。",
+	"FAITHFUL_TARGETING_MATRIX_PICKUP_QUALITY": "击杀时标记 <sprite name=\"Quality\"> 随机敌人。对目标造成的伤害将“暴击”。击杀目标会提高你的“暴击”伤害。\n<sprite name=\"Quality\"> 对目标造成伤害也会伤害其周围的敌人。",
 	"FAITHFUL_TARGETING_MATRIX_DESC": "击杀时<style=cIsDamage>标记</style>一名随机敌人。对该<style=cIsDamage>目标</style>造成的伤害有<style=cIsDamage>+100%</style>几率“<style=cIsDamage>暴击</style>”，且击杀该<style=cIsDamage>目标</style>会使<style=cIsDamage>暴击</style>伤害提高<style=cIsDamage>+[CRIT_DAMAGE]%</style> <style=cStack>(每层额外+[CRIT_DAMAGE_STACKING]%)</style>，最多叠加<style=cIsUtility>[MAX_BUFFS]</style> <style=cStack>(每层额外+[MAX_BUFFS_STACKING])</style><style=cIsUtility>次</style>。",
+	"FAITHFUL_TARGETING_MATRIX_DESC_QUALITY": "击杀时<style=cIsDamage>标记</style> <sprite name=\"Quality\"> <style=cIsDamage>[TARGETS]</style> 名随机敌人，最多 <sprite name=\"Quality\"> <style=cIsUtility>[TARGETS]</style> <style=cStack>(每层额外+[TARGETS_STACKING])</style> 名。对<style=cIsDamage>目标</style>造成的伤害有<style=cIsDamage>+100%</style>几率“<style=cIsDamage>暴击</style>”，且击杀<style=cIsDamage>目标</style>会使<style=cIsDamage>暴击</style>伤害提高<style=cIsDamage>+[CRIT_DAMAGE]%</style> <style=cStack>(每层额外+[CRIT_DAMAGE_STACKING]%)</style>，最多叠加<style=cIsUtility>[MAX_BUFFS]</style> <style=cStack>(每层额外+[MAX_BUFFS_STACKING])</style><style=cIsUtility>次</style>。\n命中<style=cIsDamage>目标</style>时，还会对 <sprite name=\"Quality\"> <style=cIsUtility>[RADIUS]米</style> 范围内的敌人造成 <sprite name=\"Quality\"> <style=cIsDamage>[DAMAGE]%</style> <style=cStack>(每层额外+[DAMAGE_STACKING]%)</style> 总伤害。",
 	"FAITHFUL_TARGETING_MATRIX_LORE": "订单：原型瞄准系统\n追踪编号：1981******\n预计送达时间：2057年3月31日\n运输方式：优先级\n送货地址：火星，泡泡站，皇家大道\n运输详情：\n\n这是我们开发了一段时间的新玩意儿，我觉得你可能想亲自看看，所以给你寄了一个原型。\n\n注意：请不要遵循其瞄准建议。该软件仍不可靠，似乎经常随机选择目标——至少看起来是随机的。它有时会锁定非战斗人员……这有点令人担忧，但我相信我们很快就会修复这个问题。",
 	"FAITHFUL_TARGETING_MATRIX_BUFF": "瞄准矩阵",
-	
+
 	"FAITHFUL_BRASS_SCREWS_NAME": "黄铜螺丝",
 	"FAITHFUL_BRASS_SCREWS_PICKUP": "在传送器区域内提高伤害。",
+	"FAITHFUL_BRASS_SCREWS_PICKUP_QUALITY": "[PREFIX] <sprite name=\"Quality\"> 在传送器区域内击杀敌人会使你暂时提高伤害。",
 	"FAITHFUL_BRASS_SCREWS_DESC": "在传送器区域内，<style=cIsDamage>伤害</style>提高 <style=cIsDamage>[DAMAGE]%</style> <style=cStack>(每层额外+[DAMAGE_STACKING]%)</style>。",
+	"FAITHFUL_BRASS_SCREWS_DESC_QUALITY": "[PREFIX] 在传送器区域内每击杀一名敌人，伤害提高 <sprite name=\"Quality\"> <style=cIsDamage>[DAMAGE]%</style>，持续 <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> 秒 <style=cStack>(每层额外+[DURATION_STACKING]秒)</style>。",
 	"FAITHFUL_BRASS_SCREWS_LORE": "<style=cMono>\r//--来自 UES [已编辑] 的自动转录--//</style>\r\n\r\n“哟，你最近怎么样——哇哦！”\n\n“哦，呃……嘿。你看得出来，我最近有点忙。”\n\n“我从没想过能看到这么多死掉的甲虫还有……女王？你是一个人干掉了整个巢穴？！你怎么做到的——？！啊！”\n\n“嘿嘿……对啊，血流成河。”\n\n“你是怎么搞定这一切的？那……那些是螺丝？”\n\n“这个啊？是的，你之前说‘齿轮’的事，给了我个灵感。”",
 	"FAITHFUL_BRASS_SCREWS_BUFF": "黄铜螺丝",
+	"FAITHFUL_BRASS_SCREWS_QUALITY_BUFF": "黄铜螺丝击杀",
 
 	"FAITHFUL_VENGEFUL_TOASTER_NAME": "复仇烤面包机",
 	"FAITHFUL_VENGEFUL_TOASTER_PICKUP": "受到伤害会暂时提升你的伤害。",
+	"FAITHFUL_VENGEFUL_TOASTER_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> 附近盟友受到伤害时也会暂时提高你的伤害。生命值越低，越有几率进一步提高伤害。",
 	"FAITHFUL_VENGEFUL_TOASTER_DESC": "受到攻击会获得 <style=cIsDamage>复仇</style>，持续 <style=cIsUtility>[DURATION]</style> 秒 <style=cStack>(每层额外+[DURATION_STACKING]秒)</style>。每层 <style=cIsDamage>复仇</style>会提升 <style=cIsDamage>+[DAMAGE]%</style> 伤害。造成伤害时会消耗全部 <style=cIsDamage>复仇</style>层数。",
+	"FAITHFUL_VENGEFUL_TOASTER_DESC_QUALITY": "[PREFIX]\n每有一名盟友在 <sprite name=\"Quality\"> <style=cIsUtility>[RADIUS]米</style> 范围内受到伤害，获得<style=cIsDamage>复仇</style>。每损失 <style=cIsHealth>1% 生命值</style>，获得 <sprite name=\"Quality\"> <style=cIsDamage>[CHANCE]%</style> <style=cStack>(每层额外+[CHANCE_STACKING]%)</style> 几率额外获得 <style=cIsDamage>1</style> 层<style=cIsDamage>复仇</style>。每累计满 <style=cIsDamage>100%</style> 几率，都会<style=cIsUtility>保证</style>额外获得一层<style=cIsDamage>复仇</style>。",
 	"FAITHFUL_VENGEFUL_TOASTER_LORE": "<style=cMono>\r//--来自 UES [已编辑] 的自动转录--//</style>\n<style=cMono>\r\n//--解雇报告--//</style>\n\n“老板！老板！我发明了一个能感受到疼痛的厨房电器！”\n\n“……为什么我们在你搞出电锯无人机那次之后没把你开了？”",
-	
+
 	"FAITHFUL_HERMITS_SHAWL_NAME": "隐士披肩",
 	"FAITHFUL_HERMITS_SHAWL_PICKUP": "脱离战斗越久，造成的伤害越高。",
+	"FAITHFUL_HERMITS_SHAWL_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> 脱离战斗时有几率格挡受到的伤害。格挡伤害会治疗你。",
 	"FAITHFUL_HERMITS_SHAWL_DESC": "脱离战斗后获得 <style=cIsDamage>耐心</style>，使伤害提高 <style=cIsDamage>+[DAMAGE]%</style>。最多可获得 <style=cIsDamage>[MAX_BUFFS]</style> 层 <style=cStack>(每层额外+[MAX_BUFFS_STACKING])</style>，所有层数将在 <style=cIsUtility>[BUFF_RECHARGE]</style> 秒内获得。造成伤害时会消耗全部 <style=cIsDamage>耐心</style>层数。",
+	"FAITHFUL_HERMITS_SHAWL_DESC_QUALITY": "[PREFIX]\n有 <sprite name=\"Quality\"> <style=cIsHealing>[BLOCK_CHANCE]%</style> <style=cStack>(每层额外+[BLOCK_CHANCE_STACKING]%)</style> 几率<style=cIsHealing>格挡</style>受到的伤害，消耗 <sprite name=\"Quality\"> <style=cIsDamage>[BLOCK_COST]</style> 层<style=cIsDamage>耐心</style>。<style=cIsUtility>不受运气影响</style>。<style=cIsHealing>格挡</style>伤害会<style=cIsHealing>治疗</style>你 <sprite name=\"Quality\"> <style=cIsHealing>[HEAL]</style> <style=cStack>(每层额外+[HEAL_STACKING])</style> <style=cIsHealing>生命值</style>。",
 	"FAITHFUL_HERMITS_SHAWL_LORE": "……当那位伟大的隐士从她山上的居所走下，\n看到前来朝圣的人群，\n她优雅地说：\n\n“给我滚出我的花园！”\n\n也许现代人本不该被神化，\n应被纪念的，是他们所坚持的价值观。\n\n——《未来信仰录》2052",
 
 	"FAITHFUL_MELTING_WARBLER_NAME": "融化的鸣禽",
 	"FAITHFUL_MELTING_WARBLER_PICKUP": "提高跳跃高度。",
+	"FAITHFUL_MELTING_WARBLER_PICKUP_QUALITY": "[PREFIX] <sprite name=\"Quality\"> 在空中时提高移动速度。",
 	"FAITHFUL_MELTING_WARBLER_DESC": "提高 <style=cIsUtility>跳跃高度</style> <style=cIsUtility>[JUMP_BOOST]米</style> <style=cStack>(每层额外+[JUMP_BOOST_STACKING]米)</style>。",
+	"FAITHFUL_MELTING_WARBLER_DESC_QUALITY": "[PREFIX] 在空中时，<style=cIsUtility>移动速度</style>提高 <sprite name=\"Quality\"> <style=cIsUtility>[SPEED]%</style>（每层额外+[SPEED_STACKING]%）。",
 	"FAITHFUL_MELTING_WARBLER_LORE": "订单：蜡质鸣禽\n追踪编号：27*******\n预计送达时间：2057年2月15日\n运输方式：优先级\n送货地址：海王星极性区，研究中心\n运输详情：\n\n亲爱的布布：\n妈妈又来信啦，那边一切还好吗？\n\n最近天气变冷，我们把暖气开得高了一点，结果爸爸的蜡模型都开始融化了，只好先把它们搬出家里。我给你寄了一个我们觉得你可能会喜欢的。还有几个他本来也想送你，不过他现在打算改用木头了，下次可以期待一下。\n\n希望不久后能再见到你！:-)\n妈妈",
-	
+	"FAITHFUL_MELTING_WARBLER_QUALITY_BUFF": "融化的鸣禽",
+
 	"FAITHFUL_LEADERS_PENNON_NAME": "领袖旗帜",
 	"FAITHFUL_LEADERS_PENNON_PICKUP": "携带一面在你周围产生庇护领域的旗帜。为附近的其他盟友提供攻击速度和生命回复。",
+	"FAITHFUL_LEADERS_PENNON_PICKUP_QUALITY": "携带一面在你周围产生庇护领域的旗帜。为 <sprite name=\"Quality\"> 附近盟友提供攻击速度和生命回复。\n<sprite name=\"Quality\"> 激活可互动对象会暂时提高附近盟友的移动速度。",
 	"FAITHFUL_LEADERS_PENNON_DESC": "在你周围制造一个领域，使 <style=cIsUtility>[RADIUS]米</style> 范围内的其他盟友获得强化 <style=cStack>(每层额外+[RADIUS_STACKING]米)</style>。提升 <style=cIsDamage>攻击速度</style> <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(每层额外+[ATTACK_SPEED_STACKING]%)</style>，并提升 <style=cIsHealing>被动生命回复</style> <style=cIsHealing>+[REGEN]生命值/秒</style> <style=cStack>(每层额外+[REGEN_STACKING]生命值/秒)</style>。",
+	"FAITHFUL_LEADERS_PENNON_DESC_QUALITY": "在你周围制造一个领域，使 <style=cIsUtility>[RADIUS]米</style> 范围内的所有盟友获得强化 <style=cStack>(每层额外+[RADIUS_STACKING]米)</style>。提升 <style=cIsDamage>攻击速度</style> <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(每层额外+[ATTACK_SPEED_STACKING]%)</style>，并提升 <style=cIsHealing>被动生命回复</style> <style=cIsHealing>+[REGEN]生命值/秒</style> <style=cStack>(每层额外+[REGEN_STACKING]生命值/秒)</style>。激活可互动对象会使附近盟友的 <style=cIsUtility>移动速度</style>提高 <sprite name=\"Quality\"> <style=cIsUtility>[SPEED]%</style>，持续 <sprite name=\"Quality\"> <style=cIsUtility>[DURATION]</style> 秒 <style=cStack>(每层额外+[DURATION_STACKING]秒)</style>。",
 	"FAITHFUL_LEADERS_PENNON_LORE": "我们知道自己赢不了。这颗星球既像地狱，又无情至极。\n\n爆破门一开，许多人就当场丧命。蜥蜴人、巨型水母、由脚下土地组成的构造体……它们似乎都联手要把我们屠光。我们从一开始就没机会。\n\n还有我们的队长，那该死的笨蛋……他最后只剩下一面引领我们走向灭亡的旗帜。",
 	"FAITHFUL_LEADERS_PENNON_BUFF": "领袖旗帜",
+	"FAITHFUL_LEADERS_PENNON_SPEED_BUFF": "领袖旗帜速度",
 
 	"FAITHFUL_SECOND_HAND_NAME": "副表指针",
 	"FAITHFUL_SECOND_HAND_PICKUP": "站在地面上时提高攻击速度与移动速度。",
+	"FAITHFUL_SECOND_HAND_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> 在地面上停留片刻后提高攻击速度。",
 	"FAITHFUL_SECOND_HAND_DESC": "在接触地面时，<style=cIsDamage>攻击速度</style>提高 <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(每层额外+[ATTACK_SPEED_STACKING]%)</style>，<style=cIsUtility>移动速度</style>提高 <style=cIsUtility>[SPEED]%</style> <style=cStack>(每层额外+[SPEED_STACKING]%)</style>。",
+	"FAITHFUL_SECOND_HAND_DESC_QUALITY": "[PREFIX]\n在地面上停留 <style=cIsUtility>[BOOST_DELAY]</style> 秒后，<style=cIsDamage>攻击速度</style>提高 <sprite name=\"Quality\"> <style=cIsDamage>[BOOST_ATTACK_SPEED]%</style> <style=cStack>(每层额外+[BOOST_ATTACK_SPEED_STACKING]%)</style>。离开地面后，该效果还会保持 <sprite name=\"Quality\"> <style=cIsUtility>[GRACE_DURATION]</style> 秒。",
 	"FAITHFUL_SECOND_HAND_LORE": "订单：古董时钟指针（复制品）\n追踪编号：77**********\n预计送达时间：2057年8月23日\n运输方式：标准 / 易碎\n送货地址：土星，连续街，古董工坊\n运输详情：\n\n又是一根替换部件。\n\n某种程度上问题肯定出在钟表结构上。我实在无法理解，为什么一根指针能带来这么多麻烦。\n\n如果这种情况还继续下去，我们可能就得开始向你收钱了。",
 	"FAITHFUL_SECOND_HAND_BUFF": "副表指针",
-	
+	"FAITHFUL_SECOND_HAND_BOOST_BUFF": "副表指针强化",
+
 	"FAITHFUL_SPACIOUS_UMBRELLA_NAME": "宽大雨伞",
 	"FAITHFUL_SPACIOUS_UMBRELLA_PICKUP": "增加传送器区域的大小。",
+	"FAITHFUL_SPACIOUS_UMBRELLA_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> 停留在传送器区域内会使其大小随时间暂时增加。",
 	"FAITHFUL_SPACIOUS_UMBRELLA_DESC": "将传送器区域的大小增加 <style=cIsUtility>[SIZE]%</style> <style=cStack>(每层额外+[SIZE_STACKING]%)</style>。",
+	"FAITHFUL_SPACIOUS_UMBRELLA_DESC_QUALITY": "[PREFIX]\n在传送器区域内时，其大小每 <style=cIsUtility>[INTERVAL]</style> 秒暂时增加 <sprite name=\"Quality\"> <style=cIsUtility>[SIZE]米</style> <style=cStack>(每层额外+[SIZE_STACKING]米)</style>，最多 <style=cIsUtility>[MAX_INSTANCES]</style> 次。",
 	"FAITHFUL_SPACIOUS_UMBRELLA_LORE": "订单：塑料雨伞（已损坏）\n追踪编号：178******\n预计送达时间：2056年9月2日\n运输方式：标准\n收货地址：地球，阿盖尔郡，大地气象研究所\n运输详情：\n\n我希望你不是打算真的用这个老家伙。如果你用了，被淋湿了可别怪我。",
 
 	"FAITHFUL_DROWNED_VISAGE_NAME": "溺亡面容",
 	"FAITHFUL_DROWNED_VISAGE_PICKUP": "在为传送器充能时，击杀敌人有概率使传送器额外充能少量。",
+	"FAITHFUL_DROWNED_VISAGE_PICKUP_QUALITY": "[PREFIX] <sprite name=\"Quality\"> 击杀获得的充能会随时间提供额外充能。",
 	"FAITHFUL_DROWNED_VISAGE_DESC": "位于传送器范围内时，击杀敌人有 <style=cIsUtility>[CHANCE]%</style> <style=cStack>(每层额外+[CHANCE]%)</style> 的概率使传送器充能 <style=cIsUtility>[CHARGE_AMOUNT]%</style>。大型或精英怪物则改为充能 <style=cIsUtility>[LARGE_CHARGE_AMOUNT]%</style>。",
+	"FAITHFUL_DROWNED_VISAGE_DESC_QUALITY": "[PREFIX] 留在传送器范围内还会在 <style=cIsUtility>10</style> 秒内使传送器额外充能 <sprite name=\"Quality\"> <style=cIsUtility>[CHARGE_AMOUNT]%</style> <style=cStack>(每层额外+[CHARGE_AMOUNT_STACKING]%)</style>。",
 	"FAITHFUL_DROWNED_VISAGE_LORE": "> 自动报告 4241442054494d4520544f2046495348 现已从记录 412044524f574e454420564953414745 获取。\n> 如需查看更多人员详情，请参考该记录。\n> 报告类型：转录\n> - 来源：412044524f574e454420564953414745（个人作战服记录器）\n> 优先级：高\n> 报告内容：\n\n-- 以下摘录为标记审查内容 --\n\nDave：“你听说过这里有只巨型怪物的胡扯传言吧？”\n\nMichael：“当然听说过。除非我睡得比Gary还死，不然不可能没听说。”\n\nDave：“哈哈！貌似就是他看到的。他说那是他在这儿见过最可怕的东西。”\n\nMichael：“哈！那就没那么吓人吧。可能是他值班时做了个噩梦。”\n\nDave：“听起来像是他的作风。我说我们晚饭吃鱼的时候，他脸都白了。”\n\nMichael：“哈哈！你这是在欺负那可怜人，Dave！”\n\nDave：“既然真那么吓人，他怎么连个样子都形容不出来。就说是某种诱饵，然后——”\n\nMichael：“等等，钓线在动！”\n\nDave：“哇哦，你钓到什么了？！”\n\n【钓竿回收声】\n\nMichael：“……哦。只是条小鱼……”\n\nDave：“嘿……我刚刚真的以为出事了。老实说，我心脏都停了半拍。”\n\nMichael：“我也是。那本来会是个好故事，哈——”\n\n【金属咔哒声】\n\n-- 录音结束 --\n\n-- 审查摘录结束 --\n\n> 完整音频请参阅报告 5448455927524520414c4c2044454144。",
-	
+	"FAITHFUL_DROWNED_VISAGE_QUALITY_BUFF": "溺亡面容",
+
 	"FAITHFUL_LONGSHOT_GEODE_NAME": "远射晶核",
 	"FAITHFUL_LONGSHOT_GEODE_PICKUP": "对远处的敌人造成额外伤害。",
+	"FAITHFUL_LONGSHOT_GEODE_PICKUP_QUALITY": "对远处敌人造成 <sprite name=\"Quality\"> 额外伤害。",
 	"FAITHFUL_LONGSHOT_GEODE_DESC": "对距离超过 <style=cIsDamage>[DISTANCE]米</style> 的敌人造成 <style=cIsDamage>[DAMAGE]%</style> 额外伤害 <style=cStack>(每层额外+[DAMAGE_STACKING]%)</style>。",
+	"FAITHFUL_LONGSHOT_GEODE_DESC_QUALITY": "对距离超过 <sprite name=\"Quality\"> <style=cIsDamage>[DISTANCE]米</style> 的敌人造成 <sprite name=\"Quality\"> <style=cIsDamage>[DAMAGE]%</style> <style=cStack>(每层额外+[DAMAGE_STACKING]%)</style> 额外伤害。",
 	"FAITHFUL_LONGSHOT_GEODE_LORE": "订单：原始水晶晶核\n追踪编号：1000******\n预计送达时间：2057年7月16日\n运输方式：高优先级\n收货地址：火星，天文学院，第17号楼\n运输详情：\n\n这东西密度大得吓人，但重量却跟一块写字板差不多。我把它寄给你，因为我们两个里你才是搞分析的那位。这东西会是我们进入天文研究一线圈子的敲门砖！\n\n希望渺茫，但我坚信它行！\n\n……哦，对了，别太在意它边上那些生物组织的残渍。就当它落地前还有位“观众”吧。",
 
 	"FAITHFUL_HASTENING_GREAVE_NAME": "迅捷胫甲",
@@ -106,24 +134,34 @@
 	
 	"FAITHFUL_NOXIOUS_SLIME_NAME": "剧毒史莱姆",
 	"FAITHFUL_NOXIOUS_SLIME_PICKUP": "负面效果造成双倍伤害。命中有几率使敌人枯萎。",
+	"FAITHFUL_NOXIOUS_SLIME_PICKUP_QUALITY": "负面效果造成双倍伤害。命中时有几率 <sprite name=\"Quality\"> 使敌人枯萎。",
 	"FAITHFUL_NOXIOUS_SLIME_PICKUP_ALT": "负面效果造成额外伤害。命中有几率使敌人枯萎。",
+	"FAITHFUL_NOXIOUS_SLIME_PICKUP_ALT_QUALITY": "负面效果造成额外伤害。命中时有几率 <sprite name=\"Quality\"> 使敌人枯萎。",
 	"FAITHFUL_NOXIOUS_SLIME_DESC": "<style=cIsDamage>[BLIGHT_CHANCE]%</style> 的几率对敌人施加 <style=cIsDamage>枯萎</style>，造成 <style=cIsDamage>300%</style> 基础伤害。所有伤害类负面效果额外造成 <style=cIsDamage>+[DAMAGE]%</style> <style=cStack>(每层额外+[DAMAGE_STACKING]%)</style> 伤害。",
+	"FAITHFUL_NOXIOUS_SLIME_DESC_QUALITY": "有 <sprite name=\"Quality\"> <style=cIsDamage>[BLIGHT_CHANCE]%</style> <style=cStack>(每层额外+[BLIGHT_CHANCE_STACKING]%)</style> 几率对敌人施加 <style=cIsDamage>枯萎</style>，造成 <sprite name=\"Quality\"> <style=cIsDamage>[BLIGHT_DAMAGE]%</style> <style=cStack>(每层额外+[BLIGHT_DAMAGE_STACKING]%)</style> 基础伤害。所有伤害类负面效果额外造成 <style=cIsDamage>+[DAMAGE]%</style> <style=cStack>(每层额外+[DAMAGE_STACKING]%)</style> 伤害。",
 	"FAITHFUL_NOXIOUS_SLIME_LORE": "订单：有毒单细胞生物\n追踪编号：58******\n预计送达时间：2056年7月1日\n运输方式：高优先级/生物\n收货地址：土星海滨，稀有/灭绝物种研究卫星\n运输详情：\n\n听着，我知道你们可能已经对这些“史莱姆”了解不少了，但一定要把它们关在密封舱里！\n\n它们看起来可能很友好，但那纯属巧合。我亲眼看到它们从控制箱里逃出来，在几秒内吞掉了保安的录像片段。这可不是大自然的浪漫。\n\n不用管它们吃什么或者需要什么特殊照料。给它们放上一点有机物，它们一小时内就能完全吸收并整合进自身结构。记得每天至少晒三小时太阳。如果它们分泌出什么异常物质，请寄样品给我们，我们会自行研究。\n\n我知道你们对它们的潜在药用价值很感兴趣，但还是要格外小心。我可不希望哪天听说你们成了它们的下一顿饭。",
 
 	"FAITHFUL_COLLECTORS_VISION_NAME": "收集者的视野",
 	"FAITHFUL_COLLECTORS_VISION_PICKUP": "收集独特物品可提高“暴击率”和“暴击伤害”。",
+	"FAITHFUL_COLLECTORS_VISION_PICKUP_QUALITY": "[PREFIX] <sprite name=\"Quality\"> 提高每件独特物品提供的增益量。",
 	"FAITHFUL_COLLECTORS_VISION_DESC": "每关收集的每件独特物品都会提供 <style=cIsDamage>[INSPIRATION_GAIN]%</style> <style=cStack>(每层额外+[INSPIRATION_GAIN_STACKING]%)</style> 的永久<style=cIsDamage>灵感</style>，使<style=cIsDamage>暴击</style>几率提高 <style=cIsDamage>+[CRIT_CHANCE]%</style>，并额外造成 <style=cIsDamage>+[CRIT_DAMAGE_MULT]% 暴击</style>伤害。",
+	"FAITHFUL_COLLECTORS_VISION_DESC_QUALITY": "每关收集的每件独特物品都会提供 <sprite name=\"Quality\"> <style=cIsDamage>[INSPIRATION_GAIN]%</style> <style=cStack>(每层额外+[INSPIRATION_GAIN_STACKING]%)</style> 的永久<style=cIsDamage>灵感</style>，使<style=cIsDamage>暴击</style>几率提高 <sprite name=\"Quality\"> <style=cIsDamage>+[CRIT_CHANCE]%</style>，并额外造成 <sprite name=\"Quality\"> <style=cIsDamage>+[CRIT_DAMAGE_MULT]% 暴击</style>伤害。",
 	"FAITHFUL_COLLECTORS_VISION_VAR1_DESC": "每关收集的每件独特物品都会提供 <style=cIsDamage>[INSPIRATION_GAIN]%</style> <style=cStack>(每层额外+[INSPIRATION_GAIN_STACKING]%)</style> 的永久<style=cIsDamage>灵感</style>，使<style=cIsDamage>暴击</style>几率提高 <style=cIsDamage>+[CRIT_CHANCE]%</style>，并额外造成 <style=cIsDamage>+[CRIT_DAMAGE_MULT]% 暴击</style>伤害。达到 100% 时，下一次拾取独特物品将获得一个 <style=cIsVoid>鉴定师之眼</style>。",
+	"FAITHFUL_COLLECTORS_VISION_VAR1_DESC_QUALITY": "每关收集的每件独特物品都会提供 <sprite name=\"Quality\"> <style=cIsDamage>[INSPIRATION_GAIN]%</style> <style=cStack>(每层额外+[INSPIRATION_GAIN_STACKING]%)</style> 的永久<style=cIsDamage>灵感</style>，使<style=cIsDamage>暴击</style>几率提高 <sprite name=\"Quality\"> <style=cIsDamage>+[CRIT_CHANCE]%</style>，并额外造成 <sprite name=\"Quality\"> <style=cIsDamage>+[CRIT_DAMAGE_MULT]% 暴击</style>伤害。达到 100% 时，下一次拾取独特物品将获得 [APPRAISERS_EYE_QUALITY] <style=cIsVoid>鉴定师之眼</style>。",
 	"FAITHFUL_COLLECTORS_VISION_LORE": "<style=cMono>\r//--来自 UES [已编辑] 的自动转录--//</style>\n\n“你有没有注意过 Bob？那家伙特别喜欢收集各种东西。铅笔、咖啡杯，甚至老板的签名海报。”\n\n“记得。有天他戴着个傻兮兮的玩意儿过来。”\n\n“‘玩意儿’？你就叫那玩意儿‘玩意儿’？我发誓它是活的。有一天，它还盯着我看……从头到脚扫了一遍。”\n\n“不管那是啥，Bob 可是护着它得很。他说是朋友 Jim 留给他的临别礼物。”\n\n“Jim？就是那个在 [已编辑] 被炒鱿鱼、还把 23-B 弄得鸡飞狗跳的家伙？”\n\n“应该不是……可能吧……总之不关我事，少知道点才轻松。话说那该死的螺丝刀在哪儿？”\n\n【Bob 从另一个房间精准地将螺丝刀扔到工作台上】\n\n“谢了哥们。”\n\n“我是认真的。这家伙吓人……比嗑了咖啡因的蜂鸟还高效。”\n\n【电钻、金属撞击和扭曲声响起】\n\n“嗯哼……”\n\n“你有在听吗？……我听说了 23-B 的事，我不想我们这也出事。”\n\n【工作间的声音持续，背景中不断传来被快速拆解与组装的声音】\n\n“啊？……哦。好吧。”\n\n“我真不明白你怎么能无动于衷。连队长都被吓到了……还以为他嗑药了。”\n\n【刺耳电流声响起，紧接着是应急灯启动的声音，然后一片寂静】\n\n<style=cMono>\r//--信号中断--//</style>",
-	
+
 	"FAITHFUL_APPRAISERS_EYE_NAME": "鉴定师之眼",
 	"FAITHFUL_APPRAISERS_EYE_PICKUP": "暴击会审视敌人的弱点。",
+	"FAITHFUL_APPRAISERS_EYE_PICKUP_QUALITY": "暴击会审视敌人的弱点。<sprite name=\"Quality\"> 被审视的敌人死亡时会爆炸。",
 	"FAITHFUL_APPRAISERS_EYE_DESC": "<style=cIsDamage>暴击会审视</style>敌人，最多 <style=cIsDamage>[MAX_DEBUFFS]</style> <style=cStack>(每层额外+[MAX_DEBUFFS_STACKING] 次)</style>，使其受到的所有来源<style=cIsDamage>暴击</style>伤害提高 <style=cIsDamage>[CRIT_DAMAGE_MULT]%</style>。",
+	"FAITHFUL_APPRAISERS_EYE_DESC_QUALITY": "<style=cIsDamage>暴击会审视</style>敌人，最多 <style=cIsDamage>[MAX_DEBUFFS]</style> <style=cStack>(每层额外+[MAX_DEBUFFS_STACKING] 次)</style>，使其受到的所有来源<style=cIsDamage>暴击</style>伤害提高 <style=cIsDamage>[CRIT_DAMAGE_MULT]%</style>。被<style=cIsDamage>审视</style>的敌人死亡时会爆炸，每层<style=cIsDamage>审视</style>造成 <sprite name=\"Quality\"> <style=cIsDamage>[DAMAGE]%</style> <style=cStack>(每层额外+[DAMAGE_STACKING]%)</style> 基础伤害。",
 	"FAITHFUL_APPRAISERS_EYE_LORE": "<style=cMono>\r//--来自UES [已编辑] 的自动转录--//</style>\n\n“告诉我，刚才那声噼啪只是继电器烧了而已。”\n\n“否定。C货舱已进入手动封锁。有人触发了库存激光、地板秤，还有——不知怎么——育婴室加热器。”\n\n“什么玩意？”\n\n“就是说啊。”\n\n[远处传来金属碰撞声。每隔几秒都能听见一声湿黏的爆裂声。]\n\n“我可不回那里面去了。”\n\n“哎呀，得了吧。Bob 又不会伤着谁。”\n\n“他现在在货舱里对着托盘讲话呢，Gary。而且每次他拿起什么东西，他肩上那个怪玩意儿就会闪一下，然后就有一个紫色小蛋从里面掉出来，跟在下发票似的。”\n\n“那不是蛋。”\n\n“它们冲我眨眼了。”\n\n“……行吧。好吧。它们可能是蛋。”\n\n[广播器发出刺耳的反馈啸叫。]\n\n“全体甲板工注意：不管是谁把C货舱封上的，立刻打开。里面有易爆货物，而 Bob [已编辑] 拒绝回应通讯。”\n\n“船长，恕我直言，我觉得 Bob 已经失控了。他把三十二支信号棒按色泽、重量，还有他所谓的‘气质’排成了一排。然后他那玩意儿扫了一下架子，现在已经有半打长着眼睛的蛋盯着那箱射钉枪了。”\n\n“也许它在繁殖。”\n\n“也许你最好别这么说。”\n\n“不管怎么说，有一点是肯定的——无论如何我都不会进去。”\n\n“同意。要是那东西哪天学会说话了，我一定在它开始给我们定价之前就辞职。”<style=cMono>\r\n\n//--转录结束：本地存储已被未经授权的货单修订损坏--//</style>",
-	
+
 	"FAITHFUL_4T0N_JETPACK_NAME": "4-T0N 喷气背包",
 	"FAITHFUL_4T0N_JETPACK_PICKUP": "下落时按住“跳跃”可向上推进。落地后会随时间充能。",
+	"FAITHFUL_4T0N_JETPACK_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> 你下方的敌人会被点燃。",
 	"FAITHFUL_4T0N_JETPACK_DESC": "下落时按住跳跃键可 <style=cIsUtility>向上推进</style>，持续最多 <style=cIsUtility>[FUEL_TIME]</style> 秒 <style=cStack>(每层额外+[FUEL_TIME_STACKING]秒)</style>。落地后在 <style=cIsUtility>[RECHARGE_TIME]</style> 秒内完全充能 <style=cStack>(每层减少-[RECHARGE_TIME_REDUCTION]%)</style>。",
+	"FAITHFUL_4T0N_JETPACK_DESC_QUALITY": "[PREFIX]\n激活期间，你下方的敌人会被<style=cIsDamage>点燃</style>，每 <style=cIsDamage>1</style> 秒 <sprite name=\"Quality\"> <style=cIsDamage>[IGNITE_FREQUENCY]</style> <style=cStack>(每层额外+[IGNITE_FREQUENCY_STACKING])</style> 次，每次造成 <sprite name=\"Quality\"> <style=cIsDamage>[IGNITE_DAMAGE]%</style> <style=cStack>(每层额外+[IGNITE_DAMAGE_STACKING]%)</style> 基础伤害。",
 	"FAITHFUL_4T0N_JETPACK_LORE": "订单：高能光子喷气背包\n追踪编号：76*************\n预计送达时间：2057年4月7日\n运输方式：高优先级 / 易碎\n收货地址：木星，第77层，Corp INC\n运输详情：\n\n先生，这是您订购的新喷气背包。这一款应该能坚持更久。\n\n不过我得提醒您，请不要再尝试用它飞到另一个办公室了。上层让我通知您——下次他们不会再替您报销医药费了，先生。",
 	"FAITHFUL_4T0N_JETPACK_EMPTY_BUFF": "无燃料",
 	"FAITHFUL_4T0N_JETPACK_LOW_BUFF": "燃料不足",
@@ -131,13 +169,17 @@
 	
 	"FAITHFUL_MATTER_ACCELERATOR_NAME": "物质加速器",
 	"FAITHFUL_MATTER_ACCELERATOR_PICKUP": "拥有护盾或屏障时提高移动速度。",
+	"FAITHFUL_MATTER_ACCELERATOR_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> 根据当前护盾提高移动速度。",
 	"FAITHFUL_MATTER_ACCELERATOR_DESC": "获得相当于最大生命值 <style=cIsHealing>[SHIELD_GAIN]%</style> 的<style=cIsHealing>护盾</style>。当你拥有<style=cIsHealing>护盾</style>或<style=cIsHealing>屏障</style>时，<style=cIsUtility>移动速度</style>提高 <style=cIsUtility>[SPEED]%</style> <style=cStack>(每层额外+[SPEED_STACKING]%)</style>。",
+	"FAITHFUL_MATTER_ACCELERATOR_DESC_QUALITY": "[PREFIX]\n每拥有相当于 <style=cIsHealing>[HEALTH_PERC]%</style> <style=cIsHealing>基础最大生命值</style> 的<style=cIsHealing>护盾</style>，<style=cIsUtility>移动速度</style>提高 <sprite name=\"Quality\"> <style=cIsUtility>[SPEED]%</style> <style=cStack>(每层额外+[SPEED_STACKING]%)</style>。",
 	"FAITHFUL_MATTER_ACCELERATOR_LORE": "“自制物质加速器的第17天。\r\n\r\n到目前为止，我的进展有好消息也有坏消息。\r\n\r\n好消息是，我终于让它稳定运行到足以开始测试性能了。坏消息是，我得弄个更好的相机才能记录下任何实际结果。我现在这个拍出来太模糊了。\r\n\r\n哦，我还成功触发了邻居家的安保系统。所以我大概也该想办法避免这事再发生了。”",
 	"FAITHFUL_MATTER_ACCELERATOR_BUFF": "物质加速器",
-	
+
 	"FAITHFUL_RADIANT_TIMEPIECE_NAME": "辉耀怀表",
 	"FAITHFUL_RADIANT_TIMEPIECE_PICKUP": "延长临时增益的持续时间。",
+	"FAITHFUL_RADIANT_TIMEPIECE_PICKUP_QUALITY": "延长临时增益的 <sprite name=\"Quality\"> 持续时间。",
 	"FAITHFUL_RADIANT_TIMEPIECE_DESC": "临时增益的<style=cIsUtility>持续时间</style>延长 <style=cIsUtility>[DURATION]</style> <style=cStack>(每层额外+[DURATION_STACKING] 秒)</style>。",
+	"FAITHFUL_RADIANT_TIMEPIECE_DESC_QUALITY": "[PREFIX]\n临时增益的<style=cIsUtility>持续时间</style>延长 <sprite name=\"Quality\"> <style=cIsUtility>[DURATION]%</style> <style=cStack>(每层额外+[DURATION_STACKING]%)</style>。",
 	"FAITHFUL_RADIANT_TIMEPIECE_LORE": "订单：Henlein 品牌怀表 第222版（银灰色）\r\n追踪编号：1510******\r\n预计送达时间：08/23/2057\r\n配送方式：高优先级/易碎品\r\n收货地址：土星，Continuum 街古董工坊\r\n配送详情：\r\n\r\n感谢您购买：\r\n > 1 件 Henlein 品牌怀表 第222版，银灰色\r\n\r\n我们希望您对其工艺感到满意。作为地球上最大的奢侈腕表零售商，我们始终以自身的工艺为傲，因此若您发现任何瑕疵，请联系我们的客服热线。我们的传统钟表匠将随时为您维修任何产品，仅收取少量*费用。\r\n\r\n更多详情可参见与订单一同附上的手册。\r\n\r\n祝您度过准时的一天。\r\n\r\n- Henlein",
 	
 	"FAITHFUL_SURVIVOR_TECHNICIAN_NAME": "技师",
