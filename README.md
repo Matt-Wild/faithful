@@ -242,6 +242,7 @@ All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main
 
 # New Miscellaneous Items
 All items can be disabled or altered in this mod's config.
+All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main/ThunderstoreContent/QualityDiamond.png?raw=true" alt="Quality" width="16"> Quality variants.
 
 <table>
   <thead>
