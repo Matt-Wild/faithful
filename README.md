@@ -5,12 +5,17 @@ Currently adds <b>19</b> items, <b>7</b> of which require the <b>Survivors of th
 
 Also adds some custom debug tools to help other mod developers and those curious about the inner workings of the game.
 
-Risk Of Options compatible!
+For more detailed information about the additions made by this mod check out the [wiki](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/wiki/).
 
 [![Thunderstore Version](https://img.shields.io/thunderstore/v/SpilledSoup_Projects/Faithful?style=for-the-badge&logo=thunderstore&color=blue)](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/)
 [![Thunderstore Downloads](https://img.shields.io/thunderstore/dt/SpilledSoup_Projects/Faithful?style=for-the-badge&logo=thunderstore&color=cyan)](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/)
 
-For more detailed information about the additions made by this mod check out the [wiki](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/wiki/).
+# Compatibility
+
+Faithful is compatible with <b>Quality</b> and <b>Risk Of Options</b>!
+
+<a href="https://thunderstore.io/c/riskofrain2/p/Goorakh/Quality/"><img src="https://gcdn.thunderstore.io/live/repository/icons/Goorakh-Quality-0.7.8.png" alt="Quality" width=256></a>
+<a href="https://thunderstore.io/c/riskofrain2/p/Rune580/Risk_Of_Options/"><img src="https://cdn.rune580.dev/roo/images/roo-full.gif" alt="Risk Of Options" width=256></a>
 
 # Join Our Discord!
 
@@ -41,6 +46,7 @@ If you would like to provide, improve or request a translation for Faithful, ple
 
 # New Items
 All items can be disabled or altered in this mod's config.
+All items (except Lunars) have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main/ThunderstoreContent/QualityDiamond.png?raw=true" alt="Quality" width="16"> Quality variants.
 
 <table>
   <thead>
@@ -151,6 +157,7 @@ All items can be disabled or altered in this mod's config.
 
 # New Void Items
 All items can be disabled or altered in this mod's config.
+All items have Quality variants.
 
 <table>
   <thead>

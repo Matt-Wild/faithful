@@ -1,3 +1,16 @@
+## 1.5.0
+
+**Added**
+- Added Quality variants for all items (except Lunars).
+
+**Fixes**
+- Fixed Collector's Vision counting Appraiser's Eye as a unique pickup.
+- Fixed Collector's Vision descriptions not reflecting adjusted Inspiration settings correctly.
+- Fixed 4-T0N Jetpack fuel buffs shifting around as fuel state changes.
+
+**Optimizations**
+- Optimized holdout zone behaviour lookups.
+
 ### v1.4.2
 
 **Balance**
@@ -111,12 +124,12 @@
 **Changed**
 - Removed the annoying "PING" logs left in after debugging. Whoops.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.3.16
 
 **Visuals**
 - Added missing item displays for Alloyed Collective.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.3.15
 
