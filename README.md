@@ -157,7 +157,7 @@ All items (except Lunars) have <img src="https://github.com/Goorakh/RoR2_ItemQua
 
 # New Void Items
 All items can be disabled or altered in this mod's config.
-All items have Quality variants.
+All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main/ThunderstoreContent/QualityDiamond.png?raw=true" alt="Quality" width="16"> Quality variants.
 
 <table>
   <thead>
