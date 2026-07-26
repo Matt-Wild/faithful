@@ -14,8 +14,8 @@ For more detailed information about the additions made by this mod check out the
 
 Faithful is compatible with <b>Quality</b> and <b>Risk Of Options</b>!
 
-<a href="https://thunderstore.io/c/riskofrain2/p/Goorakh/Quality/"><img src="https://gcdn.thunderstore.io/live/repository/icons/Goorakh-Quality-0.7.8.png" alt="Quality" width=256></a>
-<a href="https://thunderstore.io/c/riskofrain2/p/Rune580/Risk_Of_Options/"><img src="https://cdn.rune580.dev/roo/images/roo-full.gif" alt="Risk Of Options" width=256></a>
+<a href="https://thunderstore.io/c/riskofrain2/p/Goorakh/Quality/"><img src="https://gcdn.thunderstore.io/live/repository/icons/Goorakh-Quality-0.7.8.png" alt="Quality" width=200></a>
+<a href="https://thunderstore.io/c/riskofrain2/p/Rune580/Risk_Of_Options/"><img src="https://cdn.rune580.dev/roo/images/roo-full.gif" alt="Risk Of Options" width=200></a>
 
 # Join Our Discord!
 
