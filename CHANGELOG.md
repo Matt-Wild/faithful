@@ -1,3 +1,8 @@
+### v1.5.1
+
+**Fixes**
+- Fixed missing dependency. Oops.
+
 ## 1.5.0
 
 **Added**
