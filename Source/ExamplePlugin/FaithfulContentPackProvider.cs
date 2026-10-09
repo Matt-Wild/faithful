@@ -65,8 +65,13 @@ namespace Faithful
 
         public IEnumerator FinalizeAsync(FinalizeAsyncArgs _args)
         {
+            // Prepare display assets before content assignment and catalog initialisation
+            if (ItemDisplays.HasConsumers)
+            {
+                yield return ItemDisplays.PrepareAsync(_args.ReportProgress);
+            }
+
             _args.ReportProgress(1.0f);
-            yield break;
         }
     }
 }

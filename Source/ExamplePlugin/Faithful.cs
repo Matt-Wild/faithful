@@ -23,6 +23,7 @@ namespace Faithful
     [BepInDependency(LanguageAPI.PluginGUID)]
 
     [BepInDependency(PrefabAPI.PluginGUID)]
+    [BepInDependency(RecalculateStatsAPI.PluginGUID)]
 
     // For Quality support
     [BepInDependency("com.Gorakh.ItemQualities", BepInDependency.DependencyFlags.SoftDependency)]
@@ -45,7 +46,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.5.1";
+        public const string PluginVersion = "1.5.2";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -172,6 +173,11 @@ namespace Faithful
 
             // Log successful load information
             Log.Info("Faithful loaded successfully, thank you for playing our mod!");
+        }
+
+        private void OnApplicationQuit()
+        {
+            ItemDisplays.Shutdown();
         }
 
         private void Start()

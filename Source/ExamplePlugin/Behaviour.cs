@@ -172,7 +172,7 @@ namespace Faithful
             On.RoR2.CharacterBody.SetTimedBuffDurationIfPresent += HookSetTimedBuffDuration;
             On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int += HookServerGiveItemPermanent;
             On.RoR2.Inventory.GiveItemTemp += HookServerGiveItemTemporary;
-            On.RoR2.Inventory.RemoveItem_ItemIndex_int += HookServerRemoveItem;
+            On.RoR2.Inventory.RemoveItemPermanent_ItemIndex_int += HookServerRemoveItem;
             On.RoR2.Inventory.HandleInventoryChanged += HookInventoryChanged;
             On.RoR2.Inventory.RpcItemAdded += HookItemAdded;
             On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 += HookInflictDamageOverTime;
@@ -216,7 +216,8 @@ namespace Faithful
             On.RoR2.CharacterBody.ExtendTimedBuffIfPresent_BuffDef_float_float -= HookExtendTimedBuffs;
             On.RoR2.CharacterBody.SetTimedBuffDurationIfPresent -= HookSetTimedBuffDuration;
             On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int -= HookServerGiveItemPermanent;
-            On.RoR2.Inventory.RemoveItem_ItemIndex_int -= HookServerRemoveItem;
+            On.RoR2.Inventory.GiveItemTemp -= HookServerGiveItemTemporary;
+            On.RoR2.Inventory.RemoveItemPermanent_ItemIndex_int -= HookServerRemoveItem;
             On.RoR2.Inventory.HandleInventoryChanged -= HookInventoryChanged;
             On.RoR2.Inventory.RpcItemAdded -= HookItemAdded;
             On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 -= HookInflictDamageOverTime;
@@ -1032,7 +1033,7 @@ namespace Faithful
             }
         }
 
-        private static void HookServerRemoveItem(On.RoR2.Inventory.orig_RemoveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
+        private static void HookServerRemoveItem(On.RoR2.Inventory.orig_RemoveItemPermanent_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
         {
             // Cycle through On Remove Item callbacks
             foreach (OnTransferItemCallback callback in onRemoveItemCallbacks)

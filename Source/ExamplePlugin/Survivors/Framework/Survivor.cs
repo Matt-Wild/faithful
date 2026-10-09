@@ -127,6 +127,7 @@ namespace Faithful
 
         // If it's currently possible to add item display rule information
         private bool m_addingItemDisplays = false;
+        private bool m_itemDisplaysBuilt;
 
         // Additional behaviour callbacks
         private CharacterBodyCallback m_onCharacterBodyConfigured;
@@ -768,32 +769,42 @@ namespace Faithful
             m_characterModel.itemDisplayRuleSet = itemDisplayRuleSet;
 
             // Add
-            ItemDisplays.queuedDisplays++;
+            ItemDisplays.RegisterConsumer();
             RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetupItemDisplaysOnContentPacksAssigned;
         }
 
         private void SetupItemDisplaysOnContentPacksAssigned(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> _obj)
         {
-            // Create new item display rules list
-            m_itemDisplayRules = new List<ItemDisplayRuleSet.KeyAssetRuleGroup>();
+            try
+            {
+                if (m_itemDisplaysBuilt || !ItemDisplays.EnsureReady(bodyName)) return;
 
-            // Prepare item displays helper
-            ItemDisplays.LazyInit();
+                CharacterModel model = characterModel;
+                if (!model || !model.itemDisplayRuleSet)
+                {
+                    Print.Error(this, $"Could not assign item displays for '{bodyName}': the character model or rule set is missing.");
+                    return;
+                }
 
-            // Can now start adding item display information
-            m_addingItemDisplays = true;
-
-            // Get instructions for item display placement
-            SetupDefaultItemDisplays();
-
-            // Assign new item display rules to character model
-            characterModel.itemDisplayRuleSet.keyAssetRuleGroups = m_itemDisplayRules.ToArray();
-
-            // Can no longer add item display information
-            m_addingItemDisplays = false;
-
-            // Clean up
-            ItemDisplays.DisposeWhenDone();
+                // Build display rules before catalog initialisation
+                m_itemDisplayRules = new List<ItemDisplayRuleSet.KeyAssetRuleGroup>();
+                m_addingItemDisplays = true;
+                SetupDefaultItemDisplays();
+                model.itemDisplayRuleSet.keyAssetRuleGroups = m_itemDisplayRules.ToArray();
+                m_itemDisplaysBuilt = true;
+                Print.Debug(this, $"Assigned {m_itemDisplayRules.Count} item/equipment display groups for '{bodyName}'.");
+            }
+            catch (Exception exception)
+            {
+                // Log display setup errors and allow content assignment to continue
+                Print.Error(this, $"Item display setup failed for '{bodyName}'.\n{exception}");
+            }
+            finally
+            {
+                m_addingItemDisplays = false;
+                m_itemDisplayRules = null;
+                RoR2.ContentManagement.ContentManager.onContentPacksAssigned -= SetupItemDisplaysOnContentPacksAssigned;
+            }
         }
 
         protected virtual void SetupDefaultItemDisplays()
@@ -813,7 +824,10 @@ namespace Faithful
             }
 
             // Add to item display rules
-            m_itemDisplayRules.Add(ItemDisplays.CreateDisplayRuleGroupWithRules(ItemDisplays.keyAssets[_keyAsset], _rules));
+            if (ItemDisplays.TryCreateDisplayRuleGroup(bodyName, _keyAsset, _rules, out ItemDisplayRuleSet.KeyAssetRuleGroup group))
+            {
+                m_itemDisplayRules.Add(group);
+            }
         }
 
         private void SetupDisplayPrefab()

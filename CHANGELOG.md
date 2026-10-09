@@ -1,3 +1,8 @@
+### v1.5.2
+
+**Compatibility**
+- Faithful is now functional with Hallowed Concepts. - Issues with new content have been found which will be resolved soon alongside item displays etc.
+
 ### v1.5.1
 
 **Fixes**
