@@ -47,6 +47,8 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Drifter", "BagBottom", new Vector3(-0.19F, 0.128F, 0F), new Vector3(0F, 2.5F, 70F), new Vector3(0.25F, 0.25F, 0.25F));
                     _displaySettings.AddCharacterDisplay("Scavenger", "Backpack", new Vector3(-7.855F, 5.63F, -1.275F), new Vector3(0F, 340F, 84F), new Vector3(2F, 2F, 2F));
                     _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(-0.09F, 0.025F, 0F), new Vector3(0F, 180F, 270F), new Vector3(0.1125F, 0.1125F, 0.1125F));
+                    _displaySettings.AddCharacterDisplay("Enforcer", "Pelvis", new Vector3(-0.176F, 0.058F, -0.1405F), new Vector3(300F, 122.5F, 287.5F), new Vector3(0.11F, 0.11F, 0.11F));
+                    _displaySettings.AddCharacterDisplay("Acolyte", "Chest", new Vector3(0.1825F, -0.12F, -0.088F), new Vector3(292.5F, 117.5F, 185F), new Vector3(0.1F, 0.1F, 0.1F));
                 });
 
             CreateItem(_name: "Reserve Battery",
@@ -84,6 +86,8 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Drifter", "BagBottom", new Vector3(-0.123F, 0.1985F, 0.3025F), new Vector3(337.95F, 299F, 30.5F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(-0.29F, 0F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.08F, 0.08F, 0.08F));
                     _displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(0.29F, 0F, 0F), new Vector3(0F, 180F, 270F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("Enforcer", "Weapon", new Vector3(0.206F, -0.16F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.135F, 0.145F, 0.175F));
+                    _displaySettings.AddCharacterDisplay("Acolyte", "Pelvis", new Vector3(-0.186F, 0.054F, -0.066F), new Vector3(29F, 53.25F, 18.25F), new Vector3(0.1F, 0.1F, 0.1F));
                 });
 
             CreateItem(_name: "Plasma Field Generator",
@@ -121,6 +125,8 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Drifter", "Chest", new Vector3(-0.0145F, 0.285F, 0F), new Vector3(297.5F, 257.5F, 195F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Scavenger", "Head", new Vector3(-2.5375F, 2.05F, -5.725F), new Vector3(302.5F, 206.25F, 157.5F), new Vector3(1.2F, 1.2F, 1.2F));
                     _displaySettings.AddCharacterDisplay("Technician", "Chest", new Vector3(0F, 0.115F, 0.145F), new Vector3(3.75F, 0F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
+                    _displaySettings.AddCharacterDisplay("Enforcer", "Stomach", new Vector3(0F, -0.0024F, 0.1925F), new Vector3(0F, 0F, 0F), new Vector3(0.07F, 0.07F, 0.07F));
+                    _displaySettings.AddCharacterDisplay("Acolyte", "Chest", new Vector3(0F, 0.138F, 0.146F), new Vector3(329.5F, 0F, 0F), new Vector3(0.04F, 0.04F, 0.04F));
                 });
 
             CreateItem(_name: "Toxin Canister",
@@ -158,6 +164,8 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Drifter", "ThighL", new Vector3(-0.06685F, -0.13375F, -0.25285F), new Vector3(0F, 26.75F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
                     _displaySettings.AddCharacterDisplay("Scavenger", "Weapon", new Vector3(-3F, 20F, 0F), new Vector3(0F, 0F, 180F), new Vector3(2F, 2F, 2F));
                     _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(-0.0575F, 0.1885F, 0.0825F), new Vector3(1.25F, 56.25F, 186F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("Enforcer", "Stomach", new Vector3(0.224F, -0.058F, -0.0845F), new Vector3(0F, 0F, 12.5F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Acolyte", "Necklace3", new Vector3(-0.077F, -0.0119F, 0.11025F), new Vector3(310F, 313.75F, 165F), new Vector3(0.1325F, 0.1325F, 0.1325F));
                 });
 
             CreateItem(_name: "Service Start-up Drive",
@@ -193,6 +201,8 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Operator", "Backpack", new Vector3(0.1965F, -0.1005F, -0.1575F), new Vector3(0F, 270F, 90F), new Vector3(0.06F, 0.06F, 0.06F));
                     _displaySettings.AddCharacterDisplay("Drifter", "BagBottom", new Vector3(-0.192F, 0.0175F, 0.23F), new Vector3(295F, 35.5F, 75.5F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Technician", "UpperArmL", new Vector3(0F, 0.23825F, 0.1F), new Vector3(275F, 148.5F, 32F), new Vector3(0.09F, 0.09F, 0.09F));
+                    _displaySettings.AddCharacterDisplay("Enforcer", "Stomach", new Vector3(0.191F, -0.00135F, 0.12575F), new Vector3(71.5F, 79.25F, 33.75F), new Vector3(0.08F, 0.08F, 0.08F));
+                    _displaySettings.AddCharacterDisplay("Acolyte", "Pelvis", new Vector3(0.18F, 0.03075F, 0.072F), new Vector3(48.25F, 116.75F, 53F), new Vector3(0.08F, 0.08F, 0.08F));
                 });
 
             CreateItem(_name: "Chakrams",
@@ -231,6 +241,8 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Operator", "HandR", new Vector3(0.0635F, 0F, 0F), new Vector3(270F, 88.75F, 0F), new Vector3(0.08F, 0.08F, 0.08F));
                     _displaySettings.AddCharacterDisplay("Drifter", "HandR", new Vector3(-0.0845F, -0.01505F, -0.09925F), new Vector3(342F, 11.65F, 109.5F), new Vector3(0.08F, 0.08F, 0.08F));
                     _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(0.08325F, 0.1225F, 0F), new Vector3(296.75F, 187.5F, 261.5F), new Vector3(0.055F, 0.055F, 0.055F));
+                    _displaySettings.AddCharacterDisplay("Enforcer", "Chest", new Vector3(0.1558F, -0.1015F, 0.22F), new Vector3(47.5F, 16F, 32F), new Vector3(0.09F, 0.09F, 0.09F));
+                    _displaySettings.AddCharacterDisplay("Acolyte", "Head", new Vector3(-0.3696F, 0.2014F, -0.162F), new Vector3(40F, 205F, 347.5F), new Vector3(0.1F, 0.1F, 0.1F));
                 });
 
             CreateItem(_name: "Charming Facade",
@@ -268,6 +280,8 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Operator", "Head", new Vector3(-0.13625F, -0.185F, 0F), new Vector3(70F, 270.75F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
                     _displaySettings.AddCharacterDisplay("Drifter", "Head", new Vector3(-0.1115F, 0.223F, 0F), new Vector3(270F, 90F, 0F), new Vector3(0.125F, 0.125F, 0.125F));
                     _displaySettings.AddCharacterDisplay("Technician", "Head", new Vector3(0F, 0.135F, 0.142F), new Vector3(350F, 0F, 0F), new Vector3(0.165F, 0.165F, 0.165F));
+                    _displaySettings.AddCharacterDisplay("Enforcer", "Head", new Vector3(-0.0355F, 0.13F, 0F), new Vector3(275F, 90F, 0F), new Vector3(0.13F, 0.13F, 0.13F));
+                    _displaySettings.AddCharacterDisplay("Acolyte", "Head", new Vector3(-0.0731F, 0.2835F, 0F), new Vector3(275F, 90F, 0F), new Vector3(0.22F, 0.22F, 0.2F));
                 },
                 _modifyItemDisplayPrefabCallback: _prefab =>
                 {

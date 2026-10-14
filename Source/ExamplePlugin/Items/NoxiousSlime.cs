@@ -99,6 +99,8 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Technician", "Pelvis", new Vector3(0.195F, 0.0275F, -0.04525F), new Vector3(345F, 110F, 2.5F), new Vector3(0.05F, 0.05F, 0.05F));
             displaySettings.AddCharacterDisplay("Operator", "Stomach", new Vector3(-0.04F, 0.0425F, 0.125F), new Vector3(330F, 345F, 97.5F), new Vector3(0.0375F, 0.0375F, 0.0375F));
             displaySettings.AddCharacterDisplay("Drifter", "BagPocketR", new Vector3(-0.0675F, -0.2525F, 0F), new Vector3(50F, 270F, 270F), new Vector3(0.125F, 0.125F, 0.125F));
+            displaySettings.AddCharacterDisplay("Enforcer", "ThighL", new Vector3(-0.085F, -0.16F, -0.008F), new Vector3(84F, 87.5F, 355F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Acolyte", "ThighR", new Vector3(0.0475F, 0.074F, 0.015F), new Vector3(281F, 287.5F, 167.5F), new Vector3(0.1F, 0.1F, 0.1F));
         }
 
         protected override void CreateSettings()

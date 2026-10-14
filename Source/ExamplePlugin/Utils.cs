@@ -109,6 +109,8 @@ namespace Faithful
             { "operator", "mdlDroneTech" },
             { "drifter", "mdlDrifter" },
             { "best buddy", "mdlDefectiveUnit (1)" },
+            { "enforcer", "mdlEnforcer" },
+            { "acolyte", "mdlAcolyteUnion" },
             { "technician", "mdlTechnician" }
         };
 

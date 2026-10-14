@@ -122,6 +122,8 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(-0.03375F, 0.525F, 0.00185F), new Vector3(300F, 47.5F, 30F), new Vector3(0.075F, 0.075F, 0.075F));
             displaySettings.AddCharacterDisplay("Operator", "LowerArmR", new Vector3(0.08F, -0.045F, 0.045F), new Vector3(340F, 30F, 160F), new Vector3(0.1F, 0.1F, 0.1F));
             displaySettings.AddCharacterDisplay("Drifter", "BagFrontPocket", new Vector3(-0.09F, 0.5F, 0F), new Vector3(20F, 245F, 355F), new Vector3(0.075F, 0.075F, 0.075F));
+            displaySettings.AddCharacterDisplay("Enforcer", "Weapon", new Vector3(-0.35F, 0.0745F, 0.0075F), new Vector3(17.75F, 336.25F, 350.25F), new Vector3(0.1F, 0.1F, 0.1F));
+            displaySettings.AddCharacterDisplay("Acolyte", "UpperArmR", new Vector3(0.16365F, -0.025F, 0.0265F), new Vector3(312.45F, 54.9F, 136.8F), new Vector3(0.1F, 0.1F, 0.1F));
         }
 
         protected override void CreateSettings()

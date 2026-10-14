@@ -77,6 +77,8 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Technician", "Shin.R", new Vector3(0F, 0.1225F, -0.00725F), new Vector3(0F, 180F, 0F), new Vector3(0.2F, 0.125F, 0.2F));
             displaySettings.AddCharacterDisplay("Operator", "CalfR", new Vector3(0.156F, 0.01F, -0.12F), new Vector3(0F, 187F, 94F), new Vector3(0.125F, 0.06F, 0.125F));
             displaySettings.AddCharacterDisplay("Drifter", "CalfR", new Vector3(-0.21F, -0.03F, -0.015F), new Vector3(0F, 0F, 90F), new Vector3(0.225F, 0.075F, 0.225F));
+            displaySettings.AddCharacterDisplay("Enforcer", "CalfL", new Vector3(-0.42F, 0F, 0F), new Vector3(0F, 175F, 90F), new Vector3(0.21F, 0.1F, 0.21F));
+            displaySettings.AddCharacterDisplay("Acolyte", "CalfR", new Vector3(0.265F, -0.00225F, 0F), new Vector3(0F, 355F, 270F), new Vector3(0.15F, 0.08F, 0.15F));
         }
 
         protected override void CreateSettings()
