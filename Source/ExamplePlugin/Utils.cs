@@ -165,6 +165,16 @@ namespace Faithful
         // Active holdout zones
         private static readonly List<HoldoutZoneController> activeHoldoutZones = new();
 
+        private static readonly HookRegistration ruleBookHook = new("PreGameController.onPreGameControllerSetRuleBookGlobal",
+            () => PreGameController.onPreGameControllerSetRuleBookGlobal += OnPreGameControllerSetRuleBookGlobal,
+            () => PreGameController.onPreGameControllerSetRuleBookGlobal -= OnPreGameControllerSetRuleBookGlobal);
+        private static readonly HookRegistration mainMenuHook = new("BaseMainMenuScreen.OnEnter",
+            () => On.RoR2.UI.MainMenu.BaseMainMenuScreen.OnEnter += OnMainMenuEnter,
+            () => On.RoR2.UI.MainMenu.BaseMainMenuScreen.OnEnter -= OnMainMenuEnter);
+        private static readonly HookRegistration loadoutPanelHook = new("LoadoutPanelController.OnEnable",
+            () => On.RoR2.UI.LoadoutPanelController.OnEnable += OnLoadoutPanelEnable,
+            () => On.RoR2.UI.LoadoutPanelController.OnEnable -= OnLoadoutPanelEnable);
+
         public static void Init(PluginInfo _pluginInfo)
         {
             // Detect assemblies
@@ -217,15 +227,6 @@ namespace Faithful
                 On.RoR2.CharacterSpawnCard.Spawn += OnCharacterSpawnCardSpawn;
             }
 
-            // Add pre-game controller set rule book behaviour
-            PreGameController.onPreGameControllerSetRuleBookGlobal += OnPreGameControllerSetRuleBookGlobal;
-
-            // Add behaviour to main menu on enter
-            On.RoR2.UI.MainMenu.BaseMainMenuScreen.OnEnter += OnMainMenuEnter;
-
-            // Add behaviour to loadout panel
-            On.RoR2.UI.LoadoutPanelController.OnEnable += OnLoadoutPanelEnable;
-
             /*// Load language file
             LoadLanguageFile();*/
 
@@ -236,6 +237,20 @@ namespace Faithful
         {
             // Load fonts
             LoadFonts();
+        }
+
+        internal static void EnableMenuHooks()
+        {
+            ruleBookHook.TryEnable();
+            mainMenuHook.TryEnable();
+            loadoutPanelHook.TryEnable();
+        }
+
+        internal static void DisableMenuHooks()
+        {
+            ruleBookHook.TryDisable();
+            mainMenuHook.TryDisable();
+            loadoutPanelHook.TryDisable();
         }
 
         private static void DetectAssemblies()
@@ -673,24 +688,24 @@ namespace Faithful
 
         private static void OnPreGameControllerSetRuleBookGlobal(PreGameController preGameController, RuleBook ruleBook)
         {
-            // Check if expansion is enabled
-            if (ruleBook.IsChoiceActive(expansionDef.enabledChoice))
-            {
-                // Update if expansion is enabled
-                expansionEnabled = true;
+            if (!Faithful.InitializationSucceeded || !ruleBookHook.IsActive || ruleBook == null || !expansionDef || expansionDef.enabledChoice == null) return;
 
-                // Enable behaviour
-                Behaviour.Enable();
+            try
+            {
+                expansionEnabled = ruleBook.IsChoiceActive(expansionDef.enabledChoice);
+                if (expansionEnabled)
+                {
+                    Behaviour.Enable();
+                }
+                else
+                {
+                    Behaviour.Disable();
+                }
             }
-
-            // Expansion disabled
-            else
+            catch (System.Exception exception)
             {
-                // Update if expansion is enabled
-                expansionEnabled = false;
-
-                // Disable behaviour
-                Behaviour.Disable();
+                // Never interrupt the game's remaining lobby initialization
+                ruleBookHook.Fail("execute", exception);
             }
         }
 
@@ -699,21 +714,24 @@ namespace Faithful
             // Run original processes
             orig(self, mainMenuController);
 
-            // Update randomiser mode from config
-            _randomiserMode = randomiserModeSetting.Value;
+            if (!Faithful.InitializationSucceeded || !mainMenuHook.IsActive) return;
 
-            // Check if randomiser mode is enabled
-            if (randomiserMode)
+            try
             {
-                // Randomise item stats and refresh items
-                RandomiseAndRefresh();
+                // Update randomiser mode from config
+                _randomiserMode = randomiserModeSetting.Value;
+                if (randomiserMode)
+                {
+                    RandomiseAndRefresh();
+                }
+                else
+                {
+                    RefreshItemSettings();
+                }
             }
-
-            // Not randomiser mode
-            else
+            catch (System.Exception exception)
             {
-                // Refresh item settings
-                RefreshItemSettings();
+                mainMenuHook.Fail("execute", exception);
             }
         }
 
@@ -722,11 +740,17 @@ namespace Faithful
             // Run original processes
             orig(self);
 
-            // Randomise item stats and refresh items
-            RandomiseAndRefresh();
+            if (!Faithful.InitializationSucceeded || !loadoutPanelHook.IsActive) return;
 
-            // Reset lookups
-            LookupTable.Reset();
+            try
+            {
+                RandomiseAndRefresh();
+                LookupTable.Reset();
+            }
+            catch (System.Exception exception)
+            {
+                loadoutPanelHook.Fail("execute", exception);
+            }
         }
 
         public static void ApplyFonts(Transform parent)

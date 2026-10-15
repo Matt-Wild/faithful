@@ -46,10 +46,13 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.5.2";
+        public const string PluginVersion = "1.5.3";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
+
+        // Hook failures can be tolerated; callbacks still require complete core initialization.
+        internal static bool InitializationSucceeded { get; private set; }
 
         // Toolbox
         Toolbox toolbox;
@@ -103,6 +106,34 @@ namespace Faithful
             // Init our logging class so that we can properly log for debugging
             Log.Init(Logger);
 
+            try
+            {
+                Initialize();
+                InitializationSucceeded = true;
+                Utils.EnableMenuHooks();
+
+                string[] failedHooks = HookRegistration.GetFailedHookNames();
+                if (failedHooks.Length == 0)
+                {
+                    Log.Info("Faithful loaded successfully, thank you for playing our mod!");
+                }
+                else
+                {
+                    Log.Warning($"Faithful loaded with {failedHooks.Length} failed hook(s): {string.Join(", ", failedHooks)}. Features using these hooks may not work.");
+                }
+            }
+            catch (System.Exception exception)
+            {
+                InitializationSucceeded = false;
+                enabled = false;
+                Log.Error($"Faithful core initialization failed.\n{exception}");
+                Utils.DisableMenuHooks();
+                Behaviour.Disable();
+            }
+        }
+
+        private void Initialize()
+        {
             // Initialise toolbox
             toolbox = new Toolbox(this, PInfo, Config);
 
@@ -170,9 +201,6 @@ namespace Faithful
 
             // Attempt to init Quality support
             QualityCompatBootstrap.TryInit();
-
-            // Log successful load information
-            Log.Info("Faithful loaded successfully, thank you for playing our mod!");
         }
 
         private void OnApplicationQuit()
@@ -182,18 +210,24 @@ namespace Faithful
 
         private void Start()
         {
+            if (!InitializationSucceeded) return;
+
             // Update toolbox
             toolbox.Start();
         }
 
         private void Update()
         {
+            if (!InitializationSucceeded) return;
+
             // Update toolbox
             toolbox.Update();
         }
 
         private void FixedUpdate()
         {
+            if (!InitializationSucceeded) return;
+
             // Update toolbox
             toolbox.FixedUpdate();
         }

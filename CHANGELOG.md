@@ -1,3 +1,11 @@
+### v1.5.3
+
+**Added**
+- Added Faithful item displays for Enforcer and Acolyte.
+
+**Fixes**
+- Improved hook failure handling so unaffected Faithful features continue loading and other game processes are less likely to be interfered with.
+
 ### v1.5.2
 
 **Compatibility**

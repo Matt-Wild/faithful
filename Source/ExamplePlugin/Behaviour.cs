@@ -152,92 +152,202 @@ namespace Faithful
             DebugLog("Behaviour initialised");
         }
 
+        private static readonly HookRegistration holdoutZoneControllerUpdateHook = new("HoldoutZoneController.Update",
+            () => On.RoR2.HoldoutZoneController.Update += HookHoldoutZoneControllerUpdate,
+            () => On.RoR2.HoldoutZoneController.Update -= HookHoldoutZoneControllerUpdate);
+
+        private static readonly HookRegistration holdoutZoneControllerStartHook = new("HoldoutZoneController.Start",
+            () => On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart,
+            () => On.RoR2.HoldoutZoneController.Start -= HookHoldoutZoneControllerStart);
+
+        private static readonly HookRegistration characterBodyAwakeHook = new("CharacterBody.Awake",
+            () => On.RoR2.CharacterBody.Awake += HookCharacterBodyAwake,
+            () => On.RoR2.CharacterBody.Awake -= HookCharacterBodyAwake);
+
+        private static readonly HookRegistration characterBodyStartHook = new("CharacterBody.Start",
+            () => On.RoR2.CharacterBody.Start += HookCharacterBodyStart,
+            () => On.RoR2.CharacterBody.Start -= HookCharacterBodyStart);
+
+        private static readonly HookRegistration addBuffIndexHook = new("CharacterBody.AddBuff_BuffIndex",
+            () => On.RoR2.CharacterBody.AddBuff_BuffIndex += HookAddBuffIndex,
+            () => On.RoR2.CharacterBody.AddBuff_BuffIndex -= HookAddBuffIndex);
+
+        private static readonly HookRegistration addTimedBuffDefHook = new("CharacterBody.AddTimedBuff_BuffDef_float",
+            () => On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += HookAddTimedBuffDef,
+            () => On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float -= HookAddTimedBuffDef);
+
+        private static readonly HookRegistration addTimedBuffDefMaxStacksHook = new("CharacterBody.AddTimedBuff_BuffDef_float_int",
+            () => On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float_int += HookAddTimedBuffDefMaxStacks,
+            () => On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float_int -= HookAddTimedBuffDefMaxStacks);
+
+        private static readonly HookRegistration extendTimedBuffsHook = new("CharacterBody.ExtendTimedBuffIfPresent_BuffDef_float_float",
+            () => On.RoR2.CharacterBody.ExtendTimedBuffIfPresent_BuffDef_float_float += HookExtendTimedBuffs,
+            () => On.RoR2.CharacterBody.ExtendTimedBuffIfPresent_BuffDef_float_float -= HookExtendTimedBuffs);
+
+        private static readonly HookRegistration setTimedBuffDurationHook = new("CharacterBody.SetTimedBuffDurationIfPresent",
+            () => On.RoR2.CharacterBody.SetTimedBuffDurationIfPresent += HookSetTimedBuffDuration,
+            () => On.RoR2.CharacterBody.SetTimedBuffDurationIfPresent -= HookSetTimedBuffDuration);
+
+        private static readonly HookRegistration serverGiveItemPermanentHook = new("Inventory.GiveItemPermanent_ItemIndex_int",
+            () => On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int += HookServerGiveItemPermanent,
+            () => On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int -= HookServerGiveItemPermanent);
+
+        private static readonly HookRegistration serverGiveItemTemporaryHook = new("Inventory.GiveItemTemp",
+            () => On.RoR2.Inventory.GiveItemTemp += HookServerGiveItemTemporary,
+            () => On.RoR2.Inventory.GiveItemTemp -= HookServerGiveItemTemporary);
+
+        private static readonly HookRegistration serverRemoveItemHook = new("Inventory.RemoveItemPermanent_ItemIndex_int",
+            () => On.RoR2.Inventory.RemoveItemPermanent_ItemIndex_int += HookServerRemoveItem,
+            () => On.RoR2.Inventory.RemoveItemPermanent_ItemIndex_int -= HookServerRemoveItem);
+
+        private static readonly HookRegistration inventoryChangedHook = new("Inventory.HandleInventoryChanged",
+            () => On.RoR2.Inventory.HandleInventoryChanged += HookInventoryChanged,
+            () => On.RoR2.Inventory.HandleInventoryChanged -= HookInventoryChanged);
+
+        private static readonly HookRegistration itemAddedHook = new("Inventory.RpcItemAdded",
+            () => On.RoR2.Inventory.RpcItemAdded += HookItemAdded,
+            () => On.RoR2.Inventory.RpcItemAdded -= HookItemAdded);
+
+        private static readonly HookRegistration inflictDamageOverTimeHook = new("DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1",
+            () => On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 += HookInflictDamageOverTime,
+            () => On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 -= HookInflictDamageOverTime);
+
+        private static readonly HookRegistration inflictDamageOverTimeRefHook = new("DotController.InflictDot_refInflictDotInfo",
+            () => On.RoR2.DotController.InflictDot_refInflictDotInfo += HookInflictDamageOverTimeRef,
+            () => On.RoR2.DotController.InflictDot_refInflictDotInfo -= HookInflictDamageOverTimeRef);
+
+        private static readonly HookRegistration healthComponentAwakeHook = new("HealthComponent.Awake",
+            () => On.RoR2.HealthComponent.Awake += HookHealthComponentAwake,
+            () => On.RoR2.HealthComponent.Awake -= HookHealthComponentAwake);
+
+        private static readonly HookRegistration healHook = new("HealthComponent.Heal",
+            () => On.RoR2.HealthComponent.Heal += HookHeal,
+            () => On.RoR2.HealthComponent.Heal -= HookHeal);
+
+        private static readonly HookRegistration takeDamageProcessHook = new("HealthComponent.TakeDamageProcess",
+            () => On.RoR2.HealthComponent.TakeDamageProcess += HookTakeDamageProcess,
+            () => On.RoR2.HealthComponent.TakeDamageProcess -= HookTakeDamageProcess);
+
+        private static readonly HookRegistration recalculateStatsHook = new("CharacterBody.RecalculateStats",
+            () => On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats,
+            () => On.RoR2.CharacterBody.RecalculateStats -= HookRecalculateStats);
+
+        private static readonly HookRegistration updateVisualEffectsHook = new("CharacterBody.UpdateAllTemporaryVisualEffects",
+            () => On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects += HookUpdateVisualEffects,
+            () => On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects -= HookUpdateVisualEffects);
+
+        private static readonly HookRegistration characterBodyFixedUpdateHook = new("CharacterBody.FixedUpdate",
+            () => On.RoR2.CharacterBody.FixedUpdate += HookCharacterBodyFixedUpdate,
+            () => On.RoR2.CharacterBody.FixedUpdate -= HookCharacterBodyFixedUpdate);
+
+        private static readonly HookRegistration characterBodyRollCritHook = new("CharacterBody.RollCrit",
+            () => On.RoR2.CharacterBody.RollCrit += HookCharacterBodyRollCrit,
+            () => On.RoR2.CharacterBody.RollCrit -= HookCharacterBodyRollCrit);
+
+        private static readonly HookRegistration interactionBeginHook = new("GlobalEventManager.OnInteractionsGlobal",
+            () => GlobalEventManager.OnInteractionsGlobal += HookInteractionBegin,
+            () => GlobalEventManager.OnInteractionsGlobal -= HookInteractionBegin);
+
+        private static readonly HookRegistration purchaseInteractionBeginHook = new("PurchaseInteraction.OnInteractionBegin",
+            () => On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin,
+            () => On.RoR2.PurchaseInteraction.OnInteractionBegin -= HookPurchaseInteractionBegin);
+
+        private static readonly HookRegistration purchaseCanBeAffordedHook = new("PurchaseInteraction.CanBeAffordedByInteractor",
+            () => On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded,
+            () => On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor -= HookPurchaseCanBeAfforded);
+
+        private static readonly HookRegistration processJumpHook = new("EntityStates.GenericCharacterMain.ProcessJump",
+            () => On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump,
+            () => On.EntityStates.GenericCharacterMain.ProcessJump -= HookProcessJump);
+
+        private static readonly HookRegistration genericCharacterFixedUpdateHook = new("EntityStates.GenericCharacterMain.FixedUpdate",
+            () => On.EntityStates.GenericCharacterMain.FixedUpdate += HookGenericCharacterFixedUpdate,
+            () => On.EntityStates.GenericCharacterMain.FixedUpdate -= HookGenericCharacterFixedUpdate);
+
+        private static readonly HookRegistration sceneExitControllerSetStateHook = new("SceneExitController.SetState",
+            () => On.RoR2.SceneExitController.SetState += HookSceneExitControllerSetState,
+            () => On.RoR2.SceneExitController.SetState -= HookSceneExitControllerSetState);
+
+        private static readonly HookRegistration onHitEnemyHook = new("GlobalEventManager.OnHitEnemy",
+            () => On.RoR2.GlobalEventManager.OnHitEnemy += HookOnHitEnemy,
+            () => On.RoR2.GlobalEventManager.OnHitEnemy -= HookOnHitEnemy);
+
+        private static readonly HookRegistration statsModHook = new("RecalculateStatsAPI.GetStatCoefficients",
+            () => RecalculateStatsAPI.GetStatCoefficients += HookStatsMod,
+            () => RecalculateStatsAPI.GetStatCoefficients -= HookStatsMod);
+
+        private static readonly HookRegistration onDamageDealtHook = new("GlobalEventManager.onServerDamageDealt",
+            () => GlobalEventManager.onServerDamageDealt += HookOnDamageDealt,
+            () => GlobalEventManager.onServerDamageDealt -= HookOnDamageDealt);
+
+        private static readonly HookRegistration onCharacterDeathHook = new("GlobalEventManager.onCharacterDeathGlobal",
+            () => GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath,
+            () => GlobalEventManager.onCharacterDeathGlobal -= HookOnCharacterDeath);
+
+        private static readonly HookRegistration prePopulateSceneHook = new("SceneDirector.onPrePopulateSceneServer",
+            () => SceneDirector.onPrePopulateSceneServer += HookPrePopulateScene,
+            () => SceneDirector.onPrePopulateSceneServer -= HookPrePopulateScene);
+
+        private static readonly HookRegistration[] hooks =
+        [
+            holdoutZoneControllerUpdateHook,
+            holdoutZoneControllerStartHook,
+            characterBodyAwakeHook,
+            characterBodyStartHook,
+            addBuffIndexHook,
+            addTimedBuffDefHook,
+            addTimedBuffDefMaxStacksHook,
+            extendTimedBuffsHook,
+            setTimedBuffDurationHook,
+            serverGiveItemPermanentHook,
+            serverGiveItemTemporaryHook,
+            serverRemoveItemHook,
+            inventoryChangedHook,
+            itemAddedHook,
+            inflictDamageOverTimeHook,
+            inflictDamageOverTimeRefHook,
+            healthComponentAwakeHook,
+            healHook,
+            takeDamageProcessHook,
+            recalculateStatsHook,
+            updateVisualEffectsHook,
+            characterBodyFixedUpdateHook,
+            characterBodyRollCritHook,
+            interactionBeginHook,
+            purchaseInteractionBeginHook,
+            purchaseCanBeAffordedHook,
+            processJumpHook,
+            genericCharacterFixedUpdateHook,
+            sceneExitControllerSetStateHook,
+            onHitEnemyHook,
+            statsModHook,
+            onDamageDealtHook,
+            onCharacterDeathHook,
+            prePopulateSceneHook,
+        ];
+
+        private static bool CanRunHook(HookRegistration hook) =>
+            enabled && Faithful.InitializationSucceeded && hook.IsActive;
+
         public static void Enable()
         {
-            // Check if already enabled
             if (enabled) return;
-
-            // Update enabled
             enabled = true;
 
-            // Inject hooks
-            On.RoR2.HoldoutZoneController.Update += HookHoldoutZoneControllerUpdate;
-            On.RoR2.HoldoutZoneController.Start += HookHoldoutZoneControllerStart;
-            On.RoR2.CharacterBody.Awake += HookCharacterBodyAwake;
-            On.RoR2.CharacterBody.Start += HookCharacterBodyStart;
-            On.RoR2.CharacterBody.AddBuff_BuffIndex += HookAddBuffIndex;
-            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += HookAddTimedBuffDef;
-            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float_int += HookAddTimedBuffDefMaxStacks;
-            On.RoR2.CharacterBody.ExtendTimedBuffIfPresent_BuffDef_float_float += HookExtendTimedBuffs;
-            On.RoR2.CharacterBody.SetTimedBuffDurationIfPresent += HookSetTimedBuffDuration;
-            On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int += HookServerGiveItemPermanent;
-            On.RoR2.Inventory.GiveItemTemp += HookServerGiveItemTemporary;
-            On.RoR2.Inventory.RemoveItemPermanent_ItemIndex_int += HookServerRemoveItem;
-            On.RoR2.Inventory.HandleInventoryChanged += HookInventoryChanged;
-            On.RoR2.Inventory.RpcItemAdded += HookItemAdded;
-            On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 += HookInflictDamageOverTime;
-            On.RoR2.DotController.InflictDot_refInflictDotInfo += HookInflictDamageOverTimeRef;
-            On.RoR2.HealthComponent.Awake += HookHealthComponentAwake;
-            On.RoR2.HealthComponent.Heal += HookHeal;
-            On.RoR2.HealthComponent.TakeDamageProcess += HookTakeDamageProcess;
-            On.RoR2.CharacterBody.RecalculateStats += HookRecalculateStats;
-            On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects += HookUpdateVisualEffects;
-            On.RoR2.CharacterBody.FixedUpdate += HookCharacterBodyFixedUpdate;
-            On.RoR2.CharacterBody.RollCrit += HookCharacterBodyRollCrit;
-            GlobalEventManager.OnInteractionsGlobal += HookInteractionBegin;
-            On.RoR2.PurchaseInteraction.OnInteractionBegin += HookPurchaseInteractionBegin;
-            On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor += HookPurchaseCanBeAfforded;
-            On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump;
-            On.EntityStates.GenericCharacterMain.FixedUpdate += HookGenericCharacterFixedUpdate;
-            On.RoR2.SceneExitController.SetState += HookSceneExitControllerSetState;
-            On.RoR2.GlobalEventManager.OnHitEnemy += HookOnHitEnemy;
-            RecalculateStatsAPI.GetStatCoefficients += HookStatsMod;
-            GlobalEventManager.onServerDamageDealt += HookOnDamageDealt;
-            GlobalEventManager.onCharacterDeathGlobal += HookOnCharacterDeath;
-            SceneDirector.onPrePopulateSceneServer += HookPrePopulateScene;
+            foreach (HookRegistration hook in hooks)
+            {
+                hook.TryEnable();
+            }
         }
 
         public static void Disable()
         {
-            // Check if already disabled
-            if (!enabled) return;
-
-            // Update enabled
             enabled = false;
 
-            // Inject hooks
-            On.RoR2.HoldoutZoneController.Update -= HookHoldoutZoneControllerUpdate;
-            On.RoR2.HoldoutZoneController.Start -= HookHoldoutZoneControllerStart;
-            On.RoR2.CharacterBody.Awake -= HookCharacterBodyAwake;
-            On.RoR2.CharacterBody.Start -= HookCharacterBodyStart;
-            On.RoR2.CharacterBody.AddBuff_BuffIndex -= HookAddBuffIndex;
-            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float -= HookAddTimedBuffDef;
-            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float_int -= HookAddTimedBuffDefMaxStacks;
-            On.RoR2.CharacterBody.ExtendTimedBuffIfPresent_BuffDef_float_float -= HookExtendTimedBuffs;
-            On.RoR2.CharacterBody.SetTimedBuffDurationIfPresent -= HookSetTimedBuffDuration;
-            On.RoR2.Inventory.GiveItemPermanent_ItemIndex_int -= HookServerGiveItemPermanent;
-            On.RoR2.Inventory.GiveItemTemp -= HookServerGiveItemTemporary;
-            On.RoR2.Inventory.RemoveItemPermanent_ItemIndex_int -= HookServerRemoveItem;
-            On.RoR2.Inventory.HandleInventoryChanged -= HookInventoryChanged;
-            On.RoR2.Inventory.RpcItemAdded -= HookItemAdded;
-            On.RoR2.DotController.InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 -= HookInflictDamageOverTime;
-            On.RoR2.DotController.InflictDot_refInflictDotInfo -= HookInflictDamageOverTimeRef;
-            On.RoR2.HealthComponent.Awake -= HookHealthComponentAwake;
-            On.RoR2.HealthComponent.Heal -= HookHeal;
-            On.RoR2.HealthComponent.TakeDamageProcess -= HookTakeDamageProcess;
-            On.RoR2.CharacterBody.RecalculateStats -= HookRecalculateStats;
-            On.RoR2.CharacterBody.UpdateAllTemporaryVisualEffects -= HookUpdateVisualEffects;
-            On.RoR2.CharacterBody.FixedUpdate -= HookCharacterBodyFixedUpdate;
-            GlobalEventManager.OnInteractionsGlobal -= HookInteractionBegin;
-            On.RoR2.PurchaseInteraction.OnInteractionBegin -= HookPurchaseInteractionBegin;
-            On.RoR2.PurchaseInteraction.CanBeAffordedByInteractor -= HookPurchaseCanBeAfforded;
-            On.EntityStates.GenericCharacterMain.ProcessJump -= HookProcessJump;
-            On.EntityStates.GenericCharacterMain.FixedUpdate -= HookGenericCharacterFixedUpdate;
-            On.RoR2.GlobalEventManager.OnHitEnemy -= HookOnHitEnemy;
-            RecalculateStatsAPI.GetStatCoefficients -= HookStatsMod;
-            GlobalEventManager.onServerDamageDealt -= HookOnDamageDealt;
-            GlobalEventManager.onCharacterDeathGlobal -= HookOnCharacterDeath;
-            SceneDirector.onPrePopulateSceneServer -= HookPrePopulateScene;
+            foreach (HookRegistration hook in hooks)
+            {
+                hook.TryDisable();
+            }
         }
 
         private static void CreatePrefabs()
@@ -265,6 +375,8 @@ namespace Faithful
 
         public static void Update()
         {
+            if (!enabled || !Faithful.InitializationSucceeded) return;
+
             // Cycle through update callbacks
             foreach (Callback callback in updateCallbacks)
             {
@@ -286,6 +398,8 @@ namespace Faithful
 
         public static void FixedUpdate()
         {
+            if (!enabled || !Faithful.InitializationSucceeded) return;
+
             // Cycle through fixed update callbacks
             foreach (Callback callback in fixedUpdateCallbacks)
             {
@@ -817,6 +931,8 @@ namespace Faithful
         // Do stat modifications
         private static void HookStatsMod(CharacterBody _body, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
+            if (!CanRunHook(statsModHook)) return;
+
             // Cycle through item stats mod callbacks
             foreach (ItemStatsMod itemStatsMod in itemStatsMods)
             {
@@ -834,6 +950,12 @@ namespace Faithful
 
         private static void HookHoldoutZoneControllerUpdate(On.RoR2.HoldoutZoneController.orig_Update orig, HoldoutZoneController self)
         {
+            if (!CanRunHook(holdoutZoneControllerUpdateHook))
+            {
+                orig(self);
+                return;
+            }
+
             // Get Character Bodies in holdout zone
             CharacterBody[] characterBodies = Utils.GetCharacterBodiesInHoldoutZone(self);
 
@@ -852,6 +974,12 @@ namespace Faithful
 
         private static void HookHoldoutZoneControllerStart(On.RoR2.HoldoutZoneController.orig_Start orig, HoldoutZoneController self)
         {
+            if (!CanRunHook(holdoutZoneControllerStartHook))
+            {
+                orig(self);
+                return;
+            }
+
             // Add Faithful Holdout Zone mono behaviours
             FaithfulHoldoutZoneBehaviour behaviour = self.gameObject.AddComponent<FaithfulHoldoutZoneBehaviour>();
             behaviour.Init(onHoldoutZoneCalcRadiusCallbacks);
@@ -869,6 +997,7 @@ namespace Faithful
         private static void HookCharacterBodyAwake(On.RoR2.CharacterBody.orig_Awake orig, CharacterBody self)
         {
             orig(self); // Run normal processes
+            if (!CanRunHook(characterBodyAwakeHook)) return;
 
             // Cycle through On Character Body Awake callbacks
             foreach (CharacterBodyCallback callback in onCharacterBodyAwakeCallbacks)
@@ -880,6 +1009,12 @@ namespace Faithful
 
         private static void HookCharacterBodyStart(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
+            if (!CanRunHook(characterBodyStartHook))
+            {
+                orig(self);
+                return;
+            }
+
             //Log.Message($"Character body start for character '{self.name}' with netID {self.GetComponent<NetworkIdentity>().netId}");
 
             // Check if server and valid character
@@ -913,6 +1048,12 @@ namespace Faithful
 
         private static void HookAddBuffIndex(On.RoR2.CharacterBody.orig_AddBuff_BuffIndex orig, CharacterBody self, BuffIndex buffType)
         {
+            if (!CanRunHook(addBuffIndexHook))
+            {
+                orig(self, buffType);
+                return;
+            }
+
             // Cycle through On Add Buff callbacks
             foreach (OnAddBuffCallback callback in onAddBuffCallbacks)
             {
@@ -925,6 +1066,12 @@ namespace Faithful
 
         private static void HookAddTimedBuffDef(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffDef_float orig, CharacterBody self, BuffDef buffDef, float duration)
         {
+            if (!CanRunHook(addTimedBuffDefHook))
+            {
+                orig(self, buffDef, duration);
+                return;
+            }
+
             // Cycle through On Add Timed Buff callbacks
             foreach (OnAddTimedBuffCallback callback in onAddTimedBuffCallbacks)
             {
@@ -937,6 +1084,12 @@ namespace Faithful
 
         private static void HookAddTimedBuffDefMaxStacks(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffDef_float_int orig, CharacterBody self, BuffDef buffDef, float duration, int maxStacks)
         {
+            if (!CanRunHook(addTimedBuffDefMaxStacksHook))
+            {
+                orig(self, buffDef, duration, maxStacks);
+                return;
+            }
+
             // Cycle through On Add Timed Buff Max Stacks callbacks
             foreach (OnAddTimedBuffMaxStacksCallback callback in onAddTimedBuffMaxStacksCallbacks)
             {
@@ -949,6 +1102,12 @@ namespace Faithful
 
         private static void HookExtendTimedBuffs(On.RoR2.CharacterBody.orig_ExtendTimedBuffIfPresent_BuffDef_float_float orig, CharacterBody self, BuffDef buffDef, float duration, float max)
         {
+            if (!CanRunHook(extendTimedBuffsHook))
+            {
+                orig(self, buffDef, duration, max);
+                return;
+            }
+
             // Cycle through On Extend Timed Buffs callbacks
             foreach (OnExtendTimedBuffsCallback callback in onExtendTimedBuffsCallbacks)
             {
@@ -961,6 +1120,12 @@ namespace Faithful
 
         private static void HookSetTimedBuffDuration(On.RoR2.CharacterBody.orig_SetTimedBuffDurationIfPresent orig, CharacterBody self, BuffDef buffDef, float duration, bool allStacks)
         {
+            if (!CanRunHook(setTimedBuffDurationHook))
+            {
+                orig(self, buffDef, duration, allStacks);
+                return;
+            }
+
             // Cycle through On Set Timed Buff Duration callbacks
             foreach (OnSetTimedBuffDurationCallback callback in onSetTimedBuffDurationCallbacks)
             {
@@ -974,6 +1139,7 @@ namespace Faithful
         private static void HookInflictDamageOverTime(On.RoR2.DotController.orig_InflictDot_GameObject_GameObject_DotIndex_float_float_Nullable1 orig, GameObject victimObject, GameObject attackerObject, DotController.DotIndex dotIndex, float duration, float damageMultiplier, uint? maxStacksFromAttacker)
         {
             orig(victimObject, attackerObject, dotIndex, duration, damageMultiplier, maxStacksFromAttacker); // Run normal processes
+            if (!CanRunHook(inflictDamageOverTimeHook)) return;
 
             // Cycle through On Inflict Damage Over Time callbacks
             foreach (OnInflictDamageOverTimeCallback callback in onInflictDamageOverTimeCallbacks)
@@ -985,6 +1151,12 @@ namespace Faithful
 
         private static void HookInflictDamageOverTimeRef(On.RoR2.DotController.orig_InflictDot_refInflictDotInfo orig, ref InflictDotInfo inflictDotInfo)
         {
+            if (!CanRunHook(inflictDamageOverTimeRefHook))
+            {
+                orig(ref inflictDotInfo);
+                return;
+            }
+
             // Cycle through On Inflict Damage Over Time Ref callbacks
             foreach (OnInflictDamageOverTimeRefCallback callback in onInflictDamageOverTimeRefCallbacks)
             {
@@ -997,6 +1169,12 @@ namespace Faithful
 
         private static void HookServerGiveItemPermanent(On.RoR2.Inventory.orig_GiveItemPermanent_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int countToAdd)
         {
+            if (!CanRunHook(serverGiveItemPermanentHook))
+            {
+                orig(self, itemIndex, countToAdd);
+                return;
+            }
+
             // Cycle through On Give Item callbacks
             foreach (OnTransferItemCallback callback in onGiveItemPermanentCallbacks)
             {
@@ -1016,6 +1194,12 @@ namespace Faithful
 
         private static void HookServerGiveItemTemporary(On.RoR2.Inventory.orig_GiveItemTemp orig, Inventory self, ItemIndex itemIndex, float countToAdd)
         {
+            if (!CanRunHook(serverGiveItemTemporaryHook))
+            {
+                orig(self, itemIndex, countToAdd);
+                return;
+            }
+
             // Cycle through On Give Item callbacks
             foreach (OnTransferItemFloatCallback callback in onGiveItemTemporaryCallbacks)
             {
@@ -1035,6 +1219,12 @@ namespace Faithful
 
         private static void HookServerRemoveItem(On.RoR2.Inventory.orig_RemoveItemPermanent_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
         {
+            if (!CanRunHook(serverRemoveItemHook))
+            {
+                orig(self, itemIndex, count);
+                return;
+            }
+
             // Cycle through On Remove Item callbacks
             foreach (OnTransferItemCallback callback in onRemoveItemCallbacks)
             {
@@ -1048,6 +1238,7 @@ namespace Faithful
         private static void HookInventoryChanged(On.RoR2.Inventory.orig_HandleInventoryChanged orig, Inventory self)
         {
             orig(self); // Run normal processes
+            if (!CanRunHook(inventoryChangedHook)) return;
 
             // Cycle through On Inventory Changed callbacks
             foreach (OnInventoryCallback callback in onInventoryChangedCallbacks)
@@ -1060,6 +1251,7 @@ namespace Faithful
         private static void HookItemAdded(On.RoR2.Inventory.orig_RpcItemAdded orig, Inventory self, ItemIndex itemIndex)
         {
             orig(self, itemIndex); // Run normal processes
+            if (!CanRunHook(itemAddedHook)) return;
 
             // Get item def
             ItemDef itemDef = ItemCatalog.GetItemDef(itemIndex);
@@ -1086,6 +1278,12 @@ namespace Faithful
 
         private static void HookHealthComponentAwake(On.RoR2.HealthComponent.orig_Awake orig, HealthComponent self)
         {
+            if (!CanRunHook(healthComponentAwakeHook))
+            {
+                orig(self);
+                return;
+            }
+
             // Add custom health component behaviour
             FaithfulHealthComponentBehaviour component = self.gameObject.AddComponent<FaithfulHealthComponentBehaviour>();
 
@@ -1094,6 +1292,8 @@ namespace Faithful
 
         private static float HookHeal(On.RoR2.HealthComponent.orig_Heal orig, HealthComponent self, float amount, ProcChainMask procChainMask, bool nonRegen)
         {
+            if (!CanRunHook(healHook)) return orig(self, amount, procChainMask, nonRegen);
+
             // Cycle through On Heal callbacks
             foreach (OnHealCallback callback in onHealCallbacks)
             {
@@ -1106,6 +1306,12 @@ namespace Faithful
 
         private static void HookTakeDamageProcess(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, HealthComponent self, DamageInfo damageInfo)
         {
+            if (!CanRunHook(takeDamageProcessHook))
+            {
+                orig(self, damageInfo);
+                return;
+            }
+
             // Cycle through On Take Damage Process callbacks
             foreach (OnTakeDamageProcessCallback callback in onTakeDamageProcessCallbacks)
             {
@@ -1126,6 +1332,7 @@ namespace Faithful
         private static void HookRecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
         {
             orig(self); // Run normal processes
+            if (!CanRunHook(recalculateStatsHook)) return;
 
             // Cycle through On Recalculate Stats callbacks
             foreach (CharacterBodyCallback callback in onRecalculateStatsCallbacks)
@@ -1141,6 +1348,7 @@ namespace Faithful
         private static void HookUpdateVisualEffects(On.RoR2.CharacterBody.orig_UpdateAllTemporaryVisualEffects orig, CharacterBody self)
         {
             orig(self); // Run normal processes
+            if (!CanRunHook(updateVisualEffectsHook)) return;
 
             // Cycle through On Update Visual Effects callbacks
             foreach (CharacterBodyCallback callback in onUpdateVisualEffectsCallbacks)
@@ -1153,6 +1361,7 @@ namespace Faithful
         private static void HookCharacterBodyFixedUpdate(On.RoR2.CharacterBody.orig_FixedUpdate orig, CharacterBody self)
         {
             orig(self); // Run normal processes
+            if (!CanRunHook(characterBodyFixedUpdateHook)) return;
 
             // Cycle through callbacks
             foreach (CharacterBodyCallback callback in onCharacterBodyFixedUpdateCallbacks)
@@ -1164,6 +1373,8 @@ namespace Faithful
 
         private static bool HookCharacterBodyRollCrit(On.RoR2.CharacterBody.orig_RollCrit orig, CharacterBody self)
         {
+            if (!CanRunHook(characterBodyRollCritHook)) return orig(self);
+
             // Check for override
             if (critOverrideCounts.ContainsKey(self))
             {
@@ -1187,6 +1398,8 @@ namespace Faithful
 
         private static void HookInteractionBegin(Interactor _interactor, IInteractable _interactable, GameObject _interactableObject)
         {
+            if (!CanRunHook(interactionBeginHook)) return;
+
             // Validate input
             if (_interactor == null || _interactable == null || !_interactableObject) return;
 
@@ -1235,6 +1448,12 @@ namespace Faithful
 
         private static void HookPurchaseInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)
         {
+            if (!CanRunHook(purchaseInteractionBeginHook))
+            {
+                orig(self, activator);
+                return;
+            }
+
             // Cycle through OnPurchaseInteractionBegin callbacks
             foreach (OnPurchaseInteractionBeginCallback callback in onPurchaseInteractionBeginCallbacks)
             {
@@ -1252,6 +1471,8 @@ namespace Faithful
 
         private static bool HookPurchaseCanBeAfforded(On.RoR2.PurchaseInteraction.orig_CanBeAffordedByInteractor orig, PurchaseInteraction self, Interactor activator)
         {
+            if (!CanRunHook(purchaseCanBeAffordedHook)) return orig(self, activator);
+
             // Cycle through OnPurchaseCanBeAfforded callbacks
             foreach (OnPurchaseCanBeAffordedCallback callback in onPurchaseCanBeAffordedCallbacks)
             {
@@ -1274,6 +1495,7 @@ namespace Faithful
         private static void HookProcessJump(On.EntityStates.GenericCharacterMain.orig_ProcessJump orig, EntityStates.GenericCharacterMain self)
         {
             orig(self); // Run normal processes first
+            if (!CanRunHook(processJumpHook)) return;
 
             // Cycle through On Process Jump callbacks
             foreach (OnProcessJumpCallback callback in onProcessJumpCallbacks)
@@ -1286,6 +1508,7 @@ namespace Faithful
         private static void HookGenericCharacterFixedUpdate(On.EntityStates.GenericCharacterMain.orig_FixedUpdate orig, EntityStates.GenericCharacterMain self)
         {
             orig(self); // Run normal processes first
+            if (!CanRunHook(genericCharacterFixedUpdateHook)) return;
 
             // Cycle through Generic Character Fixed Update callbacks
             foreach (GenericCharacterCallback callback in genericCharacterFixedUpdateCallbacks)
@@ -1297,6 +1520,12 @@ namespace Faithful
 
         private static void HookSceneExitControllerSetState(On.RoR2.SceneExitController.orig_SetState orig, SceneExitController self, SceneExitController.ExitState newState)
         {
+            if (!CanRunHook(sceneExitControllerSetStateHook))
+            {
+                orig(self, newState);
+                return;
+            }
+
             // Check if state is finished (ready to change scenes)
             if (newState == SceneExitController.ExitState.TeleportOut)
             {
@@ -1314,6 +1543,7 @@ namespace Faithful
         private static void HookOnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
             orig(self, damageInfo, victim); // Run normal processes
+            if (!CanRunHook(onHitEnemyHook)) return;
 
             // Cycle through On Hit Enemy Late callbacks
             foreach (OnHitEnemyCallback callback in onHitEnemyLateCallbacks)
@@ -1325,6 +1555,8 @@ namespace Faithful
 
         private static void HookOnDamageDealt(DamageReport _report)
         {
+            if (!CanRunHook(onDamageDealtHook)) return;
+
             // Cycle through On Damage Dealt callbacks
             foreach (DamageReportCallback callback in onDamageDealtCallbacks)
             {
@@ -1335,6 +1567,8 @@ namespace Faithful
 
         private static void HookOnCharacterDeath(DamageReport _report)
         {
+            if (!CanRunHook(onCharacterDeathHook)) return;
+
             // Cycle through On Character Death callbacks
             foreach (DamageReportCallback callback in onCharacterDeathCallbacks)
             {
@@ -1345,6 +1579,8 @@ namespace Faithful
 
         private static void HookPrePopulateScene(SceneDirector _director)
         {
+            if (!CanRunHook(prePopulateSceneHook)) return;
+
             // Cycle through callbacks
             foreach (SceneDirectorCallback callback in onPrePopulateSceneCallbacks)
             {
