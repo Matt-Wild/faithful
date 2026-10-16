@@ -33,7 +33,7 @@
 	"FAITHFUL_WIP_ITEM_LORE": "WIP Item Lore",
   
     "FAITHFUL_COPPER_GEAR_NAME": "Copper Gear",
-	"FAITHFUL_COPPER_GEAR_PICKUP": "Increase attack speed while within the Teleporter zone.",
+	"FAITHFUL_COPPER_GEAR_PICKUP": "Increase attack speed while within the Teleporter zone or 'Holdout Zones' such as the Void Fields.",
 	"FAITHFUL_COPPER_GEAR_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> Killing an enemy while within the Teleporter zone gives you a burst of attack speed.",
 	"FAITHFUL_COPPER_GEAR_DESC": "Increase <style=cIsDamage>attack speed</style> by <style=cIsDamage>[ATTACK_SPEED]%</style> <style=cStack>(+[ATTACK_SPEED_STACKING]% per stack)</style> while inside the Teleporter zone.",
 	"FAITHFUL_COPPER_GEAR_DESC_QUALITY": "[PREFIX]\nEach enemy killed while inside the Teleporter zone increases <style=cIsDamage>attack speed</style> by <sprite name=\"Quality\"> <style=cIsDamage>[ATTACK_SPEED]%</style> for <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds.",
@@ -50,7 +50,7 @@
 	"FAITHFUL_TARGETING_MATRIX_BUFF": "Targeting Matrix",
 	
 	"FAITHFUL_BRASS_SCREWS_NAME": "Brass Screws",
-	"FAITHFUL_BRASS_SCREWS_PICKUP": "Increase damage while within the Teleporter zone.",
+	"FAITHFUL_BRASS_SCREWS_PICKUP": "Increase damage while within the Teleporter zone or 'Holdout Zones' such as the Void Fields.",
 	"FAITHFUL_BRASS_SCREWS_PICKUP_QUALITY": "[PREFIX] <sprite name=\"Quality\"> Killing an enemy while within the Teleporter zone gives you a temporary damage boost.",
 	"FAITHFUL_BRASS_SCREWS_DESC": "Increase damage by <style=cIsDamage>[DAMAGE]%</style> <style=cStack>(+[DAMAGE_STACKING]% per stack)</style> while inside the Teleporter zone.",
 	"FAITHFUL_BRASS_SCREWS_DESC_QUALITY": "[PREFIX] Each enemy killed while inside the Teleporter zone increases damage by <sprite name=\"Quality\"> <style=cIsDamage>[DAMAGE]%</style> for <sprite name=\"Quality\"> <style=cIsDamage>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds.",
@@ -99,7 +99,7 @@
 	"FAITHFUL_SECOND_HAND_BOOST_BUFF": "Second Hand Boost",
 	
 	"FAITHFUL_SPACIOUS_UMBRELLA_NAME": "Spacious Umbrella",
-	"FAITHFUL_SPACIOUS_UMBRELLA_PICKUP": "Increase the size of the Teleporter zone.",
+	"FAITHFUL_SPACIOUS_UMBRELLA_PICKUP": "Increase the size of the Teleporter zone and 'Holdout Zones' such as the Void Fields.",
 	"FAITHFUL_SPACIOUS_UMBRELLA_PICKUP_QUALITY": "[PREFIX]\n<sprite name=\"Quality\"> Staying inside the Teleporter Zone temporarily increases its size over time.",
 	"FAITHFUL_SPACIOUS_UMBRELLA_DESC": "Increase the size of the Teleporter zone by <style=cIsUtility>[SIZE]%</style> <style=cStack>(+[SIZE_STACKING]% per stack)</style>.",
 	"FAITHFUL_SPACIOUS_UMBRELLA_DESC_QUALITY": "[PREFIX]\nWhile inside the Teleporter zone, it temporarily increases in size by <sprite name=\"Quality\"> <style=cIsUtility>[SIZE]m</style> <style=cStack>(+[SIZE_STACKING]m per stack)</style> every <style=cIsUtility>[INTERVAL]</style> seconds up to <style=cIsUtility>[MAX_INSTANCES]</style> times.",
