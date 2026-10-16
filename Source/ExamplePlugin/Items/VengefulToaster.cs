@@ -50,7 +50,17 @@ namespace Faithful
             CreateDisplaySettings("vengefultoasterdisplaymesh");
 
             // Create Vengeful Toaster item
-            MainItem = Items.AddItem(token, "Vengeful Toaster", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist], "texvengefultoastericon", "vengefultoastermesh", ItemTier.Tier2, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Vengeful Toaster",
+                tags: [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist],
+                iconName: "texvengefultoastericon",
+                modelName: "vengefultoastermesh")
+            {
+                Tier = ItemTier.Tier2,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
 
             // Create item settings
             CreateSettings();

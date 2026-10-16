@@ -12,16 +12,21 @@ namespace Faithful
         public static void Init()
         {
             // Create WIP items to test models etc
-            CreateItem(_name: "Hexagonal Cluster",
-                _pickup: "Killing an enemy releases a swarm of bees.",
-                _description: "Killing an enemy releases a <style=cIsDamage>swarm</style> of <style=cIsDamage>6</style> bees that attack surrounding enemies. Each bee deals <style=cIsDamage>25%</style> base damage up to <style=cIsDamage>3</style> <style=cStack>(+3 per stack)</style> times.",
-                _lore: "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u0022You signed off on live storage for that thing?\u0022\n\n\u0022I signed off on a sealed specimen cluster. Emphasis on sealed.\u0022\n\n\u0022Then why is the cargo bay humming?\u0022\n\n\u0022Humming?\u0022\n\n\u0022Yes. Humming. Loudly. And, unless my eyes are failing me, leaking.\u0022\n\n\u0022That\u2019s not possible. It only responds to kinetic agitation.\u0022\n\n\u0022...Kinetic agitation such as firing it repeatedly into a crowd?\u0022\n\n\u0022In hindsight, perhaps the briefing could have been more specific.\u0022\n\n\u0022I don\u2019t need hindsight, doctor, I need those things out of the ventilation.\u0022\n\n\u0022Well don\u2019t shout. They become excited by raised voices.\u0022\n\n\u0022They become excited by everything! Gunfire, footsteps, light, shadows, me thinking too hard in their general direction—\u0022\n\n\u0022Remarkable, aren\u2019t they?\u0022\n\n\u0022There are thousands of them.\u0022\n\n\u0022Yes. More than we anticipated.\u0022\n\n\u0022You told me it would release a defensive swarm.\u0022\n\n\u0022I did.\u0022\n\n\u0022This is not a swarm. This is a medical emergency with wings.\u0022\n\n\u0022That seems a touch dramatic.\u0022\n\n\u0022They have filled my locker, doctor.\u0022\n\n\u0022Then I would advise against opening it.\u0022",
-                _tier: ItemTier.Tier1,
-                _tags: [ItemTag.Damage, ItemTag.OnKillEffect],
-                _iconDir: "texhexclustericon",
-                _modelDir: "hexclustermesh",
-                _displayDir: "hexclusterdisplaymesh",
-                _displaySettingsCallback: _displaySettings =>
+            CreateItem(new WIPItemOptions(
+                name: "Hexagonal Cluster",
+                tags: [ItemTag.Damage, ItemTag.OnKillEffect],
+                iconName: "texhexclustericon",
+                modelName: "hexclustermesh")
+            {
+                Item =
+                {
+                    OverridePickup = "Killing an enemy releases a swarm of bees.",
+                    OverrideDescription = "Killing an enemy releases a <style=cIsDamage>swarm</style> of <style=cIsDamage>6</style> bees that attack surrounding enemies. Each bee deals <style=cIsDamage>25%</style> base damage up to <style=cIsDamage>3</style> <style=cStack>(+3 per stack)</style> times.",
+                    OverrideLore = "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM UES [Redacted] --//</style>\r\n\r\n\u0022You signed off on live storage for that thing?\u0022\n\n\u0022I signed off on a sealed specimen cluster. Emphasis on sealed.\u0022\n\n\u0022Then why is the cargo bay humming?\u0022\n\n\u0022Humming?\u0022\n\n\u0022Yes. Humming. Loudly. And, unless my eyes are failing me, leaking.\u0022\n\n\u0022That\u2019s not possible. It only responds to kinetic agitation.\u0022\n\n\u0022...Kinetic agitation such as firing it repeatedly into a crowd?\u0022\n\n\u0022In hindsight, perhaps the briefing could have been more specific.\u0022\n\n\u0022I don\u2019t need hindsight, doctor, I need those things out of the ventilation.\u0022\n\n\u0022Well don\u2019t shout. They become excited by raised voices.\u0022\n\n\u0022They become excited by everything! Gunfire, footsteps, light, shadows, me thinking too hard in their general direction—\u0022\n\n\u0022Remarkable, aren\u2019t they?\u0022\n\n\u0022There are thousands of them.\u0022\n\n\u0022Yes. More than we anticipated.\u0022\n\n\u0022You told me it would release a defensive swarm.\u0022\n\n\u0022I did.\u0022\n\n\u0022This is not a swarm. This is a medical emergency with wings.\u0022\n\n\u0022That seems a touch dramatic.\u0022\n\n\u0022They have filled my locker, doctor.\u0022\n\n\u0022Then I would advise against opening it.\u0022",
+                    Tier = ItemTier.Tier1
+                },
+                DisplayModelName = "hexclusterdisplaymesh",
+                DisplaySettingsCallback = _displaySettings =>
                 {
                     // Add character display settings
                     _displaySettings.AddCharacterDisplay("Commando", "ThighL", new Vector3(0.1125F, 0.1125F, 0.04F), new Vector3(270F, 257.5F, 0F), new Vector3(0.15F, 0.15F, 0.15F));
@@ -49,18 +54,24 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(-0.09F, 0.025F, 0F), new Vector3(0F, 180F, 270F), new Vector3(0.1125F, 0.1125F, 0.1125F));
                     _displaySettings.AddCharacterDisplay("Enforcer", "Pelvis", new Vector3(-0.176F, 0.058F, -0.1405F), new Vector3(300F, 122.5F, 287.5F), new Vector3(0.11F, 0.11F, 0.11F));
                     _displaySettings.AddCharacterDisplay("Acolyte", "Chest", new Vector3(0.1825F, -0.12F, -0.088F), new Vector3(292.5F, 117.5F, 185F), new Vector3(0.1F, 0.1F, 0.1F));
-                });
+                }
+            });
 
-            CreateItem(_name: "Reserve Battery",
-                _pickup: "Killing an enemy adds a temporary extra charge of a random skill.",
-                _description: "Killing an enemy adds <style=cIsUtility>+1 temporary</style> charge of either your <style=cIsUtility>Secondary</style>, <style=cIsUtility>Utility</style> or <style=cIsUtility>Special skill</style>, up to a maximum of <style=cIsUtility>+1</style> <style=cStack>(+1 per stack)</style> for each skill.",
-                _lore: "> PRIMARY POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>1</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>2</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>3</style>] POWER STATUS : <style=cMono>097%</style>\r\n\r\n> COMMAND : <style=cMono>RECHARGE RESERVE [3]</style>\r\n\r\n> DAILY REMINDER : <style=cMono>\u0022A prepper is a fool every day but doomsday.\u0022</style>",
-                _tier: ItemTier.Tier1,
-                _tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist],
-                _iconDir: "texreservebatteryicon",
-                _modelDir: "reservebatterymesh",
-                _displayDir: "reservebatterydisplaymesh",
-                _displaySettingsCallback: _displaySettings =>
+            CreateItem(new WIPItemOptions(
+                name: "Reserve Battery",
+                tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist],
+                iconName: "texreservebatteryicon",
+                modelName: "reservebatterymesh")
+            {
+                Item =
+                {
+                    OverridePickup = "Killing an enemy adds a temporary extra charge of a random skill.",
+                    OverrideDescription = "Killing an enemy adds <style=cIsUtility>+1 temporary</style> charge of either your <style=cIsUtility>Secondary</style>, <style=cIsUtility>Utility</style> or <style=cIsUtility>Special skill</style>, up to a maximum of <style=cIsUtility>+1</style> <style=cStack>(+1 per stack)</style> for each skill.",
+                    OverrideLore = "> PRIMARY POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>1</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>2</style>] POWER STATUS : <style=cMono>100%</style>\r\n> RESERVE [<style=cMono>3</style>] POWER STATUS : <style=cMono>097%</style>\r\n\r\n> COMMAND : <style=cMono>RECHARGE RESERVE [3]</style>\r\n\r\n> DAILY REMINDER : <style=cMono>\u0022A prepper is a fool every day but doomsday.\u0022</style>",
+                    Tier = ItemTier.Tier1
+                },
+                DisplayModelName = "reservebatterydisplaymesh",
+                DisplaySettingsCallback = _displaySettings =>
                 {
                     // Add character display settings
                     _displaySettings.AddCharacterDisplay("Commando", "GunL", new Vector3(-0.025F, 0.056F, 0F), new Vector3(0F, 0F, 315F), new Vector3(0.05F, 0.05F, 0.05F));
@@ -88,19 +99,25 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(0.29F, 0F, 0F), new Vector3(0F, 180F, 270F), new Vector3(0.08F, 0.08F, 0.08F));
                     _displaySettings.AddCharacterDisplay("Enforcer", "Weapon", new Vector3(0.206F, -0.16F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.135F, 0.145F, 0.175F));
                     _displaySettings.AddCharacterDisplay("Acolyte", "Pelvis", new Vector3(-0.186F, 0.054F, -0.066F), new Vector3(29F, 53.25F, 18.25F), new Vector3(0.1F, 0.1F, 0.1F));
-                });
+                }
+            });
 
-            CreateItem(_name: "Plasma Field Generator",
-                _pickup: "Gain a shield and reduce its recharge time.",
-                _description: "Gain a <style=cIsHealing>shield</style> equal to <style=cIsHealing>4%</style> <style=cStack>(+4% per stack)</style> of your maximum health and reduce its <style=cIsUtility>recharge time</style> by <style=cIsUtility>5%</style> <style=cStack>(+5% per stack)</style>. Recharges outside of danger.",
-                _lore: "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM CARGO BAY 4 OF UES [Redacted] --//</style>\r\n\r\n\u0022...The heck's up with all these defective shield devices? ...Hinon? I thought the stuff they made was alright.\u0022\r\n\r\n\u0022These things? I wouldn't try any on if I were you. Defective shield devices are no fun to mess with in the first place but these ones... best not even touch them without equipment just to be safe.\u0022\r\n\r\n\u0022Yeesh. How'd they manage to mess up all of these?\u0022\r\n\r\n\u0022If I recall correctly, they went straight to human testing immediately with this particular model since they were so confident and... uh... it couldn't have gone worse, I'd say.\u0022\r\n\r\n\u0022Right. You said you used to work there, didn't you? What happened?\u0022\r\n\r\n\u0022They put it on the first guy and BOOM! He's gone the second they turned the thing on. Then the device just fell to the floor and deactivated, apparently.\u0022\r\n\r\n\u0022Gone? Like, 'gone' gone or...?\u0022\r\n\r\n\u0022Just... poof. They thought they'd teleported him somehow. It took them an embarrassingly long time to figure that they'd simply vaporized the poor guy on the spot. Given not a trace of him was left.\u0022\r\n\r\n\u0022Holy [REDACTED]. How are they still in business?\u0022\r\n\r\n\u0022Oh, yeah, nobody ever got put away for the incident. Heck, nobody even got fired! They couldn't exactly maintain their image if word got out so they tried covering up the whole thing.\u0022\r\n\r\n\u0022...You're kidding. Sounds like you'd be better off working clean-up on the Contact Light than being there.\u0022\r\n\r\n\u0022You're telling me. I quit on the spot when the internal report reached my department.\u0022\r\n\r\n\u0022...Don't tell the captain I said that by the way.\u0022\r\n\r\n\u0022Trust me, buddy. My lips are sealed.\u0022",
-                _tier: ItemTier.VoidTier1,
-                _tags: [ItemTag.Utility, ItemTag.Technology],
-                _iconDir: "texplasmafieldgeneratoricon",
-                _modelDir: "plasmafieldgeneratormesh",
-                _displayDir: "plasmafieldgeneratordisplaymesh",
-                _corruptToken: "ITEM_PERSONALSHIELD_NAME",
-                _displaySettingsCallback: _displaySettings =>
+            CreateItem(new WIPItemOptions(
+                name: "Plasma Field Generator",
+                tags: [ItemTag.Utility, ItemTag.Technology],
+                iconName: "texplasmafieldgeneratoricon",
+                modelName: "plasmafieldgeneratormesh")
+            {
+                Item =
+                {
+                    OverridePickup = "Gain a shield and reduce its recharge time.",
+                    OverrideDescription = "Gain a <style=cIsHealing>shield</style> equal to <style=cIsHealing>4%</style> <style=cStack>(+4% per stack)</style> of your maximum health and reduce its <style=cIsUtility>recharge time</style> by <style=cIsUtility>5%</style> <style=cStack>(+5% per stack)</style>. Recharges outside of danger.",
+                    OverrideLore = "<style=cMono>\r//--AUTO-TRANSCRIPTION FROM CARGO BAY 4 OF UES [Redacted] --//</style>\r\n\r\n\u0022...The heck's up with all these defective shield devices? ...Hinon? I thought the stuff they made was alright.\u0022\r\n\r\n\u0022These things? I wouldn't try any on if I were you. Defective shield devices are no fun to mess with in the first place but these ones... best not even touch them without equipment just to be safe.\u0022\r\n\r\n\u0022Yeesh. How'd they manage to mess up all of these?\u0022\r\n\r\n\u0022If I recall correctly, they went straight to human testing immediately with this particular model since they were so confident and... uh... it couldn't have gone worse, I'd say.\u0022\r\n\r\n\u0022Right. You said you used to work there, didn't you? What happened?\u0022\r\n\r\n\u0022They put it on the first guy and BOOM! He's gone the second they turned the thing on. Then the device just fell to the floor and deactivated, apparently.\u0022\r\n\r\n\u0022Gone? Like, 'gone' gone or...?\u0022\r\n\r\n\u0022Just... poof. They thought they'd teleported him somehow. It took them an embarrassingly long time to figure that they'd simply vaporized the poor guy on the spot. Given not a trace of him was left.\u0022\r\n\r\n\u0022Holy [REDACTED]. How are they still in business?\u0022\r\n\r\n\u0022Oh, yeah, nobody ever got put away for the incident. Heck, nobody even got fired! They couldn't exactly maintain their image if word got out so they tried covering up the whole thing.\u0022\r\n\r\n\u0022...You're kidding. Sounds like you'd be better off working clean-up on the Contact Light than being there.\u0022\r\n\r\n\u0022You're telling me. I quit on the spot when the internal report reached my department.\u0022\r\n\r\n\u0022...Don't tell the captain I said that by the way.\u0022\r\n\r\n\u0022Trust me, buddy. My lips are sealed.\u0022",
+                    Tier = ItemTier.VoidTier1,
+                    CorruptToken = "ITEM_PERSONALSHIELD_NAME"
+                },
+                DisplayModelName = "plasmafieldgeneratordisplaymesh",
+                DisplaySettingsCallback = _displaySettings =>
                 {
                     // Add character display settings
                     _displaySettings.AddCharacterDisplay("Commando", "Chest", new Vector3(0F, 0.315F, 0.184F), new Vector3(326.75F, 0F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
@@ -127,19 +144,25 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Chest", new Vector3(0F, 0.115F, 0.145F), new Vector3(3.75F, 0F, 0F), new Vector3(0.075F, 0.075F, 0.075F));
                     _displaySettings.AddCharacterDisplay("Enforcer", "Stomach", new Vector3(0F, -0.0024F, 0.1925F), new Vector3(0F, 0F, 0F), new Vector3(0.07F, 0.07F, 0.07F));
                     _displaySettings.AddCharacterDisplay("Acolyte", "Chest", new Vector3(0F, 0.138F, 0.146F), new Vector3(329.5F, 0F, 0F), new Vector3(0.04F, 0.04F, 0.04F));
-                });
+                }
+            });
 
-            CreateItem(_name: "Toxin Canister",
-                _pickup: "Chance on hit to create a damaging cloud that follows enemies.",
-                _description: "<style=cIsDamage>5%</style> <style=cStack>(+5% per stack)</style> chance on hit to attach a <style=cIsDamage>gas canister</style> that creates a damaging cloud around itself, dealing <style=cIsDamage>250%</style> TOTAL damage over <style=cIsDamage>5</style> seconds.",
-                _lore: "<style=cMono>\rAudio transcription complete from on-site security camera.\r\nDate: [Redacted].\r\nTime: [Redacted].\r\nLocation: Main building breakroom.\r\n\r\nPrinting...</style>\r\n\r\n\u0022Oi, you! What the hell are you doing just sitting there?! There's been a gas leak!\u0022\r\n\r\n\u0022...I can't smell anything. There's no alarm going off so it's probably fine.\u0022\r\n\r\n\u0022Have you got the survival instincts of a brick?! We don't have alarms for everything! We need to get out of here!\u0022\r\n\r\n\u0022Quiet down. I'm getting kinda sleepy... I think I'll go take a nap.\u0022",
-                _tier: ItemTier.VoidTier1,
-                _tags: [ItemTag.Damage],
-                _iconDir: "textoxincanistericon",
-                _modelDir: "toxincanistermesh",
-                _displayDir: "toxincanisterdisplaymesh",
-                _corruptToken: "ITEM_STICKYBOMB_NAME",
-                _displaySettingsCallback: _displaySettings =>
+            CreateItem(new WIPItemOptions(
+                name: "Toxin Canister",
+                tags: [ItemTag.Damage],
+                iconName: "textoxincanistericon",
+                modelName: "toxincanistermesh")
+            {
+                Item =
+                {
+                    OverridePickup = "Chance on hit to create a damaging cloud that follows enemies.",
+                    OverrideDescription = "<style=cIsDamage>5%</style> <style=cStack>(+5% per stack)</style> chance on hit to attach a <style=cIsDamage>gas canister</style> that creates a damaging cloud around itself, dealing <style=cIsDamage>250%</style> TOTAL damage over <style=cIsDamage>5</style> seconds.",
+                    OverrideLore = "<style=cMono>\rAudio transcription complete from on-site security camera.\r\nDate: [Redacted].\r\nTime: [Redacted].\r\nLocation: Main building breakroom.\r\n\r\nPrinting...</style>\r\n\r\n\u0022Oi, you! What the hell are you doing just sitting there?! There's been a gas leak!\u0022\r\n\r\n\u0022...I can't smell anything. There's no alarm going off so it's probably fine.\u0022\r\n\r\n\u0022Have you got the survival instincts of a brick?! We don't have alarms for everything! We need to get out of here!\u0022\r\n\r\n\u0022Quiet down. I'm getting kinda sleepy... I think I'll go take a nap.\u0022",
+                    Tier = ItemTier.VoidTier1,
+                    CorruptToken = "ITEM_STICKYBOMB_NAME"
+                },
+                DisplayModelName = "toxincanisterdisplaymesh",
+                DisplaySettingsCallback = _displaySettings =>
                 {
                     // Add character display settings
                     _displaySettings.AddCharacterDisplay("Commando", "ThighL", new Vector3(0.11675F, 0.3675F, -0.01275F), new Vector3(350F, 355F, 176.25F), new Vector3(0.1675F, 0.1675F, 0.1675F));
@@ -166,18 +189,24 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(-0.0575F, 0.1885F, 0.0825F), new Vector3(1.25F, 56.25F, 186F), new Vector3(0.08F, 0.08F, 0.08F));
                     _displaySettings.AddCharacterDisplay("Enforcer", "Stomach", new Vector3(0.224F, -0.058F, -0.0845F), new Vector3(0F, 0F, 12.5F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Acolyte", "Necklace3", new Vector3(-0.077F, -0.0119F, 0.11025F), new Vector3(310F, 313.75F, 165F), new Vector3(0.1325F, 0.1325F, 0.1325F));
-                });
+                }
+            });
 
-            CreateItem(_name: "Service Start-up Drive",
-                _pickup: "Gain access to a machine capsule each stage that contains a powerful drone.",
-                _description: "A <style=cIsUtility>machine capsule</style> containing a drone (79%/<style=cIsHealing>20%</style>/<style=cIsHealth>1%</style>) will appear in a random location <style=cIsUtility>on each stage</style>. <style=cStack>(Increases rarity chances of the drone per stack).</style>",
-                _lore: "Order: Maintenance Access Drive\r\nTracking Number: 44******\r\nEstimated Delivery: 08/03/2057\r\nShipping Method: Priority Internal\r\nShipping Address: |||||||, Base Camp Olympus, Mars\r\nShipping Details:\r\n\r\nYou didn't get this from me.\r\n\r\nUESC stopped using physical override keys on machine capsules after some genius decided a maintenance drone counted as a \u0022personal mobility device\u0022 and tried to expense one. Now the capsules only accept start-up authorization drives issued to licensed service staff.\r\n\r\nOfficially, this one is for diagnostics, firmware recovery, and limited deployment testing. Unofficially, the capsule does not seem to know the difference between \u0022test the drone\u0022 and \u0022hand the nearest contractor a heavily armed flying machine\u0022.\r\n\r\nIf anyone asks, you are performing routine maintenance. If the drone asks, you are its supervisor. If legal asks, I have never met you.",
-                _tier: ItemTier.Tier2,
-                _tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.OnStageBeginEffect],
-                _iconDir: "texservicestartupdriveicon",
-                _modelDir: "servicestart-updrivemesh",
-                _displayDir: "servicestart-updrivedisplaymesh",
-                _displaySettingsCallback: _displaySettings =>
+            CreateItem(new WIPItemOptions(
+                name: "Service Start-up Drive",
+                tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.OnStageBeginEffect],
+                iconName: "texservicestartupdriveicon",
+                modelName: "servicestart-updrivemesh")
+            {
+                Item =
+                {
+                    OverridePickup = "Gain access to a machine capsule each stage that contains a powerful drone.",
+                    OverrideDescription = "A <style=cIsUtility>machine capsule</style> containing a drone (79%/<style=cIsHealing>20%</style>/<style=cIsHealth>1%</style>) will appear in a random location <style=cIsUtility>on each stage</style>. <style=cStack>(Increases rarity chances of the drone per stack).</style>",
+                    OverrideLore = "Order: Maintenance Access Drive\r\nTracking Number: 44******\r\nEstimated Delivery: 08/03/2057\r\nShipping Method: Priority Internal\r\nShipping Address: |||||||, Base Camp Olympus, Mars\r\nShipping Details:\r\n\r\nYou didn't get this from me.\r\n\r\nUESC stopped using physical override keys on machine capsules after some genius decided a maintenance drone counted as a \u0022personal mobility device\u0022 and tried to expense one. Now the capsules only accept start-up authorization drives issued to licensed service staff.\r\n\r\nOfficially, this one is for diagnostics, firmware recovery, and limited deployment testing. Unofficially, the capsule does not seem to know the difference between \u0022test the drone\u0022 and \u0022hand the nearest contractor a heavily armed flying machine\u0022.\r\n\r\nIf anyone asks, you are performing routine maintenance. If the drone asks, you are its supervisor. If legal asks, I have never met you.",
+                    Tier = ItemTier.Tier2
+                },
+                DisplayModelName = "servicestart-updrivedisplaymesh",
+                DisplaySettingsCallback = _displaySettings =>
                 {
                     // Add character display settings
                     _displaySettings.AddCharacterDisplay("Commando", "Stomach", new Vector3(0.168F, 0.0375F, -0.0775F), new Vector3(60F, 200F, 80F), new Vector3(0.1F, 0.1F, 0.1F));
@@ -203,19 +232,25 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "UpperArmL", new Vector3(0F, 0.23825F, 0.1F), new Vector3(275F, 148.5F, 32F), new Vector3(0.09F, 0.09F, 0.09F));
                     _displaySettings.AddCharacterDisplay("Enforcer", "Stomach", new Vector3(0.191F, -0.00135F, 0.12575F), new Vector3(71.5F, 79.25F, 33.75F), new Vector3(0.08F, 0.08F, 0.08F));
                     _displaySettings.AddCharacterDisplay("Acolyte", "Pelvis", new Vector3(0.18F, 0.03075F, 0.072F), new Vector3(48.25F, 116.75F, 53F), new Vector3(0.08F, 0.08F, 0.08F));
-                });
+                }
+            });
 
-            CreateItem(_name: "Chakrams",
-                _pickup: "Activating your Primary skill also throws a piercing chakram that returns to you.",
-                _description: "Activating your <style=cIsUtility>Primary skill</style> also throws a <style=cIsDamage>piercing chakram</style> that deals <style=cIsDamage>400%</style> <style=cStack>(+100% per stack)</style> base damage and returns to you. You can hold up to <style=cIsUtility>3</style> <style=cStack>(+1 per stack)</style> <style=cIsDamage>chakrams</style>.",
-                _lore: "Order: Golden Steel Chakrams\r\nTracking Number: 78*******\r\nEstimated Delivery: 06/16/2060\r\nShipping Method: Priority\r\nShipping Address: \u0022Secret Hideout\u0022, Earth\r\nShipping Details:\r\n\r\nShouldn't soar off to one side like the others did. Lemme know if there's anything else you want, we've got a new stock of some classics coming in next month by the time you read this. Nunchucks, nagamaki, kunai, all that classic stuff.\r\n\r\nAlso, please change your address. It looks stupid every time I see it.",
-                _tier: ItemTier.VoidTier2,
-                _tags: [ItemTag.Damage],
-                _iconDir: "texchakramicon",
-                _modelDir: "chakrammesh",
-                _displayDir: "chakramdisplaymesh",
-                _corruptToken: "ITEM_PRIMARYSKILLSHURIKEN_NAME",
-                _displaySettingsCallback: _displaySettings =>
+            CreateItem(new WIPItemOptions(
+                name: "Chakrams",
+                tags: [ItemTag.Damage],
+                iconName: "texchakramicon",
+                modelName: "chakrammesh")
+            {
+                Item =
+                {
+                    OverridePickup = "Activating your Primary skill also throws a piercing chakram that returns to you.",
+                    OverrideDescription = "Activating your <style=cIsUtility>Primary skill</style> also throws a <style=cIsDamage>piercing chakram</style> that deals <style=cIsDamage>400%</style> <style=cStack>(+100% per stack)</style> base damage and returns to you. You can hold up to <style=cIsUtility>3</style> <style=cStack>(+1 per stack)</style> <style=cIsDamage>chakrams</style>.",
+                    OverrideLore = "Order: Golden Steel Chakrams\r\nTracking Number: 78*******\r\nEstimated Delivery: 06/16/2060\r\nShipping Method: Priority\r\nShipping Address: \u0022Secret Hideout\u0022, Earth\r\nShipping Details:\r\n\r\nShouldn't soar off to one side like the others did. Lemme know if there's anything else you want, we've got a new stock of some classics coming in next month by the time you read this. Nunchucks, nagamaki, kunai, all that classic stuff.\r\n\r\nAlso, please change your address. It looks stupid every time I see it.",
+                    Tier = ItemTier.VoidTier2,
+                    CorruptToken = "ITEM_PRIMARYSKILLSHURIKEN_NAME"
+                },
+                DisplayModelName = "chakramdisplaymesh",
+                DisplaySettingsCallback = _displaySettings =>
                 {
                     // Add character display settings
                     _displaySettings.AddCharacterDisplay("Commando", "HandR", new Vector3(-0.0045F, 0.07375F, 0.0425F), new Vector3(50.5F, 262.5F, 268F), new Vector3(0.1F, 0.1F, 0.1F));
@@ -243,19 +278,44 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Shin.L", new Vector3(0.08325F, 0.1225F, 0F), new Vector3(296.75F, 187.5F, 261.5F), new Vector3(0.055F, 0.055F, 0.055F));
                     _displaySettings.AddCharacterDisplay("Enforcer", "Chest", new Vector3(0.1558F, -0.1015F, 0.22F), new Vector3(47.5F, 16F, 32F), new Vector3(0.09F, 0.09F, 0.09F));
                     _displaySettings.AddCharacterDisplay("Acolyte", "Head", new Vector3(-0.3696F, 0.2014F, -0.162F), new Vector3(40F, 205F, 347.5F), new Vector3(0.1F, 0.1F, 0.1F));
-                });
+                }
+            });
 
-            CreateItem(_name: "Charming Facade",
-                _pickup: "Gain a 1% chance to temporarily charm a non-boss enemy on hit.",
-                _description: "Your attacks have a <style=cIsDamage>1%</style> chance to <style=cIsDamage>charm</style> a <style=cIsDamage>non-Boss enemy</style>, causing it to attack other enemies. Up to <style=cIsDamage>4</style> <style=cStack>(+4 per stack)</style> enemies can be <style=cIsDamage>charmed</style> at one time for up to <style=cIsDamage>30</style> <style=cStack>(+30 per stack)</style> seconds each.",
-                _lore: "\u0022They'd say that whispers on the wind would warn people to avoid the spirits of the forest; that they would be charmed and led to their demise if they didn't turn back... People would be lured in, used, and then stabbed in the back as soon as they lost their purpose; their bodies never being found as they were consumed by the very spirits who promised them fortune...\u0022\r\n\r\n\u0022Well, that just sounds like a bunch of occult garbage.\u0022\r\n\r\n\u0022...You're the one who asked for a ghost story.\u0022\r\n\r\n- Signal Echoes, UES Contact Light",
-                _tier: ItemTier.VoidTier3,
-                _tags: [ItemTag.Damage, ItemTag.Utility, ItemTag.AIBlacklist],
-                _iconDir: "texcharmingfacadeicon",
-                _modelDir: "charmingfacademesh",
-                _displayDir: "charmingfacadedisplaymesh",
-                _corruptToken: "ITEM_GHOSTONKILL_NAME",
-                _displaySettingsCallback: _displaySettings =>
+            CreateItem(new WIPItemOptions(
+                name: "Charming Facade",
+                tags: [ItemTag.Damage, ItemTag.Utility, ItemTag.AIBlacklist],
+                iconName: "texcharmingfacadeicon",
+                modelName: "charmingfacademesh")
+            {
+                Item =
+                {
+                    OverridePickup = "Gain a 1% chance to temporarily charm a non-boss enemy on hit.",
+                    OverrideDescription = "Your attacks have a <style=cIsDamage>1%</style> chance to <style=cIsDamage>charm</style> a <style=cIsDamage>non-Boss enemy</style>, causing it to attack other enemies. Up to <style=cIsDamage>4</style> <style=cStack>(+4 per stack)</style> enemies can be <style=cIsDamage>charmed</style> at one time for up to <style=cIsDamage>30</style> <style=cStack>(+30 per stack)</style> seconds each.",
+                    OverrideLore = "\u0022They'd say that whispers on the wind would warn people to avoid the spirits of the forest; that they would be charmed and led to their demise if they didn't turn back... People would be lured in, used, and then stabbed in the back as soon as they lost their purpose; their bodies never being found as they were consumed by the very spirits who promised them fortune...\u0022\r\n\r\n\u0022Well, that just sounds like a bunch of occult garbage.\u0022\r\n\r\n\u0022...You're the one who asked for a ghost story.\u0022\r\n\r\n- Signal Echoes, UES Contact Light",
+                    Tier = ItemTier.VoidTier3,
+                    CorruptToken = "ITEM_GHOSTONKILL_NAME",
+                    ModifyItemDisplayPrefabCallback = _prefab =>
+                    {
+                        // Get first display object
+                        GameObject rope = Utils.FindChildByName(_prefab.transform, "Rope.001");
+
+                        // Add dynamic bone behaviour
+                        DynamicBone dynamicBone = rope.AddComponent<DynamicBone>();
+
+                        // Set up dynamic bone config
+                        DynamicBoneConfig dynamicBoneConfig = new DynamicBoneConfig();
+                        dynamicBoneConfig.Damping = 0.375f;
+                        dynamicBoneConfig.Elasticity = 0.02f;
+                        dynamicBoneConfig.Stiffness = 0.5f;
+                        dynamicBoneConfig.Gravity = new Vector3(0.0f, -1.0f, 0.0f);
+                        dynamicBoneConfig.LocalGravity = new Vector3(0.5f, -0.1f, 0.0f);
+
+                        // Set up dynamic bone
+                        Utils.ConfigureDynamicBone(dynamicBone, dynamicBoneConfig);
+                    }
+                },
+                DisplayModelName = "charmingfacadedisplaymesh",
+                DisplaySettingsCallback = _displaySettings =>
                 {
                     // Add character display settings
                     _displaySettings.AddCharacterDisplay("Commando", "Head", new Vector3(0F, 0.225F, 0.1625F), new Vector3(345F, 0F, 0F), new Vector3(0.17F, 0.17F, 0.17F));
@@ -282,42 +342,17 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Technician", "Head", new Vector3(0F, 0.135F, 0.142F), new Vector3(350F, 0F, 0F), new Vector3(0.165F, 0.165F, 0.165F));
                     _displaySettings.AddCharacterDisplay("Enforcer", "Head", new Vector3(-0.0355F, 0.13F, 0F), new Vector3(275F, 90F, 0F), new Vector3(0.13F, 0.13F, 0.13F));
                     _displaySettings.AddCharacterDisplay("Acolyte", "Head", new Vector3(-0.0731F, 0.2835F, 0F), new Vector3(275F, 90F, 0F), new Vector3(0.22F, 0.22F, 0.2F));
-                },
-                _modifyItemDisplayPrefabCallback: _prefab =>
-                {
-                    // Get first display object
-                    GameObject rope = Utils.FindChildByName(_prefab.transform, "Rope.001");
-
-                    // Add dynamic bone behaviour
-                    DynamicBone dynamicBone = rope.AddComponent<DynamicBone>();
-
-                    // Set up dynamic bone config
-                    DynamicBoneConfig dynamicBoneConfig = new DynamicBoneConfig();
-                    dynamicBoneConfig.Damping = 0.375f;
-                    dynamicBoneConfig.Elasticity = 0.02f;
-                    dynamicBoneConfig.Stiffness = 0.5f;
-                    dynamicBoneConfig.Gravity = new Vector3(0.0f, -1.0f, 0.0f);
-                    dynamicBoneConfig.LocalGravity = new Vector3(0.5f, -0.1f, 0.0f);
-
-                    // Set up dynamic bone
-                    Utils.ConfigureDynamicBone(dynamicBone, dynamicBoneConfig);
-                });
+                }
+            });
         }
 
-        public static void CreateItem(bool _createDisplaySettings = true, string _name = "WIP ITEM", ItemTag[] _tags = default, 
-            string _iconDir = "texTemporalCubeIcon", string _modelDir = "temporalcubemesh", string _displayDir = "temporalcubemesh", 
-            ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null,
-            ItemDisplayCallback _displaySettingsCallback = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null,
-            ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false,
-            string _pickup = null, string _description = null, string _lore = null)
+        public static void CreateItem(WIPItemOptions _options)
         {
             // Don't create item is WIP content is disabled
             if (!Utils.WIPContentEnabled) return;
 
             // Create WIP item and add to list
-            WIPItem wipItem = new(_createDisplaySettings, _name, _tags, _iconDir, _modelDir, _displayDir, _tier, _simulacrumBanned, _canRemove, _hidden,
-                _corruptToken, _displaySettingsCallback, _modifyItemModelPrefabCallback, _modifyItemDisplayPrefabCallback, _canNeverBeTemporary,
-                _debugOnly, _pickup, _description, _lore);
+            WIPItem wipItem = new(_options);
             wipItems.Add(wipItem);
         }
     }

@@ -1,3 +1,8 @@
+### v1.5.4
+
+**Compatibility**
+- Faithful items can now be Ethereal.
+
 ### v1.5.3
 
 **Added**

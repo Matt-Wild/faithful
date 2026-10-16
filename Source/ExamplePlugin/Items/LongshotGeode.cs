@@ -38,7 +38,18 @@ namespace Faithful
             CreateDisplaySettings("longshotgeodedisplaymesh");
 
             // Create Longshot Geode item
-            MainItem = Items.AddItem(token, "Longshot Geode", [ItemTag.Damage], "texlongshotgeodeicon", "longshotgeodemesh", ItemTier.VoidTier1, _corruptToken: "ITEM_NEARBYDAMAGEBONUS_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Longshot Geode",
+                tags: [ItemTag.Damage],
+                iconName: "texlongshotgeodeicon",
+                modelName: "longshotgeodemesh")
+            {
+                Tier = ItemTier.VoidTier1,
+                CorruptToken = "ITEM_NEARBYDAMAGEBONUS_NAME",
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
 
             // Create item settings
             CreateSettings();

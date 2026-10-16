@@ -64,7 +64,19 @@ namespace Faithful
             CreateDisplaySettings("appraiserseyedisplaymesh");
 
             // Create item and buff
-            MainItem = Items.AddItem(token, "Appraisers Eye", [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique], "texappraiserseyeicon", "appraiserseyemesh", ItemTier.VoidTier3, _supportsQuality: true, _displaySettings: displaySettings, _namePrefix: "Collectors Vision", _hiddenFromLogbook: true);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Appraisers Eye",
+                tags: [ItemTag.Damage, ItemTag.Technology, ItemTag.WorldUnique],
+                iconName: "texappraiserseyeicon",
+                modelName: "appraiserseyemesh")
+            {
+                Tier = ItemTier.VoidTier3,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings,
+                NamePrefix = "Collectors Vision",
+                HiddenFromLogbook = true
+            });
             scrutinizedBuff = Buffs.AddBuff("SCRUTINIZED", "Scrutinized", "texBuffScrutinizedEye", Color.white, _isDebuff: true, _overlay: scrutinizedOverlay);
 
             // Create item settings

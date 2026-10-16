@@ -45,7 +45,17 @@ namespace Faithful
             CreateDisplaySettings("MatterAcceleratorDisplayMesh");
 
             // Create Second Hand item and buff
-            MainItem = Items.AddItem(token, "Matter Accelerator", [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated], "texMatterAcceleratorIcon", "MatterAcceleratorMesh", _tier: ItemTier.Tier1, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Matter Accelerator",
+                tags: [ItemTag.Utility, ItemTag.Healing, ItemTag.Technology, ItemTag.MobilityRelated],
+                iconName: "texMatterAcceleratorIcon",
+                modelName: "MatterAcceleratorMesh")
+            {
+                Tier = ItemTier.Tier1,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
             matterAcceleratorBuff = Buffs.AddBuff("MATTER_ACCELERATOR", "Matter Accelerator", "texMatterAcceleratorBuff", Color.white, false);
             matterAcceleratorSpeedBuff = Buffs.AddBuff("MATTER_ACCELERATOR_SPEED", "Matter Accelerator Speed", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
             matterAcceleratorHealthBuff = Buffs.AddBuff("MATTER_ACCELERATOR_HEALTH", "Matter Accelerator Health", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");

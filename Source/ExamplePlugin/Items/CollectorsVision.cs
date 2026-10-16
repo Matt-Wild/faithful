@@ -71,7 +71,18 @@ namespace Faithful
             CreateDisplaySettings("collectorsvisiondisplaymesh");
 
             // Create Collector's Vision item
-            MainItem = Items.AddItem(token, "Collectors Vision", [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texcollectorsvisionicon", "collectorsvisionmesh", ItemTier.VoidTier3, _corruptToken: "ITEM_CRITDAMAGE_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Collectors Vision",
+                tags: [ItemTag.Damage, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist],
+                iconName: "texcollectorsvisionicon",
+                modelName: "collectorsvisionmesh")
+            {
+                Tier = ItemTier.VoidTier3,
+                CorruptToken = "ITEM_CRITDAMAGE_NAME",
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
 
             // Create item settings
             CreateSettings();

@@ -14,26 +14,23 @@ namespace Faithful
         ItemDisplayCallback displaySettingsCallback;
 
         // Constructor
-        public WIPItem(bool _createDisplaySettings = true, string _name = "WIP ITEM", ItemTag[] _tags = default, string _iconDir = "texTemporalCubeIcon",
-            string _modelDir = "temporalcubemesh", string _displayDir = "temporalcubemesh", ItemTier _tier = ItemTier.Tier1,
-            bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, 
-            ItemDisplayCallback _displaySettingsCallback = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null,
-            ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false,
-            string _pickup = null, string _description = null, string _lore = null) : base(Utils.toolbox, Utils.GetXMLSafeString(_name).ToUpper())
+        public WIPItem(WIPItemOptions _options)
+            : base(Utils.toolbox, _options.Item.Token)
         {
             // Don't create item is WIP content is disabled
             if (!Utils.WIPContentEnabled) return;
 
+            ItemOptions itemOptions = _options.Item.Copy();
+
             // Assign display settings callback
-            displaySettingsCallback = _displaySettingsCallback;
+            displaySettingsCallback = _options.DisplaySettingsCallback;
 
             // Create display settings if asked to
-            if (_createDisplaySettings) CreateDisplaySettings(_displayDir);
+            if (_options.CreateDisplaySettings) CreateDisplaySettings(_options.DisplayModelName);
 
-            // Create Copper Gear item and buff
-            MainItem = Items.AddItem(token, _name, _tags ?? [], _iconDir, _modelDir, _tier, _simulacrumBanned, _canRemove, 
-                _hidden, _corruptToken, displaySettings, _modifyItemModelPrefabCallback, _modifyItemDisplayPrefabCallback, _canNeverBeTemporary, 
-                _debugOnly, true, _name, _pickup, _description, _lore);
+            // Create the WIP item with its generated display settings
+            itemOptions.DisplaySettings = displaySettings;
+            MainItem = Items.AddItem(itemOptions);
 
             // Create item settings
             CreateSettings();

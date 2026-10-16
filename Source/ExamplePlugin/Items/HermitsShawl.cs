@@ -60,7 +60,18 @@ namespace Faithful
             CreateDisplaySettings("HermitShawlDisplayMesh");
 
             // Create item
-            MainItem = Items.AddItem(token, "Hermits Shawl", [ItemTag.Damage], "texHermitShawlIcon", "HermitShawlMesh", ItemTier.Tier2, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Hermits Shawl",
+                tags: [ItemTag.Damage],
+                iconName: "texHermitShawlIcon",
+                modelName: "HermitShawlMesh")
+            {
+                Tier = ItemTier.Tier2,
+                ModifyItemDisplayPrefabCallback = ModifyDisplayPrefab,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
 
             // Create item settings
             CreateSettings();

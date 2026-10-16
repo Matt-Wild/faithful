@@ -48,7 +48,17 @@ namespace Faithful
             CreateDisplaySettings("coppergeardisplaymesh");
 
             // Create Copper Gear item and buff
-            MainItem = Items.AddItem(token, "Copper Gear", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texcoppergearicon", "coppergearmesh", _simulacrumBanned: true, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Copper Gear",
+                tags: [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated],
+                iconName: "texcoppergearicon",
+                modelName: "coppergearmesh")
+            {
+                SimulacrumBanned = true,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
             copperGearBuff = Buffs.AddBuff("COPPER_GEAR", "Copper Gear", "texbuffteleportergear", Color.white, false);
             copperGearEffectBuff = Buffs.AddBuff("COPPER_GEAR_EFFECT", "Copper Gear", "texbuffteleportergear", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "COPPER_GEAR");
 

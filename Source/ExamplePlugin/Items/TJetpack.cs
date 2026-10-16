@@ -54,7 +54,17 @@ namespace Faithful
             CreateDisplaySettings("4t0njetpackdisplaymesh");
 
             // Create item
-            MainItem = Items.AddItem(token, "4-T0N Jetpack", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "tex4t0njetpackicon", "4t0njetpackmesh", ItemTier.Tier3, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "4-T0N Jetpack",
+                tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist, ItemTag.CannotCopy, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist],
+                iconName: "tex4t0njetpackicon",
+                modelName: "4t0njetpackmesh")
+            {
+                Tier = ItemTier.Tier3,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
 
             // Create item settings
             CreateSettings();

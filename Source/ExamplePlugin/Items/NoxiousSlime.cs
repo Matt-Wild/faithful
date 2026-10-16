@@ -45,7 +45,17 @@ namespace Faithful
             CreateDisplaySettings("noxiousslimedisplaymesh");
 
             // Create Noxious Slime item
-            MainItem = Items.AddItem(token, "Noxious Slimes", [ItemTag.Damage], "texnoxiousslimeicon", "noxiousslimemesh", ItemTier.Tier3, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Noxious Slimes",
+                tags: [ItemTag.Damage],
+                iconName: "texnoxiousslimeicon",
+                modelName: "noxiousslimemesh")
+            {
+                Tier = ItemTier.Tier3,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
 
             // Create item settings
             CreateSettings();

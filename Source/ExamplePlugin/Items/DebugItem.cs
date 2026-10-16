@@ -8,7 +8,18 @@ namespace Faithful
         public DebugItem(Toolbox _toolbox) : base(_toolbox, "DEBUG_ITEM")
         {
             // Create item
-            MainItem = Items.AddItem(token, "Debug Item", [ItemTag.Any], "texTemporalCubeIcon", "Cube_TemporaryAsset", ItemTier.NoTier, _simulacrumBanned: true, _hidden: true, _debugOnly: true);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Debug Item",
+                tags: [ItemTag.Any],
+                iconName: "texTemporalCubeIcon",
+                modelName: "Cube_TemporaryAsset")
+            {
+                Tier = ItemTier.NoTier,
+                SimulacrumBanned = true,
+                Hidden = true,
+                DebugOnly = true
+            });
         }
 
         protected override void CreateSettings()

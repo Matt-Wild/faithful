@@ -67,54 +67,56 @@ namespace Faithful
         public QualityManualSettingTokensCallback qualityDescriptionManualSettings;
 
         // Constructor
-        public Item(string _token, string _safeName, ItemTag[] _tags, string _iconName, string _modelName, ItemTier _tier = ItemTier.Tier1, bool _simulacrumBanned = false, bool _canRemove = true, bool _hidden = false, string _corruptToken = null, ItemDisplaySettings _displaySettings = null, ModifyPrefabCallback _modifyItemModelPrefabCallback = null, ModifyPrefabCallback _modifyItemDisplayPrefabCallback = null, bool _canNeverBeTemporary = false, bool _debugOnly = false, bool _WIP = false, string _overrideName = null, string _overridePickup = null, string _overrideDescription = null, string _overrideLore = null, string _namePrefix = null, bool _hiddenFromLogbook = false, bool _supportsQuality = false)
+        public Item(ItemOptions _options)
         {
+            _options = _options.Copy();
+
             // Assign token
-            token = _token;
+            token = _options.Token;
 
             // Assign if hidden
-            hidden = _hidden;
+            hidden = _options.Hidden;
 
             // Assign if hidden from logbook
-            hiddenFromLogbook = _hiddenFromLogbook;
+            hiddenFromLogbook = _options.HiddenFromLogbook;
 
             // Assign if WIP
-            WIP = _WIP;
+            WIP = _options.WIP;
 
             // Assign if supports quality
-            supportsQuality = _supportsQuality;
+            supportsQuality = _options.SupportsQuality;
 
             // Assign name prefix
-            namePrefix = _namePrefix ?? "";
+            namePrefix = _options.NamePrefix ?? "";
 
             // Assign name
-            name = WIP ? _safeName : Languages.GetLanguageString($"FAITHFUL_{token}_NAME");
-            safeName = _safeName;
+            name = WIP ? _options.SafeName : Languages.GetLanguageString($"FAITHFUL_{token}_NAME");
+            safeName = _options.SafeName;
 
             // Assign tier
-            tier = _tier;
+            tier = _options.Tier;
 
             // Assign default corrupted token
-            defaultCorruptedToken = _corruptToken;
+            defaultCorruptedToken = _options.CorruptToken;
 
             // Don't create settings for hidden or WIP items
-            if (!_hidden && !_WIP)
+            if (!_options.Hidden && !_options.WIP)
             {
                 // Create default settings (MUST HAPPEN AFTER TOKEN AND NAME IS ASSIGNED)
                 CreateDefaultSettings();
             }
 
             // Should hide this item due to temporary assets or debug only?
-            bool forceHide = !Utils.debugMode && (_debugOnly || _iconName == "textemporalcubeicon" || !Assets.HasAsset(_iconName) || _modelName == "temporalcubemesh" || !Assets.HasAsset(_modelName));
+            bool forceHide = !Utils.debugMode && (_options.DebugOnly || _options.IconName == "textemporalcubeicon" || !Assets.HasAsset(_options.IconName) || _options.ModelName == "temporalcubemesh" || !Assets.HasAsset(_options.ModelName));
 
             // Should hide anyway due to config?
             if (!forceHide)
             {
-                forceHide = _hidden || (!isEnabled || Items.allItemsDisabled);
+                forceHide = _options.Hidden || (!isEnabled || Items.allItemsDisabled);
             }
 
             // Update tier
-            _tier = forceHide ? ItemTier.NoTier : _tier;
+            ItemTier effectiveTier = forceHide ? ItemTier.NoTier : _options.Tier;
 
             // Create item def
             itemDef = ScriptableObject.CreateInstance<ItemDef>();
@@ -123,10 +125,10 @@ namespace Faithful
             FetchSettings();
 
             // Assign override tokens
-            overrideName = _overrideName;
-            overridePickup = _overridePickup;
-            overrideDescription = _overrideDescription;
-            overrideLore = _overrideLore;
+            overrideName = _options.OverrideName;
+            overridePickup = _options.OverridePickup;
+            overrideDescription = _options.OverrideDescription;
+            overrideLore = _options.OverrideLore;
 
             // Update item texts
             UpdateItemTexts();
@@ -135,60 +137,86 @@ namespace Faithful
             itemDef.requiredExpansion = Utils.expansionDef;
 
             // Set item tier (force untiered if forced to be hidden)
-            itemDef.deprecatedTier = forceHide ? ItemTier.NoTier : _tier;
+            itemDef.deprecatedTier = forceHide ? ItemTier.NoTier : effectiveTier;
+
+            // Get if item can be temporary
+            bool canBeTemporary = effectiveTier == ItemTier.Tier1 || effectiveTier == ItemTier.Tier2 || effectiveTier == ItemTier.Tier3 || effectiveTier == ItemTier.Boss || effectiveTier == ItemTier.VoidTier1 || effectiveTier == ItemTier.VoidTier2 || effectiveTier == ItemTier.VoidTier3 || effectiveTier == ItemTier.VoidBoss;
+
+            // Keep automatic tag adjustments local to this item.
+            ItemTag[] tags = _options.Tags;
 
             // Automatically review temporary item tag
-            if ((_tier == ItemTier.Tier1 || _tier == ItemTier.Tier2 || _tier == ItemTier.Tier3 || _tier == ItemTier.Boss || _tier == ItemTier.VoidTier1 || _tier == ItemTier.VoidTier2 || _tier == ItemTier.VoidTier3 || _tier == ItemTier.VoidBoss) && !_canNeverBeTemporary)
+            if (canBeTemporary && !_options.CanNeverBeTemporary)
             {
                 // Check for tag
-                if (!_tags.Contains(ItemTag.CanBeTemporary))
+                if (!tags.Contains(ItemTag.CanBeTemporary))
                 {
                     // Add tag
-                    _tags = [.. _tags, ItemTag.CanBeTemporary];
+                    tags = [.. tags, ItemTag.CanBeTemporary];
                 }
             }
             else
             {
                 // Check for tag
-                if (_tags.Contains(ItemTag.CanBeTemporary))
+                if (tags.Contains(ItemTag.CanBeTemporary))
                 {
                     // Remove tag
-                    _tags = [.. _tags.Where(tag => tag != ItemTag.CanBeTemporary)];
+                    tags = [.. tags.Where(tag => tag != ItemTag.CanBeTemporary)];
+                }
+            }
+
+            // Automatically review ethereal item tag
+            if (!_options.CanNeverBeEthereal)
+            {
+                // Check for tag
+                if (!tags.Contains(ItemTag.CanBeRental))
+                {
+                    // Add tag
+                    tags = [.. tags, ItemTag.CanBeRental];
+                }
+            }
+            else
+            {
+                // Check for tag
+                if (tags.Contains(ItemTag.CanBeRental))
+                {
+                    // Remove tag
+                    tags = [.. tags.Where(tag => tag != ItemTag.CanBeRental)];
                 }
             }
 
             // Set item tags
-            itemDef.tags = _tags;
+            itemDef.tags = tags;
 
             // Banned from Simulacrum?
-            if (_simulacrumBanned)
+            if (_options.SimulacrumBanned)
             {
                 // Ban from Simulacrum
                 Utils.BanFromSimulacrum(itemDef);
             }
 
             // Set can remove (Can a shrine of chance or printer etc. take this item)
-            itemDef.canRemove = _canRemove;
+            itemDef.canRemove = _options.CanRemove;
 
             // Is item hidden (Also hide if using temporary assets when not in debug mode)
-            itemDef.hidden = _hidden || forceHide;
+            itemDef.hidden = _options.Hidden || forceHide;
 
             // Corrupts item? - Avoid pairing disabled items
-            if (_corruptToken != null && isEnabled)
+            if (_options.CorruptToken != null && isEnabled)
             {
                 if (Utils.verboseConsole)
                 {
-                    if (corruptedOverrideSetting == null) Log.Debug($"Adding corruption pair for item '{name}'. Item to corrupt token: '{_corruptToken}'");
-                    else Log.Debug($"Adding corruption pair for item '{name}'. Item to corrupt token: '{_corruptToken}' with override '{corruptedOverrideSetting.Value}'");
+                    if (corruptedOverrideSetting == null) Log.Debug($"Adding corruption pair for item '{name}'. Item to corrupt token: '{_options.CorruptToken}'");
+                    else Log.Debug($"Adding corruption pair for item '{name}'. Item to corrupt token: '{_options.CorruptToken}' with override '{corruptedOverrideSetting.Value}'");
                 }
 
                 // Add corruption pair
-                Utils.AddCorruptionPair(itemDef, _corruptToken, corruptedOverrideSetting != null ? corruptedOverrideSetting.Value : "");
+                Utils.AddCorruptionPair(itemDef, _options.CorruptToken, corruptedOverrideSetting != null ? corruptedOverrideSetting.Value : "");
             }
 
             // Set icon and model
-            itemDef.pickupIconSprite = Assets.GetIcon(_iconName);
-            GameObject modelPrefab = Assets.GetModel(_modelName);
+            itemDef.pickupIconSprite = Assets.GetIcon(_options.IconName);
+            GameObject modelPrefab = Assets.GetModel(_options.ModelName);
             Utils.ProcessRendererRules(modelPrefab);
             itemDef.pickupModelPrefab = modelPrefab;
 
@@ -226,33 +254,33 @@ namespace Faithful
             }
 
             // Check for model prefab modify callback
-            if (_modifyItemModelPrefabCallback != null)
+            if (_options.ModifyItemModelPrefabCallback != null)
             {
                 // Call modify model prefab callback
-                _modifyItemModelPrefabCallback(itemDef.pickupModelPrefab);
+                _options.ModifyItemModelPrefabCallback(itemDef.pickupModelPrefab);
             }
 
             // Check for item display settings and if config allows it
-            if (_displaySettings != null && (enableItemDisplaysSetting == null || enableItemDisplaysSetting.Value) && !Items.allItemDisplaysDisabled)
+            if (_options.DisplaySettings != null && (enableItemDisplaysSetting == null || enableItemDisplaysSetting.Value) && !Items.allItemDisplaysDisabled)
             {
                 // Get display model
-                GameObject displayModel = _displaySettings.GetModel();
+                GameObject displayModel = _options.DisplaySettings.GetModel();
 
                 // Add item display model behaviour
                 ItemDisplayModel displayModelBehaviour = displayModel.AddComponent<ItemDisplayModel>();
                 
                 // Initialise display model behaviour
-                displayModelBehaviour.Init(_token, _displaySettings.displaySpecifiers);
+                displayModelBehaviour.Init(_options.Token, _options.DisplaySettings.displaySpecifiers);
 
                 // Check for display prefab modify callback
-                if (_modifyItemDisplayPrefabCallback != null)
+                if (_options.ModifyItemDisplayPrefabCallback != null)
                 {
                     // Call modify display prefab callback
-                    _modifyItemDisplayPrefabCallback(displayModel);
+                    _options.ModifyItemDisplayPrefabCallback(displayModel);
                 }
 
                 // Add item and pass in item display settings
-                ItemAPI.Add(new CustomItem(itemDef, _displaySettings.GetRules()));
+                ItemAPI.Add(new CustomItem(itemDef, _options.DisplaySettings.GetRules()));
             }
             else
             {
@@ -264,7 +292,7 @@ namespace Faithful
 
             if (forceHide && Utils.verboseConsole)
             {
-                if (_hidden)
+                if (_options.Hidden)
                 {
                     Log.Debug($"Hiding item '{name}'");
                 }
@@ -272,7 +300,7 @@ namespace Faithful
                 {
                     Log.Debug($"Hiding item '{name}' due to user preference");
                 }
-                else if (_debugOnly)
+                else if (_options.DebugOnly)
                 {
                     Log.Debug($"Hiding WIP item '{name}'");
                 }

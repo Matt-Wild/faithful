@@ -42,7 +42,19 @@ namespace Faithful
             CreateDisplaySettings("drownedvisagedisplaymesh");
 
             // Create Drowned Visage item
-            MainItem = Items.AddItem(token, "Drowned Visage", [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist], "texdrownedvisageicon", "drownedvisagemesh", ItemTier.VoidTier2, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_SPACIOUS_UMBRELLA_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Drowned Visage",
+                tags: [ItemTag.Utility, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.HoldoutZoneRelated, ItemTag.BrotherBlacklist, ItemTag.ExtractorUnitBlacklist],
+                iconName: "texdrownedvisageicon",
+                modelName: "drownedvisagemesh")
+            {
+                Tier = ItemTier.VoidTier2,
+                SimulacrumBanned = true,
+                CorruptToken = "FAITHFUL_ITEM_SPACIOUS_UMBRELLA_NAME",
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
 
             // Create item settings
             CreateSettings();

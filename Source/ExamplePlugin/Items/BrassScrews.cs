@@ -48,7 +48,19 @@ namespace Faithful
             CreateDisplaySettings("brassscrewsdisplaymesh");
 
             // Create Brass Screws item and buff
-            MainItem = Items.AddItem(token, "Brass Screws", [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated], "texbrassscrewsicon", "brassscrewsmesh", ItemTier.VoidTier1, _simulacrumBanned: true, _corruptToken: "FAITHFUL_ITEM_COPPER_GEAR_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Brass Screws",
+                tags: [ItemTag.Damage, ItemTag.Technology, ItemTag.HoldoutZoneRelated],
+                iconName: "texbrassscrewsicon",
+                modelName: "brassscrewsmesh")
+            {
+                Tier = ItemTier.VoidTier1,
+                SimulacrumBanned = true,
+                CorruptToken = "FAITHFUL_ITEM_COPPER_GEAR_NAME",
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
             brassScrewsBuff = Buffs.AddBuff("BRASS_SCREWS", "Brass Screws", "texbuffteleporterscrew", Color.white, false);
             brassScrewsEffectBuff = Buffs.AddBuff("BRASS_SCREWS_EFFECT", "Brass Screws", "texbuffteleporterscrew", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "BRASS_SCREWS");
 

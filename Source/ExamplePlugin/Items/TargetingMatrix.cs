@@ -57,7 +57,19 @@ namespace Faithful
             CreateDisplaySettings("targetingmatrixdisplaymesh");
 
             // Create Targeting Matrix item and buff
-            MainItem = Items.AddItem(token, "Targeting Matrix", [ItemTag.Damage, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist], "textargetingmatrixicon", "targetingmatrixmesh", ItemTier.Tier2, _supportsQuality: true, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Targeting Matrix",
+                tags: [ItemTag.Damage, ItemTag.Technology, ItemTag.OnKillEffect, ItemTag.AIBlacklist, ItemTag.BrotherBlacklist, ItemTag.DevotionBlacklist, ItemTag.ExtractorUnitBlacklist],
+                iconName: "textargetingmatrixicon",
+                modelName: "targetingmatrixmesh")
+            {
+                Tier = ItemTier.Tier2,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings,
+                ModifyItemModelPrefabCallback = ModifyModelPrefab,
+                ModifyItemDisplayPrefabCallback = ModifyModelPrefab
+            });
             targetingMatrixBuff = Buffs.AddBuff("TARGETING_MATRIX", "Targeting Matrix", "texTargetingMatrixBuff", Color.white);
 
             // Create item settings

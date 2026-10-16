@@ -41,7 +41,18 @@ namespace Faithful
             CreateDisplaySettings("meltingwarblerdisplaymesh");
 
             // Create Melting Warbler item
-            MainItem = Items.AddItem(token, "Melting Warbler", [ItemTag.Utility, ItemTag.MobilityRelated], "texmeltingwarblericon", "meltingwarblermesh", ItemTier.VoidTier2, _corruptToken: "ITEM_JUMPBOOST_NAME", _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Melting Warbler",
+                tags: [ItemTag.Utility, ItemTag.MobilityRelated],
+                iconName: "texmeltingwarblericon",
+                modelName: "meltingwarblermesh")
+            {
+                Tier = ItemTier.VoidTier2,
+                CorruptToken = "ITEM_JUMPBOOST_NAME",
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
 
             // Create item settings
             CreateSettings();

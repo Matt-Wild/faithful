@@ -56,7 +56,17 @@ namespace Faithful
             CreateDisplaySettings("secondhanddisplaymesh");
 
             // Create Second Hand item and buff
-            MainItem = Items.AddItem(token, "Second Hand", [ItemTag.Damage, ItemTag.Utility, ItemTag.Technology, ItemTag.MobilityRelated], "texsecondhandicon", "secondhandmesh", _tier: ItemTier.Tier2, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Second Hand",
+                tags: [ItemTag.Damage, ItemTag.Utility, ItemTag.Technology, ItemTag.MobilityRelated],
+                iconName: "texsecondhandicon",
+                modelName: "secondhandmesh")
+            {
+                Tier = ItemTier.Tier2,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
             secondHandBuff = Buffs.AddBuff("SECOND_HAND", "Second Hand", "texbuffsecondhand", Color.white, false);
             secondHandEffectBuff = Buffs.AddBuff("SECOND_HAND_EFFECT", "Second Hand", "texbuffsecondhand", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "SECOND_HAND");
 

@@ -37,7 +37,18 @@ namespace Faithful
             CreateDisplaySettings("RadiantTimepieceDisplayMesh");
 
             // Create Second Hand item and buff
-            MainItem = Items.AddItem(token, "Radiant Timepiece", [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist], "texRadiantTimepieceIcon", "RadiantTimepieceMesh", _tier: ItemTier.Tier1, _modifyItemDisplayPrefabCallback: ModifyDisplayPrefab, _supportsQuality: true, _displaySettings: displaySettings);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Radiant Timepiece",
+                tags: [ItemTag.Utility, ItemTag.Technology, ItemTag.AIBlacklist],
+                iconName: "texRadiantTimepieceIcon",
+                modelName: "RadiantTimepieceMesh")
+            {
+                Tier = ItemTier.Tier1,
+                ModifyItemDisplayPrefabCallback = ModifyDisplayPrefab,
+                SupportsQuality = true,
+                DisplaySettings = displaySettings
+            });
 
             // Create item settings
             CreateSettings();

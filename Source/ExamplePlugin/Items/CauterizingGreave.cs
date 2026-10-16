@@ -28,7 +28,18 @@ namespace Faithful
             CreateDisplaySettings("cauterizinggreavedisplaymesh");
 
             // Create Longshot Geode item
-            MainItem = Items.AddItem(token, "Cauterizing Greave", [ItemTag.Utility], "texcauterizinggreaveicon", "cauterizinggreavemesh", ItemTier.Lunar, _displaySettings: displaySettings, _modifyItemModelPrefabCallback: ModifyModelPrefab, _modifyItemDisplayPrefabCallback: ModifyModelPrefab);
+            MainItem = Items.AddItem(new ItemOptions(
+                token: token,
+                safeName: "Cauterizing Greave",
+                tags: [ItemTag.Utility],
+                iconName: "texcauterizinggreaveicon",
+                modelName: "cauterizinggreavemesh")
+            {
+                Tier = ItemTier.Lunar,
+                DisplaySettings = displaySettings,
+                ModifyItemModelPrefabCallback = ModifyModelPrefab,
+                ModifyItemDisplayPrefabCallback = ModifyModelPrefab
+            });
 
             // Create item settings
             CreateSettings();
