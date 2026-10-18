@@ -1,8 +1,8 @@
 {
     "name": "Faithful",
-    "version_number": "1.5.4",
+    "version_number": "1.5.5",
     "website_url": "https://github.com/Matt-Wild/faithful",
-    "description": "A faithful modded expansion for Risk of Rain 2! Multiplayer-ready new items and buffs, item displays and custom VFX included.",
+    "description": "19 highly configurable new items including 7 void items and 1 unique interactable. Multiplayer/Quality/Risk Of Options compatible!",
     "dependencies": [
 		"bbepis-BepInExPack-5.4.2117",
 		"RiskofThunder-R2API_Core-5.3.0",

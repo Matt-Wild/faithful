@@ -86,4 +86,30 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Include="NetworkWeaver\Weave.ps1;NetworkWeaver\Unity.UNetWeaver.exe;NetworkWeaver\Unity.Cecil*.dll" />
+  </ItemGroup>
+
+  <!-- Patch the build output before post-build events run. -->
+  <Target Name="WeaveFaithful" AfterTargets="CopyFilesToOutputDirectory" Condition="'$(DesignTimeBuild)' != 'true'">
+    <PropertyGroup>
+      <_WeaverDirectory>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)', 'NetworkWeaver'))</_WeaverDirectory>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(_WeaverDirectory)" />
+    <WriteLinesToFile File="$(_WeaverDirectory)References.txt" Lines="@(ReferencePath->'%(FullPath)')" Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <Exec Command="powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\NetworkWeaver\Weave.ps1&quot; -AssemblyPath &quot;@(IntermediateAssembly->'%(FullPath)')&quot; -SymbolsPath &quot;@(_DebugSymbolsIntermediatePath->'%(FullPath)')&quot; -ReferenceList &quot;$(_WeaverDirectory)References.txt&quot; -WorkingDirectory &quot;$(_WeaverDirectory).&quot;" StandardOutputImportance="Low" />
+
+    <Copy SourceFiles="$(_WeaverDirectory)Output\$(TargetFileName)" DestinationFiles="$(TargetPath)" />
+    <Copy SourceFiles="$(_WeaverDirectory)Output\$(TargetName).pdb" DestinationFiles="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(_WeaverDirectory)Output\$(TargetName).pdb')" />
+    <Delete Files="$(TargetDir)$(TargetName).pdb" Condition="!Exists('$(_WeaverDirectory)Output\$(TargetName).pdb')" />
+    <Delete Files="$(TargetPath).mdb" />
+
+    <ItemGroup>
+      <FileWrites Include="$(_WeaverDirectory)**\*;$(TargetPath)" />
+      <FileWrites Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+    </ItemGroup>
+    <Message Text="Faithful networking patched successfully." Importance="High" />
+  </Target>
+
 </Project>

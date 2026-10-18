@@ -206,6 +206,42 @@ namespace Faithful
             }
         }
 
+        [Command]
+        public void CmdRequestCharacterBuffCounts(GameObject _bodyObject)
+        {
+            // Timed buff records are server-only, so send a snapshot to the requesting client
+            if (_bodyObject == null) return;
+            CharacterBody body = _bodyObject.GetComponent<CharacterBody>();
+            if (body == null) return;
+            int[] normalCounts = new int[BuffCatalog.buffCount];
+            int[] timedCounts = new int[BuffCatalog.buffCount];
+            Utils.GetCharacterBuffCounts(body, normalCounts, timedCounts);
+            TargetCharacterBuffCounts(connectionToClient, _bodyObject, normalCounts, timedCounts);
+        }
+
+        [TargetRpc]
+        public void TargetCharacterBuffCounts(NetworkConnection _connection, GameObject _bodyObject, int[] _normalCounts, int[] _timedCounts)
+        {
+            // Let the active inspector consume the snapshot without coupling networking to its UI
+            if (NetworkServer.active || _bodyObject == null) return;
+            Utils.ReceiveCharacterBuffCounts(_bodyObject.GetComponent<CharacterBody>(), _normalCounts, _timedCounts);
+        }
+
+        [ClientRpc]
+        public void RpcRefreshCharacterTeam(GameObject _bodyObject, TeamIndex _team)
+        {
+            // The host already refreshed the character when changing its team
+            if (NetworkServer.active || _bodyObject == null) return;
+
+            // Resolve the body on this client
+            CharacterBody body = _bodyObject.GetComponent<CharacterBody>();
+            if (body == null || body.teamComponent == null) return;
+
+            // Apply the team before refreshing visuals and collision layers
+            body.teamComponent.teamIndex = _team;
+            Utils.RefreshCharacterTeam(body);
+        }
+
         public void QueueDelayedPickupNotification(CharacterMaster _master, PickupIndex _triggerPickupIndex, PickupIndex _queuedPickupIndex)
         {
             // Validate input

@@ -109,132 +109,22 @@ namespace Faithful
         protected void RegisterSelectionDropdowns()
         {
             // Register essence selection dropdown
-            TMP_Dropdown essenceSelectionDropdown = transform.Find("EssenceSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>();
+            TMP_Dropdown essenceSelectionDropdown = DebugSelectionDropdown.Create(transform.Find("EssenceSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>());
             selectionDropdowns.Add(new SelectionDropdown(essenceSelectionDropdown, "Essence", ["Common", "Uncommon", "Legendary", "Boss/Planet", "Lunar", "Void Common", "Void Uncommon", "Void Legendary", "Void Boss/Planet", "Equipment", "Lunar Equipment"]));
 
             // Register character selection dropdown
-            TMP_Dropdown characterSelectionDropdown = transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>();
+            TMP_Dropdown characterSelectionDropdown = DebugSelectionDropdown.Create(transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>());
             selectionDropdowns.Add(new SelectionDropdown(characterSelectionDropdown, "Character", Utils.characterCardNames));
 
-            // Create list of pickup name tokens
-            List<string> pickupNames = new List<string>();
-
-            // Cycle through pickup definitions
-            foreach (PickupDef pickup in PickupCatalog.allPickups)
-            {
-                // Get processed internal name
-                string internalName = ProcessPickupInternalName(pickup);
-
-                // Add name token to list
-                pickupNames.Add(internalName);
-
-                // Cache in pickup lookup
-                pickupLookup[internalName] = pickup;
-            }
-
-            // Sort pickups alphabetically (list is so long this is needed in order to effectively navigate it)
-            pickupNames.Sort();
-
-            // Register pickup selection dropdown
-            TMP_Dropdown pickupSelectionDropdown = transform.Find("PickupSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>();
-            selectionDropdowns.Add(new SelectionDropdown(pickupSelectionDropdown, "Pickup", pickupNames));
+            // Register the shared pickup selection dropdown
+            TMP_Dropdown pickupSelectionDropdown = DebugPickupSelection.Create(transform.Find("PickupSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>(), pickupLookup);
+            selectionDropdowns.Add(new SelectionDropdown(pickupSelectionDropdown, "Pickup"));
 
             // Register team selection dropdown
             selectionDropdowns.Add(new SelectionDropdown(teamDropdown, "Character"));
 
             // Register elite selection dropdown
             selectionDropdowns.Add(new SelectionDropdown(eliteDropdown, "Character"));
-        }
-
-        private string ProcessPickupInternalName(PickupDef _pickup)
-        {
-            // Get internal name
-            string internalName = _pickup.internalName;
-
-            // Check if pickup is item
-            if (_pickup.itemIndex != ItemIndex.None)
-            {
-                // Get item definition
-                ItemDef item = ItemCatalog.GetItemDef(_pickup.itemIndex);
-
-                // Get item name
-                string itemName = Language.GetString(item.nameToken);
-
-                // Check if name not found
-                if (itemName == item.nameToken)
-                {
-                    // Switch to using internal name
-                    itemName = item.name;
-                }
-
-                // Check if valid item name
-                if (!string.IsNullOrWhiteSpace(itemName) && itemName != "???")
-                {
-                    // Override internal name
-                    internalName = itemName;
-                }
-            }
-
-            // Check if pickup is equipment
-            else if (_pickup.equipmentIndex != EquipmentIndex.None)
-            {
-                // Get equipment definition
-                EquipmentDef equipment = EquipmentCatalog.GetEquipmentDef(_pickup.equipmentIndex);
-
-                // Get equipment name
-                string equipmentName = Language.GetString(equipment.nameToken);
-
-                // Check if name not found
-                if (equipmentName == equipment.nameToken)
-                {
-                    // Switch to using internal name
-                    equipmentName = equipment.name;
-                }
-
-                // Check if valid equipment name
-                if (!string.IsNullOrWhiteSpace(equipmentName) && equipmentName != "???")
-                {
-                    // Override internal name
-                    internalName = equipmentName;
-                }
-            }
-
-            // Check if pickup is artifact
-            else if (_pickup.artifactIndex != ArtifactIndex.None)
-            {
-                // Get artifact definition
-                ArtifactDef artifact = ArtifactCatalog.GetArtifactDef(_pickup.artifactIndex);
-
-                // Get artifact name
-                string artifactName = Language.GetString(artifact.nameToken);
-
-                // Check if name not found
-                if (artifactName == artifact.nameToken)
-                {
-                    // Switch to using internal name
-                    artifactName = artifact.cachedName;
-                }
-
-                // Check if valid artifact name
-                if (!string.IsNullOrWhiteSpace(artifactName) && artifactName != "???")
-                {
-                    // Override internal name
-                    internalName = artifactName;
-                }
-            }
-
-            // Filter string
-            internalName = internalName.Replace("ItemTier.", "");
-            internalName = internalName.Replace("ItemIndex.", "");
-            internalName = internalName.Replace("EquipmentIndex.", "");
-            internalName = internalName.Replace("MiscPickupIndex.", "");
-            internalName = internalName.Replace("ArtifactIndex.", "");
-
-            // Add pickup index to ensure unique identifier
-            internalName += $" [{_pickup.pickupIndex.value}]";
-
-            // Return processed internal name
-            return internalName;
         }
 
         protected void OnSpawn()
@@ -313,14 +203,8 @@ namespace Faithful
             // Spawn requested amount
             for (int i = 0; i < spawnAmount; i++)
             {
-                // Create essence object
-                GameObject essence = Instantiate(LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/CommandCube"), localBody.transform.position, localBody.transform.rotation);
-                PickupIndexNetworker networker = essence.GetComponent<PickupIndexNetworker>();
-                UniquePickup pickup = networker.NetworkpickupState;
-                pickup.pickupIndex = index;
-                networker.NetworkpickupState = pickup;
-                essence.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(index);
-                NetworkServer.Spawn(essence);
+                // Spawn command essence through the shared pickup helper
+                Utils.SpawnCommandEssence(new UniquePickup(index), localBody.transform.position, localBody.transform.rotation);
             }
         }
 

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1737083168
+CRC: 2108307913
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ab2e67ee85a38663b3a5c0f622de8374
+    Hash: ff0225b51d51f3e7734feb62029fdb72
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7e6c650ee147aa14e558837369331065
+    Hash: ec75cda79f621b4127ef7b357858dce4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -67,6 +67,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
@@ -174,6 +176,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.Scrollbar/ScrollEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Slider/SliderEvent
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 - AssemblyName: UnityEngine.UI
@@ -564,6 +568,7 @@ Assets:
 - Assets/Items/ReserveBattery/ReserveBatteryDisplayMesh.obj
 - Assets/Items/SpaciousUmbrella/SpaciousUmbrellaMesh.prefab
 - Assets/Items/PlasmaFieldGen/AltIcons/texPlasmaFieldGeneratorUniqueIcon.png
+- Assets/Debug/UI/DebugCharacterPickupEntry.prefab
 - Assets/Equipment/Divider/AltIcons/texDividerLunarIcon.png
 - Assets/Survivors/Technician/Projectiles/TechnicianFloatingGrenade.prefab
 - Assets/Items/MatterAccelerator/MatterAcceleratorMesh.obj
@@ -747,6 +752,7 @@ Assets:
 - Assets/UI/texCustomExpansionWhiteIcon.png
 - Assets/Items/CharmingFacade/texCharmingFacade.png
 - Assets/Items/NoxiousSlimes/NoxiousSlimeGlassMesh.obj
+- Assets/Debug/UI/DebugCharacterBuffEntry.prefab
 - Assets/Items/TargetingMatrix/texTargetingMatrixIcon.png
 - Assets/Items/NoxiousSlimes/NoxiousSlimeGlassSlimeMesh.obj
 - Assets/Monsters/MechaSpider/Icons/texMechanicalSpiderIcon.png
@@ -787,6 +793,7 @@ Assets:
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaVoidIcon.png
 - Assets/Items/ToxinCanister/ToxinCanisterMesh.prefab
 - Assets/Items/CharmingFacade/AltIcons/texCharmingFacadeBossIcon.png
+- Assets/Debug/UI/DebugCharacterToolsPanel.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianConduitDirectIcon.png
 - Assets/Items/CharmingFacade/AltIcons/texCharmingFacadeTier3Icon.png
 - Assets/Items/TargetingMatrix/texIndicatorMatrixMask.png

@@ -1,5 +1,4 @@
-This app will patch a Script Assembly by generating all the necessary stuff so that your networking stuff :
-Commands Attribute, RPC stuff etc... will work.
+Manual console usage:
 
 Args when launching this weaver must be, in this order:
 string unityEngine => Path to UnityEngine.CoreModule.dll

@@ -39,10 +39,11 @@ namespace Faithful
                 return;
             }
 
-            // Is F1 key down - Item spawning (F5 for temp items)
-            if (Input.GetKey(KeyCode.F1) || Input.GetKey(KeyCode.F5))
+            // Is F1 key down - Item spawning (F5 for temporary items, F6 for ethereal items)
+            if (Input.GetKey(KeyCode.F1) || Input.GetKey(KeyCode.F5) || Input.GetKey(KeyCode.F6))
             {
-                bool temp = Input.GetKey(KeyCode.F5);
+                bool ethereal = Input.GetKey(KeyCode.F6);
+                bool temp = Input.GetKey(KeyCode.F5) && !ethereal;
 
                 bool spawn = false;
                 PickupIndex index = PickupCatalog.FindPickupIndex(ItemTier.Tier1);
@@ -108,14 +109,12 @@ namespace Faithful
                     Transform transform = PlayerCharacterMasterController.instances[0].master.GetBodyObject().transform;
 
                     if (Utils.verboseConsole) Log.Debug($"Spawning item at coordinates {transform.position}");
-                    GameObject essence = Object.Instantiate(LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/CommandCube"), transform.position, transform.rotation);
-                    PickupIndexNetworker networker = essence.GetComponent<PickupIndexNetworker>();
-                    UniquePickup pickup = networker.NetworkpickupState;
-                    pickup.pickupIndex = index;
-                    pickup.decayValue = temp ? 1.0f : 0.0f;
-                    networker.NetworkpickupState = pickup;
-                    essence.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(pickup);
-                    NetworkServer.Spawn(essence);
+                    UniquePickup pickup = new UniquePickup(index)
+                    {
+                        decayValue = temp ? 1.0f : 0.0f,
+                        isRental = ethereal
+                    };
+                    Utils.SpawnCommandEssence(pickup, transform.position, transform.rotation);
                 }
             }
         }

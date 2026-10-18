@@ -40,26 +40,27 @@ namespace Faithful
 
         public void SetState(bool _state)
         {
-            // Ensure state
-            toggle.isOn = _state;
+            // Update the toggle without triggering the same callback again
+            SetStateWithoutNotify(_state);
 
             // Check toggle state
             if (_state)
             {
                 // Call on callback
                 onCallback();
-
-                // Set toggle colours
-                toggle.colors = selectedColours;
             }
             else
             {
                 // Call off callback
                 offCallback();
-
-                // Set toggle colours
-                toggle.colors = normalColours;
             }
+        }
+
+        public void SetStateWithoutNotify(bool _state)
+        {
+            // Update the state and colours without running the associated callbacks
+            toggle.SetIsOnWithoutNotify(_state);
+            toggle.colors = _state ? selectedColours : normalColours;
         }
     }
 }

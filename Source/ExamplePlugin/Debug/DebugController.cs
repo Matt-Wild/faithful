@@ -14,6 +14,7 @@ namespace Faithful
         public DebugObjectAnalysis debugObjectAnalysis;
         public DebugComponentAnalysis debugComponentAnalysis;
         public DebugAudioAnalysis debugAudioAnalysis;
+        public DebugCharacterTools debugCharacterTools;
 
         public void Init()
         {
@@ -48,6 +49,10 @@ namespace Faithful
             // Add object component behaviour
             debugComponentAnalysis = transform.Find("DebugComponentAnalysisPanel").gameObject.AddComponent<DebugComponentAnalysis>();
             debugComponentAnalysis.Init(this);
+
+            // Add character tools behaviour
+            debugCharacterTools = transform.Find("DebugCharacterToolsPanel").gameObject.AddComponent<DebugCharacterTools>();
+            debugCharacterTools.Init(this);
 
             // Link debug object analysis and debug component analysis
             debugObjectAnalysis.AssignComponentAnalyser(debugComponentAnalysis);

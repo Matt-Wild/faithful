@@ -1,3 +1,8 @@
+### v1.5.5
+
+**Fixes**
+- Fixed Faithful expansion icon displaying incorrectly when disabled.
+
 ### v1.5.4
 
 **Compatibility**

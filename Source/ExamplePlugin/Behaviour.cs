@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using EntityStates;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using R2API;
 using RoR2;
 using UnityEngine;
@@ -288,6 +290,12 @@ namespace Faithful
             () => SceneDirector.onPrePopulateSceneServer += HookPrePopulateScene,
             () => SceneDirector.onPrePopulateSceneServer -= HookPrePopulateScene);
 
+        private static readonly HookRegistration characterLevelHook = new("CharacterBody.RecalculateStats (character level)",
+            () => IL.RoR2.CharacterBody.RecalculateStats += HookCharacterLevel,
+            () => IL.RoR2.CharacterBody.RecalculateStats -= HookCharacterLevel);
+
+        internal static bool characterLevelChangesAvailable => CanRunHook(characterLevelHook);
+
         private static readonly HookRegistration[] hooks =
         [
             holdoutZoneControllerUpdateHook,
@@ -310,6 +318,7 @@ namespace Faithful
             healHook,
             takeDamageProcessHook,
             recalculateStatsHook,
+            characterLevelHook,
             updateVisualEffectsHook,
             characterBodyFixedUpdateHook,
             characterBodyRollCritHook,
@@ -1327,6 +1336,25 @@ namespace Faithful
                 // Call
                 callback(self, damageInfo);
             }
+        }
+
+        private static void HookCharacterLevel(ILContext _il)
+        {
+            ILCursor cursor = new(_il);
+
+            // Find the level multiplier after team, ambient and bonus levels have been applied
+            if (!cursor.TryGotoNext(MoveType.Before,
+                instruction => instruction.MatchLdarg(0),
+                instruction => instruction.MatchCallOrCallvirt<CharacterBody>("get_level"),
+                instruction => instruction.MatchLdcR4(1.0f),
+                instruction => instruction.MatchSub()))
+            {
+                throw new System.InvalidOperationException("Could not find the character level multiplier in RecalculateStats.");
+            }
+
+            // Adjust the level before vanilla calculates stats and handles level-up effects
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.EmitDelegate<System.Action<CharacterBody>>(Utils.ApplyCharacterLevelOffset);
         }
 
         private static void HookRecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)

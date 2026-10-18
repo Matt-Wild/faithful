@@ -15,6 +15,12 @@ namespace Faithful
         // Store CharacterBody net ID
         [SyncVar(hook = nameof(CharacterIDChanged))] public NetworkInstanceId characterID;
 
+        // Store the adjustment to this character's calculated level
+        [SyncVar(hook = nameof(LevelOffsetChanged))] public float levelOffset;
+
+        // Store the level before applying the adjustment
+        public float unmodifiedLevel;
+
         // Store reference to Character Body
         private CharacterBody character;
 
@@ -44,6 +50,13 @@ namespace Faithful
         {
             // Add tick behaviour
             m_tickBehaviours.Add(new CharacterBodyTickBehaviour(_callback, _tickRate));
+        }
+
+        private void LevelOffsetChanged(float _newValue)
+        {
+            // Update the adjustment and refresh stats on connected clients
+            levelOffset = _newValue;
+            if (character != null) character.MarkAllStatsDirty();
         }
 
         private void CharacterIDChanged(NetworkInstanceId _newValue)
@@ -117,6 +130,9 @@ namespace Faithful
 
                 // Register behaviour with utils
                 Utils.RegisterFaithfulCharacterBodyBehaviour(character, this);
+
+                // Apply an adjustment received before the character body was linked
+                if (levelOffset != 0.0f) character.MarkAllStatsDirty();
 
                 // Fetch TJetpack behaviour
                 tJetpack = GetComponent<FaithfulTJetpackBehaviour>();

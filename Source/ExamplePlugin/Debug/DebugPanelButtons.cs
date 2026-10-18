@@ -115,6 +115,15 @@ namespace Faithful
         {
             // Assign panel toggle
             toggle = _toggle;
+
+            // Match the toggle to the panel's initial visibility
+            SyncPanelToggle(panel.gameObject.activeSelf);
+        }
+
+        public void SyncPanelToggle(bool _state)
+        {
+            // Reflect panel visibility without triggering another open or close callback
+            if (toggle != null) toggle.SetStateWithoutNotify(_state);
         }
 
         public void OnTabButtonClicked()

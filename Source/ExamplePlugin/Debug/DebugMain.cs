@@ -33,6 +33,10 @@
             // Add audio analysis toggle
             DebugPanelToggle toggle6 = transform.Find("AudioAnalysisToggle").gameObject.AddComponent<DebugPanelToggle>();
             toggle6.Init(debugController.debugAudioAnalysis);
+
+            // Add character tools toggle
+            DebugPanelToggle toggle7 = transform.Find("CharacterToolsToggle").gameObject.AddComponent<DebugPanelToggle>();
+            toggle7.Init(debugController.debugCharacterTools);
         }
     }
 }

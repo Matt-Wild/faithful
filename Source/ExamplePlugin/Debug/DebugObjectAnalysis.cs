@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Reflection;
 using TMPro;
@@ -806,10 +807,10 @@ namespace Faithful
         DebugObjectAnalysis analysisBehaviour;
 
         // Store scroll entry prefab
-        GameObject scrollEntryPrefab;
+        protected GameObject scrollEntryPrefab;
 
         // Store reference to scroll rect
-        ScrollRect scrollRect;
+        protected ScrollRect scrollRect;
 
         // Store reference to scroll panel transform
         Transform scrollPanel;
@@ -820,7 +821,10 @@ namespace Faithful
         // Store list of current scroll entries
         List<DebugObjectAnalysisScrollEntry> scrollEntries = new List<DebugObjectAnalysisScrollEntry>();
 
-        public void Init(DebugObjectAnalysis _analysisBehaviour)
+        // Store if the list needs one layout update after its rows have changed
+        bool layoutDirty = false;
+
+        public virtual void Init(DebugObjectAnalysis _analysisBehaviour)
         {
             // Assign analysis behaviour
             analysisBehaviour = _analysisBehaviour;
@@ -870,12 +874,14 @@ namespace Faithful
             // Cycle through scroll entries
             foreach (DebugObjectAnalysisScrollEntry entry in scrollEntries)
             {
-                // Destroy entry
+                // Remove the entry from layout immediately, then destroy it
+                entry.gameObject.SetActive(false);
                 Destroy(entry.gameObject);
             }
 
             // Clear scroll entries list
             scrollEntries.Clear();
+            layoutDirty = true;
         }
 
         protected DebugObjectAnalysisScrollEntry CreateScrollEntry(Object _entryObject, bool _searchEntry = false)
@@ -883,6 +889,7 @@ namespace Faithful
             // Create new scroll entry
             GameObject scrollEntry = Instantiate(scrollEntryPrefab);
             scrollEntry.transform.SetParent(scrollPanel, false);
+            scrollEntry.AddComponent<DebugGeneratedRow>();
 
             // Add scroll entry behaviour
             DebugObjectAnalysisScrollEntry behaviour = scrollEntry.AddComponent<DebugObjectAnalysisScrollEntry>();
@@ -891,12 +898,20 @@ namespace Faithful
             // Add to scroll entries list
             scrollEntries.Add(behaviour);
 
-            // Reset position of scroll rect
-            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
-            scrollRect.verticalNormalizedPosition = 1.0f;
+            // Rebuild once after all entries have been added
+            layoutDirty = true;
 
             // Return newly created scroll entry
             return behaviour;
+        }
+
+        protected virtual void LateUpdate()
+        {
+            // Update layout once per batch of changes rather than once per row
+            if (!layoutDirty) return;
+            layoutDirty = false;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
+            scrollRect.verticalNormalizedPosition = 1.0f;
         }
     }
 
@@ -998,6 +1013,23 @@ namespace Faithful
         // Store reference to search button
         Button searchButton;
 
+        // Store all matches while reusing only the visible result rows
+        List<GameObject> matchingObjects = new List<GameObject>();
+        DebugScrollList resultList;
+
+        // Store the current search and its most recent request
+        Coroutine searchRoutine;
+        string searchTerm;
+        float lastSearchRequestTime;
+
+        public override void Init(DebugObjectAnalysis _analysisBehaviour)
+        {
+            // Initialise the existing search section and reusable result list
+            base.Init(_analysisBehaviour);
+            resultList = scrollRect.gameObject.AddComponent<DebugScrollList>();
+            resultList.Init(scrollRect, (RectTransform)scrollEntryPrefab.transform, CreateResultRow, BindResultRow);
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -1011,6 +1043,9 @@ namespace Faithful
             // Add input field behaviour
             inputField.onEndEdit.AddListener(OnSearchInputGiven);
 
+            // Stop an outdated search when its query is edited
+            inputField.onValueChanged.AddListener(OnSearchChanged);
+
             // Add search button behaviour
             searchButton.onClick.AddListener(OnSearchPressed);
         }
@@ -1023,27 +1058,96 @@ namespace Faithful
 
         private void OnSearchInputGiven(string _inputText)
         {
-            // Destroy old scroll entries
-            DestroyScrollEntries();
+            // Ignore requests while the panel is closed
+            if (!isActiveAndEnabled || resultList == null) return;
 
-            // Check for search term
-            if (_inputText == "") return;
+            // Coalesce the input losing focus and the search button being clicked
+            if (_inputText == searchTerm && (searchRoutine != null || Time.unscaledTime - lastSearchRequestTime < 0.2f)) return;
 
-            // Find game objects using search term
-            GameObject[] matchingObjects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name.ToLower().Contains(_inputText.ToLower())).ToArray();
+            // Replace the previous search and reset the visible results
+            StopSearch();
+            searchTerm = _inputText;
+            lastSearchRequestTime = Time.unscaledTime;
+            resultList.SetItemCount(0, true);
+            matchingObjects.Clear();
+            title.text = "Search Results (0):";
+            if (string.IsNullOrEmpty(searchTerm)) return;
 
-            // Cycle through matching objects
-            foreach (GameObject matching in matchingObjects)
+            // Start filtering on the next frame so requests can be combined
+            title.text = "Searching...";
+            searchRoutine = StartCoroutine(SearchObjects(searchTerm));
+        }
+
+        private IEnumerator SearchObjects(string _searchTerm)
+        {
+            yield return null;
+
+            // Take one snapshot, including inactive objects and loaded prefabs
+            GameObject[] objects = Resources.FindObjectsOfTypeAll<GameObject>();
+            System.Diagnostics.Stopwatch timer = System.Diagnostics.Stopwatch.StartNew();
+
+            // Filter in small batches without blocking the game for the whole search
+            for (int i = 0; i < objects.Length; i++)
             {
-                // Create scroll entry
-                DebugObjectAnalysisScrollEntry entry = CreateScrollEntry(matching, true);
+                GameObject candidate = objects[i];
+                if (candidate != null && candidate.name.IndexOf(_searchTerm, System.StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    // Exclude generated rows, even while inactive or awaiting destruction
+                    if (candidate.GetComponentInParent<DebugGeneratedRow>(true) == null) matchingObjects.Add(candidate);
+                }
 
-                // Set entry title
-                entry.SetTitle($"'{matching.name}'");
+                // Allow input and rendering to continue during a large search
+                if ((i + 1) % 32 == 0 && timer.Elapsed.TotalMilliseconds >= 2.0)
+                {
+                    resultList.SetItemCount(matchingObjects.Count);
+                    title.text = $"Searching... ({matchingObjects.Count} matches)";
+                    yield return null;
+                    timer.Restart();
+                }
             }
 
-            // Update title text
-            title.text = $"Search Results ({matchingObjects.Length}):";
+            // Display the final count without limiting the available results
+            resultList.SetItemCount(matchingObjects.Count);
+            title.text = $"Search Results ({matchingObjects.Count}):";
+            searchRoutine = null;
+        }
+
+        private void CreateResultRow(GameObject _row)
+        {
+            // Install the existing manipulation controls once per visible row
+            _row.AddComponent<DebugObjectAnalysisScrollEntry>().Init(this, null, true);
+            resultList.AddNavigation(_row);
+        }
+
+        private void BindResultRow(GameObject _row, int _index)
+        {
+            // Reassign the row when a different result scrolls into view
+            GameObject matching = matchingObjects[_index];
+            DebugObjectAnalysisScrollEntry entry = _row.GetComponent<DebugObjectAnalysisScrollEntry>();
+            entry.Bind(matching, true);
+            entry.SetTitle(matching != null ? $"'{matching.name}'" : "Destroyed object");
+        }
+
+        private void OnSearchChanged(string _inputText)
+        {
+            // Keep completed results, but stop work for a query that is no longer current
+            if (_inputText != searchTerm) StopSearch();
+        }
+
+        private void OnDisable()
+        {
+            // Closing, minimising or leaving search cancels any remaining work
+            StopSearch();
+        }
+
+        private void StopSearch()
+        {
+            // Release the previous snapshot and retain any results already displayed
+            if (searchRoutine == null) return;
+            StopCoroutine(searchRoutine);
+            searchRoutine = null;
+            lastSearchRequestTime = float.NegativeInfinity;
+            title.text = $"Search cancelled ({matchingObjects.Count} matches):";
         }
     }
 
@@ -1083,15 +1187,6 @@ namespace Faithful
             // Assign scroll section
             scrollSection = _scrollSection;
 
-            // Assign entry object
-            entryObject = _entryObject;
-
-            // Update if search entry
-            searchEntry = _searchEntry;
-
-            // Assign parent transform
-            parentTransform = GetParentTransform();
-
             // Get titles
             activeTitle = Utils.FindChildWithTerm(transform, "ActiveTitle").GetComponent<TextMeshProUGUI>();
             inactiveTitle = Utils.FindChildWithTerm(transform, "InactiveTitle").GetComponent<TextMeshProUGUI>();
@@ -1112,10 +1207,19 @@ namespace Faithful
             // Apply fonts based on GameObject name tags
             Utils.ApplyFonts(transform);
 
-            // Update Titles
-            UpdateTitles();
+            // Bind the first object after the controls are ready
+            Bind(_entryObject, _searchEntry);
+        }
 
-            // Update buttons
+        public void Bind(Object _entryObject, bool _searchEntry)
+        {
+            // Reset all object state when reusing a result row
+            entryObject = _entryObject;
+            searchEntry = _searchEntry;
+            parentTransform = GetParentTransform();
+            objectExists = entryObject != null;
+            objectEnabled = CheckEntryObjectActive();
+            UpdateTitles();
             UpdateButtons();
         }
 
@@ -1420,6 +1524,9 @@ namespace Faithful
         // Store list of current scroll entries
         List<DebugComponentAnalysisScrollEntry> scrollEntries = new List<DebugComponentAnalysisScrollEntry>();
 
+        // Store if the list needs one layout update after its rows have changed
+        bool layoutDirty = false;
+
         public void Init(DebugObjectAnalysis _analysisBehaviour)
         {
             // Assign analysis behaviour
@@ -1464,12 +1571,14 @@ namespace Faithful
             // Cycle through scroll entries
             foreach (DebugComponentAnalysisScrollEntry entry in scrollEntries)
             {
-                // Destroy entry
+                // Remove the entry from layout immediately, then destroy it
+                entry.gameObject.SetActive(false);
                 Destroy(entry.gameObject);
             }
 
             // Clear scroll entries list
             scrollEntries.Clear();
+            layoutDirty = true;
         }
 
         protected DebugComponentAnalysisScrollEntry CreateScrollEntry(object _component, MemberInfo _memberInfo, List<ComponentLookupPair> _lookupTree = null)
@@ -1477,6 +1586,7 @@ namespace Faithful
             // Create new scroll entry
             GameObject scrollEntry = Instantiate(scrollEntryPrefab);
             scrollEntry.transform.SetParent(scrollPanel, false);
+            scrollEntry.AddComponent<DebugGeneratedRow>();
 
             // Add scroll entry behaviour
             DebugComponentAnalysisScrollEntry behaviour = scrollEntry.AddComponent<DebugComponentAnalysisScrollEntry>();
@@ -1485,12 +1595,20 @@ namespace Faithful
             // Add to scroll entries list
             scrollEntries.Add(behaviour);
 
-            // Reset position of scroll rect
-            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
-            scrollRect.verticalNormalizedPosition = 1.0f;
+            // Rebuild once after all entries have been added
+            layoutDirty = true;
 
             // Return newly created scroll entry
             return behaviour;
+        }
+
+        private void LateUpdate()
+        {
+            // Update layout once per batch of changes rather than once per row
+            if (!layoutDirty) return;
+            layoutDirty = false;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
+            scrollRect.verticalNormalizedPosition = 1.0f;
         }
     }
 

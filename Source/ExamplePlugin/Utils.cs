@@ -2,6 +2,7 @@
 using Faithful.Shared;
 using R2API;
 using RoR2;
+using RoR2.CharacterAI;
 using RoR2.ContentManagement;
 using RoR2.ExpansionManagement;
 using RoR2.Navigation;
@@ -340,7 +341,7 @@ namespace Faithful
             expansionDef.iconSprite = Assets.GetIcon("texCustomExpansionIcon");
 
             // Assign disabled icon and required entitlement
-            expansionDef.disabledIconSprite = dlc1.disabledIconSprite;
+            expansionDef.disabledIconSpriteReference = Assets.sotvDef.disabledIconSpriteReference;
             expansionDef.requiredEntitlement = null;
 
             // Assign run behaviour prefab
@@ -489,6 +490,105 @@ namespace Faithful
             }
         }
 
+        public static bool ChangeCharacterLevel(CharacterBody _body, float _level)
+        {
+            // Validate the character, level and server authority
+            if (!NetworkServer.active || _body == null || _body.teamComponent == null || Run.instance == null || TeamManager.instance == null || float.IsNaN(_level) || float.IsInfinity(_level)) return false;
+            if (!Behaviour.characterLevelChangesAvailable) return false;
+
+            // Require the synchronized character helper before applying the change
+            if (!characterBodyLookup.TryGetValue(_body, out FaithfulCharacterBodyBehaviour helper) || helper == null) return false;
+
+            // Refresh the current level before calculating the required offset
+            _body.RecalculateStats();
+            float level = Mathf.Max(1.0f, _level);
+            if (_body.level == level) return false;
+            float offset = level - helper.unmodifiedLevel;
+            if (float.IsNaN(offset) || float.IsInfinity(offset)) return false;
+
+            // Keep the adjustment for this body while allowing normal level gains
+            helper.levelOffset = offset;
+            _body.RecalculateStats();
+
+            // Report that the level changed
+            return true;
+        }
+
+        internal static void ApplyCharacterLevelOffset(CharacterBody _body)
+        {
+            // Apply the synchronized adjustment before level-dependent stats are calculated
+            if (!Behaviour.characterLevelChangesAvailable) return;
+            if (characterBodyLookup.TryGetValue(_body, out FaithfulCharacterBodyBehaviour helper) && helper != null)
+            {
+                helper.unmodifiedLevel = _body.level;
+                if (helper.levelOffset != 0.0f) _body.level = Mathf.Max(1.0f, _body.level + helper.levelOffset);
+            }
+        }
+
+        public static bool ChangeCharacterTeam(CharacterBody _body, TeamIndex _team)
+        {
+            // Validate the character, team and server authority
+            if (!NetworkServer.active || _body == null || _body.teamComponent == null || _team < TeamIndex.None || _team >= TeamIndex.Count) return false;
+
+            // Ignore characters already assigned to this team
+            CharacterMaster master = _body.master;
+            if (_body.teamComponent.teamIndex == _team && (master == null || master.teamIndex == _team)) return false;
+
+            // Require the network helper before applying the change
+            if (netUtils == null) return false;
+
+            // Update the master for AI and future respawns, and the body for its current affiliation
+            if (master != null) master.teamIndex = _team;
+            _body.teamComponent.teamIndex = _team;
+
+            // Refresh the character locally and on connected clients
+            RefreshCharacterTeam(_body);
+            netUtils.RpcRefreshCharacterTeam(_body.gameObject, _team);
+
+            // Clear old targets on this character and any AI now targeting an ally
+            foreach (CharacterMaster candidate in CharacterMaster.readOnlyInstancesList)
+            {
+                if (candidate == null || candidate.AiComponents == null) continue;
+                foreach (BaseAI ai in candidate.AiComponents)
+                {
+                    if (ai == null || ai.currentEnemy == null) continue;
+                    bool targetsCharacter = ai.currentEnemy.characterBody == _body || ai.bufferedTarget == _body.gameObject;
+                    if (candidate != master && !(candidate.teamIndex == _team && targetsCharacter)) continue;
+                    ai.currentEnemy.Reset();
+                    ai.bufferedTarget = null;
+                    ai.enemyAttention = 0.0f;
+                    ai.ForceAcquireNearestEnemyIfNoCurrentEnemy();
+                }
+            }
+
+            // Report that the team changed
+            return true;
+        }
+
+        public static void RefreshCharacterTeam(CharacterBody _body)
+        {
+            // Check the character still exists
+            if (_body == null || _body.teamComponent == null) return;
+
+            // Refresh collision layers while preserving temporary fake actor effects
+            if (!_body.doNotReassignToTeamBasedCollisionLayer)
+            {
+                _body.originalLayer = LayerIndex.GetAppropriateLayerForTeam(_body.teamComponent.teamIndex);
+                _body.RestoreLayer();
+            }
+
+            // Rebuild the existing indicator for the new team
+            if (_body.teamComponent.indicator != null)
+            {
+                Object.Destroy(_body.teamComponent.indicator);
+                _body.teamComponent.indicator = null;
+            }
+            _body.teamComponent.RebuildIndicator();
+
+            // Recalculate team-dependent levels and stats
+            _body.MarkAllStatsDirty();
+        }
+
         public static void SpawnCharacterCard(Transform _target, string _name, int _amount = 1, TeamIndex _team = TeamIndex.Monster, System.Action<SpawnCard.SpawnResult> _onSpawn = null)
         {
             // Attempt to get character spawn card
@@ -562,6 +662,380 @@ namespace Faithful
                 // Spawn pickup
                 PickupDropletController.CreatePickupDroplet(index, _position, velocity);
             }
+        }
+
+        public static GameObject SpawnCommandEssence(UniquePickup _pickup, Vector3 _position, Quaternion? _rotation = null)
+        {
+            // Validate the pickup and server authority before spawning a networked essence
+            if (!NetworkServer.active || Run.instance == null || PickupCatalog.GetPickupDef(_pickup.pickupIndex) == null) return null;
+
+            // Preserve pickup modifiers when configuring both the essence and its choices
+            GameObject essence = Object.Instantiate(LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/CommandCube"), _position, _rotation ?? Quaternion.identity);
+            essence.GetComponent<PickupIndexNetworker>().NetworkpickupState = _pickup;
+            essence.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(_pickup);
+            NetworkServer.Spawn(essence);
+            return essence;
+        }
+
+        public static bool GivePickup(Inventory _inventory, PickupDef _pickup, int _quantity = 1, PickupModifier _modifier = PickupModifier.Normal)
+        {
+            // Validate inventory requests without requiring a debug panel or a living body
+            if (!NetworkServer.active || _inventory == null || _pickup == null || _quantity <= 0 || _modifier < PickupModifier.Normal || _modifier > PickupModifier.Temporary) return false;
+            if (_pickup.itemIndex == ItemIndex.None && _modifier != PickupModifier.Normal) return false;
+            if (_pickup.equipmentIndex != EquipmentIndex.None && Run.instance == null) return false;
+            long previousCount = GetInventoryPickupCount(_inventory, _pickup, _modifier);
+
+            // Batch changes through the game's synchronized inventory operations
+            _inventory.InventoryChangedHandler(inventory =>
+            {
+                if (_pickup.itemIndex != ItemIndex.None)
+                {
+                    switch (_modifier)
+                    {
+                        case PickupModifier.Temporary:
+                            inventory.GiveItemTemp(_pickup.itemIndex, _quantity);
+                            break;
+                        case PickupModifier.Ethereal:
+                            inventory.GiveItemRented(_pickup.itemIndex, _quantity);
+                            break;
+                        default:
+                            inventory.GiveItemPermanent(_pickup.itemIndex, _quantity);
+                            break;
+                    }
+                }
+                else if (_pickup.equipmentIndex != EquipmentIndex.None)
+                {
+                    GiveEquipment(inventory, _pickup.equipmentIndex, _quantity);
+                }
+                else if (_pickup.keyItemIndex != KeyItemIndex.None)
+                {
+                    inventory.GiveKeyItem(_pickup.keyItemIndex);
+                }
+            });
+
+            // The game may reject pickups or limit equipment to its available slots
+            return GetInventoryPickupCount(_inventory, _pickup, _modifier) != previousCount;
+        }
+
+        private static void GiveEquipment(Inventory _inventory, EquipmentIndex _equipmentIndex, int _quantity)
+        {
+            // Fill available equipment locations without iterating beyond the inventory's capacity
+            Inventory.EquipmentLocationQueryArgs query = Inventory.EquipmentLocationQueryArgs.defaultPickup;
+            query.searchAllSlots = true;
+            int capacity = Mathf.Max(1, _inventory.GetEquipmentSlotCount() * _inventory.GetEquipmentSetCount());
+            for (int i = 0; i < Mathf.Min(_quantity, capacity); i++)
+            {
+                if (!_inventory.TryFindBestEquipmentLocation(query, out EquipmentLocation location))
+                {
+                    // A full inventory replaces its current equipment, like a normal pickup
+                    if (i == 0) _inventory.SetEquipmentIndex(_equipmentIndex, _inventory.activeEquipmentLocation);
+                    break;
+                }
+                _inventory.SetEquipmentIndex(_equipmentIndex, location);
+
+                // Stop if the game rejects the equipment, such as an expansion-locked pickup
+                if (_inventory.GetEquipment(location).equipmentIndex != _equipmentIndex) break;
+            }
+        }
+
+        public static bool RemovePickup(Inventory _inventory, PickupDef _pickup, PickupModifier _modifier = PickupModifier.Normal, bool _all = false)
+        {
+            // Validate the inventory, pickup modifier and server authority
+            if (!NetworkServer.active || _inventory == null || _pickup == null || _modifier < PickupModifier.Normal || _modifier > PickupModifier.Temporary) return false;
+            if (_pickup.itemIndex == ItemIndex.None && _modifier != PickupModifier.Normal) return false;
+            if (_pickup.equipmentIndex != EquipmentIndex.None && Run.instance == null) return false;
+            long previousCount = GetInventoryPickupCount(_inventory, _pickup, _modifier);
+            if (previousCount == 0) return false;
+
+            // Remove only the requested pickup and storage type
+            _inventory.InventoryChangedHandler(inventory =>
+            {
+                if (_pickup.itemIndex != ItemIndex.None)
+                {
+                    RemoveItem(inventory, _pickup.itemIndex, _modifier, _all);
+                }
+                else if (_pickup.equipmentIndex != EquipmentIndex.None)
+                {
+                    RemoveEquipment(inventory, _pickup.equipmentIndex, _all);
+                }
+                else if (_pickup.keyItemIndex != KeyItemIndex.None && inventory.GetKeyItemIndex() == _pickup.keyItemIndex)
+                {
+                    inventory.SetKeyItem(KeyItemIndex.None);
+                }
+            });
+            return GetInventoryPickupCount(_inventory, _pickup, _modifier) != previousCount;
+        }
+
+        private static void RemoveItem(Inventory _inventory, ItemIndex _itemIndex, PickupModifier _modifier, bool _all)
+        {
+            // Remove only ethereal copies when requested
+            if (_modifier == PickupModifier.Ethereal)
+            {
+                int count = _inventory.GetItemCountRented(_itemIndex);
+                if (count > 0) _inventory.RemoveItemRented(_itemIndex, _all ? count : 1);
+                return;
+            }
+
+            // Remove only temporary copies when requested
+            if (_modifier == PickupModifier.Temporary)
+            {
+                int count = _inventory.GetItemCountTemp(_itemIndex);
+                if (count > 0) _inventory.RemoveItemTemp(_itemIndex, _all ? count : 1);
+                return;
+            }
+
+            // Normal copies include permanent items and positive channeled stacks
+            if (_all)
+            {
+                _inventory.RemoveItemPermanent(_itemIndex, _inventory.GetItemCountPermanent(_itemIndex));
+                _inventory.RemoveItemChanneled(_itemIndex, Mathf.Max(0, _inventory.GetItemCountChanneled(_itemIndex)));
+                return;
+            }
+            if (_inventory.GetItemCountPermanent(_itemIndex) > 0) _inventory.RemoveItemPermanent(_itemIndex);
+            else if (_inventory.GetItemCountChanneled(_itemIndex) > 0) _inventory.RemoveItemChanneled(_itemIndex);
+        }
+
+        private static void RemoveEquipment(Inventory _inventory, EquipmentIndex _equipmentIndex, bool _all)
+        {
+            // Remove matching equipment locations without changing other equipment
+            for (uint slot = 0; slot < _inventory.GetEquipmentSlotCount(); slot++)
+            {
+                for (uint set = 0; set < _inventory.GetEquipmentSetCount(); set++)
+                {
+                    EquipmentLocation location = new EquipmentLocation { slot = slot, set = set };
+                    if (_inventory.GetEquipment(location).equipmentIndex != _equipmentIndex) continue;
+                    _inventory.SetEquipment(EquipmentState.empty, location);
+                    if (!_all) return;
+                }
+            }
+        }
+
+        public static bool ClearInventory(Inventory _inventory)
+        {
+            // This is a full wipe, including hidden items, every item variant, equipment and key items
+            if (!NetworkServer.active || _inventory == null || Run.instance == null) return false;
+            long previousCount = GetInventoryPickupCount(_inventory);
+            if (previousCount == 0) return false;
+            _inventory.InventoryChangedHandler(inventory =>
+            {
+                inventory.CleanInventory(Inventory.CleanInventoryArgs.All().SetFilter(itemIndex => true));
+
+                // The game's clean options do not include channeled item stacks
+                for (int i = 0; i < ItemCatalog.itemCount; i++)
+                {
+                    ItemIndex itemIndex = (ItemIndex)i;
+                    int count = inventory.GetItemCountChanneled(itemIndex);
+                    if (count == int.MinValue)
+                    {
+                        inventory.GiveItemChanneled(itemIndex, int.MaxValue);
+                        count = inventory.GetItemCountChanneled(itemIndex);
+                    }
+                    if (count != 0) inventory.GiveItemChanneled(itemIndex, -count);
+                }
+            });
+            return GetInventoryPickupCount(_inventory) != previousCount;
+        }
+
+        private static long GetInventoryPickupCount(Inventory _inventory, PickupDef _pickup, PickupModifier _modifier)
+        {
+            // Count the requested variant independently of whether its effects are disabled
+            if (_pickup.itemIndex != ItemIndex.None)
+            {
+                if (_modifier == PickupModifier.Ethereal) return _inventory.GetItemCountRented(_pickup.itemIndex);
+                if (_modifier == PickupModifier.Temporary) return _inventory.GetItemCountTemp(_pickup.itemIndex);
+                return (long)_inventory.GetItemCountPermanent(_pickup.itemIndex) + Mathf.Max(0, _inventory.GetItemCountChanneled(_pickup.itemIndex));
+            }
+            if (_pickup.keyItemIndex != KeyItemIndex.None) return _inventory.GetKeyItemIndex() == _pickup.keyItemIndex ? 1 : 0;
+            if (_pickup.equipmentIndex == EquipmentIndex.None) return 0;
+
+            // Equipment can occupy more than one slot or set
+            long count = 0;
+            for (uint slot = 0; slot < _inventory.GetEquipmentSlotCount(); slot++)
+            {
+                for (uint set = 0; set < _inventory.GetEquipmentSetCount(); set++)
+                {
+                    EquipmentLocation location = new EquipmentLocation { slot = slot, set = set };
+                    if (_inventory.GetEquipment(location).equipmentIndex == _pickup.equipmentIndex) count++;
+                }
+            }
+            return count;
+        }
+
+        private static long GetInventoryPickupCount(Inventory _inventory)
+        {
+            // Include hidden and negative channeled values when checking a full wipe
+            long count = 0;
+            for (int i = 0; i < ItemCatalog.itemCount; i++)
+            {
+                ItemIndex itemIndex = (ItemIndex)i;
+                count += (long)_inventory.GetItemCountPermanent(itemIndex) + _inventory.GetItemCountRented(itemIndex) + _inventory.GetItemCountTemp(itemIndex) + System.Math.Abs((long)_inventory.GetItemCountChanneled(itemIndex));
+            }
+            for (uint slot = 0; slot < _inventory.GetEquipmentSlotCount(); slot++)
+            {
+                for (uint set = 0; set < _inventory.GetEquipmentSetCount(); set++)
+                {
+                    EquipmentLocation location = new EquipmentLocation { slot = slot, set = set };
+                    if (_inventory.GetEquipment(location).equipmentIndex != EquipmentIndex.None) count++;
+                }
+            }
+            if (_inventory.GetKeyItemIndex() != KeyItemIndex.None) count++;
+            return count;
+        }
+
+        public static string GetPickupDisplayName(PickupDef _pickup)
+        {
+            // Prefer the localized name, falling back to the catalog's internal name
+            if (_pickup == null) return string.Empty;
+            string nameToken = _pickup.nameToken;
+            string fallback = _pickup.internalName ?? string.Empty;
+            if (_pickup.itemIndex != ItemIndex.None)
+            {
+                ItemDef item = ItemCatalog.GetItemDef(_pickup.itemIndex);
+                if (item != null)
+                {
+                    nameToken = item.nameToken;
+                    fallback = item.name;
+                }
+            }
+            else if (_pickup.equipmentIndex != EquipmentIndex.None)
+            {
+                EquipmentDef equipment = EquipmentCatalog.GetEquipmentDef(_pickup.equipmentIndex);
+                if (equipment != null)
+                {
+                    nameToken = equipment.nameToken;
+                    fallback = equipment.name;
+                }
+            }
+            else if (_pickup.artifactIndex != ArtifactIndex.None)
+            {
+                ArtifactDef artifact = ArtifactCatalog.GetArtifactDef(_pickup.artifactIndex);
+                if (artifact != null)
+                {
+                    nameToken = artifact.nameToken;
+                    fallback = artifact.cachedName;
+                }
+            }
+            string name = string.IsNullOrWhiteSpace(nameToken) ? null : Language.GetString(nameToken);
+            if (!string.IsNullOrWhiteSpace(name) && name != "???" && name != nameToken) return name;
+
+            // Strip catalog prefixes only from fallback names, leaving localized text unchanged
+            return fallback.Replace("ItemTier.", "").Replace("ItemIndex.", "").Replace("EquipmentIndex.", "").Replace("MiscPickupIndex.", "").Replace("ArtifactIndex.", "").Replace("KeyItemIndex.", "");
+        }
+
+        // Receive server buff counts while a client is inspecting a character
+        internal static event System.Action<CharacterBody, int[], int[]> characterBuffCountsReceived;
+
+        internal static void ReceiveCharacterBuffCounts(CharacterBody _body, int[] _normalCounts, int[] _timedCounts)
+        {
+            characterBuffCountsReceived?.Invoke(_body, _normalCounts, _timedCounts);
+        }
+
+        public static void GetCharacterBuffCounts(CharacterBody _body, int[] _normalCounts, int[] _timedCounts)
+        {
+            // Reuse caller-owned buffers instead of allocating while inspecting buffs each frame
+            System.Array.Clear(_normalCounts, 0, _normalCounts.Length);
+            System.Array.Clear(_timedCounts, 0, _timedCounts.Length);
+            if (!NetworkServer.active || _body == null) return;
+            foreach (CharacterBody.TimedBuff timedBuff in _body.timedBuffs)
+            {
+                int index = (int)timedBuff.buffIndex;
+                if (index >= 0 && index < _timedCounts.Length) _timedCounts[index]++;
+            }
+            int count = Mathf.Min(BuffCatalog.buffCount, Mathf.Min(_normalCounts.Length, _timedCounts.Length));
+            for (int i = 0; i < count; i++)
+            {
+                int total = _body.GetBuffCount((BuffIndex)i);
+                _timedCounts[i] = Mathf.Min(total, _timedCounts[i]);
+                _normalCounts[i] = Mathf.Max(0, total - _timedCounts[i]);
+            }
+        }
+
+        public static bool GiveBuff(CharacterBody _body, BuffDef _buff, int _quantity = 1, float _duration = 0.0f)
+        {
+            // Zero duration adds normal buffs; positive duration uses the game's timed buff rules
+            if (!NetworkServer.active || _body == null || _buff == null || BuffCatalog.GetBuffDef(_buff.buffIndex) == null || _quantity <= 0 || float.IsNaN(_duration) || float.IsInfinity(_duration) || _duration < 0.0f) return false;
+            int previousCount = _body.GetBuffCount(_buff.buffIndex);
+            double previousDuration = GetTimedBuffDurationSum(_body, _buff.buffIndex);
+            if (_duration == 0.0f)
+            {
+                // Unmanaged buffs are appropriate when there is no source responsible for removal
+                int quantity = Mathf.Min(_quantity, int.MaxValue - previousCount);
+                if (quantity > 0) _body.AddUnmanagedBuff(_buff.buffIndex, quantity);
+            }
+            else
+            {
+                int quantity = _buff.canStack ? Mathf.Min(_quantity, int.MaxValue - previousCount) : 1;
+                for (int i = 0; i < quantity; i++) _body.AddTimedBuff(_buff, _duration);
+            }
+            return _body.GetBuffCount(_buff.buffIndex) != previousCount || GetTimedBuffDurationSum(_body, _buff.buffIndex) != previousDuration;
+        }
+
+        public static bool RemoveBuff(CharacterBody _body, BuffDef _buff, bool _timed = false, bool _all = false)
+        {
+            // Keep normal and timed ownership separate when removing buffs
+            if (!NetworkServer.active || _body == null || _buff == null || BuffCatalog.GetBuffDef(_buff.buffIndex) == null) return false;
+            BuffIndex buffIndex = _buff.buffIndex;
+            int timedCount = 0;
+            int firstToExpire = -1;
+            float shortestTimer = float.PositiveInfinity;
+            for (int i = 0; i < _body.timedBuffs.Count; i++)
+            {
+                CharacterBody.TimedBuff timedBuff = _body.timedBuffs[i];
+                if (timedBuff.buffIndex != buffIndex) continue;
+                timedCount++;
+                if (firstToExpire < 0 || timedBuff.timer < shortestTimer)
+                {
+                    firstToExpire = i;
+                    shortestTimer = timedBuff.timer;
+                }
+            }
+            if (_timed)
+            {
+                if (firstToExpire < 0) return false;
+                if (_all) _body.ClearTimedBuffs(buffIndex);
+                else
+                {
+                    // The native oldest-buff helper selects the longest timer in this game version
+                    _body.timedBuffs.RemoveAt(firstToExpire);
+                    _body.RemoveBuff(buffIndex);
+                }
+                return true;
+            }
+
+            // Remove unmanaged normal buffs before buffs owned by other non-timer sources
+            int normalCount = Mathf.Max(0, _body.GetBuffCount(buffIndex) - timedCount);
+            int amount = _all ? normalCount : Mathf.Min(1, normalCount);
+            if (amount == 0) return false;
+            int unmanaged = Mathf.Min(amount, _body.unmanagedBuffsServer[(int)buffIndex]);
+            if (unmanaged > 0) _body.RemoveUnmanagedBuff(buffIndex, unmanaged);
+            if (amount > unmanaged) _body.RemoveBuffInternal(buffIndex, amount - unmanaged);
+            return true;
+        }
+
+        public static bool ClearBuffs(CharacterBody _body)
+        {
+            // Clear timers and normal counts through native removal methods so buff effects update
+            if (!NetworkServer.active || _body == null) return false;
+            bool changed = false;
+            for (int i = 0; i < BuffCatalog.buffCount; i++)
+            {
+                BuffDef buff = BuffCatalog.GetBuffDef((BuffIndex)i);
+                if (buff == null) continue;
+                changed |= RemoveBuff(_body, buff, true, true);
+                changed |= RemoveBuff(_body, buff, false, true);
+            }
+            return changed;
+        }
+
+        private static double GetTimedBuffDurationSum(CharacterBody _body, BuffIndex _buffIndex)
+        {
+            // Detect duration refreshes as well as changes in timed stack counts
+            double duration = 0.0;
+            foreach (CharacterBody.TimedBuff timedBuff in _body.timedBuffs)
+            {
+                if (timedBuff.buffIndex == _buffIndex) duration += timedBuff.timer;
+            }
+            return duration;
         }
 
         public static void MakeElite(CharacterBody _character, Inventory _inventory, EliteDef _eliteDef)

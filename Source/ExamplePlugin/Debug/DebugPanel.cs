@@ -55,12 +55,18 @@ namespace Faithful
         {
             // Set active
             gameObject.SetActive(true);
+
+            // Keep the main menu toggle in sync when opened from another panel
+            panelButtons.SyncPanelToggle(true);
         }
 
         public void Close()
         {
             // Set inactive
             gameObject.SetActive(false);
+
+            // Keep the main menu toggle in sync when closed from another panel
+            panelButtons.SyncPanelToggle(false);
         }
 
         public void Maximise()
