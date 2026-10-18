@@ -7,19 +7,10 @@ using HarmonyLib;
 
 namespace Faithful
 {
-    // This is an example plugin that can be put in
-    // BepInEx/plugins/ExamplePlugin/ExamplePlugin.dll to test out.
-    // It's a small plugin that adds a relatively simple item to the game,
-    // and gives you that item whenever you press F2.
-
-    // This attribute specifies that we have a dependency on a given BepInEx Plugin,
-    // We need the R2API ItemAPI dependency because we are using for adding our item to the game.
-    // You don't need this if you're not using R2API in your plugin,
-    // it's just to tell BepInEx to initialize R2API before this plugin so it's safe to use R2API.
+    // Required R2API modules
     [BepInDependency(ItemAPI.PluginGUID)]
 
-    // This one is because we use a .language file for language tokens
-    // More info in https://risk-of-thunder.github.io/R2Wiki/Mod-Creation/Assets/Localization/
+    // Language token overlays
     [BepInDependency(LanguageAPI.PluginGUID)]
 
     [BepInDependency(PrefabAPI.PluginGUID)]
@@ -28,21 +19,11 @@ namespace Faithful
     // For Quality support
     [BepInDependency("com.Gorakh.ItemQualities", BepInDependency.DependencyFlags.SoftDependency)]
 
-    // This attribute is required, and lists metadata for your plugin.
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
-    // This is the main declaration of our plugin class.
-    // BepInEx searches for all classes inheriting from BaseUnityPlugin to initialize on startup.
-    // BaseUnityPlugin itself inherits from MonoBehaviour,
-    // so you can use this as a reference for what you can declare and use in your plugin class
-    // More information in the Unity Docs: https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
     public class Faithful : BaseUnityPlugin
     {
-        // The Plugin GUID should be a unique ID for this plugin,
-        // which is human readable (as it is used in places like the config).
-        // If we see this PluginGUID as it is on thunderstore,
-        // we will deprecate this mod.
-        // Change the PluginAuthor and the PluginName !
+        // Stable plugin identity used by BepInEx and configuration
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
@@ -51,7 +32,7 @@ namespace Faithful
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
 
-        // Hook failures can be tolerated; callbacks still require complete core initialization.
+        // Hook failures can be tolerated; callbacks still require complete core initialization
         internal static bool InitializationSucceeded { get; private set; }
 
         // Toolbox
@@ -93,7 +74,7 @@ namespace Faithful
         // Interactables
         internal static Interactable recollectionShrine;
 
-        // The Awake() method is run at the very start when the game is initialized.
+        // The Awake() method is run at the very start when the game is initialized
         public void Awake()
         {
             // Update plugin info
