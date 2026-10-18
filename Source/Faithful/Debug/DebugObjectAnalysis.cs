@@ -283,6 +283,9 @@ namespace Faithful
         // Store owner text reference
         TextMeshProUGUI ownerText;
 
+        // Open character tools for supported character components
+        Button characterToolsButton;
+
         // Store component state buttons behaviour
         DebugComponentAnalysisStateButtons stateButtons;
 
@@ -315,6 +318,10 @@ namespace Faithful
             // Get owner text
             ownerText = Utils.FindChildWithTerm(transform, "OwnerTitle").GetComponent<TextMeshProUGUI>();
 
+            // Find the character tools button and add its behaviour
+            characterToolsButton = transform.Find("CharacterToolsButton").GetComponent<Button>();
+            characterToolsButton.onClick.AddListener(OnCharacterToolsClicked);
+
             // Add state buttons behaviour
             stateButtons = gameObject.AddComponent<DebugComponentAnalysisStateButtons>();
             stateButtons.Init(this);
@@ -340,6 +347,9 @@ namespace Faithful
                 // Refresh analysed object
                 objectAnalysis.RefreshAnalysedObject();
             }
+
+            // Also handle a character master losing or receiving its body
+            UpdateCharacterToolsButton();
         }
 
         public void AssignObjectAnalyser(DebugObjectAnalysis _objectAnalysis)
@@ -460,11 +470,47 @@ namespace Faithful
             // Set analysed component for state buttons
             stateButtons.AnalyseComponent(analysedComponent);
 
+            // Show character tools only for supported character components
+            UpdateCharacterToolsButton();
+
             // Set analysed component for methods section
             methodsSection.AnalyseComponent(analysedComponent, _lookupTree);
 
             // Set analysed component for attributes section
             attributesSection.AnalyseComponent(analysedComponent, _lookupTree);
+        }
+
+        private RoR2.CharacterBody GetAnalysedCharacter()
+        {
+            // Resolve only the analysed component, rather than unrelated components on its object
+            if (analysedComponent is RoR2.CharacterMaster master && master != null) return master.GetBody();
+            if (analysedComponent is RoR2.CharacterBody body && body != null) return body;
+            if (analysedComponent is RoR2.HealthComponent health && health != null) return health.body;
+            return null;
+        }
+
+        private void UpdateCharacterToolsButton()
+        {
+            // Keep unsupported components hidden and bodyless or dead characters unavailable
+            bool supported = analysing && (analysedComponent is RoR2.CharacterMaster || analysedComponent is RoR2.CharacterBody || analysedComponent is RoR2.HealthComponent);
+            characterToolsButton.gameObject.SetActive(supported);
+            RoR2.CharacterBody body = supported ? GetAnalysedCharacter() : null;
+            characterToolsButton.interactable = body != null && body.healthComponent != null && body.healthComponent.alive;
+        }
+
+        private void OnCharacterToolsClicked()
+        {
+            // Recheck the character in case its body changed since the button was updated
+            RoR2.CharacterBody body = GetAnalysedCharacter();
+            if (body == null || body.healthComponent == null || !body.healthComponent.alive) return;
+
+            // Open character tools on this target using the shared panel and toggle handling
+            DebugCharacterTools characterTools = debugController.debugCharacterTools;
+            characterTools.Open();
+            characterTools.Maximise();
+            characterTools.SelectCharacter(body);
+            objectAnalysis.Close();
+            Close();
         }
 
         public void RefreshAnalysedObject()

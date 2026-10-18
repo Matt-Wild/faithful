@@ -26,6 +26,9 @@ namespace Faithful
         // Store reference to visual effect
         private TemporaryVisualEffect visualEffect;
 
+        // Store character that owns the visual effect
+        private CharacterBody visualEffectTargeter;
+
         // Store starting local position of display bone
         private Vector3 displayPos;
 
@@ -72,8 +75,12 @@ namespace Faithful
         float outOfRangeTime;
 
         // Blacklisted characters for targeting
-        string[] blacklisted = ["AffixEarthHealerBody"];
+        string[] blacklisted = ["AffixEarthHealerBody", "ArtifactShellBody"];
         BodyIndex[] blacklistedIndexes;
+
+        // Blacklisted buffs for targeting
+        string[] blacklistedBuffs = ["bdBrotherThroneShield", "bdHiddenInvincibility", "bdHiddenRejectAllDamage"];
+        BuffIndex[] blacklistedBuffIndexes;
 
         public FaithfulTargetingMatrixBehaviour()
         {
@@ -118,6 +125,25 @@ namespace Faithful
 
             // Set blacklisted indexes
             blacklistedIndexes = bodyIndexes.ToArray();
+
+            // Convert buff names once instead of looking them up during target searches
+            List<BuffIndex> buffIndexes = new List<BuffIndex>();
+            foreach (string name in blacklistedBuffs)
+            {
+                BuffIndex buffIndex = BuffCatalog.FindBuffIndex(name);
+                if (buffIndex != BuffIndex.None) buffIndexes.Add(buffIndex);
+            }
+            blacklistedBuffIndexes = buffIndexes.ToArray();
+        }
+
+        bool HasBlacklistedBuff(CharacterBody _character)
+        {
+            // Any listed buff makes this character unavailable for targeting
+            foreach (BuffIndex buffIndex in blacklistedBuffIndexes)
+            {
+                if (_character.HasBuff(buffIndex)) return true;
+            }
+            return false;
         }
 
         public void FetchSettings()
@@ -168,8 +194,8 @@ namespace Faithful
             // Check for targets
             if (!HasAnyTarget) return;
 
-            // Track if targets changed
-            bool targetsChanged = false;
+            // Track how many targets need replacing
+            int targetsRemoved = 0;
 
             // Cycle through targets backwards so targets can be removed during iteration
             for (int i = targets.Count - 1; i >= 0; i--)
@@ -182,7 +208,7 @@ namespace Faithful
                 {
                     // Remove invalid target
                     RemoveTarget(currentTarget, false);
-                    targetsChanged = true;
+                    targetsRemoved++;
                     continue;
                 }
 
@@ -208,18 +234,18 @@ namespace Faithful
                 {
                     // Remove target
                     RemoveTarget(currentTarget, false);
-                    targetsChanged = true;
+                    targetsRemoved++;
                 }
             }
 
-            // Check if targets changed
-            if (targetsChanged)
+            // Check if targets were removed
+            if (targetsRemoved > 0)
             {
                 // Sync target state
                 CmdSyncTarget();
 
-                // Attempt to find new target
-                SearchForTarget();
+                // Replace only the targets removed
+                SearchForTarget(targetsRemoved);
             }
         }
 
@@ -298,11 +324,6 @@ namespace Faithful
             }
 
             Invoke(nameof(SearchForTargetForKill), 0.1f);
-        }
-
-        void SearchForTarget()
-        {
-            SearchForTarget(int.MaxValue);
         }
 
         void SearchForTargetForKill()
@@ -384,6 +405,9 @@ namespace Faithful
 
                 // Check if blacklisted
                 if (blacklistedIndexes.Contains(characterBody.bodyIndex)) continue;
+
+                // Skip characters protected by a blacklisted buff
+                if (HasBlacklistedBuff(characterBody)) continue;
 
                 // Valid target
                 filteredCharacterBodies.Add(characterBody);
@@ -474,7 +498,7 @@ namespace Faithful
             FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour == null ? null : targetCharacterBehaviour.targetingMatrix;
 
             // Tell target targeting matrix behaviour that it's no longer being targeted
-            targetTargetingMatrixBehaviour?.SetNotTargeted();
+            targetTargetingMatrixBehaviour?.SetNotTargeted(character);
 
             // Remove target
             targets.Remove(_target);
@@ -575,7 +599,7 @@ namespace Faithful
         public void SetTargeted(CharacterBody _targeter)
         {
             // Check if targeter is the local player
-            if (Utils.localPlayerBody != _targeter) return;
+            if (_targeter == null || Utils.localPlayerBody != _targeter) return;
 
             // Check for visual effect
             if (visualEffect != null) return;
@@ -590,6 +614,7 @@ namespace Faithful
                 visualEffect.visualState = TemporaryVisualEffect.VisualState.Enter;
                 visualEffect.healthComponent = character.healthComponent;
                 visualEffect.radius = character.radius;
+                visualEffectTargeter = _targeter;
                 LocalCameraEffect component = gameObject.GetComponent<LocalCameraEffect>();
                 if (component)
                 {
@@ -598,22 +623,26 @@ namespace Faithful
             }
         }
 
-        public void SetNotTargeted()
+        public void SetNotTargeted(CharacterBody _targeter)
         {
-            // Check for visual effect
-            if (visualEffect == null) return;
+            // Only the character that owns the visual effect can remove it
+            if (visualEffectTargeter != _targeter) return;
 
             // Remove visual effect
-            visualEffect.visualState = TemporaryVisualEffect.VisualState.Exit;
+            if (visualEffect != null) visualEffect.visualState = TemporaryVisualEffect.VisualState.Exit;
+
+            // Clear references so a new effect can be created while the old one exits
+            visualEffect = null;
+            visualEffectTargeter = null;
         }
 
         [Command]
         public void CmdSyncTarget()
         {
-            // Clear targets on clients first
-            RpcSyncNoTarget();
+            // Collect network IDs for all current targets
+            List<NetworkInstanceId> targetNetIDs = [];
 
-            // Sync all targets on clients
+            // Cycle through targets
             foreach (CharacterBody currentTarget in targets)
             {
                 // Validate target
@@ -623,48 +652,64 @@ namespace Faithful
                 NetworkIdentity networkIdentity = currentTarget.GetComponent<NetworkIdentity>();
                 if (networkIdentity == null) continue;
 
-                // Sync target on all clients
-                RpcAddSyncTarget(networkIdentity.netId);
+                // Add target network ID
+                targetNetIDs.Add(networkIdentity.netId);
             }
+
+            // Sync the complete target list on all clients
+            RpcSyncTargets(targetNetIDs.ToArray());
         }
 
         [ClientRpc]
-        private void RpcAddSyncTarget(NetworkInstanceId _targetNetID)
+        private void RpcSyncTargets(NetworkInstanceId[] _targetNetIDs)
         {
             // Unnecessary for host
             if (Utils.hosting) return;
 
-            // Attempt to find target character body
-            CharacterBody targetBody = ClientScene.FindLocalObject(_targetNetID)?.GetComponent<CharacterBody>();
+            // Copy targets so missing targets can be removed during iteration
+            List<CharacterBody> previousTargets = [.. targets];
 
-            // Check for target body
-            if (targetBody == null)
+            // Remove only targets no longer present in the synced list
+            foreach (CharacterBody currentTarget in previousTargets)
             {
-                // Warn and return
-                Log.Warning($"[TARGETING MATRIX] | Could not find target body with net ID {_targetNetID} - Sync unsuccessful.");
-                return;
+                // Get target network identity
+                NetworkIdentity networkIdentity = currentTarget == null ? null : currentTarget.GetComponent<NetworkIdentity>();
+
+                // Remove missing or invalid target without syncing back to the host
+                if (networkIdentity == null || !_targetNetIDs.Contains(networkIdentity.netId))
+                {
+                    RemoveTarget(currentTarget, false);
+                }
             }
 
-            // Get faithful behaviour for target
-            FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(targetBody);
-            if (targetCharacterBehaviour == null) return;
+            // Add new targets while keeping existing indicators active
+            foreach (NetworkInstanceId targetNetID in _targetNetIDs)
+            {
+                // Attempt to find target character body
+                CharacterBody targetBody = ClientScene.FindLocalObject(targetNetID)?.GetComponent<CharacterBody>();
 
-            // Get targeting matrix behaviour for target
-            FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
-            if (targetTargetingMatrixBehaviour == null) return;
+                // Check for target body
+                if (targetBody == null)
+                {
+                    // Warn and skip target
+                    Log.Warning($"[TARGETING MATRIX] | Could not find target body with net ID {targetNetID} - Sync unsuccessful.");
+                    continue;
+                }
 
-            // Add target
-            AddTarget(targetBody, targetTargetingMatrixBehaviour);
-        }
+                // Skip targets already held
+                if (HasTarget(targetBody)) continue;
 
-        [ClientRpc]
-        private void RpcSyncNoTarget()
-        {
-            // Unnecessary for host
-            if (Utils.hosting) return;
+                // Get faithful behaviour for target
+                FaithfulCharacterBodyBehaviour targetCharacterBehaviour = Utils.FindCharacterBodyHelper(targetBody);
+                if (targetCharacterBehaviour == null) continue;
 
-            // Remove targets
-            RemoveTarget(false);
+                // Get targeting matrix behaviour for target
+                FaithfulTargetingMatrixBehaviour targetTargetingMatrixBehaviour = targetCharacterBehaviour.targetingMatrix;
+                if (targetTargetingMatrixBehaviour == null) continue;
+
+                // Add target
+                AddTarget(targetBody, targetTargetingMatrixBehaviour);
+            }
         }
 
         public void OnDisplayModelCreated()

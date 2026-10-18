@@ -24,6 +24,9 @@ namespace Faithful
         // Store reference to child objects
         protected List<GameObject> children = new List<GameObject>();
 
+        // Remember which children were active before minimising
+        protected Dictionary<GameObject, bool> childStates = new Dictionary<GameObject, bool>();
+
         // Store menu panel heights
         protected float openedHeight;
         protected float closedHeight;
@@ -160,7 +163,7 @@ namespace Faithful
             // Open menu panel
             panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, openedHeight);
 
-            // Enable children
+            // Restore the children that were active before minimising
             SetChildrenActive(true);
 
             // Set tab button sprite
@@ -173,10 +176,13 @@ namespace Faithful
 
         public void MinimisePanel()
         {
+            // Repeated requests must not replace the saved states with hidden ones
+            if (panel.minimised) return;
+
             // Close menu panel
             panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, closedHeight);
 
-            // Disable children
+            // Remember child states before hiding them
             SetChildrenActive(false);
 
             // Set tab button sprite
@@ -192,9 +198,22 @@ namespace Faithful
             // Cycle through all children in menu panel
             foreach (GameObject child in children)
             {
-                // Set child active
-                child.SetActive(_active);
+                if (child == null) continue;
+
+                // Save activeSelf so a closed parent does not change the remembered state
+                if (!_active)
+                {
+                    childStates[child] = child.activeSelf;
+                    child.SetActive(false);
+                }
+                else if (childStates.TryGetValue(child, out bool wasActive))
+                {
+                    child.SetActive(wasActive);
+                }
             }
+
+            // Maximising an already open panel must leave its current children unchanged
+            if (_active) childStates.Clear();
         }
     }
 }

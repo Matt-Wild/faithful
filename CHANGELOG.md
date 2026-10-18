@@ -1,3 +1,12 @@
+### v1.5.6
+
+**Fixes**
+- Targeting Matrix can no longer target characters with buffs Throne Shield, Hidden Invincibility, or Hidden Reject All Damage.
+- Targeting Matric can no longer target the Artifact Reliquary.
+- Targeting Matrix item display no longer starts open when first picking up the item despite not having a target yet.
+- Quality Targeting Matrix visual effects are no longer out of sync on clients.
+- Quality Targeting Matrix no longer targets too many characters after a target dies to another cause.
+
 ### v1.5.5
 
 **Fixes**

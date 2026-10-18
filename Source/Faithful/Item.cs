@@ -645,9 +645,6 @@ namespace Faithful
 
         void Start()
         {
-            // Skip if no character body specifiers provided
-            if (displaySpecifiers.Count == 0) return;
-
             // Attempt to get character body
             CharacterBody characterBody = body;
 

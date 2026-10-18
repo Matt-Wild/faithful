@@ -199,6 +199,13 @@ namespace Faithful
             On.RoR2.PingerController.AttemptPing -= OnAttemptPing;
         }
 
+        public override void OnMaximise()
+        {
+            // Refresh the visible character panels if the target changed while minimised
+            base.OnMaximise();
+            UpdateCharacterPanel();
+        }
+
         private void UpdateCharacterPanel()
         {
             // Update the inventory target before showing or hiding the character panel
@@ -223,14 +230,14 @@ namespace Faithful
             {
                 // No character selected
                 characterPanel.SetActive(false);
-                noCharacterPanel.SetActive(true);
+                noCharacterPanel.SetActive(!minimised);
                 teamDropdown.interactable = false;
 
                 return;
             }
 
-            // Enable character panel
-            characterPanel.SetActive(true);
+            // Keep character content hidden until the panel is maximised
+            characterPanel.SetActive(!minimised);
             noCharacterPanel.SetActive(false);
 
             // Update character name
@@ -332,7 +339,13 @@ namespace Faithful
             if (localBody == null || localBody.healthComponent == null || !localBody.healthComponent.alive) return;
 
             // Target the player and refresh the character tools immediately
-            currentCharacter = localBody;
+            SelectCharacter(localBody);
+        }
+
+        public void SelectCharacter(CharacterBody _character)
+        {
+            // Share immediate targeting between self selection and other debug panels
+            currentCharacter = _character != null && _character.healthComponent != null && _character.healthComponent.alive ? _character : null;
             UpdateCharacterPanel();
             previousCharacter = currentCharacter;
         }
