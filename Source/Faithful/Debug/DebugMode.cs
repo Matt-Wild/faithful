@@ -10,6 +10,7 @@ namespace Faithful
     {
         // Store reference to debug UI
         protected GameObject ui;
+        protected DebugController debugController;
 
         // Constructor
         public DebugMode()
@@ -128,15 +129,13 @@ namespace Faithful
             }
 
             // Add On Stage Start behaviour
-            On.RoR2.Stage.Start += OnStageStart;
+            Behaviour.AddStageStartCallback(OnStageStart);
         }
 
-        IEnumerator OnStageStart(On.RoR2.Stage.orig_Start orig, Stage self)
+        void OnStageStart(Stage self)
         {
             // Create UI
             CreateUI();
-
-            return orig(self); // Run normal processes
         }
 
         void CreateUI()
@@ -145,7 +144,7 @@ namespace Faithful
             ui = Object.Instantiate(Assets.GetObject("debugcanvas"));
 
             // Add Debug Controller component
-            DebugController debugController = ui.AddComponent<DebugController>();
+            debugController = ui.AddComponent<DebugController>();
             debugController.Init();
 
             // Disable UI on creation
@@ -156,6 +155,12 @@ namespace Faithful
         {
             // Toggle UI
             ui.SetActive(!ui.activeInHierarchy);
+        }
+
+        public void RefreshProfiler()
+        {
+            // Refresh the current stage's panel after the frame has been recorded
+            if (debugController != null && debugController.debugProfiler != null) debugController.debugProfiler.Refresh();
         }
     }
 }

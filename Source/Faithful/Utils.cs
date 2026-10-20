@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using Faithful.Shared;
 using R2API;
 using RoR2;
@@ -142,6 +142,9 @@ namespace Faithful
         // Store list of character bodies and corresponding faithful character behaviours
         static private Dictionary<CharacterBody, FaithfulCharacterBodyBehaviour> characterBodyLookup = new Dictionary<CharacterBody, FaithfulCharacterBodyBehaviour>();
 
+        // Display-only buff values, independent of gameplay stack counts
+        private static readonly Dictionary<BuffDef, System.Func<CharacterBody, int, int>> buffDisplayValues = new();
+
         // HG shader
         static private Shader HGShader;
 
@@ -169,17 +172,13 @@ namespace Faithful
         private static readonly HookRegistration ruleBookHook = new("PreGameController.onPreGameControllerSetRuleBookGlobal",
             () => PreGameController.onPreGameControllerSetRuleBookGlobal += OnPreGameControllerSetRuleBookGlobal,
             () => PreGameController.onPreGameControllerSetRuleBookGlobal -= OnPreGameControllerSetRuleBookGlobal);
-        private static readonly HookRegistration mainMenuHook = new("BaseMainMenuScreen.OnEnter",
-            () => On.RoR2.UI.MainMenu.BaseMainMenuScreen.OnEnter += OnMainMenuEnter,
-            () => On.RoR2.UI.MainMenu.BaseMainMenuScreen.OnEnter -= OnMainMenuEnter);
-        private static readonly HookRegistration loadoutPanelHook = new("LoadoutPanelController.OnEnable",
-            () => On.RoR2.UI.LoadoutPanelController.OnEnable += OnLoadoutPanelEnable,
-            () => On.RoR2.UI.LoadoutPanelController.OnEnable -= OnLoadoutPanelEnable);
-
         public static void Init(PluginInfo _pluginInfo)
         {
             // Detect assemblies
             DetectAssemblies();
+
+            // Release any remaining character helpers when a run ends
+            Run.onRunDestroyGlobal += ClearCharacterBodyLookup;
 
             // Create debug mode setting
             debugModeSetting = Config.CreateSetting("DEBUG_MODE", "Debug Tools", "Debug Mode", false, "Do you want to enable this mod's debug mode?", false, true, _restartRequired: true);
@@ -215,7 +214,9 @@ namespace Faithful
             HGShader = LegacyResourcesAPI.Load<Shader>("Shaders/Deferred/HGStandard");
 
             // Config Simulacrum
-            On.RoR2.InfiniteTowerRun.OverrideRuleChoices += InjectSimulacrumBannedItems;
+            Behaviour.AddInfiniteTowerRuleChoicesCallback(InjectSimulacrumBannedItems);
+            Behaviour.AddMainMenuEnterCallback(OnMainMenuEnter);
+            Behaviour.AddLoadoutPanelEnableCallback(OnLoadoutPanelEnable);
 
             // Init content pack provider
             FaithfulContentPackProvider.Init();
@@ -224,8 +225,8 @@ namespace Faithful
             if (debugMode)
             {
                 // Inject character spawn card awake and spawn behaviour
-                On.RoR2.CharacterSpawnCard.Awake += OnCharacterSpawnCardAwake;
-                On.RoR2.CharacterSpawnCard.Spawn += OnCharacterSpawnCardSpawn;
+                Behaviour.AddSpawnCardAwakeCallback(OnCharacterSpawnCardAwake);
+                Behaviour.AddSpawnCardSpawnCallback(OnCharacterSpawnCardSpawn);
             }
 
             /*// Load language file
@@ -243,15 +244,13 @@ namespace Faithful
         internal static void EnableMenuHooks()
         {
             ruleBookHook.TryEnable();
-            mainMenuHook.TryEnable();
-            loadoutPanelHook.TryEnable();
+            Behaviour.EnableMenuHooks();
         }
 
         internal static void DisableMenuHooks()
         {
             ruleBookHook.TryDisable();
-            mainMenuHook.TryDisable();
-            loadoutPanelHook.TryDisable();
+            Behaviour.DisableMenuHooks();
         }
 
         private static void DetectAssemblies()
@@ -358,6 +357,11 @@ namespace Faithful
             items[_token] = _item;
         }
 
+        public static void RegisterBuffDisplayValue(BuffDef _buff, System.Func<CharacterBody, int, int> _valueSource)
+        {
+            buffDisplayValues[_buff] = _valueSource;
+        }
+
         // Refresh chosen buff on chosen character
         public static void RefreshTimedBuffs(CharacterBody body, BuffDef buffDef, float duration, int amount = int.MaxValue)
         {
@@ -365,6 +369,10 @@ namespace Faithful
             {
                 return; // Body not valid
             }
+
+            // Stop once all possible matching stacks have been refreshed
+            amount = Mathf.Min(amount, body.GetBuffCount(buffDef));
+            if (amount <= 0) return;
 
             // Account for Radiant Timepiece
             duration += Faithful.radiantTimepiece.GetAdditionalTimedBuffDuration(buffDef, body);
@@ -386,6 +394,7 @@ namespace Faithful
 
                     // Increment counter
                     counter++;
+                    if (counter >= amount) return;
                 }
             }
         }
@@ -450,6 +459,24 @@ namespace Faithful
         {
             // Add to dictionary
             characterBodyLookup[_characterBody] = _faithfulBehaviour;
+        }
+
+        public static void UnregisterFaithfulCharacterBodyBehaviour(CharacterBody _characterBody, FaithfulCharacterBodyBehaviour _faithfulBehaviour)
+        {
+            // Destroyed Unity objects still have managed references which need removing
+            if (ReferenceEquals(_characterBody, null)) return;
+
+            // Only remove this helper's registration, preserving any replacement
+            if (characterBodyLookup.TryGetValue(_characterBody, out FaithfulCharacterBodyBehaviour helper) && ReferenceEquals(helper, _faithfulBehaviour))
+            {
+                characterBodyLookup.Remove(_characterBody);
+            }
+        }
+
+        private static void ClearCharacterBodyLookup(Run _run)
+        {
+            // Release registrations left over from the run
+            characterBodyLookup.Clear();
         }
 
         public static void AddCorruptionPair(ItemDef _corrupter, string _corruptedToken, string _corruptedOverride = "")
@@ -1048,7 +1075,7 @@ namespace Faithful
             _character.baseMaxHealth *= _eliteDef.healthBoostCoefficient;
         }
 
-        static void InjectSimulacrumBannedItems(On.RoR2.InfiniteTowerRun.orig_OverrideRuleChoices orig, InfiniteTowerRun self, RuleChoiceMask mustInclude, RuleChoiceMask mustExclude, ulong runSeed)
+        static void InjectSimulacrumBannedItems(InfiniteTowerRun self, RuleChoiceMask mustInclude, RuleChoiceMask mustExclude, ulong runSeed)
         {
             // List of items needing to be banned
             List<ItemDef> newBanned = [];
@@ -1079,7 +1106,6 @@ namespace Faithful
                 self.blacklistedItems = newBanned.ToArray();
             }
 
-            orig(self, mustInclude, mustExclude, runSeed);  // Run normal processes
         }
 
         static void RegisterCharacterSpawnCard(CharacterSpawnCard _spawnCard)
@@ -1144,18 +1170,14 @@ namespace Faithful
             return [.. builtPairs];
         }
 
-        private static void OnCharacterSpawnCardAwake(On.RoR2.CharacterSpawnCard.orig_Awake orig, CharacterSpawnCard self)
+        private static void OnCharacterSpawnCardAwake(CharacterSpawnCard self)
         {
-            orig(self); // Run normal processes
-
             // Register spawn card
             RegisterCharacterSpawnCard(self);
         }
 
-        private static void OnCharacterSpawnCardSpawn(On.RoR2.CharacterSpawnCard.orig_Spawn orig, CharacterSpawnCard self, Vector3 position, Quaternion rotation, DirectorSpawnRequest directorSpawnRequest, ref SpawnCard.SpawnResult result)
+        private static void OnCharacterSpawnCardSpawn(CharacterSpawnCard self, Vector3 position, Quaternion rotation, DirectorSpawnRequest directorSpawnRequest, ref SpawnCard.SpawnResult result)
         {
-            orig(self, position, rotation, directorSpawnRequest, ref result); // Run normal processes
-
             // Register spawn card
             RegisterCharacterSpawnCard(self);
         }
@@ -1183,48 +1205,24 @@ namespace Faithful
             }
         }
 
-        private static void OnMainMenuEnter(On.RoR2.UI.MainMenu.BaseMainMenuScreen.orig_OnEnter orig, RoR2.UI.MainMenu.BaseMainMenuScreen self, RoR2.UI.MainMenu.MainMenuController mainMenuController)
+        private static void OnMainMenuEnter(RoR2.UI.MainMenu.BaseMainMenuScreen self, RoR2.UI.MainMenu.MainMenuController mainMenuController)
         {
-            // Run original processes
-            orig(self, mainMenuController);
-
-            if (!Faithful.InitializationSucceeded || !mainMenuHook.IsActive) return;
-
-            try
+            // Update randomiser mode from config
+            _randomiserMode = randomiserModeSetting.Value;
+            if (randomiserMode)
             {
-                // Update randomiser mode from config
-                _randomiserMode = randomiserModeSetting.Value;
-                if (randomiserMode)
-                {
-                    RandomiseAndRefresh();
-                }
-                else
-                {
-                    RefreshItemSettings();
-                }
+                RandomiseAndRefresh();
             }
-            catch (System.Exception exception)
+            else
             {
-                mainMenuHook.Fail("execute", exception);
+                RefreshItemSettings();
             }
         }
 
-        private static void OnLoadoutPanelEnable(On.RoR2.UI.LoadoutPanelController.orig_OnEnable orig, RoR2.UI.LoadoutPanelController self)
+        private static void OnLoadoutPanelEnable(RoR2.UI.LoadoutPanelController self)
         {
-            // Run original processes
-            orig(self);
-
-            if (!Faithful.InitializationSucceeded || !loadoutPanelHook.IsActive) return;
-
-            try
-            {
-                RandomiseAndRefresh();
-                LookupTable.Reset();
-            }
-            catch (System.Exception exception)
-            {
-                loadoutPanelHook.Fail("execute", exception);
-            }
+            RandomiseAndRefresh();
+            LookupTable.Reset();
         }
 
         public static void ApplyFonts(Transform parent)
@@ -1789,17 +1787,20 @@ namespace Faithful
             return null; // Return null if not found
         }
 
-        public static FaithfulCharacterBodyBehaviour FindCharacterBodyHelper(CharacterBody _characterBody)
+        public static FaithfulCharacterBodyBehaviour FindCharacterBodyHelper(CharacterBody _characterBody, bool _warnIfMissing = true)
         {
+            // Check for character body
+            if (_characterBody == null) return null;
+
             // Check for character body in character body lookup
-            if (characterBodyLookup.ContainsKey(_characterBody))
+            if (characterBodyLookup.TryGetValue(_characterBody, out FaithfulCharacterBodyBehaviour helper))
             {
                 // Return corresponding faithful behaviour
-                return characterBodyLookup[_characterBody];
+                return helper;
             }
 
             // Check if verbose mode
-            if (verboseConsole)
+            if (verboseConsole && _warnIfMissing)
             {
                 // Warn and return null
                 Log.Warning($"[UTILS] - Could not find faithful character body behaviour for character '{_characterBody.name}' with net ID {_characterBody.GetComponent<NetworkIdentity>().netId}.");
@@ -2484,9 +2485,27 @@ namespace Faithful
             return modelLocator.modelTransform.GetComponent<CharacterModel>();
         }
 
+        public static int GetBuffDisplayValue(CharacterBody _body, BuffIndex _buffIndex)
+        {
+            int count = _body.GetBuffCount(_buffIndex);
+            if (!Behaviour.buffDisplayValuesAvailable) return count;
+
+            BuffDef buff = BuffCatalog.GetBuffDef(_buffIndex);
+            if (buff == null || !buffDisplayValues.TryGetValue(buff, out System.Func<CharacterBody, int, int> valueSource)) return count;
+            return valueSource(_body, count);
+        }
+
         public static List<CharacterBody> GetAlivePlayerBodies(bool _requiresConnected = true)
         {
-            List<CharacterBody> bodies = new List<CharacterBody>();
+            List<CharacterBody> bodies = new();
+            GetAlivePlayerBodies(bodies, _requiresConnected);
+            return bodies;
+        }
+
+        public static void GetAlivePlayerBodies(List<CharacterBody> _bodies, bool _requiresConnected = true)
+        {
+            // Reuse the supplied list
+            _bodies.Clear();
 
             foreach (PlayerCharacterMasterController player in PlayerCharacterMasterController.instances)
             {
@@ -2513,14 +2532,11 @@ namespace Faithful
                 // Only include alive bodies
                 if (body.healthComponent.alive)
                 {
-                    bodies.Add(body);
+                    _bodies.Add(body);
                 }
             }
-
-            return bodies;
         }
 
-        // Get all Holdout Zones this character is in
         public static List<HoldoutZoneController> GetHoldoutZonesContainingCharacter(CharacterMaster _character)
         {
             // Check for character body
@@ -2599,23 +2615,41 @@ namespace Faithful
             return IsCharacterInHoldoutZone(_character.GetBody(), _holdoutZone);
         }
 
-        // Return Hurt Boxes from RoR2 Sphere Search
+        // Return distinct Hurt Boxes within a sphere
         public static HurtBox[] GetHurtBoxesInSphere(Vector3 position, float radius)
         {
-            if (radius <= 0)
+            using (HG.CollectionPool<HurtBox, List<HurtBox>>.RentCollection(out List<HurtBox> hurtBoxes))
             {
-                return []; // Can't check 0 or negative radius
+                GetHurtBoxesInSphere(position, radius, hurtBoxes);
+                return hurtBoxes.ToArray();
             }
+        }
 
-            // Get hurt boxes in sphere search
-            RoR2.HurtBox[] hurtBoxes = new SphereSearch // SPHERE SEARCH IS LIMITED TO ONLY 100 COLLIDERS (BEFORE FILTERS) SO IT CAN BE VERY UNRELIABLE
+        public static void GetHurtBoxesInSphere(Vector3 _position, float _radius, List<HurtBox> _hurtBoxes)
+        {
+            // Reuse the supplied list
+            _hurtBoxes.Clear();
+            if (_radius <= 0.0f) return;
+
+            // Use the same physics query as SphereSearch without its temporary candidate buffers
+            int count = HGPhysics.OverlapSphere(out Collider[] colliders, _position, _radius, LayerIndex.entityPrecise.mask, QueryTriggerInteraction.UseGlobal);
+            try
             {
-                radius = radius,
-                mask = LayerIndex.entityPrecise.mask,
-                origin = position
-            }.RefreshCandidates().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes();
-
-            return hurtBoxes;   // Return found hurt boxes
+                using (HG.CollectionPool<HealthComponent, HashSet<HealthComponent>>.RentCollection(out HashSet<HealthComponent> victims))
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        // Keep the first hurt box for each health component
+                        HurtBox hurtBox = colliders[i].GetComponent<HurtBox>();
+                        if (hurtBox == null || hurtBox.healthComponent == null) continue;
+                        if (victims.Add(hurtBox.healthComponent)) _hurtBoxes.Add(hurtBox);
+                    }
+                }
+            }
+            finally
+            {
+                HGPhysics.ReturnResults(colliders);
+            }
         }
 
         // Returns all character bodies in holdout zone
@@ -2672,8 +2706,15 @@ namespace Faithful
 
         public static List<CharacterMaster> GetCharactersForTeam(TeamIndex _teamIndex, bool _requiresBody = true)
         {
-            // Initialise list
-            List<CharacterMaster> characters = new List<CharacterMaster>();
+            List<CharacterMaster> characters = new();
+            GetCharactersForTeam(characters, _teamIndex, _requiresBody);
+            return characters;
+        }
+
+        public static void GetCharactersForTeam(List<CharacterMaster> _characters, TeamIndex _teamIndex, bool _requiresBody = true)
+        {
+            // Reuse the supplied list
+            _characters.Clear();
 
             // Cycle through characters
             foreach (CharacterMaster character in CharacterMaster.readOnlyInstancesList)
@@ -2682,12 +2723,9 @@ namespace Faithful
                 if (character.teamIndex == _teamIndex && (!_requiresBody || character.hasBody))
                 {
                     // Add to list
-                    characters.Add(character);
+                    _characters.Add(character);
                 }
             }
-
-            // Return list
-            return characters;
         }
 
         public static int GetItemCountForTeam(TeamIndex _teamIndex, ItemDef _itemDef, bool _requiresAlive = true, bool _requiresConnected = true)

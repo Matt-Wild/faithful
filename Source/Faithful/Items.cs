@@ -1,5 +1,4 @@
-﻿using On.RoR2.UI.LogBook;
-using RoR2;
+﻿using RoR2;
 using RoR2.ExpansionManagement;
 using System;
 using System.Collections.Generic;
@@ -25,7 +24,7 @@ namespace Faithful
             CreateAllItemsSettings();
 
             // Hook behaviour
-            LogBookController.CanSelectItemEntry += OnCanSelectItemEntry;
+            Behaviour.AddCanSelectItemEntryCallback(OnCanSelectItemEntry);
         }
 
         static void CreateAllItemsSettings()
@@ -58,13 +57,13 @@ namespace Faithful
             return newItem;
         }
 
-        static bool OnCanSelectItemEntry(LogBookController.orig_CanSelectItemEntry orig, ItemDef itemDef, Dictionary<ExpansionDef, bool> expansionAvailability)
+        static bool OnCanSelectItemEntry(ItemDef itemDef, Dictionary<ExpansionDef, bool> expansionAvailability)
         {
             // Check if item is hidden from logbook
             foreach (Item item in items) if (item.itemDef == itemDef) if (item.hiddenFromLogbook) return false;
 
-            // Return original method result if not hidden from logbook
-            return orig(itemDef, expansionAvailability);
+            // Leave normal selection rules in place for other entries
+            return true;
         }
 
         public static Item GetItem(string _token)

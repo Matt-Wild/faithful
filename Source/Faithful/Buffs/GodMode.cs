@@ -41,10 +41,10 @@ namespace Faithful
             Behaviour.AddUpdateCallback(Update, true);
 
             // Add On Get User Name behaviour
-            On.RoR2.CharacterBody.GetUserName += OnGetUsername;
+            Behaviour.AddGetUserNameCallback(OnGetUsername);
 
             // Override On Map Zone Teleport Body
-            On.RoR2.MapZone.TeleportBody += OnMapTeleportBody;
+            Behaviour.AddMapTeleportBodyCallback(OnMapTeleportBody);
         }
 
         void InHoldoutZone(CharacterBody _body, HoldoutZoneController _zone)
@@ -225,30 +225,16 @@ namespace Faithful
             }
         }
 
-        string OnGetUsername(On.RoR2.CharacterBody.orig_GetUserName orig, CharacterBody self)
+        string OnGetUsername(CharacterBody self, string _name)
         {
-            // Check for buff
-            if (self.GetBuffCount(godModeBuff.buffDef) > 0)
-            {
-                // Add "Godly" to username
-                return "Godly " + orig(self);
-            }
-
-            // Otherwise ignore behaviour
-            return orig(self);
+            // Add "Godly" to the normal username while the buff is active
+            return self.GetBuffCount(godModeBuff.buffDef) > 0 ? "Godly " + _name : _name;
         }
 
-        void OnMapTeleportBody(On.RoR2.MapZone.orig_TeleportBody orig, MapZone self, CharacterBody characterBody)
+        bool OnMapTeleportBody(MapZone self, CharacterBody characterBody)
         {
-            // Check for buff
-            if (characterBody.GetBuffCount(godModeBuff.buffDef) > 0)
-            {
-                // Ignore behaviour
-                return;
-            }
-
-            // Otherwise run normal processes
-            orig(self, characterBody);
+            // Allow normal teleportation only when God Mode is inactive
+            return characterBody.GetBuffCount(godModeBuff.buffDef) <= 0;
         }
     }
 }

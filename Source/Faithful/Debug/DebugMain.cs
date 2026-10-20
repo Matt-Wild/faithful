@@ -37,6 +37,10 @@
             // Add character tools toggle
             DebugPanelToggle toggle7 = transform.Find("CharacterToolsToggle").gameObject.AddComponent<DebugPanelToggle>();
             toggle7.Init(debugController.debugCharacterTools);
+
+            // Add profiler toggle
+            DebugPanelToggle toggle8 = transform.Find("FaithfulProfilerToggle").gameObject.AddComponent<DebugPanelToggle>();
+            toggle8.Init(debugController.debugProfiler);
         }
     }
 }

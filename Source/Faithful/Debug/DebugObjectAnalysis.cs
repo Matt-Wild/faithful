@@ -87,13 +87,13 @@ namespace Faithful
         private void OnEnable()
         {
             // Add hooks
-            On.RoR2.PingerController.AttemptPing += OnAttemptPing;
+            Behaviour.AddAttemptPingCallback(OnAttemptPing);
         }
 
         private void OnDisable()
         {
             // Remove hooks
-            On.RoR2.PingerController.AttemptPing -= OnAttemptPing;
+            Behaviour.RemoveAttemptPingCallback(OnAttemptPing);
         }
 
         private void FixedUpdate()
@@ -215,7 +215,7 @@ namespace Faithful
             componentAnalyser.AnalyseComponent(_component, _lookupTree);
         }
 
-        private void OnAttemptPing(On.RoR2.PingerController.orig_AttemptPing orig, RoR2.PingerController self, Ray aimRay, GameObject bodyObject)
+        private void OnAttemptPing(RoR2.PingerController self, ref Ray aimRay, GameObject bodyObject)
         {
             // Prepare for ping
             float num;
@@ -263,9 +263,6 @@ namespace Faithful
                 // Analyse object
                 AnalyseObject(gameObject);
             }
-
-            // Run original processes
-            orig(self, aimRay, bodyObject);
         }
     }
 

@@ -14,12 +14,12 @@ namespace Faithful
             // Initialise buffs list
             buffs = new List<Buff>();
 
-            // Add hooks
-            On.RoR2.CharacterModel.UpdateOverlays += OnUpdateOverlays;
+            // Add behaviour callbacks
+            Behaviour.AddOnUpdateOverlaysCallback(OnUpdateOverlays);
 
             // Mark overlay-backed buff models dirty when the buff appears/disappears
-            On.RoR2.CharacterBody.OnBuffFirstStackGained += OnBuffFirstStackGained;
-            On.RoR2.CharacterBody.OnBuffFinalStackLost += OnBuffFinalStackLost;
+            Behaviour.AddOnBuffFirstStackGainedCallback(OnBuffFirstStackGained);
+            Behaviour.AddOnBuffFinalStackLostCallback(OnBuffFinalStackLost);
         }
 
         public static Buff AddBuff(string _token, string _safeName, string _iconDir, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, string _langTokenOverride = null, bool _qualityBuff = false)
@@ -34,16 +34,13 @@ namespace Faithful
             return newBuff;
         }
 
-        private static void OnUpdateOverlays(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
+        private static void OnUpdateOverlays(CharacterModel self)
         {
-            // Run vanilla overlay logic first
-            orig(self);
-
             // Validate model
             if (self == null) return;
 
             // Remove stale Faithful overlays from previous overlay rebuilds
-            // This makes the hook idempotent: every rebuild starts from "no Faithful overlays",
+            // This makes the callback idempotent: every rebuild starts from "no Faithful overlays",
             // then adds only the Faithful overlays that should exist right now
             RemoveFaithfulOverlays(self);
 
@@ -93,20 +90,14 @@ namespace Faithful
             }
         }
 
-        private static void OnBuffFirstStackGained(On.RoR2.CharacterBody.orig_OnBuffFirstStackGained orig, CharacterBody self, BuffDef buffDef)
+        private static void OnBuffFirstStackGained(CharacterBody self, BuffDef buffDef)
         {
-            // Run vanilla logic first
-            orig(self, buffDef);
-
             // If this is one of our overlay-backed buffs, request a natural material refresh
             MarkOverlayDirtyIfFaithfulOverlayBuff(self, buffDef);
         }
 
-        private static void OnBuffFinalStackLost(On.RoR2.CharacterBody.orig_OnBuffFinalStackLost orig, CharacterBody self, BuffDef buffDef)
+        private static void OnBuffFinalStackLost(CharacterBody self, BuffDef buffDef)
         {
-            // Run vanilla logic first
-            orig(self, buffDef);
-
             // If this is one of our overlay-backed buffs, request a natural material refresh
             MarkOverlayDirtyIfFaithfulOverlayBuff(self, buffDef);
         }

@@ -88,10 +88,10 @@ namespace Faithful
             Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
 
             // Add fix for Huntress Flurry (modifies Seeking Arrow)
-            On.EntityStates.Huntress.HuntressWeapon.FireSeekingArrow.OnEnter += OnHuntressSeekingArrayEnter;
+            Behaviour.AddHuntressSeekingArrowEnterCallback(OnHuntressSeekingArrayEnter);
 
             // Add fix for CMD_SWARM
-            On.EntityStates.Drone.Command.Headbutt.OnEnter += OnOperatorCMDSwarmEnter;
+            Behaviour.AddDroneHeadbuttEnterCallback(OnOperatorCMDSwarmEnter);
         }
 
         public override void QualityConstructor()
@@ -388,11 +388,8 @@ namespace Faithful
             }
         }
 
-        void OnHuntressSeekingArrayEnter(On.EntityStates.Huntress.HuntressWeapon.FireSeekingArrow.orig_OnEnter orig, EntityStates.Huntress.HuntressWeapon.FireSeekingArrow self)
+        void OnHuntressSeekingArrayEnter(EntityStates.Huntress.HuntressWeapon.FireSeekingArrow self)
         {
-            // Run original process
-            orig(self);
-
             // Check for victim
             if (self.initialOrbTarget == null) return;
 
@@ -414,7 +411,7 @@ namespace Faithful
             self.isCrit = true;
         }
 
-        private void OnOperatorCMDSwarmEnter(On.EntityStates.Drone.Command.Headbutt.orig_OnEnter orig, EntityStates.Drone.Command.Headbutt self)
+        private void OnOperatorCMDSwarmEnter(EntityStates.Drone.Command.Headbutt self)
         {
             // Get victim and attacker
             CharacterBody victim = self.target?.healthComponent?.body;
@@ -427,8 +424,6 @@ namespace Faithful
                 Behaviour.OverrideCritCheck(attacker);
             }
 
-            // Run original process
-            orig(self);
         }
 
         CharacterBody GetSwarmDroneLeaderBody(EntityStates.Drone.Command.Headbutt _drone)
@@ -551,57 +546,59 @@ namespace Faithful
             float radius = radiusQualityValues.GetValue(qualityCounts.GetHighestQuality());
             if (radius <= 0.0f) return;
 
-            // Get nearby hurt boxes
-            HurtBox[] hurtBoxes = Utils.GetHurtBoxesInSphere(_victim.corePosition, radius);
-            if (hurtBoxes == null || hurtBoxes.Length == 0) return;
-
-            // Get attack team
-            TeamIndex attackerTeamIndex = TeamIndex.None;
-            if (_attacker.teamComponent)
+            // Keep separate pooled results for attacks triggered during damage callbacks
+            using (HG.CollectionPool<HurtBox, List<HurtBox>>.RentCollection(out List<HurtBox> hurtBoxes))
+            using (HG.CollectionPool<HealthComponent, HashSet<HealthComponent>>.RentCollection(out HashSet<HealthComponent> hitVictims))
             {
-                attackerTeamIndex = _attacker.teamComponent.teamIndex;
-            }
+                // Get nearby hurt boxes
+                Utils.GetHurtBoxesInSphere(_victim.corePosition, radius, hurtBoxes);
+                if (hurtBoxes.Count == 0) return;
 
-            // Track health components so one enemy is only hit once
-            HashSet<HealthComponent> hitVictims = [];
-
-            // Damage nearby enemies
-            foreach (HurtBox hurtBox in hurtBoxes)
-            {
-                // Validate hurt box and health component
-                HealthComponent healthComponent = hurtBox?.healthComponent;
-                if (healthComponent == null || !healthComponent.alive) continue;
-
-                // Get victim body
-                CharacterBody splashVictim = healthComponent.body;
-                if (splashVictim == null || splashVictim == _victim || splashVictim == _attacker) continue;
-
-                // Respect team and friendly fire rules
-                if (!FriendlyFireManager.ShouldDirectHitProceed(healthComponent, attackerTeamIndex)) continue;
-
-                // Only hit each health component once
-                if (!hitVictims.Add(healthComponent)) continue;
-
-                // Create splash damage info
-                DamageInfo splashDamageInfo = new()
+                // Get attack team
+                TeamIndex attackerTeamIndex = TeamIndex.None;
+                if (_attacker.teamComponent)
                 {
-                    attacker = _attacker.gameObject,
-                    inflictor = _report.inflictor,
-                    damage = _report.damage * damageCoefficient,
-                    damageColorIndex = DamageColorIndex.Item,
-                    damageType = DamageType.Generic,
-                    crit = _report.crit,
-                    force = Vector3.zero,
-                    position = hurtBox.transform.position,
-                    procChainMask = _report.procChainMask,
-                    procCoefficient = 0.5f
-                };
-                splashDamageInfo.AddModdedDamageType(splashDamageType);
+                    attackerTeamIndex = _attacker.teamComponent.teamIndex;
+                }
 
-                // Apply splash damage
-                healthComponent.TakeDamage(splashDamageInfo);
-                GlobalEventManager.instance.OnHitEnemy(splashDamageInfo, splashVictim.gameObject);
-                GlobalEventManager.instance.OnHitAll(splashDamageInfo, splashVictim.gameObject);
+                // Damage nearby enemies
+                foreach (HurtBox hurtBox in hurtBoxes)
+                {
+                    // Validate hurt box and health component
+                    HealthComponent healthComponent = hurtBox?.healthComponent;
+                    if (healthComponent == null || !healthComponent.alive) continue;
+
+                    // Get victim body
+                    CharacterBody splashVictim = healthComponent.body;
+                    if (splashVictim == null || splashVictim == _victim || splashVictim == _attacker) continue;
+
+                    // Respect team and friendly fire rules
+                    if (!FriendlyFireManager.ShouldDirectHitProceed(healthComponent, attackerTeamIndex)) continue;
+
+                    // Only hit each health component once
+                    if (!hitVictims.Add(healthComponent)) continue;
+
+                    // Create splash damage info
+                    DamageInfo splashDamageInfo = new()
+                    {
+                        attacker = _attacker.gameObject,
+                        inflictor = _report.inflictor,
+                        damage = _report.damage * damageCoefficient,
+                        damageColorIndex = DamageColorIndex.Item,
+                        damageType = DamageType.Generic,
+                        crit = _report.crit,
+                        force = Vector3.zero,
+                        position = hurtBox.transform.position,
+                        procChainMask = _report.procChainMask,
+                        procCoefficient = 0.5f
+                    };
+                    splashDamageInfo.AddModdedDamageType(splashDamageType);
+
+                    // Apply splash damage
+                    healthComponent.TakeDamage(splashDamageInfo);
+                    GlobalEventManager.instance.OnHitEnemy(splashDamageInfo, splashVictim.gameObject);
+                    GlobalEventManager.instance.OnHitAll(splashDamageInfo, splashVictim.gameObject);
+                }
             }
         }
     }

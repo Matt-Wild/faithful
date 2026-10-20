@@ -37,6 +37,10 @@ namespace Faithful
         // Store quality health state
         Dictionary<HealthComponent, float> combinedHealthBeforeDamage = [];
 
+        // Store possible quality holders
+        List<CharacterBody> toasterHolders = [];
+        CharacterBody[] toasterHolderSnapshot = [];
+
         // Constructor
         public VengefulToaster(Toolbox _toolbox, Vengeance _vengeance) : base(_toolbox, "VENGEFUL_TOASTER")
         {
@@ -74,6 +78,15 @@ namespace Faithful
 
         public override void QualityConstructor()
         {
+            // Track holders when bodies spawn, change inventory or are destroyed
+            CharacterBody.onBodyStartGlobal += UpdateToasterHolder;
+            CharacterBody.onBodyInventoryChangedGlobal += UpdateToasterHolder;
+            CharacterBody.onBodyDestroyGlobal += RemoveToasterHolder;
+            Run.onRunDestroyGlobal += ClearToasterHolders;
+
+            // Include any bodies which already exist
+            foreach (CharacterBody body in CharacterBody.readOnlyInstancesList) UpdateToasterHolder(body);
+
             // Store health before damage for quality calculations
             Behaviour.AddOnTakeDamageProcessCallback(OnTakeDamageProcess_Quality);
 
@@ -224,6 +237,37 @@ namespace Faithful
             }
         }
 
+        private void UpdateToasterHolder(CharacterBody _body)
+        {
+            // Only the server grants Vengeance
+            if (!Utils.hosting || _body == null) return;
+
+            // Track base and quality copies
+            bool shouldTrack = _body.inventory != null && _body.inventory.GetItemCountEffective(MainItem.itemDef.itemIndex) > 0;
+            bool tracked = toasterHolders.Contains(_body);
+            if (shouldTrack == tracked) return;
+
+            // Update membership and replace the snapshot only when holders change
+            if (shouldTrack) toasterHolders.Add(_body);
+            else toasterHolders.Remove(_body);
+            toasterHolderSnapshot = toasterHolders.ToArray();
+        }
+
+        private void RemoveToasterHolder(CharacterBody _body)
+        {
+            // Release destroyed bodies and any health state from their last hit
+            if (toasterHolders.Remove(_body)) toasterHolderSnapshot = toasterHolders.ToArray();
+            if (_body != null) ClearCombinedHealthBeforeDamage(_body);
+        }
+
+        private void ClearToasterHolders(Run _run)
+        {
+            // Release all remaining run state
+            toasterHolders.Clear();
+            toasterHolderSnapshot = [];
+            combinedHealthBeforeDamage.Clear();
+        }
+
         private void TryGrantVengeanceToNearbyQualityAllies(CharacterBody _victimBody)
         {
             // Validate input
@@ -232,8 +276,8 @@ namespace Faithful
             // Get victim team
             TeamIndex victimTeamIndex = _victimBody.teamComponent.teamIndex;
 
-            // Check nearby allies
-            foreach (CharacterBody allyBody in CharacterBody.readOnlyInstancesList)
+            // Use a stable snapshot in case granting buffs changes another character's inventory
+            foreach (CharacterBody allyBody in toasterHolderSnapshot)
             {
                 // Validate ally
                 if (allyBody == null || allyBody == _victimBody || allyBody.teamComponent == null || allyBody.teamComponent.teamIndex != victimTeamIndex) continue;

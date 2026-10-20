@@ -19,6 +19,9 @@ namespace Faithful
         // Current displayed fuel buff percentage
         protected int currentFuelBuffPerc;
 
+        // Keep clients aware of whether the server is using display-only fuel values
+        [SyncVar] private bool fuelBuffUsesDisplayValue;
+
         // Store if active
         protected bool active = false;
 
@@ -59,6 +62,12 @@ namespace Faithful
         protected float fuelUsed = 0.0f;
         protected float lastJetTime;
 
+        // Store last sent jetpack state
+        protected bool hasSyncedJetpack = false;
+        protected JetpackSyncData lastSyncedJetpack;
+        protected float lastJetpackSyncTime;
+        protected const float jetpackSyncRefreshInterval = 1.0f;
+
         // Store if this jetpack has a display
         protected bool hasDisplay = false;
 
@@ -89,7 +98,6 @@ namespace Faithful
         // Quality "ignite" state
         protected bool hasDoneInitialIgnite = false;
         protected float igniteStopwatch = 0.0f;
-        protected readonly HashSet<HealthComponent> igniteVictims = [];
 
         public FaithfulTJetpackBehaviour()
         {
@@ -210,6 +218,9 @@ namespace Faithful
 
         private void OnDestroy()
         {
+            // Stop routed jetpack behaviour
+            Deactivate();
+
             // Unregister with utils
             Utils.UnregisterCharacterBehaviour(this);
         }
@@ -265,14 +276,15 @@ namespace Faithful
             refueling = false;
             fuelUsed = 0.0f;
 
-            // Inject hooks
-            On.EntityStates.GenericCharacterMain.ProcessJump += OnProcessJump;
-            On.EntityStates.GenericCharacterMain.FixedUpdate += OnFixedUpdate;
-            //On.EntityStates.Mage.JetpackOn.OnEnter += OnArtificerJetpackOnEnter;
-            //On.EntityStates.Mage.JetpackOn.OnExit += OnArtificerJetpackOnExit;
-            On.EntityStates.Mage.JetpackOn.FixedUpdate += OnArtificerJetpackFixedUpdate;
-            On.EntityStates.Mage.MageCharacterMain.ProcessJump += OnArtificerProcessJump;
-            On.RoR2.GlobalEventManager.IsImmuneToFallDamage += OnIsImmuneToFallDamage;
+            // Send initial state after activation
+            hasSyncedJetpack = false;
+
+            // Register callbacks for this character
+            Behaviour.AddProcessJumpOverrideCallback(character, OnProcessJump);
+            Behaviour.AddCharacterPreFixedUpdateCallback(character, OnFixedUpdate);
+            Behaviour.AddArtificerProcessJumpOverrideCallback(character, OnArtificerProcessJump);
+            Behaviour.AddArtificerJetpackFixedUpdateOverrideCallback(character, SkipArtificerJetpackFixedUpdate);
+            Behaviour.AddFallDamageImmunityCallback(character, IsImmuneToFallDamage);
         }
 
         protected void Deactivate()
@@ -286,24 +298,17 @@ namespace Faithful
             // Set active
             active = false;
 
-            // Remove hooks
-            On.EntityStates.GenericCharacterMain.ProcessJump -= OnProcessJump;
-            On.EntityStates.GenericCharacterMain.FixedUpdate -= OnFixedUpdate;
-            //On.EntityStates.Mage.JetpackOn.OnEnter -= OnArtificerJetpackOnEnter;
-            //On.EntityStates.Mage.JetpackOn.OnExit -= OnArtificerJetpackOnExit;
-            On.EntityStates.Mage.JetpackOn.FixedUpdate -= OnArtificerJetpackFixedUpdate;
-            On.EntityStates.Mage.MageCharacterMain.ProcessJump -= OnArtificerProcessJump;
+            // Remove callbacks when the item is lost or the character is destroyed
+            Behaviour.RemoveProcessJumpOverrideCallback(character, OnProcessJump);
+            Behaviour.RemoveCharacterPreFixedUpdateCallback(character, OnFixedUpdate);
+            Behaviour.RemoveArtificerProcessJumpOverrideCallback(character, OnArtificerProcessJump);
+            Behaviour.RemoveArtificerJetpackFixedUpdateOverrideCallback(character, SkipArtificerJetpackFixedUpdate);
+            Behaviour.RemoveFallDamageImmunityCallback(character, IsImmuneToFallDamage);
         }
 
-        protected void OnFixedUpdate(On.EntityStates.GenericCharacterMain.orig_FixedUpdate orig, GenericCharacterMain self)
+        public void OnFixedUpdate(GenericCharacterMain self)
         {
-            // Check if valid and correct character
-            if (self == null || self.characterBody != character)
-            {
-                orig(self); // Otherwise run normal processes
-                return;
-            }
-
+            if (!active) return;
             // Ensure jetpack is initialised
             Init(self.characterBody);
 
@@ -318,19 +323,11 @@ namespace Faithful
 
             // Sync jetpack
             SyncJetpack();
-
-            orig(self); // Run normal processes
         }
 
-        protected void OnArtificerProcessJump(On.EntityStates.Mage.MageCharacterMain.orig_ProcessJump orig, EntityStates.Mage.MageCharacterMain self)
+        public bool OnArtificerProcessJump(EntityStates.Mage.MageCharacterMain self)
         {
-            // Check if Artificer is this character
-            if (self == null || self.characterBody != character)
-            {
-                orig(self); // Run normal processes
-                return;
-            }
-
+            if (!active) return false;
             // Get if jetpack state is currently on
             bool jetOn = self.jetpackStateMachine.state.GetType() == typeof(EntityStates.Mage.JetpackOn);
 
@@ -353,48 +350,26 @@ namespace Faithful
                     // Activate jetpack state
                     self.jetpackStateMachine.SetNextState(new EntityStates.Mage.JetpackOn());
                 }
+                return true;
             }
-            else
-            {
-                orig(self); // Run normal processes
-            }
+            return false;
         }
 
-        protected void OnProcessJump(On.EntityStates.GenericCharacterMain.orig_ProcessJump orig, GenericCharacterMain self)
+        public bool OnProcessJump(GenericCharacterMain self)
         {
-            // Check if valid and correct character
-            if (self == null || self.characterBody != character || !self.hasCharacterMotor || !self.hasInputBank || !self.isAuthority)
-            {
-                orig(self); // Otherwise run normal processes
-                return;
-            }
+            // Leave normal jump handling alone when this character has no authority or motor
+            if (!active || !self.hasCharacterMotor || !self.hasInputBank || !self.isAuthority) return false;
 
             // Do jetpack behaviour
             JetpackBehaviour(self);
 
-            // Check if not to run normal processes
-            if (jetActivated || (character.inputBank.jump.down && canBeActivated))
-            {
-                return;
-            }
-
-            orig(self); // Otherwise run normal processes
+            // Skip normal jump handling while the jetpack takes control
+            return jetActivated || (character.inputBank.jump.down && canBeActivated);
         }
 
-        private bool OnIsImmuneToFallDamage(On.RoR2.GlobalEventManager.orig_IsImmuneToFallDamage orig, GlobalEventManager self, CharacterBody body)
+        public bool IsImmuneToFallDamage(GlobalEventManager _manager, CharacterBody _body)
         {
-            // Check if valid and correct character (and fall damage is ignored)
-            if (self == null || body != character || !ignoreFallDamage)
-            {
-                // Otherwise return normal result
-                return orig(self, body);
-            }
-
-            // Check if jet is active (don't do fall damage is jetpack is on)
-            if (jetActivated) return true;
-
-            // Otherwise return normal result
-            return orig(self, body);
+            return active && ignoreFallDamage && jetActivated;
         }
 
         protected void JetpackBehaviour(GenericCharacterMain self)
@@ -462,7 +437,9 @@ namespace Faithful
             int fuelPerc = Mathf.CeilToInt(fuelRemainingPerc * 100.0f);
 
             // Check if fuel percentage has changed
-            if (fuelPerc == currentFuelBuffPerc) return;
+            bool useDisplayValue = Behaviour.buffDisplayValuesAvailable;
+            if (fuelPerc == currentFuelBuffPerc && fuelBuffUsesDisplayValue == useDisplayValue) return;
+            fuelBuffUsesDisplayValue = useDisplayValue;
 
             // Update current fuel buff percentage
             currentFuelBuffPerc = fuelPerc;
@@ -471,7 +448,7 @@ namespace Faithful
             if (fuelPerc == 0)
             {
                 // Update buff counts
-                character.AddBuff(emptyFuelBuff.buffDef.buffIndex);
+                character.SetBuffCount(emptyFuelBuff.buffDef.buffIndex, 1);
                 character.SetBuffCount(lowFuelBuff.buffDef.buffIndex, 0);
                 character.SetBuffCount(highFuelBuff.buffDef.buffIndex, 0);
             }
@@ -479,7 +456,7 @@ namespace Faithful
             {
                 // Update buff counts
                 character.RemoveBuff(emptyFuelBuff.buffDef.buffIndex);
-                character.SetBuffCount(lowFuelBuff.buffDef.buffIndex, fuelPerc);
+                character.SetBuffCount(lowFuelBuff.buffDef.buffIndex, useDisplayValue ? 1 : fuelPerc);
                 character.SetBuffCount(highFuelBuff.buffDef.buffIndex, 0);
             }
             else
@@ -487,28 +464,14 @@ namespace Faithful
                 // Update buff counts
                 character.RemoveBuff(emptyFuelBuff.buffDef.buffIndex);
                 character.SetBuffCount(lowFuelBuff.buffDef.buffIndex, 0);
-                character.SetBuffCount(highFuelBuff.buffDef.buffIndex, fuelPerc);
+                character.SetBuffCount(highFuelBuff.buffDef.buffIndex, useDisplayValue ? 1 : fuelPerc);
             }
         }
 
-        protected void OnArtificerJetpackFixedUpdate(On.EntityStates.Mage.JetpackOn.orig_FixedUpdate orig, EntityStates.Mage.JetpackOn self)
+        public bool SkipArtificerJetpackFixedUpdate(EntityStates.Mage.JetpackOn _state)
         {
-            // Check if Artificer is this character
-            if (self == null || self.characterBody != character)
-            {
-                orig(self); // Run normal processes
-                return;
-            }
-
-            // Check if doing TJetpack behaviour
-            if (jetActivated)
-            {
-                // Skip Artificer jetpack behaviour to prioritise 4-T0N Jetpack
-                return;
-            }
-
-            // Otherwise run normal processes
-            orig(self);
+            // Prioritise 4-T0N Jetpack while it is thrusting
+            return active && jetActivated;
         }
 
         protected void Grounded()
@@ -650,8 +613,17 @@ namespace Faithful
             // Only sync if belonging to the local player and net utils is found
             if (character == Utils.localPlayerBody && Utils.netUtils != null)
             {
+                // Skip unchanged state, but periodically refresh clients which missed an earlier update
+                if (hasSyncedJetpack && fuelUsed == lastSyncedJetpack.fuelUsed && jetActivated == lastSyncedJetpack.jetActivated && Time.fixedTime - lastJetpackSyncTime < jetpackSyncRefreshInterval) return;
+
                 // Send sync request to net utils
-                Utils.netUtils.SyncJetpack(GetComponent<NetworkIdentity>().netId, new JetpackSyncData(fuelUsed, jetActivated));
+                JetpackSyncData data = new JetpackSyncData(fuelUsed, jetActivated);
+                Utils.netUtils.SyncJetpack(GetComponent<NetworkIdentity>().netId, data);
+
+                // Remember sent state
+                lastSyncedJetpack = data;
+                lastJetpackSyncTime = Time.fixedTime;
+                hasSyncedJetpack = true;
             }
         }
 
@@ -772,8 +744,8 @@ namespace Faithful
             float epicFrequency = CalculateIgniteFrequencyForQuality(_qualityCounts.EPIC, jetpackItem.FrequencyQualityValues.EPIC, jetpackItem.FrequencyStackingQualityValues.EPIC, jetpackItem.FrequencyMaxQualityValues.EPIC);
             float legendaryFrequency = CalculateIgniteFrequencyForQuality(_qualityCounts.LEGENDARY, jetpackItem.FrequencyQualityValues.LEGENDARY, jetpackItem.FrequencyStackingQualityValues.LEGENDARY, jetpackItem.FrequencyMaxQualityValues.LEGENDARY);
 
-            // Frequencies are not cumulative - use the highest calculated value
-            return Mathf.Max(uncommonFrequency, rareFrequency, epicFrequency, legendaryFrequency);
+            // Frequencies are not cumulative - use the highest calculated value without allocating an array
+            return Mathf.Max(Mathf.Max(uncommonFrequency, rareFrequency), Mathf.Max(epicFrequency, legendaryFrequency));
         }
 
         protected float CalculateIgniteFrequencyForQuality(int _count, float _baseFrequency, float _stackingFrequency, int _maxFrequency)
@@ -811,31 +783,35 @@ namespace Faithful
             search.RefreshCandidates();
             search.FilterOutGameObject(character.gameObject);
 
-            // Prevent hitting the same body multiple times from multiple hurtboxes
-            igniteVictims.Clear();
-
-            foreach (HurtBox hurtBox in search.GetResults())
+            // Keep separate pooled results and victim tracking for each flame attack
+            using (HG.CollectionPool<HurtBox, List<HurtBox>>.RentCollection(out List<HurtBox> hurtBoxes))
+            using (HG.CollectionPool<HealthComponent, HashSet<HealthComponent>>.RentCollection(out HashSet<HealthComponent> igniteVictims))
             {
-                // Validate target
-                if (hurtBox == null || hurtBox.healthComponent == null) continue;
+                search.GetResults(hurtBoxes);
 
-                HealthComponent healthComponent = hurtBox.healthComponent;
-                CharacterBody victimBody = healthComponent.body;
+                foreach (HurtBox hurtBox in hurtBoxes)
+                {
+                    // Validate target
+                    if (hurtBox == null || hurtBox.healthComponent == null) continue;
 
-                // Check if valid victim
-                if (victimBody == null || victimBody == character || !healthComponent.alive) continue;
+                    HealthComponent healthComponent = hurtBox.healthComponent;
+                    CharacterBody victimBody = healthComponent.body;
 
-                // Keep the effect strictly below the jetpack user
-                if (victimBody.corePosition.y >= origin.y) continue;
+                    // Check if valid victim
+                    if (victimBody == null || victimBody == character || !healthComponent.alive) continue;
 
-                // Only ignite each victim once per tick
-                if (!igniteVictims.Add(healthComponent)) continue;
+                    // Keep the effect strictly below the jetpack user
+                    if (victimBody.corePosition.y >= origin.y) continue;
 
-                // Jetpack flame attack
-                float directDamageCoefficient = _damageCoefficient * directDamageFraction;
-                float burnDamageCoefficient = _damageCoefficient * burnDamageFraction;
-                HitEnemyWithJetpackFlame(hurtBox, victimBody, directDamageCoefficient);
-                ApplyJetpackBurn(victimBody, burnDamageCoefficient);
+                    // Only ignite each victim once per tick
+                    if (!igniteVictims.Add(healthComponent)) continue;
+
+                    // Jetpack flame attack
+                    float directDamageCoefficient = _damageCoefficient * directDamageFraction;
+                    float burnDamageCoefficient = _damageCoefficient * burnDamageFraction;
+                    HitEnemyWithJetpackFlame(hurtBox, victimBody, directDamageCoefficient);
+                    ApplyJetpackBurn(victimBody, burnDamageCoefficient);
+                }
             }
         }
 
@@ -915,6 +891,12 @@ namespace Faithful
 
             // Inflict DoT
             DotController.InflictDot(ref dotInfo);
+        }
+
+        public int GetFuelDisplayValue(int _fallback)
+        {
+            if (!fuelBuffUsesDisplayValue || character == null || itemCount <= 0) return _fallback;
+            return Mathf.Clamp(Mathf.CeilToInt(fuelRemainingPerc * 100.0f), 0, 100);
         }
 
         protected float fuelCapacity

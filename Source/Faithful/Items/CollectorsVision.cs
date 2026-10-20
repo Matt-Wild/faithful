@@ -21,6 +21,7 @@ namespace Faithful
 
         // Store additional item settings
         Setting<bool> countTemporarySetting;
+        Setting<bool> countEtherealSetting;
         Setting<bool> capInspirationSetting;
         Setting<bool> grantAppraisersEyeSetting;
         Setting<int> inspirationGainSetting;
@@ -30,6 +31,7 @@ namespace Faithful
 
         // Store item stats
         bool countTemporary;
+        bool countEthereal;
         bool capInspiration;
         bool grantAppraisersEye;
         int inspirationGain;
@@ -45,15 +47,19 @@ namespace Faithful
         QualityValues<int> inspirationGainQualityValues = new();
         QualityValues<int> inspirationGainStackingQualityValues = new();
 
-        // Used for timing item given notifications for after the original item has already pushed it's notification
+        // Queue the Eye popup after the pickup which granted it
         private struct PendingEyeNotification
         {
             public CharacterMaster master;
             public PickupIndex grantingPickupIndex;
             public PickupIndex queuedPickupIndex;
+            public float fallbackTime;
         }
 
         static readonly List<PendingEyeNotification> pendingEyeNotifications = [];
+
+        // Allow the normal pickup message to arrive before falling back for grants without a popup
+        const float eyeNotificationWaitDuration = 2.0f;
 
         // Constructor
         public CollectorsVision(Toolbox _toolbox, Inspiration _inspiration) : base(_toolbox, "COLLECTORS_VISION")
@@ -93,12 +99,15 @@ namespace Faithful
             // Link On Give Item behaviours
             Behaviour.AddServerOnGiveItemPermanentLateCallback(OnGiveItemPermanent);
             Behaviour.AddServerOnGiveItemTemporaryLateCallback(OnGiveItemTemporary);
+            Behaviour.AddServerOnGiveItemRentedLateCallback(OnGiveItemRented);
 
             // Add on scene exit behaviour
             Behaviour.AddOnPreSceneExitCallback(OnSceneExit);
 
             // Hook other behaviour
-            On.RoR2.CharacterMasterNotificationQueue.PushPickupNotification_CharacterMaster_PickupIndex_bool_int += OnPushPickupNotification;
+            Behaviour.AddPushPickupNotificationCallback(OnPushPickupNotification);
+            Behaviour.AddUpdateCallback(UpdatePendingEyeNotifications);
+            Run.onRunDestroyGlobal += ClearPendingEyeNotifications;
         }
 
         public override void QualityConstructor()
@@ -153,6 +162,7 @@ namespace Faithful
         {
             // Create settings specific to this item
             countTemporarySetting = MainItem.CreateSetting("COUNT_TEMPORARY", "Count Temporary Items?", true, "Should this item count temporary items when providing inspiration?", false, _canRandomise: false);
+            countEtherealSetting = MainItem.CreateSetting("COUNT_ETHEREAL", "Count Ethereal Items?", true, "Should this item count ethereal items when providing inspiration?", false, _canRandomise: false);
             capInspirationSetting = MainItem.CreateSetting("CAP_INSPIRATION", "Cap Inspiration?", true, "Should inspiration granted by this item be capped at 100%?", false, _canRandomise: false);
             grantAppraisersEyeSetting = MainItem.CreateSetting("GRANT_EYE", "Grant Appraisers Eye?", true, "After reaching 100% inspiration, should collecting more unique items award Appraiser's Eye?", false, _canRandomise: false);
             inspirationGainSetting = MainItem.CreateSetting("INSPIRATION_GAIN", "Inspiration Gain", 1, "How much inspiration should this item give the player when they pick up a new unique item for the stage? (1 = 1% inspiration)", _valueFormatting: "{0:0}%", _minValue: 1);
@@ -175,6 +185,7 @@ namespace Faithful
         {
             // Get item settings
             countTemporary = countTemporarySetting.Value;
+            countEthereal = countEtherealSetting.Value;
             capInspiration = capInspirationSetting.Value;
             grantAppraisersEye = grantAppraisersEyeSetting.Value;
             inspirationGain = inspirationGainSetting.Value;
@@ -231,6 +242,15 @@ namespace Faithful
         {
             // Ignore if not counting temporary items
             if (!countTemporary) return;
+
+            // Call OnGiveItem
+            OnGiveItem(_inventory, _index, _count);
+        }
+
+        void OnGiveItemRented(Inventory _inventory, ItemIndex _index, int _count)
+        {
+            // Ignore if not counting ethereal items
+            if (!countEthereal) return;
 
             // Call OnGiveItem
             OnGiveItem(_inventory, _index, _count);
@@ -371,13 +391,10 @@ namespace Faithful
             return totalGain;
         }
 
-        private void OnPushPickupNotification(On.RoR2.CharacterMasterNotificationQueue.orig_PushPickupNotification_CharacterMaster_PickupIndex_bool_int orig, CharacterMaster characterMaster, PickupIndex pickupIndex, bool isTemporary, int upgradeCount)
+        private void OnPushPickupNotification(CharacterMaster characterMaster, UniquePickup uniquePickup)
         {
-            // Perform original method functionality
-            orig(characterMaster, pickupIndex, isTemporary, upgradeCount);
-
             // Process pending eye notifications
-            ProcessPendingEyeNotifications(characterMaster, pickupIndex);
+            ProcessPendingEyeNotifications(characterMaster, uniquePickup.pickupIndex);
         }
 
         private void GrantEye(Inventory _inventory, ItemIndex _grantingItemIndex)
@@ -454,40 +471,60 @@ namespace Faithful
             };
         }
 
-        private void ProcessPendingEyeNotifications(CharacterMaster _master, PickupIndex _pushedPickupIndex)
+        private void UpdatePendingEyeNotifications()
         {
-            // Cycle through pending notifications
-            for (int i = pendingEyeNotifications.Count - 1; i >= 0; i--)
+            // No matching pickup is required once the fallback time has elapsed
+            ProcessPendingEyeNotifications(null, PickupIndex.none);
+        }
+
+        private static void ClearPendingEyeNotifications(Run _run)
+        {
+            pendingEyeNotifications.Clear();
+        }
+
+        private static void ProcessPendingEyeNotifications(CharacterMaster _master, PickupIndex _pushedPickupIndex)
+        {
+            // Keep insertion order when several grants are waiting for the same pickup
+            int i = 0;
+            while (i < pendingEyeNotifications.Count)
             {
                 PendingEyeNotification notification = pendingEyeNotifications[i];
 
-                // Check if master is still valid
-                if (notification.master == null)
+                // Only the owning client can display the popup
+                if (Run.instance == null || notification.master == null || !notification.master.hasAuthority)
                 {
                     pendingEyeNotifications.RemoveAt(i);
                     continue;
                 }
 
-                // Check if this is the pickup notification that granted the eye
-                if (_master == notification.master && _pushedPickupIndex == notification.grantingPickupIndex)
+                bool matchesPickup = _master == notification.master && _pushedPickupIndex == notification.grantingPickupIndex;
+                if (matchesPickup || Time.unscaledTime >= notification.fallbackTime)
                 {
+                    // Remove first so the Eye's own notification cannot release the same entry again
                     pendingEyeNotifications.RemoveAt(i);
-                    CharacterMasterNotificationQueue.PushPickupNotification(_master, notification.queuedPickupIndex);
+                    CharacterMasterNotificationQueue.PushPickupNotification(notification.master, new UniquePickup(notification.queuedPickupIndex));
+
+                    // Pushing a notification can re-enter this method and change the pending list
+                    i = 0;
+                    continue;
                 }
+
+                i++;
             }
         }
 
         internal static void QueuePendingNotification(CharacterMaster _master, PickupIndex _grantingPickupIndex, PickupIndex _queuedPickupIndex)
         {
-            // Validate master
-            if (_master == null) return;
+            // Validate the local recipient and pickup before retaining the request
+            if (Run.instance == null || _master == null || !_master.hasAuthority || _queuedPickupIndex == PickupIndex.none) return;
 
-            // Add to pending notifications
+            // A late request still gets queued behind any pickup notifications already received
             pendingEyeNotifications.Add(new PendingEyeNotification
             {
                 master = _master,
                 grantingPickupIndex = _grantingPickupIndex,
-                queuedPickupIndex = _queuedPickupIndex
+                queuedPickupIndex = _queuedPickupIndex,
+                fallbackTime = Time.unscaledTime + eyeNotificationWaitDuration
             });
         }
 

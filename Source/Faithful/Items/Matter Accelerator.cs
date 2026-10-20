@@ -231,7 +231,7 @@ namespace Faithful
             if (!healthComponent) return;
 
             // Get item counts
-            QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
+            QualityCounts counts = inventory.GetItemCountEffective(MainItem.itemDef) > 0 ? QualityCompat.GetItemCountsEffective(inventory, MainItem) : new();
 
             // Check for any valid item
             if (counts.Total == 0)

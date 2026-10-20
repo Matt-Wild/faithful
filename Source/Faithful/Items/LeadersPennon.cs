@@ -243,7 +243,7 @@ namespace Faithful
             float radius = Utils.CalculateStackingValue(_count, baseRadius, radiusStacking);     // REMEMBER TO SYNC THIS WITH FaithfulLeadersPennonBehaviour
 
             // Other ally in radius
-            if ((_holder.GetBodyObject().transform.position - _other.GetBodyObject().transform.position).magnitude <= radius)
+            if (radius >= 0.0f && (_holder.GetBodyObject().transform.position - _other.GetBodyObject().transform.position).sqrMagnitude <= radius * radius)
             {
                 // Get body of other
                 CharacterBody body = _other.GetBody();
@@ -427,7 +427,9 @@ namespace Faithful
             if (faithfulBehaviour == null) return;
 
             // Tell faithful leader's pennon behaviour to update it's visual effect
-            faithfulBehaviour.leadersPennon.UpdateVisualEffect(_body.HasBuff(leadersPennonBuff.buffDef));
+            bool active = _body.HasBuff(leadersPennonBuff.buffDef);
+            FaithfulLeadersPennonBehaviour behaviour = active ? faithfulBehaviour.EnsureLeadersPennon() : faithfulBehaviour.leadersPennon;
+            if (behaviour != null) behaviour.UpdateVisualEffect(active);
         }
     }
 }

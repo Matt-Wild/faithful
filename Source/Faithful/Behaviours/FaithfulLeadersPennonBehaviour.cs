@@ -44,9 +44,6 @@ namespace Faithful
                 UpdateItemCount(inventory.GetItemCountEffective(Items.GetItem("LEADERS_PENNON").itemDef));
             }
 
-            // Hook behaviour
-            Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
-
             // Update temporary visual effects
             character.UpdateAllTemporaryVisualEffects();
         }
@@ -80,23 +77,10 @@ namespace Faithful
                 // Remove visual effect
                 visualEffect.visualState = TemporaryVisualEffect.VisualState.Exit;
             }
-
-            // Unhook behaviour
-            Behaviour.RemoveOnInventoryChangedCallback(OnInventoryChanged);
         }
 
-        protected void OnInventoryChanged(Inventory _inventory)
+        public void OnInventoryChanged(Inventory _inventory)
         {
-            // Attempt to get Character Body
-            CharacterBody body = Utils.GetInventoryBody(_inventory);
-            if (body == null)
-            {
-                return;
-            }
-
-            // Check if for this character body
-            if (body != character) return;
-
             // Get new item count
             int newCount = _inventory.GetItemCountEffective(Items.GetItem("LEADERS_PENNON").itemDef);
 

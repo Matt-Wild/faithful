@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using ItemQualities;
 using ItemQualities.ContentManagement;
 using ItemQualities.Utilities.Extensions;
-using On.RoR2.UI.LogBook;
 using RoR2;
 using RoR2.ExpansionManagement;
 
@@ -28,13 +27,13 @@ namespace Faithful
             QualityContentManager.LoadContentAsync += LoadQualityContent;
 
             // Hook into inventory changed event to clear cached counts
-            On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
+            Behaviour.AddOnBodyInventoryChangedCallback(CharacterBody_OnInventoryChanged);
 
             // Hook into on destroy inventory event to clear cached counts
-            On.RoR2.Inventory.OnDestroy += Inventory_OnDestroy;
+            Behaviour.AddOnInventoryDestroyedCallback(Inventory_OnDestroy);
 
             // Hook into logbook selection so quality variants mirror the base item's logbook visibility
-            LogBookController.CanSelectItemEntry += LogBookController_CanSelectItemEntry;
+            Behaviour.AddCanSelectItemEntryCallback(LogBookController_CanSelectItemEntry);
 
             // Do a manual full inventory cache wipe when leaving a stage
             Behaviour.AddOnPreSceneExitCallback((_exitController) =>
@@ -44,26 +43,20 @@ namespace Faithful
             });
         }
 
-        private static void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
+        private static void CharacterBody_OnInventoryChanged(CharacterBody self)
         {
-            // Call original behaviour
-            orig(self);
-
             // Check for inventory
             if (self.inventory == null) return;
 
-            // Clear cached counts for inventory
-            cachedItemCountsEffective.Remove(self.inventory);
-            cachedItemCountsPermanent.Remove(self.inventory);
+            // Invalidate counts while retaining the dictionaries for future lookups
+            if (cachedItemCountsEffective.TryGetValue(self.inventory, out Dictionary<Item, QualityCounts> effectiveCache)) effectiveCache.Clear();
+            if (cachedItemCountsPermanent.TryGetValue(self.inventory, out Dictionary<Item, QualityCounts> permanentCache)) permanentCache.Clear();
         }
 
-        private static void Inventory_OnDestroy(On.RoR2.Inventory.orig_OnDestroy orig, Inventory self)
+        private static void Inventory_OnDestroy(Inventory self)
         {
-            // Call original behaviour
-            orig(self);
-
-            // Check for inventory
-            if (self == null) return;
+            // Destroyed Unity objects can still be keys in the cache
+            if (ReferenceEquals(self, null)) return;
 
             // Clear cached counts for inventory
             cachedItemCountsEffective.Remove(self);
@@ -85,13 +78,13 @@ namespace Faithful
             yield break;
         }
 
-        private static bool LogBookController_CanSelectItemEntry(LogBookController.orig_CanSelectItemEntry orig, ItemDef itemDef, Dictionary<ExpansionDef, bool> expansionAvailability)
+        private static bool LogBookController_CanSelectItemEntry(ItemDef itemDef, Dictionary<ExpansionDef, bool> expansionAvailability)
         {
             // Check if this is a quality variant of a Faithful item that is hidden from the logbook
             if (IsHiddenFromLogbookQualityVariant(itemDef)) return false;
 
-            // Return original method result if not hidden from logbook
-            return orig(itemDef, expansionAvailability);
+            // Leave normal selection rules in place for other entries
+            return true;
         }
 
         private static bool IsHiddenFromLogbookQualityVariant(ItemDef _itemDef)
@@ -196,7 +189,8 @@ namespace Faithful
             else
             {
                 // Create new cache for inventory
-                cachedItemCountsEffective.Add(_inventory, []);
+                inventoryCache = [];
+                cachedItemCountsEffective.Add(_inventory, inventoryCache);
             }
 
             // Get inaccessible counts
@@ -212,7 +206,7 @@ namespace Faithful
             };
 
             // Add counts to cache
-            cachedItemCountsEffective[_inventory].Add(_item, counts);
+            inventoryCache.Add(_item, counts);
 
             // Return counts
             return counts;
@@ -240,7 +234,8 @@ namespace Faithful
             else
             {
                 // Create new cache for inventory
-                cachedItemCountsPermanent.Add(_inventory, []);
+                inventoryCache = [];
+                cachedItemCountsPermanent.Add(_inventory, inventoryCache);
             }
 
             // Get inaccessible counts
@@ -256,7 +251,7 @@ namespace Faithful
             };
 
             // Add counts to cache
-            cachedItemCountsPermanent[_inventory].Add(_item, counts);
+            inventoryCache.Add(_item, counts);
 
             // Return counts
             return counts;

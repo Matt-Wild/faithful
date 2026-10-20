@@ -96,6 +96,24 @@ namespace Faithful
         {
             // Link Quality death explosion behaviour
             Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath_Quality);
+
+            // Release candidates for victims removed without a death report
+            CharacterBody.onBodyDestroyGlobal += OnCharacterBodyDestroyed_Quality;
+            Run.onRunDestroyGlobal += ClearQualityExplosionCandidates;
+        }
+
+        private void OnCharacterBodyDestroyed_Quality(CharacterBody _body)
+        {
+            // Remove the managed key even if Unity has already destroyed the health component
+            if (ReferenceEquals(_body, null)) return;
+            HealthComponent healthComponent = _body.healthComponent;
+            if (!ReferenceEquals(healthComponent, null)) qualityExplosionCandidates.Remove(healthComponent);
+        }
+
+        private void ClearQualityExplosionCandidates(Run _run)
+        {
+            // Release any candidates left over from the run
+            qualityExplosionCandidates.Clear();
         }
 
         private void CreateDisplaySettings(string _displayMeshName)

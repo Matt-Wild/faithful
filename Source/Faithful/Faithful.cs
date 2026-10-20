@@ -27,7 +27,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.5.6";
+        public const string PluginVersion = "1.5.7";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -211,6 +211,18 @@ namespace Faithful
 
             // Update toolbox
             toolbox.FixedUpdate();
+        }
+
+        private void LateUpdate()
+        {
+            if (!InitializationSucceeded) return;
+
+            // Record runtime profiling data for frame (debug only)
+            if (Utils.debugMode)
+            {
+                FaithfulRuntimeProfiler.Record();
+                toolbox.debugMode.RefreshProfiler();
+            }
         }
     }
 }

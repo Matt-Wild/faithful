@@ -160,92 +160,100 @@ namespace Faithful
 
         void FixedUpdate()
         {
-            // Check if no longer targeting something
-            if (targeting && !HasAnyTarget)
+            FaithfulRuntimeProfiler.StartScope("FaithfulTargetingMatrixBehaviour.FixedUpdate");
+            try
             {
-                // Set as no longer targeting
-                targeting = false;
+                // Check if no longer targeting something
+                if (targeting && !HasAnyTarget)
+                {
+                    // Set as no longer targeting
+                    targeting = false;
 
-                // Stop all coroutines
-                StopAllCoroutines();
+                    // Stop all coroutines
+                    StopAllCoroutines();
 
-                // Close display
-                StartCoroutine(CloseDisplay());
+                    // Close display
+                    StartCoroutine(CloseDisplay());
+                }
+
+                // Check if starting to target something
+                if (!targeting && HasAnyTarget)
+                {
+                    // Set as targeting
+                    targeting = true;
+
+                    // Stop all coroutines
+                    StopAllCoroutines();
+
+                    // Open display
+                    StartCoroutine(OpenDisplay());
+                }
+
+                // Check if hosting
+                if (!Utils.hosting) return;
+
+                // BELOW IS HOST ONLY BEHAVIOUR
+
+                // Check for targets
+                if (!HasAnyTarget) return;
+
+                // Track how many targets need replacing
+                int targetsRemoved = 0;
+
+                // Cycle through targets backwards so targets can be removed during iteration
+                for (int i = targets.Count - 1; i >= 0; i--)
+                {
+                    // Get current target
+                    CharacterBody currentTarget = targets[i];
+
+                    // Check if target is invalid
+                    if (currentTarget == null || currentTarget.healthComponent == null || !currentTarget.healthComponent.alive)
+                    {
+                        // Remove invalid target
+                        RemoveTarget(currentTarget, false);
+                        targetsRemoved++;
+                        continue;
+                    }
+
+                    // Get position of target
+                    Vector3 targetPos = currentTarget.corePosition;
+
+                    // Check if target is out of range
+                    if (Vector3.Distance(targetPos, character.corePosition) > maxDistance)
+                    {
+                        // Add to out of range timer
+                        targetOutOfRangeTimers[currentTarget] = targetOutOfRangeTimers.TryGetValue(currentTarget, out float timer) ? timer + Time.fixedDeltaTime : Time.fixedDeltaTime;
+                    }
+
+                    // Target in range
+                    else
+                    {
+                        // Reset out of range timer
+                        targetOutOfRangeTimers[currentTarget] = 0.0f;
+                    }
+
+                    // Check if out of range for too long
+                    if (targetOutOfRangeTimers.TryGetValue(currentTarget, out float outOfRangeTimer) && outOfRangeTimer > outOfRangeTime)
+                    {
+                        // Remove target
+                        RemoveTarget(currentTarget, false);
+                        targetsRemoved++;
+                    }
+                }
+
+                // Check if targets were removed
+                if (targetsRemoved > 0)
+                {
+                    // Sync target state
+                    CmdSyncTarget();
+
+                    // Replace only the targets removed
+                    SearchForTarget(targetsRemoved);
+                }
             }
-
-            // Check if starting to target something
-            if (!targeting && HasAnyTarget)
+            finally
             {
-                // Set as targeting
-                targeting = true;
-
-                // Stop all coroutines
-                StopAllCoroutines();
-
-                // Open display
-                StartCoroutine(OpenDisplay());
-            }
-
-            // Check if hosting
-            if (!Utils.hosting) return;
-
-            // BELOW IS HOST ONLY BEHAVIOUR
-
-            // Check for targets
-            if (!HasAnyTarget) return;
-
-            // Track how many targets need replacing
-            int targetsRemoved = 0;
-
-            // Cycle through targets backwards so targets can be removed during iteration
-            for (int i = targets.Count - 1; i >= 0; i--)
-            {
-                // Get current target
-                CharacterBody currentTarget = targets[i];
-
-                // Check if target is invalid
-                if (currentTarget == null || currentTarget.healthComponent == null || !currentTarget.healthComponent.alive)
-                {
-                    // Remove invalid target
-                    RemoveTarget(currentTarget, false);
-                    targetsRemoved++;
-                    continue;
-                }
-
-                // Get position of target
-                Vector3 targetPos = currentTarget.corePosition;
-
-                // Check if target is out of range
-                if (Vector3.Distance(targetPos, character.corePosition) > maxDistance)
-                {
-                    // Add to out of range timer
-                    targetOutOfRangeTimers[currentTarget] = targetOutOfRangeTimers.TryGetValue(currentTarget, out float timer) ? timer + Time.fixedDeltaTime : Time.fixedDeltaTime;
-                }
-
-                // Target in range
-                else
-                {
-                    // Reset out of range timer
-                    targetOutOfRangeTimers[currentTarget] = 0.0f;
-                }
-
-                // Check if out of range for too long
-                if (targetOutOfRangeTimers.TryGetValue(currentTarget, out float outOfRangeTimer) && outOfRangeTimer > outOfRangeTime)
-                {
-                    // Remove target
-                    RemoveTarget(currentTarget, false);
-                    targetsRemoved++;
-                }
-            }
-
-            // Check if targets were removed
-            if (targetsRemoved > 0)
-            {
-                // Sync target state
-                CmdSyncTarget();
-
-                // Replace only the targets removed
-                SearchForTarget(targetsRemoved);
+                FaithfulRuntimeProfiler.StopScope("FaithfulTargetingMatrixBehaviour.FixedUpdate");
             }
         }
 

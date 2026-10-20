@@ -71,49 +71,57 @@ namespace Faithful
             // This is Quality behaviour
             if (!Utils.qualityEnabled) return;
 
-            // Get character bodies needed inside the holdout zone for quality buff to apply
-            holders.Clear();
-            foreach (CharacterBody body in Utils.GetAlivePlayerBodies())
+            FaithfulRuntimeProfiler.StartScope("FaithfulHoldoutZoneBehaviour.FixedUpdate");
+            try
             {
-                // Add to holders if they have any spacious umbrellas
-                if (body.inventory == null) continue;
-                if (body.inventory.GetItemCountEffective(Faithful.spaciousUmbrella.MainItem.itemDef.itemIndex) > 0) holders.Add(body);
-            }
-            if (holders.Count == 0) return;
-
-            // Check if at least one holder is inside the holdout zone
-            bool inside = false;
-            foreach (CharacterBody holder in holders)
-            {
-                if (Utils.IsCharacterInHoldoutZone(holder, zone))
+                // Get character bodies needed inside the holdout zone for quality buff to apply
+                Utils.GetAlivePlayerBodies(holders);
+                for (int i = holders.Count - 1; i >= 0; i--)
                 {
-                    inside = true;
-                    break;
+                    // Remove players without spacious umbrellas
+                    CharacterBody body = holders[i];
+                    if (body.inventory == null || body.inventory.GetItemCountEffective(Faithful.spaciousUmbrella.MainItem.itemDef.itemIndex) <= 0) holders.RemoveAt(i);
+                }
+                if (holders.Count == 0) return;
+
+                // Check if at least one holder is inside the holdout zone
+                bool inside = false;
+                foreach (CharacterBody holder in holders)
+                {
+                    if (Utils.IsCharacterInHoldoutZone(holder, zone))
+                    {
+                        inside = true;
+                        break;
+                    }
+                }
+
+                // If no holders are inside the holdout zone, remove quality buffs and reset quality timer
+                if (!inside)
+                {
+                    playerInside = false;
+                    qualityTimer = 0.0f;
+                    qualityBuffsApplied = 0;
+                    return;
+                }
+
+                // If a holder has just entered the holdout zone, start quality timer
+                if (!playerInside)
+                {
+                    playerInside = true;
+                    qualityTimer = Time.time;
+                    qualityBuffsApplied = 0;
+                }
+
+                // If at least one holder has been inside the holdout zone for the required interval, apply quality buff and reset timer
+                else if (Time.time - qualityTimer >= intervalQuality && qualityBuffsApplied < maxInstancesQuality)
+                {
+                    qualityBuffsApplied++;
+                    qualityTimer = Time.time;
                 }
             }
-
-            // If no holders are inside the holdout zone, remove quality buffs and reset quality timer
-            if (!inside)
+            finally
             {
-                playerInside = false;
-                qualityTimer = 0.0f;
-                qualityBuffsApplied = 0;
-                return;
-            }
-
-            // If a holder has just entered the holdout zone, start quality timer
-            if (!playerInside)
-            {
-                playerInside = true;
-                qualityTimer = Time.time;
-                qualityBuffsApplied = 0;
-            }
-
-            // If at least one holder has been inside the holdout zone for the required interval, apply quality buff and reset timer
-            else if (Time.time - qualityTimer >= intervalQuality && qualityBuffsApplied < maxInstancesQuality)
-            {
-                qualityBuffsApplied++;
-                qualityTimer = Time.time;
+                FaithfulRuntimeProfiler.StopScope("FaithfulHoldoutZoneBehaviour.FixedUpdate");
             }
         }
 
@@ -125,17 +133,25 @@ namespace Faithful
 
         void OnCalcRadius(ref float _radius)
         {
-            // Cycle through on Holdout Zone calc radius callbacks
-            foreach (OnHoldoutZoneCalcRadiusCallback callback in onHoldoutZoneCalcRadiusCallbacks)
+            FaithfulRuntimeProfiler.StartScope("FaithfulHoldoutZoneBehaviour.OnCalcRadius");
+            try
             {
-                // Call
-                callback(ref _radius, zone);
-            }
+                // Cycle through on Holdout Zone calc radius callbacks
+                foreach (OnHoldoutZoneCalcRadiusCallback callback in onHoldoutZoneCalcRadiusCallbacks)
+                {
+                    // Call
+                    callback(ref _radius, zone);
+                }
 
-            // Quality behaviour, increase radius if buffs are applied and quality is enabled
-            if (Utils.qualityEnabled && qualityBuffsApplied > 0)
+                // Quality behaviour, increase radius if buffs are applied and quality is enabled
+                if (Utils.qualityEnabled && qualityBuffsApplied > 0)
+                {
+                    _radius += GetQualityRadiusIncrease();
+                }
+            }
+            finally
             {
-                _radius += GetQualityRadiusIncrease();
+                FaithfulRuntimeProfiler.StopScope("FaithfulHoldoutZoneBehaviour.OnCalcRadius");
             }
         }
 
@@ -144,21 +160,16 @@ namespace Faithful
             // Ignore if no holders or quality buffs
             if (holders.Count == 0 || qualityBuffsApplied == 0) return 0.0f;
 
-            // Get valid holders (ones inside zone)
-            List<CharacterBody> validHolders = [];
-            foreach (CharacterBody holder in holders)
-            {
-                if (Utils.IsCharacterInHoldoutZone(holder, zone)) validHolders.Add(holder);
-            }
-            if (validHolders.Count == 0) return 0.0f;
-
             // Sum up quality counts for all relevant holders
             int uncommonCount = 0;
             int rareCount = 0;
             int epicCount = 0;
             int legendaryCount = 0;
-            foreach (CharacterBody holder in validHolders)
+            foreach (CharacterBody holder in holders)
             {
+                // Only count valid holders inside the zone
+                if (holder == null || holder.inventory == null || !Utils.IsCharacterInHoldoutZone(holder, zone)) continue;
+
                 QualityCounts counts = QualityCompat.GetItemCountsEffective(holder.inventory, Faithful.spaciousUmbrella.MainItem);
                 uncommonCount += counts.UNCOMMON;
                 rareCount += counts.RARE;

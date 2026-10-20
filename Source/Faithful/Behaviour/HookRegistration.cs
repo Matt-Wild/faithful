@@ -60,6 +60,22 @@ namespace Faithful
             }
         }
 
+        internal void StartProfiling()
+        {
+            // Ignore if debug mode is disabled
+            if (!Utils.debugMode) return;
+
+            FaithfulRuntimeProfiler.StartScope(Name);
+        }
+
+        internal void StopProfiling()
+        {
+            // Ignore if debug mode is disabled
+            if (!Utils.debugMode) return;
+
+            FaithfulRuntimeProfiler.StopScope(Name);
+        }
+
         internal void Fail(string operation, Exception exception)
         {
             if (!HasFailed)

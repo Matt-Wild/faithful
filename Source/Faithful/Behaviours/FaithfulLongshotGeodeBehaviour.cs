@@ -39,9 +39,6 @@ namespace Faithful
                 // Update if radius indicator should be present
                 UpdateRadiusIndicator(inventory);
             }
-
-            // Hook behaviour
-            Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
         }
 
         public void FetchSettings()
@@ -71,22 +68,12 @@ namespace Faithful
                 // Destroy radius indicator
                 Destroy(radiusIndicator.gameObject);
             }
-
-            // Unhook behaviour
-            Behaviour.RemoveOnInventoryChangedCallback(OnInventoryChanged);
         }
 
-        protected void OnInventoryChanged(Inventory _inventory)
+        public void OnInventoryChanged(Inventory _inventory)
         {
             // Ignore if radius indicator not enabled
             if (!enableRadiusIndicator) return;
-
-            // Attempt to get Character Body
-            CharacterBody body = Utils.GetInventoryBody(_inventory);
-            if (body == null) return;
-
-            // Check if for this character body
-            if (body != character) return;
 
             // Update radius indicator
             UpdateRadiusIndicator(_inventory);

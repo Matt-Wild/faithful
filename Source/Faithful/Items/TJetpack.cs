@@ -77,6 +77,10 @@ namespace Faithful
             lowFuelBuff = Buffs.AddBuff("4T0N_JETPACK_LOW", "Jetpack Fuel Low", "texBuff4T0NJetpackLow", Color.white, _hasConfig: false, _usePercentageDisplay: true, _isHidden: !showBuff);
             highFuelBuff = Buffs.AddBuff("4T0N_JETPACK_HIGH", "Jetpack Fuel High", "texBuff4T0NJetpackHigh", Color.white, _hasConfig: false, _usePercentageDisplay: true, _isHidden: !showBuff);
 
+            // Display fuel independently of the gameplay buff stacks
+            Utils.RegisterBuffDisplayValue(lowFuelBuff.buffDef, GetFuelDisplayValue);
+            Utils.RegisterBuffDisplayValue(highFuelBuff.buffDef, GetFuelDisplayValue);
+
             // Inject on transfer item behaviours
             Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
 
@@ -219,6 +223,13 @@ namespace Faithful
                 // Update TJetpack item count
                 helper.tJetpack.UpdateItemCount(count);
             }
+        }
+
+        private static int GetFuelDisplayValue(CharacterBody _body, int _count)
+        {
+            FaithfulCharacterBodyBehaviour helper = Utils.FindCharacterBodyHelper(_body, _warnIfMissing: false);
+            if (helper == null || helper.tJetpack == null) return _count;
+            return helper.tJetpack.GetFuelDisplayValue(_count);
         }
     }
 }

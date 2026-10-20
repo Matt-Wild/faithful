@@ -190,7 +190,7 @@ namespace Faithful
                 }
 
                 // Get quality item counts
-                QualityCounts counts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
+                QualityCounts counts = inventory.GetItemCountEffective(MainItem.itemDef) > 0 ? QualityCompat.GetItemCountsEffective(inventory, MainItem) : new();
 
                 // Check for any quality stacks
                 if (counts.Total <= 0)

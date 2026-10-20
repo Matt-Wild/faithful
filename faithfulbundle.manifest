@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3772279669
+CRC: 3286620768
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7d1d2e79eee968bc2374ada37cbf0c4a
+    Hash: ee104d2f6a3ec0220026a538f72cf92c
   TypeTreeHash:
     serializedVersion: 2
     Hash: d22a026e9033ef3d17c41e3233439c75
@@ -208,10 +208,11 @@ Assets:
 - Assets/Items/HermitsShawl/AltIcons/texHermitShawlTier3Icon.png
 - Assets/Items/HermitsShawl/HermitShawlDisplayMesh.fbx
 - Assets/Items/SecondHand/texBuffSecondHand.png
-- Assets/Items/NoxiousSlimes/Materials/texNoxiousSlimeSlime.mat
+- Assets/Debug/UI/ToolPanelToggle.prefab
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveUniqueIcon.png
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonDisplayMesh.prefab
 - Assets/Items/LeadersPennon/texBuffLeaderSpeed.png
+- Assets/Items/NoxiousSlimes/Materials/texNoxiousSlimeSlime.mat
 - Assets/Items/SecondHand/SecondHandDisplayMesh.obj
 - Assets/Items/RadiantTimepiece/AltIcons/texRadiantTimepieceUniqueIcon.png
 - Assets/Items/SecondHand/AltIcons/texSecondHandTier3Icon.png
@@ -221,6 +222,7 @@ Assets:
 - Assets/Items/CauterizingGreave/CauterizingGreaveMesh.fbx
 - Assets/Items/ReserveBattery/AltIcons/texReserveBatteryVoidIcon.png
 - Assets/Survivors/Technician/Icons/texBuffElectroSpeed.png
+- Assets/Debug/UI/DebugStatsPanel.prefab
 - Assets/Items/CharmingFacade/Materials/texCharmingFacade.mat
 - Assets/Items/ToxinCanister/texToxinCanister.png
 - Assets/Items/PlasmaFieldGen/PlasmaFieldGeneratorMesh.prefab
@@ -387,6 +389,7 @@ Assets:
 - Assets/Items/BrassScrews/AltIcons/texBrassScrewsTier2Icon.png
 - Assets/Items/VengefulToaster/Materials/texVengefulToaster.mat
 - Assets/Items/RadiantTimepiece/AltIcons/texRadiantTimepieceVoidIcon.png
+- Assets/Debug/UI/DebugSpawnPanel.prefab
 - Assets/Items/CollectorsVision/Shrine/RecollectionShrineMesh.fbx
 - Assets/Equipment/ChargefieldPylon/Materials/texChargefieldPylon.mat
 - Assets/Items/ReserveBattery/AltIcons/texReserveBatteryLunarIcon.png
@@ -457,9 +460,11 @@ Assets:
 - Assets/Placeholder/Item/texTemporalCubeConsumedIcon.png
 - Assets/Items/ToxinCanister/texToxinCanisterNormal.png
 - Assets/Survivors/Technician/Materials/texTechnicianDefault.mat
+- Assets/Debug/UI/SelectionDropdown.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianMainIcon.png
 - Assets/Items/DrownedVisage/AltIcons/texDrownedVisageTier3Icon.png
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackIcon.png
+- Assets/Debug/UI/TabPanelButton.prefab
 - Assets/Items/CollectorsVision/Materials/texCollectorsVision.mat
 - Assets/Items/MatterAccelerator/AltIcons/texMatterAcceleratorTier1Icon.png
 - Assets/Items/AppraisersEye/Materials/texAppraisersEyeBase.mat
@@ -514,6 +519,7 @@ Assets:
 - Assets/Placeholder/Item/texTemporalCube.png
 - Assets/Items/ToxinCanister/ToxinCanisterDisplayMesh.fbx
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinTechnician.prefab
+- Assets/Debug/UI/DebugProfilerHistoryEntry.prefab
 - Assets/Items/PlasmaFieldGen/texPlasmaFieldGeneratorEmission.png
 - Assets/Items/AppraisersEye/AltIcons/texAppraisersEyeTier1Icon.png
 - Assets/Items/VengefulToaster/AltIcons/texVengefulToasterVoidIcon.png
@@ -555,10 +561,12 @@ Assets:
 - Assets/Items/ReserveBattery/Materials/texReserveBattery.mat
 - Assets/Items/ReserveBattery/texReserveBattery.png
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinRobotLights.prefab
+- Assets/Debug/UI/DebugAudioPanel.prefab
 - Assets/Items/BrassScrews/AltIcons/texBrassScrewsTier1Icon.png
-- Assets/Survivors/Technician/Icons/texTechnicianMasteryIcon.png
+- Assets/Debug/UI/DebugGamePanel.prefab
 - Assets/Items/Chakram/ChakramMesh.prefab
 - Assets/Items/CopperGear/AltIcons/texCopperGearTier2Icon.png
+- Assets/Survivors/Technician/Icons/texTechnicianMasteryIcon.png
 - Assets/Survivors/Technician/Textures/texTechnicianEmission.png
 - Assets/Textures/Skills/Default/texDefaultPrimaryIcon.png
 - Assets/Items/TargetingMatrix/TargetingMatrixDisplayMesh.fbx
@@ -677,10 +685,11 @@ Assets:
 - Assets/Items/HexCluster/HexClusterMesh.obj
 - Assets/Items/TargetingMatrix/texTargetingMatrix.png
 - Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeVoidAchievement.png
-- Assets/Items/RadiantTimepiece/AltIcons/texRadiantTimepieceTier2Icon.png
+- Assets/Debug/UI/DebugProfilerEntry.prefab
 - Assets/Items/SecondHand/AltIcons/texSecondHandLunarIcon.png
 - Assets/Survivors/Technician/Mesh/TechnicianMasterySkinTurret.prefab
 - Assets/Items/LeadersPennon/texLeadersPennonEmission.png
+- Assets/Items/RadiantTimepiece/AltIcons/texRadiantTimepieceTier2Icon.png
 - Assets/Equipment/ChargefieldPylon/ChargefieldPylonMesh.prefab
 - Assets/Items/Chakram/ChakramProjectileMesh.prefab
 - Assets/Monsters/MechaSpider/Textures/texMechanicalSpiderAlly.png
@@ -752,6 +761,7 @@ Assets:
 - Assets/UI/texCustomExpansionWhiteIcon.png
 - Assets/Items/CharmingFacade/texCharmingFacade.png
 - Assets/Items/NoxiousSlimes/NoxiousSlimeGlassMesh.obj
+- Assets/Debug/UI/DebugStagePanel.prefab
 - Assets/Debug/UI/DebugCharacterBuffEntry.prefab
 - Assets/Items/TargetingMatrix/texTargetingMatrixIcon.png
 - Assets/Items/NoxiousSlimes/NoxiousSlimeGlassSlimeMesh.obj
@@ -801,8 +811,11 @@ Assets:
 - Assets/Items/MeltingWarbler/MeltingWarblerDisplayMesh.obj
 - Assets/Items/BrassScrews/texBrassScrews.png
 - Assets/Items/LeadersPennon/AltIcons/texLeadersPennonBossIcon.png
+- Assets/Debug/UI/DebugProfilerPanel.prefab
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaUniqueIcon.png
 - Assets/Items/CollectorsVision/Shrine/texShrineRecollection.png
+- Assets/Debug/UI/DebugMainPanel.prefab
+- Assets/Debug/UI/ClosePanelButton.prefab
 - Assets/Equipment/ChargefieldPylon/texChargefieldPylon.png
 - Assets/Items/HermitsShawl/texHermitShawlNormal.png
 - Assets/Items/ReserveBattery/AltIcons/texReserveBatteryUniqueIcon.png
@@ -857,8 +870,10 @@ Assets:
 - Assets/Items/CopperGear/CopperGearMesh.prefab
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackTier3Icon.png
 - Assets/Items/NoxiousSlimes/texNoxiousSlimeNormal.png
+- Assets/Debug/UI/DebugObjectAnalysisPanel.prefab
 - Assets/Placeholder/Item/texBuffTemporalCube.png
 - Assets/Items/CharmingFacade/texCharmingFacadeEmission.png
+- Assets/Debug/UI/DebugComponentAnalysisPanel.prefab
 - Assets/Items/CauterizingGreave/AltIcons/texCauterizingGreaveVoidIcon.png
 - Assets/Survivors/Technician/Icons/texTechnicianChargeFlowIcon.png
 - Assets/Survivors/Technician/Mesh/TechnicianAlloySkinTechnician.prefab

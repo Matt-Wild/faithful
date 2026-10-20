@@ -1,3 +1,24 @@
+### v1.5.7
+
+**Compatibility**
+- Collector's Vision now counts Ethereal items (configurable).
+
+**Fixes**
+- Fixed Jetpack leaving behind active hooks after character death or stage changes.
+- Fixed Faithful retaining unnecessary character data after characters were destroyed or a run ended.
+- Fixed Appraiser's Eye notification no longer showing correctly.
+
+**Optimizations**
+- Quality Vengeful Toaster now checks only Toaster holders instead of every character when damage is dealt.
+- Optimized Leader's Pennon, Longshot Geode, and Hermit's Shawl to avoid unnecessary processing for unrelated characters.
+- Optimized Jetpack's fuel buff display to avoid unnecessary character stat recalculations.
+- Reduced character setup work until behaviour is needed and prevented missing characters from being continuously searched for.
+- Reduced unnecessary processing and memory allocations from holdout zones and Leader's Pennon.
+- Reduced unnecessary processing and memory allocations from Quality Targeting Matrix and Jetpack area attacks.
+- Reduced unnecessary Jetpack network updates while idle.
+- Removed unnecessary memory allocations from Quality Jetpack's flame calculations.
+- Reduced unnecessary Quality item checks and memory allocations when inventories change.
+
 ### v1.5.6
 
 **Fixes**

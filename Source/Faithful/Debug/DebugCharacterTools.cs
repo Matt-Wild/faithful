@@ -187,7 +187,7 @@ namespace Faithful
         private void OnEnable()
         {
             // Add hooks
-            On.RoR2.PingerController.AttemptPing += OnAttemptPing;
+            Behaviour.AddAttemptPingCallback(OnAttemptPing);
 
             // Update character panel
             UpdateCharacterPanel();
@@ -196,7 +196,7 @@ namespace Faithful
         private void OnDisable()
         {
             // Remove hooks
-            On.RoR2.PingerController.AttemptPing -= OnAttemptPing;
+            Behaviour.RemoveAttemptPingCallback(OnAttemptPing);
         }
 
         public override void OnMaximise()
@@ -452,7 +452,7 @@ namespace Faithful
             UpdateCharacterPanel();
         }
 
-        private void OnAttemptPing(On.RoR2.PingerController.orig_AttemptPing orig, PingerController self, Ray aimRay, GameObject bodyObject)
+        private void OnAttemptPing(PingerController self, ref Ray aimRay, GameObject bodyObject)
         {
             // Prepare for ping
             float num;
@@ -473,9 +473,6 @@ namespace Faithful
                     currentCharacter = component.healthComponent.body;
                 }
             }
-
-            // Run original processes
-            orig(self, aimRay, bodyObject);
         }
     }
 }

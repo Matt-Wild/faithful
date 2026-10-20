@@ -209,9 +209,9 @@ namespace Faithful
                 // Check if quality behaviour is available
                 bool qualityAvailable = MainItem.supportsQuality && Utils.qualityEnabled && secondHandBoostBuff != null;
 
-                // Get quality counts
+                // Only look up quality counts when the item is held
                 QualityCounts qualityCounts = new();
-                if (qualityAvailable)
+                if (qualityAvailable && secondHandCount > 0)
                 {
                     qualityCounts = QualityCompat.GetItemCountsEffective(inventory, MainItem);
                 }

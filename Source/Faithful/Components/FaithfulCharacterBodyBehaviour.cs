@@ -42,14 +42,91 @@ namespace Faithful
 
         void FixedUpdate()
         {
-            // Update tick behaviours
-            foreach (CharacterBodyTickBehaviour tickBehaviour in m_tickBehaviours) tickBehaviour.FixedUpdate();
+            FaithfulRuntimeProfiler.StartScope("FaithfulCharacterBodyBehaviour.FixedUpdate");
+            try
+            {
+                // Update tick behaviours
+                foreach (CharacterBodyTickBehaviour tickBehaviour in m_tickBehaviours) tickBehaviour.FixedUpdate();
+            }
+            finally
+            {
+                FaithfulRuntimeProfiler.StopScope("FaithfulCharacterBodyBehaviour.FixedUpdate");
+            }
         }
 
         public void AddTickBehaviour(CharacterBodyCallback _callback, float _tickRate)
         {
             // Add tick behaviour
-            m_tickBehaviours.Add(new CharacterBodyTickBehaviour(_callback, _tickRate));
+            CharacterBodyTickBehaviour tickBehaviour = new CharacterBodyTickBehaviour(_callback, _tickRate);
+            if (characterBodyFound) tickBehaviour.UpdateCharacterBody(character);
+            m_tickBehaviours.Add(tickBehaviour);
+        }
+
+        public void OnInventoryChanged(Inventory _inventory)
+        {
+            // Create local item behaviours only when needed
+            if (character == null || _inventory == null) return;
+            if (leadersPennon == null && _inventory.GetItemCountEffective(Items.GetItem("LEADERS_PENNON").itemDef) > 0) EnsureLeadersPennon();
+            if (longshotGeode == null && _inventory.GetItemCountEffective(Items.GetItem("LONGSHOT_GEODE").itemDef) > 0) EnsureLongshotGeode();
+            if (hermitsShawl == null && _inventory.GetItemCountEffective(Items.GetItem("HERMITS_SHAWL").itemDef) > 0) EnsureHermitsShawl();
+
+            // Notify this character's item behaviours
+            if (leadersPennon != null) leadersPennon.OnInventoryChanged(_inventory);
+            if (longshotGeode != null) longshotGeode.OnInventoryChanged(_inventory);
+            if (hermitsShawl != null) hermitsShawl.OnInventoryChanged(_inventory);
+        }
+
+        public FaithfulLeadersPennonBehaviour EnsureLeadersPennon()
+        {
+            // Allies can need the visual effect without owning a pennon
+            if (leadersPennon == null && character != null)
+            {
+                leadersPennon = gameObject.AddComponent<FaithfulLeadersPennonBehaviour>();
+                leadersPennon.Init(character);
+            }
+            return leadersPennon;
+        }
+
+        public FaithfulLongshotGeodeBehaviour EnsureLongshotGeode()
+        {
+            // Create and initialise the behaviour if needed
+            if (longshotGeode == null && character != null)
+            {
+                longshotGeode = gameObject.AddComponent<FaithfulLongshotGeodeBehaviour>();
+                longshotGeode.Init(character);
+            }
+            return longshotGeode;
+        }
+
+        public FaithfulHermitsShawlBehaviour EnsureHermitsShawl()
+        {
+            // Create and initialise the behaviour if needed
+            if (hermitsShawl == null && character != null)
+            {
+                hermitsShawl = gameObject.AddComponent<FaithfulHermitsShawlBehaviour>();
+                hermitsShawl.Init(character);
+            }
+            return hermitsShawl;
+        }
+
+        public void AssignCharacter(CharacterBody _character)
+        {
+            if (characterBodyFound) return;
+            character = _character;
+            StartCoroutine(LinkCharacterBody());
+        }
+
+        private void OnCharacterBodyStart(CharacterBody _body)
+        {
+            // Finish linking if the body arrived after the polling window
+            NetworkIdentity identity = _body.GetComponent<NetworkIdentity>();
+            if (identity != null && identity.netId == characterID) AssignCharacter(_body);
+        }
+
+        public void OnCharacterBodyFixedUpdate()
+        {
+            // Update this character's Hermit's Shawl
+            if (hermitsShawl != null) hermitsShawl.OnCharacterBodyFixedUpdate();
         }
 
         private void LevelOffsetChanged(float _newValue)
@@ -71,6 +148,10 @@ namespace Faithful
         public override void OnStartClient()
         {
             base.OnStartClient();
+            if (characterBodyFound) return;
+
+            // Listen for bodies which arrive after this helper
+            CharacterBody.onBodyStartGlobal += OnCharacterBodyStart;
 
             // Start coroutine to find and link character body
             StartCoroutine(LinkCharacterBody());
@@ -106,21 +187,38 @@ namespace Faithful
             }
         }
 
+        private void OnDestroy()
+        {
+            CharacterBody.onBodyStartGlobal -= OnCharacterBodyStart;
+
+            // Release this character's helper registration
+            Utils.UnregisterFaithfulCharacterBodyBehaviour(character, this);
+        }
+
         private IEnumerator LinkCharacterBody()
         {
             // Only attempt to link if not already attempting to link
-            if (!searchingForCharacterBody)
+            if (!searchingForCharacterBody && !characterBodyFound)
             {
                 // Beginning search
                 searchingForCharacterBody = true;
 
-                // Cycle until character body is found
+                // Poll briefly for spawn ordering, then rely on the body start event
+                float searchStarted = Time.realtimeSinceStartup;
+                WaitForSecondsRealtime retryDelay = new WaitForSecondsRealtime(0.25f);
                 while (character == null)
                 {
-                    // Attempt to find character body
                     character = ClientScene.FindLocalObject(characterID)?.GetComponent<CharacterBody>();
-                    yield return null;
+                    if (character != null) break;
+                    if (Time.realtimeSinceStartup - searchStarted >= 30.0f)
+                    {
+                        searchingForCharacterBody = false;
+                        yield break;
+                    }
+                    yield return retryDelay;
                 }
+
+                CharacterBody.onBodyStartGlobal -= OnCharacterBodyStart;
 
                 // Set as character body found
                 characterBodyFound = true;
@@ -140,36 +238,24 @@ namespace Faithful
                 // Assign character
                 tJetpack.AssignCharacter(character);
 
-                // Fetch leaders pennon behaviour
-                leadersPennon = GetComponent<FaithfulLeadersPennonBehaviour>();
-
-                // Initialise leaders pennon behaviour
-                leadersPennon.Init(character);
-
-                // Fetch longshot geode behaviour
-                longshotGeode = GetComponent<FaithfulLongshotGeodeBehaviour>();
-
-                // Initialise longshot geode behaviour
-                longshotGeode.Init(character);
-
                 // Fetch targeting matrix behaviour
                 targetingMatrix = GetComponent<FaithfulTargetingMatrixBehaviour>();
 
                 // Initialise targeting matrix behaviour
                 targetingMatrix.Init(character);
 
-                // Fetch hermits shawl behaviour
-                hermitsShawl = GetComponent<FaithfulHermitsShawlBehaviour>();
-
-                // Initialise hermits shawl behaviour
-                hermitsShawl.Init(character);
-
                 // Check for inventory
                 if (character.inventory != null)
                 {
+                    // Initialise local behaviours for items already held
+                    OnInventoryChanged(character.inventory);
+
                     // Update jetpack with jetpack item count
                     tJetpack.UpdateItemCount(character.inventory.GetItemCountEffective(Items.GetItem("4T0N_JETPACK").itemDef));
                 }
+
+                // Restore effects for buffs received before this helper was linked
+                character.UpdateAllTemporaryVisualEffects();
 
                 // Check if debug mode
                 if (Utils.verboseConsole)

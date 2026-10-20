@@ -90,6 +90,10 @@
     <UpToDateCheckInput Include="NetworkWeaver\Weave.ps1;NetworkWeaver\Unity.UNetWeaver.exe;NetworkWeaver\Unity.Cecil*.dll" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Behaviour\" />
+  </ItemGroup>
+
   <!-- Patch the build output before post-build events run. -->
   <Target Name="WeaveFaithful" AfterTargets="CopyFilesToOutputDirectory" Condition="'$(DesignTimeBuild)' != 'true'">
     <PropertyGroup>

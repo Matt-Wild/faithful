@@ -20,9 +20,6 @@ namespace Faithful
         // How many hermit shawl items this character has
         int itemCount = -1;
 
-        // Is behaviour hooked for this character?
-        bool hooked = false;
-
         // Is this character out of combat
         bool ooc = false;
 
@@ -59,9 +56,6 @@ namespace Faithful
                 UpdateItemCount(inventory.GetItemCountEffective(hermitsShawlItem.itemDef));
             }
 
-            // Hook behaviour
-            Behaviour.AddOnItemAddedCallback(hermitsShawlItem.itemDef, OnItemAdded);
-
             // Update temporary visual effects
             character.UpdateAllTemporaryVisualEffects();
         }
@@ -81,69 +75,10 @@ namespace Faithful
         {
             // Unregister with utils
             Utils.UnregisterCharacterBehaviour(this);
-
-            // Unhook behaviour
-            Behaviour.RemoveOnItemAddedCallback(hermitsShawlItem.itemDef, OnItemAdded);  // This is an additional hook
-            UnhookBehaviour();
         }
 
-        private void OnItemAdded(Inventory _inventory)
+        public void OnInventoryChanged(Inventory _inventory)
         {
-            // Ignore if behaviour already hooked
-            if (hooked) return;
-
-            // Get character body for inventory
-            CharacterBody characterBody = Utils.GetInventoryBody(_inventory);
-            if (characterBody == null) return;
-
-            // Check if for this character
-            if (characterBody != character) return;
-
-            // Get item count
-            int itemCount = _inventory.GetItemCountEffective(hermitsShawlItem.itemDef);
-
-            // Update item count
-            UpdateItemCount(itemCount);
-        }
-
-        private void HookBehaviour()
-        {
-            // Skip if already hooked
-            if (hooked) return;
-
-            // Update hooked flag
-            hooked = true;
-
-            // Hook behaviour
-            Behaviour.AddOnInventoryChangedCallback(OnInventoryChanged);
-            Behaviour.AddOnCharacterBodyFixedUpdateCallback(OnCharacterBodyFixedUpdate);
-        }
-
-        private void UnhookBehaviour()
-        {
-            // Skip if already not hooked
-            if (!hooked) return;
-
-            // Update hooked flag
-            hooked = false;
-
-            // Unhook behaviour
-            Behaviour.RemoveOnInventoryChangedCallback(OnInventoryChanged);
-            Behaviour.RemoveOnCharacterBodyFixedUpdateCallback(OnCharacterBodyFixedUpdate);
-        }
-
-        protected void OnInventoryChanged(Inventory _inventory)
-        {
-            // Attempt to get Character Body
-            CharacterBody body = Utils.GetInventoryBody(_inventory);
-            if (body == null)
-            {
-                return;
-            }
-
-            // Check if for this character body
-            if (body != character) return;
-
             // Get new item count
             int newCount = _inventory.GetItemCountEffective(hermitsShawlItem.itemDef);
 
@@ -151,10 +86,10 @@ namespace Faithful
             UpdateItemCount(newCount);
         }
 
-        private void OnCharacterBodyFixedUpdate(CharacterBody _body)
+        public void OnCharacterBodyFixedUpdate()
         {
-            // Ignore if not this character body
-            if (_body != character) return;
+            // Ignore if character body no longer exists
+            if (character == null) return;
 
             // Ignore if not hosting
             if (!Utils.hosting) return;
@@ -240,13 +175,6 @@ namespace Faithful
 
             // Update item count
             itemCount = _newCount;
-
-            // Hook if not hooked and item count is above 0
-            if (!hooked && itemCount > 0)
-            {
-                // Hook behaviour
-                HookBehaviour();
-            }
         }
 
         Item hermitsShawlItem
