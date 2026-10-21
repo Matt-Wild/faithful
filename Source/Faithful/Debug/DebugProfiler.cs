@@ -13,6 +13,10 @@ namespace Faithful
         FaithfulProfilerSnapshot snapshot;
         GameObject historyEntryPrefab;
 
+        // Store the whole game's managed memory readings with the displayed snapshot
+        TextMeshProUGUI memoryUsedValue;
+        TextMeshProUGUI memoryReservedValue;
+
         // Store the current view and its labels and controls
         bool history = false;
         GameObject liveLabels;
@@ -35,6 +39,13 @@ namespace Faithful
             freezeButtonText = freezeButton.GetComponentInChildren<TextMeshProUGUI>(true);
             freezeButtonText.text = "Freeze";
             freezeButton.onClick.AddListener(OnFreezeClicked);
+
+            // Find the memory readings and log the displayed snapshot on demand
+            Transform memoryUsedText = Utils.FindChildWithTerm(transform, "MemoryUsedText").transform;
+            Transform memoryReservedText = Utils.FindChildWithTerm(transform, "MemoryReservedText").transform;
+            memoryUsedValue = Utils.FindChildWithTerm(memoryUsedText, "MemoryUsedValue").GetComponent<TextMeshProUGUI>();
+            memoryReservedValue = Utils.FindChildWithTerm(memoryReservedText, "MemoryReservedValue").GetComponent<TextMeshProUGUI>();
+            transform.Find("LogButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(OnLogClicked);
 
             // Switch between the live window and retained history
             liveLabels = transform.Find("ProfilerLabels/Live").gameObject;
@@ -71,7 +82,17 @@ namespace Faithful
             if (!Utils.debugMode || !isActiveAndEnabled || minimised || frozen || entryList == null) return;
 
             snapshot = FaithfulRuntimeProfiler.GenerateSnapshot(history);
+            string memoryUsed = FaithfulProfilerSnapshot.FormatMemory(snapshot.MemoryUsedBytes);
+            string memoryReserved = FaithfulProfilerSnapshot.FormatMemory(snapshot.MemoryReservedBytes);
+            if (memoryUsedValue.text != memoryUsed) memoryUsedValue.text = memoryUsed;
+            if (memoryReservedValue.text != memoryReserved) memoryReservedValue.text = memoryReserved;
             entryList.RefreshItems(snapshot.Scopes.Length + 1);
+        }
+
+        private void OnLogClicked()
+        {
+            // Use the captured values, including while the display is frozen
+            FaithfulRuntimeProfiler.LogSnapshot(snapshot);
         }
 
         private void OnFreezeClicked()
@@ -111,7 +132,7 @@ namespace Faithful
 
             // Reuse captured values when switching views while frozen
             if (entryList == null || snapshot.Scopes == null) return;
-            snapshot = new FaithfulProfilerSnapshot(snapshot.Scopes, snapshot.Total, history);
+            snapshot = new FaithfulProfilerSnapshot(snapshot.Scopes, snapshot.Total, history, snapshot.MemoryUsedBytes, snapshot.MemoryReservedBytes);
             entryList.RefreshItems(snapshot.Scopes.Length + 1, true);
         }
 
@@ -189,13 +210,19 @@ namespace Faithful
 
         internal static void UpdateTime(TextMeshProUGUI _text, double _ticks, ref double _displayed)
         {
-            // Use microseconds below one millisecond, keeping true zero distinct
+            // Use microseconds for small values and at least three significant digits in seconds
             double milliseconds = _ticks * 1000.0 / Stopwatch.Frequency;
             double value;
             if (_ticks == 0) value = 0;
             else if (milliseconds < 0.001) value = -0.5;
             else if (milliseconds < 1) value = -Math.Round(milliseconds * 1000.0, MidpointRounding.AwayFromZero);
-            else value = Math.Round(milliseconds, MidpointRounding.AwayFromZero);
+            else if (milliseconds < 1000) value = Math.Round(milliseconds, MidpointRounding.AwayFromZero);
+            else
+            {
+                double seconds = milliseconds / 1000.0;
+                int decimals = seconds < 10 ? 2 : seconds < 100 ? 1 : 0;
+                value = Math.Round(seconds, decimals, MidpointRounding.AwayFromZero) * 1000.0;
+            }
             if (_displayed == value) return;
 
             // Negative cached values represent microseconds; -0.5 represents less than one
@@ -203,6 +230,12 @@ namespace Faithful
             if (value == 0) _text.text = "0\u00B5s";
             else if (value == -0.5) _text.text = "<1\u00B5s";
             else if (value < 0) _text.text = (-value).ToString("0", CultureInfo.InvariantCulture) + "\u00B5s";
+            else if (value >= 1000)
+            {
+                double seconds = value / 1000.0;
+                string format = seconds < 10 ? "0.00" : seconds < 100 ? "0.0" : "0";
+                _text.text = seconds.ToString(format, CultureInfo.InvariantCulture) + "s";
+            }
             else _text.text = value.ToString("0", CultureInfo.InvariantCulture) + "ms";
         }
     }

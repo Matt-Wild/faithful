@@ -1,3 +1,8 @@
+### v1.5.8
+
+**Added**
+- Added optional per profile saving for Faithful progress (shouldn't conflict with PersistentProfiles).
+
 ### v1.5.7
 
 **Compatibility**

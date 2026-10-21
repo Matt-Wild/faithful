@@ -381,8 +381,8 @@ namespace Faithful
             }
 
             // Update item texts
-            itemDef.name = $"{Utils.GetXMLSafeString(string.IsNullOrWhiteSpace(namePrefix) ? safeName : $"{namePrefix} FROM {safeName}")}_FAITHFUL_{token}_ITEM".ToUpper();
-            itemDef.nameToken = string.IsNullOrEmpty(overrideName) ? $"FAITHFUL_ITEM_{token}_NAME" : overrideName;
+            itemDef.name = $"{Utils.GetXMLSafeString(string.IsNullOrWhiteSpace(namePrefix) ? safeName : $"{namePrefix} WITH {safeName}")}_FAITHFUL_{token}_ITEM".ToUpper();
+            itemDef.nameToken = $"FAITHFUL_ITEM_{token}_NAME";
             itemDef.pickupToken = extendPickupDescription ? $"FAITHFUL_ITEM_{token}_DESC" : $"FAITHFUL_ITEM_{token}_PICKUP";
             itemDef.descriptionToken = $"FAITHFUL_ITEM_{token}_DESC";
             itemDef.loreToken = $"FAITHFUL_ITEM_{token}_LORE";

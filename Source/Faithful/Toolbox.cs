@@ -21,6 +21,7 @@ namespace Faithful
 
             // Create tools
             Config.Init(_configFile);
+            FaithfulProgressSaving.Init();
             Utils.Init(_pluginInfo);
             debugMode = new DebugMode();
             Behaviour.Init();
