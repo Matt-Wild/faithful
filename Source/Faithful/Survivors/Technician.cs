@@ -2020,10 +2020,6 @@ namespace Faithful
                 new Vector3(1F, 1F, 1F)
                 )
                 );
-
-
-
-
             AddDefaultItemDisplay("SprintDamage",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplaySprintDamage"),
                 "Head",
@@ -2098,169 +2094,193 @@ namespace Faithful
                 );
             AddDefaultItemDisplay("CausticPheromones",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayCausticPheromones"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "Chest",
+                new Vector3(-0.725F, -0.1F, -0.125F),
+                new Vector3(10F, 0F, 0F),
+                new Vector3(0.75F, 0.75F, 0.75F)
                 )
                 );
             AddDefaultItemDisplay("RechargeableJump",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayRechargeableJump"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "Shin.L",
+                new Vector3(0.00032F, 0.321F, 0.081F),
+                new Vector3(5F, 173.75F, 180F),
+                new Vector3(0.2F, 0.2F, 0.2F)
                 )
                 );
             AddDefaultItemDisplay("HelpWake",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayHelpWake"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "HandL",
+                new Vector3(0.006F, 0.1075F, 0.048F),
+                new Vector3(17.875F, 254.375F, 54.5F),
+                new Vector3(0.105F, 0.105F, 0.105F)
                 )
                 );
             AddDefaultItemDisplay("Blindness",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBlindness"),
                 "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                new Vector3(0.063F, 0.1625F, 0.135F),
+                new Vector3(4F, 200F, 2.5F),
+                new Vector3(0.1F, 0.1F, 0.1F)
+                ),
+                ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBlindness"),
+                "Head",
+                new Vector3(-0.072F, 0.1625F, 0.1315F),
+                new Vector3(4F, 155F, 355F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("HexCurse",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayHexCurse"),
                 "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                new Vector3(0.00325F, 0.2525F, 0.1F),
+                new Vector3(66F, 182.5F, 182.5F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("HexMountain",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayHexMountain"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                "Backpack",
+                new Vector3(0.00525F, -0.01F, -0.119F),
+                new Vector3(353.25F, 350F, 0F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("IncreasedDifficulty",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayIncreasedDifficulty"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "Pelvis",
+                new Vector3(0.0045F, 0.0625F, 0.1335F),
+                new Vector3(0F, 180F, 355F),
+                new Vector3(0.15F, 0.15F, 0.15F)
                 )
                 );
             AddDefaultItemDisplay("LowerHealing",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayLowerHealing"),
                 "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                new Vector3(0.0043F, 0.0807F, 0.1585F),
+                new Vector3(9.5F, 178F, 164F),
+                new Vector3(0.1F, 0.08F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("OutOfTPRadius",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayOutOfTPRadius"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                "Backpack",
+                new Vector3(0.00422F, -0.0753F, -0.11375F),
+                new Vector3(345F, 0.25F, 355.25F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("RandomDebuffOnInteract",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayRandomDebuffOnInteract"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                "Stomach",
+                new Vector3(-0.104F, 0.0475F, -0.0975F),
+                new Vector3(0F, 32F, 0F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("RoamingItemDisable",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayRoamingItemDisable"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                "Stomach",
+                new Vector3(0.104F, 0.0475F, -0.0975F),
+                new Vector3(0F, 328F, 0F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("SlipperyGround",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplaySlipperyGround"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                "Shin.L",
+                new Vector3(-0.003F, 0.675F, 0F),
+                new Vector3(82.5F, 350F, 270F),
                 new Vector3(0.1F, 0.1F, 0.1F)
+                ),
+                ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplaySlipperyGround"),
+                "Shin.R",
+                new Vector3(0.003F, 0.675F, 0F),
+                new Vector3(82.5F, 10F, 270F),
+                new Vector3(0.1F, -0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("WeakAssHamstring",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayWeakAssHamstring"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "ThighL",
+                new Vector3(-0.0304F, 0.0838F, -0.116F),
+                new Vector3(355.5F, 211.25F, 169.75F),
+                new Vector3(0.125F, 0.125F, 0.125F)
+                ),
+                ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayWeakAssHamstring"),
+                "ThighR",
+                new Vector3(0.0304F, 0.0838F, -0.116F),
+                new Vector3(355F, 159F, 176.5F),
+                new Vector3(0.125F, 0.125F, 0.125F)
                 )
                 );
             AddDefaultItemDisplay("MushShot",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMushShot"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "Shin.L",
+                new Vector3(0F, 0F, -0.074F),
+                new Vector3(298F, 0F, 0F),
+                new Vector3(0.032F, 0.032F, 0.032F)
+                ),
+                ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMushShot"),
+                "Shin.R",
+                new Vector3(0F, 0F, -0.074F),
+                new Vector3(298F, 0F, 0F),
+                new Vector3(0.032F, 0.032F, 0.032F)
                 )
                 );
             AddDefaultItemDisplay("WispOnKill",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayWispOnKill"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "ThighL",
+                new Vector3(-0.07345F, 0.058F, 0.08925F),
+                new Vector3(1.125F, 303.5F, 356.75F),
+                new Vector3(0.125F, 0.125F, 0.125F)
                 )
                 );
             AddDefaultItemDisplay("SpawnAltar",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplaySpawnAltar"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "Pelvis",
+                new Vector3(0F, 0.0375F, -0.179F),
+                new Vector3(88.75F, 180F, 90F),
+                new Vector3(0.07F, 0.07F, 0.07F)
                 )
                 );
             AddDefaultItemDisplay("EliteDeathEquipment",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEliteDeath"),
                 "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                new Vector3(0F, 0.225F, -0.01F),
+                new Vector3(15F, 180F, 0F),
+                new Vector3(0.5F, 0.5F, 0.5F)
                 )
                 );
             AddDefaultItemDisplay("Mimicry",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMimicry"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                "Chest",
+                new Vector3(0.06425F, 0.00275F, 0.12F),
+                new Vector3(24.6F, 18.5F, 1.25F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("BarrierEnemiesOnKill",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBarrierEnemiesOnKill"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0.1F, 0.1F, 0.1F)
+                "UpperArmR",
+                new Vector3(0.0525F, 0.03125F, 0.071F),
+                new Vector3(7.5F, 29.5F, 340.5F),
+                new Vector3(0.12F, 0.12F, 0.12F)
                 )
                 );
             AddDefaultItemDisplay("HexHaunting",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayHexHaunting"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                "Backpack",
+                new Vector3(-0.19F, 0.01025F, -0.073F),
+                new Vector3(350.5F, 165.5F, 24F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
             AddDefaultItemDisplay("ShareItemsWithEnemies",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayShareItemsWithEnemies"),
-                "Head",
-                new Vector3(0F, 0F, 0F),
-                new Vector3(0F, 0F, 0F),
+                "HandR",
+                new Vector3(-0.0215F, 0.119F, 0.0023F),
+                new Vector3(357F, 271F, 351.5F),
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
