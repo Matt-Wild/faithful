@@ -1335,11 +1335,8 @@ namespace Faithful
                 _amount /= _zone.baseChargeDuration;
             }
 
-            // Add charge to Holdout Zone
-            _zone.charge += _amount;
-
-            // Clamp zone charge
-            _zone.charge = Mathf.Clamp01(_zone.charge);
+            // Add charge within the Holdout Zone's current limit
+            _zone.charge = Mathf.Clamp(_zone.charge + _amount, 0.0f, _zone.maxCharge);
 
             // return Holdout Zone
             return _zone;

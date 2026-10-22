@@ -1,3 +1,8 @@
+### v1.5.10
+
+**Fixes**
+- Drowned Visage no longer resets teleporter progress to 100% during Soul-Binding trial.
+
 ### v1.5.9
 
 **Compatibility**
