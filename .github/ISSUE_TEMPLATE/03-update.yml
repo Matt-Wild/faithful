@@ -17,7 +17,19 @@ body:
   id: game-log
   attributes:
     label: Game Log (optional)
-    description: Logs can help us identify errors, conflicts, and their causes. If relevant, after reproducing the issue, open r2modman -> Settings -> Debugging -> Copy log to clipboard. Paste the log here, or attach it as a text file. You can leave this blank if you cannot obtain a log.
+    description: |
+      Logs can help us identify the cause of an issue.
+
+      To obtain your log after reproducing the issue:
+      1. Open r2modman.
+      2. Navigate to Settings → Debugging.
+      3. Select "Copy log to clipboard".
+
+      For large logs, paste the contents into a .txt file
+      and attach it here rather than pasting it directly.
+
+      You can also paste a short, relevant excerpt.
+    placeholder: "Attach your log file or paste relevant log output here."
   validations:
     required: false
 - type: textarea
