@@ -15,6 +15,7 @@ namespace Faithful
             [
                 holdoutZoneControllerUpdateHook,
                 holdoutZoneControllerStartHook,
+                supportBeaconControllerStartHook,
                 characterBodyAwakeHook,
                 characterBodyStartHook,
                 addBuffIndexHook,

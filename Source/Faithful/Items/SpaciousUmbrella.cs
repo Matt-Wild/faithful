@@ -11,10 +11,12 @@ namespace Faithful
         // Store additional item settings
         Setting<float> sizeSetting;
         Setting<float> sizeStackingSetting;
+        Setting<bool> affectRallyPointSetting;
 
         // Store item stats
         float size;
         float sizeStacking;
+        public bool AffectRallyPoint;
 
         // Store additional quality settings
         QualitySetting<float> sizeQualitySetting;
@@ -56,6 +58,9 @@ namespace Faithful
 
             // Link Holdout Zone behaviour
             Behaviour.AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadius);
+
+            // Link Support Beacon behaviour
+            Behaviour.AddOnSupportBeaconStartCallback(OnSupportBeaconStart);
         }
 
         public override void QualityConstructor()
@@ -103,6 +108,7 @@ namespace Faithful
             // Create settings specific to this item
             sizeSetting = MainItem.CreateSetting("SIZE", "Radius Increase", 25.0f, "How much should this item increase the size of the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
             sizeStackingSetting = MainItem.CreateSetting("SIZE_STACKING", "Radius Increase Stacking", 25.0f, "How much should additional stacks of this item increase the size of the teleporter radius? (25.0 = 25% increase)", _valueFormatting: "{0:0.0}%");
+            affectRallyPointSetting = MainItem.CreateSetting("AFFECT_RALLY_POINT", "Affect Rally Point?", true, "Should this item increase the radius of Enforcer's Rally Point?", false, _canRandomise: false);
 
             // Create quality settings for this item if quality is enabled and this item supports quality
             if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
@@ -122,6 +128,7 @@ namespace Faithful
             // Get item settings
             size = sizeSetting.Value / 100.0f;
             sizeStacking = sizeStackingSetting.Value / 100.0f;
+            AffectRallyPoint = affectRallyPointSetting.Value;
 
             // Fetch quality settings for this item if quality is enabled and this item supports quality
             if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
@@ -139,7 +146,23 @@ namespace Faithful
             MaxInstancesQuality = maxInstancesQualitySetting.Value;
         }
 
+        void OnSupportBeaconStart(SupportBeaconController _beacon)
+        {
+            // Ignore if Rally Point support is disabled
+            if (!AffectRallyPoint) return;
+
+            // Apply Umbrella before the beacon's initial barrier and kill checks
+            HoldoutZoneController zone = _beacon.GetComponent<HoldoutZoneController>();
+            if (zone != null) Behaviour.EnsureHoldoutZoneBehaviour(zone).UpdateSupportBeaconRadius();
+        }
+
         void OnHoldoutZoneCalcRadius(ref float _radius, HoldoutZoneController _zone)
+        {
+            // Apply the same increase to ordinary holdout zones and support beacons
+            _radius += GetRadiusIncrease(_zone.baseRadius);
+        }
+
+        public float GetRadiusIncrease(float _baseRadius)
         {
             // Number of Spacious Umbrella items
             int count = Utils.GetItemCountForTeam(TeamIndex.Player, MainItem.itemDef);
@@ -147,16 +170,19 @@ namespace Faithful
             // Check if players have one of the item
             if (count == 1)
             {
-                // Add onto radius
-                _radius += size * _zone.baseRadius;
+                // Radius increase for one item
+                return size * _baseRadius;
             }
 
             // Check if players have multiple of the item
             else if (count > 1)
             {
-                // Add onto radius
-                _radius += ((size + (count * sizeStacking + Mathf.Log(count + 1, Mathf.Pow(2.0f, 1.0f / sizeStacking)) * (count / 4.0f)) / ((count / 4.0f) + 1) - sizeStacking) + count * 0.02f) * _zone.baseRadius;
+                // Radius increase for multiple items
+                return ((size + (count * sizeStacking + Mathf.Log(count + 1, Mathf.Pow(2.0f, 1.0f / sizeStacking)) * (count / 4.0f)) / ((count / 4.0f) + 1) - sizeStacking) + count * 0.02f) * _baseRadius;
             }
+
+            // No items held
+            return 0.0f;
         }
     }
 }

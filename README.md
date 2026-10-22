@@ -3,8 +3,6 @@ Multiplayer compatible and highly configurable!
 
 Currently adds <b>19</b> items, <b>7</b> of which require the <b>Survivors of the Void DLC</b>. All items have item displays!
 
-Also adds some custom debug tools to help other mod developers and those curious about the inner workings of the game.
-
 For more detailed information about the additions made by this mod check out the [wiki](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/wiki/).
 
 # Compatibility

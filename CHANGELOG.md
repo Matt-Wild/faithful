@@ -1,3 +1,8 @@
+### v1.5.9
+
+**Compatibility**
+- Spacious Umbrella now increases Enforcer's Rally Point radius while preserving its exclusion of other radius modifiers (configurable).
+
 ### v1.5.8
 
 **Added**

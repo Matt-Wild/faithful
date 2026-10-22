@@ -9,6 +9,8 @@ namespace Faithful
 
     internal delegate void OnHoldoutZoneCalcRadiusCallback(ref float _radius, HoldoutZoneController _zone);
 
+    internal delegate void OnSupportBeaconStartCallback(SupportBeaconController _beacon);
+
     internal static partial class Behaviour
     {
         // Holdout zone updates: callbacks run for contained characters before the original method
@@ -107,9 +109,8 @@ namespace Faithful
             holdoutZoneControllerStartHook.StartProfiling();
             try
             {
-                // Add Faithful Holdout Zone mono behaviours
-                FaithfulHoldoutZoneBehaviour behaviour = self.gameObject.AddComponent<FaithfulHoldoutZoneBehaviour>();
-                behaviour.Init(onHoldoutZoneCalcRadiusCallbacks);
+                // Ensure the helper exists regardless of beacon and holdout Start order
+                EnsureHoldoutZoneBehaviour(self);
 
                 // Cycle through OnHoldoutZoneStart callbacks
                 foreach (OnHoldoutZoneStartCallback callback in onHoldoutZoneStartCallbacks)
@@ -124,6 +125,61 @@ namespace Faithful
             }
 
             orig(self); // Run normal processes
+        }
+
+        // Support beacon start: callbacks run before the original method
+        private static readonly List<OnSupportBeaconStartCallback> onSupportBeaconStartCallbacks = new List<OnSupportBeaconStartCallback>();
+
+        private static readonly HookRegistration supportBeaconControllerStartHook = new("SupportBeaconController.Start",
+            () => On.RoR2.SupportBeaconController.Start += HookSupportBeaconControllerStart,
+            () => On.RoR2.SupportBeaconController.Start -= HookSupportBeaconControllerStart);
+
+        internal static bool supportBeaconStartAvailable => CanRunHook(supportBeaconControllerStartHook);
+
+        // Add on Support Beacon start callback
+        public static void AddOnSupportBeaconStartCallback(OnSupportBeaconStartCallback _callback)
+        {
+            onSupportBeaconStartCallbacks.Add(_callback);
+
+            DebugLog("Added on Support Beacon start behaviour");
+        }
+
+        private static void HookSupportBeaconControllerStart(On.RoR2.SupportBeaconController.orig_Start orig, SupportBeaconController self)
+        {
+            if (!CanRunHook(supportBeaconControllerStartHook))
+            {
+                orig(self);
+                return;
+            }
+
+            supportBeaconControllerStartHook.StartProfiling();
+            try
+            {
+                // Cycle through OnSupportBeaconStart callbacks
+                foreach (OnSupportBeaconStartCallback callback in onSupportBeaconStartCallbacks)
+                {
+                    // Call
+                    callback(self);
+                }
+            }
+            finally
+            {
+                supportBeaconControllerStartHook.StopProfiling();
+            }
+
+            orig(self); // Run normal processes
+        }
+
+        internal static FaithfulHoldoutZoneBehaviour EnsureHoldoutZoneBehaviour(HoldoutZoneController _zone)
+        {
+            // Create and initialise the holdout helper only when needed
+            FaithfulHoldoutZoneBehaviour behaviour = _zone.GetComponent<FaithfulHoldoutZoneBehaviour>();
+            if (behaviour == null)
+            {
+                behaviour = _zone.gameObject.AddComponent<FaithfulHoldoutZoneBehaviour>();
+                behaviour.Init(onHoldoutZoneCalcRadiusCallbacks);
+            }
+            return behaviour;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using RoR2;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 namespace Faithful
@@ -12,6 +11,11 @@ namespace Faithful
 
         // Store Holdout Zone
         private List<OnHoldoutZoneCalcRadiusCallback> onHoldoutZoneCalcRadiusCallbacks;
+
+        // Support beacon radius contribution
+        private bool supportBeacon;
+        private float supportBeaconBaseRadius;
+        private float supportBeaconRadiusIncrease;
 
         // Players holding umbrellas
         private List<CharacterBody> holders = [];
@@ -31,6 +35,8 @@ namespace Faithful
         {
             // Get Holdout Zone
             zone = GetComponent<HoldoutZoneController>();
+            supportBeacon = GetComponent<SupportBeaconController>() != null;
+            supportBeaconBaseRadius = zone.baseRadius;
 
             // Update quality settings if quality is enabled
             if (Utils.qualityEnabled)
@@ -64,64 +70,116 @@ namespace Faithful
             }
 
             Utils.UnregisterActiveHoldoutZone(zone);
+
+            // Remove only this helper's contribution when it is disabled
+            ResetQualityState();
+            UpdateSupportBeaconRadius();
         }
 
         private void FixedUpdate()
         {
-            // This is Quality behaviour
-            if (!Utils.qualityEnabled) return;
+            // Ordinary zones only need the Quality tick
+            if (!Utils.qualityEnabled && !supportBeacon) return;
 
             FaithfulRuntimeProfiler.StartScope("FaithfulHoldoutZoneBehaviour.FixedUpdate");
             try
             {
-                // Get character bodies needed inside the holdout zone for quality buff to apply
-                Utils.GetAlivePlayerBodies(holders);
-                for (int i = holders.Count - 1; i >= 0; i--)
-                {
-                    // Remove players without spacious umbrellas
-                    CharacterBody body = holders[i];
-                    if (body.inventory == null || body.inventory.GetItemCountEffective(Faithful.spaciousUmbrella.MainItem.itemDef.itemIndex) <= 0) holders.RemoveAt(i);
-                }
-                if (holders.Count == 0) return;
+                // Update Quality state before refreshing the beacon radius
+                if (Utils.qualityEnabled && zone.isActiveAndEnabled && (!supportBeacon || (Behaviour.supportBeaconStartAvailable && Faithful.spaciousUmbrella.AffectRallyPoint))) UpdateQualityState();
+                else ResetQualityState();
 
-                // Check if at least one holder is inside the holdout zone
-                bool inside = false;
-                foreach (CharacterBody holder in holders)
-                {
-                    if (Utils.IsCharacterInHoldoutZone(holder, zone))
-                    {
-                        inside = true;
-                        break;
-                    }
-                }
-
-                // If no holders are inside the holdout zone, remove quality buffs and reset quality timer
-                if (!inside)
-                {
-                    playerInside = false;
-                    qualityTimer = 0.0f;
-                    qualityBuffsApplied = 0;
-                    return;
-                }
-
-                // If a holder has just entered the holdout zone, start quality timer
-                if (!playerInside)
-                {
-                    playerInside = true;
-                    qualityTimer = Time.time;
-                    qualityBuffsApplied = 0;
-                }
-
-                // If at least one holder has been inside the holdout zone for the required interval, apply quality buff and reset timer
-                else if (Time.time - qualityTimer >= intervalQuality && qualityBuffsApplied < maxInstancesQuality)
-                {
-                    qualityBuffsApplied++;
-                    qualityTimer = Time.time;
-                }
+                UpdateSupportBeaconRadius();
             }
             finally
             {
                 FaithfulRuntimeProfiler.StopScope("FaithfulHoldoutZoneBehaviour.FixedUpdate");
+            }
+        }
+
+        private void UpdateQualityState()
+        {
+            // Get character bodies needed inside the holdout zone for quality buff to apply
+            Utils.GetAlivePlayerBodies(holders);
+            for (int i = holders.Count - 1; i >= 0; i--)
+            {
+                // Remove players without spacious umbrellas
+                CharacterBody body = holders[i];
+                if (body.inventory == null || body.inventory.GetItemCountEffective(Faithful.spaciousUmbrella.MainItem.itemDef.itemIndex) <= 0) holders.RemoveAt(i);
+            }
+            if (holders.Count == 0)
+            {
+                ResetQualityState();
+                return;
+            }
+
+            // Check if at least one holder is inside the holdout zone
+            bool inside = false;
+            foreach (CharacterBody holder in holders)
+            {
+                if (Utils.IsCharacterInHoldoutZone(holder, zone))
+                {
+                    inside = true;
+                    break;
+                }
+            }
+
+            // If no holders are inside the holdout zone, remove quality buffs and reset quality timer
+            if (!inside)
+            {
+                ResetQualityState();
+                return;
+            }
+
+            // If a holder has just entered the holdout zone, start quality timer
+            if (!playerInside)
+            {
+                playerInside = true;
+                qualityTimer = Time.time;
+                qualityBuffsApplied = 0;
+            }
+
+            // If at least one holder has been inside the holdout zone for the required interval, apply quality buff and reset timer
+            else if (Time.time - qualityTimer >= intervalQuality && qualityBuffsApplied < maxInstancesQuality)
+            {
+                qualityBuffsApplied++;
+                qualityTimer = Time.time;
+            }
+        }
+
+        private void ResetQualityState()
+        {
+            playerInside = false;
+            qualityTimer = 0.0f;
+            qualityBuffsApplied = 0;
+        }
+
+        public void UpdateSupportBeaconRadius()
+        {
+            // Ordinary holdout zones use calcRadius
+            if (!supportBeacon || zone == null) return;
+
+            FaithfulRuntimeProfiler.StartScope("FaithfulHoldoutZoneBehaviour.UpdateSupportBeaconRadius");
+            try
+            {
+                // Keep the original radius unless another behaviour changes it
+                if (zone.baseRadius != supportBeaconBaseRadius + supportBeaconRadiusIncrease)
+                {
+                    supportBeaconBaseRadius = zone.baseRadius - supportBeaconRadiusIncrease;
+                }
+                float radiusIncrease = 0.0f;
+                if (isActiveAndEnabled && zone.isActiveAndEnabled && zone.ignoreRadiusModifiers && Behaviour.supportBeaconStartAvailable && Faithful.spaciousUmbrella.AffectRallyPoint)
+                {
+                    radiusIncrease = Faithful.spaciousUmbrella.GetRadiusIncrease(supportBeaconBaseRadius);
+                    if (Utils.qualityEnabled && qualityBuffsApplied > 0) radiusIncrease += GetQualityRadiusIncrease();
+                }
+
+                // Keep the game's modifier exclusion and let it update visuals and gameplay coverage
+                zone.baseRadius = supportBeaconBaseRadius + radiusIncrease;
+                supportBeaconRadiusIncrease = radiusIncrease;
+            }
+            finally
+            {
+                FaithfulRuntimeProfiler.StopScope("FaithfulHoldoutZoneBehaviour.UpdateSupportBeaconRadius");
             }
         }
 
@@ -133,6 +191,9 @@ namespace Faithful
 
         void OnCalcRadius(ref float _radius)
         {
+            // Beacon increases are already included in baseRadius while other modifiers are blocked
+            if (supportBeacon && zone.ignoreRadiusModifiers) return;
+
             FaithfulRuntimeProfiler.StartScope("FaithfulHoldoutZoneBehaviour.OnCalcRadius");
             try
             {
