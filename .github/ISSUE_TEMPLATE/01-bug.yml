@@ -1,0 +1,54 @@
+name: Bug Report
+description: Report a bug, crash, or unexpected behaviour in Faithful.
+labels:
+- bug
+body:
+- type: markdown
+  attributes:
+    value: Please check existing issues before submitting a new one. You can paste or drag images and screenshots into text boxes.
+- type: textarea
+  id: description
+  attributes:
+    label: Bug Description
+    description: Explain what happened and what you expected instead. Screenshots or images are welcome.
+  validations:
+    required: true
+- type: checkboxes
+  id: issue-impact
+  attributes:
+    label: Issue Impact
+    description: Select any that apply to this issue.
+    options:
+      - label: "Fatal: The game crashes, fails to start, or cannot initialise."
+        required: false
+      - label: "Mod load failure: Faithful fails to load or initialise correctly."
+        required: false
+      - label: "Softlock: The game remains running, but this issue can prevent the player from continuing gameplay."
+        required: false
+- type: textarea
+  id: game-log
+  attributes:
+    label: Game Log (optional)
+    description: Logs can help us identify errors, conflicts, and their causes. After reproducing the issue, open r2modman -> Settings -> Debugging -> Copy log to clipboard. Paste the log here, or attach it as a text file. You can leave this blank if you cannot obtain a log.
+  validations:
+    required: false
+- type: textarea
+  id: steps-to-reproduce
+  attributes:
+    label: Steps to Reproduce (optional)
+    description: If possible, list the actions that consistently cause this issue. Reproduction steps help us confirm the problem and test a fix.
+    placeholder: |-
+      1. Start the game with...
+      2. Go to...
+      3. Do...
+      4. Observe...
+  validations:
+    required: false
+- type: input
+  id: faithful-version
+  attributes:
+    label: Faithful Version (optional)
+    description: If known, provide the version of Faithful you are using.
+    placeholder: e.g. the version shown in r2modman
+  validations:
+    required: false
