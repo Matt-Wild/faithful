@@ -1,0 +1,21 @@
+name: Other Issue
+description: Open a general issue if none of the other categories fit.
+body:
+- type: markdown
+  attributes:
+    value: Please check existing issues before submitting a new one. You can paste or drag images and screenshots into text boxes.
+- type: textarea
+  id: description
+  attributes:
+    label: Description
+    description: Describe your issue or topic. You can include screenshots, images, or other relevant details.
+  validations:
+    required: true
+- type: input
+  id: faithful-version
+  attributes:
+    label: Faithful Version (optional)
+    description: If known, provide the version of Faithful you are using.
+    placeholder: e.g. the version shown in r2modman
+  validations:
+    required: false

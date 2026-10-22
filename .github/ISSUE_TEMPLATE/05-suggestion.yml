@@ -1,0 +1,23 @@
+name: Suggestion
+description: Suggest a new feature, improvement, or change to Faithful.
+labels:
+- enhancement
+body:
+- type: markdown
+  attributes:
+    value: Please check existing issues before submitting a new one. You can paste or drag images and screenshots into text boxes.
+- type: textarea
+  id: description
+  attributes:
+    label: Suggestion Description
+    description: Describe the change you would like and why it would be useful. Feel free to include images or examples.
+  validations:
+    required: true
+- type: input
+  id: faithful-version
+  attributes:
+    label: Faithful Version (optional)
+    description: If known, provide the version of Faithful you are using.
+    placeholder: e.g. the version shown in r2modman
+  validations:
+    required: false

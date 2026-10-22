@@ -1,0 +1,51 @@
+name: Performance Issue
+description: Report FPS drops, stuttering, long loading times, or other performance problems.
+labels:
+- performance
+body:
+- type: markdown
+  attributes:
+    value: Please check existing issues before submitting a new one. You can paste or drag images and screenshots into text boxes.
+- type: textarea
+  id: description
+  attributes:
+    label: Performance Issue Description
+    description: Describe the performance problem, when it occurs, and how it affects the game. Screenshots or images are welcome.
+    placeholder: e.g. FPS drops from 100 to 35 when...
+  validations:
+    required: true
+- type: checkboxes
+  id: issue-impact
+  attributes:
+    label: Issue Impact
+    description: Select any that apply to this issue.
+    options:
+      - label: "Fatal: This performance issue can cause the game to crash or freeze."
+        required: false
+- type: textarea
+  id: game-log
+  attributes:
+    label: Game Log (optional)
+    description: Logs can help us identify errors, conflicts, and their causes. After reproducing the issue, open r2modman -> Settings -> Debugging -> Copy log to clipboard. Paste the log here, or attach it as a text file. You can leave this blank if you cannot obtain a log.
+  validations:
+    required: false
+- type: textarea
+  id: steps-to-reproduce
+  attributes:
+    label: Steps to Reproduce (optional)
+    description: If possible, describe when the slowdown happens and how we can reproduce it. This helps us measure and investigate the performance problem.
+    placeholder: |-
+      1. Start the game with...
+      2. Go to...
+      3. Do...
+      4. Observe...
+  validations:
+    required: false
+- type: input
+  id: faithful-version
+  attributes:
+    label: Faithful Version (optional)
+    description: If known, provide the version of Faithful you are using.
+    placeholder: e.g. the version shown in r2modman
+  validations:
+    required: false

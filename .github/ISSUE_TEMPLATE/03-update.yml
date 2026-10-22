@@ -1,0 +1,42 @@
+name: Game Update Issue
+description: Report something in Faithful affected by a base-game update.
+labels:
+- update
+body:
+- type: markdown
+  attributes:
+    value: Please check existing issues before submitting a new one. You can paste or drag images and screenshots into text boxes.
+- type: textarea
+  id: description
+  attributes:
+    label: Update Issue Description
+    description: Explain what changed after a Risk of Rain 2 update and how it affects Faithful. Images are welcome.
+  validations:
+    required: true
+- type: textarea
+  id: game-log
+  attributes:
+    label: Game Log (optional)
+    description: Logs can help us identify errors, conflicts, and their causes. If relevant, after reproducing the issue, open r2modman -> Settings -> Debugging -> Copy log to clipboard. Paste the log here, or attach it as a text file. You can leave this blank if you cannot obtain a log.
+  validations:
+    required: false
+- type: textarea
+  id: steps-to-reproduce
+  attributes:
+    label: Steps to Reproduce (optional)
+    description: If relevant, list the actions that consistently cause this issue. Reproduction steps help us confirm the problem and test a fix.
+    placeholder: |-
+      1. Start the game with...
+      2. Go to...
+      3. Do...
+      4. Observe...
+  validations:
+    required: false
+- type: input
+  id: faithful-version
+  attributes:
+    label: Faithful Version (optional)
+    description: If known, provide the version of Faithful you are using.
+    placeholder: e.g. the version shown in r2modman
+  validations:
+    required: false
