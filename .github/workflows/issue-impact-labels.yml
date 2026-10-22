@@ -30,13 +30,14 @@ jobs:
 
             // Return true, false, or null (if the checkbox is missing).
             function checkboxState(option) {
-              const checked = `- [x] ${option}`.toLowerCase();
-              const unchecked = `- [ ] ${option}`.toLowerCase();
+              const checked = `- [x] ${option}:`.toLowerCase();
+              const unchecked = `- [ ] ${option}:`.toLowerCase();
 
               for (const line of body.split(/\r?\n/)) {
                 const value = line.trim().toLowerCase();
-                if (value === checked) return true;
-                if (value === unchecked) return false;
+                // Match the impact prefix so changes to its description do not break labels.
+                if (value.startsWith(checked)) return true;
+                if (value.startsWith(unchecked)) return false;
               }
 
               return null;
@@ -45,17 +46,17 @@ jobs:
             const rules = [
               {
                 label: 'fatal',
-                option: 'Fatal: The game crashes, fails to start, or cannot initialise.',
+                option: 'Fatal',
                 enabled: isBug || isCompatibility || isPerformance
               },
               {
                 label: 'mod load failure',
-                option: 'Mod load failure: Faithful fails to load or initialise correctly.',
+                option: 'Mod load failure',
                 enabled: isBug || isCompatibility
               },
               {
                 label: 'softlock',
-                option: 'Softlock: The game remains running, but the player cannot continue without restarting or reloading.',
+                option: 'Softlock',
                 enabled: isBug || isCompatibility
               }
             ];
