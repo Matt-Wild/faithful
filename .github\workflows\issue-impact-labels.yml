@@ -1,0 +1,84 @@
+
+name: Issue Impact Labels
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Apply impact labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body || '';
+            const labels = new Set(issue.labels.map(label => label.name));
+
+            const isBug = labels.has('bug');
+            const isCompatibility = labels.has('compatibility');
+            const isPerformance = labels.has('performance');
+
+            // Ignore issue types that do not have these checkboxes.
+            if (!isBug && !isCompatibility && !isPerformance) return;
+
+            // Return true, false, or null (if the checkbox is missing).
+            function checkboxState(option) {
+              const checked = `- [x] ${option}`.toLowerCase();
+              const unchecked = `- [ ] ${option}`.toLowerCase();
+
+              for (const line of body.split(/\r?\n/)) {
+                const value = line.trim().toLowerCase();
+                if (value === checked) return true;
+                if (value === unchecked) return false;
+              }
+
+              return null;
+            }
+
+            const rules = [
+              {
+                label: 'fatal',
+                option: 'Fatal: The game crashes, fails to start, or cannot initialise.',
+                enabled: isBug || isCompatibility || isPerformance
+              },
+              {
+                label: 'mod load failure',
+                option: 'Mod load failure: Faithful fails to load or initialise correctly.',
+                enabled: isBug || isCompatibility
+              },
+              {
+                label: 'softlock',
+                option: 'Softlock: The game remains running, but the player cannot continue without restarting or reloading.',
+                enabled: isBug || isCompatibility
+              }
+            ];
+
+            for (const rule of rules) {
+              if (!rule.enabled) continue;
+
+              const checked = checkboxState(rule.option);
+
+              // Leave older issues without the checkbox unchanged.
+              if (checked === null) continue;
+
+              if (checked && !labels.has(rule.label)) {
+                await github.rest.issues.addLabels({
+                  ...context.repo,
+                  issue_number: issue.number,
+                  labels: [rule.label]
+                });
+              } else if (!checked && labels.has(rule.label)) {
+                await github.rest.issues.removeLabel({
+                  ...context.repo,
+                  issue_number: issue.number,
+                  name: rule.label
+                });
+              }
+            }
