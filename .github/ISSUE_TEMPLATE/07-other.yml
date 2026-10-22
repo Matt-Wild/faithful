@@ -14,8 +14,11 @@ body:
 - type: input
   id: faithful-version
   attributes:
-    label: Faithful Version (optional)
-    description: If known, provide the version of Faithful you are using.
+    label: Faithful Version
+    description: |
+      (optional)
+
+      If known, provide the version of Faithful you are using.
     placeholder: e.g. the version shown in r2modman
   validations:
     required: false

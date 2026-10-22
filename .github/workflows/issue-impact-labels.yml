@@ -1,5 +1,5 @@
 
-name: Issue Impact Labels
+name: Issue Form Maintenance
 
 on:
   issues:
@@ -8,34 +8,68 @@ on:
 permissions:
   issues: write
 
+concurrency:
+  group: issue-form-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
 jobs:
   label:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Apply impact labels
+      - name: Apply impact labels and remove empty sections
         uses: actions/github-script@v7
         with:
           script: |
-            const issue = context.payload.issue;
+            // Read the latest issue in case it was edited while this run was queued
+            const { data: issue } = await github.rest.issues.get({
+              ...context.repo,
+              issue_number: context.payload.issue.number
+            });
             const body = issue.body || '';
             const labels = new Set(issue.labels.map(label => label.name));
+
+            // Split form sections without treating headings inside pasted code as fields
+            const newline = body.includes('\r\n') ? '\r\n' : '\n';
+            const lines = body.split(/\r?\n/);
+            const sections = [];
+            let start = 0;
+            let heading = null;
+            let fence = null;
+
+            for (let i = 0; i < lines.length; i++) {
+              const marker = lines[i].match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+              if (marker) {
+                if (!fence) fence = marker[1];
+                else if (marker[1][0] === fence[0] && marker[1].length >= fence.length && !marker[2].trim()) fence = null;
+                continue;
+              }
+              if (fence) continue;
+
+              const match = lines[i].match(/^### (.+?)\s*$/);
+              if (!match) continue;
+
+              sections.push({ heading, lines: lines.slice(start, i) });
+              start = i;
+              heading = match[1];
+            }
+            sections.push({ heading, lines: lines.slice(start) });
+
+            const impact = sections.find(section => section.heading === 'Issue Impact');
+            const impactLines = impact ? impact.lines.slice(1) : [];
 
             const isBug = labels.has('bug');
             const isCompatibility = labels.has('compatibility');
             const isPerformance = labels.has('performance');
 
-            // Ignore issue types that do not have these checkboxes.
-            if (!isBug && !isCompatibility && !isPerformance) return;
-
-            // Return true, false, or null (if the checkbox is missing).
+            // Return true, false, or null (if the checkbox is missing)
             function checkboxState(option) {
               const checked = `- [x] ${option}:`.toLowerCase();
               const unchecked = `- [ ] ${option}:`.toLowerCase();
 
-              for (const line of body.split(/\r?\n/)) {
+              for (const line of impactLines) {
                 const value = line.trim().toLowerCase();
-                // Match the impact prefix so changes to its description do not break labels.
+                // Match the impact prefix so changes to its description do not break labels
                 if (value.startsWith(checked)) return true;
                 if (value.startsWith(unchecked)) return false;
               }
@@ -66,7 +100,7 @@ jobs:
 
               const checked = checkboxState(rule.option);
 
-              // Leave older issues without the checkbox unchanged.
+              // Leave older issues without the checkbox unchanged
               if (checked === null) continue;
 
               if (checked && !labels.has(rule.label)) {
@@ -83,3 +117,44 @@ jobs:
                 });
               }
             }
+
+            // Only remove known optional fields with no answer; retain attachments and text
+            const optionalHeadings = new Set([
+              'Relevant Mod Link',
+              'Game Log',
+              'Steps to Reproduce',
+              'Faithful Version'
+            ]);
+
+            const retained = sections.filter(section => {
+              const content = section.lines.slice(1).join(newline).trim();
+              const empty = content === '' || content === '_No response_';
+              // Accept headings from both the current and earlier templates
+              const fieldName = section.heading?.replace(/ \(optional\)$/, '');
+              if (optionalHeadings.has(fieldName)) return !empty;
+              if (section.heading !== 'Issue Impact') return true;
+              if (empty) return false;
+
+              // Keep the entire impact section if anything was checked or extra text was added
+              const options = content.split(/\r?\n/).filter(line => line.trim());
+              return !options.every(line => /^- \[ \] (Fatal|Mod load failure|Softlock):/i.test(line.trim()));
+            });
+
+            if (retained.length === sections.length) return;
+            const cleanedBody = retained.flatMap(section => section.lines).join(newline).trimEnd();
+
+            // Do not overwrite an edit made while labels were being applied
+            const { data: currentIssue } = await github.rest.issues.get({
+              ...context.repo,
+              issue_number: issue.number
+            });
+            if ((currentIssue.body || '') !== body) {
+              core.info('Issue changed during this run; leaving cleanup to the newer edit event.');
+              return;
+            }
+
+            await github.rest.issues.update({
+              ...context.repo,
+              issue_number: issue.number,
+              body: cleanedBody
+            });

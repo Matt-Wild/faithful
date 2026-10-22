@@ -13,14 +13,6 @@ body:
     description: Explain how Faithful and another mod interact unexpectedly. Include screenshots or images if helpful.
   validations:
     required: true
-- type: input
-  id: relevant-mod
-  attributes:
-    label: Relevant Mod Link (optional)
-    description: Link to the other mod (for example, its Thunderstore or GitHub page).
-    placeholder: https://thunderstore.io/...
-  validations:
-    required: false
 - type: checkboxes
   id: issue-impact
   attributes:
@@ -33,16 +25,29 @@ body:
         required: false
       - label: "Softlock: The game remains running, but this issue can prevent the player from continuing gameplay."
         required: false
+- type: input
+  id: relevant-mod
+  attributes:
+    label: Relevant Mod Link
+    description: |
+      (optional)
+
+      Link to the other mod (for example, its Thunderstore or GitHub page).
+    placeholder: https://thunderstore.io/...
+  validations:
+    required: false
 - type: textarea
   id: game-log
   attributes:
-    label: Game Log (optional)
+    label: Game Log
     description: |
+      (optional)
+
       Logs can help us identify the cause of an issue.
 
       To obtain your log after reproducing the issue:
       1. Open r2modman.
-      2. Navigate to Settings → Debugging.
+      2. Navigate to Settings -> Debugging.
       3. Select "Copy log to clipboard".
 
       For large logs, paste the contents into a .txt file
@@ -55,8 +60,11 @@ body:
 - type: textarea
   id: steps-to-reproduce
   attributes:
-    label: Steps to Reproduce (optional)
-    description: If relevant, list the actions that consistently cause this issue. Reproduction steps help us confirm the problem and test a fix.
+    label: Steps to Reproduce
+    description: |
+      (optional)
+
+      If relevant, list the actions that consistently cause this issue. Reproduction steps help us confirm the problem and test a fix.
     placeholder: |-
       1. Start the game with...
       2. Go to...
@@ -67,8 +75,11 @@ body:
 - type: input
   id: faithful-version
   attributes:
-    label: Faithful Version (optional)
-    description: If known, provide the version of Faithful you are using.
+    label: Faithful Version
+    description: |
+      (optional)
+
+      If known, provide the version of Faithful you are using.
     placeholder: e.g. the version shown in r2modman
   validations:
     required: false

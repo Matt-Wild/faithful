@@ -28,13 +28,15 @@ body:
 - type: textarea
   id: game-log
   attributes:
-    label: Game Log (optional)
+    label: Game Log
     description: |
+      (optional)
+
       Logs can help us identify the cause of an issue.
 
       To obtain your log after reproducing the issue:
       1. Open r2modman.
-      2. Navigate to Settings → Debugging.
+      2. Navigate to Settings -> Debugging.
       3. Select "Copy log to clipboard".
 
       For large logs, paste the contents into a .txt file
@@ -47,8 +49,11 @@ body:
 - type: textarea
   id: steps-to-reproduce
   attributes:
-    label: Steps to Reproduce (optional)
-    description: If possible, list the actions that consistently cause this issue. Reproduction steps help us confirm the problem and test a fix.
+    label: Steps to Reproduce
+    description: |
+      (optional)
+
+      If possible, list the actions that consistently cause this issue. Reproduction steps help us confirm the problem and test a fix.
     placeholder: |-
       1. Start the game with...
       2. Go to...
@@ -59,8 +64,11 @@ body:
 - type: input
   id: faithful-version
   attributes:
-    label: Faithful Version (optional)
-    description: If known, provide the version of Faithful you are using.
+    label: Faithful Version
+    description: |
+      (optional)
+
+      If known, provide the version of Faithful you are using.
     placeholder: e.g. the version shown in r2modman
   validations:
     required: false
