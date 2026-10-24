@@ -292,3 +292,4 @@ All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main
   - Cancel the Eat
   - DaBubble
   - wolflin
+  - ThatMothRess

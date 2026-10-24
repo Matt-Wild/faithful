@@ -1,3 +1,10 @@
+### v1.5.11
+
+**Fixes**
+- Fixed Spacious Umbrella increasing Corpse Lily cloud growth on Enforcer's Rally Point.
+- Fixed Jetpack buff staying even after losing the item.
+- Fixed Jetpack not recharging when Enforcer is grounded in his secondary state.
+
 ### v1.5.10
 
 **Fixes**

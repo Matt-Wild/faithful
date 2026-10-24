@@ -1,4 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
 using RoR2;
 
 namespace Faithful
@@ -10,6 +15,8 @@ namespace Faithful
     internal delegate void OnHoldoutZoneCalcRadiusCallback(ref float _radius, HoldoutZoneController _zone);
 
     internal delegate void OnSupportBeaconStartCallback(SupportBeaconController _beacon);
+
+    internal delegate void OnHoldoutZoneCalcFixedRadiusCallback(ref float _radius, HoldoutZoneController _zone);
 
     internal static partial class Behaviour
     {
@@ -125,6 +132,109 @@ namespace Faithful
             }
 
             orig(self); // Run normal processes
+        }
+
+        // Fixed holdout radius: callbacks adjust the target without changing the base radius
+        private static readonly List<OnHoldoutZoneCalcFixedRadiusCallback> onHoldoutZoneCalcFixedRadiusCallbacks = new List<OnHoldoutZoneCalcFixedRadiusCallback>();
+
+        private static readonly HookRegistration holdoutZoneFixedRadiusHook = new("HoldoutZoneController.DoUpdate (fixed radius)",
+            () => IL.RoR2.HoldoutZoneController.DoUpdate += HookHoldoutZoneFixedRadius,
+            () => IL.RoR2.HoldoutZoneController.DoUpdate -= HookHoldoutZoneFixedRadius);
+
+        // Add on Holdout Zone calc fixed radius callback
+        public static void AddOnHoldoutZoneCalcFixedRadiusCallback(OnHoldoutZoneCalcFixedRadiusCallback _callback)
+        {
+            onHoldoutZoneCalcFixedRadiusCallbacks.Add(_callback);
+
+            DebugLog("Added on Holdout Zone calc fixed radius behaviour");
+        }
+
+        private static void HookHoldoutZoneFixedRadius(ILContext _il)
+        {
+            ILCursor cursor = new(_il);
+
+            // Adjust the local radius before the game notifies calcRadius listeners and updates coverage
+            if (!cursor.TryGotoNext(MoveType.After,
+                instruction => instruction.MatchLdarg(0),
+                instruction => instruction.MatchLdfld<HoldoutZoneController>(nameof(HoldoutZoneController.baseRadius))))
+            {
+                throw new InvalidOperationException("Could not find the base radius read in HoldoutZoneController.DoUpdate.");
+            }
+
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.EmitDelegate<Func<float, HoldoutZoneController, float>>(CalcHoldoutZoneFixedRadius);
+        }
+
+        private static float CalcHoldoutZoneFixedRadius(float _radius, HoldoutZoneController _zone)
+        {
+            // Ordinary zones keep the game's normal radius modifier path
+            if (!CanRunHook(holdoutZoneFixedRadiusHook) || !_zone.ignoreRadiusModifiers) return _radius;
+
+            holdoutZoneFixedRadiusHook.StartProfiling();
+            try
+            {
+                foreach (OnHoldoutZoneCalcFixedRadiusCallback callback in onHoldoutZoneCalcFixedRadiusCallbacks)
+                {
+                    callback(ref _radius, _zone);
+                }
+                return _radius;
+            }
+            finally
+            {
+                holdoutZoneFixedRadiusHook.StopProfiling();
+            }
+        }
+
+        // The beacon reads baseRadius directly during its initial coverage window
+        private static ILHook supportBeaconInitialRadiusILHook;
+
+        private static readonly HookRegistration supportBeaconInitialRadiusHook = new("SupportBeaconController.currentRadius (initial radius)",
+            InstallSupportBeaconInitialRadiusHook,
+            () =>
+            {
+                supportBeaconInitialRadiusILHook?.Dispose();
+                supportBeaconInitialRadiusILHook = null;
+            });
+
+        // Keep the initial and ongoing beacon radius paths available together
+        internal static bool supportBeaconRadiusAvailable => supportBeaconStartAvailable && CanRunHook(holdoutZoneFixedRadiusHook) && CanRunHook(supportBeaconInitialRadiusHook);
+
+        private static void InstallSupportBeaconInitialRadiusHook()
+        {
+            // MMHOOK does not expose this property getter
+            MethodInfo getter = typeof(SupportBeaconController).GetProperty("currentRadius", BindingFlags.Instance | BindingFlags.NonPublic)?.GetGetMethod(true);
+            if (getter == null) throw new InvalidOperationException("Could not find SupportBeaconController.currentRadius.");
+
+            supportBeaconInitialRadiusILHook = new ILHook(getter, HookSupportBeaconInitialRadius);
+        }
+
+        private static void HookSupportBeaconInitialRadius(ILContext _il)
+        {
+            ILCursor cursor = new(_il);
+
+            // Replace only the initial base radius read and retain the later currentRadius path
+            if (!cursor.TryGotoNext(MoveType.Before, instruction => instruction.MatchLdfld<HoldoutZoneController>(nameof(HoldoutZoneController.baseRadius))))
+            {
+                throw new InvalidOperationException("Could not find the initial base radius read in SupportBeaconController.currentRadius.");
+            }
+
+            cursor.Remove();
+            cursor.EmitDelegate<Func<HoldoutZoneController, float>>(GetSupportBeaconInitialRadius);
+        }
+
+        private static float GetSupportBeaconInitialRadius(HoldoutZoneController _zone)
+        {
+            if (!CanRunHook(supportBeaconInitialRadiusHook)) return _zone.baseRadius;
+
+            supportBeaconInitialRadiusHook.StartProfiling();
+            try
+            {
+                return CalcHoldoutZoneFixedRadius(_zone.baseRadius, _zone);
+            }
+            finally
+            {
+                supportBeaconInitialRadiusHook.StopProfiling();
+            }
         }
 
         // Support beacon start: callbacks run before the original method

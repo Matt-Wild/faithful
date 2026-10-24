@@ -14,8 +14,7 @@ namespace Faithful
 
         // Support beacon radius contribution
         private bool supportBeacon;
-        private float supportBeaconBaseRadius;
-        private float supportBeaconRadiusIncrease;
+        public float SupportBeaconRadiusIncrease { get; private set; }
 
         // Players holding umbrellas
         private List<CharacterBody> holders = [];
@@ -36,7 +35,6 @@ namespace Faithful
             // Get Holdout Zone
             zone = GetComponent<HoldoutZoneController>();
             supportBeacon = GetComponent<SupportBeaconController>() != null;
-            supportBeaconBaseRadius = zone.baseRadius;
 
             // Update quality settings if quality is enabled
             if (Utils.qualityEnabled)
@@ -71,7 +69,7 @@ namespace Faithful
 
             Utils.UnregisterActiveHoldoutZone(zone);
 
-            // Remove only this helper's contribution when it is disabled
+            // Clear this helper's contribution when it is disabled
             ResetQualityState();
             UpdateSupportBeaconRadius();
         }
@@ -85,7 +83,7 @@ namespace Faithful
             try
             {
                 // Update Quality state before refreshing the beacon radius
-                if (Utils.qualityEnabled && zone.isActiveAndEnabled && (!supportBeacon || (Behaviour.supportBeaconStartAvailable && Faithful.spaciousUmbrella.AffectRallyPoint))) UpdateQualityState();
+                if (Utils.qualityEnabled && zone.isActiveAndEnabled && (!supportBeacon || (Behaviour.supportBeaconRadiusAvailable && Faithful.spaciousUmbrella.AffectRallyPoint))) UpdateQualityState();
                 else ResetQualityState();
 
                 UpdateSupportBeaconRadius();
@@ -161,21 +159,13 @@ namespace Faithful
             FaithfulRuntimeProfiler.StartScope("FaithfulHoldoutZoneBehaviour.UpdateSupportBeaconRadius");
             try
             {
-                // Keep the original radius unless another behaviour changes it
-                if (zone.baseRadius != supportBeaconBaseRadius + supportBeaconRadiusIncrease)
+                // Cache the increase separately so other items still see the original base radius
+                SupportBeaconRadiusIncrease = 0.0f;
+                if (isActiveAndEnabled && zone.isActiveAndEnabled && zone.ignoreRadiusModifiers && Behaviour.supportBeaconRadiusAvailable && Faithful.spaciousUmbrella.AffectRallyPoint)
                 {
-                    supportBeaconBaseRadius = zone.baseRadius - supportBeaconRadiusIncrease;
+                    SupportBeaconRadiusIncrease = Faithful.spaciousUmbrella.GetRadiusIncrease(zone.baseRadius);
+                    if (Utils.qualityEnabled && qualityBuffsApplied > 0) SupportBeaconRadiusIncrease += GetQualityRadiusIncrease();
                 }
-                float radiusIncrease = 0.0f;
-                if (isActiveAndEnabled && zone.isActiveAndEnabled && zone.ignoreRadiusModifiers && Behaviour.supportBeaconStartAvailable && Faithful.spaciousUmbrella.AffectRallyPoint)
-                {
-                    radiusIncrease = Faithful.spaciousUmbrella.GetRadiusIncrease(supportBeaconBaseRadius);
-                    if (Utils.qualityEnabled && qualityBuffsApplied > 0) radiusIncrease += GetQualityRadiusIncrease();
-                }
-
-                // Keep the game's modifier exclusion and let it update visuals and gameplay coverage
-                zone.baseRadius = supportBeaconBaseRadius + radiusIncrease;
-                supportBeaconRadiusIncrease = radiusIncrease;
             }
             finally
             {
@@ -191,7 +181,7 @@ namespace Faithful
 
         void OnCalcRadius(ref float _radius)
         {
-            // Beacon increases are already included in baseRadius while other modifiers are blocked
+            // Fixed radius bonuses are supplied before the game's calcRadius notifications
             if (supportBeacon && zone.ignoreRadiusModifiers) return;
 
             FaithfulRuntimeProfiler.StartScope("FaithfulHoldoutZoneBehaviour.OnCalcRadius");

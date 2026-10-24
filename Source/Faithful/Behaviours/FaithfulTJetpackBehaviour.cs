@@ -304,6 +304,17 @@ namespace Faithful
             Behaviour.RemoveArtificerProcessJumpOverrideCallback(character, OnArtificerProcessJump);
             Behaviour.RemoveArtificerJetpackFixedUpdateOverrideCallback(character, SkipArtificerJetpackFixedUpdate);
             Behaviour.RemoveFallDamageImmunityCallback(character, IsImmuneToFallDamage);
+
+            // Refresh the fuel indicator when the jetpack is activated again
+            currentFuelBuffPerc = -1;
+
+            // Remove fuel indicators when the jetpack is no longer available
+            if (Utils.hosting && character != null)
+            {
+                if (emptyFuelBuff?.buffDef != null) character.SetBuffCount(emptyFuelBuff.buffDef.buffIndex, 0);
+                if (lowFuelBuff?.buffDef != null) character.SetBuffCount(lowFuelBuff.buffDef.buffIndex, 0);
+                if (highFuelBuff?.buffDef != null) character.SetBuffCount(highFuelBuff.buffDef.buffIndex, 0);
+            }
         }
 
         public void OnFixedUpdate(GenericCharacterMain self)

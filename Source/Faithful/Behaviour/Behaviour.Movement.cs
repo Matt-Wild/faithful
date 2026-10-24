@@ -26,9 +26,10 @@ namespace Faithful
 
         private static readonly CharacterScopedCallbacks<ProcessJumpOverrideCallback> processJumpOverrideCallbacks = new();
 
+        // Both normal jumping and Enforcer's shielded state use this overload
         private static readonly HookRegistration processJumpHook = new("EntityStates.GenericCharacterMain.ProcessJump",
-            () => On.EntityStates.GenericCharacterMain.ProcessJump += HookProcessJump,
-            () => On.EntityStates.GenericCharacterMain.ProcessJump -= HookProcessJump);
+            () => On.EntityStates.GenericCharacterMain.ProcessJump_bool += HookProcessJump,
+            () => On.EntityStates.GenericCharacterMain.ProcessJump_bool -= HookProcessJump);
 
         // Add On Process Jump callback
         public static void AddOnProcessJumpCallback(OnProcessJumpCallback _callback)
@@ -49,7 +50,7 @@ namespace Faithful
             processJumpOverrideCallbacks.Remove(_body, _callback);
         }
 
-        private static void HookProcessJump(On.EntityStates.GenericCharacterMain.orig_ProcessJump orig, EntityStates.GenericCharacterMain self)
+        private static void HookProcessJump(On.EntityStates.GenericCharacterMain.orig_ProcessJump_bool orig, GenericCharacterMain self, bool ignoreRequirements)
         {
             // Allow this character's callbacks to handle jumping
             if (CanRunHook(processJumpHook))
@@ -68,7 +69,7 @@ namespace Faithful
                 }
             }
 
-            orig(self); // Run normal processes first
+            orig(self, ignoreRequirements); // Run normal processes first
             if (!CanRunHook(processJumpHook)) return;
 
             processJumpHook.StartProfiling();

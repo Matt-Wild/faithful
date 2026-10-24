@@ -58,6 +58,7 @@ namespace Faithful
 
             // Link Holdout Zone behaviour
             Behaviour.AddOnHoldoutZoneCalcRadiusCallback(OnHoldoutZoneCalcRadius);
+            Behaviour.AddOnHoldoutZoneCalcFixedRadiusCallback(OnHoldoutZoneCalcFixedRadius);
 
             // Link Support Beacon behaviour
             Behaviour.AddOnSupportBeaconStartCallback(OnSupportBeaconStart);
@@ -156,9 +157,18 @@ namespace Faithful
             if (zone != null) Behaviour.EnsureHoldoutZoneBehaviour(zone).UpdateSupportBeaconRadius();
         }
 
+        void OnHoldoutZoneCalcFixedRadius(ref float _radius, HoldoutZoneController _zone)
+        {
+            // Apply only the cached beacon increase while the game blocks other radius modifiers
+            if (!AffectRallyPoint || !Behaviour.supportBeaconRadiusAvailable) return;
+
+            FaithfulHoldoutZoneBehaviour behaviour = _zone.GetComponent<FaithfulHoldoutZoneBehaviour>();
+            if (behaviour != null && behaviour.isActiveAndEnabled) _radius += behaviour.SupportBeaconRadiusIncrease;
+        }
+
         void OnHoldoutZoneCalcRadius(ref float _radius, HoldoutZoneController _zone)
         {
-            // Apply the same increase to ordinary holdout zones and support beacons
+            // Ordinary holdout zones use the same stacking calculation
             _radius += GetRadiusIncrease(_zone.baseRadius);
         }
 
