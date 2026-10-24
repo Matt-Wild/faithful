@@ -24,3 +24,14 @@ body:
     placeholder: e.g. the version shown in r2modman
   validations:
     required: false
+- type: input
+  id: discord-username
+  attributes:
+    label: Link Discord?
+    description: |
+      (optional)
+
+      We grant a Contributor role and README credits to Discord members whose suggestions or reports make it into published Faithful versions. If you're interested, join our Discord [here](https://discord.gg/uV37nwn9Us).
+    placeholder: Discord username or display name
+  validations:
+    required: false

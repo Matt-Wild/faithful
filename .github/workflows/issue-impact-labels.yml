@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Apply impact labels and remove empty sections
+      - name: Apply impact labels and tidy form sections
         uses: actions/github-script@v7
         with:
           script: |
@@ -123,7 +123,9 @@ jobs:
               'Relevant Mod Link',
               'Game Log',
               'Steps to Reproduce',
-              'Faithful Version'
+              'Faithful Version',
+              'Discord Username',
+              'Link Discord?'
             ]);
 
             const retained = sections.filter(section => {
@@ -140,8 +142,15 @@ jobs:
               return !options.every(line => /^- \[ \] (Fatal|Mod load failure|Softlock):/i.test(line.trim()));
             });
 
-            if (retained.length === sections.length) return;
-            const cleanedBody = retained.flatMap(section => section.lines).join(newline).trimEnd();
+            const cleanedBody = retained.flatMap(section => {
+              const fieldName = section.heading?.replace(/ \(optional\)$/, '');
+              if (fieldName !== 'Discord Username' && fieldName !== 'Link Discord?') return section.lines;
+
+              // Keep supplied Discord details as a plain line instead of a form heading
+              const response = section.lines.slice(1).join(newline).trim();
+              return [`Discord: ${response}`, ''];
+            }).join(newline).trimEnd();
+            if (cleanedBody === body.trimEnd()) return;
 
             // Do not overwrite an edit made while labels were being applied
             const { data: currentIssue } = await github.rest.issues.get({
