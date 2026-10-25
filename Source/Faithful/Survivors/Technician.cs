@@ -1315,6 +1315,14 @@ namespace Faithful
                 new Vector3(0.25F, 0.25F, 0.25F)
                 )
                 );
+            AddDefaultItemDisplay("DroneWeapons",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayDroneWeapons"),
+                "Pelvis",
+                new Vector3(-0.1545F, 0.0788F, -0.098F),
+                new Vector3(5F, 325F, 0F),
+                new Vector3(0.04F, 0.04F, 0.04F)
+                )
+                );
             AddDefaultItemDisplay("BFG",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayBFG"),
                 "Chest",
@@ -1805,9 +1813,17 @@ namespace Faithful
             AddDefaultItemDisplay("HealAndRevive",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayHealAndRevive"),
                 "ThighL",
-                new Vector3(-0.0625F, 0.09275F, 0.1015F),
-                new Vector3(80F, 320F, 0F),
-                new Vector3(0.25F, 0.25F, 0.25F)
+                new Vector3(-0.06575F, 0.0936F, 0.1055F),
+                new Vector3(84.25F, 320F, 0F),
+                new Vector3(0.32F, 0.32F, 0.32F)
+                )
+                );
+            AddDefaultItemDisplay("HealAndReviveConsumed",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayHealAndReviveConsumed"),
+                "ThighL",
+                new Vector3(-0.06575F, 0.0936F, 0.1055F),
+                new Vector3(84.25F, 320F, 0F),
+                new Vector3(0.1375F, 0.1375F, 0.1375F)
                 )
                 );
             AddDefaultItemDisplay("EliteAurelioniteEquipment",
@@ -1904,6 +1920,14 @@ namespace Faithful
                 new Vector3(0.5F, 0.5F, 0.5F)
                 )
                 );
+            // AddDefaultItemDisplay("MasterCore",
+            // ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayPowerOrbSphere"),
+                // "Base",
+                // new Vector3(0.4F, 1.75F, -0.5F),
+                // new Vector3(0F, 0F, 0F),
+                // new Vector3(0.5F, 0.5F, 0.5F)
+                // )
+                // );
             AddDefaultItemDisplay("PhysicsProjectile",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("PhysicsProjectileDisplay"),
                 "BackpackEye",
