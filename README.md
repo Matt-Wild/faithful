@@ -259,37 +259,14 @@ All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main
 
 # Special Thanks
 
-- Thank you to all the people who helped turn ideas into reality on the Risk of Rain 2 Modding Discord server!
-  - .score
-  - Chinchi
-  - Bubbet
-  - Gorakh
-  - HDeDeDe
-  - iDeathHD
-  - Nebby
-  - DestroyedClone
-  - TheTimesweeper
-  - HIFU
-  - RandomlyAwesome
-  - Groove_Salad
-  - Buns
-  - KomradeSpectre
-  - Harb
-  - viliger
-  - KingEnderBrine
-  - Mystical Chicken
+### Risk of Rain 2 Modding Discord
 
-- And thank you to our Discord members who helped to refine Faithful through suggestions, bug reports and more!
-  - Expakun
-  - MiztarPi314
-  - gaylesbean
-  - Airtas
-  - Soylar
-  - AngeLiq
-  - Torch
-  - Nive
-  - Guodan
-  - Cancel the Eat
-  - DaBubble
-  - wolflin
-  - ThatMothRess
+Thank you to all the people who helped turn ideas into reality on the Risk of Rain 2 Modding Discord server!
+
+.score · Chinchi · Bubbet · Gorakh · HDeDeDe · iDeathHD · Nebby · DestroyedClone · TheTimesweeper · HIFU · RandomlyAwesome · Groove_Salad · Buns · KomradeSpectre · Harb · viliger · KingEnderBrine · Mystical Chicken
+
+### SpilledSoup Discord Community
+
+And thank you to our Discord members who helped to refine Faithful through suggestions, bug reports and more!
+
+Expakun · MiztarPi314 · gaylesbean · Airtas · Soylar · AngeLiq · Torch · Nive · Guodan · Cancel the Eat · DaBubble · wolflin · ThatMothRess

@@ -1,3 +1,8 @@
+### v1.5.12
+
+**Fixes**
+- Fixed Shrine of Recollection cost type getting mixed up with other modded cost types being introduced.
+
 ### v1.5.11
 
 **Fixes**

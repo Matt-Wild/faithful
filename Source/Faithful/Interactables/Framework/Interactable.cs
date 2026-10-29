@@ -228,26 +228,36 @@ namespace Faithful
         {
             // Create custom cost type definition
             m_customCostType = new CostTypeDef();
+            m_customCostType.name = $"FAITHFUL_COST_{token}";
             m_customCostType.costStringFormatToken = $"FAITHFUL_COST_{token}_FORMAT";
             m_customCostType.isAffordable = new CostTypeDef.IsAffordableDelegate(CustomIsAffordable);
             m_customCostType.payCost = new CostTypeDef.PayCostDelegate(CustomPayCost);
             m_customCostType.colorIndex = m_customCostColour;
             m_customCostType.saturateWorldStyledCostString = m_saturateWorldStyledCustomCost;
             m_customCostType.darkenWorldStyledCostString = m_darkenWorldStyledCustomCost;
-            m_costTypeIndex = CostTypeCatalog.costTypeDefs.Length + _list.Count;
-
-            // Check for behaviour
-            if (m_behaviour != null)
-            {
-                // Update cost type in behaviour
-                m_behaviour.costType = (CostTypeIndex)m_costTypeIndex;
-            }
 
             // Add custom cost formatting to language API
             LanguageAPI.Add($"FAITHFUL_COST_{token}_FORMAT", m_customCostString == null ? "?" : m_customCostString);
 
             // Add custom cost type definition to the list of additional cost type definitions
             _list.Add(m_customCostType);
+
+            // Wait until the catalog has assigned the final cost type index
+            CostTypeCatalog.availability.CallWhenAvailable(UpdateCustomCostType);
+        }
+
+        private void UpdateCustomCostType()
+        {
+            // Get the index assigned by the cost type catalog
+            m_costTypeIndex = (int)m_customCostType.costTypeIndex;
+
+            // Check for behaviour
+            if (m_behaviour != null)
+            {
+                // Update cost type in behaviour and purchase interaction
+                m_behaviour.costType = (CostTypeIndex)m_costTypeIndex;
+                m_behaviour.purchaseInteraction.costType = (CostTypeIndex)m_costTypeIndex;
+            }
         }
 
         private void CreatePrefab()
