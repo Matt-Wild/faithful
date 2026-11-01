@@ -44,6 +44,8 @@ namespace Faithful
             AddSetSpawn("solutionalhaunt", new Vector3(227.5F, -16.45F, -34F), new Vector3(0, 0, 0));
             AddSetSpawn("solusweb", new Vector3(264F, -363.75F, -293F), new Vector3(0, 90, 0));
             AddSetSpawn("solusweb", new Vector3(293F, -363.75F, -264F), new Vector3(0, 180, 0));
+            AddSetSpawn("champrush", new Vector3(-21.375F, 4.6F, 232F), new Vector3(0, 0, 0));
+            AddSetSpawn("ultima", new Vector3(41.25F, 21.875F, 302.75F), new Vector3(0, 180, 0));
 
             // Add behaviour
             Behaviour.AddOnPrePopulateSceneCallback(OnPrePopulateScene);
