@@ -9,6 +9,7 @@ namespace Faithful
         ItemDisplaySettings displaySettings;
 
         // Store additional item settings
+        Setting<bool> simulacrumBannedSetting;
         Setting<float> itemChanceSetting;
         Setting<float> itemChanceStackingSetting;
 
@@ -22,6 +23,9 @@ namespace Faithful
             // Create display settings
             CreateDisplaySettings("TemporalCubeMesh");
 
+            // Create startup setting before item registration
+            simulacrumBannedSetting = Config.CreateSetting($"ITEM_{token}_SIMULACRUM_BANNED", "Item: Lucky Figurine", "Ban From Simulacrum?", true, "Should this item be banned from Simulacrum?", false, _canRandomise: false, _restartRequired: true);
+
             // Create item
             MainItem = Items.AddItem(new ItemOptions(
                 token: token,
@@ -31,7 +35,8 @@ namespace Faithful
                 modelName: "TemporalCubeMesh")
             {
                 Tier = ItemTier.VoidTier2,
-                SimulacrumBanned = true,    // Chance Shrines don't appear in unmodded Simulacrum
+                CorruptToken = "ITEM_EXTRASHRINEITEM_NAME",
+                SimulacrumBanned = simulacrumBannedSetting.Value,
                 SupportsQuality = false,    // Should eventually support quality
                 DisplaySettings = displaySettings
             });
