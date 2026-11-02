@@ -8,6 +8,14 @@ namespace Faithful
         // Store display settings
         ItemDisplaySettings displaySettings;
 
+        // Store additional item settings
+        Setting<float> itemChanceSetting;
+        Setting<float> itemChanceStackingSetting;
+
+        // Store item stats
+        float itemChance;
+        float itemChanceStacking;
+
         // Constructor
         public LuckyFigurine(Toolbox _toolbox) : base(_toolbox, "LUCKY_FIGURINE")
         {
@@ -22,10 +30,15 @@ namespace Faithful
                 iconName: "texTemporalCube",
                 modelName: "TemporalCubeMesh")
             {
+                Tier = ItemTier.VoidTier2,
                 SimulacrumBanned = true,    // Chance Shrines don't appear in unmodded Simulacrum
                 SupportsQuality = false,    // Should eventually support quality
                 DisplaySettings = displaySettings
             });
+
+            // Create and fetch item settings
+            CreateSettings();
+            FetchSettings();
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -69,6 +82,23 @@ namespace Faithful
             displaySettings.AddCharacterDisplay("Drifter", "BagFrontPocket", new Vector3(-0.1F, 0.5125F, 0F), new Vector3(0F, 0F, 352.5F), new Vector3(0.075F, 0.075F, 0.075F));
             displaySettings.AddCharacterDisplay("Enforcer", "Weapon", new Vector3(-0.36F, 0.1075F, 0F), new Vector3(30F, 270F, 270F), new Vector3(0.125F, 0.125F, 0.125F));
             displaySettings.AddCharacterDisplay("Acolyte", "UpperArmR", new Vector3(0.175F, -0.006F, -0.0075F), new Vector3(36.75F, 185.5F, 279.375F), new Vector3(0.13F, 0.13F, 0.13F));
+        }
+
+        protected override void CreateSettings()
+        {
+            // Create settings specific to this item
+            itemChanceSetting = MainItem.CreateSetting("ITEM_CHANCE", "Item Chance", 0.0f, "What should the chance be for this item to drop an additional item when using a Shrine of Chance? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
+            itemChanceStackingSetting = MainItem.CreateSetting("ITEM_CHANCE_STACKING", "Item Chance Stacking", 10.0f, "How much additional chance should further stacks of this item provide to drop an additional item when using a Shrine of Chance? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
+        }
+
+        public override void FetchSettings()
+        {
+            // Get item settings
+            itemChance = itemChanceSetting.Value;
+            itemChanceStacking = itemChanceStackingSetting.Value;
+
+            // Update item texts with new settings
+            MainItem.UpdateItemTexts();
         }
     }
 }
