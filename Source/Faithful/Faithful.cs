@@ -27,7 +27,7 @@ namespace Faithful
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "SpilledSoup";
         public const string PluginName = "Faithful";
-        public const string PluginVersion = "1.5.12";
+        public const string PluginVersion = "1.5.13";
 
         // Plugin info
         public static PluginInfo PInfo { get; private set; }
@@ -66,6 +66,7 @@ namespace Faithful
         internal static TJetpack tJetpack;
         internal static MatterAccelerator matterAccelerator;
         internal static RadiantTimepiece radiantTimepiece;
+        internal static LuckyFigurine luckyFigurine;
         internal static DebugItem debugItem;
 
         // Survivors
@@ -166,6 +167,7 @@ namespace Faithful
             tJetpack = new TJetpack(toolbox);
             matterAccelerator = new MatterAccelerator(toolbox);
             radiantTimepiece = new RadiantTimepiece(toolbox);
+            luckyFigurine = new LuckyFigurine(toolbox);
             debugItem = new DebugItem(toolbox);
 
             // Create WIP content

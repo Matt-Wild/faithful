@@ -1,3 +1,8 @@
+### v1.5.13
+
+**Changed**
+- Shrine of Recollection can now be found in Soulbound Threshold and Terminal Lucidity.
+
 ### v1.5.12
 
 **Fixes**
