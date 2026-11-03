@@ -46,6 +46,7 @@ try
 
     if ($manifest.version_number -eq $version)
     {
+        Write-Output 'Skipped manifest update: the manifest version already matches the DLL version.'
         return
     }
 

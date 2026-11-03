@@ -121,7 +121,7 @@
 
   <!-- Read the compiled plugin version only after the build and networking weave succeed. -->
   <Target Name="UpdateFaithfulManifestVersion" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
-    <Exec Command="powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\Build\UpdateManifestVersion.ps1&quot; -AssemblyPath &quot;$(TargetPath)&quot; -ManifestPath &quot;$(MSBuildProjectDirectory)\..\..\manifest.json&quot;" />
+    <Exec Command="powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\Build\UpdateManifestVersion.ps1&quot; -AssemblyPath &quot;$(TargetPath)&quot; -ManifestPath &quot;$(MSBuildProjectDirectory)\..\..\manifest.json&quot;" StandardOutputImportance="High" />
   </Target>
 
   <Target Name="AssembleFaithfulMod" AfterTargets="UpdateFaithfulManifestVersion" Condition="'$(DesignTimeBuild)' != 'true'">

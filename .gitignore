@@ -7,3 +7,6 @@
 
 # Per-developer game installation path
 /Source/Faithful/Faithful.Local.props
+
+# Generated Thunderstore upload archives
+/Build (packaged)/

@@ -86,7 +86,9 @@ try
         throw "No assembled Faithful.dll found in '$packagePath'."
     }
 
-    $packageContents = @(Get-ChildItem -LiteralPath $packagePath -Force)
+    $packageContents = @(Get-ChildItem -LiteralPath $packagePath -Force | Where-Object {
+        $_.PSIsContainer -or $_.Extension -ne '.zip'
+    })
     foreach ($item in Get-ChildItem -LiteralPath $targetPath -Force)
     {
         Remove-Item -LiteralPath $item.FullName -Recurse -Force

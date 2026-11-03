@@ -54,6 +54,11 @@ try
     }
 
     $manifestVersion = (Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json).version_number
+    if ($manifestVersion -notmatch '\A[0-9]+\.[0-9]+\.[0-9]+\z')
+    {
+        throw 'manifest.json must contain a three-part numeric version_number for the upload ZIP.'
+    }
+
     $changelog = [IO.File]::ReadAllText($changelogPath)
     $foldStart = '<details><summary><strong>Old Changelogs</strong></summary>'
     # Unwrap the old manual fold if it is still present in the source
@@ -111,6 +116,44 @@ try
     }
     Copy-Item -LiteralPath $languages -Destination $plugins -Recurse
     Write-Output "Assembled Faithful package in '$buildPath'."
+
+    Add-Type -AssemblyName System.IO.Compression
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $packagedPath = Join-Path $repoRoot 'Build (packaged)'
+    [void][IO.Directory]::CreateDirectory($packagedPath)
+    $zipName = "Faithful v$manifestVersion.zip"
+    $zipPath = Join-Path $packagedPath $zipName
+    # Write to a temporary file beside the final ZIP so only a complete archive is published
+    $tempZip = Join-Path $packagedPath ('faithful-' + [guid]::NewGuid().ToString('N') + '.tmp')
+    try
+    {
+        $zip = [IO.Compression.ZipFile]::Open($tempZip, [IO.Compression.ZipArchiveMode]::Create)
+        try
+        {
+            foreach ($file in Get-ChildItem -LiteralPath $buildPath -Recurse -File -Force)
+            {
+                $entryName = $file.FullName.Substring($buildPrefix.Length).Replace('\', '/')
+                [void][IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $file.FullName, $entryName)
+            }
+        }
+        finally
+        {
+            $zip.Dispose()
+        }
+        Move-Item -LiteralPath $tempZip -Destination $zipPath -Force
+    }
+    finally
+    {
+        if (Test-Path -LiteralPath $tempZip -PathType Leaf)
+        {
+            Remove-Item -LiteralPath $tempZip
+        }
+    }
+    Write-Output "Created ZIP package: '$zipPath'."
+    if ($releases.Count -eq 0 -or $releases[0].Groups[1].Value -ne $manifestVersion)
+    {
+        Write-Output 'Faithful packaging : warning FTH002: ZIP package created, but the changelog does not match the manifest version. Update CHANGELOG.md before uploading.'
+    }
 }
 catch
 {

@@ -1,3 +1,8 @@
+## 1.6.0
+
+**Added**
+- Added Lucky Figurine item.
+
 ### v1.5.13
 
 **Changed**
@@ -5,19 +10,19 @@
 
 ### v1.5.12
 
-**Fixes**
+**Fixed**
 - Fixed Shrine of Recollection cost type getting mixed up with other modded cost types being introduced.
 
 ### v1.5.11
 
-**Fixes**
+**Fixed**
 - Fixed Spacious Umbrella increasing Corpse Lily cloud growth on Enforcer's Rally Point.
 - Fixed Jetpack buff staying even after losing the item.
 - Fixed Jetpack not recharging when Enforcer is grounded in his secondary state.
 
 ### v1.5.10
 
-**Fixes**
+**Fixed**
 - Drowned Visage no longer resets teleporter progress to 100% during Soul-Binding trial.
 
 ### v1.5.9
@@ -35,12 +40,12 @@
 **Compatibility**
 - Collector's Vision now counts Ethereal items (configurable).
 
-**Fixes**
+**Fixed**
 - Fixed Jetpack leaving behind active hooks after character death or stage changes.
 - Fixed Faithful retaining unnecessary character data after characters were destroyed or a run ended.
 - Fixed Appraiser's Eye notification no longer showing correctly.
 
-**Optimizations**
+**Optimized**
 - Quality Vengeful Toaster now checks only Toaster holders instead of every character when damage is dealt.
 - Optimized Leader's Pennon, Longshot Geode, and Hermit's Shawl to avoid unnecessary processing for unrelated characters.
 - Optimized Jetpack's fuel buff display to avoid unnecessary character stat recalculations.
@@ -53,7 +58,7 @@
 
 ### v1.5.6
 
-**Fixes**
+**Fixed**
 - Targeting Matrix can no longer target characters with buffs Throne Shield, Hidden Invincibility, or Hidden Reject All Damage.
 - Targeting Matric can no longer target the Artifact Reliquary.
 - Targeting Matrix item display no longer starts open when first picking up the item despite not having a target yet.
@@ -62,7 +67,7 @@
 
 ### v1.5.5
 
-**Fixes**
+**Fixed**
 - Fixed Faithful expansion icon displaying incorrectly when disabled.
 
 ### v1.5.4
@@ -75,7 +80,7 @@
 **Added**
 - Added Faithful item displays for Enforcer and Acolyte.
 
-**Fixes**
+**Fixed**
 - Improved hook failure handling so unaffected Faithful features continue loading and other game processes are less likely to be interfered with.
 
 ### v1.5.2
@@ -85,7 +90,7 @@
 
 ### v1.5.1
 
-**Fixes**
+**Fixed**
 - Fixed missing dependency. Oops.
 
 ## 1.5.0
@@ -93,12 +98,12 @@
 **Added**
 - Added Quality variants for all items (except Lunars).
 
-**Fixes**
+**Fixed**
 - Fixed Collector's Vision counting Appraiser's Eye as a unique pickup.
 - Fixed Collector's Vision descriptions not reflecting adjusted Inspiration settings correctly.
 - Fixed 4-T0N Jetpack fuel buffs shifting around as fuel state changes.
 
-**Optimizations**
+**Optimized**
 - Optimized holdout zone behaviour lookups.
 
 ### v1.4.2
@@ -115,7 +120,7 @@
 **Compatibility**
 - Fixed a compatibility issue between v1.4.0 and Hypercrit2.
 
-**Fixes**
+**Fixed**
 - Fixed minor missing language tokens for buffs.
 
 ## v1.4.0
@@ -133,7 +138,7 @@
 - Improved the Jetpack item display for Seeker.
 - Changed the Inspiration buff icon.
 
-**Fixes**
+**Fixed**
 - Fixed some personalisation settings randomising in Randomizer Mode.
 
 **Note**
@@ -152,19 +157,19 @@
 - Updated items to include newly introduced item tags.
 - Replaced item lore quotes with quotes more faithful to the base game.
 
+<details><summary><strong>Old Changelogs</strong></summary>
+
 ### v1.3.25
 
 **Config**
 - Added config options for changing item pickups and descriptions.
 
-**Fixes**
+**Fixed**
 - Fixed mod managers flattening Faithful's folder structure.
-
-<details><summary><strong>Old Changelogs</strong></summary>
 
 ### v1.3.24
 
-**Fixes**
+**Fixed**
 - Fixed language files not being found when installation via mod managers altered file paths.
 
 ### v1.3.23
@@ -183,7 +188,7 @@
 **Visuals**
 - Improved Shrine of Recollection visuals.
 
-**Fixes**
+**Fixed**
 - Fixed buff count not updating correctly inside the teleporter zone for Copper Gear and Brass Screws.
 - Fixed item displays no longer appearing on Engineer's alternate Turrets.
 
@@ -197,7 +202,7 @@
 **Changed**
 - Targeting Matrix has been redesigned as a green item by popular request.
 
-**Fixes**
+**Fixed**
 - Fixed Operator's alternate secondary not being affected by Targeting Matrix.
 
 ### v1.3.19
@@ -228,7 +233,7 @@
 
 ### v1.3.14
 
-**Fixes**
+**Fixed**
 - Railgunner's Concussion Device no longer grants vengeance.
 
 ### v1.3.13
@@ -243,7 +248,7 @@
 
 ### v1.3.11
 
-**Fixes**
+**Fixed**
 - Vengeful Toaster and Hermit's Shawl no longer waste their associated buffs on damage events that do no actual damage.
 
 ### v1.3.10
@@ -251,7 +256,7 @@
 **Config**
 - Separated verbose console output into its own setting.
 
-**Fixes**
+**Fixed**
 - Fixed some assets needlessly trying to become networked by the Prefab API.
 
 ### v1.3.9
@@ -266,7 +271,7 @@
 
 ### v1.3.7
 
-**Fixes**
+**Fixed**
 - Fixed the broken Jetpack material.
 - Switched some asset fetch operations to use GUIDs.
 
@@ -277,17 +282,17 @@
 
 ### v1.3.5
 
-**Fixes**
+**Fixed**
 - Fixed an issue with the Carbonizer laser sometimes disappearing. Oops.
 
 ### v1.3.4
 
-**Fixes**
+**Fixed**
 - Fixed a minor error with Hermit's Shawl when some modded characters are destroyed.
 
 ### v1.3.3
 
-**Fixes**
+**Fixed**
 - Fixed an error with Targeting Matrix on modded characters with no model locator.
 
 ### v1.3.2
@@ -298,7 +303,7 @@
 
 ### v1.3.1
 
-**Fixes**
+**Fixed**
 - Made the code for finding item corruptions more robust.
 
 ## v1.3.0
@@ -321,7 +326,7 @@
 
 ### v1.2.13
 
-**Fixes**
+**Fixed**
 - Faithful no longer requires Survivors of the Void to be enabled.
 
 ### v1.2.12
@@ -331,7 +336,7 @@
 
 ### v1.2.11
 
-**Fixes**
+**Fixed**
 - Fixed various issues by switching to overlay language tokens from the Language API.
 
 ### v1.2.10
@@ -386,7 +391,7 @@
 
 ### v1.2.2
 
-**Fixes**
+**Fixed**
 - Fixed Hermit's Shawl being left as debug only. Oops.
 
 ### v1.2.1
@@ -401,7 +406,7 @@
 
 ### v1.1.6
 
-**Fixes**
+**Fixed**
 - Fixed rogue config entries for debug items (delete old config to clean).
 
 ### v1.1.5
@@ -412,7 +417,7 @@
 
 ### v1.1.4
 
-**Fixes**
+**Fixed**
 - Targeting Matrix can no longer target Healing Cores.
 
 ### v1.1.3
@@ -423,7 +428,7 @@
 
 ### v1.1.2
 
-**Fixes**
+**Fixed**
 - Fixed NRE errors that sometimes occurred when dying with Targeting Matrix.
 
 ### v1.1.1
@@ -442,7 +447,7 @@
 - Added the Targeting Matrix item.
 - Added a unique visual effect for Leader's Pennon.
 
-**Fixes**
+**Fixed**
 - Fixed some minor config issues.
 
 ### v1.0.20
@@ -455,7 +460,7 @@
 **Added**
 - Added an option to randomise the stats of all items added by this mod (disabled by default).
 
-**Fixes**
+**Fixed**
 - Fixed Leader's Pennon radius indicator persisting after the owning player dies.
 - Fixed multiple issues when some players in a multiplayer lobby have godmode enabled while others do not.
 
@@ -466,7 +471,7 @@
 
 ### v1.0.17
 
-**Fixes**
+**Fixed**
 - Fixed an inconsistency in the README.
 
 ### v1.0.16
@@ -509,7 +514,7 @@
 
 ### v1.0.9
 
-**Fixes**
+**Fixed**
 - Fixed Copper Gear and Brass Screw sometimes not providing their buffs inside the teleporter zone.
 
 **Config**
@@ -532,22 +537,22 @@
 
 ### v1.0.5
 
-**Fixes**
+**Fixed**
 - Fixed the warbanner temporary visual effect getting yeeted. Oops.
 
 ### v1.0.4
 
-**Fixes**
+**Fixed**
 - Fixed errors with debugging tools when modded spawn cards are created.
 
 ### v1.0.3
 
-**Fixes**
+**Fixed**
 - Fixed the README for the store page.
 
 ### v1.0.2
 
-**Fixes**
+**Fixed**
 - Fixed a minor version mismatch issue.
 
 ### v1.0.1
