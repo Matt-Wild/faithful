@@ -214,8 +214,6 @@
 **Changed**
 - Removed the annoying "PING" logs left in after debugging. Whoops.
 
-<details><summary><strong>Old Changelogs</strong></summary>
-
 ### v1.3.16
 
 **Visuals**

@@ -31,7 +31,7 @@ namespace Faithful
                 token: token,
                 safeName: "Lucky Figurine",
                 tags: [ItemTag.Utility, ItemTag.AIBlacklist, ItemTag.CannotDuplicate, ItemTag.SacrificeBlacklist],
-                iconName: "texTemporalCube",
+                iconName: "texTemporalCubeIcon",
                 modelName: "TemporalCubeMesh")
             {
                 Tier = ItemTier.VoidTier2,

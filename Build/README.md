@@ -1,0 +1,272 @@
+# A Faithful Expansion
+Multiplayer compatible and highly configurable!
+
+Currently adds <b>19</b> items, <b>7</b> of which require the <b>Survivors of the Void DLC</b>. All items have item displays!
+
+For more detailed information about the additions made by this mod check out the [wiki](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/wiki/).
+
+# Compatibility
+
+Faithful is compatible with <b>Quality</b> and <b>Risk Of Options</b>!
+
+<a href="https://thunderstore.io/c/riskofrain2/p/Goorakh/Quality/"><img src="https://gcdn.thunderstore.io/live/repository/icons/Goorakh-Quality-0.7.8.png" alt="Quality" width=200></a>
+<a href="https://thunderstore.io/c/riskofrain2/p/Rune580/Risk_Of_Options/"><img src="https://cdn.rune580.dev/roo/images/roo-full.gif" alt="Risk Of Options" width=200></a>
+
+# Join Our Discord!
+
+We genuinely love hearing feedback about our mod! If you'd like to give your thoughts, report an issue or just feel like seeing what we're up to please join our Discord!<br>
+
+[![Discord](https://img.shields.io/discord/1019915684353933392?label=Discord&logo=discord)](https://discord.com/invite/CCSauYkpzP)
+
+# Support Us!
+
+This mod is still currently in-development and lacks a lot of the content we have planned.
+
+We've got plans for more items, survivors, enemies and stages. And maybe even some other things.
+
+You can support us in making this mod (or in our other work) through the link below:
+
+[![Patreon](https://img.shields.io/badge/Support%20Us%20on-Patreon-orange?logo=patreon)](https://www.patreon.com/c/spilledsoupprojects)
+
+# Supported Languages
+
+Currently we support the following languages:
+- English
+- Russian
+- Chinese (Simplified)
+
+Thank you to Coldeiб for his Russian translation of our mod!
+
+If you would like to provide, improve or request a translation for Faithful, please join our Discord and get in touch!
+
+# New Items
+All items can be disabled or altered in this mod's config.
+All items (except Lunars) have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main/ThunderstoreContent/QualityDiamond.png?raw=true" alt="Quality" width="16"> Quality variants.
+
+<table>
+  <thead>
+    <tr>
+      <th>Icon</th>
+      <th>Name / Effect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2" align="center"><h3>Common / Tier 1 Items</h3></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCopperGearIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Copper Gear</b><br>
+        Increase attack speed by <b>25% (</b>+25% per stack<b>)</b> while inside the Teleporter zone.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texMatterAcceleratorIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Matter Accelerator</b><br>
+        Gain a shield equal to <b>5%</b> of your maximum health. While you have a shield or barrier, movement speed is increased by <b>20% (</b>+20% per stack<b>)</b>.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texRadiantTimepieceIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Radiant Timepiece</b><br>
+        Increase the duration of temporary buffs by <b>1 (</b>+1 per stack<b>)</b> second(s).
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><h3>Uncommon / Tier 2 Items</h3></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texHermitShawlIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Hermit's Shawl</b><br>
+        Leaving combat grants Patience, increasing damage by <b>+25%</b>. You can have up to <b>4 (</b>+4 per stack<b>)</b> stacks that are all gained over <b>10</b> seconds. All stacks of Patience are consumed upon dealing damage.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSecondHandIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Second Hand</b><br>
+        Increase attack speed by <b>20% (</b>+20% per stack<b>)</b> and movement speed by <b>30% (</b>+30% per stack<b>)</b> while touching the ground.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texSpaciousUmbrellaIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Spacious Umbrella</b><br>
+        Increase the size of the Teleporter zone by <b>25% (</b>+25% per stack<b>)</b>.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texTargetingMatrixIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Targeting Matrix</b><br>
+        Target a random enemy on kill. Damage dealt to the target has a <b>+100%</b> chance to 'Critically Strike' and killing the target increases Critical Strike damage by <b>+10% (</b>+5% per stack<b>)</b>, up to <b>3 (</b>+1 per stack<b>)</b>.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texVengefulToasterIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Vengeful Toaster</b><br>
+        Getting hit grants Vengeance for <b>4 (</b>+2 per stack<b>)</b> seconds. Each stack of Vengeance increases damage by <b>+75%</b>. All stacks of Vengeance are consumed upon dealing damage.
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><h3>Legendary / Tier 3 Items</h3></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texNoxiousSlimeIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Noxious Slimes</b><br>
+        <b>10%</b> chance to blight an enemy for <b>300%</b> base damage. All damaging debuffs deal <b>+100% (</b>+100% per stack<b>)</b> damage.
+      </td>
+    </tr>
+	<tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/tex4T0NJetpackIcon.png?raw=true" width=128></td>
+      <td>
+        <b>4-T0N Jetpack</b><br>
+        Holding the jump key while falling boosts you upwards for up to <b>3 (</b>+1.5 per stack<b>)</b> seconds. Fully recharges in <b>8 (</b>-20% per stack<b>)</b> seconds while touching the ground.
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><h3>Lunar Items</h3></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCauterizingGreaveIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Cauterizing Greave</b><br>
+        Increase max health by <b>100% (</b>+100% per stack<b>)</b>. Reduce healing received by <b>50% (</b>+50% per stack<b>)</b>.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texHasteningGreaveIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Hastening Greave</b><br>
+        Increase attack speed by <b>100% (</b>+100% per stack<b>)</b>. Reduce base damage by <b>50% (</b>+50% per stack<b>)</b>.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+# New Void Items
+All items can be disabled or altered in this mod's config.
+All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main/ThunderstoreContent/QualityDiamond.png?raw=true" alt="Quality" width="16"> Quality variants.
+
+<table>
+  <thead>
+    <tr>
+      <th>Icon</th>
+      <th>Name / Effect</th>
+      <th>Corrupts</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="3" align="center"><h3>Common / Tier 1 Void Items</h3></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texBrassScrewsIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Brass Screws</b><br>
+        Increase damage by <b>20% (</b>+20% per stack<b>)</b> while inside the Teleporter zone.
+      </td>
+      <td>
+        Corrupts all <b>Copper Gears</b>.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLeadersPennonIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Leader's Pennon</b><br>
+        Create a ward around yourself that strengthens all allies other than yourself within <b>15m (</b>+7.5m per stack<b>)</b>. Raise attack speed by <b>30%</b> and passive health regeneration by <b>+5hp/s</b>.
+      </td>
+      <td>
+        Corrupts all <b>Warbanners</b>.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLongshotGeodeIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Longshot Geode</b><br>
+        Increase damage to enemies further than <b>40m</b> away by <b>15% (</b>+15% per stack<b>)</b>.
+      </td>
+      <td>
+        Corrupts all <b>Focus Crystals</b>.
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" align="center"><h3>Uncommon / Tier 2 Void Items</h3></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texDrownedVisageIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Drowned Visage</b><br>
+        Killing an enemy while within the Teleporter radius has a <b>5% (</b>+5% per stack<b>)</b> chance to charge the Teleporter by <b>5%</b>. Large or elite monsters charge it by <b>10%</b> instead.
+      </td>
+      <td>
+        Corrupts all <b>Spacious Umbrellas</b>.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texMeltingWarblerIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Melting Warbler</b><br>
+        Increase jump height by <b>2m (</b>+2m per stack<b>)</b>.
+      </td>
+      <td>
+        Corrupts all <b>Wax Quails</b>.
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" align="center"><h3>Legendary / Tier 3 Void Items</h3></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCollectorsVisionIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Collector's Vision</b><br>
+        Each unique item collected per stage grants <b>1% (</b>+1% per stack<b>)</b> permanent Inspiration, increasing Critical Strike chance by <b>+1%</b> and granting an additional <b>+20%</b> Critical Strike damage. At <b>100%</b>, the next unique pickup will grant an <b>Appraiser's Eye</b>.
+      </td>
+      <td>
+        Corrupts all <b>Laser Scopes</b>.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+# New Miscellaneous Items
+All items can be disabled or altered in this mod's config.
+All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main/ThunderstoreContent/QualityDiamond.png?raw=true" alt="Quality" width="16"> Quality variants.
+
+<table>
+  <thead>
+    <tr>
+      <th>Icon</th>
+      <th>Name / Effect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texAppraisersEyeIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Appraiser's Eye</b><br>
+        Critical Strikes scrutinize enemies up to <b>1 (</b>+1 per stack<b>)</b> time(s), increasing Critical Strike damage taken by <b>20%</b> from all sources.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+# Special Thanks
+
+### Risk of Rain 2 Modding Discord
+
+Thank you to all the people who helped turn ideas into reality on the Risk of Rain 2 Modding Discord server!
+
+**.score** · **Chinchi** · **Bubbet** · **Gorakh** · **HDeDeDe** · **iDeathHD** · **Nebby** · **DestroyedClone** · **TheTimesweeper** · **HIFU** · **RandomlyAwesome** · **Groove_Salad** · **Buns** · **KomradeSpectre** · **Harb** · **viliger** · **KingEnderBrine** · **Mystical Chicken**
+
+### SpilledSoup Discord Community
+
+And thank you to our Discord members who helped to refine Faithful through suggestions, bug reports and more!
+
+**Expakun** · **MiztarPi314** · **gaylesbean** · **Airtas** · **Soylar** · **AngeLiq** · **Torch** · **Nive** · **Guodan** · **Cancel the Eat** · **DaBubble** · **wolflin** · **ThatMothRess**

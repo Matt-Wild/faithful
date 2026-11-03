@@ -1,2 +1,9 @@
 # Reference assets not from this mod
 /RoR2 Reference/
+
+# Generated bundle export index and manifest
+/Bundle Export/Bundle Export
+/Bundle Export/Bundle Export.manifest
+
+# Per-developer game installation path
+/Source/Faithful/Faithful.Local.props

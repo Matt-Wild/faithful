@@ -1,0 +1,17 @@
+{
+    "name": "Faithful",
+    "version_number": "1.5.14",
+    "website_url": "https://github.com/Matt-Wild/faithful",
+    "description": "19 highly configurable new items including 7 void items and 1 unique interactable. Multiplayer/Quality/Risk Of Options compatible!",
+    "dependencies": [
+		"bbepis-BepInExPack-5.4.2117",
+		"RiskofThunder-R2API_Core-5.3.0",
+		"RiskofThunder-R2API_ContentManagement-1.0.10",
+		"RiskofThunder-R2API_Items-1.0.7",
+		"RiskofThunder-R2API_Language-1.0.1",
+		"RiskofThunder-R2API_RecalculateStats-1.6.3",
+		"RiskofThunder-R2API_Prefab-1.1.1",
+		"RiskofThunder-R2API_Director-2.3.6",
+		"RiskofThunder-R2API_DamageType-1.1.7"
+    ]
+}
