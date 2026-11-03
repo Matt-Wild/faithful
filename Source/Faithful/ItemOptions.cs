@@ -14,7 +14,7 @@ namespace Faithful
         public string ModelName { get; }
 
         public ItemTier Tier { get; set; } = ItemTier.Tier1;
-        public bool SimulacrumBanned { get; set; } = false;
+        public bool DefaultSimulacrumBanned { get; set; } = false;
         public bool CanRemove { get; set; } = true;
         public bool Hidden { get; set; } = false;
         public string CorruptToken { get; set; } = null;

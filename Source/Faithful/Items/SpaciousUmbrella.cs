@@ -45,7 +45,7 @@ namespace Faithful
                 modelName: "spaciousumbrellamesh")
             {
                 Tier = ItemTier.Tier2,
-                SimulacrumBanned = true,
+                DefaultSimulacrumBanned = true,
                 SupportsQuality = true,
                 DisplaySettings = displaySettings
             });

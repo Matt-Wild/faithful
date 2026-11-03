@@ -9,7 +9,6 @@ namespace Faithful
         ItemDisplaySettings displaySettings;
 
         // Store additional item settings
-        Setting<bool> simulacrumBannedSetting;
         Setting<float> itemChanceSetting;
         Setting<float> itemChanceStackingSetting;
 
@@ -23,9 +22,6 @@ namespace Faithful
             // Create display settings
             CreateDisplaySettings("TemporalCubeMesh");
 
-            // Create startup setting before item registration
-            simulacrumBannedSetting = Config.CreateSetting($"ITEM_{token}_SIMULACRUM_BANNED", "Item: Lucky Figurine", "Ban From Simulacrum?", true, "Should this item be banned from Simulacrum?", false, _canRandomise: false, _restartRequired: true);
-
             // Create item
             MainItem = Items.AddItem(new ItemOptions(
                 token: token,
@@ -36,7 +32,7 @@ namespace Faithful
             {
                 Tier = ItemTier.VoidTier2,
                 CorruptToken = "ITEM_EXTRASHRINEITEM_NAME",
-                SimulacrumBanned = simulacrumBannedSetting.Value,
+                DefaultSimulacrumBanned = true,
                 SupportsQuality = false,    // Should eventually support quality
                 DisplaySettings = displaySettings
             });
@@ -44,6 +40,52 @@ namespace Faithful
             // Create and fetch item settings
             CreateSettings();
             FetchSettings();
+
+            Behaviour.AddShrineChancePickupCallback(ModifyShrineChancePickup);
+        }
+
+        private UniquePickup ModifyShrineChancePickup(ShrineChanceBehavior _shrine, Interactor _activator, UniquePickup _pickup)
+        {
+            // Use the same inventory as the shrine
+            if (!_activator.TryGetComponent(out CharacterBody body) || !body.inventory) return _pickup;
+
+            // Check the activator's Lucky Figurine count
+            int luckyFigurineCount = body.inventory.GetItemCountEffective(MainItem.itemDef);
+            if (luckyFigurineCount <= 0) return _pickup;
+
+            // Replace a failed roll with a reward from the shrine's normal pool
+            if (!_pickup.isValid)
+            {
+                _pickup = _shrine.dropTable ? _shrine.dropTable.GeneratePickup(_shrine.rng) : RollLegacyShrineReward(_shrine);
+            }
+
+            // Let vanilla count the reward as the final successful use
+            if (_pickup.isValid)
+            {
+                _shrine.successfulPurchaseCount = _shrine.maxPurchaseCount - 1;
+            }
+
+            return _pickup;
+        }
+
+        private static UniquePickup RollLegacyShrineReward(ShrineChanceBehavior _shrine)
+        {
+            Run run = Run.instance;
+            WeightedSelection<PickupIndex> rewards = new WeightedSelection<PickupIndex>(4);
+            AddReward(run.availableTier1DropList, _shrine.tier1Weight);
+            AddReward(run.availableTier2DropList, _shrine.tier2Weight);
+            AddReward(run.availableTier3DropList, _shrine.tier3Weight);
+            AddReward(run.availableEquipmentDropList, _shrine.equipmentWeight);
+
+            return rewards.Count > 0 ? new UniquePickup(rewards.Evaluate(_shrine.rng.nextNormalizedFloat)) : UniquePickup.none;
+
+            void AddReward(System.Collections.Generic.List<PickupIndex> _pool, float _weight)
+            {
+                if (_weight > 0f && _pool.Count > 0)
+                {
+                    rewards.AddChoice(_shrine.rng.NextElementUniform(_pool), _weight);
+                }
+            }
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -92,7 +134,7 @@ namespace Faithful
         protected override void CreateSettings()
         {
             // Create settings specific to this item
-            itemChanceSetting = MainItem.CreateSetting("ITEM_CHANCE", "Item Chance", 0.0f, "What should the chance be for this item to drop an additional item when using a Shrine of Chance? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
+            itemChanceSetting = MainItem.CreateSetting("ITEM_CHANCE", "Item Chance", 0.0f, "What should the chance be for this item to drop an additional item when using a Shrine of Chance? (10.0 = 10% chance)", _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
             itemChanceStackingSetting = MainItem.CreateSetting("ITEM_CHANCE_STACKING", "Item Chance Stacking", 10.0f, "How much additional chance should further stacks of this item provide to drop an additional item when using a Shrine of Chance? (10.0 = 10% chance)", _valueFormatting: "{0:0.0}%");
         }
 

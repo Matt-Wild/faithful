@@ -55,7 +55,7 @@ namespace Faithful
                 iconName: "texcoppergearicon",
                 modelName: "coppergearmesh")
             {
-                SimulacrumBanned = true,
+                DefaultSimulacrumBanned = true,
                 SupportsQuality = true,
                 DisplaySettings = displaySettings
             });

@@ -16,6 +16,7 @@ namespace Faithful
         // Create default settings that all items have (CAN BE NULL)
         public Setting<bool> enabledSetting;
         public Setting<bool> extendedPickupDescSetting;
+        private Setting<bool> simulacrumBannedSetting;
         public Setting<bool> enableItemDisplaysSetting;
         public Setting<string> nameOverrideSetting;
         public Setting<string> pickupOverrideSetting;
@@ -103,7 +104,7 @@ namespace Faithful
             if (!_options.Hidden && !_options.WIP)
             {
                 // Create default settings (MUST HAPPEN AFTER TOKEN AND NAME IS ASSIGNED)
-                CreateDefaultSettings();
+                CreateDefaultSettings(_options);
             }
 
             // Should hide this item due to temporary assets or debug only?
@@ -189,7 +190,7 @@ namespace Faithful
             itemDef.tags = tags;
 
             // Banned from Simulacrum?
-            if (_options.SimulacrumBanned)
+            if (simulacrumBannedSetting?.Value ?? _options.DefaultSimulacrumBanned)
             {
                 // Ban from Simulacrum
                 Utils.BanFromSimulacrum(itemDef);
@@ -453,12 +454,13 @@ namespace Faithful
             }
         }
 
-        private void CreateDefaultSettings()
+        private void CreateDefaultSettings(ItemOptions _options)
         {
             // Create the settings which every item should have
             enabledSetting = CreateSetting("ENABLED", "Enable Item?", true, "Should this item appear in runs?", false, _restartRequired: true);
             enableItemDisplaysSetting = CreateSetting("ENABLE_ITEM_DISPLAYS", "Enable Item Displays?", true, "Should this item have item displays on the compatible character models?", false, true, _restartRequired: true);
             extendedPickupDescSetting = CreateSetting("EXTENDED_PICKUP_DESC", "Extended Pickup Description", false, "Should this item have the logbook description appear when picking it up during runs?", false, true);
+            simulacrumBannedSetting = CreateSetting("SIMULACRUM_BANNED", "Ban From Simulacrum?", _options.DefaultSimulacrumBanned, "Should this item be banned from Simulacrum?", false, _canRandomise: false, _restartRequired: true);
             nameOverrideSetting = CreateSetting("NAME_OVERRIDE", "Override Item Name", "", "Should this item be called something different?", false, _canRandomise: false);
             pickupOverrideSetting = CreateSetting("PICKUP_OVERRIDE", "Override Item Pickup", "", "Should this item have a different pickup?\n\nFor styling and dynamic stat tags, open the .language file for examples.", false, _canRandomise: false);
             descriptionOverrideSetting = CreateSetting("DESCRIPTION_OVERRIDE", "Override Item Description", "", "Should this item have a different description?\n\nFor styling and dynamic stat tags, open the .language file for examples.", false, _canRandomise: false);

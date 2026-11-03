@@ -16,7 +16,7 @@ namespace Faithful
                 modelName: "Cube_TemporaryAsset")
             {
                 Tier = ItemTier.NoTier,
-                SimulacrumBanned = true,
+                DefaultSimulacrumBanned = true,
                 Hidden = true,
                 DebugOnly = true
             });

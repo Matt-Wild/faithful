@@ -8,6 +8,8 @@ namespace Faithful
 
     internal delegate void SceneExitControllerCallback(SceneExitController _exitController);
 
+    internal delegate void RunRuleBookCallback(Run _run, RuleBook _ruleBook);
+
     internal delegate void StageStartCallback(Stage self);
 
     internal delegate void InfiniteTowerRuleChoicesCallback(InfiniteTowerRun self, RuleChoiceMask mustInclude, RuleChoiceMask mustExclude, ulong runSeed);
@@ -18,6 +20,37 @@ namespace Faithful
 
     internal static partial class Behaviour
     {
+        private static readonly List<RunRuleBookCallback> onRunSetRuleBookCallbacks = new List<RunRuleBookCallback>();
+
+        private static readonly HookRegistration runSetRuleBookHook = new("Run.onRunSetRuleBookGlobal",
+            () => Run.onRunSetRuleBookGlobal += HookRunSetRuleBook,
+            () => Run.onRunSetRuleBookGlobal -= HookRunSetRuleBook);
+
+        public static void AddOnRunSetRuleBookCallback(RunRuleBookCallback _callback)
+        {
+            onRunSetRuleBookCallbacks.Add(_callback);
+
+            DebugLog("Added On Run Set Rule Book behaviour");
+        }
+
+        private static void HookRunSetRuleBook(Run _run, RuleBook _ruleBook)
+        {
+            if (!CanRunHook(runSetRuleBookHook)) return;
+
+            runSetRuleBookHook.StartProfiling();
+            try
+            {
+                foreach (RunRuleBookCallback callback in onRunSetRuleBookCallbacks)
+                {
+                    callback(_run, _ruleBook);
+                }
+            }
+            finally
+            {
+                runSetRuleBookHook.StopProfiling();
+            }
+        }
+
         // Scene population event
         private static readonly List<SceneDirectorCallback> onPrePopulateSceneCallbacks = new List<SceneDirectorCallback>();
 

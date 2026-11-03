@@ -2,6 +2,10 @@
 
 **Added**
 - Added Lucky Figurine item.
+- Added "Ban From Simulacrum?" config for all items.
+
+**Fixed**
+- Fixed some setting sliders not working properly when using Risk Of Options.
 
 ### v1.5.13
 

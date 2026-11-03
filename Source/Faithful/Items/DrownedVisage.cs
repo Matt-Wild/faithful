@@ -50,7 +50,7 @@ namespace Faithful
                 modelName: "drownedvisagemesh")
             {
                 Tier = ItemTier.VoidTier2,
-                SimulacrumBanned = true,
+                DefaultSimulacrumBanned = true,
                 CorruptToken = "FAITHFUL_ITEM_SPACIOUS_UMBRELLA_NAME",
                 SupportsQuality = true,
                 DisplaySettings = displaySettings

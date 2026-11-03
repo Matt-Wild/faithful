@@ -55,6 +55,7 @@ namespace Faithful
                 characterBodyRollCritHook,
                 interactionBeginHook,
                 purchaseInteractionBeginHook,
+                shrineChancePickupHook,
                 purchaseCanBeAffordedHook,
                 processJumpHook,
                 genericCharacterFixedUpdateHook,
@@ -67,6 +68,7 @@ namespace Faithful
                 onDamageDealtHook,
                 onCharacterDeathHook,
                 prePopulateSceneHook,
+                runSetRuleBookHook,
             ];
         }
 

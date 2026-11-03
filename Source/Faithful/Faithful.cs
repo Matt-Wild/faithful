@@ -97,18 +97,18 @@ namespace Faithful
                 string[] failedHooks = HookRegistration.GetFailedHookNames();
                 if (failedHooks.Length == 0)
                 {
-                    Log.Info("Faithful loaded successfully, thank you for playing our mod!");
+                    Log.Info($"[v{PluginVersion}] Faithful loaded successfully, thank you for playing our mod!");
                 }
                 else
                 {
-                    Log.Warning($"Faithful loaded with {failedHooks.Length} failed hook(s): {string.Join(", ", failedHooks)}. Features using these hooks may not work.");
+                    Log.Warning($"[v{PluginVersion}] Faithful loaded with {failedHooks.Length} failed hook(s): {string.Join(", ", failedHooks)}. Features using these hooks may not work.");
                 }
             }
             catch (System.Exception exception)
             {
                 InitializationSucceeded = false;
                 enabled = false;
-                Log.Error($"Faithful core initialization failed.\n{exception}");
+                Log.Error($"[v{PluginVersion}] Faithful core initialization failed.\n{exception}");
                 Utils.DisableMenuHooks();
                 Behaviour.Disable();
             }

@@ -56,7 +56,7 @@ namespace Faithful
                 modelName: "brassscrewsmesh")
             {
                 Tier = ItemTier.VoidTier1,
-                SimulacrumBanned = true,
+                DefaultSimulacrumBanned = true,
                 CorruptToken = "FAITHFUL_ITEM_COPPER_GEAR_NAME",
                 SupportsQuality = true,
                 DisplaySettings = displaySettings

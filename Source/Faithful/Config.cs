@@ -322,6 +322,7 @@ namespace Faithful
 
         // Method references for Risk of Options
         static MethodInfo setModIconMethod;
+        static MethodInfo setModDescriptionMethod;
         static MethodInfo addOptionMethod;
 
         public static void Init()
@@ -343,6 +344,9 @@ namespace Faithful
 
                     // Get methods
                     GetMethods();
+
+                    // Set the description for Faithful's mod options tab
+                    setModDescriptionMethod?.Invoke(null, ["Settings for Faithful"]);
 
                     if (Utils.verboseConsole) Log.Info("Risk Of Options wrapper created successfully.");
                 }
@@ -590,6 +594,9 @@ namespace Faithful
             {
                 Log.Warning($"[CONFIG] | Risk Of Options was found but the method 'SetModIcon' could not be found.");
             }
+
+            // Get the set mod description method
+            setModDescriptionMethod = assembly.GetType("RiskOfOptions.ModSettingsManager")?.GetMethod("SetModDescription", [typeof(string)]);
 
             // Get the add option method
             addOptionMethod = assembly.GetType("RiskOfOptions.ModSettingsManager")?.GetMethod("AddOption", [baseOptionType, typeof(string), typeof(string)]);

@@ -72,6 +72,7 @@ namespace Faithful
 
         // Corruption item pairs
         static List<CorruptPair> corruptionPairs = new List<CorruptPair>();
+        private static ItemDef.Pair[] resolvedCorruptionPairs = [];
 
         // Create debug mode config
         static private Setting<bool> debugModeSetting;
@@ -176,6 +177,8 @@ namespace Faithful
         {
             // Detect assemblies
             DetectAssemblies();
+
+            Behaviour.AddOnRunSetRuleBookCallback(ApplyCorruptionExpansionRequirements);
 
             // Release any remaining character helpers when a run ends
             Run.onRunDestroyGlobal += ClearCharacterBodyLookup;
@@ -1167,7 +1170,22 @@ namespace Faithful
                 }
             }
 
-            return [.. builtPairs];
+            resolvedCorruptionPairs = [.. builtPairs];
+            return resolvedCorruptionPairs;
+        }
+
+        private static void ApplyCorruptionExpansionRequirements(Run _run, RuleBook _ruleBook)
+        {
+            // Use the resolved target so corruption overrides also change the expansion requirement
+            foreach (ItemDef.Pair pair in resolvedCorruptionPairs)
+            {
+                ExpansionDef requiredExpansion = pair.itemDef1.requiredExpansion;
+                if (!requiredExpansion || _run.IsExpansionEnabled(requiredExpansion)) continue;
+
+                ItemIndex voidItemIndex = pair.itemDef2.itemIndex;
+                _run.availableItems.Remove(voidItemIndex);
+                _run.expansionLockedItems.Add(voidItemIndex);
+            }
         }
 
         private static void OnCharacterSpawnCardAwake(CharacterSpawnCard self)

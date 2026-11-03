@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using RoR2;
 using UnityEngine;
 
@@ -10,12 +12,64 @@ namespace Faithful
 
     internal delegate bool OnPurchaseCanBeAffordedCallback(PurchaseInteraction _shop, CharacterMaster _activator);
 
+    internal delegate UniquePickup ShrineChancePickupCallback(ShrineChanceBehavior _shrine, Interactor _activator, UniquePickup _pickup);
+
     internal delegate void InteractorCallback(Interactor _interactor);
 
     internal delegate void FaithfulInteractorCallback(FaithfulInteractableBehaviour _behaviour, Interactor _interactor);
 
     internal static partial class Behaviour
     {
+        private delegate void ApplyShrineChancePickupCallbacks(ref UniquePickup _pickup, ShrineChanceBehavior _shrine, Interactor _activator);
+
+        private static readonly List<ShrineChancePickupCallback> shrineChancePickupCallbacks = new List<ShrineChancePickupCallback>();
+
+        private static readonly HookRegistration shrineChancePickupHook = new("ShrineChanceBehavior.AddShrineStack (selected pickup)",
+            () => IL.RoR2.ShrineChanceBehavior.AddShrineStack += HookShrineChancePickup,
+            () => IL.RoR2.ShrineChanceBehavior.AddShrineStack -= HookShrineChancePickup);
+
+        public static void AddShrineChancePickupCallback(ShrineChancePickupCallback _callback)
+        {
+            shrineChancePickupCallbacks.Add(_callback);
+
+            DebugLog("Added Shrine Chance Pickup behaviour");
+        }
+
+        private static void HookShrineChancePickup(ILContext _il)
+        {
+            ILCursor cursor = new(_il);
+
+            // Both reward paths meet at the validity check for the selected pickup
+            if (!cursor.TryGotoNext(MoveType.Before, instruction => instruction.MatchCallOrCallvirt<UniquePickup>("get_isValid")))
+            {
+                throw new System.InvalidOperationException("Could not find the selected pickup validity check in AddShrineStack.");
+            }
+
+            // Keep the pickup address on the stack for the original validity check
+            cursor.Emit(OpCodes.Dup);
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.Emit(OpCodes.Ldarg_1);
+            cursor.EmitDelegate<ApplyShrineChancePickupCallbacks>(ModifyShrineChancePickup);
+        }
+
+        private static void ModifyShrineChancePickup(ref UniquePickup _pickup, ShrineChanceBehavior _shrine, Interactor _activator)
+        {
+            if (!CanRunHook(shrineChancePickupHook)) return;
+
+            shrineChancePickupHook.StartProfiling();
+            try
+            {
+                foreach (ShrineChancePickupCallback callback in shrineChancePickupCallbacks)
+                {
+                    _pickup = callback(_shrine, _activator, _pickup);
+                }
+            }
+            finally
+            {
+                shrineChancePickupHook.StopProfiling();
+            }
+        }
+
         // Interaction procs: callbacks run for eligible interaction events
         private static readonly List<OnInteractionBeginProcCallback> onInteractionBeginProcCallbacks = new List<OnInteractionBeginProcCallback>();
 
