@@ -87,7 +87,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Include="NetworkWeaver\Weave.ps1;NetworkWeaver\Unity.UNetWeaver.exe;NetworkWeaver\Unity.Cecil*.dll" />
+    <UpToDateCheckInput Include="NetworkWeaver\Weave.ps1;NetworkWeaver\Unity.UNetWeaver.exe;NetworkWeaver\Unity.Cecil*.dll;Build\UpdateManifestVersion.ps1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -114,6 +114,11 @@
       <FileWrites Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
     </ItemGroup>
     <Message Text="Faithful networking patched successfully." Importance="High" />
+  </Target>
+
+  <!-- Read the compiled plugin version only after the build and networking weave succeed. -->
+  <Target Name="UpdateFaithfulManifestVersion" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
+    <Exec Command="powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\Build\UpdateManifestVersion.ps1&quot; -AssemblyPath &quot;$(TargetPath)&quot; -ManifestPath &quot;$(MSBuildProjectDirectory)\..\..\manifest.json&quot;" />
   </Target>
 
 </Project>
