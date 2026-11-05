@@ -74,6 +74,7 @@ namespace Faithful
         public static GameObject matrixEffectPrefab;
         public static GameObject matrixEffectLocalPrefab;
         public static GameObject shrineUseEffectPrefab;
+        public static GameObject luckyFigurineShrineEffectPrefab;
         public static GameObject technicianArcPrefab;
         public static GameObject technicianTrackingIndicatorPrefab;
         public static PhysicMaterial ragdollMaterial;
@@ -279,6 +280,32 @@ namespace Faithful
 
             // Get shrine use effect prefab
             shrineUseEffectPrefab = FetchAsset<GameObject>("RoR2/Base/Common/VFX/ShrineUseEffect.prefab");
+
+            // Create Lucky Figurine's void shrine reward effect
+            GameObject tempLFEffect = Object.Instantiate(FetchAsset<GameObject>("RoR2/Base/Common/VFX/ShrineChanceDollUseEffect.prefab"));
+            luckyFigurineShrineEffectPrefab = tempLFEffect.InstantiateClone("faithfulLuckyFigurineShrineEffect", false);
+            Object.DestroyImmediate(tempLFEffect);
+            Color figurineEffectColor = RoR2.ColorCatalog.GetColor(RoR2.ColorCatalog.ColorIndex.VoidItem);
+            ParticleSystem[] figurineParticles = luckyFigurineShrineEffectPrefab.GetComponentsInChildren<ParticleSystem>(true);
+            foreach (ParticleSystem particles in figurineParticles)
+            {
+                ParticleSystem.MainModule main = particles.main;
+                main.startColor = figurineEffectColor;
+            }
+            luckyFigurineShrineEffectPrefab.GetComponent<RoR2.ParticleSystemColorFromEffectData>().particleSystems = figurineParticles;
+            foreach (Light light in luckyFigurineShrineEffectPrefab.GetComponentsInChildren<Light>(true))
+            {
+                light.color = figurineEffectColor;
+            }
+            Material figurineSymbolMaterial = luckyFigurineShrineEffectPrefab.transform.Find("ColoredDustBalance").GetComponent<ParticleSystemRenderer>().material;
+            figurineSymbolMaterial.name = "matLuckyFigurineShrineSymbol";
+            figurineSymbolMaterial.SetColor("_TintColor", Color.white);
+            figurineSymbolMaterial.SetFloat("_Boost", 1.0f);
+            ParticleSystem.ColorOverLifetimeModule figurineSymbolLifetime = luckyFigurineShrineEffectPrefab.transform.Find("ColoredDustBalance").GetComponent<ParticleSystem>().colorOverLifetime;
+            Gradient figurineSymbolGradient = figurineSymbolLifetime.color.gradient;
+            figurineSymbolGradient.SetKeys([new GradientColorKey(Color.white, 0.0f), new GradientColorKey(Color.white, 1.0f)], figurineSymbolGradient.alphaKeys);
+            figurineSymbolLifetime.color = figurineSymbolGradient;
+            ContentAddition.AddEffect(luckyFigurineShrineEffectPrefab);
 
             // Get and modify engi turret laser prefab to become Technician's Arc
             GameObject turretLaser = Object.Instantiate(FetchAsset<GameObject>("RoR2/Base/Engi/LaserEngiTurret.prefab"));

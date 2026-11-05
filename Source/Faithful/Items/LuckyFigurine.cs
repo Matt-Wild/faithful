@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Facepunch.Steamworks.Inventory.Item;
 
 namespace Faithful
 {
@@ -247,6 +246,21 @@ namespace Faithful
             // Use the abundant outcome only when the shrine has an extra reward
             _result.ChatTokenOverride = hasBonusPickup ? "FAITHFUL_LUCKY_FIGURINE_SHRINE_CHANCE_MESSAGE_SUCCESS" : "FAITHFUL_LUCKY_FIGURINE_SHRINE_CHANCE_MESSAGE_FAIL";
             _result.UseJackpotEffectOverride = hasBonusPickup;
+            if (hasBonusPickup && Assets.luckyFigurineShrineEffectPrefab)
+            {
+                _result.SpawnEffectOverride = SpawnShrineRewardEffect;
+            }
+        }
+
+        private void SpawnShrineRewardEffect(ShrineChanceBehavior _shrine)
+        {
+            EffectManager.SpawnEffect(Assets.luckyFigurineShrineEffectPrefab, new EffectData
+            {
+                origin = _shrine.transform.position,
+                rotation = Quaternion.identity,
+                scale = 1.0f,
+                color = ColorCatalog.GetColor(ColorCatalog.ColorIndex.VoidItem)
+            }, true);
         }
 
         private static IEnumerator DropBonusPickups(List<UniquePickup> _pickups, Vector3 _position, Vector3 _forward, int _startingDirection)

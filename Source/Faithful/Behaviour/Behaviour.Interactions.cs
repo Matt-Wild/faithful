@@ -24,6 +24,7 @@ namespace Faithful
         public System.Action<ShrineChanceBehavior> AfterPrimaryDrop { get; set; }
         public string ChatTokenOverride { get; set; }
         public bool? UseJackpotEffectOverride { get; set; }
+        public System.Action<ShrineChanceBehavior> SpawnEffectOverride { get; set; }
 
         public ShrineChancePurchaseResult(UniquePickup _pickup)
         {
@@ -78,6 +79,13 @@ namespace Faithful
             }
 
             Instruction afterEffectCheck = cursor.Next;
+            if (!cursor.TryGotoNext(MoveType.After, instruction => instruction.MatchLdfld<ShrineChanceBehavior>(nameof(ShrineChanceBehavior.effectPrefabShrineRewardNormal))) ||
+                !cursor.TryGotoNext(MoveType.After, instruction => instruction.MatchCall(typeof(EffectManager), nameof(EffectManager.SpawnEffect))))
+            {
+                throw new System.InvalidOperationException("Could not find the end of the reward effect block in AddShrineStack.");
+            }
+
+            Instruction afterRewardEffects = cursor.Next;
 
             // Store the result for this purchase and keep the pickup address for the validity check
             VariableDefinition purchaseResult = new(_il.Method.Module.ImportReference(typeof(ShrineChancePurchaseResult)));
@@ -102,8 +110,25 @@ namespace Faithful
 
             // Choose the effect independently of vanilla's Chance Doll state
             cursor.Goto(afterEffectCheck);
+            // A custom effect replaces the entire vanilla effect block
+            ILLabel vanillaEffectCheck = cursor.DefineLabel();
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.Emit(OpCodes.Ldloc, purchaseResult);
+            cursor.EmitDelegate<System.Func<ShrineChanceBehavior, ShrineChancePurchaseResult, bool>>(TrySpawnShrineEffectOverride);
+            cursor.Emit(OpCodes.Brfalse, vanillaEffectCheck);
+            cursor.Emit(OpCodes.Pop);
+            cursor.Emit(OpCodes.Br, afterRewardEffects);
+            cursor.MarkLabel(vanillaEffectCheck);
             cursor.Emit(OpCodes.Ldloc, purchaseResult);
             cursor.EmitDelegate<System.Func<bool, ShrineChancePurchaseResult, bool>>((useJackpot, result) => result?.UseJackpotEffectOverride ?? useJackpot);
+        }
+
+        private static bool TrySpawnShrineEffectOverride(ShrineChanceBehavior _shrine, ShrineChancePurchaseResult _result)
+        {
+            if (_result?.SpawnEffectOverride == null) return false;
+
+            _result.SpawnEffectOverride(_shrine);
+            return true;
         }
 
         private static ShrineChancePurchaseResult ModifyShrineChancePurchase(ref UniquePickup _pickup, ShrineChanceBehavior _shrine, Interactor _activator)
