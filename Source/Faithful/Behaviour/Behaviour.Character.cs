@@ -21,6 +21,36 @@ namespace Faithful
         // Character body helper
         internal static GameObject characterBodyHelperPrefab;
 
+        // Character body destruction
+        private static readonly List<CharacterBodyCallback> onBodyDestroyedCallbacks = new();
+        private static readonly HookRegistration bodyDestroyedHook = new("CharacterBody.onBodyDestroyGlobal",
+            () => CharacterBody.onBodyDestroyGlobal += HookBodyDestroyed,
+            () => CharacterBody.onBodyDestroyGlobal -= HookBodyDestroyed);
+
+        public static void AddOnBodyDestroyedCallback(CharacterBodyCallback _callback)
+        {
+            onBodyDestroyedCallbacks.Add(_callback);
+            DebugLog("Added Character Body Destroyed behaviour");
+        }
+
+        private static void HookBodyDestroyed(CharacterBody _body)
+        {
+            if (!CanRunHook(bodyDestroyedHook)) return;
+
+            bodyDestroyedHook.StartProfiling();
+            try
+            {
+                foreach (CharacterBodyCallback callback in onBodyDestroyedCallbacks)
+                {
+                    callback(_body);
+                }
+            }
+            finally
+            {
+                bodyDestroyedHook.StopProfiling();
+            }
+        }
+
         private static void CreatePrefabs()
         {
             // We create an empty gameobject to hold all the networked components

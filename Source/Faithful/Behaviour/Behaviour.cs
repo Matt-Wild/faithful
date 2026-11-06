@@ -20,6 +20,8 @@ namespace Faithful
                 supportBeaconInitialRadiusHook,
                 characterBodyAwakeHook,
                 characterBodyStartHook,
+                bodyDestroyedHook,
+                findAIEnemyHook,
                 addBuffIndexHook,
                 addTimedBuffDefHook,
                 addTimedBuffDefMaxStacksHook,

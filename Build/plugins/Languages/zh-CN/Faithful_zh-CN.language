@@ -182,6 +182,14 @@
 	"FAITHFUL_RADIANT_TIMEPIECE_DESC_QUALITY": "[PREFIX]\n临时增益的<style=cIsUtility>持续时间</style>延长 <sprite name=\"Quality\"> <style=cIsUtility>[DURATION]%</style> <style=cStack>(每层额外+[DURATION_STACKING]%)</style>。",
 	"FAITHFUL_RADIANT_TIMEPIECE_LORE": "订单：Henlein 品牌怀表 第222版（银灰色）\r\n追踪编号：1510******\r\n预计送达时间：08/23/2057\r\n配送方式：高优先级/易碎品\r\n收货地址：土星，Continuum 街古董工坊\r\n配送详情：\r\n\r\n感谢您购买：\r\n > 1 件 Henlein 品牌怀表 第222版，银灰色\r\n\r\n我们希望您对其工艺感到满意。作为地球上最大的奢侈腕表零售商，我们始终以自身的工艺为傲，因此若您发现任何瑕疵，请联系我们的客服热线。我们的传统钟表匠将随时为您维修任何产品，仅收取少量*费用。\r\n\r\n更多详情可参见与订单一同附上的手册。\r\n\r\n祝您度过准时的一天。\r\n\r\n- Henlein",
 	
+	"FAITHFUL_CHARMING_FACADE_NAME": "魅惑假面",
+	"FAITHFUL_CHARMING_FACADE_PICKUP": "命中时有[CHANCE]%的几率暂时魅惑非头目敌人。",
+	"FAITHFUL_CHARMING_FACADE_PICKUP_QUALITY": "命中时有 <sprite name=\"Quality\"> [CHANCE]%的几率暂时魅惑非头目敌人。",
+	"FAITHFUL_CHARMING_FACADE_DESC": "你的攻击有<style=cIsDamage>[CHANCE]%</style>的几率<style=cIsDamage>魅惑</style><style=cIsDamage>非头目敌人</style>，使其攻击其他敌人。同时最多可<style=cIsDamage>魅惑</style><style=cIsDamage>[LIMIT]</style>名敌人<style=cStack>（每层增加[LIMIT_STACKING]名）</style>，每名敌人的魅惑持续时间最多为<style=cIsDamage>[DURATION]秒</style><style=cStack>（每层增加[DURATION_STACKING]秒）</style>。",
+	"FAITHFUL_CHARMING_FACADE_DESC_QUALITY": "你的攻击有 <sprite name=\"Quality\"> <style=cIsDamage>[CHANCE]%</style><style=cStack>（每层增加[CHANCE_STACKING]%）</style>的几率<style=cIsDamage>魅惑</style><style=cIsDamage>非头目敌人</style>，使其攻击其他敌人。同时最多可<style=cIsDamage>魅惑</style><style=cIsDamage>[LIMIT]</style>名敌人<style=cStack>（每层增加[LIMIT_STACKING]名）</style>，每名敌人的魅惑持续时间最多为<style=cIsDamage>[DURATION]秒</style><style=cStack>（每层增加[DURATION_STACKING]秒）</style>。几率每达到一个完整的<style=cIsUtility>100%</style>，<style=cIsDamage>魅惑</style>持续时间就额外增加<style=cIsDamage>[BONUS_DURATION]秒</style>。",
+	"FAITHFUL_CHARMING_FACADE_LORE": "“他们说，风中的低语会警告人们远离森林里的精灵；如果不回头，就会被魅惑，一步步走向死亡……人们被引诱、被利用，一旦失去用处，就会遭到背叛；他们的尸体再也不会被找到，因为那些曾许诺带来好运的精灵，会将他们吞噬殆尽……”\n\n“好吧，听起来就是一堆装神弄鬼的胡话。”\n\n“……明明是你要听鬼故事的。”\n\n- 信号回声，尤伊思触点之光",
+	"FAITHFUL_CHARMING_FACADE_BUFF": "魅惑",
+
 	"FAITHFUL_LUCKY_FIGURINE_NAME": "幸运人偶",
 	"FAITHFUL_LUCKY_FIGURINE_PICKUP": "机遇神龛必定给予奖励，但会消耗所有剩余使用次数。",
 	"FAITHFUL_LUCKY_FIGURINE_PICKUP_QUALITY": "机遇神龛必定给予 <sprite name=\"Quality\"> 奖励，但会消耗所有剩余使用次数。",

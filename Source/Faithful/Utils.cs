@@ -555,6 +555,30 @@ namespace Faithful
             }
         }
 
+        public static void ResetCharacterAITargets(CharacterBody _body)
+        {
+            // Only reset AI for living characters on the server
+            if (!hosting || !_body || !_body.master) return;
+            if (!_body.healthComponent || !_body.healthComponent.alive) return;
+
+            BaseAI[] aiComponents = _body.master.AiComponents;
+            if (aiComponents == null) return;
+
+            foreach (BaseAI ai in aiComponents)
+            {
+                if (!ai || ai.body != _body) continue;
+
+                // Discard targets retained before the targeting rules changed
+                ai.currentEnemy.Reset();
+                ai.customTarget.Reset();
+                ai.bufferedTarget = null;
+                ai.enemyAttention = 0.0f;
+
+                // Select a replacement using the current targeting rules
+                ai.ForceAcquireNearestEnemyIfNoCurrentEnemy();
+            }
+        }
+
         public static bool ChangeCharacterTeam(CharacterBody _body, TeamIndex _team)
         {
             // Validate the character, team and server authority
@@ -1526,6 +1550,46 @@ namespace Faithful
 
             // Remove the rules component after applying (keeps runtime hierarchy clean)
             Object.Destroy(rules);
+        }
+
+        public static Texture2D CreateGrayscaleTexture(Texture _source, string _name)
+        {
+            // Validate source
+            if (!_source) throw new System.ArgumentNullException(nameof(_source));
+
+            // Read through the GPU so the source does not need to be CPU-readable
+            RenderTexture previous = RenderTexture.active;
+            RenderTexture copy = RenderTexture.GetTemporary(_source.width, _source.height, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
+            Texture2D texture = new(_source.width, _source.height, TextureFormat.RGBAFloat, false, true);
+            try
+            {
+                Graphics.Blit(_source, copy);
+                RenderTexture.active = copy;
+                texture.ReadPixels(new Rect(0, 0, _source.width, _source.height), 0, 0);
+                Color[] pixels = texture.GetPixels();
+                for (int i = 0; i < pixels.Length; i++)
+                {
+                    float brightness = pixels[i].grayscale;
+                    pixels[i] = new Color(brightness, brightness, brightness, pixels[i].a);
+                }
+
+                texture.name = _name;
+                texture.wrapMode = _source.wrapMode;
+                texture.filterMode = _source.filterMode;
+                texture.SetPixels(pixels);
+                texture.Apply(false, true);
+                return texture;
+            }
+            catch
+            {
+                Object.DestroyImmediate(texture);
+                throw;
+            }
+            finally
+            {
+                RenderTexture.active = previous;
+                RenderTexture.ReleaseTemporary(copy);
+            }
         }
 
         public static Material ProcessRendererRules(Material _material, RendererRules _rules, bool _useShared = false)

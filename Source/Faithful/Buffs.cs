@@ -20,12 +20,13 @@ namespace Faithful
             // Mark overlay-backed buff models dirty when the buff appears/disappears
             Behaviour.AddOnBuffFirstStackGainedCallback(OnBuffFirstStackGained);
             Behaviour.AddOnBuffFinalStackLostCallback(OnBuffFinalStackLost);
+            Behaviour.AddOnBodyDestroyedCallback(OnBodyDestroyed);
         }
 
-        public static Buff AddBuff(string _token, string _safeName, string _iconDir, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, string _langTokenOverride = null, bool _qualityBuff = false)
+        public static Buff AddBuff(string _token, string _safeName, string _iconDir, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, BuffOverlayVisuals.BuffOverlayVisual _visual = null, string _langTokenOverride = null, bool _qualityBuff = false)
         {
             // Create buff
-            Buff newBuff = new Buff(_token, _safeName, _iconDir, _colour, _canStack, _isDebuff, _isHidden, _hasConfig, _usePercentageDisplay, _overlay, _langTokenOverride, _qualityBuff);
+            Buff newBuff = new Buff(_token, _safeName, _iconDir, _colour, _canStack, _isDebuff, _isHidden, _hasConfig, _usePercentageDisplay, _overlay, _visual, _langTokenOverride, _qualityBuff);
 
             // Add buff to buffs list
             buffs.Add(newBuff);
@@ -92,14 +93,35 @@ namespace Faithful
 
         private static void OnBuffFirstStackGained(CharacterBody self, BuffDef buffDef)
         {
+            // Apply the visual locally when the buff first appears
+            foreach (Buff buff in buffs)
+            {
+                if (buff.buffDef == buffDef && buff.visualEnabled) buff.visual.ApplyToCharacter(self);
+            }
+
             // If this is one of our overlay-backed buffs, request a natural material refresh
             MarkOverlayDirtyIfFaithfulOverlayBuff(self, buffDef);
         }
 
         private static void OnBuffFinalStackLost(CharacterBody self, BuffDef buffDef)
         {
+            // Let the visual exit when the last stack is removed
+            foreach (Buff buff in buffs)
+            {
+                if (buff.buffDef == buffDef) buff.visual?.RemoveFromCharacter(self);
+            }
+
             // If this is one of our overlay-backed buffs, request a natural material refresh
             MarkOverlayDirtyIfFaithfulOverlayBuff(self, buffDef);
+        }
+
+        private static void OnBodyDestroyed(CharacterBody _body)
+        {
+            // Body destruction does not necessarily remove each buff first
+            foreach (Buff buff in buffs)
+            {
+                buff.visual?.RemoveFromCharacter(_body);
+            }
         }
 
         private static void MarkOverlayDirtyIfFaithfulOverlayBuff(CharacterBody _body, BuffDef _buffDef)

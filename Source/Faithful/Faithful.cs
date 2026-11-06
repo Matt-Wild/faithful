@@ -67,6 +67,7 @@ namespace Faithful
         internal static MatterAccelerator matterAccelerator;
         internal static RadiantTimepiece radiantTimepiece;
         internal static LuckyFigurine luckyFigurine;
+        internal static CharmingFacade charmingFacade;
         internal static DebugItem debugItem;
 
         // Survivors
@@ -168,6 +169,7 @@ namespace Faithful
             matterAccelerator = new MatterAccelerator(toolbox);
             radiantTimepiece = new RadiantTimepiece(toolbox);
             luckyFigurine = new LuckyFigurine(toolbox);
+            charmingFacade = new CharmingFacade(toolbox);
             debugItem = new DebugItem(toolbox);
 
             // Create WIP content

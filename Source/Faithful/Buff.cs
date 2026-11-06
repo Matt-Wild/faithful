@@ -9,6 +9,7 @@ namespace Faithful
         // Create default settings that all buffs have
         public Setting<bool> hiddenSetting;
         public Setting<bool> enableOverlaySetting;
+        public Setting<bool> enableVisualSetting;
 
         // Is this buff used specifically for Quality?
         public bool qualityBuff = false;
@@ -19,6 +20,9 @@ namespace Faithful
         // Buff overlay
         public Overlays.Overlay overlay;
 
+        // Buff visual
+        public BuffOverlayVisuals.BuffOverlayVisual visual;
+
         // Buff token and name
         public string token;
         public string langTokenOverride;
@@ -26,7 +30,7 @@ namespace Faithful
         public string safeName;
 
         // Constructor
-        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, string _langTokenOverride = null, bool _qualityBuff = false)
+        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, BuffOverlayVisuals.BuffOverlayVisual _visual = null, string _langTokenOverride = null, bool _qualityBuff = false)
         {
             // Assign token
             token = _token;
@@ -43,6 +47,9 @@ namespace Faithful
 
             // Assign overlay
             overlay = _overlay;
+
+            // Assign visual
+            visual = _visual;
 
             // Check if has config
             if (_hasConfig)
@@ -110,6 +117,12 @@ namespace Faithful
             {
                 enableOverlaySetting = CreateSetting("OVERLAY", "Enable Overlay?", true, "Should the character overlay for this buff be enabled?");
             }
+
+            // Visual preferences are local and take effect after restarting
+            if (visual != null && (!qualityBuff || Utils.qualityEnabled))
+            {
+                enableVisualSetting = Config.CreateSetting($"BUFF_{token}_VISUAL", qualityBuff ? $"Quality Buff: {safeName}" : $"Buff: {safeName}", "Enable Visual Effect?", true, "Should the temporary visual effect for this buff be enabled?", _isStat: false, _isClientSide: true, _canRandomise: false, _restartRequired: true);
+            }
         }
 
         public Setting<T> CreateSetting<T>(string _tokenAddition, string _key, T _defaultValue, string _description, bool _restartRequired = false, string _valueFormatting = "{0:0}")
@@ -124,6 +137,7 @@ namespace Faithful
         }
 
         public bool overlayEnabled => enableOverlaySetting != null && enableOverlaySetting.Value && overlay != null;
+        public bool visualEnabled => visual != null && (enableVisualSetting?.Value ?? true);
         public string sourceToken => string.IsNullOrEmpty(langTokenOverride) ? token : langTokenOverride;
     }
 }

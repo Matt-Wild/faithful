@@ -281,7 +281,7 @@ namespace Faithful
                 }
             });
 
-            CreateItem(new WIPItemOptions(
+            /*CreateItem(new WIPItemOptions(
                 name: "Charming Facade",
                 tags: [ItemTag.Damage, ItemTag.Utility, ItemTag.AIBlacklist],
                 iconName: "texcharmingfacadeicon",
@@ -343,7 +343,7 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Enforcer", "Head", new Vector3(-0.0355F, 0.13F, 0F), new Vector3(275F, 90F, 0F), new Vector3(0.13F, 0.13F, 0.13F));
                     _displaySettings.AddCharacterDisplay("Acolyte", "Head", new Vector3(-0.0731F, 0.2835F, 0F), new Vector3(275F, 90F, 0F), new Vector3(0.22F, 0.22F, 0.2F));
                 }
-            });
+            });*/
         }
 
         public static void CreateItem(WIPItemOptions _options)
