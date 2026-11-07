@@ -1,124 +1,114 @@
 using System.Collections.Generic;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
-using MonoMod.Cil;
+using System.Linq;
 using RoR2;
 using RoR2.CharacterAI;
+using UnityEngine;
 
 namespace Faithful
 {
-    internal delegate void ModifyAIEnemySearchCallback(BaseAI _ai, BullseyeSearch _search);
-
-    internal delegate bool TrySelectAIEnemyCallback(BaseAI _ai, IEnumerable<HurtBox> _candidates, out HurtBox _target);
+    internal delegate bool AllowFriendlyAIRetaliationCallback(BaseAI _ai, DamageReport _report);
 
     internal static partial class Behaviour
     {
-        // Enemy acquisition: modify the search before collecting candidates, then optionally select a target
-        private static readonly List<ModifyAIEnemySearchCallback> modifyAIEnemySearchCallbacks = new();
-        private static readonly List<TrySelectAIEnemyCallback> trySelectAIEnemyCallbacks = new();
+        private static readonly List<AllowFriendlyAIRetaliationCallback> allowFriendlyAIRetaliationCallbacks = new();
 
-        private static readonly HookRegistration findAIEnemyHook = new("BaseAI.FindEnemyHurtBox",
-            () => IL.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox += HookFindAIEnemy,
-            () => IL.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox -= HookFindAIEnemy);
+        private static readonly HookRegistration aiRetaliationHook = new("BaseAI.OnBodyDamaged",
+            () => On.RoR2.CharacterAI.BaseAI.OnBodyDamaged += HookAIRetaliation,
+            () => On.RoR2.CharacterAI.BaseAI.OnBodyDamaged -= HookAIRetaliation);
 
-        public static void AddModifyAIEnemySearchCallback(ModifyAIEnemySearchCallback _callback)
+        public static void AddAllowFriendlyAIRetaliationCallback(AllowFriendlyAIRetaliationCallback _callback)
         {
-            modifyAIEnemySearchCallbacks.Add(_callback);
-            DebugLog("Added Modify AI Enemy Search behaviour");
+            allowFriendlyAIRetaliationCallbacks.Add(_callback);
+            DebugLog("Added Allow Friendly AI Retaliation behaviour");
         }
 
-        public static void AddTrySelectAIEnemyCallback(TrySelectAIEnemyCallback _callback)
+        private static bool AllowFriendlyAIRetaliation(BaseAI _ai, DamageReport _report)
         {
-            trySelectAIEnemyCallbacks.Add(_callback);
-            DebugLog("Added Try Select AI Enemy behaviour");
-        }
-
-        private static void HookFindAIEnemy(ILContext _il)
-        {
-            ILCursor cursor = new(_il);
-
-            // Match both injection points before changing the method
-            if (!cursor.TryGotoNext(MoveType.Before, instruction => instruction.MatchCallOrCallvirt<BullseyeSearch>("RefreshCandidates")))
-            {
-                throw new System.InvalidOperationException("Could not find the enemy search refresh in FindEnemyHurtBox.");
-            }
-            Instruction refresh = cursor.Next;
-
-            if (!cursor.TryGotoNext(MoveType.After, instruction =>
-                instruction.MatchCallOrCallvirt<BullseyeSearch>("GetResults") &&
-                instruction.Operand is MethodReference method && method.Parameters.Count == 0))
-            {
-                throw new System.InvalidOperationException("Could not find the enemy search results in FindEnemyHurtBox.");
-            }
-            Instruction vanillaSelectionStart = cursor.Next;
-
-            VariableDefinition selectedTarget = new(_il.Method.Module.ImportReference(typeof(HurtBox)));
-            _il.Body.Variables.Add(selectedTarget);
-
-            // Keep vanilla's search reference for RefreshCandidates after callbacks have modified it
-            cursor.Goto(refresh, MoveType.Before);
-            cursor.Emit(OpCodes.Dup);
-            cursor.Emit(OpCodes.Ldarg_0);
-            cursor.EmitDelegate(ModifyAIEnemySearch);
-
-            // Keep the original results for vanilla if no callback handles target selection
-            cursor.Goto(vanillaSelectionStart, MoveType.Before);
-            ILLabel vanillaSelection = cursor.DefineLabel();
-            cursor.Emit(OpCodes.Dup);
-            cursor.Emit(OpCodes.Ldarg_0);
-            cursor.Emit(OpCodes.Ldloca, selectedTarget);
-            cursor.EmitDelegate<SelectAIEnemy>(TrySelectAIEnemy);
-            cursor.Emit(OpCodes.Brfalse, vanillaSelection);
-            cursor.Emit(OpCodes.Pop);
-            cursor.Emit(OpCodes.Ldloc, selectedTarget);
-            cursor.Emit(OpCodes.Ret);
-            cursor.MarkLabel(vanillaSelection);
-        }
-
-        private static void ModifyAIEnemySearch(BullseyeSearch _search, BaseAI _ai)
-        {
-            if (!CanRunHook(findAIEnemyHook) || modifyAIEnemySearchCallbacks.Count == 0) return;
-
-            findAIEnemyHook.StartProfiling();
+            aiRetaliationHook.StartProfiling();
             try
             {
-                foreach (ModifyAIEnemySearchCallback callback in modifyAIEnemySearchCallbacks)
+                foreach (AllowFriendlyAIRetaliationCallback callback in allowFriendlyAIRetaliationCallbacks)
                 {
-                    callback(_ai, _search);
+                    if (callback(_ai, _report)) return true;
                 }
             }
             finally
             {
-                findAIEnemyHook.StopProfiling();
-            }
-        }
-
-        private delegate bool SelectAIEnemy(IEnumerable<HurtBox> _candidates, BaseAI _ai, out HurtBox _target);
-
-        private static bool TrySelectAIEnemy(IEnumerable<HurtBox> _candidates, BaseAI _ai, out HurtBox _target)
-        {
-            _target = null;
-            if (!CanRunHook(findAIEnemyHook) || trySelectAIEnemyCallbacks.Count == 0) return false;
-
-            findAIEnemyHook.StartProfiling();
-            try
-            {
-                // The first handled result wins, including a deliberately empty target
-                foreach (TrySelectAIEnemyCallback callback in trySelectAIEnemyCallbacks)
-                {
-                    if (callback(_ai, _candidates, out HurtBox target))
-                    {
-                        _target = target;
-                        return true;
-                    }
-                }
-            }
-            finally
-            {
-                findAIEnemyHook.StopProfiling();
+                aiRetaliationHook.StopProfiling();
             }
 
             return false;
+        }
+
+        private static void HookAIRetaliation(On.RoR2.CharacterAI.BaseAI.orig_OnBodyDamaged orig, BaseAI self, DamageReport damageReport)
+        {
+            if (!CanRunHook(aiRetaliationHook) || allowFriendlyAIRetaliationCallbacks.Count == 0 || !self.body || self.currentEnemy == null ||
+                damageReport == null || !damageReport.attacker || !AllowFriendlyAIRetaliation(self, damageReport))
+            {
+                orig(self, damageReport);
+                return;
+            }
+
+            bool previousNeverRetaliateFriendlies = self.neverRetaliateFriendlies;
+            bool previousRetaliateUntargetable = self.retaliateUntargetable;
+            float previousAttention = self.enemyAttention;
+            GameObject previousBufferedTarget = self.bufferedTarget;
+            bool changeTarget = self.currentEnemy.gameObject != damageReport.attacker;
+            bool retaliated = false;
+
+            try
+            {
+                // Allow this friendly retaliation through vanilla's two team restrictions
+                self.neverRetaliateFriendlies = false;
+                self.retaliateUntargetable = true;
+                if (changeTarget)
+                {
+                    // Give the attacker priority over an existing target or queued player target
+                    self.enemyAttention = 0f;
+                    self.bufferedTarget = null;
+                }
+
+                orig(self, damageReport);
+                retaliated = self.currentEnemy.gameObject == damageReport.attacker;
+            }
+            finally
+            {
+                self.neverRetaliateFriendlies = previousNeverRetaliateFriendlies;
+                self.retaliateUntargetable = previousRetaliateUntargetable;
+
+                // Keep existing target commitment if vanilla rejected the attacker, including on failure
+                if (changeTarget && !retaliated)
+                {
+                    self.enemyAttention = previousAttention;
+                    self.bufferedTarget = previousBufferedTarget;
+                }
+            }
+        }
+
+        private static readonly HookRegistration findAIEnemyHook = new("BaseAI.FindEnemyHurtBox",
+            () => On.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox += HookFindAIEnemy,
+            () => On.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox -= HookFindAIEnemy);
+
+        private static HurtBox HookFindAIEnemy(On.RoR2.CharacterAI.BaseAI.orig_FindEnemyHurtBox orig, BaseAI self, float maxDistance, bool full360Vision, bool filterByLoS)
+        {
+            if (!CanRunHook(findAIEnemyHook)) return orig(self, maxDistance, full360Vision, filterByLoS);
+
+            TargetSearchContext previous = currentTargetSearchContext;
+
+            // Apply native exclusions and player priority before callbacks choose a preference group
+            currentTargetSearchContext = new(self.body, self, candidate => candidate.healthComponent.body && (!self.ignoreFliers || !candidate.healthComponent.body.isFlying) &&
+                candidate.healthComponent.body.bodyIndex != DLC4Content.BodyPrefabs.PlayerSpiritForm.bodyIndex, candidates => self.prioritizePlayers ? candidates.OrderByDescending(candidate => candidate.healthComponent.body.isPlayerControlled) : candidates);
+
+            findAIEnemyHook.StartProfiling();
+            try
+            {
+                return orig(self, maxDistance, full360Vision, filterByLoS);
+            }
+            finally
+            {
+                currentTargetSearchContext = previous;
+                findAIEnemyHook.StopProfiling();
+            }
         }
     }
 }

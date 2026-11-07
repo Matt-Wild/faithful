@@ -21,6 +21,132 @@ namespace Faithful
         // Character body helper
         internal static GameObject characterBodyHelperPrefab;
 
+        // Character whose state is currently executing on this thread
+        [System.ThreadStatic]
+        private static CharacterBody currentStateCharacter;
+
+        [System.ThreadStatic]
+        private static EntityStateMachine currentStateMachine;
+
+        private static readonly HookRegistration stateMachineUpdateHook = new("EntityStateMachine.ManagedUpdate",
+            () => On.RoR2.EntityStateMachine.ManagedUpdate += HookStateMachineUpdate,
+            () => On.RoR2.EntityStateMachine.ManagedUpdate -= HookStateMachineUpdate);
+
+        private static readonly HookRegistration stateMachineFixedUpdateHook = new("EntityStateMachine.ManagedFixedUpdate",
+            () => On.RoR2.EntityStateMachine.ManagedFixedUpdate += HookStateMachineFixedUpdate,
+            () => On.RoR2.EntityStateMachine.ManagedFixedUpdate -= HookStateMachineFixedUpdate);
+
+        private static readonly HookRegistration stateMachineSetStateHook = new("EntityStateMachine.SetState",
+            () => On.RoR2.EntityStateMachine.SetState += HookStateMachineSetState,
+            () => On.RoR2.EntityStateMachine.SetState -= HookStateMachineSetState);
+
+        private static readonly HookRegistration stateMachineDestroyHook = new("EntityStateMachine.OnDestroy",
+            () => On.RoR2.EntityStateMachine.OnDestroy += HookStateMachineDestroy,
+            () => On.RoR2.EntityStateMachine.OnDestroy -= HookStateMachineDestroy);
+
+        private static void HookStateMachineUpdate(On.RoR2.EntityStateMachine.orig_ManagedUpdate orig, EntityStateMachine self)
+        {
+            if (!CanRunHook(stateMachineUpdateHook))
+            {
+                orig(self);
+                return;
+            }
+
+            // Nested state execution must restore the previous character afterwards
+            CharacterBody previous = currentStateCharacter;
+            EntityStateMachine previousMachine = currentStateMachine;
+            currentStateCharacter = self.commonComponents.characterBody;
+            currentStateMachine = self;
+            stateMachineUpdateHook.StartProfiling();
+            try
+            {
+                orig(self);
+            }
+            finally
+            {
+                currentStateCharacter = previous;
+                currentStateMachine = previousMachine;
+                stateMachineUpdateHook.StopProfiling();
+            }
+        }
+
+        private static void HookStateMachineFixedUpdate(On.RoR2.EntityStateMachine.orig_ManagedFixedUpdate orig, EntityStateMachine self, float deltaTime)
+        {
+            if (!CanRunHook(stateMachineFixedUpdateHook))
+            {
+                orig(self, deltaTime);
+                return;
+            }
+
+            CharacterBody previous = currentStateCharacter;
+            EntityStateMachine previousMachine = currentStateMachine;
+            currentStateCharacter = self.commonComponents.characterBody;
+            currentStateMachine = self;
+            stateMachineFixedUpdateHook.StartProfiling();
+            try
+            {
+                orig(self, deltaTime);
+            }
+            finally
+            {
+                currentStateCharacter = previous;
+                currentStateMachine = previousMachine;
+                stateMachineFixedUpdateHook.StopProfiling();
+            }
+        }
+
+        private static void HookStateMachineSetState(On.RoR2.EntityStateMachine.orig_SetState orig, EntityStateMachine self, EntityStates.EntityState newState)
+        {
+            if (!CanRunHook(stateMachineSetStateHook))
+            {
+                orig(self, newState);
+                return;
+            }
+
+            // SetState runs both the old state's OnExit and the new state's OnEnter
+            CharacterBody previous = currentStateCharacter;
+            EntityStateMachine previousMachine = currentStateMachine;
+            currentStateCharacter = self.commonComponents.characterBody;
+            currentStateMachine = self;
+            stateMachineSetStateHook.StartProfiling();
+            try
+            {
+                orig(self, newState);
+            }
+            finally
+            {
+                currentStateCharacter = previous;
+                currentStateMachine = previousMachine;
+                stateMachineSetStateHook.StopProfiling();
+            }
+        }
+
+        private static void HookStateMachineDestroy(On.RoR2.EntityStateMachine.orig_OnDestroy orig, EntityStateMachine self)
+        {
+            if (!CanRunHook(stateMachineDestroyHook))
+            {
+                orig(self);
+                return;
+            }
+
+            // Destruction can also execute the current state's OnExit
+            CharacterBody previous = currentStateCharacter;
+            EntityStateMachine previousMachine = currentStateMachine;
+            currentStateCharacter = self.commonComponents.characterBody;
+            currentStateMachine = self;
+            stateMachineDestroyHook.StartProfiling();
+            try
+            {
+                orig(self);
+            }
+            finally
+            {
+                currentStateCharacter = previous;
+                currentStateMachine = previousMachine;
+                stateMachineDestroyHook.StopProfiling();
+            }
+        }
+
         // Character body destruction
         private static readonly List<CharacterBodyCallback> onBodyDestroyedCallbacks = new();
         private static readonly HookRegistration bodyDestroyedHook = new("CharacterBody.onBodyDestroyGlobal",

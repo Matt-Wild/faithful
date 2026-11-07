@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using MonoMod.Cil;
 using RoR2;
 using UnityEngine;
 
@@ -114,6 +116,51 @@ namespace Faithful
             () => On.RoR2.HealthComponent.TakeDamageProcess += HookTakeDamageProcess,
             () => On.RoR2.HealthComponent.TakeDamageProcess -= HookTakeDamageProcess);
 
+        private static readonly HookRegistration takeDamageFriendlyHitHook = new("HealthComponent.TakeDamageProcess (friendly hits)",
+            () => IL.RoR2.HealthComponent.TakeDamageProcess += HookTakeDamageFriendlyHit,
+            () => IL.RoR2.HealthComponent.TakeDamageProcess -= HookTakeDamageFriendlyHit);
+
+        // A killing hit can end friendly-hit permission before on-hit processing runs
+        private static readonly ConditionalWeakTable<DamageInfo, Dictionary<HealthComponent, GameObject>> friendlyDamagePermissions = new();
+
+        private static void HookTakeDamageFriendlyHit(ILContext _il)
+        {
+            PatchDamageInfoFriendlyHitCheck(_il, takeDamageFriendlyHitHook, false);
+        }
+
+        private static bool AllowDamageInfoFriendlyHit(HealthComponent _victim, TeamIndex _team, DamageInfo _info, HookRegistration _hook, bool _onHit)
+        {
+            bool approved = false;
+            if (_onHit && friendlyDamagePermissions.TryGetValue(_info, out Dictionary<HealthComponent, GameObject> victims))
+            {
+                approved = victims.TryGetValue(_victim, out GameObject attacker) && attacker == _info.attacker;
+                ForgetFriendlyDamagePermission(_info, _victim);
+            }
+
+            bool allowed = FriendlyFireManager.ShouldDirectHitProceed(_victim, _team);
+            if (!CanRunHook(_hook)) return allowed;
+            if (allowed || approved) return true;
+            if (!AllowFriendlyHit(_info.attacker, _victim, _hook)) return false;
+
+            // Keep permission for this hit only - damage info can be reused for several victims
+            if (!_onHit && _victim.alive && _info.procCoefficient > 0f && !_info.rejected &&
+                (_info.damageType.damageTypeExtended & DamageTypeExtended.DoesNotDamageOrProcHitAllies) != DamageTypeExtended.Generic)
+            {
+                friendlyDamagePermissions.GetValue(_info, _ => [])[_victim] = _info.attacker;
+            }
+
+            return true;
+        }
+
+        private static void ForgetFriendlyDamagePermission(DamageInfo _info, HealthComponent _victim)
+        {
+            if (_info == null || !friendlyDamagePermissions.TryGetValue(_info, out Dictionary<HealthComponent, GameObject> victims)) return;
+
+            victims.Remove(_victim);
+
+            if (victims.Count == 0) friendlyDamagePermissions.Remove(_info);
+        }
+
         // Add On Take Damage Process callback
         public static void AddOnTakeDamageProcessCallback(OnTakeDamageProcessCallback _callback)
         {
@@ -132,6 +179,9 @@ namespace Faithful
 
         private static void HookTakeDamageProcess(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, HealthComponent self, DamageInfo damageInfo)
         {
+            // Reusing damage info for a new hit must not reuse an earlier approval
+            ForgetFriendlyDamagePermission(damageInfo, self);
+
             if (!CanRunHook(takeDamageProcessHook))
             {
                 orig(self, damageInfo);
@@ -178,6 +228,15 @@ namespace Faithful
             () => On.RoR2.GlobalEventManager.OnHitEnemy += HookOnHitEnemy,
             () => On.RoR2.GlobalEventManager.OnHitEnemy -= HookOnHitEnemy);
 
+        private static readonly HookRegistration processHitEnemyFriendlyHitHook = new("GlobalEventManager.ProcessHitEnemy (friendly hits)",
+            () => IL.RoR2.GlobalEventManager.ProcessHitEnemy += HookProcessHitEnemyFriendlyHit,
+            () => IL.RoR2.GlobalEventManager.ProcessHitEnemy -= HookProcessHitEnemyFriendlyHit);
+
+        private static void HookProcessHitEnemyFriendlyHit(ILContext _il)
+        {
+            PatchDamageInfoFriendlyHitCheck(_il, processHitEnemyFriendlyHitHook, true);
+        }
+
         // Add On Hit Enemy Late callback
         public static void AddOnHitEnemyLateCallback(OnHitEnemyCallback _callback)
         {
@@ -188,7 +247,17 @@ namespace Faithful
 
         private static void HookOnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
-            orig(self, damageInfo, victim); // Run normal processes
+            try
+            {
+                orig(self, damageInfo, victim); // Run normal processes
+            }
+            finally
+            {
+                // Early returns, including zero proc coefficient, also finish this hit's approval
+                if (damageInfo != null && friendlyDamagePermissions.TryGetValue(damageInfo, out _) && victim &&
+                    victim.TryGetComponent(out HealthComponent healthComponent)) ForgetFriendlyDamagePermission(damageInfo, healthComponent);
+            }
+
             if (!CanRunHook(onHitEnemyHook)) return;
 
             onHitEnemyHook.StartProfiling();

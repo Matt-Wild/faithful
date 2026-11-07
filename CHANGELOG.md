@@ -2,6 +2,7 @@
 
 **Added**
 - Added Lucky Figurine item.
+- Added Charming Facade item.
 - Added "Ban From Simulacrum?" config for all items.
 
 **Fixed**

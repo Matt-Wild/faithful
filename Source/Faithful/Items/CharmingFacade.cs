@@ -1,5 +1,7 @@
 ﻿using RoR2;
+using RoR2.Projectile;
 using RoR2.CharacterAI;
+using RoR2.Orbs;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,9 +26,9 @@ namespace Faithful
         // Visual for Charmed debuff
         static readonly BuffOverlayVisuals.BuffOverlayVisual charmedVisual = BuffOverlayVisuals.CreateBuffOverlayVisual(new BuffOverlayVisuals.BuffOverlayVisualSettings
         {
-            Sprite = Assets.GetIcon("texCharmingFacadeBuff"),
+            Sprite = Assets.GetIcon("texIndicatorFacadeMask"),
             EffectName = "faithfulCharmedOverlayVisualEffect",
-            Colour = new Color(0.32f, 0.0f, 0.32f)
+            Colour = new Color(0.4f, 0.0f, 0.2f)
         });
 
         // Item display settings
@@ -93,9 +95,15 @@ namespace Faithful
             Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
             Behaviour.AddOnBodyDestroyedCallback(OnBodyDestroyed);
 
-            // Register charmed enemy targeting
-            Behaviour.AddModifyAIEnemySearchCallback(ModifyAIEnemySearch);
-            Behaviour.AddTrySelectAIEnemyCallback(TrySelectAIEnemy);
+            // Apply charm targeting rules to AI, skill and projectile searches
+            Behaviour.AddTryModifyTargetSearchMaskCallback(TryModifyTargetSearchMask);
+            Behaviour.AddModifyTargetSearchResultsCallback(ModifyTargetSearchResults);
+
+            // Allow teammates to retaliate when attacked by charmed characters
+            Behaviour.AddAllowFriendlyAIRetaliationCallback(AllowFriendlyAIRetaliation);
+
+            // Allow same team attacks when either character is charmed
+            Behaviour.AddAllowFriendlyHitCallback(CanCharmEnableHit);
         }
 
         public override void QualityConstructor()
@@ -236,8 +244,8 @@ namespace Faithful
             // Only living victims can occupy charm slots
             if (!victimBody.healthComponent || !victimBody.healthComponent.alive) return;
 
-            // Ignore bosses
-            if (victimBody.isBoss) return;
+            // Ignore players and bosses
+            if (victimBody.isPlayerControlled || victimBody.isBoss) return;
 
             // Ignore if victim already has charmed buff
             if (victimBody.HasBuff(charmedBuff.buffDef)) return;
@@ -324,8 +332,8 @@ namespace Faithful
             // Check for duration
             if (charmDuration <= 0.0f) return;
 
-            // Roll for charm
-            if (!Util.CheckRoll(charmChance, attackerBody.master)) return;
+            // Roll for charm, respecting guaranteed on-hit effects
+            if (!_info.AttackerCheckRoll(charmChance)) return;
 
             // Record ownership before applying the buff so callbacks can find the owner
             if (victims == null)
@@ -397,54 +405,118 @@ namespace Faithful
             }
         }
 
-        private void ModifyAIEnemySearch(BaseAI _ai, BullseyeSearch _search)
+        private bool AllowFriendlyAIRetaliation(BaseAI _ai, DamageReport _report)
         {
-            if (!Utils.hosting || !IsCharmed(_ai.body)) return;
+            if (!Utils.hosting || !_ai.body || _report.victimBody != _ai.body) return false;
 
-            // Include the character's own team, but never neutral
-            _search.teamMaskFilter = TeamMask.allButNeutral;
+            CharacterBody attacker = _report.attackerBody;
+            if (!attacker || attacker == _ai.body || !attacker.healthComponent || !attacker.healthComponent.alive) return false;
+
+            // Only change retaliation against a charmed member of the victim's own team
+            return _report.attackerTeamIndex == _report.victimTeamIndex && _report.attackerTeamIndex != TeamIndex.None && _report.attackerTeamIndex != TeamIndex.Neutral && IsCharmed(attacker);
         }
 
-        private bool TrySelectAIEnemy(BaseAI _ai, IEnumerable<HurtBox> _candidates, out HurtBox _target)
+        private bool HasCharmedTeamTargets(CharacterBody _attacker)
+        {
+            if (!_attacker || !_attacker.teamComponent) return false;
+
+            // Ordinary homing attacks may also acquire charmed members of their own team
+            foreach (CharacterBody victim in charmOwners.Keys)
+            {
+                if (victim && victim != _attacker && victim.teamComponent && victim.teamComponent.teamIndex == _attacker.teamComponent.teamIndex) return true;
+            }
+
+            return false;
+        }
+
+        private bool TryGetCharmedAITarget(CharacterBody _character, out CharacterBody _target)
         {
             _target = null;
+            if (!_character.master || !_character.teamComponent) return false;
 
-            // Leave normal characters to vanilla targeting
-            if (!Utils.hosting || !TryGetCharmOwner(_ai.body, out CharacterBody owner)) return false;
-            if (!owner || !owner.teamComponent) return true;
-
-            TeamIndex ownerTeam = owner.teamComponent.teamIndex;
-            HurtBox fallback = null;
-
-            // Vanilla's search already returns candidates in distance order
-            foreach (HurtBox candidate in _candidates)
+            foreach (BaseAI ai in _character.master.AiComponents)
             {
-                if (!candidate || !candidate.healthComponent) continue;
+                if (!ai || ai.body != _character || ai.currentEnemy == null) continue;
+                CharacterBody target = ai.currentEnemy.characterBody;
+                if (!target || !target.healthComponent || !target.healthComponent.alive || !target.teamComponent) continue;
+                if (target.teamComponent.teamIndex != _character.teamComponent.teamIndex || !IsCharmed(target)) continue;
+
+                _target = target;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TryModifyTargetSearchMask(CharacterBody _character, object _source, ref TeamMask _mask)
+        {
+            if (!Utils.hosting || !_character.teamComponent) return false;
+
+            // Leave ally searches and other explicitly inclusive searches unchanged
+            TeamIndex team = _character.teamComponent.teamIndex;
+            if (_mask.HasTeam(team)) return false;
+
+            if (IsCharmed(_character))
+            {
+                _mask = TeamMask.allButNeutral;
+                return true;
+            }
+
+            if ((_source is ProjectileController or LightningOrb && HasCharmedTeamTargets(_character)) ||
+                (_source is CharacterBody && TryGetCharmedAITarget(_character, out _)))
+            {
+                _mask.AddTeam(team);
+                return true;
+            }
+            return false;
+        }
+
+        private void ModifyTargetSearchResults(CharacterBody _character, object _source, TeamMask _originalMask, List<HurtBox> _candidates)
+        {
+            if (!Utils.hosting) return;
+
+            bool charmed = TryGetCharmOwner(_character, out CharacterBody owner);
+
+            if (charmed && (!owner || !owner.teamComponent))
+            {
+                _candidates.Clear();
+                return;
+            }
+
+            // Keep only valid targets, allowing added teams only when charm permits the hit
+            _candidates.RemoveAll(candidate =>
+            {
+                if (!candidate || !candidate.healthComponent) return true;
 
                 HealthComponent health = candidate.healthComponent;
                 CharacterBody body = health.body;
+                if (!health.alive || !body || body == _character || !body.teamComponent) return true;
 
-                // Exclude invalid targets and the searching character itself
-                if (!health.alive || !body || body == _ai.body) continue;
-                if (!body.teamComponent || body.teamComponent.teamIndex == TeamIndex.Neutral) continue;
+                TeamIndex team = body.teamComponent.teamIndex;
+                return (charmed && team == TeamIndex.Neutral) || (!_originalMask.HasTeam(team) && !CanCharmEnableHit(_character, body));
+            });
 
-                // Preserve vanilla's flying and spirit form exclusions
-                if (_ai.ignoreFliers && body.isFlying) continue;
-                if (body.bodyIndex == DLC4Content.BodyPrefabs.PlayerSpiritForm.bodyIndex) continue;
-
-                // Prefer the nearest valid target outside the charmer's team
-                if (body.teamComponent.teamIndex != ownerTeam)
+            if (!charmed)
+            {
+                // Independent skill searches should honour an already selected charmed teammate
+                if (_source is CharacterBody && TryGetCharmedAITarget(_character, out CharacterBody target))
                 {
-                    _target = candidate;
-                    return true;
+                    int index = _candidates.FindIndex(candidate => candidate.healthComponent.body == target);
+                    if (index > 0)
+                    {
+                        HurtBox candidate = _candidates[index];
+                        _candidates.RemoveAt(index);
+                        _candidates.Insert(0, candidate);
+                    }
                 }
 
-                // Retain the nearest fallback on the charmer's team
-                if (!fallback) fallback = candidate;
+                return;
             }
 
-            _target = fallback;
-            return true;
+            // Preserve native ordering within each group, keeping the charmer's team as a fallback
+            List<HurtBox> fallback = _candidates.FindAll(candidate => candidate.healthComponent.body.teamComponent.teamIndex == owner.teamComponent.teamIndex);
+            _candidates.RemoveAll(candidate => candidate.healthComponent.body.teamComponent.teamIndex == owner.teamComponent.teamIndex);
+            _candidates.AddRange(fallback);
         }
 
         private bool IsCharmed(CharacterBody _body)

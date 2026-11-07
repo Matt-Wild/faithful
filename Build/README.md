@@ -1,7 +1,7 @@
 # A Faithful Expansion
 Multiplayer compatible and highly configurable!
 
-Currently adds <b>19</b> items, <b>7</b> of which require the <b>Survivors of the Void DLC</b>. All items have item displays!
+Currently adds <b>21</b> items, <b>9</b> of which require the <b>Survivors of the Void DLC</b>, 1 of which require the <b>Seekers of the Storm DLC</b> (by default). All items have item displays!
 
 For more detailed information about the additions made by this mod check out the [wiki](https://thunderstore.io/package/SpilledSoup_Projects/Faithful/wiki/).
 
