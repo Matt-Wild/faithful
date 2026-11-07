@@ -293,10 +293,10 @@ namespace Faithful
                     charmChance *= _info.procCoefficient;
 
                     // Set base duration
-                    charmDuration = Utils.CalculateStackingValue(attackerItemCount - qualityCounts.Total, duration, durationStacking);
+                    charmDuration = Utils.CalculateStackingValue(attackerItemCount, duration, durationStacking);
 
                     // Add Quality bonus duration
-                    int durationBonuses = Mathf.FloorToInt(charmChance / 100.0f) - 1;
+                    int durationBonuses = Mathf.FloorToInt(charmChance / 100.0f);
                     if (durationBonuses > 0)
                     {
                         // Get duration bonus to multiply
