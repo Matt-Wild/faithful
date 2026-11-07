@@ -135,11 +135,11 @@ namespace Faithful
         {
             if (!CanRunHook(shrineChancePickupHook)) return null;
 
-            ShrineChancePurchaseResult result = new(_pickup);
-
             shrineChancePickupHook.StartProfiling();
             try
             {
+                ShrineChancePurchaseResult result = new(_pickup);
+
                 foreach (ShrineChancePurchaseCallback callback in shrineChancePurchaseCallbacks)
                 {
                     callback(_shrine, _activator, result);

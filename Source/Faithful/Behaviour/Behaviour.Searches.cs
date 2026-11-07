@@ -130,55 +130,77 @@ namespace Faithful
         {
             if (!CanRunHook(enemyDetectionTeamHook)) return orig(self, otherGameObject);
 
-            TeamMask originalMask = self.enemyTeamsMask;
-            TeamMask mask = originalMask;
-            TargetSearchData data;
             enemyDetectionTeamHook.StartProfiling();
             try
             {
+                TeamMask originalMask = self.enemyTeamsMask;
+                TeamMask mask = originalMask;
+
                 // Trigger detection supplies its own source instead of inheriting a running state
-                data = PrepareTargetSearch(self.characterBody, self, null, ref mask);
+                TargetSearchData data = PrepareTargetSearch(self.characterBody, self, null, ref mask);
+                if (data == null)
+                {
+                    enemyDetectionTeamHook.StopProfiling();
+                    try
+                    {
+                        return orig(self, otherGameObject);
+                    }
+                    finally
+                    {
+                        enemyDetectionTeamHook.StartProfiling();
+                    }
+                }
+
+                bool detected;
+                self.enemyTeamsMask = mask;
+                enemyDetectionTeamHook.StopProfiling();
+                try
+                {
+                    detected = orig(self, otherGameObject);
+                }
+                finally
+                {
+                    enemyDetectionTeamHook.StartProfiling();
+
+                    // Keep the cached mask unchanged so charm expiry needs no refresh
+                    self.enemyTeamsMask = originalMask;
+                }
+
+                if (!detected || !otherGameObject || !otherGameObject.TryGetComponent(out HurtBox hurtBox)) return false;
+
+                // Apply the same candidate restrictions as the shared searches, including self and dead targets
+                List<HurtBox> candidates = [hurtBox];
+                ModifyTargetSearchResults(candidates, 0, data);
+                return candidates.Contains(hurtBox);
             }
             finally
             {
                 enemyDetectionTeamHook.StopProfiling();
             }
-
-            if (data == null) return orig(self, otherGameObject);
-
-            bool detected;
-            self.enemyTeamsMask = mask;
-            try
-            {
-                detected = orig(self, otherGameObject);
-            }
-            finally
-            {
-                // Keep the cached mask unchanged so charm expiry needs no refresh
-                self.enemyTeamsMask = originalMask;
-            }
-
-            if (!detected || !otherGameObject || !otherGameObject.TryGetComponent(out HurtBox hurtBox)) return false;
-
-            // Apply the same candidate restrictions as the shared searches, including self and dead targets
-            List<HurtBox> candidates = [hurtBox];
-            ModifyTargetSearchResults(candidates, 0, data, enemyDetectionTeamHook);
-            return candidates.Contains(hurtBox);
         }
 
         private static HurtBox HookLightningOrbTarget(On.RoR2.Orbs.LightningOrb.orig_PickNextTarget orig, LightningOrb self, Vector3 position)
         {
             if (!CanRunHook(lightningOrbTargetHook)) return orig(self, position);
 
-            CharacterBody attacker = self.attacker ? self.attacker.GetComponent<CharacterBody>() : null;
-            TargetSearchContext previous = currentTargetSearchContext;
-
-            // Later bounces run outside character states, but the orb still knows its attacker
-            currentTargetSearchContext = new(attacker, self, candidate => !self.bouncedObjects.Contains(candidate.healthComponent));
             lightningOrbTargetHook.StartProfiling();
+            TargetSearchContext previous = currentTargetSearchContext;
             try
             {
-                return orig(self, position);
+                // Later bounces run outside character states, but the orb still knows its attacker
+                CharacterBody attacker = self.attacker ? self.attacker.GetComponent<CharacterBody>() : null;
+                currentTargetSearchContext = new(attacker, self, candidate => !self.bouncedObjects.Contains(candidate.healthComponent));
+
+                // Measure our context changes without including the original method
+                lightningOrbTargetHook.StopProfiling();
+                try
+                {
+                    return orig(self, position);
+                }
+                finally
+                {
+                    lightningOrbTargetHook.StartProfiling();
+                }
             }
             finally
             {
@@ -189,17 +211,30 @@ namespace Faithful
 
         private static void HookBullseyeSearchRefresh(On.RoR2.BullseyeSearch.orig_RefreshCandidates orig, BullseyeSearch self)
         {
-            bullseyeSearchData.Remove(self);
-            if (!CanRunHook(bullseyeSearchRefreshHook)) { orig(self); return; }
+            if (!CanRunHook(bullseyeSearchRefreshHook))
+            {
+                bullseyeSearchData.Remove(self);
+                orig(self);
+                return;
+            }
 
-            TeamMask originalMask = self.teamMaskFilter;
             bullseyeSearchRefreshHook.StartProfiling();
+            TeamMask originalMask = self.teamMaskFilter;
             try
             {
+                bullseyeSearchData.Remove(self);
                 TargetSearchData data = PrepareTargetSearch(self.viewer, ref self.teamMaskFilter);
                 if (data != null) bullseyeSearchData.Add(self, data);
 
-                orig(self);
+                bullseyeSearchRefreshHook.StopProfiling();
+                try
+                {
+                    orig(self);
+                }
+                finally
+                {
+                    bullseyeSearchRefreshHook.StartProfiling();
+                }
             }
             finally
             {
@@ -211,18 +246,45 @@ namespace Faithful
 
         private static void HookBullseyeSearchResults(On.RoR2.BullseyeSearch.orig_GetResults_List1 orig, BullseyeSearch self, List<HurtBox> results)
         {
-            int start = results.Count;
-            orig(self, results);
+            if (!CanRunHook(bullseyeSearchResultsHook)) { orig(self, results); return; }
 
-            // The parameterless overload calls this overload, so both paths are handled once
-            if (CanRunHook(bullseyeSearchResultsHook) && bullseyeSearchData.TryGetValue(self, out TargetSearchData data))
-                ModifyTargetSearchResults(results, start, data, bullseyeSearchResultsHook);
+            bullseyeSearchResultsHook.StartProfiling();
+            int start = results.Count;
+            try
+            {
+                bullseyeSearchResultsHook.StopProfiling();
+                try
+                {
+                    orig(self, results);
+                }
+                finally
+                {
+                    bullseyeSearchResultsHook.StartProfiling();
+                }
+
+                // The parameterless overload calls this overload, so both paths are handled once
+                if (CanRunHook(bullseyeSearchResultsHook) && bullseyeSearchData.TryGetValue(self, out TargetSearchData data))
+                    ModifyTargetSearchResults(results, start, data);
+            }
+            finally
+            {
+                bullseyeSearchResultsHook.StopProfiling();
+            }
         }
 
         private static SphereSearch HookSphereSearchRefresh(On.RoR2.SphereSearch.orig_RefreshCandidates orig, SphereSearch self)
         {
             // A new query must not inherit a previous source or team filter
-            sphereSearchData.Remove(self);
+            sphereSearchRefreshHook.StartProfiling();
+            try
+            {
+                sphereSearchData.Remove(self);
+            }
+            finally
+            {
+                sphereSearchRefreshHook.StopProfiling();
+            }
+
             return orig(self);
         }
 
@@ -239,22 +301,40 @@ namespace Faithful
                     sphereSearchData.Remove(self);
                     sphereSearchData.Add(self, data);
                 }
-
-                return orig(self, mask);
             }
             finally
             {
                 sphereSearchTeamHook.StopProfiling();
             }
+
+            return orig(self, mask);
         }
 
         private static void HookSphereSearchResults(On.RoR2.SphereSearch.orig_GetHurtBoxes_List1 orig, SphereSearch self, List<HurtBox> dest)
         {
-            int start = dest.Count;
-            orig(self, dest);
+            if (!CanRunHook(sphereSearchResultsHook)) { orig(self, dest); return; }
 
-            if (CanRunHook(sphereSearchResultsHook) && sphereSearchData.TryGetValue(self, out TargetSearchData data))
-                ModifyTargetSearchResults(dest, start, data, sphereSearchResultsHook);
+            sphereSearchResultsHook.StartProfiling();
+            int start = dest.Count;
+            try
+            {
+                sphereSearchResultsHook.StopProfiling();
+                try
+                {
+                    orig(self, dest);
+                }
+                finally
+                {
+                    sphereSearchResultsHook.StartProfiling();
+                }
+
+                if (CanRunHook(sphereSearchResultsHook) && sphereSearchData.TryGetValue(self, out TargetSearchData data))
+                    ModifyTargetSearchResults(dest, start, data);
+            }
+            finally
+            {
+                sphereSearchResultsHook.StopProfiling();
+            }
         }
 
         private static HurtBox[] HookSphereSearchArray(On.RoR2.SphereSearch.orig_GetHurtBoxes orig, SphereSearch self)
@@ -264,40 +344,40 @@ namespace Faithful
             // This overload does not call the list overload
             if (!CanRunHook(sphereSearchArrayHook) || !sphereSearchData.TryGetValue(self, out TargetSearchData data)) return results;
 
-            List<HurtBox> candidates = new(results);
-            ModifyTargetSearchResults(candidates, 0, data, sphereSearchArrayHook);
-
-            return candidates.ToArray();
-        }
-
-        private static void ModifyTargetSearchResults(List<HurtBox> _results, int _start, TargetSearchData _data, HookRegistration _hook)
-        {
-            if (!_data.Character || modifyTargetSearchResultsCallbacks.Count == 0) return;
-
-            _hook.StartProfiling();
+            sphereSearchArrayHook.StartProfiling();
             try
             {
-                // Preserve entries already in a destination list and all native search restrictions
-                List<HurtBox> candidates = _results.GetRange(_start, _results.Count - _start);
-                TargetSearchContext context = _data.Context;
-                candidates.RemoveAll(candidate => !candidate || !candidate.healthComponent || (context?.Filter != null && !context.Filter(candidate)));
-                if (context?.Order != null) candidates = context.Order(candidates).ToList();
+                List<HurtBox> candidates = new(results);
+                ModifyTargetSearchResults(candidates, 0, data);
 
-                foreach (ModifyTargetSearchResultsCallback callback in modifyTargetSearchResultsCallbacks)
-                {
-                    callback(_data.Character, _data.Source, _data.OriginalMask, candidates);
-                }
-
-                // Known single-target callers may otherwise override the callback's preference afterwards
-                if (context != null && candidates.Count > 1) candidates.RemoveRange(1, candidates.Count - 1);
-
-                _results.RemoveRange(_start, _results.Count - _start);
-                _results.AddRange(candidates);
+                return candidates.ToArray();
             }
             finally
             {
-                _hook.StopProfiling();
+                sphereSearchArrayHook.StopProfiling();
             }
+        }
+
+        private static void ModifyTargetSearchResults(List<HurtBox> _results, int _start, TargetSearchData _data)
+        {
+            if (!_data.Character || modifyTargetSearchResultsCallbacks.Count == 0) return;
+
+            // Preserve entries already in a destination list and all native search restrictions
+            List<HurtBox> candidates = _results.GetRange(_start, _results.Count - _start);
+            TargetSearchContext context = _data.Context;
+            candidates.RemoveAll(candidate => !candidate || !candidate.healthComponent || (context?.Filter != null && !context.Filter(candidate)));
+            if (context?.Order != null) candidates = context.Order(candidates).ToList();
+
+            foreach (ModifyTargetSearchResultsCallback callback in modifyTargetSearchResultsCallbacks)
+            {
+                callback(_data.Character, _data.Source, _data.OriginalMask, candidates);
+            }
+
+            // Known single-target callers may otherwise override the callback's preference afterwards
+            if (context != null && candidates.Count > 1) candidates.RemoveRange(1, candidates.Count - 1);
+
+            _results.RemoveRange(_start, _results.Count - _start);
+            _results.AddRange(candidates);
         }
     }
 }

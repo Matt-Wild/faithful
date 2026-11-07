@@ -189,6 +189,8 @@
 	"FAITHFUL_CHARMING_FACADE_DESC_QUALITY": "Your attacks have a <sprite name=\"Quality\"> <style=cIsDamage>[CHANCE]%</style> <style=cStack>(+[CHANCE_STACKING]% per stack)</style> chance to <style=cIsDamage>charm</style> a <style=cIsDamage>non-Boss enemy</style>, causing it to attack other enemies. Up to <style=cIsDamage>[LIMIT]</style> <style=cStack>(+[LIMIT_STACKING] per stack)</style> enemies can be <style=cIsDamage>charmed</style> at one time for up to <style=cIsDamage>[DURATION]</style> <style=cStack>(+[DURATION_STACKING] per stack)</style> seconds each. Every interval of <style=cIsUtility>100%</style> chance increases the duration of the <style=cIsDamage>charm</style> by an additional <style=cIsDamage>[BONUS_DURATION]</style> seconds.",
 	"FAITHFUL_CHARMING_FACADE_LORE": "\u0022They'd say that whispers on the wind would warn people to avoid the spirits of the forest; that they would be charmed and led to their demise if they didn't turn back... People would be lured in, used, and then stabbed in the back as soon as they lost their purpose; their bodies never being found as they were consumed by the very spirits who promised them fortune...\u0022\n\n\u0022Well, that just sounds like a bunch of occult garbage.\u0022\n\n\u0022...You're the one who asked for a ghost story.\u0022\n\n- Signal Echoes, UES Contact Light",
 	"FAITHFUL_CHARMING_FACADE_BUFF": "Charmed",
+	"FAITHFUL_CHARMING_FACADE_STOCK_BUFF": "Charm Stock",
+	"FAITHFUL_CHARMING_FACADE_STOCK_EMPTY_BUFF": "Charm Stock Empty",
 
 	"FAITHFUL_LUCKY_FIGURINE_NAME": "Lucky Figurine",
 	"FAITHFUL_LUCKY_FIGURINE_PICKUP": "Shrines of Chance always reward you at the cost of all remaining uses.",

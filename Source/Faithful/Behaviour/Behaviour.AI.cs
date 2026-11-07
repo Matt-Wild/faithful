@@ -6,30 +6,31 @@ using UnityEngine;
 
 namespace Faithful
 {
-    internal delegate bool AllowFriendlyAIRetaliationCallback(BaseAI _ai, DamageReport _report);
+    internal delegate bool? ModifyAIRetaliationCallback(BaseAI _ai, DamageReport _report);
 
     internal static partial class Behaviour
     {
-        private static readonly List<AllowFriendlyAIRetaliationCallback> allowFriendlyAIRetaliationCallbacks = new();
+        private static readonly List<ModifyAIRetaliationCallback> modifyAIRetaliationCallbacks = new();
 
         private static readonly HookRegistration aiRetaliationHook = new("BaseAI.OnBodyDamaged",
             () => On.RoR2.CharacterAI.BaseAI.OnBodyDamaged += HookAIRetaliation,
             () => On.RoR2.CharacterAI.BaseAI.OnBodyDamaged -= HookAIRetaliation);
 
-        public static void AddAllowFriendlyAIRetaliationCallback(AllowFriendlyAIRetaliationCallback _callback)
+        public static void AddModifyAIRetaliationCallback(ModifyAIRetaliationCallback _callback)
         {
-            allowFriendlyAIRetaliationCallbacks.Add(_callback);
-            DebugLog("Added Allow Friendly AI Retaliation behaviour");
+            modifyAIRetaliationCallbacks.Add(_callback);
+            DebugLog("Added Modify AI Retaliation behaviour");
         }
 
-        private static bool AllowFriendlyAIRetaliation(BaseAI _ai, DamageReport _report)
+        private static bool? ModifyAIRetaliation(BaseAI _ai, DamageReport _report)
         {
             aiRetaliationHook.StartProfiling();
             try
             {
-                foreach (AllowFriendlyAIRetaliationCallback callback in allowFriendlyAIRetaliationCallbacks)
+                foreach (ModifyAIRetaliationCallback callback in modifyAIRetaliationCallbacks)
                 {
-                    if (callback(_ai, _report)) return true;
+                    bool? shouldRetaliate = callback(_ai, _report);
+                    if (shouldRetaliate.HasValue) return shouldRetaliate;
                 }
             }
             finally
@@ -37,15 +38,30 @@ namespace Faithful
                 aiRetaliationHook.StopProfiling();
             }
 
-            return false;
+            return null;
         }
 
         private static void HookAIRetaliation(On.RoR2.CharacterAI.BaseAI.orig_OnBodyDamaged orig, BaseAI self, DamageReport damageReport)
         {
-            if (!CanRunHook(aiRetaliationHook) || allowFriendlyAIRetaliationCallbacks.Count == 0 || !self.body || self.currentEnemy == null ||
-                damageReport == null || !damageReport.attacker || !AllowFriendlyAIRetaliation(self, damageReport))
+            if (!CanRunHook(aiRetaliationHook) || modifyAIRetaliationCallbacks.Count == 0 || !self.body || self.currentEnemy == null ||
+                damageReport == null || !damageReport.attacker)
             {
                 orig(self, damageReport);
+                return;
+            }
+
+            bool? shouldRetaliate = ModifyAIRetaliation(self, damageReport);
+            if (!shouldRetaliate.HasValue)
+            {
+                orig(self, damageReport);
+                return;
+            }
+
+            if (!shouldRetaliate.Value)
+            {
+                // Preserve damage bookkeeping without changing or queuing a retaliation target
+                self.lastDamagedTime = Run.FixedTimeStamp.now;
+                if (self.bufferedTarget == damageReport.attacker) self.bufferedTarget = null;
                 return;
             }
 
@@ -93,16 +109,24 @@ namespace Faithful
         {
             if (!CanRunHook(findAIEnemyHook)) return orig(self, maxDistance, full360Vision, filterByLoS);
 
-            TargetSearchContext previous = currentTargetSearchContext;
-
             // Apply native exclusions and player priority before callbacks choose a preference group
-            currentTargetSearchContext = new(self.body, self, candidate => candidate.healthComponent.body && (!self.ignoreFliers || !candidate.healthComponent.body.isFlying) &&
-                candidate.healthComponent.body.bodyIndex != DLC4Content.BodyPrefabs.PlayerSpiritForm.bodyIndex, candidates => self.prioritizePlayers ? candidates.OrderByDescending(candidate => candidate.healthComponent.body.isPlayerControlled) : candidates);
-
             findAIEnemyHook.StartProfiling();
+            TargetSearchContext previous = currentTargetSearchContext;
             try
             {
-                return orig(self, maxDistance, full360Vision, filterByLoS);
+                currentTargetSearchContext = new(self.body, self, candidate => candidate.healthComponent.body && (!self.ignoreFliers || !candidate.healthComponent.body.isFlying) &&
+                    candidate.healthComponent.body.bodyIndex != DLC4Content.BodyPrefabs.PlayerSpiritForm.bodyIndex, candidates => self.prioritizePlayers ? candidates.OrderByDescending(candidate => candidate.healthComponent.body.isPlayerControlled) : candidates);
+
+                // Measure our context changes without including the original method
+                findAIEnemyHook.StopProfiling();
+                try
+                {
+                    return orig(self, maxDistance, full360Vision, filterByLoS);
+                }
+                finally
+                {
+                    findAIEnemyHook.StartProfiling();
+                }
             }
             finally
             {

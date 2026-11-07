@@ -21,6 +21,22 @@ namespace Faithful
         // Character body helper
         internal static GameObject characterBodyHelperPrefab;
 
+        // Features currently requiring state context for target searches
+        private static readonly HashSet<object> stateSearchContextUsers = new();
+
+        public static void SetStateSearchContextRequired(object _source, bool _required)
+        {
+            if (_source == null) return;
+            if (_required) stateSearchContextUsers.Add(_source);
+            else stateSearchContextUsers.Remove(_source);
+        }
+
+        private static bool ShouldTrackStateSearchContext()
+        {
+            // Finish nested scopes correctly even if the last user stops during an outer call
+            return Utils.hosting && (stateSearchContextUsers.Count > 0 || !ReferenceEquals(currentStateMachine, null) || currentTargetSearchContext != null);
+        }
+
         // Character whose state is currently executing on this thread
         [System.ThreadStatic]
         private static CharacterBody currentStateCharacter;
@@ -46,21 +62,31 @@ namespace Faithful
 
         private static void HookStateMachineUpdate(On.RoR2.EntityStateMachine.orig_ManagedUpdate orig, EntityStateMachine self)
         {
-            if (!CanRunHook(stateMachineUpdateHook))
+            if (!CanRunHook(stateMachineUpdateHook) || !ShouldTrackStateSearchContext())
             {
                 orig(self);
                 return;
             }
 
             // Nested state execution must restore the previous character afterwards
+            stateMachineUpdateHook.StartProfiling();
             CharacterBody previous = currentStateCharacter;
             EntityStateMachine previousMachine = currentStateMachine;
-            currentStateCharacter = self.commonComponents.characterBody;
-            currentStateMachine = self;
-            stateMachineUpdateHook.StartProfiling();
             try
             {
-                orig(self);
+                currentStateCharacter = self.commonComponents.characterBody;
+                currentStateMachine = self;
+
+                // Measure our context changes without including the original method
+                stateMachineUpdateHook.StopProfiling();
+                try
+                {
+                    orig(self);
+                }
+                finally
+                {
+                    stateMachineUpdateHook.StartProfiling();
+                }
             }
             finally
             {
@@ -72,20 +98,30 @@ namespace Faithful
 
         private static void HookStateMachineFixedUpdate(On.RoR2.EntityStateMachine.orig_ManagedFixedUpdate orig, EntityStateMachine self, float deltaTime)
         {
-            if (!CanRunHook(stateMachineFixedUpdateHook))
+            if (!CanRunHook(stateMachineFixedUpdateHook) || !ShouldTrackStateSearchContext())
             {
                 orig(self, deltaTime);
                 return;
             }
 
+            stateMachineFixedUpdateHook.StartProfiling();
             CharacterBody previous = currentStateCharacter;
             EntityStateMachine previousMachine = currentStateMachine;
-            currentStateCharacter = self.commonComponents.characterBody;
-            currentStateMachine = self;
-            stateMachineFixedUpdateHook.StartProfiling();
             try
             {
-                orig(self, deltaTime);
+                currentStateCharacter = self.commonComponents.characterBody;
+                currentStateMachine = self;
+
+                // Measure our context changes without including the original method
+                stateMachineFixedUpdateHook.StopProfiling();
+                try
+                {
+                    orig(self, deltaTime);
+                }
+                finally
+                {
+                    stateMachineFixedUpdateHook.StartProfiling();
+                }
             }
             finally
             {
@@ -97,21 +133,31 @@ namespace Faithful
 
         private static void HookStateMachineSetState(On.RoR2.EntityStateMachine.orig_SetState orig, EntityStateMachine self, EntityStates.EntityState newState)
         {
-            if (!CanRunHook(stateMachineSetStateHook))
+            if (!CanRunHook(stateMachineSetStateHook) || !ShouldTrackStateSearchContext())
             {
                 orig(self, newState);
                 return;
             }
 
             // SetState runs both the old state's OnExit and the new state's OnEnter
+            stateMachineSetStateHook.StartProfiling();
             CharacterBody previous = currentStateCharacter;
             EntityStateMachine previousMachine = currentStateMachine;
-            currentStateCharacter = self.commonComponents.characterBody;
-            currentStateMachine = self;
-            stateMachineSetStateHook.StartProfiling();
             try
             {
-                orig(self, newState);
+                currentStateCharacter = self.commonComponents.characterBody;
+                currentStateMachine = self;
+
+                // Measure our context changes without including the original method
+                stateMachineSetStateHook.StopProfiling();
+                try
+                {
+                    orig(self, newState);
+                }
+                finally
+                {
+                    stateMachineSetStateHook.StartProfiling();
+                }
             }
             finally
             {
@@ -123,21 +169,31 @@ namespace Faithful
 
         private static void HookStateMachineDestroy(On.RoR2.EntityStateMachine.orig_OnDestroy orig, EntityStateMachine self)
         {
-            if (!CanRunHook(stateMachineDestroyHook))
+            if (!CanRunHook(stateMachineDestroyHook) || !ShouldTrackStateSearchContext())
             {
                 orig(self);
                 return;
             }
 
             // Destruction can also execute the current state's OnExit
+            stateMachineDestroyHook.StartProfiling();
             CharacterBody previous = currentStateCharacter;
             EntityStateMachine previousMachine = currentStateMachine;
-            currentStateCharacter = self.commonComponents.characterBody;
-            currentStateMachine = self;
-            stateMachineDestroyHook.StartProfiling();
             try
             {
-                orig(self);
+                currentStateCharacter = self.commonComponents.characterBody;
+                currentStateMachine = self;
+
+                // Measure our context changes without including the original method
+                stateMachineDestroyHook.StopProfiling();
+                try
+                {
+                    orig(self);
+                }
+                finally
+                {
+                    stateMachineDestroyHook.StartProfiling();
+                }
             }
             finally
             {

@@ -137,12 +137,22 @@ namespace Faithful
         {
             if (!CanRunHook(sphereProjectileTargetHook)) { orig(self); return; }
 
-            TargetSearchContext previous = currentTargetSearchContext;
-            currentTargetSearchContext = CreateProjectileSearchContext(self, self.PassesFilters);
             sphereProjectileTargetHook.StartProfiling();
+            TargetSearchContext previous = currentTargetSearchContext;
             try
             {
-                orig(self);
+                currentTargetSearchContext = CreateProjectileSearchContext(self, self.PassesFilters);
+
+                // Measure our context changes without including the original method
+                sphereProjectileTargetHook.StopProfiling();
+                try
+                {
+                    orig(self);
+                }
+                finally
+                {
+                    sphereProjectileTargetHook.StartProfiling();
+                }
             }
             finally
             {
@@ -155,16 +165,25 @@ namespace Faithful
         {
             if (!CanRunHook(wightProjectileTargetHook)) { orig(self); return; }
 
-            TargetSearchContext previous = currentTargetSearchContext;
-
             // Vanilla prefers the last spirit-form candidate, otherwise the first valid candidate
-            currentTargetSearchContext = CreateProjectileSearchContext(self, self.PassesFilters,
-                candidates => candidates.Reverse().Where(candidate => candidate.GetComponentInParent<SpiritFormManager>())
-                    .Concat(candidates.Where(candidate => !candidate.GetComponentInParent<SpiritFormManager>())));
             wightProjectileTargetHook.StartProfiling();
+            TargetSearchContext previous = currentTargetSearchContext;
             try
             {
-                orig(self);
+                currentTargetSearchContext = CreateProjectileSearchContext(self, self.PassesFilters,
+                    candidates => candidates.Reverse().Where(candidate => candidate.GetComponentInParent<SpiritFormManager>())
+                        .Concat(candidates.Where(candidate => !candidate.GetComponentInParent<SpiritFormManager>())));
+
+                // Measure our context changes without including the original method
+                wightProjectileTargetHook.StopProfiling();
+                try
+                {
+                    orig(self);
+                }
+                finally
+                {
+                    wightProjectileTargetHook.StartProfiling();
+                }
             }
             finally
             {
@@ -177,12 +196,22 @@ namespace Faithful
         {
             if (!CanRunHook(directionalProjectileTargetHook)) { orig(self); return; }
 
-            TargetSearchContext previous = currentTargetSearchContext;
-            currentTargetSearchContext = CreateProjectileSearchContext(self, self.PassesFilters);
             directionalProjectileTargetHook.StartProfiling();
+            TargetSearchContext previous = currentTargetSearchContext;
             try
             {
-                orig(self);
+                currentTargetSearchContext = CreateProjectileSearchContext(self, self.PassesFilters);
+
+                // Measure our context changes without including the original method
+                directionalProjectileTargetHook.StopProfiling();
+                try
+                {
+                    orig(self);
+                }
+                finally
+                {
+                    directionalProjectileTargetHook.StartProfiling();
+                }
             }
             finally
             {
@@ -195,12 +224,22 @@ namespace Faithful
         {
             if (!CanRunHook(missileTargetHook)) return orig(self);
 
-            TargetSearchContext previous = currentTargetSearchContext;
-            currentTargetSearchContext = CreateProjectileSearchContext(self);
             missileTargetHook.StartProfiling();
+            TargetSearchContext previous = currentTargetSearchContext;
             try
             {
-                return orig(self);
+                currentTargetSearchContext = CreateProjectileSearchContext(self);
+
+                // Measure our context changes without including the original method
+                missileTargetHook.StopProfiling();
+                try
+                {
+                    return orig(self);
+                }
+                finally
+                {
+                    missileTargetHook.StartProfiling();
+                }
             }
             finally
             {

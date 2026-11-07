@@ -9,8 +9,10 @@ namespace Faithful
 {
     internal class CharmingFacade : ItemBase
     {
-        // Buff tied to item
+        // Buffs tied to item
         Buff charmedBuff;
+        Buff charmingStockBuff;
+        Buff charmingStockEmptyBuff;
 
         // Server-side charm ownership
         readonly Dictionary<CharacterBody, HashSet<CharacterBody>> charmedVictims = new();
@@ -79,8 +81,10 @@ namespace Faithful
                 ModifyItemDisplayPrefabCallback = ModifyItemDisplayPrefab
             });
 
-            // Create buff tied to item
+            // Create buffs tied to item
             charmedBuff = Buffs.AddBuff(token, "Charmed", "texCharmingFacadeBuff", Color.white, false, _overlay: charmedOverlay, _visual: charmedVisual);
+            charmingStockBuff = Buffs.AddBuff($"{token}_STOCK", "Charm Stock", "texCharmingStockBuff", Color.white);
+            charmingStockEmptyBuff = Buffs.AddBuff($"{token}_STOCK_EMPTY", "Charm Stock Empty", "texCharmingStockEmptyBuff", Color.white, false);
 
             // Create item settings
             CreateSettings();
@@ -95,12 +99,16 @@ namespace Faithful
             Behaviour.AddOnCharacterDeathCallback(OnCharacterDeath);
             Behaviour.AddOnBodyDestroyedCallback(OnBodyDestroyed);
 
+            // Keep charm capacity visible only while holding the item
+            Behaviour.AddOnCharacterBodyStartCallback(UpdateCharmStocks);
+            Behaviour.AddOnBodyInventoryChangedCallback(UpdateCharmStocks);
+
             // Apply charm targeting rules to AI, skill and projectile searches
             Behaviour.AddTryModifyTargetSearchMaskCallback(TryModifyTargetSearchMask);
             Behaviour.AddModifyTargetSearchResultsCallback(ModifyTargetSearchResults);
 
-            // Allow teammates to retaliate when attacked by charmed characters
-            Behaviour.AddAllowFriendlyAIRetaliationCallback(AllowFriendlyAIRetaliation);
+            // Apply charm rules to retaliation
+            Behaviour.AddModifyAIRetaliationCallback(ModifyAIRetaliation);
 
             // Allow same team attacks when either character is charmed
             Behaviour.AddAllowFriendlyHitCallback(CanCharmEnableHit);
@@ -108,7 +116,7 @@ namespace Faithful
 
         public override void QualityConstructor()
         {
-            // CREATE QUALITY CONTENT AND BEHAVIOUR HERE (E.G. BUFFS ONLY USED BY QUALITY AND NEW QUALITY BEHAVIOUR HOOKS)
+            // Quality behaviour is handled elsewhere
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -204,6 +212,12 @@ namespace Faithful
 
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+
+            // Refresh available capacity when settings change during a run
+            if (Utils.hosting)
+            {
+                foreach (CharacterBody body in CharacterBody.readOnlyInstancesList) UpdateCharmStocks(body);
+            }
         }
 
         protected void FetchQualitySettings()
@@ -224,6 +238,24 @@ namespace Faithful
                 { "DURATION", durationSetting.Value.ToString() },
                 { "DURATION_STACKING", durationStackingSetting.Value.ToString() }
             };
+        }
+
+        private void UpdateCharmStocks(CharacterBody _body)
+        {
+            if (!Utils.hosting || !_body) return;
+
+            // Only living item holders should display charm capacity
+            int itemCount = _body.inventory && _body.healthComponent && _body.healthComponent.alive ? _body.inventory.GetItemCountEffective(MainItem.itemDef.itemIndex) : 0;
+            int available = 0;
+            if (itemCount > 0)
+            {
+                int charmLimit = Utils.CalculateStackingValue(itemCount, limit, limitStacking);
+                int charmedCount = charmedVictims.TryGetValue(_body, out HashSet<CharacterBody> victims) ? victims.Count : 0;
+                available = Mathf.Max(0, charmLimit - charmedCount);
+            }
+
+            _body.SetBuffCount(charmingStockBuff.buffDef.buffIndex, available);
+            _body.SetBuffCount(charmingStockEmptyBuff.buffDef.buffIndex, itemCount > 0 && available == 0 ? 1 : 0);
         }
 
         private void OnHitEnemyLate(DamageInfo _info, GameObject _victim)
@@ -343,12 +375,14 @@ namespace Faithful
             }
             victims.Add(victimBody);
             charmOwners[victimBody] = attackerBody;
+            Behaviour.SetStateSearchContextRequired(this, true);
 
             // Apply charmed buff to victim
             victimBody.AddTimedBuff(charmedBuff.buffDef, charmDuration);
 
             // Do not retain a slot if the buff was prevented or the victim died during application
             if (!victimBody.healthComponent.alive || !victimBody.HasBuff(charmedBuff.buffDef)) ReleaseCharm(victimBody);
+            else UpdateCharmStocks(attackerBody);
         }
 
         private void OnBuffFirstStackGained(CharacterBody _body, BuffDef _buffDef)
@@ -372,6 +406,7 @@ namespace Faithful
         {
             if (!Utils.hosting) return;
             ReleaseCharm(_report.victimBody);
+            UpdateCharmStocks(_report.victimBody);
         }
 
         private void OnBodyDestroyed(CharacterBody _body)
@@ -397,23 +432,63 @@ namespace Faithful
             // Repeated expiry, death and destruction callbacks can safely release the same victim
             if (ReferenceEquals(_victim, null) || !charmOwners.TryGetValue(_victim, out CharacterBody owner)) return;
             charmOwners.Remove(_victim);
+            Behaviour.SetStateSearchContextRequired(this, charmOwners.Count > 0);
 
             if (charmedVictims.TryGetValue(owner, out HashSet<CharacterBody> victims))
             {
                 victims.Remove(_victim);
                 if (victims.Count == 0) charmedVictims.Remove(owner);
+                UpdateCharmStocks(owner);
             }
         }
 
-        private bool AllowFriendlyAIRetaliation(BaseAI _ai, DamageReport _report)
+        private bool? ModifyAIRetaliation(BaseAI _ai, DamageReport _report)
         {
-            if (!Utils.hosting || !_ai.body || _report.victimBody != _ai.body) return false;
+            if (!Utils.hosting || !_ai.body || _report.victimBody != _ai.body) return null;
 
             CharacterBody attacker = _report.attackerBody;
-            if (!attacker || attacker == _ai.body || !attacker.healthComponent || !attacker.healthComponent.alive) return false;
+            if (!attacker || attacker == _ai.body || !attacker.healthComponent || !attacker.healthComponent.alive) return null;
 
-            // Only change retaliation against a charmed member of the victim's own team
-            return _report.attackerTeamIndex == _report.victimTeamIndex && _report.attackerTeamIndex != TeamIndex.None && _report.attackerTeamIndex != TeamIndex.Neutral && IsCharmed(attacker);
+            if (TryGetCharmOwner(_ai.body, out CharacterBody owner) && owner && owner.teamComponent && attacker.teamComponent &&
+                attacker.teamComponent.teamIndex == owner.teamComponent.teamIndex)
+            {
+                TeamIndex ownerTeam = owner.teamComponent.teamIndex;
+                bool hasPreferredTarget = IsPreferredCharmTarget(_ai, _ai.currentEnemy.characterBody, ownerTeam);
+                if (!hasPreferredTarget)
+                {
+                    // Reuse the normal AI search, including charm's target preference
+                    HurtBox target = _ai.FindEnemyHurtBox(float.PositiveInfinity, _ai.fullVision, !_ai.xrayVision);
+                    if (target && target.healthComponent && IsPreferredCharmTarget(_ai, target.healthComponent.body, ownerTeam))
+                    {
+                        _ai.currentEnemy.gameObject = target.healthComponent.gameObject;
+                        _ai.currentEnemy.bestHurtBox = target;
+                        _ai.enemyAttention = _ai.enemyAttentionDuration;
+                        hasPreferredTarget = true;
+                    }
+                }
+
+                if (hasPreferredTarget)
+                {
+                    // Do not let a queued member of the charmer's team bypass the preference later
+                    if (_ai.bufferedTarget && _ai.bufferedTarget.TryGetComponent(out CharacterBody queued) && queued.teamComponent &&
+                        queued.teamComponent.teamIndex == ownerTeam) _ai.bufferedTarget = null;
+                    return false;
+                }
+            }
+
+            // Allow immediate retaliation against a charmed teammate
+            if (_report.attackerTeamIndex == _report.victimTeamIndex && _report.attackerTeamIndex != TeamIndex.None &&
+                _report.attackerTeamIndex != TeamIndex.Neutral && IsCharmed(attacker)) return true;
+
+            return null;
+        }
+
+        private bool IsPreferredCharmTarget(BaseAI _ai, CharacterBody _target, TeamIndex _ownerTeam)
+        {
+            return _target && _target != _ai.body && _target.healthComponent && _target.healthComponent.alive && _target.teamComponent &&
+                _target.teamComponent.teamIndex != TeamIndex.Neutral && _target.teamComponent.teamIndex != _ownerTeam &&
+                (!_ai.ignoreFliers || !_target.isFlying) && _target.bodyIndex != DLC4Content.BodyPrefabs.PlayerSpiritForm.bodyIndex &&
+                _target.GetVisibilityLevel(_ai.body) >= VisibilityLevel.Revealed;
         }
 
         private bool HasCharmedTeamTargets(CharacterBody _attacker)

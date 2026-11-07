@@ -180,7 +180,15 @@ namespace Faithful
         private static void HookTakeDamageProcess(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, HealthComponent self, DamageInfo damageInfo)
         {
             // Reusing damage info for a new hit must not reuse an earlier approval
-            ForgetFriendlyDamagePermission(damageInfo, self);
+            takeDamageProcessHook.StartProfiling();
+            try
+            {
+                ForgetFriendlyDamagePermission(damageInfo, self);
+            }
+            finally
+            {
+                takeDamageProcessHook.StopProfiling();
+            }
 
             if (!CanRunHook(takeDamageProcessHook))
             {
@@ -253,9 +261,17 @@ namespace Faithful
             }
             finally
             {
-                // Early returns, including zero proc coefficient, also finish this hit's approval
-                if (damageInfo != null && friendlyDamagePermissions.TryGetValue(damageInfo, out _) && victim &&
-                    victim.TryGetComponent(out HealthComponent healthComponent)) ForgetFriendlyDamagePermission(damageInfo, healthComponent);
+                onHitEnemyHook.StartProfiling();
+                try
+                {
+                    // Early returns, including zero proc coefficient, also finish this hit's approval
+                    if (damageInfo != null && friendlyDamagePermissions.TryGetValue(damageInfo, out _) && victim &&
+                        victim.TryGetComponent(out HealthComponent healthComponent)) ForgetFriendlyDamagePermission(damageInfo, healthComponent);
+                }
+                finally
+                {
+                    onHitEnemyHook.StopProfiling();
+                }
             }
 
             if (!CanRunHook(onHitEnemyHook)) return;

@@ -187,10 +187,11 @@ namespace Faithful
         {
             if (!CanRunHook(_hook) || allowFriendlyHitCallbacks.Count == 0 || !_victim || !_victim.body) return false;
 
-            CharacterBody attackerBody = _attacker ? _attacker.GetComponent<CharacterBody>() : null;
             _hook.StartProfiling();
             try
             {
+                CharacterBody attackerBody = _attacker ? _attacker.GetComponent<CharacterBody>() : null;
+
                 foreach (AllowFriendlyHitCallback callback in allowFriendlyHitCallbacks)
                 {
                     if (callback(attackerBody, _victim.body)) return true;
