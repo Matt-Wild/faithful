@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1513222461
+CRC: 358721921
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 96adae1f984c41ec5f0f963f5d715334
+    Hash: 78f6dd24739e537f958e1ce40adf7f48
   TypeTreeHash:
     serializedVersion: 2
     Hash: d22a026e9033ef3d17c41e3233439c75
@@ -270,6 +270,7 @@ Assets:
 - Assets/Placeholder/Item/Materials/texTemporalCube.mat
 - Assets/Items/MeltingWarbler/texMeltingWarbler.png
 - Assets/Items/HexCluster/AltIcons/texHexClusterBossIcon.png
+- Assets/Items/CharmingFacade/texCharmingStockBuff.png
 - Assets/Equipment/ChargefieldPylon/Materials/texChargefieldPylonDeploy.mat
 - Assets/Items/CharmingFacade/AltIcons/texCharmingFacadeTier1Icon.png
 - Assets/Items/HasteningGreave/AltIcons/texHasteningGreaveUniqueIcon.png
@@ -376,6 +377,7 @@ Assets:
 - Assets/Items/HasteningGreave/HasteningGreaveDisplayMesh.fbx
 - Assets/Survivors/Technician/Icons/texTechnicianRepairIcon.png
 - Assets/Items/NoxiousSlimes/AltIcons/texNoxiousSlimeTier3Achievement.png
+- Assets/Items/CharmingFacade/texCharmingStockEmptyBuff.png
 - Assets/Survivors/Technician/Mesh/TechnicianMasterySkinRobotLights.prefab
 - Assets/Items/HermitsShawl/AltIcons/texHermitShawlVoidAchievement.png
 - Assets/Items/SecondHand/texSecondHandIcon.png
@@ -408,6 +410,7 @@ Assets:
 - Assets/Items/AppraisersEye/AppraisersEyeMesh.prefab
 - Assets/Items/CopperGear/AltIcons/texCopperGearLunarIcon.png
 - Assets/Items/VengefulToaster/texVengefulToaster.png
+- Assets/Items/CharmingFacade/texIndicatorFacadeMask.png
 - Assets/Items/Chakram/texChakram.png
 - Assets/Placeholder/Item/texTemporalCubeNormal.png
 - Assets/Items/HasteningGreave/AltIcons/texHasteningGreaveBossIcon.png
