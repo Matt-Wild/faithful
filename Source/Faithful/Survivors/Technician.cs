@@ -843,6 +843,14 @@ namespace Faithful
                 new Vector3(0.2F, 0.2F, 0.2F)
                 )
                 );
+            AddDefaultItemDisplay("ArtifactKey",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayArtifactKey"),
+                "Backpack",
+                new Vector3(-0.01525F, 0.00775F, -0.1205F),
+                new Vector3(348.25F, 174F, 20F),
+                new Vector3(0.2F, 0.2F, 0.2F)
+                )
+                );
             AddDefaultItemDisplay("Medkit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMedkit"),
                 "Chest",
