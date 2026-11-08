@@ -110,7 +110,7 @@ namespace Faithful
         {
             // Register essence selection dropdown
             TMP_Dropdown essenceSelectionDropdown = DebugSelectionDropdown.Create(transform.Find("EssenceSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>());
-            selectionDropdowns.Add(new SelectionDropdown(essenceSelectionDropdown, "Essence", ["Common", "Uncommon", "Legendary", "Boss/Planet", "Lunar", "Void Common", "Void Uncommon", "Void Legendary", "Void Boss/Planet", "Equipment", "Lunar Equipment"]));
+            selectionDropdowns.Add(new SelectionDropdown(essenceSelectionDropdown, "Essence", ["Common", "Uncommon", "Legendary", "Boss/Planet", "Lunar", "Void Common", "Void Uncommon", "Void Legendary", "Void Boss/Planet", "Equipment", "Lunar Equipment", "Cursed", "Hex"]));
 
             // Register character selection dropdown
             TMP_Dropdown characterSelectionDropdown = DebugSelectionDropdown.Create(transform.Find("CharacterSelectionDropdown").gameObject.GetComponent<TMP_Dropdown>());
@@ -193,6 +193,12 @@ namespace Faithful
                     break;
                 case "Lunar Equipment":
                     index = PickupCatalog.FindPickupIndex(EquipmentCatalog.equipmentDefs.Where(x => x.nameToken == "EQUIPMENT_METEOR_NAME").FirstOrDefault().equipmentIndex);
+                    break;
+                case "Cursed":
+                    index = PickupCatalog.FindPickupIndex(ItemTier.Cursed);
+                    break;
+                case "Hex":
+                    index = PickupCatalog.FindPickupIndex(ItemTier.Hex);
                     break;
                 default:
                     break;

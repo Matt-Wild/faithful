@@ -90,11 +90,16 @@ namespace Faithful
             }
         }
 
+        internal static string GetSaveDirectory()
+        {
+            string basePath = usePersistentDataPath.Value ? Application.persistentDataPath : Paths.BepInExRootPath;
+            return Path.Combine(basePath, SAVE_DIR);
+        }
+
         private static string GetSavePath(UserProfile _profile)
         {
             // Use the profile being processed, including during logout and profile switching
-            string basePath = usePersistentDataPath.Value ? Application.persistentDataPath : Paths.BepInExRootPath;
-            return Path.Combine(basePath, SAVE_DIR, _profile.fileName + ".dat");
+            return Path.Combine(GetSaveDirectory(), _profile.fileName + ".dat");
         }
 
         private static ProgressData Load(UserProfile _profile)

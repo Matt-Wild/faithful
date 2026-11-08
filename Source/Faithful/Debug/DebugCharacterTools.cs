@@ -56,6 +56,12 @@ namespace Faithful
         DebugCharacterBuffs buffs;
         bool buffsReady;
 
+        // Character loadouts panel and its toggle button
+        GameObject loadoutsPanel;
+        Button loadoutsButton;
+        DebugCharacterLoadouts loadouts;
+        bool loadoutsReady;
+
         // Current target character
         CharacterBody currentCharacter;
 
@@ -151,6 +157,17 @@ namespace Faithful
             buffsReady = buffs.Init();
             buffsButton = Utils.FindChildByName(characterPanel.transform, "BuffsButton").GetComponent<Button>();
             buffsButton.onClick.AddListener(OnBuffsClicked);
+
+            // Prepare saved loadouts alongside the existing character inspectors
+            loadoutsPanel = Utils.FindChildByName(characterPanel.transform, "LoadoutsPanel")?.gameObject;
+            loadoutsButton = Utils.FindChildByName(characterPanel.transform, "LoadoutsButton")?.GetComponent<Button>();
+            if (loadoutsPanel != null && loadoutsButton != null)
+            {
+                loadoutsPanel.SetActive(false);
+                loadouts = loadoutsPanel.AddComponent<DebugCharacterLoadouts>();
+                loadoutsReady = loadouts.Init();
+                loadoutsButton.onClick.AddListener(OnLoadoutsClicked);
+            }
         }
 
         private void Update()
@@ -211,8 +228,9 @@ namespace Faithful
             // Update the inventory target before showing or hiding the character panel
             inventory.SetCharacter(currentCharacter);
 
-            // Keep both inspectors linked to the same target
+            // Keep the character panels linked to the same target
             buffs.SetCharacter(currentCharacter);
+            loadouts?.SetCharacter(currentCharacter);
 
             // Discard unfinished input when switching to another target
             if (levelInput.isFocused && !ReferenceEquals(levelInputCharacter, currentCharacter))
@@ -326,6 +344,7 @@ namespace Faithful
             killButton.interactable = NetworkServer.active && health != null && health.alive;
             inventoryButton.interactable = inventoryReady && currentCharacter != null && currentCharacter.inventory != null;
             buffsButton.interactable = buffsReady && health != null && health.alive;
+            if (loadoutsButton != null) loadoutsButton.interactable = loadoutsReady && health != null && health.alive;
 
             // Only allow self targeting when the local player's body is alive
             CharacterBody localBody = Utils.localPlayerBody;
@@ -356,7 +375,11 @@ namespace Faithful
             if (!inventoryReady || currentCharacter == null || currentCharacter.inventory == null) return;
             inventory.SetCharacter(currentCharacter);
             bool open = !inventoryPanel.activeSelf;
-            if (open) buffsPanel.SetActive(false);
+            if (open)
+            {
+                buffsPanel.SetActive(false);
+                loadoutsPanel?.SetActive(false);
+            }
             inventoryPanel.SetActive(open);
         }
 
@@ -366,8 +389,26 @@ namespace Faithful
             if (!buffsReady || currentCharacter == null) return;
             buffs.SetCharacter(currentCharacter);
             bool open = !buffsPanel.activeSelf;
-            if (open) inventoryPanel.SetActive(false);
+            if (open)
+            {
+                inventoryPanel.SetActive(false);
+                loadoutsPanel?.SetActive(false);
+            }
             buffsPanel.SetActive(open);
+        }
+
+        private void OnLoadoutsClicked()
+        {
+            // Toggle the loadouts panel and close the other character panels
+            if (!loadoutsReady || currentCharacter == null) return;
+            loadouts.SetCharacter(currentCharacter);
+            bool open = !loadoutsPanel.activeSelf;
+            if (open)
+            {
+                inventoryPanel.SetActive(false);
+                buffsPanel.SetActive(false);
+            }
+            loadoutsPanel.SetActive(open);
         }
 
         private void OnObjectAnalysisClicked()

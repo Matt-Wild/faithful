@@ -104,6 +104,16 @@ namespace Faithful
                     spawn = true;
                     index = PickupCatalog.FindPickupIndex(EquipmentCatalog.equipmentDefs.Where(x => x.nameToken == "EQUIPMENT_METEOR_NAME").FirstOrDefault().equipmentIndex);
                 }
+                else if (Input.GetKeyDown(KeyCode.Equals))
+                {
+                    spawn = true;
+                    index = PickupCatalog.FindPickupIndex(ItemTier.Cursed);
+                }
+                else if (Input.GetKeyDown(KeyCode.BackQuote))
+                {
+                    spawn = true;
+                    index = PickupCatalog.FindPickupIndex(ItemTier.Hex);
+                }
 
                 if (spawn)  // Spawn command essense of selected tier
                 {

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 358721921
+CRC: 1987828353
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 78f6dd24739e537f958e1ce40adf7f48
+    Hash: 69568275d144d212bc576977950742b2
   TypeTreeHash:
     serializedVersion: 2
     Hash: d22a026e9033ef3d17c41e3233439c75
@@ -751,6 +751,7 @@ Assets:
 - Assets/Items/HasteningGreave/Materials/texHasteningGreave.mat
 - Assets/Survivors/Technician/Icons/texTechnicianTurretIcon.png
 - Assets/Items/LongshotGeode/LongshotGeodeRockMesh.obj
+- Assets/Items/CharmingFacade/texCharmingFacadeBoostBuff.png
 - Assets/Items/4-T0NJetpack/AltIcons/tex4T0NJetpackBossIcon.png
 - Assets/Items/SpaciousUmbrella/AltIcons/texSpaciousUmbrellaTier3Icon.png
 - Assets/Monsters/MechaSpider/Materials/texMechanicalSpider.mat
@@ -867,6 +868,7 @@ Assets:
 - Assets/Items/MatterAccelerator/MatterAcceleratorDisplayMesh.prefab
 - Assets/Items/HexCluster/AltIcons/texHexClusterTier3Icon.png
 - Assets/Survivors/Technician/VFX/TechnicianTrackingIndicator.prefab
+- Assets/Debug/UI/DebugCharacterLoadoutEntry.prefab
 - Assets/Survivors/Technician/Mesh/TechnicianAlloyRendererGlass.prefab
 - Assets/Items/RadiantTimepiece/texRadiantTimepieceIcon.png
 - Assets/Survivors/Technician/Mesh/TechnicianMasteryRendererBody.prefab

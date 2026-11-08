@@ -723,6 +723,16 @@ namespace Faithful
             // Validate the pickup and server authority before spawning a networked essence
             if (!NetworkServer.active || Run.instance == null || PickupCatalog.GetPickupDef(_pickup.pickupIndex) == null) return null;
 
+            // Use a boss item to avoid the generic tier pickup's PowerShape choice group
+            if (_pickup.pickupIndex == PickupCatalog.FindPickupIndex(ItemTier.Boss))
+            {
+                List<PickupIndex> bossPickups = Run.instance.availableBossDropList;
+                if (bossPickups.Count == 0) return null;
+
+                // Keep temporary and ethereal modifiers when changing the pickup
+                _pickup = _pickup.WithPickupIndex(bossPickups[0]);
+            }
+
             // Preserve pickup modifiers when configuring both the essence and its choices
             GameObject essence = Object.Instantiate(LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/CommandCube"), _position, _rotation ?? Quaternion.identity);
             essence.GetComponent<PickupIndexNetworker>().NetworkpickupState = _pickup;
