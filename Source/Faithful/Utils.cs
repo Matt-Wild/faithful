@@ -221,6 +221,10 @@ namespace Faithful
             Behaviour.AddMainMenuEnterCallback(OnMainMenuEnter);
             Behaviour.AddLoadoutPanelEnableCallback(OnLoadoutPanelEnable);
 
+            // Match shield recharge sounds to the modified delay
+            Behaviour.AddOnShieldRechargeStartedCallback(OnShieldRechargeStarted);
+            Behaviour.AddCanPlayShieldRechargeSoundCallback(CanPlayShieldRechargeSound);
+
             // Init content pack provider
             FaithfulContentPackProvider.Init();
 
@@ -1803,6 +1807,8 @@ namespace Faithful
                 RendererModifier.CaptainAirstrikeAreaIndicator => Assets.captainAirstrikeAreaIndicatorMaterial,
                 RendererModifier.CaptainSupplyDropAreaIndicator2 => Assets.captainSupplyDropAreaIndicator2Material,
                 RendererModifier.CaptainSupplyDropAreaIndicatorOuter => Assets.captainSupplyDropAreaIndicatorOuterMaterial,
+                RendererModifier.ChanceDollSymbol => Assets.chanceDollSymbolMaterial,
+                RendererModifier.ChanceDollSymbolSimple => Assets.chanceDollSymbolSimpleMaterial,
                 RendererModifier.ChefAlwaysOnTop => Assets.chefAlwaysOnTopMaterial,
                 RendererModifier.ChildStarCore => Assets.childStarCoreMaterial,
                 RendererModifier.ChildStarGlow => Assets.childStarGlowMaterial,
@@ -1897,6 +1903,47 @@ namespace Faithful
 
             // Return null
             return null;
+        }
+
+        private static bool HasModifiedShieldRechargeDelay(CharacterBody _body)
+        {
+            // Keep the normal sound if either part of the replacement is unavailable
+            if (!Behaviour.shieldRechargeSoundChangesAvailable) return false;
+
+            // Check for a configured modifier even if the actual timer is already at its minimum
+            float baseDelay = Mathf.Max(CharacterBody.outOfDangerDelay, Behaviour.MinimumShieldRechargeDelay + 1.0f);
+            float delay = baseDelay;
+            Behaviour.ModifyShieldRechargeDelay(_body, Behaviour.MinimumShieldRechargeDelay, ref delay);
+
+            return delay != baseDelay;
+        }
+
+        private static void OnShieldRechargeStarted(CharacterBody _body)
+        {
+            if (!HasModifiedShieldRechargeDelay(_body)) return;
+
+            // Send the sound once from the server to all connected clients
+            FaithfulCharacterBodyBehaviour helper = FindCharacterBodyHelper(_body, _warnIfMissing: false);
+            if (helper) helper.RpcPlayShieldRechargeSound(_body.gameObject);
+        }
+
+        private static bool CanPlayShieldRechargeSound(CharacterBody _body)
+        {
+            // Suppress the delayed sound using the same rule on every client
+            return !HasModifiedShieldRechargeDelay(_body) || !FindCharacterBodyHelper(_body, _warnIfMissing: false);
+        }
+
+        internal static uint PlayShieldRechargeSound(CharacterBody _body)
+        {
+            if (!_body) return 0;
+
+            // Match both sounds used by the base game
+            if (_body.inventory && _body.inventory.GetItemCountEffective(DLC3Content.Items.ShieldBooster) > 0)
+            {
+                Util.PlaySound("Play_item_use_shieldBooster_regen", _body.gameObject);
+            }
+
+            return Util.PlaySound("Play_item_proc_personal_shield_recharge", _body.gameObject);
         }
 
         public static bool HasCharacterSpawnCard(string _name)

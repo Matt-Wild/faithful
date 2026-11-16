@@ -23,6 +23,8 @@ namespace Faithful.Shared
         CaptainAirstrikeAreaIndicator = 140,
         CaptainSupplyDropAreaIndicator2 = 150,
         CaptainSupplyDropAreaIndicatorOuter = 160,
+        ChanceDollSymbol = 470,
+        ChanceDollSymbolSimple = 480,
         ChefAlwaysOnTop = 170,
 		Chest = 175,
         ChildStarCore = 180,

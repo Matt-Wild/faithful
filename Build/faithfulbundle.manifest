@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 593837873
+CRC: 513836517
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d2c06a879536ef17654641a864333cee
+    Hash: 18fb04980f1ca90a5c7e7fd90dc43b51
   TypeTreeHash:
     serializedVersion: 2
     Hash: d22a026e9033ef3d17c41e3233439c75
@@ -225,6 +225,7 @@ Assets:
 - Assets/Items/ReserveBattery/AltIcons/texReserveBatteryVoidIcon.png
 - Assets/Survivors/Technician/Icons/texBuffElectroSpeed.png
 - Assets/Debug/UI/DebugStatsPanel.prefab
+- Assets/Items/LuckyFigurine/AltIcons/texLuckyFigurineTier3Icon.png
 - Assets/Items/CharmingFacade/Materials/texCharmingFacade.mat
 - Assets/Items/ToxinCanister/texToxinCanister.png
 - Assets/Items/PlasmaFieldGen/PlasmaFieldGeneratorMesh.prefab
@@ -338,6 +339,7 @@ Assets:
 - Assets/Items/CollectorsVision/CollectorsVisionDisplayConeMesh.obj
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinRobot.prefab
 - Assets/Survivors/Technician/Materials/texTechnicianMastery.mat
+- Assets/Items/LuckyFigurine/AltIcons/texLuckyFigurineLunarIcon.png
 - Assets/Items/CauterizingGreave/CauterizingGreaveMesh.prefab
 - Assets/Items/CopperGear/AltIcons/texCopperGearUniqueIcon.png
 - Assets/Items/CollectorsVision/CollectorsVisionMesh.obj
@@ -395,6 +397,7 @@ Assets:
 - Assets/Items/VengefulToaster/Materials/texVengefulToaster.mat
 - Assets/Items/RadiantTimepiece/AltIcons/texRadiantTimepieceVoidIcon.png
 - Assets/Debug/UI/DebugSpawnPanel.prefab
+- Assets/Items/LuckyFigurine/AltIcons/texLuckyFigurineTier2Icon.png
 - Assets/Items/CollectorsVision/Shrine/RecollectionShrineMesh.fbx
 - Assets/Equipment/ChargefieldPylon/Materials/texChargefieldPylon.mat
 - Assets/Items/ReserveBattery/AltIcons/texReserveBatteryLunarIcon.png
@@ -454,6 +457,7 @@ Assets:
 - Assets/Items/ToxinCanister/ToxinCanisterDisplayMesh.prefab
 - Assets/Items/CauterizingGreave/CauterizingGreaveDisplayMesh.obj
 - Assets/Items/4-T0NJetpack/tex4T0NJetpackEmission.png
+- Assets/Items/LuckyFigurine/AltIcons/texLuckyFigurineBossIcon.png
 - Assets/Items/CollectorsVision/AltIcons/texCollectorsVisionBossIcon.png
 - Assets/Items/MeltingWarbler/texMeltingWarblerNormal.png
 - Assets/Items/AppraisersEye/texAppraisersEyeEggNormal.png
@@ -567,6 +571,7 @@ Assets:
 - Assets/Items/HermitsShawl/HermitShawlMesh.prefab
 - Assets/Items/ReserveBattery/Materials/texReserveBattery.mat
 - Assets/Items/ReserveBattery/texReserveBattery.png
+- Assets/Items/LuckyFigurine/AltIcons/texLuckyFigurineVoidIcon.png
 - Assets/Survivors/Technician/Mesh/TechnicianPrimeSkinRobotLights.prefab
 - Assets/Debug/UI/DebugAudioPanel.prefab
 - Assets/Items/LuckyFigurine/texLuckyFigurineSigilEmission.png
@@ -809,6 +814,7 @@ Assets:
 - Assets/Survivors/Technician/Textures/texTechnicianAlloy.png
 - Assets/Items/LeadersPennon/texIndicatorPennonMask.png
 - Assets/Items/NoxiousSlimes/Materials/texNoxiousSlimeCase.mat
+- Assets/Items/LuckyFigurine/AltIcons/texLuckyFigurineTier1Icon.png
 - Assets/Items/LeadersPennon/AltIcons/texLeadersPennonUniqueIcon.png
 - Assets/Items/BrassScrews/BrassScrewsMesh.prefab
 - Assets/Items/CopperGear/texCopperGear.png
@@ -820,6 +826,7 @@ Assets:
 - Assets/Items/CharmingFacade/AltIcons/texCharmingFacadeBossIcon.png
 - Assets/Debug/UI/DebugCharacterToolsPanel.prefab
 - Assets/Survivors/Technician/Icons/texTechnicianConduitDirectIcon.png
+- Assets/Items/LuckyFigurine/AltIcons/texLuckyFigurineUniqueIcon.png
 - Assets/Items/CharmingFacade/AltIcons/texCharmingFacadeTier3Icon.png
 - Assets/Items/TargetingMatrix/texIndicatorMatrixMask.png
 - Assets/Items/CauterizingGreave/CauterizingGreaveMesh.obj

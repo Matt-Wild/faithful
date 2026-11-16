@@ -19,6 +19,9 @@ namespace Faithful
     // For Quality support
     [BepInDependency("com.Gorakh.ItemQualities", BepInDependency.DependencyFlags.SoftDependency)]
 
+    // For MoreStats support
+    [BepInDependency("com.RiskOfBrainrot.MoreStats", BepInDependency.DependencyFlags.SoftDependency)]
+
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
     public class Faithful : BaseUnityPlugin
@@ -68,6 +71,7 @@ namespace Faithful
         internal static RadiantTimepiece radiantTimepiece;
         internal static LuckyFigurine luckyFigurine;
         internal static CharmingFacade charmingFacade;
+        internal static PlasmaFieldGenerator plasmaFieldGenerator;
         internal static DebugItem debugItem;
 
         // Survivors
@@ -170,6 +174,7 @@ namespace Faithful
             radiantTimepiece = new RadiantTimepiece(toolbox);
             luckyFigurine = new LuckyFigurine(toolbox);
             charmingFacade = new CharmingFacade(toolbox);
+            plasmaFieldGenerator = new PlasmaFieldGenerator(toolbox);
             debugItem = new DebugItem(toolbox);
 
             // Create WIP content

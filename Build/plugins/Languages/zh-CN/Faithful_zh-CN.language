@@ -182,6 +182,11 @@
 	"FAITHFUL_RADIANT_TIMEPIECE_DESC_QUALITY": "[PREFIX]\n临时增益的<style=cIsUtility>持续时间</style>延长 <sprite name=\"Quality\"> <style=cIsUtility>[DURATION]%</style> <style=cStack>(每层额外+[DURATION_STACKING]%)</style>。",
 	"FAITHFUL_RADIANT_TIMEPIECE_LORE": "订单：Henlein 品牌怀表 第222版（银灰色）\r\n追踪编号：1510******\r\n预计送达时间：08/23/2057\r\n配送方式：高优先级/易碎品\r\n收货地址：土星，Continuum 街古董工坊\r\n配送详情：\r\n\r\n感谢您购买：\r\n > 1 件 Henlein 品牌怀表 第222版，银灰色\r\n\r\n我们希望您对其工艺感到满意。作为地球上最大的奢侈腕表零售商，我们始终以自身的工艺为傲，因此若您发现任何瑕疵，请联系我们的客服热线。我们的传统钟表匠将随时为您维修任何产品，仅收取少量*费用。\r\n\r\n更多详情可参见与订单一同附上的手册。\r\n\r\n祝您度过准时的一天。\r\n\r\n- Henlein",
 	
+	"FAITHFUL_PLASMA_FIELD_GENERATOR_NAME": "等离子场生成器",
+	"FAITHFUL_PLASMA_FIELD_GENERATOR_PICKUP": "获得护盾，并缩短其充能等待时间。",
+	"FAITHFUL_PLASMA_FIELD_GENERATOR_DESC": "获得一个相当于你最大生命值<style=cIsHealing>[SHIELD]%</style><style=cStack>（每层增加[SHIELD_STACKING]%）</style>的<style=cIsHealing>护盾</style>，并将其<style=cIsUtility>充能等待时间</style>缩短<style=cIsUtility>[RECHARGE_TIME_REDUCTION]%</style><style=cStack>（每层增加[RECHARGE_TIME_REDUCTION_STACKING]%）</style>。脱险后可重新充能。",
+	"FAITHFUL_PLASMA_FIELD_GENERATOR_LORE": "<style=cMono>//--来自UES[已编辑]号4号货舱的自动转录 --//</style>\n\n“……这些有毛病的护盾装置到底是怎么回事？……海农？我还以为他们的东西挺不错呢。”\n\n“这些？换作是我，一个都不会试。故障护盾装置本来就不是能随便摆弄的东西，而这批……保险起见，没穿防护装备最好连碰都别碰。”\n\n“啧，他们是怎么把这一整批都搞砸的？”\n\n“如果我没记错，他们对这个型号特别有信心，直接就开始人体试验了，然后……呃……我觉得，结果不能更糟了。”\n\n“对了，你说你以前在那儿工作过，是吧？发生了什么？”\n\n“他们给第一个人戴上装置，砰！刚一打开，那个人就没了。然后装置好像就掉到地上，自己关了。”\n\n“没了？是彻底‘没了’，还是……？”\n\n“就是……噗的一下。他们以为不知怎么把他传送走了。过了好久才弄明白，他们只是当场把那个可怜的家伙汽化了。毕竟连一点痕迹都没留下。”\n\n“天哪，[已编辑]。他们怎么还没倒闭？”\n\n“是啊，那件事居然没人坐牢。别说坐牢了，连被开除的都没有！事情传出去，他们的名声就保不住了，所以他们想把整件事掩盖过去。”\n\n“……你开玩笑吧。听起来，去直达光号干清洁都比待在那儿强。”\n\n“可不是嘛。内部报告一送到我们部门，我当场就辞职了。”\n\n“……顺便说一句，别告诉船长这些是我说的。”\n\n“放心吧，老兄。我会守口如瓶的。”",
+
 	"FAITHFUL_CHARMING_FACADE_NAME": "魅惑假面",
 	"FAITHFUL_CHARMING_FACADE_PICKUP": "命中时有[CHANCE]%的几率暂时魅惑非头目敌人。",
 	"FAITHFUL_CHARMING_FACADE_PICKUP_QUALITY": "命中时有 <sprite name=\"Quality\"> [CHANCE]%的几率暂时魅惑非头目敌人。",

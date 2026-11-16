@@ -18,11 +18,47 @@ namespace Faithful
         // Store the loadout saving controls
         TMP_InputField nameInput;
         UnityEngine.UI.Button saveButton;
+        UnityEngine.UI.Toggle ignoreBlacklistToggle;
 
         // Store saved loadouts and their file path
         LoadoutFile saved = new();
         string savePath;
         bool savingAvailable = true;
+
+        // Items and buffs excluded from loadouts unless the blacklist is ignored
+        readonly HashSet<ItemDef> itemBlacklist =
+        [
+            RoR2Content.Items.CaptainDefenseMatrix,
+            DLC1Content.Items.ConvertCritChanceToCritDamage,
+            DLC1Content.Items.VoidmanPassiveItem,
+            DLC3Content.Items.StatsFromScrap,
+            DLC3Content.Items.Junk,
+            DLC4Content.Items.PassiveBigMan,
+            DLC4Content.Items.StealBackHealth,
+            DLC4Content.Items.ConvertHealingToAttackSpeed,
+            RoR2Content.Items.DrizzlePlayerHelper,
+            RoR2Content.Items.MonsoonPlayerHelper,
+            RoR2Content.Items.BoostEquipmentRecharge,
+            RoR2Content.Items.UseAmbientLevel,
+            RoR2Content.Items.MinionLeash,
+            RoR2Content.Items.BoostDamage,
+            RoR2Content.Items.BoostHp,
+            RoR2Content.Items.CutHp,
+            RoR2Content.Items.AdaptiveArmor,
+            RoR2Content.Items.Karma
+        ];
+
+        readonly HashSet<BuffDef> buffBlacklist =
+        [
+            DLC2Content.Buffs.ChakraBuff,
+            DLC2Content.Buffs.RevitalizeBuff,
+            DLC2Content.Buffs.TamperingASAndArmorBonus,
+            DLC2Content.Buffs.TamperingMSAndHRBonus,
+            DLC3Content.Buffs.TrashToTreasureWhite,
+            DLC3Content.Buffs.TrashToTreasureGreen,
+            DLC3Content.Buffs.TrashToTreasureRed,
+            DLC3Content.Buffs.TrashToTreasureYellow
+        ];
 
         [Serializable]
         internal class LoadoutFile
@@ -63,7 +99,8 @@ namespace Faithful
             GameObject prefab = Assets.GetObject("DebugCharacterLoadoutEntry");
             nameInput = Utils.FindChildByName(transform, "LoadoutNameInputField")?.GetComponent<TMP_InputField>();
             saveButton = Utils.FindChildByName(transform, "LoadoutSaveButton")?.GetComponent<UnityEngine.UI.Button>();
-            if (scrollRect == null || prefab == null || nameInput == null || saveButton == null)
+            ignoreBlacklistToggle = Utils.FindChildByName(transform, "IgnoreBlacklistToggle")?.GetComponent<UnityEngine.UI.Toggle>();
+            if (scrollRect == null || prefab == null || nameInput == null || saveButton == null || ignoreBlacklistToggle == null)
             {
                 Log.Error("[DEBUG MENU] | Character loadout controls are missing. Rebuild the asset bundle with the character tools and loadout entry prefabs.");
                 return false;
@@ -98,6 +135,16 @@ namespace Faithful
         {
             // Saving and applying require the host
             return NetworkServer.active && character != null && character.inventory != null && character.healthComponent != null && character.healthComponent.alive;
+        }
+
+        private bool IsBlacklisted(ItemDef _item)
+        {
+            return !ignoreBlacklistToggle.isOn && itemBlacklist.Contains(_item);
+        }
+
+        private bool IsBlacklisted(BuffDef _buff)
+        {
+            return !ignoreBlacklistToggle.isOn && buffBlacklist.Contains(_buff);
         }
 
         private bool IsNameAvailable(string _name)
@@ -170,7 +217,7 @@ namespace Faithful
             {
                 ItemDef item = ItemCatalog.GetItemDef((ItemIndex)i);
 
-                if (item == null) continue;
+                if (item == null || IsBlacklisted(item)) continue;
 
                 int normal = (int)Math.Min(int.MaxValue, (long)inventory.GetItemCountPermanent(item.itemIndex) + Mathf.Max(0, inventory.GetItemCountChanneled(item.itemIndex)));
                 AddItem(loadout, item, normal, PickupModifier.Normal);
@@ -186,7 +233,7 @@ namespace Faithful
             {
                 BuffDef buff = BuffCatalog.GetBuffDef((BuffIndex)i);
 
-                if (buff != null && normalCounts[i] > 0) loadout.buffs.Add(new SavedBuff { name = buff.name, count = normalCounts[i] });
+                if (buff != null && !IsBlacklisted(buff) && normalCounts[i] > 0) loadout.buffs.Add(new SavedBuff { name = buff.name, count = normalCounts[i] });
             }
 
             // Add the loadout to the saved list
@@ -214,7 +261,7 @@ namespace Faithful
                 ItemIndex index = ItemCatalog.FindItemIndex(item.name);
                 PickupDef pickup = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex(index));
 
-                if (index == ItemIndex.None || pickup == null) continue;
+                if (index == ItemIndex.None || pickup == null || IsBlacklisted(ItemCatalog.GetItemDef(index))) continue;
 
                 items.Add((pickup, item));
             }
@@ -222,12 +269,12 @@ namespace Faithful
             {
                 BuffDef buff = BuffCatalog.GetBuffDef(BuffCatalog.FindBuffIndex(entry.name));
 
-                if (buff == null) continue;
+                if (buff == null || IsBlacklisted(buff)) continue;
 
                 buffs.Add((buff, entry));
             }
 
-            // Replace the selected character's items
+            // Replace the selected character's items, keeping blacklisted items
             CharacterBody target = character;
             Inventory inventory = target.inventory;
             inventory.InventoryChangedHandler(_ =>
@@ -236,7 +283,7 @@ namespace Faithful
                 {
                     PickupDef pickup = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex((ItemIndex)i));
 
-                    if (pickup == null) continue;
+                    if (pickup == null || IsBlacklisted(ItemCatalog.GetItemDef((ItemIndex)i))) continue;
 
                     Utils.RemovePickup(inventory, pickup, PickupModifier.Normal, true);
                     Utils.RemovePickup(inventory, pickup, PickupModifier.Temporary, true);
@@ -249,10 +296,14 @@ namespace Faithful
                 }
             });
 
-            // Replace non-timed buffs
+            // Replace non-timed buffs, keeping blacklisted buffs
             for (int i = 0; i < BuffCatalog.buffCount; i++)
             {
-                Utils.RemoveBuff(target, BuffCatalog.GetBuffDef((BuffIndex)i), false, true);
+                BuffDef buff = BuffCatalog.GetBuffDef((BuffIndex)i);
+
+                if (buff == null || IsBlacklisted(buff)) continue;
+
+                Utils.RemoveBuff(target, buff, false, true);
             }
 
             foreach ((BuffDef buff, SavedBuff entry) in buffs)

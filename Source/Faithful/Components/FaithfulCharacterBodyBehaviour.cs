@@ -21,6 +21,13 @@ namespace Faithful
         // Store the level before applying the adjustment
         public float unmodifiedLevel;
 
+        // Store whether shields were recharging on the last server update
+        public bool shieldRecharging;
+
+        // Store the local recharge sound so a small refill can stop it early
+        private uint shieldRechargeSoundID;
+        private HealthComponent shieldRechargeSoundSource;
+
         // Store reference to Character Body
         private CharacterBody character;
 
@@ -45,6 +52,12 @@ namespace Faithful
             FaithfulRuntimeProfiler.StartScope("FaithfulCharacterBodyBehaviour.FixedUpdate");
             try
             {
+                // Stop the recharge sound once the client sees a full shield
+                if (shieldRechargeSoundID != 0 && (!shieldRechargeSoundSource || shieldRechargeSoundSource.shield >= shieldRechargeSoundSource.fullShield))
+                {
+                    StopShieldRechargeSound();
+                }
+
                 // Update tick behaviours
                 foreach (CharacterBodyTickBehaviour tickBehaviour in m_tickBehaviours) tickBehaviour.FixedUpdate();
             }
@@ -129,6 +142,27 @@ namespace Faithful
             if (hermitsShawl != null) hermitsShawl.OnCharacterBodyFixedUpdate();
         }
 
+        [ClientRpc]
+        public void RpcPlayShieldRechargeSound(GameObject _bodyObject)
+        {
+            // Use the supplied body even if this helper has not finished linking yet
+            if (!_bodyObject) return;
+
+            StopShieldRechargeSound();
+            CharacterBody body = _bodyObject.GetComponent<CharacterBody>();
+            shieldRechargeSoundSource = body ? body.healthComponent : null;
+            shieldRechargeSoundID = Utils.PlayShieldRechargeSound(body);
+        }
+
+        private void StopShieldRechargeSound()
+        {
+            if (shieldRechargeSoundID == 0) return;
+
+            AkSoundEngine.StopPlayingID(shieldRechargeSoundID);
+            shieldRechargeSoundID = 0;
+            shieldRechargeSoundSource = null;
+        }
+
         private void LevelOffsetChanged(float _newValue)
         {
             // Update the adjustment and refresh stats on connected clients
@@ -182,13 +216,14 @@ namespace Faithful
                 if (NetworkServer.active)
                 {
                     // Destroy faithful behaviour
-                    NetworkServer.Destroy(gameObject);
+                    Object.Destroy(gameObject);
                 }
             }
         }
 
         private void OnDestroy()
         {
+            StopShieldRechargeSound();
             CharacterBody.onBodyStartGlobal -= OnCharacterBodyStart;
 
             // Release this character's helper registration

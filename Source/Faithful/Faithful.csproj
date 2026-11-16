@@ -80,6 +80,10 @@
 	  <HintPath>libs\ItemQualities.dll</HintPath>
 	  <Private>false</Private>
 	</Reference>
+    <Reference Include="MoreStats">
+      <HintPath>libs\MoreStats.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="Faithful.Shared">
       <HintPath>libs\Faithful.Shared.dll</HintPath>
       <Private>true</Private>

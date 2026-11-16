@@ -12,6 +12,16 @@ namespace Faithful
 
     internal delegate void CharacterBodyCallback(CharacterBody _body);
 
+    internal delegate void ModifyShieldFromHealthCallback(CharacterBody _body, float _maxHealth, ref float _shield);
+
+    internal delegate void ModifyShieldRechargeDelayCallback(CharacterBody _body, float _minimumDelay, ref float _delay);
+
+    internal delegate bool CanPlayShieldRechargeSoundCallback(CharacterBody _body);
+
+    internal delegate void ModifyHealthBarValuesCallback(HealthComponent _healthComponent, ref HealthComponent.HealthBarValues _values);
+
+    internal delegate void ModifyVoidShieldVisualsCallback(CharacterBody _body, ref bool _hasVoidShields);
+
     internal delegate void CharacterModelCallback(CharacterModel _model);
 
     internal delegate string GetUserNameCallback(CharacterBody self, string _name);
@@ -470,6 +480,369 @@ namespace Faithful
             }
         }
 
+        // Shield additions based on the calculated maximum health
+        private static readonly List<ModifyShieldFromHealthCallback> modifyShieldFromHealthCallbacks = new();
+
+        private static readonly HookRegistration shieldFromHealthHook = new("CharacterBody.RecalculateStats (shield from health)",
+            () => IL.RoR2.CharacterBody.RecalculateStats += HookShieldFromHealth,
+            () => IL.RoR2.CharacterBody.RecalculateStats -= HookShieldFromHealth);
+
+        public static void AddModifyShieldFromHealthCallback(ModifyShieldFromHealthCallback _callback)
+        {
+            modifyShieldFromHealthCallbacks.Add(_callback);
+            DebugLog("Added Modify Shield From Health behaviour");
+        }
+
+        private static void HookShieldFromHealth(ILContext _il)
+        {
+            ILCursor cursor = new(_il);
+
+            // Find PSG's shield addition after maximum health has been calculated
+            if (!cursor.TryGotoNext(MoveType.After, instruction => instruction.MatchLdfld<CharacterBody>("baseMaxShield")) ||
+                !cursor.TryGotoNext(MoveType.After,
+                    instruction => instruction.MatchLdarg(0),
+                    instruction => instruction.MatchCallOrCallvirt<CharacterBody>("get_maxHealth"),
+                    instruction => instruction.MatchMul(),
+                    instruction => instruction.MatchAdd()))
+            {
+                throw new System.InvalidOperationException("Could not find the health-based shield addition in RecalculateStats.");
+            }
+
+            // Modify the shield value before it is stored, ahead of health conversion and shield change handling
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.EmitDelegate(ModifyShieldFromHealth);
+        }
+
+        private static float ModifyShieldFromHealth(float _shield, CharacterBody _body)
+        {
+            if (!CanRunHook(shieldFromHealthHook) || modifyShieldFromHealthCallbacks.Count == 0 || !_body) return _shield;
+
+            shieldFromHealthHook.StartProfiling();
+            try
+            {
+                float maxHealth = _body.maxHealth;
+                foreach (ModifyShieldFromHealthCallback callback in modifyShieldFromHealthCallbacks)
+                {
+                    callback(_body, maxHealth, ref _shield);
+                }
+
+                return _shield;
+            }
+            finally
+            {
+                shieldFromHealthHook.StopProfiling();
+            }
+        }
+
+        // Shield delays shared by MoreStats and Faithful
+        internal const float MinimumShieldRechargeDelay = 1.0f;
+        private static readonly List<ModifyShieldRechargeDelayCallback> modifyShieldRechargeDelayCallbacks = new();
+
+        private static readonly bool useMoreStatsForShieldRechargeDelay = MoreStatsCompatBootstrap.IsAvailable;
+
+        private static readonly HookRegistration shieldRechargeDelayHook = new("Shield recharge delay",
+            EnableShieldRechargeDelay,
+            DisableShieldRechargeDelay);
+
+        private static void EnableShieldRechargeDelay()
+        {
+            // Use one route for the shared callbacks
+            if (useMoreStatsForShieldRechargeDelay) MoreStatsCompatBootstrap.TryInit();
+            else IL.RoR2.HealthComponent.ServerFixedUpdate += HookShieldRechargeDelay;
+        }
+
+        private static void DisableShieldRechargeDelay()
+        {
+            if (useMoreStatsForShieldRechargeDelay) MoreStatsCompatBootstrap.TryShutdown();
+            else IL.RoR2.HealthComponent.ServerFixedUpdate -= HookShieldRechargeDelay;
+        }
+
+        private static void HookShieldRechargeDelay(ILContext _il)
+        {
+            ILCursor cursor = new(_il);
+
+            // Find the out-of-danger check used for shield recharging
+            if (!cursor.TryGotoNext(MoveType.After, instruction => instruction.MatchCallOrCallvirt<CharacterBody>("get_maxShield")) ||
+                !cursor.TryGotoNext(MoveType.After, instruction => instruction.MatchCallOrCallvirt<CharacterBody>("get_outOfDanger")))
+            {
+                throw new System.InvalidOperationException("Could not find the shield recharge check in ServerFixedUpdate.");
+            }
+
+            // Change only this check, keeping forced regeneration and the shield break guard
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.EmitDelegate(ModifyShieldRechargeReady);
+        }
+
+        private static bool ModifyShieldRechargeReady(bool _outOfDanger, HealthComponent _healthComponent)
+        {
+            if (!CanRunHook(shieldRechargeDelayHook) || modifyShieldRechargeDelayCallbacks.Count == 0) return _outOfDanger;
+
+            CharacterBody body = _healthComponent.body;
+            if (!body || _healthComponent.shield >= body.maxShield) return _outOfDanger;
+
+            float baseDelay = CharacterBody.outOfDangerDelay;
+            float delay = baseDelay;
+            ModifyShieldRechargeDelay(body, MinimumShieldRechargeDelay, ref delay);
+            if (delay == baseDelay) return _outOfDanger;
+
+            // Reuse the damage stopwatch without changing the shared out-of-danger state
+            return body.outOfDangerStopwatch >= delay;
+        }
+
+        public static void AddModifyShieldRechargeDelayCallback(ModifyShieldRechargeDelayCallback _callback)
+        {
+            modifyShieldRechargeDelayCallbacks.Add(_callback);
+            DebugLog("Added Modify Shield Recharge Delay behaviour");
+        }
+
+        internal static void ModifyShieldRechargeDelay(CharacterBody _body, float _minimumDelay, ref float _delay)
+        {
+            if (!CanRunHook(shieldRechargeDelayHook) || !_body || modifyShieldRechargeDelayCallbacks.Count == 0) return;
+
+            FaithfulRuntimeProfiler.StartScope("Behaviour.ModifyShieldRechargeDelay");
+            try
+            {
+                float originalDelay = _delay;
+                foreach (ModifyShieldRechargeDelayCallback callback in modifyShieldRechargeDelayCallbacks)
+                {
+                    callback(_body, _minimumDelay, ref _delay);
+                }
+                if (_delay != originalDelay) _delay = Mathf.Max(_minimumDelay, _delay);
+            }
+            finally
+            {
+                FaithfulRuntimeProfiler.StopScope("Behaviour.ModifyShieldRechargeDelay");
+            }
+        }
+
+        // Shield recharge transitions and the normal out-of-danger sound
+        private static readonly List<CharacterBodyCallback> onShieldRechargeStartedCallbacks = new();
+        private static readonly List<CanPlayShieldRechargeSoundCallback> canPlayShieldRechargeSoundCallbacks = new();
+
+        private static readonly HookRegistration shieldRechargeHook = new("HealthComponent.ServerFixedUpdate (shield recharge)",
+            () => IL.RoR2.HealthComponent.ServerFixedUpdate += HookShieldRecharge,
+            () => IL.RoR2.HealthComponent.ServerFixedUpdate -= HookShieldRecharge);
+
+        private static readonly HookRegistration shieldRechargeSoundHook = new("CharacterBody.OnOutOfDangerChanged (shield sound)",
+            () => IL.RoR2.CharacterBody.OnOutOfDangerChanged += HookShieldRechargeSound,
+            () => IL.RoR2.CharacterBody.OnOutOfDangerChanged -= HookShieldRechargeSound);
+
+        internal static bool shieldRechargeSoundChangesAvailable => CanRunHook(shieldRechargeHook) && CanRunHook(shieldRechargeSoundHook);
+
+        public static void AddOnShieldRechargeStartedCallback(CharacterBodyCallback _callback)
+        {
+            onShieldRechargeStartedCallbacks.Add(_callback);
+            DebugLog("Added On Shield Recharge Started behaviour");
+        }
+
+        public static void AddCanPlayShieldRechargeSoundCallback(CanPlayShieldRechargeSoundCallback _callback)
+        {
+            canPlayShieldRechargeSoundCallbacks.Add(_callback);
+            DebugLog("Added Can Play Shield Recharge Sound behaviour");
+        }
+
+        private static void HookShieldRecharge(ILContext _il)
+        {
+            ILCursor cursor = new(_il);
+            int shieldVariable = -1;
+
+            // Find the shield value being updated and the end of the recharge block
+            if (!cursor.TryGotoNext(MoveType.After,
+                    instruction => instruction.MatchLdarg(0),
+                    instruction => instruction.MatchLdfld<HealthComponent>("shield"),
+                    instruction => instruction.MatchStloc(out shieldVariable)) ||
+                !cursor.TryGotoNext(MoveType.After, instruction => instruction.MatchLdfld<CharacterBody>("shieldBrokeSinceDangerCheck")) ||
+                !cursor.Next.MatchBrtrue(out ILLabel rechargeFinished))
+            {
+                throw new System.InvalidOperationException("Could not find the shield recharge block in ServerFixedUpdate.");
+            }
+
+            // Include skipped recharge paths, before the completion sound and shield assignment
+            cursor.GotoLabel(rechargeFinished);
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.Emit(OpCodes.Ldloc, shieldVariable);
+            cursor.EmitDelegate(UpdateShieldRecharge);
+        }
+
+        private static void UpdateShieldRecharge(HealthComponent _healthComponent, float _newShield)
+        {
+            if (!CanRunHook(shieldRechargeHook) || onShieldRechargeStartedCallbacks.Count == 0) return;
+
+            shieldRechargeHook.StartProfiling();
+            try
+            {
+                CharacterBody body = _healthComponent.body;
+                FaithfulCharacterBodyBehaviour helper = Utils.FindCharacterBodyHelper(body, _warnIfMissing: false);
+                if (!helper) return;
+
+                // Only the recharge block has changed this local shield value
+                bool recharging = _newShield > _healthComponent.shield;
+                if (helper.shieldRecharging == recharging) return;
+
+                helper.shieldRecharging = recharging;
+                if (!recharging) return;
+
+                foreach (CharacterBodyCallback callback in onShieldRechargeStartedCallbacks)
+                {
+                    callback(body);
+                }
+            }
+            finally
+            {
+                shieldRechargeHook.StopProfiling();
+            }
+        }
+
+        private static void HookShieldRechargeSound(ILContext _il)
+        {
+            ILCursor cursor = new(_il);
+            if (!cursor.TryGotoNext(MoveType.After, instruction => instruction.MatchCallOrCallvirt<CharacterBody>("get_outOfDanger")))
+            {
+                throw new System.InvalidOperationException("Could not find the shield sound check in OnOutOfDangerChanged.");
+            }
+
+            // Change only the sound condition, leaving stat updates in place
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.EmitDelegate(CanPlayShieldRechargeSound);
+        }
+
+        private static bool CanPlayShieldRechargeSound(bool _canPlay, CharacterBody _body)
+        {
+            if (!_canPlay || !CanRunHook(shieldRechargeSoundHook)) return _canPlay;
+
+            shieldRechargeSoundHook.StartProfiling();
+            try
+            {
+                foreach (CanPlayShieldRechargeSoundCallback callback in canPlayShieldRechargeSoundCallbacks)
+                {
+                    if (!callback(_body)) return false;
+                }
+                return true;
+            }
+            finally
+            {
+                shieldRechargeSoundHook.StopProfiling();
+            }
+        }
+
+        // Shared void shield choices for the HUD, model, item displays and break effects
+        private static readonly List<ModifyVoidShieldVisualsCallback> modifyVoidShieldVisualsCallbacks = new();
+
+        private static readonly HookRegistration voidShieldOverlayHook = new("CharacterModel.UpdateOverlays (void shields)",
+            () => IL.RoR2.CharacterModel.UpdateOverlays += HookVoidShieldOverlay,
+            () => IL.RoR2.CharacterModel.UpdateOverlays -= HookVoidShieldOverlay);
+
+        private static readonly HookRegistration voidShieldDisplayHook = new("ShieldBoosterBodyBehavior.FixedUpdate (void shields)",
+            () => IL.RoR2.Items.ShieldBoosterBodyBehavior.FixedUpdate += HookVoidShieldDisplay,
+            () => IL.RoR2.Items.ShieldBoosterBodyBehavior.FixedUpdate -= HookVoidShieldDisplay);
+
+        private static readonly HookRegistration voidShieldBreakHook = new("HealthComponent.TakeDamageProcess (void shields)",
+            () => IL.RoR2.HealthComponent.TakeDamageProcess += HookVoidShieldBreak,
+            () => IL.RoR2.HealthComponent.TakeDamageProcess -= HookVoidShieldBreak);
+
+        private static readonly HookRegistration voidShieldSetHook = new("HealthComponent.SetShield (void shields)",
+            () => IL.RoR2.HealthComponent.SetShield += HookVoidShieldSet,
+            () => IL.RoR2.HealthComponent.SetShield -= HookVoidShieldSet);
+
+        public static void AddModifyVoidShieldVisualsCallback(ModifyVoidShieldVisualsCallback _callback)
+        {
+            modifyVoidShieldVisualsCallbacks.Add(_callback);
+            DebugLog("Added Modify Void Shield Visuals behaviour");
+        }
+
+        private static void HookVoidShieldOverlay(ILContext _il)
+        {
+            PatchVoidShieldVisualCheck<CharacterModel>(_il, voidShieldOverlayHook, _model => _model.body);
+        }
+
+        private static void HookVoidShieldDisplay(ILContext _il)
+        {
+            PatchVoidShieldVisualCheck<RoR2.Items.ShieldBoosterBodyBehavior>(_il, voidShieldDisplayHook, _behaviour => _behaviour.body);
+        }
+
+        private static void HookVoidShieldBreak(ILContext _il)
+        {
+            PatchVoidShieldVisualCheck<HealthComponent>(_il, voidShieldBreakHook, _healthComponent => _healthComponent.body);
+        }
+
+        private static void HookVoidShieldSet(ILContext _il)
+        {
+            PatchVoidShieldVisualCheck<HealthComponent>(_il, voidShieldSetHook, _healthComponent => _healthComponent.body);
+        }
+
+        private static void PatchVoidShieldVisualCheck<T>(ILContext _il, HookRegistration _hook, System.Func<T, CharacterBody> _getBody)
+        {
+            ILCursor cursor = new(_il);
+
+            // Extend only the visual choice made by the Plasma Shrimp check
+            if (!cursor.TryGotoNext(MoveType.After,
+                    instruction => instruction.MatchLdsfld(typeof(DLC1Content.Items), nameof(DLC1Content.Items.MissileVoid)),
+                    instruction => instruction.MatchCallOrCallvirt<Inventory>(nameof(Inventory.GetItemCountEffective)),
+                    instruction => instruction.MatchLdcI4(0),
+                    instruction => instruction.MatchCgt()))
+            {
+                throw new System.InvalidOperationException($"Could not find the void shield visual check in {_il.Method.Name}.");
+            }
+
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.EmitDelegate<System.Func<bool, T, bool>>((hasVoidShields, source) => CanRunHook(_hook) ? ModifyVoidShieldVisuals(_getBody(source), hasVoidShields) : hasVoidShields);
+        }
+
+        private static bool ModifyVoidShieldVisuals(CharacterBody _body, bool _hasVoidShields)
+        {
+            if (!enabled || !Faithful.InitializationSucceeded || !_body || modifyVoidShieldVisualsCallbacks.Count == 0) return _hasVoidShields;
+
+            FaithfulRuntimeProfiler.StartScope("Behaviour.ModifyVoidShieldVisuals");
+            try
+            {
+                foreach (ModifyVoidShieldVisualsCallback callback in modifyVoidShieldVisualsCallbacks)
+                {
+                    callback(_body, ref _hasVoidShields);
+                }
+                return _hasVoidShields;
+            }
+            finally
+            {
+                FaithfulRuntimeProfiler.StopScope("Behaviour.ModifyVoidShieldVisuals");
+            }
+        }
+
+        // Health bar display values
+        private static readonly List<ModifyHealthBarValuesCallback> modifyHealthBarValuesCallbacks = new();
+
+        private static readonly HookRegistration healthBarValuesHook = new("HealthComponent.GetHealthBarValues",
+            () => On.RoR2.HealthComponent.GetHealthBarValues += HookHealthBarValues,
+            () => On.RoR2.HealthComponent.GetHealthBarValues -= HookHealthBarValues);
+
+        public static void AddModifyHealthBarValuesCallback(ModifyHealthBarValuesCallback _callback)
+        {
+            modifyHealthBarValuesCallbacks.Add(_callback);
+            DebugLog("Added Modify Health Bar Values behaviour");
+        }
+
+        private static HealthComponent.HealthBarValues HookHealthBarValues(On.RoR2.HealthComponent.orig_GetHealthBarValues orig, HealthComponent self)
+        {
+            HealthComponent.HealthBarValues values = orig(self);
+            if (!CanRunHook(healthBarValuesHook)) return values;
+
+            healthBarValuesHook.StartProfiling();
+            try
+            {
+                values.hasVoidShields = ModifyVoidShieldVisuals(self.body, values.hasVoidShields);
+
+                foreach (ModifyHealthBarValuesCallback callback in modifyHealthBarValuesCallbacks)
+                {
+                    callback(self, ref values);
+                }
+
+                return values;
+            }
+            finally
+            {
+                healthBarValuesHook.StopProfiling();
+            }
+        }
+
         // Recalculate stats: callbacks run after the original method
         private static readonly List<CharacterBodyCallback> onRecalculateStatsCallbacks = new List<CharacterBodyCallback>();
 
@@ -483,6 +856,12 @@ namespace Faithful
             onRecalculateStatsCallbacks.Add(_callback);
 
             DebugLog("Added On Recalculate Stats behaviour");
+        }
+
+        public static void RemoveOnRecalculateStatsCallback(CharacterBodyCallback _callback)
+        {
+            onRecalculateStatsCallbacks.Remove(_callback);
+            DebugLog("Removed On Recalculate Stats behaviour");
         }
 
         private static void HookRecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)

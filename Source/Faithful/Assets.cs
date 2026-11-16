@@ -36,6 +36,8 @@ namespace Faithful
         public static Material captainAirstrikeAreaIndicatorMaterial;
         public static Material captainSupplyDropAreaIndicator2Material;
         public static Material captainSupplyDropAreaIndicatorOuterMaterial;
+        public static Material chanceDollSymbolMaterial;
+        public static Material chanceDollSymbolSimpleMaterial;
         public static Material chefAlwaysOnTopMaterial;
         public static Material childStarCoreMaterial;
         public static Material childStarGlowMaterial;
@@ -163,6 +165,8 @@ namespace Faithful
             captainAirstrikeAreaIndicatorMaterial = FetchAsset<Material>("RoR2/Base/Captain/matCaptainAirstrikeAreaIndicator.mat");
             captainSupplyDropAreaIndicator2Material = FetchAsset<Material>("RoR2/Base/Captain/matCaptainSupplyDropAreaIndicator2.mat");
             captainSupplyDropAreaIndicatorOuterMaterial = FetchAsset<Material>("RoR2/Base/Captain/matCaptainSupplyDropAreaIndicatorOuter.mat");
+            chanceDollSymbolMaterial = FetchAsset<Material>("RoR2/DLC2/Items/ExtraShrineItem/matChanceDollSymbol.mat");
+            chanceDollSymbolSimpleMaterial = FetchAsset<Material>("RoR2/DLC2/Items/ExtraShrineItem/matChanceDollSymbolSimple.mat");
             chefAlwaysOnTopMaterial = FetchAsset<Material>("RoR2/DLC2/Chef/matChef_AlwaysOnTop.mat");
             childStarCoreMaterial = FetchAsset<Material>("RoR2/DLC2/Child/matChildStarCore.mat");
             childStarGlowMaterial = FetchAsset<Material>("RoR2/DLC2/Child/matChildStarGlow.mat");

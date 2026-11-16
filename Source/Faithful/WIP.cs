@@ -102,6 +102,7 @@ namespace Faithful
                 }
             });
 
+            /*
             CreateItem(new WIPItemOptions(
                 name: "Plasma Field Generator",
                 tags: [ItemTag.Utility, ItemTag.Technology],
@@ -146,6 +147,7 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Acolyte", "Chest", new Vector3(0F, 0.138F, 0.146F), new Vector3(329.5F, 0F, 0F), new Vector3(0.04F, 0.04F, 0.04F));
                 }
             });
+            */
 
             CreateItem(new WIPItemOptions(
                 name: "Toxin Canister",

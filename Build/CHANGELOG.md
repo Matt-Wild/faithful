@@ -3,10 +3,12 @@
 **Added**
 - Added Lucky Figurine item.
 - Added Charming Facade item.
+- Added Plasma Field Generator item.
 - Added "Ban From Simulacrum?" config for all items.
 
 **Fixed**
 - Fixed some setting sliders not working properly when using Risk Of Options.
+- Fixed NRE spam due to external issues involving failed character cleanup.
 
 ### v1.5.13
 
