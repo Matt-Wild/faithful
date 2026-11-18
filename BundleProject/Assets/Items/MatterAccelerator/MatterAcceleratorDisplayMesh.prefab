@@ -166,6 +166,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: 85455ab293bb80042a7fcaa786770385, type: 3}
@@ -204,7 +209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1680372781562454384
 Transform:
   m_ObjectHideFlags: 0
@@ -413,7 +418,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6260553783679939141}
   m_Layer: 0
-  m_Name: MatterAcceleratorDisplayMesh 1
+  m_Name: MatterAcceleratorDisplayMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -572,7 +577,7 @@ SkinnedMeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8582301575971825608}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -636,6 +641,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: 85455ab293bb80042a7fcaa786770385, type: 3}
