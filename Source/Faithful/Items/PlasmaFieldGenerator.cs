@@ -1,5 +1,7 @@
 ﻿using RoR2;
+using R2API;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
@@ -20,6 +22,14 @@ namespace Faithful
         float rechargeTimeReduction;
         float rechargeTimeReductionStacking;
 
+        // Item Quality settings
+        QualitySetting<float> shieldIncreaseQualitySetting;
+        QualitySetting<float> shieldIncreaseStackingQualitySetting;
+
+        // Item Quality stats from settings
+        QualityValues<float> shieldIncreaseQualityValues = new();
+        QualityValues<float> shieldIncreaseStackingQualityValues = new();
+
         // Constructor
         public PlasmaFieldGenerator(Toolbox _toolbox) : base(_toolbox, "PLASMA_FIELD_GENERATOR")
         {
@@ -36,7 +46,7 @@ namespace Faithful
             {
                 Tier = ItemTier.VoidTier1,
                 CorruptToken = "ITEM_PERSONALSHIELD_NAME",
-                SupportsQuality = false,
+                SupportsQuality = true,
                 DisplaySettings = displaySettings
             });
 
@@ -54,6 +64,15 @@ namespace Faithful
 
             // Use the base game's void shield visuals
             Behaviour.AddModifyVoidShieldVisualsCallback(ModifyVoidShieldVisuals);
+        }
+
+        public override void QualityConstructor()
+        {
+            // Add quality stats mods
+            Behaviour.AddStatsMod(StatsMod_Quality);
+
+            // Recharge shields when activating an interactable
+            Behaviour.AddOnInteractionBeginProcCallback(OnInteractionBeginProc_Quality);
         }
 
         private void CreateDisplaySettings(string _displayMeshName)
@@ -143,30 +162,67 @@ namespace Faithful
             shieldStackingSetting = MainItem.CreateSetting("SHIELD_STACKING", "Shield Stacking", 4.0f, "How much additional shield should further stacks grant? (4.0 = 4% shield)", _valueFormatting: "{0:0.0}%");
             rechargeTimeReductionSetting = MainItem.CreateSetting("RECHARGE_TIME_REDUCTION", "Recharge Time Reduction", 5.0f, "How much should the first stack reduce the delay before shields begin recharging? The delay cannot go below 1 second. (5.0 = 5% reduction)", _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
             rechargeTimeReductionStackingSetting = MainItem.CreateSetting("RECHARGE_TIME_REDUCTION_STACKING", "Recharge Time Reduction Stacking", 5.0f, "How strongly should further stacks reduce the remaining delay above the 1 second minimum? The percentage is scaled against the full unmodified delay, matching the first stack's strength. (5.0 = 5% reduction strength)", _maxValue: 100.0f, _valueFormatting: "{0:0.0}%");
+
+            // Create quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) CreateQualitySettings();
+        }
+
+        protected void CreateQualitySettings()
+        {
+            // Create quality settings specific to this item
+            shieldIncreaseQualitySetting = MainItem.CreateQualitySetting("SHIELD_INCREASE", "Shield Increase", 10.0f, 25.0f, 50.0f, 100.0f, "How much should the first stack of this quality item increase shield from all sources? (10.0 = 10% increase)", _valueFormatting: "{0:0.0}%");
+            shieldIncreaseStackingQualitySetting = MainItem.CreateQualitySetting("SHIELD_INCREASE_STACKING", "Shield Increase Stacking", 10.0f, 25.0f, 50.0f, 100.0f, "How much additional shield increase should further stacks of this quality item grant? (10.0 = 10% increase)", _valueFormatting: "{0:0.0}%");
         }
 
         public override void FetchSettings()
         {
-            bool statsChanged = shield != shieldSetting.Value || shieldStacking != shieldStackingSetting.Value ||
-                rechargeTimeReduction != rechargeTimeReductionSetting.Value || rechargeTimeReductionStacking != rechargeTimeReductionStackingSetting.Value;
-
             // Get item settings
             shield = shieldSetting.Value;
             shieldStacking = shieldStackingSetting.Value;
             rechargeTimeReduction = rechargeTimeReductionSetting.Value;
             rechargeTimeReductionStacking = rechargeTimeReductionStackingSetting.Value;
 
+            // Fetch quality settings for this item if quality is enabled and this item supports quality
+            if (MainItem.supportsQuality && Utils.qualityEnabled) FetchQualitySettings();
+
             // Update item texts with new settings
             MainItem.UpdateItemTexts();
+        }
 
-            // Refresh cached shield stats when settings change during a run
-            if (statsChanged)
-            {
-                foreach (CharacterBody body in CharacterBody.readOnlyInstancesList)
-                {
-                    if (body.inventory && body.inventory.GetItemCountEffective(MainItem.itemDef) > 0) body.MarkAllStatsDirty();
-                }
-            }
+        protected void FetchQualitySettings()
+        {
+            // Update item quality values
+            shieldIncreaseQualityValues.UpdateValues(shieldIncreaseQualitySetting);
+            shieldIncreaseStackingQualityValues.UpdateValues(shieldIncreaseStackingQualitySetting);
+        }
+
+        private void StatsMod_Quality(CharacterBody _body, RecalculateStatsAPI.StatHookEventArgs _stats)
+        {
+            // Check for the item before fetching quality counts
+            if (!_body.inventory || _body.inventory.GetItemCountEffective(MainItem.itemDef) <= 0) return;
+
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(_body.inventory, MainItem);
+            if (counts.Total <= 0) return;
+
+            // Increase shield from all sources, adding the bonus from each quality
+            _stats.shieldMultAdd += (Utils.CalculateStackingValue(counts.UNCOMMON, shieldIncreaseQualityValues.UNCOMMON, shieldIncreaseStackingQualityValues.UNCOMMON)
+                + Utils.CalculateStackingValue(counts.EPIC, shieldIncreaseQualityValues.EPIC, shieldIncreaseStackingQualityValues.EPIC)
+                + Utils.CalculateStackingValue(counts.RARE, shieldIncreaseQualityValues.RARE, shieldIncreaseStackingQualityValues.RARE)
+                + Utils.CalculateStackingValue(counts.LEGENDARY, shieldIncreaseQualityValues.LEGENDARY, shieldIncreaseStackingQualityValues.LEGENDARY)) / 100.0f;
+        }
+
+        private void OnInteractionBeginProc_Quality(Interactor _interactor, IInteractable _interactable, GameObject _interactableObject)
+        {
+            // Only the server should start regeneration
+            if (!NetworkServer.active || !_interactor) return;
+
+            CharacterBody body = _interactor.GetComponent<CharacterBody>();
+            if (!body || !body.inventory || !body.healthComponent) return;
+            if (body.inventory.GetItemCountEffective(MainItem.itemDef) <= 0) return;
+
+            // Any quality variant starts normal shield regeneration
+            QualityCounts counts = QualityCompat.GetItemCountsEffective(body.inventory, MainItem);
+            if (counts.Total > 0) body.healthComponent.ForceShieldRegen();
         }
     }
 }

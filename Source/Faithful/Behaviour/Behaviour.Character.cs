@@ -10,6 +10,8 @@ namespace Faithful
 {
     internal delegate void StatsModCallback(int _count, RecalculateStatsAPI.StatHookEventArgs _stats);
 
+    internal delegate void BodyStatsModCallback(CharacterBody _body, RecalculateStatsAPI.StatHookEventArgs _stats);
+
     internal delegate void CharacterBodyCallback(CharacterBody _body);
 
     internal delegate void ModifyShieldFromHealthCallback(CharacterBody _body, float _maxHealth, ref float _shield);
@@ -430,6 +432,8 @@ namespace Faithful
 
         private static readonly List<BuffStatsMod> buffStatsMods = new List<BuffStatsMod>();
 
+        private static readonly List<BodyStatsModCallback> bodyStatsModCallbacks = new List<BodyStatsModCallback>();
+
         private static readonly HookRegistration statsModHook = new("RecalculateStatsAPI.GetStatCoefficients",
             () => RecalculateStatsAPI.GetStatCoefficients += HookStatsMod,
             () => RecalculateStatsAPI.GetStatCoefficients -= HookStatsMod);
@@ -452,6 +456,14 @@ namespace Faithful
             DebugLog($"Added stat mods for '{_buff.token}' buff");
         }
 
+        // Add character body stats mod
+        public static void AddStatsMod(BodyStatsModCallback _callback)
+        {
+            bodyStatsModCallbacks.Add(_callback);
+
+            DebugLog("Added character body stat mods");
+        }
+
         // Do stat modifications
         private static void HookStatsMod(CharacterBody _body, RecalculateStatsAPI.StatHookEventArgs _stats)
         {
@@ -472,6 +484,12 @@ namespace Faithful
                 {
                     // Process buff stats mod
                     buffStatsMod.Process(_body, _stats);
+                }
+
+                // Cycle through character body stats mod callbacks
+                foreach (BodyStatsModCallback callback in bodyStatsModCallbacks)
+                {
+                    callback(_body, _stats);
                 }
             }
             finally
