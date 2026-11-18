@@ -84,7 +84,7 @@ namespace Faithful
             // Create buffs tied to item
             charmedBuff = Buffs.AddBuff(token, "Charmed", "texCharmingFacadeBuff", Color.white, false, _overlay: charmedOverlay, _visual: charmedVisual);
             charmingStockBuff = Buffs.AddBuff($"{token}_STOCK", "Charm Stock", "texCharmingStockBuff", Color.white);
-            charmingStockEmptyBuff = Buffs.AddBuff($"{token}_STOCK_EMPTY", "Charm Stock Empty", "texCharmingStockEmptyBuff", Color.white, false);
+            charmingStockEmptyBuff = Buffs.AddBuff($"{token}_STOCK_EMPTY", "Charm Stock Empty", "texCharmingStockEmptyBuff", Color.white, false, _isCooldown: true);
 
             // Create item settings
             CreateSettings();

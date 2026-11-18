@@ -30,7 +30,7 @@ namespace Faithful
         public string safeName;
 
         // Constructor
-        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, BuffOverlayVisuals.BuffOverlayVisual _visual = null, string _langTokenOverride = null, bool _qualityBuff = false)
+        public Buff(string _token, string _safeName, string _iconName, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _isCooldown = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, BuffOverlayVisuals.BuffOverlayVisual _visual = null, string _langTokenOverride = null, bool _qualityBuff = false)
         {
             // Assign token
             token = _token;
@@ -79,6 +79,7 @@ namespace Faithful
             // Set buff configs
             buffDef.canStack = _canStack;
             buffDef.isDebuff = _isDebuff;
+            buffDef.isCooldown = _isCooldown;
 
             // Set if buff is hidden (Also hide if using temporary assets when not in debug mode)
             buffDef.isHidden = _isHidden || forceHide;

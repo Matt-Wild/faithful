@@ -54,7 +54,8 @@ namespace Faithful
             {
                 Tier = ItemTier.Tier1,
                 SupportsQuality = true,
-                DisplaySettings = displaySettings
+                DisplaySettings = displaySettings,
+                ModifyItemDisplayPrefabCallback = ModifyItemDisplayPrefab
             });
             matterAcceleratorBuff = Buffs.AddBuff("MATTER_ACCELERATOR", "Matter Accelerator", "texMatterAcceleratorBuff", Color.white, false);
             matterAcceleratorSpeedBuff = Buffs.AddBuff("MATTER_ACCELERATOR_SPEED", "Matter Accelerator Speed", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
@@ -164,6 +165,12 @@ namespace Faithful
             healthPercQualityValues.UpdateValues(healthPercQualitySetting, 0.01f);
             speedQualityValues.UpdateValues(speedQualitySetting);
             speedStackingQualityValues.UpdateValues(speedStackingQualitySetting);
+        }
+
+        private void ModifyItemDisplayPrefab(GameObject _model)
+        {
+            // Switch the item display to match the holder's shield type
+            _model.AddComponent<FaithfulMatterAcceleratorDisplayBehaviour>();
         }
 
         void MatterAcceleratorHealthBuffStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)

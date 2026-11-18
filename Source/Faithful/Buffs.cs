@@ -23,10 +23,10 @@ namespace Faithful
             Behaviour.AddOnBodyDestroyedCallback(OnBodyDestroyed);
         }
 
-        public static Buff AddBuff(string _token, string _safeName, string _iconDir, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, BuffOverlayVisuals.BuffOverlayVisual _visual = null, string _langTokenOverride = null, bool _qualityBuff = false)
+        public static Buff AddBuff(string _token, string _safeName, string _iconDir, Color _colour, bool _canStack = true, bool _isDebuff = false, bool _isHidden = false, bool _isCooldown = false, bool _hasConfig = true, bool _usePercentageDisplay = false, Overlays.Overlay _overlay = null, BuffOverlayVisuals.BuffOverlayVisual _visual = null, string _langTokenOverride = null, bool _qualityBuff = false)
         {
             // Create buff
-            Buff newBuff = new Buff(_token, _safeName, _iconDir, _colour, _canStack, _isDebuff, _isHidden, _hasConfig, _usePercentageDisplay, _overlay, _visual, _langTokenOverride, _qualityBuff);
+            Buff newBuff = new Buff(_token, _safeName, _iconDir, _colour, _canStack, _isDebuff, _isHidden, _isCooldown, _hasConfig, _usePercentageDisplay, _overlay, _visual, _langTokenOverride, _qualityBuff);
 
             // Add buff to buffs list
             buffs.Add(newBuff);

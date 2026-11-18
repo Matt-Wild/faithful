@@ -6,6 +6,9 @@
 - Added Plasma Field Generator item.
 - Added "Ban From Simulacrum?" config for all items.
 
+**Changed**
+- Matter Accelerator's item display now changes if the character had void shield.
+
 **Fixed**
 - Fixed some setting sliders not working properly when using Risk Of Options.
 - Fixed NRE spam due to external issues involving failed character cleanup.
