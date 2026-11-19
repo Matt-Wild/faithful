@@ -9,8 +9,8 @@ namespace Faithful
     {
         // Store buffs
         Buff matterAcceleratorBuff;
+        Buff matterAcceleratorVoidBuff;
         Buff matterAcceleratorSpeedBuff;
-        Buff matterAcceleratorHealthBuff;
 
         // Quality buffs
         Buff matterAcceleratorQualityBuff;
@@ -58,8 +58,8 @@ namespace Faithful
                 ModifyItemDisplayPrefabCallback = ModifyItemDisplayPrefab
             });
             matterAcceleratorBuff = Buffs.AddBuff("MATTER_ACCELERATOR", "Matter Accelerator", "texMatterAcceleratorBuff", Color.white, false);
+            matterAcceleratorVoidBuff = Buffs.AddBuff("MATTER_ACCELERATOR_VOID", "Matter Accelerator Void", "texMatterAcceleratorVoidBuff", Color.white, false, _isHidden: matterAcceleratorBuff.buffDef.isHidden, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
             matterAcceleratorSpeedBuff = Buffs.AddBuff("MATTER_ACCELERATOR_SPEED", "Matter Accelerator Speed", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
-            matterAcceleratorHealthBuff = Buffs.AddBuff("MATTER_ACCELERATOR_HEALTH", "Matter Accelerator Health", "texMatterAcceleratorBuff", Color.white, _isHidden: true, _hasConfig: false, _langTokenOverride: "MATTER_ACCELERATOR");
 
             // Create item settings
             CreateSettings();
@@ -69,7 +69,7 @@ namespace Faithful
 
             // Add stats modification
             Behaviour.AddStatsMod(matterAcceleratorSpeedBuff, MatterAcceleratorBuffStatsMod);
-            Behaviour.AddStatsMod(matterAcceleratorHealthBuff, MatterAcceleratorHealthBuffStatsMod);
+            Behaviour.AddModifyShieldFromHealthCallback(ModifyShieldFromHealth);
 
             // Link Generic Character Fixed Update behaviour
             Behaviour.AddGenericCharacterFixedUpdateCallback(GenericCharacterFixedUpdate);
@@ -173,10 +173,13 @@ namespace Faithful
             _model.AddComponent<FaithfulMatterAcceleratorDisplayBehaviour>();
         }
 
-        void MatterAcceleratorHealthBuffStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
+        private void ModifyShieldFromHealth(CharacterBody _body, float _maxHealth, ref float _shield)
         {
-            // Modify shield
-            _stats.baseShieldAdd += _count;
+            // Check for item
+            if (!_body.inventory || _body.inventory.GetItemCountEffective(MainItem.itemDef) <= 0) return;
+
+            // Add shield using the current maximum health
+            _shield += _maxHealth * shieldGain;
         }
 
         void MatterAcceleratorBuffStatsMod(int _count, RecalculateStatsAPI.StatHookEventArgs _stats)
@@ -208,22 +211,21 @@ namespace Faithful
             {
                 // Ensure no buffs
                 characterBody.SetBuffCount(matterAcceleratorBuff.buffDef.buffIndex, 0);
+                characterBody.SetBuffCount(matterAcceleratorVoidBuff.buffDef.buffIndex, 0);
                 characterBody.SetBuffCount(matterAcceleratorSpeedBuff.buffDef.buffIndex, 0);
-                characterBody.SetBuffCount(matterAcceleratorHealthBuff.buffDef.buffIndex, 0);
                 return;
             }
 
             // Get needed amount of speed buffs
             int neededSpeed = healthComponent.shield > 0.0f || healthComponent.barrier > 0.0f ? itemCount : 0;
 
-            // Update visual buff
-            characterBody.SetBuffCount(matterAcceleratorBuff.buffDef.buffIndex, neededSpeed > 0 ? 1 : 0);
+            // Update visual buff to match the shield type
+            bool hasVoidShields = neededSpeed > 0 && healthComponent.GetHealthBarValues().hasVoidShields;
+            characterBody.SetBuffCount(matterAcceleratorBuff.buffDef.buffIndex, neededSpeed > 0 && !hasVoidShields ? 1 : 0);
+            characterBody.SetBuffCount(matterAcceleratorVoidBuff.buffDef.buffIndex, hasVoidShields ? 1 : 0);
 
             // Update speed buff based on shield or barrier
             characterBody.SetBuffCount(matterAcceleratorSpeedBuff.buffDef.buffIndex, neededSpeed);
-
-            // Update health buff based on max health
-            characterBody.SetBuffCount(matterAcceleratorHealthBuff.buffDef.buffIndex, Mathf.CeilToInt(healthComponent.fullHealth * shieldGain));
         }
 
         void GenericCharacterFixedUpdate_Quality(GenericCharacterMain _character)
