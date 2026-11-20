@@ -12,6 +12,7 @@
 **Fixed**
 - Fixed some setting sliders not working properly when using Risk Of Options.
 - Fixed NRE spam due to external issues involving failed character cleanup.
+- Fixed Matter Accelerator providing too little shield with Transcendence.
 
 ### v1.5.13
 
