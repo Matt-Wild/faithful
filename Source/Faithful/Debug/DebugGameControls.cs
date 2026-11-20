@@ -50,8 +50,6 @@ namespace Faithful
             List<string> stageNames = new();
             foreach (SceneDef scene in SceneCatalog.allSceneDefs)
             {
-                if (scene.sceneType != SceneType.Stage && scene.sceneType != SceneType.UntimedStage && scene.sceneType != SceneType.Intermission && scene.sceneType != SceneType.TimedIntermission) continue;
-                if (scene.isOfflineScene) continue;
                 if (scene.requiredExpansion && (!Run.instance || !Run.instance.IsExpansionEnabled(scene.requiredExpansion))) continue;
 
                 // Include the internal name to distinguish scenes with the same display name
