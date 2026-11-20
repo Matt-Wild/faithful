@@ -1,9 +1,11 @@
 ﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 namespace Faithful
 {
@@ -19,7 +21,7 @@ namespace Faithful
         // Store stage selection controls and destinations
         protected TMP_Dropdown stageDropdown;
         protected UnityEngine.UI.Button stageGoButton;
-        Dictionary<string, SceneDef> stageLookup = new();
+        Dictionary<string, string> stageLookup = new();
 
         public override void Awake()
         {
@@ -46,17 +48,37 @@ namespace Faithful
 
         private void CreateStageOptions()
         {
-            // Discover gameplay scenes, including hidden realms and stage variants
+            // Discover registered scenes and remember expansion-locked destinations
             List<string> stageNames = new();
+            HashSet<string> knownScenes = new(StringComparer.OrdinalIgnoreCase);
+            HashSet<string> blockedScenes = new(StringComparer.OrdinalIgnoreCase);
+            stageLookup.Clear();
             foreach (SceneDef scene in SceneCatalog.allSceneDefs)
             {
-                if (scene.requiredExpansion && (!Run.instance || !Run.instance.IsExpansionEnabled(scene.requiredExpansion))) continue;
+                // Remember filtered scenes so the built-in scene pass cannot add them back
+                knownScenes.Add(scene.cachedName);
+                if (scene.requiredExpansion && (!Run.instance || !Run.instance.IsExpansionEnabled(scene.requiredExpansion)))
+                {
+                    blockedScenes.Add(scene.baseSceneName);
+                    continue;
+                }
 
-                // Include the internal name to distinguish scenes with the same display name
-                string title = string.IsNullOrEmpty(scene.nameToken) ? scene.cachedName : Language.GetString(scene.nameToken);
-                string name = title;
+                // Keep existing display names and distinguish scenes which share a name
+                string name = string.IsNullOrEmpty(scene.nameToken) ? scene.cachedName : Language.GetString(scene.nameToken);
+                if (stageLookup.ContainsKey(name)) name = $"{name} [{scene.cachedName}]";
                 stageNames.Add(name);
-                stageLookup[name] = scene;
+                stageLookup[name] = scene.cachedName;
+            }
+
+            // Include built-in scenes which do not have a registered scene definition
+            for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+            {
+                string sceneName = System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
+                if (string.IsNullOrEmpty(sceneName) || !knownScenes.Add(sceneName) || blockedScenes.Contains(sceneName)) continue;
+
+                string name = stageLookup.ContainsKey(sceneName) ? $"{sceneName} [{sceneName}]" : sceneName;
+                stageNames.Add(name);
+                stageLookup[name] = sceneName;
             }
 
             // Keep the list alphabetical and reuse the existing selection dropdown
@@ -102,15 +124,19 @@ namespace Faithful
 
         private void OnGoToStage()
         {
-            // Teleport to the selected stage using the same transition as Skip Stage
+            // Check for host authority and a selected destination
             if (!NetworkServer.active || !Run.instance || !Stage.instance || stageDropdown.options.Count == 0) return;
-            if (!stageLookup.TryGetValue(stageDropdown.options[stageDropdown.value].text, out SceneDef scene)) return;
-            if (scene.requiredExpansion && !Run.instance.IsExpansionEnabled(scene.requiredExpansion)) return;
+            if (!stageLookup.TryGetValue(stageDropdown.options[stageDropdown.value].text, out string sceneName)) return;
 
-            Stage.instance.BeginAdvanceStage(scene);
+            SceneDef scene = SceneCatalog.FindSceneDef(sceneName);
+            if (scene && scene.requiredExpansion && !Run.instance.IsExpansionEnabled(scene.requiredExpansion)) return;
+
+            // Keep the normal stage transition where a scene definition is available
+            if (scene) Stage.instance.BeginAdvanceStage(scene);
+            else NetworkManager.singleton.ServerChangeScene(sceneName);
 
             // Log selected stage
-            Log.Debug($"[DEBUG MENU] | Going to stage: {scene.cachedName}.");
+            Log.Debug($"[DEBUG MENU] | Going to stage: {sceneName}.");
         }
 
         private void OnTimeScaleChanged(string _newTimeScale)
