@@ -103,6 +103,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}
@@ -506,6 +511,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}
@@ -689,6 +699,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}
@@ -1016,6 +1031,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}
@@ -1187,6 +1207,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}
@@ -1604,6 +1629,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}
@@ -1801,6 +1831,14 @@ MonoBehaviour:
     transform: {fileID: 601949828705480217}
   - name: BackpackDrill
     transform: {fileID: 601949828705480217}
+  - name: LobbyRobotAlly
+    transform: {fileID: 9013147066325103170}
+  - name: LobbyRobotAllyLights
+    transform: {fileID: 1171346313188646060}
+  - name: LobbyTurretAlly
+    transform: {fileID: 4385654696554391190}
+  - name: LobbyTurretAllyLights
+    transform: {fileID: 8591318359686046340}
 --- !u!114 &7840600021370491518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4421,6 +4459,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}
@@ -4846,6 +4889,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}
@@ -5420,6 +5468,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}
@@ -5773,6 +5826,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifier: 10
   salvageExistingProperties: 0
+  addDitherModelComponent: 0
+  ditherModelFade: 1
+  ditherModelOldFade: 1
+  ditherModelBounds: {fileID: 0}
+  ditherModelRenderers: []
   textureRules:
   - name: _EmTex
     texture: {fileID: 2800000, guid: ad35befd5e83eac46972688e9bd73711, type: 3}

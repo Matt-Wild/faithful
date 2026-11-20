@@ -10,6 +10,8 @@ namespace Faithful
 
     internal delegate void OnHitEnemyCallback(DamageInfo _info, GameObject _victim);
 
+    internal delegate void OnHitAllCallback(DamageInfo _info, GameObject _victim);
+
     internal delegate void OnTakeDamageProcessCallback(HealthComponent _healthComponent, DamageInfo _info);
 
     internal delegate void DamageReportCallback(DamageReport _report);
@@ -289,6 +291,41 @@ namespace Faithful
             finally
             {
                 onHitEnemyHook.StopProfiling();
+            }
+        }
+
+        // All hits: callbacks run after the original method, including hits which do no damage
+        private static readonly List<OnHitAllCallback> onHitAllLateCallbacks = new List<OnHitAllCallback>();
+
+        private static readonly HookRegistration onHitAllHook = new("GlobalEventManager.OnHitAll",
+            () => On.RoR2.GlobalEventManager.OnHitAll += HookOnHitAll,
+            () => On.RoR2.GlobalEventManager.OnHitAll -= HookOnHitAll);
+
+        // Add On Hit All Late callback
+        public static void AddOnHitAllLateCallback(OnHitAllCallback _callback)
+        {
+            onHitAllLateCallbacks.Add(_callback);
+
+            DebugLog("Added On Hit All Late behaviour");
+        }
+
+        private static void HookOnHitAll(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
+        {
+            orig(self, damageInfo, victim); // Run normal processes
+            if (!CanRunHook(onHitAllHook) || onHitAllLateCallbacks.Count == 0) return;
+
+            onHitAllHook.StartProfiling();
+            try
+            {
+                // Cycle through On Hit All Late callbacks
+                foreach (OnHitAllCallback callback in onHitAllLateCallbacks)
+                {
+                    callback(damageInfo, victim);
+                }
+            }
+            finally
+            {
+                onHitAllHook.StopProfiling();
             }
         }
 

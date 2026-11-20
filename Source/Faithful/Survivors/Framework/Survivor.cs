@@ -115,6 +115,7 @@ namespace Faithful
 
         // List of skins used by this survivor
         private List<SkinDef> m_skins = new List<SkinDef>();
+        private List<SkinDef> m_displaySkins = new List<SkinDef>();
 
         // Dictionary of skill families this survivor has
         private Dictionary<SkillSlot, SkillFamily> m_skillFamilies = new Dictionary<SkillSlot, SkillFamily>();
@@ -488,11 +489,12 @@ namespace Faithful
             // Setup renderer infos depending on if an existing character model was found
             if (!preAttached)
             {
-                SetupCustomRendererInfos();
+                // Gameplay model
+                SetupCustomRendererInfos(m_characterModel);
             }
             else
             {
-                SetupPreAttachedRendererInfos();
+                SetupPreAttachedRendererInfos(m_characterModel);
             }
 
             // Set up the hurt boxes
@@ -508,10 +510,10 @@ namespace Faithful
             SetupRagdoll();
         }
 
-        private void SetupCustomRendererInfos()
+        private void SetupCustomRendererInfos(CharacterModel _model)
         {
             // Get child locator
-            ChildLocator childLocator = m_characterModel.GetComponent<ChildLocator>();
+            ChildLocator childLocator = _model.GetComponent<ChildLocator>();
 
             // Check for child locator
             if (childLocator == null)
@@ -565,40 +567,40 @@ namespace Faithful
             }
 
             // Pass renderer infos to character model
-            m_characterModel.baseRendererInfos = rendererInfos.ToArray();
+            _model.baseRendererInfos = rendererInfos.ToArray();
         }
 
-        private void SetupPreAttachedRendererInfos()
+        private void SetupPreAttachedRendererInfos(CharacterModel _model)
         {
             // Cycle through existing renderer infos
-            for (int i = 0; i < m_characterModel.baseRendererInfos.Length; i++)
+            for (int i = 0; i < _model.baseRendererInfos.Length; i++)
             {
                 // Check for default material
-                if (m_characterModel.baseRendererInfos[i].defaultMaterial == null)
+                if (_model.baseRendererInfos[i].defaultMaterial == null)
                 {
                     // Set default material as current material
-                    m_characterModel.baseRendererInfos[i].defaultMaterial = m_characterModel.baseRendererInfos[i].renderer.sharedMaterial;
+                    _model.baseRendererInfos[i].defaultMaterial = _model.baseRendererInfos[i].renderer.sharedMaterial;
                 }
 
                 // Check again for default material
-                if (m_characterModel.baseRendererInfos[i].defaultMaterial == null)
+                if (_model.baseRendererInfos[i].defaultMaterial == null)
                 {
                     // Error - No material found for renderer info
-                    Print.Error(this, $"No material found for renderer info on renderer '{m_characterModel.baseRendererInfos[i].renderer.gameObject.name}'");
+                    Print.Error(this, $"No material found for renderer info on renderer '{_model.baseRendererInfos[i].renderer.gameObject.name}'");
                 }
                 else
                 {
                     // Check for renderer rules
-                    RendererRules rendererRules = m_characterModel.baseRendererInfos[i].renderer.GetComponent<RendererRules>();
+                    RendererRules rendererRules = _model.baseRendererInfos[i].renderer.GetComponent<RendererRules>();
                     if (rendererRules == null)
                     {
                         // No renderer rules found - Perform normal HG shader conversion
-                        m_characterModel.baseRendererInfos[i].defaultMaterial.ConvertDefaultShaderToHopoo();
+                        _model.baseRendererInfos[i].defaultMaterial.ConvertDefaultShaderToHopoo();
                     }
                     else
                     {
                         // Process renderer rules for renderer
-                        Utils.ProcessRendererRules(m_characterModel.baseRendererInfos[i].renderer);
+                        Utils.ProcessRendererRules(_model.baseRendererInfos[i].renderer);
                     }
                 }
             }
@@ -840,16 +842,24 @@ namespace Faithful
                 Print.Error(this, $"Could not find display prefab '{displayPrefabName}'");
             }
 
-            // Check for character model
+            // Check if character model was pre-attached
             CharacterModel characterModel = m_displayPrefab.GetComponent<CharacterModel>();
-            if (!characterModel)
+            bool preAttached = characterModel != null;
+            if (!preAttached)
             {
                 // Add character model if component not found
                 characterModel = m_displayPrefab.AddComponent<CharacterModel>();
             }
 
-            // Update base renderer infos for display prefab character model
-            characterModel.baseRendererInfos = m_characterModel.baseRendererInfos;
+            // Setup renderer infos depending on if an existing character model was found
+            if (!preAttached)
+            {
+                SetupCustomRendererInfos(characterModel);
+            }
+            else
+            {
+                SetupPreAttachedRendererInfos(characterModel);
+            }
 
             // Ensure display prefab has a skin controller
             m_displaySkinController = m_displayPrefab.GetComponent<ModelSkinController>();
@@ -1197,7 +1207,7 @@ namespace Faithful
         protected void AddSkin(string _skinToken, Sprite _skinIcon, UnlockableDef _unlockableDef = null, Skins.SkinReplacement[] _skinReplacements = null)
         {
             // Create skin definition
-            SkinDef newSkin = Skins.CreateSkinDef($"FAITHFUL_SURVIVOR_{token}_{_skinToken}_SKIN", _skinIcon, this, _unlockableDef, _skinReplacements);
+            SkinDef newSkin = Skins.CreateSkinDef($"FAITHFUL_SURVIVOR_{token}_{_skinToken}_SKIN", _skinIcon, m_characterModel, _unlockableDef, _skinReplacements);
 
             // Add to skins list
             m_skins.Add(newSkin);
@@ -1205,10 +1215,17 @@ namespace Faithful
             // Update skin controller
             m_skinController.skins = [.. m_skins];
 
-            // Update display prefab skin controller
+            // Create skin definition for the display prefab
             if (m_displaySkinController)
             {
-                m_displaySkinController.skins = [.. m_skins];
+                CharacterModel displayModel = m_displaySkinController.GetComponent<CharacterModel>();
+                SkinDef displaySkin = Skins.CreateSkinDef($"FAITHFUL_SURVIVOR_{token}_{_skinToken}_SKIN", _skinIcon, displayModel, _unlockableDef, _skinReplacements);
+
+                // Add to display skins list
+                m_displaySkins.Add(displaySkin);
+
+                // Update display prefab skin controller
+                m_displaySkinController.skins = [.. m_displaySkins];
             }
         }
 

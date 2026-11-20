@@ -1,8 +1,10 @@
 ﻿using EntityStates;
+using R2API;
 using RoR2;
 using RoR2.Networking;
 using UnityEngine;
 using UnityEngine.Networking;
+using TechnicianSurvivor = global::Faithful.Technician;
 
 namespace Faithful.Skills.Technician
 {
@@ -42,14 +44,14 @@ namespace Faithful.Skills.Technician
 
         TechnicianTracker tracker;
 
-        BuffIndex mechanicalAllyBuffIndex;
+        DamageAPI.ModdedDamageType mechanicalAllyDamageType;
 
         public override void OnEnter()
         {
             base.OnEnter();
 
-            // Fetch mechanical ally buff index (default to overclocked)
-            mechanicalAllyBuffIndex = Buffs.GetBuff("OVERCLOCKED").buffDef.buffIndex;
+            // Fetch mechanical ally damage type (default to overclocked)
+            mechanicalAllyDamageType = TechnicianSurvivor.arcOverclockDamageType;
 
             // Get how long the "build up" for this skill is
             stopwatch = 0f;
@@ -68,8 +70,8 @@ namespace Faithful.Skills.Technician
                 // Check if using repair
                 if (passiveName != null && passiveName.Contains("REPAIR"))
                 {
-                    // Change mechanical ally buff to be repair
-                    mechanicalAllyBuffIndex = Buffs.GetBuff("REPAIR").buffDef.buffIndex;
+                    // Change mechanical ally damage type to be repair
+                    mechanicalAllyDamageType = TechnicianSurvivor.arcRepairDamageType;
                 }
 
                 characterBody.SetAimTimer(1f);
@@ -107,7 +109,8 @@ namespace Faithful.Skills.Technician
         private void FireArc(string muzzleString, float _damageMult = 1.0f)
         {
             // Check for target
-            Transform target = tracker?.GetTrackingTarget()?.transform;
+            HurtBox trackingTarget = tracker ? tracker.GetTrackingTarget() : null;
+            Transform target = trackingTarget ? trackingTarget.transform : null;
             if (target == null) return;
 
             // Get arc source
@@ -137,6 +140,7 @@ namespace Faithful.Skills.Technician
                 bulletAttack.maxDistance = arcDir.magnitude;
                 bulletAttack.smartCollision = true;
                 bulletAttack.damageType = DamageType.SlowOnHit;
+                bulletAttack.damageType.damageTypeExtended |= DamageTypeExtended.Electrical;
                 bulletAttack.allowTrajectoryAimAssist = false;
                 bulletAttack.damageType.damageSource = DamageSource.Primary;
                 bulletAttack.hitCallback = ArcHitCallback;
@@ -173,6 +177,7 @@ namespace Faithful.Skills.Technician
                 damageInfo.procCoefficient = bulletAttack.procCoefficient;
                 damageInfo.damageType = bulletAttack.damageType;
                 damageInfo.damageColorIndex = bulletAttack.damageColorIndex;
+                damageInfo.inflictedHurtbox = hitInfo.hitHurtBox;
                 damageInfo.ModifyDamageInfo(hitInfo.damageModifier);
                 if (hitInfo.isSniperHit)
                 {
@@ -198,7 +203,12 @@ namespace Faithful.Skills.Technician
                 {
                     healthComponent = hitInfo.hitHurtBox.healthComponent;
                 }
-                bool flag = healthComponent && FriendlyFireManager.ShouldDirectHitProceed(healthComponent, attackerTeamIndex);
+
+                // Mark mechanical ally hits for server-side support, even when friendly fire is enabled
+                bool mechanicalAlly = TechnicianSurvivor.IsMechanicalAlly(healthComponent ? healthComponent.body : null, attackerTeamIndex);
+                if (mechanicalAlly) damageInfo.AddModdedDamageType(mechanicalAllyDamageType);
+
+                bool flag = !mechanicalAlly && healthComponent && FriendlyFireManager.ShouldDirectHitProceed(healthComponent, attackerTeamIndex);
                 if (NetworkServer.active)
                 {
                     if (flag)
@@ -206,20 +216,6 @@ namespace Faithful.Skills.Technician
                         healthComponent.TakeDamage(damageInfo);
                         GlobalEventManager.instance.OnHitEnemy(damageInfo, hitInfo.entityObject);
                     }
-                    // INJECTED
-                    else
-                    {
-                        // Fetch character body
-                        CharacterBody body = healthComponent?.body;
-
-                        // Check for mechanical flag
-                        if (body != null && body.bodyFlags.HasFlag(CharacterBody.BodyFlags.Mechanical))
-                        {
-                            // Add timed mechanical ally buff
-                            body.AddTimedBuff(mechanicalAllyBuffIndex, 1.0f);
-                        }
-                    }
-                    // END INJECTED
                     GlobalEventManager.instance.OnHitAll(damageInfo, hitInfo.entityObject);
                 }
                 else if (ClientScene.ready)
@@ -232,6 +228,7 @@ namespace Faithful.Skills.Technician
                     LogFilter.currentLogLevel = currentLogLevel;
                     BulletAttack.messageWriter.Write(damageInfo);
                     BulletAttack.messageWriter.Write(flag);
+                    BulletAttack.messageWriter.Write(HurtBoxReference.FromHurtBox(damageInfo.inflictedHurtbox));
                     BulletAttack.messageWriter.FinishMessage();
                     ClientScene.readyConnection.SendWriter(BulletAttack.messageWriter, QosChannelIndex.defaultReliable.intVal);
                 }
@@ -319,7 +316,8 @@ namespace Faithful.Skills.Technician
                 }
 
                 // Check for target
-                Transform target = tracker?.GetTrackingTarget()?.transform;
+                HurtBox trackingTarget = tracker ? tracker.GetTrackingTarget() : null;
+                Transform target = trackingTarget ? trackingTarget.transform : null;
                 if (target != null)
                 {
                     // Update arc end points

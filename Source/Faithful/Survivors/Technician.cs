@@ -1,18 +1,42 @@
-﻿using RoR2;
+﻿using R2API;
+using RoR2;
 using UnityEngine;
 using EntityStates;
 using RoR2.Skills;
+using UnityEngine.Networking;
 
 namespace Faithful
 {
     internal class Technician : Survivor
     {
+        // Arc support damage types
+        internal static readonly DamageAPI.ModdedDamageType arcOverclockDamageType;
+        internal static readonly DamageAPI.ModdedDamageType arcRepairDamageType;
+
+        // Mechanical ally buffs
+        Buff overclockedBuff;
+        Buff repairBuff;
+
+        static Technician()
+        {
+            // Reserve both types before the survivor is initialized on hosts and clients
+            arcOverclockDamageType = DamageAPI.ReserveDamageType();
+            arcRepairDamageType = DamageAPI.ReserveDamageType();
+        }
+
         public Technician()
         {
             // Initialise survivor
             Init("TECHNICIAN", "mdlTechnician", "texTechnicianIcon", "texTechnicianMainIcon", _bodyColor: new Color(0.9414f, 0.7578f, 0.1953f), _sortPosition: 25, _maxHealth: 120.0f,
                  _healthRegen: 1.0f, _armour: 0.0f, _shield: 0.0f, _jumpCount: 1, _damage: 12, _attackSpeed: 1.0f, _crit: 1.0f, _moveSpeed: 7.0f, _acceleration: 80.0f, _jumpPower: 15.0f,
                  _aiType: AIType.Commando, _aimOriginPosition: new Vector3(0.0f, 0.0f, 0.0f), _onCharacterBodyConfigured: OnCharacterBodyConfigured);
+
+            // Fetch mechanical ally buffs
+            overclockedBuff = Buffs.GetBuff("OVERCLOCKED");
+            repairBuff = Buffs.GetBuff("REPAIR");
+
+            // Apply Arc support buffs on the server for both hosts and clients
+            Behaviour.AddOnHitAllLateCallback(OnHitAll);
         }
 
         protected override void SetupAdditionalSkins()
@@ -58,14 +82,12 @@ namespace Faithful
                 new Skins.SkinReplacement
                 {
                     childName = "LobbyRobotAlly",
-                    replacementMesh = "TechnicianMasterySkinTurret",
                     replacementMaterial = "texTechnicianMastery",
                     replacementRendererRules = "TechnicianMasteryRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
                     childName = "LobbyTurretAlly",
-                    replacementMesh = "TechnicianMasterySkinTurret",
                     replacementMaterial = "texTechnicianMastery",
                     replacementRendererRules = "TechnicianMasteryRendererBody"
                 }
@@ -112,14 +134,12 @@ namespace Faithful
                 new Skins.SkinReplacement
                 {
                     childName = "LobbyRobotAlly",
-                    replacementMesh = "TechnicianPrimeSkinTurret",
                     replacementMaterial = "texTechnicianPrime",
                     replacementRendererRules = "TechnicianPrimeRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
                     childName = "LobbyTurretAlly",
-                    replacementMesh = "TechnicianPrimeSkinTurret",
                     replacementMaterial = "texTechnicianPrime",
                     replacementRendererRules = "TechnicianPrimeRendererBody"
                 }
@@ -168,14 +188,12 @@ namespace Faithful
                 new Skins.SkinReplacement
                 {
                     childName = "LobbyRobotAlly",
-                    replacementMesh = "TechnicianAlloySkinRobot",
                     replacementMaterial = "texTechnicianAlloy",
                     replacementRendererRules = "TechnicianAlloyRendererBody"
                 },
                 new Skins.SkinReplacement
                 {
                     childName = "LobbyTurretAlly",
-                    replacementMesh = "TechnicianAlloySkinRobot",
                     replacementMaterial = "texTechnicianAlloy",
                     replacementRendererRules = "TechnicianAlloyRendererBody"
                 }
@@ -2316,6 +2334,33 @@ namespace Faithful
                 new Vector3(0.1F, 0.1F, 0.1F)
                 )
                 );
+        }
+
+        internal static bool IsMechanicalAlly(CharacterBody _body, TeamIndex _team)
+        {
+            // Arc support only affects mechanical characters on the attacker's team
+            return _body && _body.teamComponent && _team != TeamIndex.None && _body.teamComponent.teamIndex == _team && (_body.bodyFlags & CharacterBody.BodyFlags.Mechanical) != 0;
+        }
+
+        private void OnHitAll(DamageInfo _info, GameObject _victim)
+        {
+            // Only the server applies buffs
+            if (!NetworkServer.active || _info == null || !_info.attacker) return;
+
+            // Use the support mode selected when Arc started
+            Buff buff;
+            if (_info.HasModdedDamageType(arcOverclockDamageType)) buff = overclockedBuff;
+            else if (_info.HasModdedDamageType(arcRepairDamageType)) buff = repairBuff;
+            else return;
+
+            // Use the hit hurtbox, falling back to the networked victim
+            HealthComponent healthComponent = _info.inflictedHurtbox ? _info.inflictedHurtbox.healthComponent : (_victim ? _victim.GetComponent<HealthComponent>() : null);
+            if (!healthComponent || !healthComponent.alive) return;
+
+            // Validate the ally again on the server before adding the timed buff
+            CharacterBody body = healthComponent.body;
+            if (!IsMechanicalAlly(body, TeamComponent.GetObjectTeam(_info.attacker))) return;
+            body.AddTimedBuff(buff.buffDef.buffIndex, 1.0f);
         }
 
         private void OnCharacterBodyConfigured(CharacterBody _characterBody)

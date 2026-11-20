@@ -8,24 +8,24 @@ namespace Faithful
 {
     internal static class Skins
     {
-        internal static SkinDef CreateSkinDef(string _skinToken, Sprite _skinIcon, Survivor _survivor, UnlockableDef _unlockableDef = null, SkinReplacement[] _skinReplacements = null)
+        internal static SkinDef CreateSkinDef(string _skinToken, Sprite _skinIcon, CharacterModel _model, UnlockableDef _unlockableDef = null, SkinReplacement[] _skinReplacements = null)
         {
             // Get default renderer infos
-            CharacterModel.RendererInfo[] defaultRendererInfos = _survivor.characterModel.baseRendererInfos;
+            CharacterModel.RendererInfo[] defaultRendererInfos = _model.baseRendererInfos;
 
             // Get child locator
-            ChildLocator childLocator = _survivor.characterModel.GetComponent<ChildLocator>();
+            ChildLocator childLocator = _model.GetComponent<ChildLocator>();
 
             // Check for child locator
             if (childLocator == null)
             {
                 // Error and return - unsuccessful
-                Log.Error($"[SKINS] | Was unable to create skin definition for skin '{Languages.GetLanguageString(_skinToken)}' - Child locator not found on survivor!");
+                Log.Error($"[SKINS] | Was unable to create skin definition for skin '{Languages.GetLanguageString(_skinToken)}' - Child locator not found on model!");
                 return null;
             }
 
-            // Get survivor root
-            GameObject root = _survivor.characterModel.gameObject;
+            // Get model root
+            GameObject root = _model.gameObject;
 
             // Create skin renderer infos
             CharacterModel.RendererInfo[] skinRendererInfos = new CharacterModel.RendererInfo[defaultRendererInfos.Length];

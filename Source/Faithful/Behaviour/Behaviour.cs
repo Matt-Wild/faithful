@@ -89,6 +89,7 @@ namespace Faithful
                 immuneToFallDamageHook,
                 sceneExitControllerSetStateHook,
                 onHitEnemyHook,
+                onHitAllHook,
                 processHitEnemyFriendlyHitHook,
                 overlapFriendlyHitHook,
                 blastFriendlyHitHook,
