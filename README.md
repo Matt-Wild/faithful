@@ -197,6 +197,16 @@ All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main
       </td>
     </tr>
     <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texPlasmaFieldGeneratorIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Plasma Field Generator</b><br>
+        Gain a shield equal to <b>4% (</b>+4% per stack<b>)</b> of your maximum health and reduce its recharge time by <b>5% (</b>+5% per stack<b>)</b>. Recharges outside of danger.
+      </td>
+      <td>
+        Corrupts all <b>Personal Shield Generators</b>.
+      </td>
+    </tr>
+    <tr>
       <td colspan="3" align="center"><h3>Uncommon / Tier 2 Void Items</h3></td>
     </tr>
     <tr>
@@ -207,6 +217,16 @@ All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main
       </td>
       <td>
         Corrupts all <b>Spacious Umbrellas</b>.
+      </td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texLuckyFigurineIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Lucky Figurine</b><br>
+        Using a Shrine of Chance guarantees an item at the cost of all remaining uses. <b>0% (</b>+10% per stack<b>)</b> chance to drop an additional item.
+      </td>
+      <td>
+        Corrupts all <b>Chance Dolls</b>.
       </td>
     </tr>
     <tr>
@@ -221,6 +241,16 @@ All items have <img src="https://github.com/Goorakh/RoR2_ItemQualities/blob/main
     </tr>
     <tr>
       <td colspan="3" align="center"><h3>Legendary / Tier 3 Void Items</h3></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCharmingFacadeIcon.png?raw=true" width=128></td>
+      <td>
+        <b>Charming Facade</b><br>
+        Your attacks have a <b>1%</b> chance to charm a non-Boss enemy, causing it to attack other enemies. Up to <b>4 (</b>+4 per stack<b>)</b> enemies can be charmed at one time for up to <b>30 (</b>+30 per stack<b>)</b> seconds each.
+      </td>
+      <td>
+        Corrupts all <b>Happiest Masks</b>.
+      </td>
     </tr>
     <tr>
       <td><img src="https://github.com/Matt-Wild/faithful/blob/main/Page%20Elements/texCollectorsVisionIcon.png?raw=true" width=128></td>
