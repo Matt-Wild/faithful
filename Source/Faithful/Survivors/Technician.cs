@@ -869,6 +869,14 @@ namespace Faithful
                 new Vector3(0.2F, 0.2F, 0.2F)
                 )
                 );
+            AddDefaultItemDisplay("RoboBallBuddy",
+            ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayEmpathyChip"),
+                "Head",
+                new Vector3(0F, 0.15475F, 0.11515F),
+                new Vector3(77.5F, 0F, 180F),
+                new Vector3(0.09F, 0.09F, 0.09F)
+                )
+                );
             AddDefaultItemDisplay("Medkit",
             ItemDisplays.CreateDisplayRule(ItemDisplays.LoadDisplay("DisplayMedkit"),
                 "Chest",

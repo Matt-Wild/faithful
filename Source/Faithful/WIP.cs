@@ -95,6 +95,7 @@ namespace Faithful
                     _displaySettings.AddCharacterDisplay("Chef", "LowerArmR", new Vector3(0F, 0F, -0.065F), new Vector3(0F, 355F, 90F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Operator", "CalfL", new Vector3(-0.345F, -0.0014F, 0.105F), new Vector3(88.25F, 255F, 0F), new Vector3(0.1F, 0.1F, 0.1F));
                     _displaySettings.AddCharacterDisplay("Drifter", "BagBottom", new Vector3(-0.123F, 0.1985F, 0.3025F), new Vector3(337.95F, 299F, 30.5F), new Vector3(0.1F, 0.1F, 0.1F));
+                    _displaySettings.AddCharacterDisplay("Technician", "Pelvis", new Vector3(0.1425F, 0.055F, 0.103F), new Vector3(358.75F, 40.5F, 25F), new Vector3(0.06F, 0.06F, 0.06F));
                     _displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(-0.29F, 0F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.08F, 0.08F, 0.08F));
                     _displaySettings.AddCharacterDisplay("Technician", "Backpack", new Vector3(0.29F, 0F, 0F), new Vector3(0F, 180F, 270F), new Vector3(0.08F, 0.08F, 0.08F));
                     _displaySettings.AddCharacterDisplay("Enforcer", "Weapon", new Vector3(0.206F, -0.16F, 0F), new Vector3(0F, 0F, 270F), new Vector3(0.135F, 0.145F, 0.175F));
